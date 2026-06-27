@@ -2084,6 +2084,22 @@ async function saveFlight(){
       const hasData = mainArrFlight || mainArrDate || mainDeptFlight || mainDeptDate ||
                       arrPersons.some(p=>p.flight||p.date) || deptPersons.some(p=>p.flight||p.date);
 
+      const existing = fMap[g.id];
+      
+      // Check if data actually changed vs what's saved
+      const dataChanged = !existing || 
+        existing.arrFlight !== mainArrFlight ||
+        existing.arrDate !== mainArrDate ||
+        existing.arrTime !== mainArrTime ||
+        existing.arrAirport !== mainArrAirport ||
+        existing.deptFlight !== mainDeptFlight ||
+        existing.deptDate !== mainDeptDate ||
+        existing.deptTime !== mainDeptTime ||
+        existing.transfer !== transfer ||
+        existing.notes !== notes ||
+        existing.personsArr !== JSON.stringify(arrPersons) ||
+        existing.personsDept !== JSON.stringify(deptPersons);
+
       const data = {
         guestId: g.id, weddingId: currentWeddingId,
         arrFlight: mainArrFlight, arrDate: mainArrDate, arrTime: mainArrTime, arrAirport: mainArrAirport,
@@ -2093,8 +2109,7 @@ async function saveFlight(){
         personsDept: JSON.stringify(deptPersons)
       };
 
-      const existing = fMap[g.id];
-      if(existing && hasData){ await db.collection('flights').doc(existing.id).update(data); }
+      if(existing && hasData && dataChanged){ await db.collection('flights').doc(existing.id).update(data); }
       else if(existing && !hasData){ /* leave existing data alone */ }
       else if(!existing && hasData){ data.createdAt=new Date().toISOString(); await db.collection('flights').add(data); }
     }
