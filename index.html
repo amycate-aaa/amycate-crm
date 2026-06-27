@@ -3491,34 +3491,6 @@ function generateFlightReport(){
   Prepared by Amy Cate · amy.cate@destinationweddings.com · Destination Weddings / Celebration Travel
 </div>
 
-<script>
-// ── Intake popup drag ──
-(function(){
-  const popup = document.getElementById('intakeModal');
-  const handle = document.getElementById('intakeModalHeader');
-  if(!popup || !handle) return;
-  let dragging=false, ox=0, oy=0;
-  handle.addEventListener('mousedown', function(e){
-    dragging=true;
-    const r=popup.getBoundingClientRect();
-    ox=e.clientX-r.left; oy=e.clientY-r.top;
-    handle.style.cursor='grabbing';
-    e.preventDefault();
-  });
-  document.addEventListener('mousemove', function(e){
-    if(!dragging) return;
-    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-popup.offsetWidth);
-    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-popup.offsetHeight);
-    popup.style.right='auto';
-    popup.style.left=x+'px';
-    popup.style.top=y+'px';
-  });
-  document.addEventListener('mouseup', function(){
-    dragging=false;
-    handle.style.cursor='grab';
-  });
-})();
-</script>
 </body></html>`;
 
   // Open in new window for printing/saving
@@ -4624,6 +4596,34 @@ function importResortLibrary(event){ const file=event.target.files[0]; if(!file)
 
 // Init when tab opens
 document.addEventListener('DOMContentLoaded', ()=>{ qbInitDestinations(); qbFilterResorts(); });
+</script>
+<script>
+// ── Intake popup drag ──
+(function(){
+  const popup = document.getElementById('intakeModal');
+  const handle = document.getElementById('intakeModalHeader');
+  if(!popup || !handle) return;
+  let dragging=false, ox=0, oy=0;
+  handle.addEventListener('mousedown', function(e){
+    dragging=true;
+    const r=popup.getBoundingClientRect();
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    handle.style.cursor='grabbing';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-popup.offsetWidth);
+    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-popup.offsetHeight);
+    popup.style.right='auto';
+    popup.style.left=x+'px';
+    popup.style.top=y+'px';
+  });
+  document.addEventListener('mouseup', function(){
+    dragging=false;
+    handle.style.cursor='grab';
+  });
+})();
 </script>
 </body>
 </html>
