@@ -3775,6 +3775,9 @@ async function viewResponses(leadId) {
         + '<div><span style="color:#888">Check-out:</span> ' + esc(d.checkoutDate||'Group date') + '</div>'
         + '</div>'
         + notesHtml
+        + '<div style="display:flex;justify-content:flex-end;margin-top:10px">'
+        + (d.email ? '<button onclick="safeMailto(\'mailto:'+d.email+'?subject=Re: '+encodeURIComponent(d.groupName||d.eventName||'Your Trip')+'\')" style="padding:6px 14px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:6px;font-size:.82rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>' : '')
+        + '</div>'
         + '</div>';
     }).join('');
   } catch(e) {
