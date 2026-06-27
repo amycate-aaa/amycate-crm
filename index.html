@@ -1146,7 +1146,7 @@ function showTab(name){
   }
   if(name==='financials') renderFinancials();
   if(name==='payments') renderPayments();
-  if(name==='flights'){ Promise.all([loadFlights(currentWeddingId), loadGuests(currentWeddingId)]).then(()=>{ renderFlights(); renderDetailFlights(); }); }
+  if(name==='flights'){ renderFlights(); renderDetailFlights(); loadFlights(currentWeddingId).then(()=>{ renderFlights(); renderDetailFlights(); }); }
   if(name==='docs') renderDocs();
   if(name==='leads') renderLeads();
   if(name==='timeline') renderTimeline();
