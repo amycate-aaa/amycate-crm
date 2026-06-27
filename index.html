@@ -485,6 +485,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <select id="qb-dest" onchange="qbFilterResorts()" class="form-input">
                 <option value="">— All Destinations —</option>
               </select>
+              <script>if(typeof qbInitDestinations==="function"){qbInitDestinations();qbFilterResorts();}</script>
             </div>
             <div>
               <label class="form-label">Resort *</label>
