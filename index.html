@@ -587,7 +587,11 @@ tr:hover .sticky-col{background:#f8f8f8;}
           <div style="margin-bottom:12px"><label class="form-label">About *</label><textarea id="qb-nr-about" class="form-input" rows="3" placeholder="A vibrant adults-only resort featuring..."></textarea></div>
           <div style="margin-bottom:12px"><label class="form-label">Highlights (one per line)</label><textarea id="qb-nr-highlights" class="form-input" rows="4" placeholder="Adults Only (18+)&#10;Multiple Pools&#10;Private Beach&#10;World-Class Spa"></textarea></div>
           <div style="margin-bottom:12px"><label class="form-label">Special Note (optional)</label><input id="qb-nr-note" class="form-input" placeholder="e.g. Plus unlimited access to Dreams next door..."></div>
-          <div style="margin-bottom:12px"><label class="form-label">Hero Photo URL (optional)</label><input id="qb-nr-photo" class="form-input" placeholder="https://... or paste Google Drive share link"></div>
+          <div style="background:#f9f5ee;border:1px solid #e8dcc8;border-radius:10px;padding:14px;margin-bottom:12px">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#b8973a;margin-bottom:10px">&#x1F4F7; Photos</div>
+            <div style="margin-bottom:10px"><label class="form-label">1. Hero Photo URL</label><input id="qb-nr-photo" class="form-input" placeholder="Main banner photo — paste URL or Drive share link"></div>
+            <div><label class="form-label">2. Resort Photos <span style="font-weight:400;color:var(--muted);font-size:.8rem">(one URL per line — pool, beach, lobby, etc.)</span></label><textarea id="qb-nr-resort-photos" class="form-input" rows="3" placeholder="https://...&#10;https://...&#10;https://..."></textarea></div>
+          </div>
           <div style="margin-bottom:8px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
               <label class="form-label" style="margin-bottom:0">Room Types</label>
@@ -4316,6 +4320,8 @@ let qbEditingResort = null;
 let qbHTML = '';
 
 function qbGetAll(){ const a=[]; Object.entries(QB_RESORTS).forEach(([d,l])=>l.forEach(r=>a.push({...r,destination:d}))); return a; }
+function qbRoomDesc(val){ return typeof val==='object'?val.desc||'':val||''; }
+function qbRoomPhoto(val){ return typeof val==='object'?val.photo||'':''; }
 
 function qbInitDestinations(){
   const sel=document.getElementById('qb-dest'); if(!sel) return;
@@ -4390,7 +4396,17 @@ function qbRenderRooms(resort){
 function qbOnRoomChange(i){
   const name=document.getElementById('qb-rname'+i).value;
   const resort=qbGetAll().find(r=>r.name===document.getElementById('qb-resort').value);
-  if(resort&&resort.rooms&&resort.rooms[name]!==undefined) document.getElementById('qb-rdesc'+i).value=resort.rooms[name]||'';
+  if(resort&&resort.rooms&&resort.rooms[name]!==undefined){
+    const val=resort.rooms[name];
+    if(typeof val==='object'){
+      document.getElementById('qb-rdesc'+i).value=val.desc||'';
+      // Store room photo on the element for use in quote generation
+      document.getElementById('qb-rname'+i).dataset.photo=val.photo||'';
+    } else {
+      document.getElementById('qb-rdesc'+i).value=val||'';
+      document.getElementById('qb-rname'+i).dataset.photo='';
+    }
+  }
   qbCheckGenerate();
 }
 
@@ -4544,13 +4560,14 @@ function qbOpenResortModal(resort){
   document.getElementById('qb-nr-highlights').value=resort?(resort.highlights||[]).join('\n'):'';
   document.getElementById('qb-nr-note').value=resort?resort.note||'':'';
   document.getElementById('qb-nr-photo').value=resort?resort.photo||'':'';
+  document.getElementById('qb-nr-resort-photos').value=resort?(resort.resortPhotos||[]).join('\n'):'';
   const rows=document.getElementById('qb-room-rows'); rows.innerHTML='';
-  const roomEntries=resort?Object.entries(resort.rooms||{}).filter(([k])=>k!=='Custom'):[['',''],['','']];
+  const roomEntries=resort?Object.entries(resort.rooms||{}).filter(([k])=>k!=='Custom').map(([k,v])=>[k, typeof v==='object'?v.desc||'':v, typeof v==='object'?v.photo||'':'']):[['','',''],['','','']];
   if(!roomEntries.length) roomEntries.push(['',''],['','']);
-  roomEntries.forEach(([rname,rdesc])=>{
+  roomEntries.forEach(([rname,rdesc,rphoto])=>{
     const div=document.createElement('div');
-    div.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
-    div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" value="'+esc(rname)+'"></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem">'+rdesc+'</textarea></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
+    div.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
+    div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" value="'+esc(rname)+'"></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem">'+rdesc+'</textarea></div><div><label class="form-label">Room Photo URL</label><input class="form-input qb-rphoto" value="'+esc(rphoto||'')+'"></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
     rows.appendChild(div);
   });
   document.getElementById('qb-resort-modal').style.display='flex';
@@ -4562,7 +4579,8 @@ function qbAddRoomRow(){
   const rows=document.getElementById('qb-room-rows');
   const div=document.createElement('div');
   div.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
-  div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" placeholder="Room name..."></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem" placeholder="Description..."></textarea></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
+  div.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
+  div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" placeholder="Room name..."></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem" placeholder="Description..."></textarea></div><div><label class="form-label">Room Photo URL</label><input class="form-input qb-rphoto" placeholder="https://..."></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
   rows.appendChild(div);
 }
 
@@ -4574,16 +4592,18 @@ function qbSaveResort(){
   const highlights=document.getElementById('qb-nr-highlights').value.split('\n').map(s=>s.trim()).filter(Boolean);
   const note=document.getElementById('qb-nr-note').value.trim();
   const photo=document.getElementById('qb-nr-photo').value.trim();
+  const resortPhotos=document.getElementById('qb-nr-resort-photos').value.split('\n').map(s=>s.trim()).filter(Boolean);
   const rooms={};
   document.querySelectorAll('#qb-room-rows .qb-rname').forEach((input,idx)=>{
     const rname=input.value.trim();
     const rdesc=document.querySelectorAll('#qb-room-rows .qb-rdesc')[idx]?.value.trim()||'';
-    if(rname) rooms[rname]=rdesc;
+    const rphoto=document.querySelectorAll('#qb-room-rows .qb-rphoto')[idx]?.value.trim()||'';
+    if(rname) rooms[rname]=rphoto?{desc:rdesc,photo:rphoto}:rdesc;
   });
   rooms['Custom']='';
   if(qbEditingResort){ Object.keys(QB_RESORTS).forEach(d=>{QB_RESORTS[d]=QB_RESORTS[d].filter(r=>r.name!==qbEditingResort.name);if(QB_RESORTS[d].length===0) delete QB_RESORTS[d];}); }
   if(!QB_RESORTS[dest]) QB_RESORTS[dest]=[];
-  QB_RESORTS[dest].push({name,about,highlights,note,photo,rooms,custom:true});
+  QB_RESORTS[dest].push({name,about,highlights,note,photo,resortPhotos,rooms,custom:true});
   qbInitDestinations(); qbFilterResorts();
   document.getElementById('qb-dest').value=dest; qbFilterResorts();
   document.getElementById('qb-resort').value=name; qbOnResortChange();
