@@ -141,40 +141,31 @@ function renderForm(guest, wedding, flightDoc){
       <p class="card-intro">Hi <strong>${esc(guest.names||guest.name||'')}</strong>! Please fill in your flight details below so Amy can arrange your ground transportation.</p>
     </div>`;
 
-  // ── ARRIVALS ──
-  html += `<div class="card"><div class="section-label arr">✈ Arrivals</div>`;
+  // ── PER PERSON: ARRIVAL + DEPARTURE TOGETHER ──
   persons.forEach((name, idx) => {
-    const d = arrPersons[idx] || {};
-    const arrDate = d.date || defaultArrDate;
+    const dArr = arrPersons[idx] || {};
+    const dDept = deptPersons[idx] || {};
+    const arrDate = dArr.date || defaultArrDate;
+    const deptDate = dDept.date || defaultDeptDate;
     html += `
-      <div class="person-block arr">
-        <div class="person-name">${esc(name)}</div>
-        <div class="grid-2">
+      <div class="card">
+        <div class="person-name" style="font-size:1rem;font-weight:700;color:#1B2B4B;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid #c9a96e">👤 ${esc(name)}</div>
+        <div class="section-label arr" style="margin-bottom:10px">✈ Arrival</div>
+        <div class="grid-2" style="margin-bottom:18px">
           <div class="form-group">
             <label>Arrival Date</label>
             <input type="date" id="arr-${idx}-date" value="${esc(arrDate)}">
           </div>
           <div class="form-group">
             <label>Flight # (e.g. AA2345)</label>
-            <input type="text" id="arr-${idx}-flight" value="${esc(d.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+            <input type="text" id="arr-${idx}-flight" value="${esc(dArr.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
           </div>
           <div class="form-group" style="grid-column:1/-1">
             <label>Arrives At (time)</label>
-            <input type="text" id="arr-${idx}-time" value="${esc(d.time||'')}" placeholder="e.g. 2:45 PM">
+            <input type="text" id="arr-${idx}-time" value="${esc(dArr.time||'')}" placeholder="e.g. 2:45 PM">
           </div>
         </div>
-      </div>`;
-  });
-  html += `</div>`;
-
-  // ── DEPARTURES ──
-  html += `<div class="card"><div class="section-label dept">✈ Departures</div>`;
-  persons.forEach((name, idx) => {
-    const d = deptPersons[idx] || {};
-    const deptDate = d.date || defaultDeptDate;
-    html += `
-      <div class="person-block dept">
-        <div class="person-name">${esc(name)}</div>
+        <div class="section-label dept" style="margin-bottom:10px">✈ Departure</div>
         <div class="grid-2">
           <div class="form-group">
             <label>Departure Date</label>
@@ -182,16 +173,15 @@ function renderForm(guest, wedding, flightDoc){
           </div>
           <div class="form-group">
             <label>Flight # (e.g. AA2345)</label>
-            <input type="text" id="dept-${idx}-flight" value="${esc(d.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+            <input type="text" id="dept-${idx}-flight" value="${esc(dDept.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
           </div>
           <div class="form-group" style="grid-column:1/-1">
             <label>Departs At (time)</label>
-            <input type="text" id="dept-${idx}-time" value="${esc(d.time||'')}" placeholder="e.g. 10:00 AM">
+            <input type="text" id="dept-${idx}-time" value="${esc(dDept.time||'')}" placeholder="e.g. 10:00 AM">
           </div>
         </div>
       </div>`;
   });
-  html += `</div>`;
 
   html += `<button class="submit-btn" id="submitBtn" onclick="submitFlight()">Submit My Flight Info</button>`;
 
