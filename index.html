@@ -542,7 +542,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <div><label class="form-label">Deposit</label><input id="qb-deposit" class="form-input" value="$50/person ($100 total for 2 guests)"></div>
               <div><label class="form-label">Final Payment Due</label><input id="qb-final" class="form-input" placeholder="January 2, 2027"></div>
             </div>
-            <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+            <div id="qb-xhale-row" style="margin-top:10px;display:none;align-items:center;gap:8px">
               <input type="checkbox" id="qb-xhale" style="width:auto;height:16px;width:16px;cursor:pointer">
               <label for="qb-xhale" style="font-size:.92rem;cursor:pointer;color:#1a1a1a;font-weight:500;text-transform:none;letter-spacing:0;margin-bottom:0">Include Xhale Club perks section</label>
             </div>
@@ -4313,6 +4313,13 @@ function qbFilterResorts(){
 function qbOnResortChange(){
   const name=document.getElementById('qb-resort').value;
   const resort=qbGetAll().find(r=>r.name===name);
+  // Show Xhale checkbox only for Breathless resorts
+  const xhaleRow=document.getElementById('qb-xhale-row');
+  if(xhaleRow){
+    const isBreathless=name.toLowerCase().includes('breathless');
+    xhaleRow.style.display=isBreathless?'flex':'none';
+    if(!isBreathless){const cb=document.getElementById('qb-xhale');if(cb)cb.checked=false;}
+  }
   const actions=document.getElementById('qb-resort-actions');
   if(!resort){if(actions) actions.style.display='none'; qbRenderRooms(null); return;}
   if(actions) actions.style.display='flex';
