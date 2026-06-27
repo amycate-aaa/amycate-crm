@@ -3490,6 +3490,35 @@ function generateFlightReport(){
 <div class="footer">
   Prepared by Amy Cate · amy.cate@destinationweddings.com · Destination Weddings / Celebration Travel
 </div>
+
+<script>
+// ── Intake popup drag ──
+(function(){
+  const popup = document.getElementById('intakeModal');
+  const handle = document.getElementById('intakeModalHeader');
+  if(!popup || !handle) return;
+  let dragging=false, ox=0, oy=0;
+  handle.addEventListener('mousedown', function(e){
+    dragging=true;
+    const r=popup.getBoundingClientRect();
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    handle.style.cursor='grabbing';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-popup.offsetWidth);
+    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-popup.offsetHeight);
+    popup.style.right='auto';
+    popup.style.left=x+'px';
+    popup.style.top=y+'px';
+  });
+  document.addEventListener('mouseup', function(){
+    dragging=false;
+    handle.style.cursor='grab';
+  });
+})();
+</script>
 </body></html>`;
 
   // Open in new window for printing/saving
@@ -3648,8 +3677,15 @@ function openIntakeModal(leadId) {
   sv('i-checkOut', l.checkOut || '');
   sv('i-roomCategory', l.roomCategory || '');
   sv('i-intakeNote', l.intakeNote || '');
+  sv('i-datesRequested', l.datesRequested || '');
   if (document.getElementById('i-email')) document.getElementById('i-email').value = l.email || '';
-  openModal('intakeModal');
+  // Show as floating popup
+  const popup = document.getElementById('intakeModal');
+  popup.style.display = 'block';
+}
+
+function closeIntakePopup(){
+  document.getElementById('intakeModal').style.display = 'none';
 }
 
 async function sendIntakeLink() {
@@ -3659,6 +3695,7 @@ async function sendIntakeLink() {
   // Save intake trip details to lead record
   const updates = {
     checkIn: gv('i-checkIn'),
+    datesRequested: gv('i-datesRequested'),
     checkOut: gv('i-checkOut'),
     resort: gv('i-resort'),
     destination: gv('i-destination'),
@@ -3707,7 +3744,7 @@ amy.cate@destinationweddings.com
     });
   }
 
-  closeModal('intakeModal');
+  closeIntakePopup();
 }
 
 async function viewResponses(leadId) {
@@ -3782,25 +3819,30 @@ function copyIntakeLink() {
 }
 </script>
 
-<!-- Intake Modal -->
-<div class="modal-overlay" id="intakeModal">
-  <div class="modal">
-    <h3>Send Intake Form</h3>
-    <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">Fill in what you know — the client fills out the rest.</p>
+<!-- Intake Modal — Draggable Floating Popup -->
+<div id="intakeModal" style="display:none;position:fixed;top:80px;right:24px;width:420px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.22);z-index:99999;border:1px solid #e0e0e0;overflow:hidden">
+  <!-- Drag handle / header -->
+  <div id="intakeModalHeader" style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none">
+    <div style="color:white;font-weight:700;font-size:.95rem">📋 Send Intake Form</div>
+    <button onclick="closeIntakePopup()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>
+  </div>
+  <div style="padding:18px;max-height:75vh;overflow-y:auto">
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Fill in what you know — the client fills out the rest.</p>
     <div class="form-grid">
       <div class="form-group full"><label>Group / Couple Name</label><input type="text" id="i-names" readonly style="background:var(--surface2);color:var(--muted)"></div>
       <div class="form-group"><label>Resort</label><input type="text" id="i-resort" placeholder="e.g. Dreams Royal Beach"></div>
       <div class="form-group"><label>Destination</label><input type="text" id="i-destination" placeholder="e.g. Punta Cana, DR"></div>
-      <div class="form-group"><label>Check-in Date</label><input type="date" id="i-checkIn"></div>
-      <div class="form-group"><label>Check-out Date</label><input type="date" id="i-checkOut"></div>
+      <div class="form-group"><label>Check-In Date</label><input type="date" id="i-checkIn"></div>
+      <div class="form-group"><label>Check-Out Date</label><input type="date" id="i-checkOut"></div>
+      <div class="form-group full"><label>Dates Requested <span style="font-weight:400;color:var(--muted);font-size:.8rem">(free text)</span></label><input type="text" id="i-datesRequested" placeholder="e.g. Feb 14–21, 2027 or flexible"></div>
       <div class="form-group full"><label>Room Category <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional)</span></label><input type="text" id="i-roomCategory" placeholder="e.g. Deluxe Ocean View King"></div>
-      <div class="form-group full"><label>Note to client <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional — appears on their form)</span></label><input type="text" id="i-intakeNote" placeholder="e.g. So excited for you! Please fill this out at your earliest convenience."></div>
-      <div class="form-group full"><label>Send to email</label><input type="email" id="i-email" placeholder="Client's email — leave blank to just copy the link"></div>
+      <div class="form-group full"><label>Note to client <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional)</span></label><input type="text" id="i-intakeNote" placeholder="e.g. So excited for you!"></div>
+      <div class="form-group full"><label>Send to email</label><input type="email" id="i-email" placeholder="Leave blank to just copy the link"></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('intakeModal')">Cancel</button>
-      <button class="btn btn-outline" id="copyIntakeLinkBtn" onclick="copyIntakeLink()">🔗 Copy Link</button>
-      <button class="btn btn-primary" onclick="sendIntakeLink()">📧 Send</button>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm" onclick="closeIntakePopup()">Cancel</button>
+      <button class="btn btn-outline btn-sm" id="copyIntakeLinkBtn" onclick="copyIntakeLink()">🔗 Copy Link</button>
+      <button class="btn btn-primary btn-sm" onclick="sendIntakeLink()">📧 Send</button>
     </div>
   </div>
 </div>
