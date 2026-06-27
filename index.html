@@ -3174,7 +3174,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
       <div class="form-group">
         <label>Flight # <span style="color:#888;font-weight:400;font-size:.78rem">(e.g. AA2345)</span></label>
         <div style="display:flex;gap:6px">
-          <input type="text" id="${prefix}-flight" value="" style="flex:1;text-transform:uppercase" placeholder="AA2345" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="${prefix}-flight" value="${flight}" style="flex:1;text-transform:uppercase" placeholder="AA2345" oninput="this.value=this.value.toUpperCase()">
           <button type="button" class="btn btn-outline btn-sm" onclick="lookupFlightFor('${type}',${idx})" style="padding:4px 10px">🔍</button>
         </div>
         <div id="${prefix}-result" style="font-size:.8rem;margin-top:3px"></div>
