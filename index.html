@@ -4089,7 +4089,7 @@ function showInboxIntakeDetail(id, data){
     + '<div style="font-size:.82rem;color:#888;margin-bottom:12px">'+groupLabel+'</div>'
     + '<div style="margin-bottom:16px">'+rows+'</div>'
     + '<div style="display:flex;justify-content:flex-end;gap:10px">'
-    + '<button onclick="window.location.href=\'mailto:\'+replyEmail+\'?subject=\'+replySubject" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
+    + '<button onclick="safeMailto(\'mailto:'+replyEmail+'?subject='+replySubject+'\')" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
     + '<button onclick="document.getElementById(&quot;inbox-intake-panel&quot;).remove()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Done</button>'
     + '</div></div>';
   document.body.appendChild(panel);
