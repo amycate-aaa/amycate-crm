@@ -2034,8 +2034,14 @@ function renderFlights(){
 function openFlightModal(guestId){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editFlightId=null;
-  sv('f-transfer','Not Booked'); sv('f-notes','');
-  const g = guestId ? guests.find(x=>x.id===guestId) : null;
+  
+  // Load existing transfer/notes from first guest with flight data
+  const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
+  const wGuests=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const firstFlight = guestId ? fMap[guestId] : wGuests.map(g=>fMap[g.id]).find(f=>f);
+  sv('f-transfer', firstFlight?.transfer||'Not Booked');
+  sv('f-notes', firstFlight?.notes||'');
+  
   document.getElementById('flightModalTitle').textContent = 'Flight Info — All Guests';
   setTimeout(()=>renderFlightPersonSections(guestId), 50);
   openModal('flightModal');
@@ -3148,7 +3154,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
   const bg = isArr ? '#e8f0f8' : '#f0f0e8';
   const border = isArr ? '#b0c8e0' : '#d0c890';
   const label = isArr ? '✈ Arrival' : '✈ Departure';
-  const flight = '';
+  const flight = existingData?.flight||'';
   const time = existingData?.time||'';
   const airport = existingData?.airport||'';
   const date = (existingData?.date && existingData.date!=='')?existingData.date:'';
