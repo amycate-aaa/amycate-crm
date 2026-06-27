@@ -4078,14 +4078,14 @@ function showInboxIntakeDetail(id, data){
   const replyEmail = data.email||'';
   panel.innerHTML = '<div id="inbox-intake-handle" style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none">'
     + '<div style="color:white;font-weight:700;font-size:.95rem">&#x1F4CB; Intake &#x2014; '+guestName+'</div>'
-    + '<button onclick="document.getElementById('inbox-intake-panel').remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>'
+    + '<button onclick="document.getElementById(&quot;inbox-intake-panel&quot;).remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>'
     + '</div>'
     + '<div style="padding:18px;max-height:75vh;overflow-y:auto">'
     + '<div style="font-size:.82rem;color:#888;margin-bottom:12px">'+groupLabel+'</div>'
     + '<div style="margin-bottom:16px">'+rows+'</div>'
     + '<div style="display:flex;justify-content:flex-end;gap:10px">'
-    + '<button onclick="window.location.href='mailto:'+replyEmail+'?subject='+replySubject+''" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
-    + '<button onclick="document.getElementById('inbox-intake-panel').remove()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Done</button>'
+    + '<button onclick="window.location.href=\'mailto:\'+replyEmail+\'?subject=\'+replySubject" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
+    + '<button onclick="document.getElementById(&quot;inbox-intake-panel&quot;).remove()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Done</button>'
     + '</div></div>';
   document.body.appendChild(panel);
   makeDraggable(panel, document.getElementById('inbox-intake-handle'));
