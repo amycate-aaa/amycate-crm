@@ -1,4 +1,4 @@
-const CACHE = 'wedding-crm-v89';
+const CACHE = 'wedding-crm-v92';
 self.addEventListener('install', e => { self.skipWaiting(); });
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(keys =>
