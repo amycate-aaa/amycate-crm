@@ -3722,30 +3722,26 @@ amy.cate@destinationweddings.com
 async function viewResponses(leadId) {
   const l = leads.find(x => x.id === leadId);
   const leadName = l ? l.names : 'This Group';
-  const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
-  modal.setAttribute('data-modal','1');
+  // Remove any existing response panel
+  const existing = document.getElementById('responses-panel');
+  if(existing) existing.remove();
+  const panel = document.createElement('div');
+  panel.id = 'responses-panel';
+  panel.style.cssText = 'position:fixed;top:80px;left:24px;width:460px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:99999;border:1px solid #e0e0e0;overflow:hidden';
+  const dragHandle = document.createElement('div');
+  dragHandle.style.cssText = 'background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none';
+  dragHandle.innerHTML = '<div style="color:white;font-weight:700;font-size:.95rem">📋 Intake Responses — ' + esc(leadName) + '</div><button onclick="document.getElementById('responses-panel').remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>';
   const inner = document.createElement('div');
-  inner.style.cssText = 'background:white;border-radius:12px;padding:28px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto';
-  const header = document.createElement('div');
-  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px';
-  const title = document.createElement('h3');
-  title.style.cssText = 'margin:0;font-size:1.1rem';
-  title.textContent = 'Quote Requests — ' + leadName;
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = '✕';
-  closeBtn.style.cssText = 'background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666';
-  closeBtn.onclick = () => modal.remove();
-  header.appendChild(title);
-  header.appendChild(closeBtn);
+  inner.style.cssText = 'padding:18px;max-height:75vh;overflow-y:auto';
   const listEl = document.createElement('div');
   listEl.id = 'responses-list';
   listEl.textContent = 'Loading...';
-  inner.appendChild(header);
   inner.appendChild(listEl);
-  modal.appendChild(inner);
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-  document.body.appendChild(modal);
+  panel.appendChild(dragHandle);
+  panel.appendChild(inner);
+  document.body.appendChild(panel);
+  // Make draggable
+  makeDraggable(panel, dragHandle);
 
   try {
     const snap = await db.collection('intakes').where('leadId','==',leadId).get();
@@ -4070,24 +4066,30 @@ function showInboxIntakeDetail(id, data){
       <div style="font-size:.88rem;color:#1a1a1a">${esc(String(value))}</div>
     </div>`).join('');
 
-  overlay.innerHTML = `
-    <div style="background:white;border-radius:14px;padding:28px;width:560px;max-width:95vw;max-height:85vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.3)">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div>
-          <h3 style="font-size:1rem;font-weight:700;color:#1a1a1a">📋 Intake — ${esc((data.firstName||'')+' '+(data.lastName||'')).trim()}</h3>
-          <div style="font-size:.82rem;color:#888;margin-top:3px">${esc(data.groupName||data.eventName||'')}</div>
-        </div>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">✕</button>
-      </div>
-      <div style="margin-bottom:20px">${rows}</div>
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button onclick="window.location.href='mailto:${data.email||''}?subject=Re: ${esc(data.groupName||data.eventName||'Your Inquiry')}'" style="padding:9px 18px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer">📧 Reply</button>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="padding:9px 18px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer">Done</button>
-      </div>
-    </div>`;
-
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+  // Remove existing if open
+  const existingIntake = document.getElementById('inbox-intake-panel');
+  if(existingIntake) existingIntake.remove();
+  const panel = document.createElement('div');
+  panel.id = 'inbox-intake-panel';
+  panel.style.cssText = 'position:fixed;top:80px;left:24px;width:460px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:99999;border:1px solid #e0e0e0;overflow:hidden';
+  const guestName = esc((data.firstName||'')+' '+(data.lastName||'')).trim();
+  const groupLabel = esc(data.groupName||data.eventName||'');
+  const replySubject = encodeURIComponent('Re: '+(data.groupName||data.eventName||'Your Inquiry'));
+  const replyEmail = data.email||'';
+  panel.innerHTML = '<div id="inbox-intake-handle" style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none">'
+    + '<div style="color:white;font-weight:700;font-size:.95rem">&#x1F4CB; Intake &#x2014; '+guestName+'</div>'
+    + '<button onclick="document.getElementById('inbox-intake-panel').remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>'
+    + '</div>'
+    + '<div style="padding:18px;max-height:75vh;overflow-y:auto">'
+    + '<div style="font-size:.82rem;color:#888;margin-bottom:12px">'+groupLabel+'</div>'
+    + '<div style="margin-bottom:16px">'+rows+'</div>'
+    + '<div style="display:flex;justify-content:flex-end;gap:10px">'
+    + '<button onclick="window.location.href='mailto:'+replyEmail+'?subject='+replySubject+''" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
+    + '<button onclick="document.getElementById('inbox-intake-panel').remove()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Done</button>'
+    + '</div></div>';
+  document.body.appendChild(panel);
+  makeDraggable(panel, document.getElementById('inbox-intake-handle'));
+  overlay.remove();
 }
 
 function showInboxEmailDetail(id, data){
@@ -4598,32 +4600,35 @@ function importResortLibrary(event){ const file=event.target.files[0]; if(!file)
 document.addEventListener('DOMContentLoaded', ()=>{ qbInitDestinations(); qbFilterResorts(); });
 </script>
 <script>
-// ── Intake popup drag ──
-(function(){
-  const popup = document.getElementById('intakeModal');
-  const handle = document.getElementById('intakeModalHeader');
-  if(!popup || !handle) return;
+// ── Shared draggable helper ──
+function makeDraggable(panel, handle){
   let dragging=false, ox=0, oy=0;
   handle.addEventListener('mousedown', function(e){
     dragging=true;
-    const r=popup.getBoundingClientRect();
+    const r=panel.getBoundingClientRect();
     ox=e.clientX-r.left; oy=e.clientY-r.top;
     handle.style.cursor='grabbing';
     e.preventDefault();
   });
   document.addEventListener('mousemove', function(e){
     if(!dragging) return;
-    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-popup.offsetWidth);
-    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-popup.offsetHeight);
-    popup.style.right='auto';
-    popup.style.left=x+'px';
-    popup.style.top=y+'px';
+    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-panel.offsetWidth);
+    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-panel.offsetHeight);
+    panel.style.right='auto';
+    panel.style.left=x+'px';
+    panel.style.top=y+'px';
   });
   document.addEventListener('mouseup', function(){
     dragging=false;
     handle.style.cursor='grab';
   });
-})();
+}
+// ── Wire up Send Intake popup drag ──
+document.addEventListener('DOMContentLoaded', function(){
+  const popup = document.getElementById('intakeModal');
+  const handle = document.getElementById('intakeModalHeader');
+  if(popup && handle) makeDraggable(popup, handle);
+});
 </script>
 </body>
 </html>
