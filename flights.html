@@ -158,11 +158,11 @@ function renderForm(guest, wedding, flightDoc){
           </div>
           <div class="form-group">
             <label>Flight # (e.g. AA2345)</label>
-            <input type="text" id="arr-${idx}-flight" value="${esc(dArr.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+            <input type="text" id="arr-${idx}-flight" value="${esc(dArr.flight||'')}" placeholder="" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
           </div>
           <div class="form-group" style="grid-column:1/-1">
             <label>Arrives At (time)</label>
-            <input type="text" id="arr-${idx}-time" value="${esc(dArr.time||'')}" placeholder="e.g. 2:45 PM">
+            <input type="text" id="arr-${idx}-time" value="${esc(dArr.time||'')}" placeholder="">
           </div>
         </div>
         <div class="section-label dept" style="margin-bottom:10px">✈ Departure</div>
@@ -173,11 +173,11 @@ function renderForm(guest, wedding, flightDoc){
           </div>
           <div class="form-group">
             <label>Flight # (e.g. AA2345)</label>
-            <input type="text" id="dept-${idx}-flight" value="${esc(dDept.flight||'')}" placeholder="AA2345" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
+            <input type="text" id="dept-${idx}-flight" value="${esc(dDept.flight||'')}" placeholder="" style="text-transform:uppercase" oninput="this.value=this.value.toUpperCase()">
           </div>
           <div class="form-group" style="grid-column:1/-1">
             <label>Departs At (time)</label>
-            <input type="text" id="dept-${idx}-time" value="${esc(dDept.time||'')}" placeholder="e.g. 10:00 AM">
+            <input type="text" id="dept-${idx}-time" value="${esc(dDept.time||'')}" placeholder="">
           </div>
         </div>
       </div>`;
