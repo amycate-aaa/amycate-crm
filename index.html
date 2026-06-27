@@ -3228,8 +3228,8 @@ function renderFlightPersonSections(focusGuestId){
     try{ deptPersons = existingFlight?.personsDept ? JSON.parse(existingFlight.personsDept) : []; }catch(e){}
 
     persons.forEach((name, pIdx) => {
-      const arrData  = arrPersons[pIdx] || { flight: '', time: '', airport: '', date: g.depart||'' };
-      const deptData = deptPersons[pIdx] || { flight: '', time: '', date: g.return||'' };
+      const arrData  = arrPersons[pIdx] || { flight: pIdx===0?existingFlight?.arrFlight||'':'', time: pIdx===0?existingFlight?.arrTime||'':'', airport: pIdx===0?existingFlight?.arrAirport||'':'', date: pIdx===0?existingFlight?.arrDate||g.depart||'':g.depart||'' };
+      const deptData = deptPersons[pIdx] || { flight: pIdx===0?existingFlight?.deptFlight||'':'', time: pIdx===0?existingFlight?.deptTime||'':'', date: pIdx===0?existingFlight?.deptDate||g.return||'':g.return||'' };
       
       combinedHtml += `<div style="background:rgba(255,255,255,.07);border-radius:8px;padding:12px 14px;margin-bottom:12px">
         <div style="font-size:.85rem;font-weight:700;color:#c9a96e;margin-bottom:10px">👤 ${name}</div>
