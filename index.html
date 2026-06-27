@@ -3884,6 +3884,7 @@ async function loadInbox(){
     flightSnap.docs.forEach(d => {
       const data = d.data();
       if(!data.submittedAt) return; // only show guest-submitted ones
+      if(data.crmDismissed === true) return; // skip dismissed
       const g = guests.find(x => x.id === data.guestId);
       const w = weddings.find(x => x.id === data.weddingId);
       items.push({
@@ -3996,7 +3997,9 @@ async function dismissInboxItem(id){
       } else if(item.type === 'intake'){
         await db.collection('intakes').doc(id).update({ crmDismissed: true });
       } else if(item.type === 'flight' && item.data?.guestId){
-        // Just keep dismissed in localStorage for flights
+        await db.collection('flights').where('guestId','==',item.data.guestId).get().then(snap=>{
+          snap.docs.forEach(d=>d.ref.update({crmDismissed:true}));
+        });
       } else if(item.type === 'lead'){
         await db.collection('leads').doc(id.replace('lead_','')).update({ crmDismissed: true });
       }
