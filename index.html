@@ -3195,10 +3195,7 @@ function renderFlightPersonSections(focusGuestId){
 
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
 
-  let arrHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px">✈ Arrivals</div>`;
-  let deptHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px;margin-top:20px">✈ Departures</div>`;
-
-  // Global person index for copy-from-above
+  let combinedHtml = '';
   let globalIdx = 0;
 
   wGuests.forEach(g => {
@@ -3210,16 +3207,28 @@ function renderFlightPersonSections(focusGuestId){
     try{ deptPersons = existingFlight?.personsDept ? JSON.parse(existingFlight.personsDept) : []; }catch(e){}
 
     persons.forEach((name, pIdx) => {
-      const arrData  = { flight: '', time: '', airport: '', date: pIdx===0?g.depart||'':g.depart||'' };
-      const deptData = { flight: '', time: '', date: pIdx===0?g.return||'':g.return||'' };
-      arrHtml  += flightPersonSection(name, globalIdx, 'arr',  g.depart, arrData);
-      deptHtml += flightPersonSection(name, globalIdx, 'dept', g.return, deptData);
+      const arrData  = arrPersons[pIdx] || { flight: '', time: '', airport: '', date: g.depart||'' };
+      const deptData = deptPersons[pIdx] || { flight: '', time: '', date: g.return||'' };
+      
+      combinedHtml += `<div style="background:rgba(255,255,255,.07);border-radius:8px;padding:12px 14px;margin-bottom:12px">
+        <div style="font-size:.85rem;font-weight:700;color:#c9a96e;margin-bottom:10px">👤 ${name}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div>
+            <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#aac;font-weight:700;margin-bottom:8px">✈ Arrival</div>
+            ${flightPersonSection(name, globalIdx, 'arr', g.depart, arrData)}
+          </div>
+          <div>
+            <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#aac;font-weight:700;margin-bottom:8px">✈ Departure</div>
+            ${flightPersonSection(name, globalIdx, 'dept', g.return, deptData)}
+          </div>
+        </div>
+      </div>`;
       globalIdx++;
     });
   });
 
-  arrDiv.innerHTML = arrHtml;
-  deptDiv.innerHTML = deptHtml;
+  arrDiv.innerHTML = combinedHtml;
+  deptDiv.innerHTML = '';
 }
 
 function copyFlightFromAbove(type, idx){
