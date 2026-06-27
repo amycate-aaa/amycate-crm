@@ -3267,10 +3267,15 @@ async function lookupFlightFor(type, idx){
       const arr=flight.arrival;
       if(arr.airport?.iata){const el=document.getElementById(`${prefix}-airport`);if(el)el.value=arr.airport.iata;}
       if(arr.scheduledTime?.local){
-        const t=new Date(arr.scheduledTime.local);
-        const timeEl=document.getElementById(`${prefix}-time`);
-        if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-        const newDate=arr.scheduledTime.local.split('T')[0];
+        const localStr=arr.scheduledTime.local;
+        const timePart=localStr.split('T')[1]||'';
+        const [hh,mm]=timePart.split(':');
+        if(hh&&mm){
+          const h=parseInt(hh); const ampm=h>=12?'PM':'AM'; const h12=h%12||12;
+          const timeEl=document.getElementById(`${prefix}-time`);
+          if(timeEl)timeEl.value=`${h12}:${mm} ${ampm}`;
+        }
+        const newDate=localStr.split('T')[0];
         const dateEl=document.getElementById(`${prefix}-date`);
         if(dateEl&&newDate&&newDate.match(/^\d{4}-\d{2}-\d{2}$/))dateEl.value=newDate;
       }
@@ -3278,10 +3283,15 @@ async function lookupFlightFor(type, idx){
     } else if(type==='dept'&&flight.departure){
       const dept=flight.departure;
       if(dept.scheduledTime?.local){
-        const t=new Date(dept.scheduledTime.local);
-        const timeEl=document.getElementById(`${prefix}-time`);
-        if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-        const newDate=dept.scheduledTime.local.split('T')[0];
+        const localStr=dept.scheduledTime.local;
+        const timePart=localStr.split('T')[1]||'';
+        const [hh,mm]=timePart.split(':');
+        if(hh&&mm){
+          const h=parseInt(hh); const ampm=h>=12?'PM':'AM'; const h12=h%12||12;
+          const timeEl=document.getElementById(`${prefix}-time`);
+          if(timeEl)timeEl.value=`${h12}:${mm} ${ampm}`;
+        }
+        const newDate=localStr.split('T')[0];
         const dateEl=document.getElementById(`${prefix}-date`);
         if(dateEl&&newDate&&newDate.match(/^\d{4}-\d{2}-\d{2}$/))dateEl.value=newDate;
       }
