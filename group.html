@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Details — Amy Cate</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #f5f5f7; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; color: #1a1a1a; }
+  header { background: #1a1a1a; border-bottom: 1px solid #333; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { color: #c9a96e; font-size: 1rem; font-weight: 700; letter-spacing: .04em; }
+  .header-sub { color: #888; font-size: .82rem; }
+  .wedding-bar { background: #1a1a1a; border-bottom: 1px solid #e0e0e0; padding: 12px 20px; }
+  .wedding-bar .wname { font-size: .95rem; font-weight: 700; color: white; }
+  .wedding-bar .wdate { font-size: .82rem; color: #c9a96e; margin-top: 2px; }
+  .stat-row { display: flex; gap: 0; border-bottom: 1px solid #e0e0e0; }
+  .stat-card { flex: 1; padding: 16px 20px; border-right: 1px solid #e0e0e0; background: #ffffff; }
+  .stat-card:last-child { border-right: none; }
+  .stat-card .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: #888; margin-bottom: 4px; }
+  .stat-card .value { font-size: 1.4rem; font-weight: 700; color: #1a1a1a; }
+  .stat-card .value.red { color: #e05555; }
+  .stat-card .value.green { color: #4caf7d; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; min-width: 650px; }
+  thead tr { background: #1a1a1a; }
+  thead th { padding: 10px 12px; text-align: left; font-size: .72rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: #aaa; border-bottom: 1px solid #e0e0e0; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid #f0f0f0; }
+  tbody tr:hover { background: #1a1a1a; }
+  tbody td { padding: 11px 12px; font-size: .87rem; vertical-align: middle; color: #333; }
+  .guest-name { font-weight: 700; color: #1a1a1a; }
+  .guest-add { color: #888; font-size: .82rem; margin-top: 2px; }
+  .booking { color: #c9a96e; font-weight: 600; font-size: .85rem; font-family: monospace; }
+  .room-type { color: #1a1a1a; font-size: .82rem; max-width: 160px; }
+  .amount { font-weight: 600; color: #1a1a1a; }
+  .paid-full { color: #4caf7d; font-weight: 700; }
+  .paid-partial { color: #f0c040; font-weight: 700; }
+
+  /* Password screen */
+  .pw-screen { display: flex; align-items: center; justify-content: center; min-height: 80vh; padding: 20px; }
+  .pw-box { background: #1a1a1a; border: 1px solid #2a2a3e; border-radius: 14px; padding: 36px; width: 360px; max-width: 95vw; text-align: center; }
+  .pw-box .pw-icon { font-size: 2.5rem; margin-bottom: 12px; }
+  .pw-box h2 { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 6px; }
+  .pw-box p { font-size: .88rem; color: #888; margin-bottom: 20px; }
+  .pw-box input { width: 100%; padding: 11px 14px; background: #f5f5f7; border: 1px solid #333; border-radius: 8px; color: #1a1a1a; font-size: 1rem; text-align: center; letter-spacing: .05em; margin-bottom: 12px; outline: none; }
+  .pw-box input:focus { border-color: #c9a96e; }
+  .pw-box button { width: 100%; padding: 12px; background: #c9a96e; color: #1a1a1a; border: none; border-radius: 8px; font-size: .95rem; font-weight: 700; cursor: pointer; }
+  .pw-box button:hover { background: #d4b87e; }
+  .pw-error { color: #e05555; font-size: .85rem; margin-top: 8px; display: none; }
+
+  .loading-screen { text-align: center; padding: 80px 20px; color: #666; }
+  .spinner { width: 36px; height: 36px; border: 3px solid #eee; border-top-color: #c9a96e; border-radius: 50%; animation: spin .8s linear infinite; margin: 0 auto 16px; }
+  .footer { text-align: center; padding: 24px 20px; font-size: .78rem; color: #555; border-top: 1px solid #e0e0e0; margin-top: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .sort-arrow { font-size: .7rem; color: #c9a96e; margin-left: 3px; }
+  thead th:hover { background: #333; }
+  @media (max-width: 600px) { .stat-row { flex-wrap: wrap; } .stat-card { flex: 1 1 50%; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="logo">✦ Amy Cate</div>
+    <div class="header-sub">Destination Weddings Travel Group & Celebration Travel</div>
+  </div>
+</header>
+
+<div id="loadingScreen" class="loading-screen">
+  <div class="spinner"></div>
+  <p>Loading…</p>
+</div>
+
+<div id="pwScreen" style="display:none">
+  <div class="pw-screen">
+    <div class="pw-box">
+      <div class="pw-icon">🔐</div>
+      <h2 id="pwTitle">Group Portal</h2>
+      <p>Enter the password provided by Amy to view your group details.</p>
+      <input type="password" id="pwInput" placeholder="Enter password" onkeydown="if(event.key==='Enter') checkPassword()">
+      <button onclick="checkPassword()">View My Group →</button>
+      <div class="pw-error" id="pwError">Incorrect password. Please try again.</div>
+    </div>
+  </div>
+</div>
+
+<div id="content" style="display:none"></div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  authDomain: "wedding-crm-e5d12.firebaseapp.com",
+  projectId: "wedding-crm-e5d12",
+  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+  messagingSenderId: "246819649586",
+  appId: "1:246819649586:web:a74debd217ce048d26242b"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function show(id){ document.getElementById(id).style.display=''; }
+function hide(id){ document.getElementById(id).style.display='none'; }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtDate(d){ if(!d) return '—'; try{ return new Date(d+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } }
+function fmt(n){ return '$'+parseFloat(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,','); }
+
+const params = new URLSearchParams(window.location.search);
+const weddingId = params.get('w');
+
+let _wedding = null;
+let _guests  = [];
+
+async function init(){
+  if(!weddingId){ showError(); return; }
+  try{
+    const [wSnap, gSnap, fSnap] = await Promise.all([
+      db.collection('weddings').doc(weddingId).get(),
+      db.collection('guests').where('weddingId','==',weddingId).get(),
+      db.collection('flights').where('weddingId','==',weddingId).get()
+    ]);
+    if(!wSnap.exists){ showError(); return; }
+    _wedding = { id: wSnap.id, ...wSnap.data() };
+    _fMap = {};
+    fSnap.docs.forEach(d => { const f={id:d.id,...d.data()}; _fMap[f.guestId]=f; });
+    _guests  = gSnap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(g => g.status !== 'Cancelled')
+      .sort((a,b) => (a.depart||'').localeCompare(b.depart||''));
+
+    hide('loadingScreen');
+
+    // If no password set, show directly
+    if(!_wedding.portalPassword){
+      render(_wedding, _guests);
+    } else {
+      document.getElementById('pwTitle').textContent = _wedding.names || 'Group Portal';
+      show('pwScreen');
+      setTimeout(()=>document.getElementById('pwInput').focus(), 100);
+    }
+  } catch(e){ console.error(e); showError(); }
+}
+
+function showError(){
+  hide('loadingScreen');
+  document.body.innerHTML += '<div style="text-align:center;padding:80px 20px;color:#666"><h2 style="color:#8a3a3a;margin-bottom:10px">Group not found</h2><p>This link may be invalid or expired.</p><p style="margin-top:12px"><a href="mailto:amy.cate@destinationweddings.com" style="color:#c9a96e">amy.cate@destinationweddings.com</a></p></div>';
+}
+
+function checkPassword(){
+  const entered = document.getElementById('pwInput').value.trim();
+  const correct = _wedding.portalPassword;
+  if(entered.toLowerCase() === correct.toLowerCase()){
+    hide('pwScreen');
+    render(_wedding, _guests);
+  } else {
+    const err = document.getElementById('pwError');
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+    setTimeout(()=>err.style.display='none', 3000);
+  }
+}
+
+function countPeople(guests){
+  return guests.reduce((acc,g)=>{
+    acc++;
+    if(g.additional) acc += g.additional.split(',').filter(x=>x.trim()).length;
+    return acc;
+  }, 0);
+}
+
+function render(w, guests){
+  let totalCost=0, totalPaid=0, totalDue=0;
+  guests.forEach(g=>{
+    const cost = parseFloat(g.roomcost||0) + parseFloat(g.inscost||0);
+    const paid = parseFloat(g.deposit||0) + parseFloat(g.pay1||0) + parseFloat(g.pay2||0);
+    totalCost += cost;
+    totalPaid += paid;
+    totalDue  += Math.max(0, cost - paid);
+  });
+
+  let rows = '';
+  guests.forEach((g, idx)=>{
+    const cost = parseFloat(g.roomcost||0) + parseFloat(g.inscost||0);
+    const paid = parseFloat(g.deposit||0) + parseFloat(g.pay1||0) + parseFloat(g.pay2||0);
+    const due  = cost - paid;
+    const payStatus = due <= 0.01
+      ? `<span class="paid-full">✓ Paid</span>`
+      : paid > 0
+        ? `<span class="paid-partial">Partial</span>`
+        : `<span style="color:#e05555">Pending</span>`;
+
+    const rc = parseFloat(g.roomcost||0);
+    const ic = parseFloat(g.inscost||0);
+    const totalPaid = parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
+    const balDue = cost - totalPaid;
+    rows += `<tr>
+      <td style="color:#555;font-size:.8rem">${idx+1}</td>
+      <td><span class="booking">${esc(g.booking||'—')}</span></td>
+      <td class="room-type">${esc(g.roomtype||'—')}</td>
+      <td>
+        <div class="guest-name">${esc(g.names||'—')}</div>
+        ${g.additional ? g.additional.split(',').map(a=>`<div class="guest-add">+ ${esc(a.trim())}</div>`).join('') : ''}
+      </td>
+      <td style="white-space:nowrap">${fmtDate(g.depart)}</td>
+      <td style="text-align:center">${g.nights||'—'}</td>
+      <td style="white-space:nowrap">${fmtDate(g.return)}</td>
+      <td class="amount">${rc>0?fmt(rc):'—'}</td>
+      <td class="amount">${ic>0?fmt(ic):'—'}</td>
+      <td class="amount">${fmt(cost)}</td>
+      <td class="amount" style="color:#2a7a4a;font-weight:600">${totalPaid>0?fmt(totalPaid):'—'}</td>
+      <td class="amount" style="color:${balDue>0?'#e05555':'#2a7a4a'};font-weight:700">${balDue>0?fmt(balDue):'✓ Paid'}</td>
+      <td style="text-align:center">${(()=>{
+        const fl=_fMap[g.id];
+        if(!fl||(!fl.arrFlight&&!fl.deptFlight)) return '<span style="color:#ccc;font-size:.85rem">—</span>';
+        if(fl.arrFlight&&fl.deptFlight) return '✅';
+        return '⚠️';
+      })()}</td>
+    </tr>`;
+  });
+
+  const html = `
+    <div class="wedding-bar">
+      <div class="wname">✦ ${esc(w.names||'')} &nbsp;·&nbsp; ${esc(w.resort||'')}${w.location?', '+esc(w.location):''}</div>
+      <div class="wdate">Wedding Date: ${fmtDate(w.weddingDate)}</div>
+    </div>
+    <div style="background:#fff8e8;border:1px solid #f0d080;border-radius:10px;padding:14px 18px;margin:16px 20px 0;font-size:.83rem;color:#555;line-height:1.6">
+      <strong style="color:#1a1a1a">📋 Please Note:</strong> This group summary is for your personal reference only. All information is manually entered and maintained by Amy Cate. While every effort is made to ensure accuracy, errors may occur. This portal reflects bookings as recorded in Amy's system and is for viewing purposes only — it is not generated from the resort's system and should not be used as an official travel document. <strong>If you notice any discrepancies, please use the button below to notify Amy right away.</strong>
+    </div>
+    <div style="text-align:center;padding:12px 20px 0">
+      <button onclick="messageAmy()" style="background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;padding:10px 24px;font-size:.92rem;font-weight:700;cursor:pointer;letter-spacing:.02em">📧 Message Amy</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div class="label">Guest Count</div><div class="value">${countPeople(guests)}</div></div>
+      <div class="stat-card"><div class="label">Room Count</div><div class="value" style="color:#c9a96e">${guests.length}</div></div>
+      <div class="stat-card"><div class="label">Amount Due</div><div class="value ${totalDue>0.01?'red':''}">${fmt(totalDue)}</div></div>
+    </div>
+    <div class="table-wrap">
+      <table id="groupTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th onclick="sortTable('booking')" style="cursor:pointer;user-select:none">Booking # <span id="sort-booking" class="sort-arrow"></span></th>
+            <th onclick="sortTable('roomtype')" style="cursor:pointer;user-select:none">Room Type <span id="sort-roomtype" class="sort-arrow"></span></th>
+            <th onclick="sortTable('names')" style="cursor:pointer;user-select:none">Guest(s) <span id="sort-names" class="sort-arrow"></span></th>
+            <th onclick="sortTable('depart')" style="cursor:pointer;user-select:none">Arrival <span id="sort-depart" class="sort-arrow">↑</span></th>
+            <th onclick="sortTable('nights')" style="cursor:pointer;user-select:none;text-align:center">Nights <span id="sort-nights" class="sort-arrow"></span></th>
+            <th onclick="sortTable('return')" style="cursor:pointer;user-select:none">Depart <span id="sort-return" class="sort-arrow"></span></th>
+            <th onclick="sortTable('roomcost')" style="cursor:pointer;user-select:none">Room Cost <span id="sort-roomcost" class="sort-arrow"></span></th>
+            <th>Insurance</th>
+            <th onclick="sortTable('cost')" style="cursor:pointer;user-select:none">Total Cost <span id="sort-cost" class="sort-arrow"></span></th>
+            <th onclick="sortTable('payment')" style="cursor:pointer;user-select:none">Payments <span id="sort-payment" class="sort-arrow"></span></th>
+            <th>Bal Due</th>
+            <th style="text-align:center">✈ Flight</th>
+          </tr>
+        </thead>
+        <tbody id="groupTbody">${rows}</tbody>
+      </table>
+    </div>
+    <div class="footer">
+      Amy M. Cate · Certified Destination Wedding & Group Travel Specialist · (832) 773-8664 · amy.cate@destinationweddings.com
+    </div>`;
+
+  document.getElementById('content').innerHTML = html;
+  show('content');
+  _allGuests = guests;
+  renderRows(guests);
+}
+
+function messageAmy(){
+  const subject = encodeURIComponent('Group Portal Question — ' + (_wedding.names||'My Group'));
+  const body = encodeURIComponent('Hi Amy,\n\nI was reviewing the group portal for ' + (_wedding.names||'our group') + ' and wanted to reach out about the following:\n\n[Please describe your question or discrepancy here]\n\nThank you!');
+  window.location.href = 'mailto:amy.cate@destinationweddings.com?subject=' + subject + '&body=' + body;
+}
+
+init();
+
+// ── SORT ──
+let _sortCol = 'depart', _sortDir = 1;
+let _fMap = {};
+let _allGuests = [];
+
+function sortTable(col){
+  if(_sortCol === col){ _sortDir *= -1; }
+  else { _sortCol = col; _sortDir = 1; }
+  document.querySelectorAll('.sort-arrow').forEach(el => el.textContent = '');
+  const arrow = document.getElementById('sort-'+col);
+  if(arrow) arrow.textContent = _sortDir === 1 ? '↑' : '↓';
+  renderRows(_allGuests);
+}
+
+function getVal(g, col){
+  if(col==='cost') return parseFloat(g.roomcost||0)+parseFloat(g.inscost||0);
+  if(col==='payment'){
+    const cost=parseFloat(g.roomcost||0)+parseFloat(g.inscost||0);
+    const paid=parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
+    return cost-paid;
+  }
+  return String(g[col]||'');
+}
+
+function renderRows(guests){
+  const sorted = [...guests].sort((a,b)=>{
+    const av=getVal(a,_sortCol), bv=getVal(b,_sortCol);
+    if(typeof av==='number' && typeof bv==='number') return (av-bv)*_sortDir;
+    return String(av).localeCompare(String(bv))*_sortDir;
+  });
+
+  let rows = '';
+  sorted.forEach((g, idx)=>{
+    const cost = parseFloat(g.roomcost||0)+parseFloat(g.inscost||0);
+    const paid = parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
+    const due  = cost-paid;
+    const payStatus = due<=0.01
+      ? '<span class="paid-full">✓ Paid</span>'
+      : paid>0
+        ? '<span class="paid-partial">Partial</span>'
+        : '<span style="color:#e05555">Pending</span>';
+    const rc2 = parseFloat(g.roomcost||0);
+    const ic2 = parseFloat(g.inscost||0);
+    const totalPaid2 = parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
+    const balDue2 = cost - totalPaid2;
+    rows += `<tr>
+      <td style="color:#aaa;font-size:.8rem">${idx+1}</td>
+      <td><span class="booking">${esc(g.booking||'—')}</span></td>
+      <td class="room-type">${esc(g.roomtype||'—')}</td>
+      <td>
+        <div class="guest-name">${esc(g.names||'—')}</div>
+        ${g.additional?g.additional.split(',').map(a=>`<div class="guest-add">+ ${esc(a.trim())}</div>`).join(''):''}
+      </td>
+      <td style="white-space:nowrap">${fmtDate(g.depart)}</td>
+      <td style="text-align:center">${g.nights||'—'}</td>
+      <td style="white-space:nowrap">${fmtDate(g.return)}</td>
+      <td class="amount">${rc2>0?fmt(rc2):'—'}</td>
+      <td class="amount">${ic2>0?fmt(ic2):'—'}</td>
+      <td class="amount">${fmt(cost)}</td>
+      <td class="amount" style="color:#2a7a4a;font-weight:600">${totalPaid2>0?fmt(totalPaid2):'—'}</td>
+      <td class="amount" style="color:${balDue2>0?'#e05555':'#2a7a4a'};font-weight:700">${balDue2>0?fmt(balDue2):'✓ Paid'}</td>
+      <td style="text-align:center">${(()=>{
+        const fl=_fMap[g.id];
+        if(!fl||(!fl.arrFlight&&!fl.deptFlight)) return '<span style="color:#ccc;font-size:.85rem">—</span>';
+        if(fl.arrFlight&&fl.deptFlight) return '✅';
+        return '⚠️';
+      })()}</td>
+    </tr>`;
+  });
+  document.getElementById('groupTbody').innerHTML = rows;
+}
+</script>
+</body>
+</html>
