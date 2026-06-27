@@ -498,18 +498,6 @@ tr:hover .sticky-col{background:#f8f8f8;}
             </div>
           </div>
 
-          <!-- Trip -->
-          <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Trip Details</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 70px;gap:10px;margin-bottom:10px">
-              <div><label class="form-label">Check-In</label><input type="date" id="qb-checkin" class="form-input" onchange="qbCalcCheckout()"></div>
-              <div><label class="form-label">Check-Out</label><input type="date" id="qb-checkout" class="form-input" onchange="qbCalcNights()"></div>
-              <div><label class="form-label">Nights</label><input type="number" id="qb-nights" class="form-input" placeholder="3" min="1" oninput="qbCalcCheckout()" style="min-width:0;padding:10px 6px"></div>
-            </div>
-            <div><label class="form-label">Event / Group Name</label><input id="qb-event" class="form-input" placeholder="e.g. Ticoya's Birthday Trip 2027"></div>
-          </div>
-
-          <!-- Room Options -->
           <!-- Guest -->
           <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
             <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Guest</div>
@@ -518,8 +506,8 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <div><label class="form-label">Rooming With</label><input id="qb-rooming" class="form-input" placeholder="Roommate or N/A"></div>
               <div><label class="form-label">Occupancy</label>
                 <select id="qb-occ" class="form-input" onchange="qbUpdateHints()">
-                  <option value="Double">Double (2 Guests)</option>
                   <option value="Single">Single (1 Guest)</option>
+                  <option value="Double">Double (2 Guests)</option>
                   <option value="Triple">Triple (3 Guests)</option>
                 </select>
               </div>
@@ -532,6 +520,17 @@ tr:hover .sticky-col{background:#f8f8f8;}
               </div>
             </div>
             <div style="margin-top:10px"><label class="form-label">Custom Intro (optional)</label><textarea id="qb-intro" class="form-input" rows="2" placeholder="Leave blank for auto-generated..."></textarea></div>
+          </div>
+
+          <!-- Trip -->
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Trip Details</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 70px;gap:10px;margin-bottom:10px">
+              <div><label class="form-label">Check-In</label><input type="date" id="qb-checkin" class="form-input" onchange="qbCalcCheckout()"></div>
+              <div><label class="form-label">Check-Out</label><input type="date" id="qb-checkout" class="form-input" onchange="qbCalcNights()"></div>
+              <div><label class="form-label">Nights</label><input type="number" id="qb-nights" class="form-input" value="7" min="1" oninput="qbCalcCheckout()" style="min-width:0;padding:10px 6px"></div>
+            </div>
+            <div><label class="form-label">Event / Group Name</label><input id="qb-event" class="form-input" placeholder="e.g. Ticoya's Birthday Trip 2027"></div>
           </div>
 
           <div id="qb-rooms-container"></div>
@@ -4455,7 +4454,7 @@ function qbBuildHTML(){
     const sn=occ==='Single'?'<div style="background:#fff8e8;border:1px solid #f0d080;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:.85rem;color:#555">✦ <em>Note:</em> Since you are traveling solo, your rate reflects single occupancy.</div>':'';
     return '<div style="padding:24px 28px;border-bottom:2px solid #eee;margin-bottom:0"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999">Option '+(i+1)+'</span>'+(o.topPick?'<span style="background:#E8714A;color:white;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase">★ Top Pick</span>':'')+(o.label?'<span style="background:#1B2B4B;color:#c9a96e;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase">'+o.label+'</span>':'')+'</div><div style="font-size:1.15rem;font-weight:800;color:#1B2B4B;margin-bottom:4px">'+o.name+(o.bed?' — '+o.bed:'')+'</div><div style="font-size:.82rem;color:#777;margin-bottom:14px">'+occ+' Occupancy · Transportation Included</div><div style="font-size:.88rem;color:#444;line-height:1.65;margin-bottom:16px">'+o.desc+sn+'</div><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div style="font-size:1.6rem;font-weight:800;color:#1B2B4B">'+qbFmt(o.price)+'</div><div style="font-size:.78rem;color:#888;margin-top:2px">'+nights+' nights · '+(occ==='Double'?'Double occupancy':occ==='Triple'?'Triple occupancy':'Single occupancy')+' · '+pp+'Transportation included</div></div><a href="'+(o.link||'#')+'" style="background:#E8714A;color:white;text-decoration:none;padding:12px 24px;border-radius:6px;font-weight:700;font-size:.88rem;display:inline-block">Book Now →</a></div></div>';
   }).join('');
-  const xhaleHtml=xhale?'<div style="background:#1B2B4B;padding:20px 28px"><div style="color:#c9a96e;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">✦ Xhale Club Perks Included</div><ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px">'+["Exclusive access to 2 private Xhale-only pools","Enhanced concierge service & VIP host","Continental breakfast, afternoon hors doeuvres & desserts","Top-shelf spirits & premium bar service","Preferred restaurant seating","Upgraded mini-bar & bath amenities"].map(p=>'<li style="font-size:.82rem;color:#dde;display:flex;align-items:flex-start;gap:6px"><span style="color:#E8714A">✦</span>'+p+'</li>').join('')+'</ul></div>':'';
+  const xhaleHtml=xhale?'<div style="background:#1B2B4B;padding:20px 28px"><div style="color:#c9a96e;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">✦ Xhale Club Perks Included</div><ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px">'+["Exclusive access to private Xhale Club pools","Dedicated Xhale Club concierge & VIP host","Daily continental breakfast served in-suite or in the lounge","Afternoon hors d'oeuvres & evening desserts","Top-shelf spirits & premium bar service","Preferred seating at all restaurants","Upgraded in-room mini-bar restocked daily","Upgraded bath amenities & pillow menu","Private Xhale Club beach & pool areas","Late check-out (subject to availability)","Complimentary room upgrades (subject to availability)","Round-trip airport transfers included"].map(p=>'<li style="font-size:.82rem;color:#dde;display:flex;align-items:flex-start;gap:6px"><span style="color:#E8714A">✦</span>'+p+'</li>').join('')+'</ul></div>':'';
   const evD=event.includes('Birthday')?event.replace('Birthday','<em>Birthday</em>'):event;
   const occLabel=occ==='Single'?'Solo (1 Guest)':occ==='Triple'?'3 Guests (Triple)':'2 Guests (Double)';
   const heroPhoto = resort.photo
