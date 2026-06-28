@@ -620,7 +620,8 @@ tr:hover .sticky-col{background:#f8f8f8;}
 <div id="tab-timeline" class="tab-panel">
       <div class="section-head">
         <div><h2>&#x1F4C5; Timeline</h2><p>All upcoming events</p></div>
-        <div style="display:flex;gap:6px">
+        <div style="display:flex;gap:6px;align-items:center">
+          <button id="tl-btn-past" onclick="toggleTimelinePast()" style="padding:6px 12px;border:1px solid #ccc;border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;background:white;color:#888">Show Past</button>
           <button id="tl-btn-list" onclick="setTimelineView('list')" style="padding:6px 14px;border:1px solid #ccc;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:#1a1a1a;color:white">&#9776; List</button>
           <button id="tl-btn-quarter" onclick="setTimelineView('quarter')" style="padding:6px 14px;border:1px solid #ccc;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:white;color:#1a1a1a">&#9783; Quarterly</button>
         </div>
@@ -2413,6 +2414,16 @@ function renderReports(){
     </div>`;
 }
 
+let timelineView = 'list';
+let timelineShowPast = false;
+
+function toggleTimelinePast(){
+  timelineShowPast = !timelineShowPast;
+  const btn = document.getElementById('tl-btn-past');
+  if(btn){ btn.style.background = timelineShowPast?'#1a1a1a':'white'; btn.style.color = timelineShowPast?'white':'#888'; btn.textContent = timelineShowPast?'Hide Past':'Show Past'; }
+  renderTimeline();
+}
+
 function setTimelineView(view){
   timelineView = view;
   const listBtn = document.getElementById('tl-btn-list');
@@ -2426,7 +2437,7 @@ function setTimelineView(view){
 
 function renderTimelineQuarter(cont, weddings, guests){
   const today = new Date(); today.setHours(0,0,0,0);
-  const upcoming = weddings.filter(w=>w.weddingDate && new Date(w.weddingDate+'T12:00:00') >= today);
+  const upcoming = weddings.filter(w=>w.weddingDate && (timelineShowPast || new Date(w.weddingDate+'T12:00:00') >= today));
   
   // Group by quarter
   const quarters = {};
@@ -2478,7 +2489,9 @@ function renderTimeline(){
   if(timelineView === 'quarter'){ renderTimelineQuarter(cont, weddings, guests); return; }
 
   const today = new Date(); today.setHours(0,0,0,0);
-  const sorted = [...weddings].filter(w=>w.weddingDate && new Date(w.weddingDate+'T12:00:00') >= today).sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
+  const sorted = [...weddings].filter(w=>w.weddingDate && (timelineShowPast || new Date(w.weddingDate+'T12:00:00') >= today)).sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
+
+  if(!sorted.length){ cont.innerHTML='<div class="empty-state"><div class="icon">&#x1F4C5;</div><p>No upcoming events</p></div>'; return; }
 
   cont.innerHTML = sorted.map(w=>{
     const wDate = new Date(w.weddingDate+'T12:00:00');
