@@ -1046,6 +1046,10 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <select id="w-flightsRequired"><option value="Yes">Yes</option><option value="No">No</option></select>
       </div>
       <div class="form-group"><label>🔒 Client Portal Password</label><input type="text" id="w-portalPassword" placeholder="e.g. jinks2026"></div>
+      <div class="form-group" style="display:flex;align-items:center;gap:8px;padding-top:8px">
+        <input type="checkbox" id="w-portalProvided" style="width:auto;height:auto;margin:0">
+        <label for="w-portalProvided" style="font-weight:600;font-size:.88rem;cursor:pointer;margin:0">&#10003; Client Portal Provided</label>
+      </div>
       <div class="form-group full" style="grid-column:1/-1"><label>&#x1F4F7; Portal Hero Photo URL <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(optional)</span></label>
         <div style="display:flex;gap:8px;align-items:center">
           <input type="url" id="w-heroPhoto" class="form-input" placeholder="Paste URL or pick from resort library" onchange="updateHeroPhotoPreview()">
@@ -1464,7 +1468,8 @@ function renderWeddingGrid(){
       <div style="font-size:.82rem;color:#999;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between">${fmtDate(w.weddingDate)}${opBadge}</div>
       ${w.resort?`<div style="font-size:.82rem;color:#888;margin-bottom:8px">${esc(w.resort)}</div>`:'<div style="margin-bottom:8px"></div>'}
       <div style="font-size:1.25rem;font-weight:700;color:#1a1a1a;margin-bottom:4px;line-height:1.3">${esc(w.names)}</div>
-      ${w.destination?`<div style="font-size:.82rem;color:#aaa;margin-bottom:12px">${esc(w.destination)}</div>`:'<div style="margin-bottom:12px"></div>'}
+      ${w.destination?`<div style="font-size:.82rem;color:#aaa;margin-bottom:6px">${esc(w.destination)}</div>`:'<div style="margin-bottom:6px"></div>'}
+      <div style="margin-bottom:8px;min-height:18px">${w.portalProvided?'<span style="background:#f0f8f2;border:1px solid #a8cca8;color:#1a5c2a;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:10px">&#10003; Portal Sent</span>':''}</div>
       <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;border-top:1px solid #eee;padding-top:12px">
         <div style="text-align:center">
           <div style="font-size:1.3rem;font-weight:700;color:#1a1a1a">${rooms}</div>
@@ -1532,6 +1537,7 @@ function editWedding(id){
   sv('w-destination',w.destination); sv('w-location',w.location||''); sv('w-flightsRequired',w.flightsRequired||'Yes');
   sv('w-operator',w.operator||'DWT');
   sv('w-portalPassword',w.portalPassword||'');
+  const ppEl = document.getElementById('w-portalProvided'); if(ppEl) ppEl.checked = w.portalProvided||false;
   sv('w-weddingWebsite',w.weddingWebsite||'');
   sv('w-heroPhoto',w.heroPhoto||''); updateHeroPhotoPreview();
   sv('w-dateSigned',w.dateSigned); sv('w-date30day',w.date30day);
@@ -1550,7 +1556,7 @@ async function saveWedding(){
     names:gv('w-names'), resort:gv('w-resort'), weddingDate:gv('w-weddingDate'),
     destination:gv('w-destination'), location:gv('w-location'), flightsRequired:gv('w-flightsRequired'),
     operator:gv('w-operator')||'DWT',
-    portalPassword:gv('w-portalPassword')||'', weddingWebsite:gv('w-weddingWebsite')||'', heroPhoto:gv('w-heroPhoto')||'',
+    portalPassword:gv('w-portalPassword')||'', portalProvided:document.getElementById('w-portalProvided')?.checked||false, weddingWebsite:gv('w-weddingWebsite')||'', heroPhoto:gv('w-heroPhoto')||'',
     dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false, payStructure:gv('w-payStructure')||'1',
     pay1:gv('w-pay1'), pay2:(gv('w-payStructure')==='1'?'':gv('w-pay2')),
     reductionDate:(document.getElementById('w-noAgreement')?.checked?'':gv('w-reductionDate')), roomListingDate:(document.getElementById('w-noAgreement')?.checked?'':gv('w-roomListingDate')),
