@@ -2880,6 +2880,8 @@ function renderDetailFinancials(){
   document.getElementById('df-due2').textContent=w&&w.pay2?fmtDate(w.pay2):'—';
 }
 
+const docIcons={Contract:'📄','Room Block':'🏨',BEO:'📋',Invoice:'🧾',Itinerary:'🗺️',Other:'🔗'};
+
 function renderDetailDocs(){
   const cont=document.getElementById('detailDocsContainer');
   if(!docs.length){cont.innerHTML='<div class="empty-state"><div class="icon">📁</div><p>No documents yet</p></div>';return;}
