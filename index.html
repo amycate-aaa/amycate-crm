@@ -485,6 +485,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <select id="qb-dest" onchange="qbFilterResorts()" class="form-input">
                 <option value="">— All Destinations —</option>
               </select>
+              <script>if(typeof qbInitDestinations==="function"){qbInitDestinations();qbFilterResorts();}</script>
             </div>
             <div>
               <label class="form-label">Resort *</label>
@@ -498,18 +499,6 @@ tr:hover .sticky-col{background:#f8f8f8;}
             </div>
           </div>
 
-          <!-- Trip -->
-          <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Trip Details</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr 70px;gap:10px;margin-bottom:10px">
-              <div><label class="form-label">Check-In</label><input type="date" id="qb-checkin" class="form-input" onchange="qbCalcCheckout()"></div>
-              <div><label class="form-label">Check-Out</label><input type="date" id="qb-checkout" class="form-input" onchange="qbCalcNights()"></div>
-              <div><label class="form-label">Nights</label><input type="number" id="qb-nights" class="form-input" placeholder="3" min="1" oninput="qbCalcCheckout()" style="min-width:0;padding:10px 6px"></div>
-            </div>
-            <div><label class="form-label">Event / Group Name</label><input id="qb-event" class="form-input" placeholder="e.g. Ticoya's Birthday Trip 2027"></div>
-          </div>
-
-          <!-- Room Options -->
           <!-- Guest -->
           <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
             <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Guest</div>
@@ -518,8 +507,8 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <div><label class="form-label">Rooming With</label><input id="qb-rooming" class="form-input" placeholder="Roommate or N/A"></div>
               <div><label class="form-label">Occupancy</label>
                 <select id="qb-occ" class="form-input" onchange="qbUpdateHints()">
-                  <option value="Double">Double (2 Guests)</option>
                   <option value="Single">Single (1 Guest)</option>
+                  <option value="Double">Double (2 Guests)</option>
                   <option value="Triple">Triple (3 Guests)</option>
                 </select>
               </div>
@@ -534,6 +523,17 @@ tr:hover .sticky-col{background:#f8f8f8;}
             <div style="margin-top:10px"><label class="form-label">Custom Intro (optional)</label><textarea id="qb-intro" class="form-input" rows="2" placeholder="Leave blank for auto-generated..."></textarea></div>
           </div>
 
+          <!-- Trip -->
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Trip Details</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 70px;gap:10px;margin-bottom:10px">
+              <div><label class="form-label">Check-In</label><input type="date" id="qb-checkin" class="form-input" onchange="qbCalcCheckout()"></div>
+              <div><label class="form-label">Check-Out</label><input type="date" id="qb-checkout" class="form-input" onchange="qbCalcNights()"></div>
+              <div><label class="form-label">Nights</label><input type="number" id="qb-nights" class="form-input" value="7" min="1" oninput="qbCalcCheckout()" style="min-width:0;padding:10px 6px"></div>
+            </div>
+            <div><label class="form-label">Event / Group Name</label><input id="qb-event" class="form-input" placeholder="e.g. Ticoya's Birthday Trip 2027"></div>
+          </div>
+
           <div id="qb-rooms-container"></div>
 
           <!-- Payment -->
@@ -543,7 +543,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
               <div><label class="form-label">Deposit</label><input id="qb-deposit" class="form-input" value="$50/person ($100 total for 2 guests)"></div>
               <div><label class="form-label">Final Payment Due</label><input id="qb-final" class="form-input" placeholder="January 2, 2027"></div>
             </div>
-            <div style="margin-top:10px;display:flex;align-items:center;gap:8px">
+            <div id="qb-xhale-row" style="margin-top:10px;display:none;align-items:center;gap:8px">
               <input type="checkbox" id="qb-xhale" style="width:auto;height:16px;width:16px;cursor:pointer">
               <label for="qb-xhale" style="font-size:.92rem;cursor:pointer;color:#1a1a1a;font-weight:500;text-transform:none;letter-spacing:0;margin-bottom:0">Include Xhale Club perks section</label>
             </div>
@@ -587,6 +587,11 @@ tr:hover .sticky-col{background:#f8f8f8;}
           <div style="margin-bottom:12px"><label class="form-label">About *</label><textarea id="qb-nr-about" class="form-input" rows="3" placeholder="A vibrant adults-only resort featuring..."></textarea></div>
           <div style="margin-bottom:12px"><label class="form-label">Highlights (one per line)</label><textarea id="qb-nr-highlights" class="form-input" rows="4" placeholder="Adults Only (18+)&#10;Multiple Pools&#10;Private Beach&#10;World-Class Spa"></textarea></div>
           <div style="margin-bottom:12px"><label class="form-label">Special Note (optional)</label><input id="qb-nr-note" class="form-input" placeholder="e.g. Plus unlimited access to Dreams next door..."></div>
+          <div style="background:#f9f5ee;border:1px solid #e8dcc8;border-radius:10px;padding:14px;margin-bottom:12px">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#b8973a;margin-bottom:10px">&#x1F4F7; Photos</div>
+            <div style="margin-bottom:10px"><label class="form-label">1. Hero Photo URL</label><input id="qb-nr-photo" class="form-input" placeholder="Main banner photo — paste URL or Drive share link"></div>
+            <div><label class="form-label">2. Resort Photos <span style="font-weight:400;color:var(--muted);font-size:.8rem">(one URL per line — pool, beach, lobby, etc.)</span></label><textarea id="qb-nr-resort-photos" class="form-input" rows="3" placeholder="https://...&#10;https://...&#10;https://..."></textarea></div>
+          </div>
           <div style="margin-bottom:8px">
             <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
               <label class="form-label" style="margin-bottom:0">Room Types</label>
@@ -1146,12 +1151,13 @@ function showTab(name){
   }
   if(name==='financials') renderFinancials();
   if(name==='payments') renderPayments();
-  if(name==='flights'){ renderFlights(); renderDetailFlights(); loadFlights(currentWeddingId).then(()=>{ renderFlights(); renderDetailFlights(); }); }
+  if(name==='flights') renderFlights();
   if(name==='docs') renderDocs();
   if(name==='leads') renderLeads();
   if(name==='timeline') renderTimeline();
   if(name==='reports') renderReports();
   if(name==='events') renderEventsTab();
+  if(name==='quotes'){ qbInitDestinations(); qbFilterResorts(); }
 }
 
 // ── STATE ──
@@ -1997,9 +2003,9 @@ function renderFlights(){
   const search=(gv('flightSearch')).toLowerCase();
   const tFilter=gv('flightTransferFilter');
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
-  const active=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const active=guests.filter(g=>g.status!=='Cancelled');
   let n=0;
-  const rows=active.filter(g=>g.weddingId===currentWeddingId).filter(g=>{
+  const rows=active.filter(g=>{
     const ms=!search||(g.names||'').toLowerCase().includes(search);
     const mt=!tFilter||(fMap[g.id]?.transfer||'Not Booked')===tFilter;
     return ms&&mt;
@@ -2034,14 +2040,8 @@ function renderFlights(){
 function openFlightModal(guestId){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editFlightId=null;
-  
-  // Load existing transfer/notes from first guest with flight data
-  const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
-  const wGuests=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
-  const firstFlight = guestId ? fMap[guestId] : wGuests.map(g=>fMap[g.id]).find(f=>f);
-  sv('f-transfer', firstFlight?.transfer||'Not Booked');
-  sv('f-notes', firstFlight?.notes||'');
-  
+  sv('f-transfer','Not Booked'); sv('f-notes','');
+  const g = guestId ? guests.find(x=>x.id===guestId) : null;
   document.getElementById('flightModalTitle').textContent = 'Flight Info — All Guests';
   setTimeout(()=>renderFlightPersonSections(guestId), 50);
   openModal('flightModal');
@@ -2081,25 +2081,6 @@ async function saveFlight(){
         globalIdx++;
       });
 
-      const hasData = mainArrFlight || mainArrDate || mainDeptFlight || mainDeptDate ||
-                      arrPersons.some(p=>p.flight||p.date) || deptPersons.some(p=>p.flight||p.date);
-
-      const existing = fMap[g.id];
-      
-      // Check if data actually changed vs what's saved
-      const dataChanged = !existing || 
-        existing.arrFlight !== mainArrFlight ||
-        existing.arrDate !== mainArrDate ||
-        existing.arrTime !== mainArrTime ||
-        existing.arrAirport !== mainArrAirport ||
-        existing.deptFlight !== mainDeptFlight ||
-        existing.deptDate !== mainDeptDate ||
-        existing.deptTime !== mainDeptTime ||
-        existing.transfer !== transfer ||
-        existing.notes !== notes ||
-        existing.personsArr !== JSON.stringify(arrPersons) ||
-        existing.personsDept !== JSON.stringify(deptPersons);
-
       const data = {
         guestId: g.id, weddingId: currentWeddingId,
         arrFlight: mainArrFlight, arrDate: mainArrDate, arrTime: mainArrTime, arrAirport: mainArrAirport,
@@ -2109,9 +2090,9 @@ async function saveFlight(){
         personsDept: JSON.stringify(deptPersons)
       };
 
-      if(existing && hasData && dataChanged){ await db.collection('flights').doc(existing.id).update(data); }
-      else if(existing && !hasData){ /* leave existing data alone */ }
-      else if(!existing && hasData){ data.createdAt=new Date().toISOString(); await db.collection('flights').add(data); }
+      const existing = fMap[g.id];
+      if(existing){ await db.collection('flights').doc(existing.id).update(data); }
+      else{ data.createdAt=new Date().toISOString(); await db.collection('flights').add(data); }
     }
     closeModal('flightModal');
     await loadFlights(currentWeddingId);
@@ -2713,45 +2694,29 @@ function renderDetailFlights(){
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
   let n=0;
   const rows=wGuests.map(g=>{
-    const f=fMap[g.id]||{};
+    n++; const f=fMap[g.id]||{};
     const tb={Confirmed:'badge-green',Requested:'badge-yellow','Not Booked':'badge-red','N/A':'badge-muted'}[f.transfer||'Not Booked']||'badge-red';
     const hasFlight = f.arrFlight || f.deptFlight;
     const missingIndicator = !hasFlight ? `<span style="color:var(--red);font-size:.8rem;font-weight:700">● Missing</span>` : '';
-    
-    // Get all passengers for this booking
-    const allPersons = [g.names];
-    if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) allPersons.push(a.trim()); });
-    
-    // Parse per-person flight data if available
-    let arrPersons=[], deptPersons=[];
-    try{ arrPersons=JSON.parse(f.personsArr||'[]'); }catch(e){}
-    try{ deptPersons=JSON.parse(f.personsDept||'[]'); }catch(e){}
-    
-    return allPersons.map((personName, pIdx) => {
-      n++;
-      const pArr = arrPersons[pIdx] || {flight:f.arrFlight||'',date:f.arrDate||'',time:f.arrTime||'',airport:f.arrAirport||''};
-      const pDept = deptPersons[pIdx] || {flight:f.deptFlight||'',date:f.deptDate||'',time:f.deptTime||''};
-      const isFirst = pIdx === 0;
-      return `<tr style="${!hasFlight?'background:#fff8f8':''}${pIdx>0?';border-top:none':''}">
-      <td style="color:var(--muted)">${isFirst?n:''}</td>
-      <td>${isFirst?nameHtml(personName)+missingIndicator:'<span style="color:#888;font-size:.85rem;padding-left:12px">+ '+esc(personName)+'</span>'}</td>
-      <td style="white-space:nowrap">${pArr.date?fmtDate((pArr.date||'').replace(/T.*/,'').trim()||null):'—'}</td>
-      <td style="color:var(--accent);font-weight:600">${esc(pArr.flight)||'—'}</td>
-      <td>${esc(pArr.time)||'—'}</td>
-      <td>${esc(pArr.airport)||'—'}</td>
-      <td style="white-space:nowrap">${pDept.date?fmtDate((pDept.date||'').replace(/T.*/,'').trim()||null):'—'}</td>
-      <td style="color:var(--accent);font-weight:600">${esc(pDept.flight)||'—'}</td>
-      <td>${esc(pDept.time)||'—'}</td>
-      <td>${isFirst?`<span class="badge ${tb}">${f.transfer||'Not Booked'}</span>`:''}</td>
-      <td style="color:var(--muted);font-size:.92rem">${isFirst?esc(f.notes):''}</td>
+    return `<tr style="${!hasFlight?'background:#fff8f8':''}">
+      <td style="color:var(--muted)">${n}</td>
+      <td>${nameHtml(g.names)}${missingIndicator}</td>
+      <td style="white-space:nowrap">${f.arrDate?fmtDate((f.arrDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
+      <td style="color:var(--accent);font-weight:600">${esc(f.arrFlight)||'—'}</td>
+      <td>${esc(f.arrTime)||'—'}</td>
+      <td>${esc(f.arrAirport)||'—'}</td>
+      <td style="white-space:nowrap">${f.deptDate?fmtDate((f.deptDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
+      <td style="color:var(--accent);font-weight:600">${esc(f.deptFlight)||'—'}</td>
+      <td>${esc(f.deptTime)||'—'}</td>
+      <td><span class="badge ${tb}">${f.transfer||'Not Booked'}</span></td>
+      <td style="color:var(--muted);font-size:.92rem">${esc(f.notes)}</td>
       <td class="sticky-col" style="text-align:center;padding:6px">
-        ${isFirst?`<div style="display:flex;flex-direction:column;gap:4px;align-items:center">
+        <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
           ${g.email ? `<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>` : `<span style="color:#aaa;font-size:.75rem">No email</span>`}
           <button onclick="openFlightModal('${g.id}')" style="background:#f0f0f0;border:1px solid #999;color:#111;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
-        </div>`:''}
+        </div>
       </td>
     </tr>`;
-    }).join('');
   }).join('');
   tbody.innerHTML=rows||'<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>No guests yet</p></div></td></tr>';
 }
@@ -3111,9 +3076,9 @@ function renderEventsTab(){
     const dateBadge = daysOut>60?'badge-green':daysOut>0?'badge-yellow':'badge-muted';
     const wGuests = guests.filter(g=>g.weddingId===w.id&&g.status!=='Cancelled');
     const wPeople = countPeople(wGuests);
-    let totTotal=0, totPaid=0;
-    wGuests.forEach(g=>{ const f=calcFinancials(g,w); totTotal+=f.total; totPaid+=f.totalPaid; });
-    const outstanding = Math.max(0,totTotal-totPaid);
+    let totPaid=0, totDue=0;
+    wGuests.forEach(g=>{ const f=calcFinancials(g,w); totPaid+=f.totalPaid; totDue+=f.bal1+(f.bal2||0); });
+    const outstanding = Math.max(0,totDue);
 
     const dateCell = d => {
       if(!d) return '<span style="color:var(--muted)">—</span>';
@@ -3169,7 +3134,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
   const bg = isArr ? '#e8f0f8' : '#f0f0e8';
   const border = isArr ? '#b0c8e0' : '#d0c890';
   const label = isArr ? '✈ Arrival' : '✈ Departure';
-  const flight = existingData?.flight||'';
+  const flight = '';
   const time = existingData?.time||'';
   const airport = existingData?.airport||'';
   const date = (existingData?.date && existingData.date!=='')?existingData.date:'';
@@ -3189,7 +3154,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
       <div class="form-group">
         <label>Flight # <span style="color:#888;font-weight:400;font-size:.78rem">(e.g. AA2345)</span></label>
         <div style="display:flex;gap:6px">
-          <input type="text" id="${prefix}-flight" value="${flight}" style="flex:1;text-transform:uppercase" placeholder="" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="${prefix}-flight" value="" style="flex:1;text-transform:uppercase" placeholder="AA2345" oninput="this.value=this.value.toUpperCase()">
           <button type="button" class="btn btn-outline btn-sm" onclick="lookupFlightFor('${type}',${idx})" style="padding:4px 10px">🔍</button>
         </div>
         <div id="${prefix}-result" style="font-size:.8rem;margin-top:3px"></div>
@@ -3216,7 +3181,10 @@ function renderFlightPersonSections(focusGuestId){
 
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
 
-  let combinedHtml = '';
+  let arrHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px">✈ Arrivals</div>`;
+  let deptHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px;margin-top:20px">✈ Departures</div>`;
+
+  // Global person index for copy-from-above
   let globalIdx = 0;
 
   wGuests.forEach(g => {
@@ -3228,28 +3196,16 @@ function renderFlightPersonSections(focusGuestId){
     try{ deptPersons = existingFlight?.personsDept ? JSON.parse(existingFlight.personsDept) : []; }catch(e){}
 
     persons.forEach((name, pIdx) => {
-      const arrData  = arrPersons[pIdx] || { flight: pIdx===0?existingFlight?.arrFlight||'':'', time: pIdx===0?existingFlight?.arrTime||'':'', airport: pIdx===0?existingFlight?.arrAirport||'':'', date: pIdx===0?existingFlight?.arrDate||g.depart||'':g.depart||'' };
-      const deptData = deptPersons[pIdx] || { flight: pIdx===0?existingFlight?.deptFlight||'':'', time: pIdx===0?existingFlight?.deptTime||'':'', date: pIdx===0?existingFlight?.deptDate||g.return||'':g.return||'' };
-      
-      combinedHtml += `<div style="background:rgba(255,255,255,.07);border-radius:8px;padding:12px 14px;margin-bottom:12px">
-        <div style="font-size:.85rem;font-weight:700;color:#c9a96e;margin-bottom:10px">👤 ${name}</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-          <div>
-            <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#aac;font-weight:700;margin-bottom:8px">✈ Arrival</div>
-            ${flightPersonSection(name, globalIdx, 'arr', g.depart, arrData)}
-          </div>
-          <div>
-            <div style="font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:#aac;font-weight:700;margin-bottom:8px">✈ Departure</div>
-            ${flightPersonSection(name, globalIdx, 'dept', g.return, deptData)}
-          </div>
-        </div>
-      </div>`;
+      const arrData  = { flight: '', time: '', airport: '', date: pIdx===0?g.depart||'':g.depart||'' };
+      const deptData = { flight: '', time: '', date: pIdx===0?g.return||'':g.return||'' };
+      arrHtml  += flightPersonSection(name, globalIdx, 'arr',  g.depart, arrData);
+      deptHtml += flightPersonSection(name, globalIdx, 'dept', g.return, deptData);
       globalIdx++;
     });
   });
 
-  arrDiv.innerHTML = combinedHtml;
-  deptDiv.innerHTML = '';
+  arrDiv.innerHTML = arrHtml;
+  deptDiv.innerHTML = deptHtml;
 }
 
 function copyFlightFromAbove(type, idx){
@@ -3282,37 +3238,23 @@ async function lookupFlightFor(type, idx){
       const arr=flight.arrival;
       if(arr.airport?.iata){const el=document.getElementById(`${prefix}-airport`);if(el)el.value=arr.airport.iata;}
       if(arr.scheduledTime?.local){
-        const localStr=arr.scheduledTime.local;
-        const timePart=localStr.split('T')[1]||'';
-        const [hh,mm]=timePart.split(':');
-        if(hh&&mm){
-          const h=parseInt(hh); const ampm=h>=12?'PM':'AM'; const h12=h%12||12;
-          const timeEl=document.getElementById(`${prefix}-time`);
-          if(timeEl)timeEl.value=`${h12}:${mm} ${ampm}`;
-        }
-        const newDate=localStr.split('T')[0];
+        const t=new Date(arr.scheduledTime.local);
+        const timeEl=document.getElementById(`${prefix}-time`);
+        if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        if(dateEl&&newDate&&newDate.match(/^\d{4}-\d{2}-\d{2}$/))dateEl.value=newDate;
+        if(dateEl)dateEl.value=arr.scheduledTime.local.split('T')[0];
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+( arr.airport?.name||arr.airport?.iata||'');}
     } else if(type==='dept'&&flight.departure){
       const dept=flight.departure;
       if(dept.scheduledTime?.local){
-        const localStr=dept.scheduledTime.local;
-        const timePart=localStr.split('T')[1]||'';
-        const [hh,mm]=timePart.split(':');
-        if(hh&&mm){
-          const h=parseInt(hh); const ampm=h>=12?'PM':'AM'; const h12=h%12||12;
-          const timeEl=document.getElementById(`${prefix}-time`);
-          if(timeEl)timeEl.value=`${h12}:${mm} ${ampm}`;
-        }
-        const newDate=localStr.split('T')[0];
+        const t=new Date(dept.scheduledTime.local);
+        const timeEl=document.getElementById(`${prefix}-time`);
+        if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        if(dateEl&&newDate&&newDate.match(/^\d{4}-\d{2}-\d{2}$/))dateEl.value=newDate;
+        if(dateEl)dateEl.value=dept.scheduledTime.local.split('T')[0];
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+(flight.departure?.airport?.name||'');}
-    } else {
-      if(resultEl){resultEl.style.color='#8a2a2a';resultEl.textContent='No arrival/departure data — enter manually.';}
     }
   }catch(e){if(resultEl){resultEl.style.color='#8a2a2a';resultEl.textContent='Lookup failed — enter manually.';}}
 }
@@ -3553,6 +3495,7 @@ function generateFlightReport(){
 <div class="footer">
   Prepared by Amy Cate · amy.cate@destinationweddings.com · Destination Weddings / Celebration Travel
 </div>
+
 </body></html>`;
 
   // Open in new window for printing/saving
@@ -3711,8 +3654,15 @@ function openIntakeModal(leadId) {
   sv('i-checkOut', l.checkOut || '');
   sv('i-roomCategory', l.roomCategory || '');
   sv('i-intakeNote', l.intakeNote || '');
+  sv('i-datesRequested', l.datesRequested || '');
   if (document.getElementById('i-email')) document.getElementById('i-email').value = l.email || '';
-  openModal('intakeModal');
+  // Show as floating popup
+  const popup = document.getElementById('intakeModal');
+  popup.style.display = 'block';
+}
+
+function closeIntakePopup(){
+  document.getElementById('intakeModal').style.display = 'none';
 }
 
 async function sendIntakeLink() {
@@ -3722,6 +3672,7 @@ async function sendIntakeLink() {
   // Save intake trip details to lead record
   const updates = {
     checkIn: gv('i-checkIn'),
+    datesRequested: gv('i-datesRequested'),
     checkOut: gv('i-checkOut'),
     resort: gv('i-resort'),
     destination: gv('i-destination'),
@@ -3770,36 +3721,32 @@ amy.cate@destinationweddings.com
     });
   }
 
-  closeModal('intakeModal');
+  closeIntakePopup();
 }
 
 async function viewResponses(leadId) {
   const l = leads.find(x => x.id === leadId);
   const leadName = l ? l.names : 'This Group';
-  const modal = document.createElement('div');
-  modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
-  modal.setAttribute('data-modal','1');
+  // Remove any existing response panel
+  const existing = document.getElementById('responses-panel');
+  if(existing) existing.remove();
+  const panel = document.createElement('div');
+  panel.id = 'responses-panel';
+  panel.style.cssText = 'position:fixed;top:80px;left:24px;width:460px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:99999;border:1px solid #e0e0e0;overflow:hidden';
+  const dragHandle = document.createElement('div');
+  dragHandle.style.cssText = 'background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none';
+  dragHandle.innerHTML = '<div style="color:white;font-weight:700;font-size:.95rem">&#x1F4CB; Intake Responses &mdash; ' + esc(leadName) + '</div><button onclick="document.getElementById(&quot;responses-panel&quot;).remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>';
   const inner = document.createElement('div');
-  inner.style.cssText = 'background:white;border-radius:12px;padding:28px;max-width:680px;width:100%;max-height:85vh;overflow-y:auto';
-  const header = document.createElement('div');
-  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:20px';
-  const title = document.createElement('h3');
-  title.style.cssText = 'margin:0;font-size:1.1rem';
-  title.textContent = 'Quote Requests — ' + leadName;
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = '✕';
-  closeBtn.style.cssText = 'background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666';
-  closeBtn.onclick = () => modal.remove();
-  header.appendChild(title);
-  header.appendChild(closeBtn);
+  inner.style.cssText = 'padding:18px;max-height:75vh;overflow-y:auto';
   const listEl = document.createElement('div');
   listEl.id = 'responses-list';
   listEl.textContent = 'Loading...';
-  inner.appendChild(header);
   inner.appendChild(listEl);
-  modal.appendChild(inner);
-  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-  document.body.appendChild(modal);
+  panel.appendChild(dragHandle);
+  panel.appendChild(inner);
+  document.body.appendChild(panel);
+  // Make draggable
+  makeDraggable(panel, dragHandle);
 
   try {
     const snap = await db.collection('intakes').where('leadId','==',leadId).get();
@@ -3828,6 +3775,9 @@ async function viewResponses(leadId) {
         + '<div><span style="color:#888">Check-out:</span> ' + esc(d.checkoutDate||'Group date') + '</div>'
         + '</div>'
         + notesHtml
+        + '<div style="display:flex;justify-content:flex-end;margin-top:10px">'
+        + (d.email ? '<button onclick="safeMailto(\'mailto:'+d.email+'?subject=Re: '+encodeURIComponent(d.groupName||d.eventName||'Your Trip')+'\')" style="padding:6px 14px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:6px;font-size:.82rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>' : '')
+        + '</div>'
         + '</div>';
     }).join('');
   } catch(e) {
@@ -3845,25 +3795,30 @@ function copyIntakeLink() {
 }
 </script>
 
-<!-- Intake Modal -->
-<div class="modal-overlay" id="intakeModal">
-  <div class="modal">
-    <h3>Send Intake Form</h3>
-    <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">Fill in what you know — the client fills out the rest.</p>
+<!-- Intake Modal — Draggable Floating Popup -->
+<div id="intakeModal" style="display:none;position:fixed;top:80px;right:24px;width:420px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.22);z-index:99999;border:1px solid #e0e0e0;overflow:hidden">
+  <!-- Drag handle / header -->
+  <div id="intakeModalHeader" style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none">
+    <div style="color:white;font-weight:700;font-size:.95rem">📋 Send Intake Form</div>
+    <button onclick="closeIntakePopup()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>
+  </div>
+  <div style="padding:18px;max-height:75vh;overflow-y:auto">
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">Fill in what you know — the client fills out the rest.</p>
     <div class="form-grid">
       <div class="form-group full"><label>Group / Couple Name</label><input type="text" id="i-names" readonly style="background:var(--surface2);color:var(--muted)"></div>
       <div class="form-group"><label>Resort</label><input type="text" id="i-resort" placeholder="e.g. Dreams Royal Beach"></div>
       <div class="form-group"><label>Destination</label><input type="text" id="i-destination" placeholder="e.g. Punta Cana, DR"></div>
-      <div class="form-group"><label>Check-in Date</label><input type="date" id="i-checkIn"></div>
-      <div class="form-group"><label>Check-out Date</label><input type="date" id="i-checkOut"></div>
+      <div class="form-group"><label>Check-In Date</label><input type="date" id="i-checkIn"></div>
+      <div class="form-group"><label>Check-Out Date</label><input type="date" id="i-checkOut"></div>
+      <div class="form-group full"><label>Dates Requested <span style="font-weight:400;color:var(--muted);font-size:.8rem">(free text)</span></label><input type="text" id="i-datesRequested" placeholder="e.g. Feb 14–21, 2027 or flexible"></div>
       <div class="form-group full"><label>Room Category <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional)</span></label><input type="text" id="i-roomCategory" placeholder="e.g. Deluxe Ocean View King"></div>
-      <div class="form-group full"><label>Note to client <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional — appears on their form)</span></label><input type="text" id="i-intakeNote" placeholder="e.g. So excited for you! Please fill this out at your earliest convenience."></div>
-      <div class="form-group full"><label>Send to email</label><input type="email" id="i-email" placeholder="Client's email — leave blank to just copy the link"></div>
+      <div class="form-group full"><label>Note to client <span style="font-weight:400;color:var(--muted);font-size:.8rem">(optional)</span></label><input type="text" id="i-intakeNote" placeholder="e.g. So excited for you!"></div>
+      <div class="form-group full"><label>Send to email</label><input type="email" id="i-email" placeholder="Leave blank to just copy the link"></div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('intakeModal')">Cancel</button>
-      <button class="btn btn-outline" id="copyIntakeLinkBtn" onclick="copyIntakeLink()">🔗 Copy Link</button>
-      <button class="btn btn-primary" onclick="sendIntakeLink()">📧 Send</button>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end">
+      <button class="btn btn-outline btn-sm" onclick="closeIntakePopup()">Cancel</button>
+      <button class="btn btn-outline btn-sm" id="copyIntakeLinkBtn" onclick="copyIntakeLink()">🔗 Copy Link</button>
+      <button class="btn btn-primary btn-sm" onclick="sendIntakeLink()">📧 Send</button>
     </div>
   </div>
 </div>
@@ -3932,6 +3887,7 @@ async function loadInbox(){
     flightSnap.docs.forEach(d => {
       const data = d.data();
       if(!data.submittedAt) return; // only show guest-submitted ones
+      if(data.crmDismissed === true) return; // skip dismissed
       const g = guests.find(x => x.id === data.guestId);
       const w = weddings.find(x => x.id === data.weddingId);
       items.push({
@@ -4044,7 +4000,9 @@ async function dismissInboxItem(id){
       } else if(item.type === 'intake'){
         await db.collection('intakes').doc(id).update({ crmDismissed: true });
       } else if(item.type === 'flight' && item.data?.guestId){
-        // Just keep dismissed in localStorage for flights
+        await db.collection('flights').where('guestId','==',item.data.guestId).get().then(snap=>{
+          snap.docs.forEach(d=>d.ref.update({crmDismissed:true}));
+        });
       } else if(item.type === 'lead'){
         await db.collection('leads').doc(id.replace('lead_','')).update({ crmDismissed: true });
       }
@@ -4105,9 +4063,14 @@ function showInboxIntakeDetail(id, data){
     ['Phone', data.phone||''],
     ['Group/Event', data.groupName||data.eventName||data.group||''],
     ['Destination', data.destination||''],
-    ['Travel Dates', data.travelDates||data.dates||''],
+    ['Dates Requested', data.datesRequested||data.travelDates||data.dates||''],
+    ['Check-In', data.checkinDate||data.checkIn||''],
+    ['Check-Out', data.checkoutDate||data.checkOut||''],
+    ['Nights', data.nights||''],
     ['Room Preference', Array.isArray(data.roomPreference) ? data.roomPreference.join(', ') : (data.roomPreference||'')],
     ['# Travelers', data.travelers||data.numTravelers||data.partySize||''],
+    ['Rooming With', data.roomingWith||''],
+    ['Occupant Names', data.occupantNames||data.guestNames||data.additionalGuests||''],
     ['Arrive Early/Stay Late', data.customDates||data.arriveLate||''],
     ['Notes', data.notes||data.message||''],
     ['Submitted', data.submittedAt ? new Date(data.submittedAt).toLocaleString('en-US') : ''],
@@ -4119,24 +4082,30 @@ function showInboxIntakeDetail(id, data){
       <div style="font-size:.88rem;color:#1a1a1a">${esc(String(value))}</div>
     </div>`).join('');
 
-  overlay.innerHTML = `
-    <div style="background:white;border-radius:14px;padding:28px;width:560px;max-width:95vw;max-height:85vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.3)">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <div>
-          <h3 style="font-size:1rem;font-weight:700;color:#1a1a1a">📋 Intake — ${esc((data.firstName||'')+' '+(data.lastName||'')).trim()}</h3>
-          <div style="font-size:.82rem;color:#888;margin-top:3px">${esc(data.groupName||data.eventName||'')}</div>
-        </div>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">✕</button>
-      </div>
-      <div style="margin-bottom:20px">${rows}</div>
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button onclick="window.location.href='mailto:${data.email||''}?subject=Re: ${esc(data.groupName||data.eventName||'Your Inquiry')}'" style="padding:9px 18px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer">📧 Reply</button>
-        <button onclick="this.closest('div[style*=fixed]').remove()" style="padding:9px 18px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer">Done</button>
-      </div>
-    </div>`;
-
-  document.body.appendChild(overlay);
-  overlay.addEventListener('click', e => { if(e.target===overlay) overlay.remove(); });
+  // Remove existing if open
+  const existingIntake = document.getElementById('inbox-intake-panel');
+  if(existingIntake) existingIntake.remove();
+  const panel = document.createElement('div');
+  panel.id = 'inbox-intake-panel';
+  panel.style.cssText = 'position:fixed;top:80px;left:24px;width:460px;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,.25);z-index:99999;border:1px solid #e0e0e0;overflow:hidden';
+  const guestName = esc((data.firstName||'')+' '+(data.lastName||'')).trim();
+  const groupLabel = esc(data.groupName||data.eventName||'');
+  const replySubject = encodeURIComponent('Re: '+(data.groupName||data.eventName||'Your Inquiry'));
+  const replyEmail = data.email||'';
+  panel.innerHTML = '<div id="inbox-intake-handle" style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;cursor:grab;user-select:none">'
+    + '<div style="color:white;font-weight:700;font-size:.95rem">&#x1F4CB; Intake &#x2014; '+guestName+'</div>'
+    + '<button onclick="document.getElementById(&quot;inbox-intake-panel&quot;).remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;line-height:1;padding:0 4px">&times;</button>'
+    + '</div>'
+    + '<div style="padding:18px;max-height:75vh;overflow-y:auto">'
+    + '<div style="font-size:.82rem;color:#888;margin-bottom:12px">'+groupLabel+'</div>'
+    + '<div style="margin-bottom:16px">'+rows+'</div>'
+    + '<div style="display:flex;justify-content:flex-end;gap:10px">'
+    + '<button onclick="safeMailto(\'mailto:'+replyEmail+'?subject='+replySubject+'\')" style="padding:8px 16px;background:#c9a96e;color:#1a1a1a;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">&#x1F4E7; Reply</button>'
+    + '<button onclick="document.getElementById(&quot;inbox-intake-panel&quot;).remove()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">Done</button>'
+    + '</div></div>';
+  document.body.appendChild(panel);
+  makeDraggable(panel, document.getElementById('inbox-intake-handle'));
+  overlay.remove();
 }
 
 function showInboxEmailDetail(id, data){
@@ -4320,7 +4289,7 @@ const QB_RESORTS = {
 ],
 "Punta Cana / Cap Cana, Dominican Republic":[
 
-{name:"Breathless Punta Cana Resort & Spa",photo:"https://assets.milestoneinternet.com/destination-weddings-travel-group/72550-breathless-punta-cana-resort-spa/aioapi/1-2.jpg",about:"An adults-only, all-suite resort in the Uvero Alto region of Punta Cana. Vibrant, chic and modern — featuring 750 ultra-contemporary suites, Unlimited-Luxury® dining and drinks, four pools, world-class spa, and endless entertainment.",highlights:["Adults Only (18+)", "Unlimited Luxury\u00ae", "11 Restaurants", "7 Bars & Lounges", "4 Pools", "Private Beach", "World-Class Spa", "Nightly Entertainment", "Fitness Center"],note:"Plus unlimited access to 11 additional restaurants and 11 bars at Dreams Onyx Resort & Spa next door — included in your stay!",rooms:{"Allure Jr Suite Swim-Up": "The Allure Junior Suite Swim-Up features lush tropical garden views and direct access to one of the lazy-river-style pools right from your private terrace. These 554 sq. ft. ground-floor suites are decorated in ultra-contemporary style. Round-trip airport transfers included.", "Allure Jr Suite Pool View": "The Allure Junior Suite Pool View features stunning views of the pool and lush tropical gardens from a private balcony or terrace. Fresh, ultra-contemporary d\u00e9cor. Located on floors 1\u20133 facing the pool. Round-trip airport transfers included.", "Allure Jr Suite Tropical View": "The Allure Junior Suite Tropical View features stunning views of the lush tropical gardens from a private balcony or terrace. Ultra-contemporary d\u00e9cor with one king or two double beds. Round-trip airport transfers included.", "Allure Jr Suite Partial Ocean View": "The Allure Junior Suite Partial Ocean View features stunning partial views of the Caribbean Sea from your private balcony. Two double beds, floors 2\u20133. Round-trip airport transfers included.", "Xhale Club Jr Suite Pool View": "Features pool and tropical garden views from a private balcony. Includes all upgraded Xhale Club amenities. Floors 1\u20132 facing the pool. Round-trip airport transfers included.", "Xhale Club Jr Suite Swim-Up": "Features tropical garden views and direct access to a lazy-river-style pool. All Xhale Club amenities. Ground floor. Round-trip airport transfers included.", "Xhale Club Jr Suite Partial Ocean View": "Stunning views of the Caribbean Sea. All Xhale Club amenities. Floors 2\u20133 facing the ocean. Round-trip airport transfers included.", "Xhale Club Master Suite Oceanfront": "Picturesque oceanfront views, living area with sofa bed, separate bedroom, large terrace with whirlpool bathtub. Double sinks, rain shower and Jacuzzi. All Xhale Club amenities. Round-trip airport transfers included.", "Custom": ""}},
+{name:"Breathless Punta Cana Resort & Spa",photo:"https://alg.widen.net/img/alg/fw7s7ckesx/1240px@1x/BREPC-EXT-Aerial-2017-1-CB.webp?q=80",resortPhotos:["https://alg.widen.net/img/alg/7gudn08qvf/1600px@1x/BREPC-BAR-WinkLobbyBar-01-CPC.webp?q=80","https://alg.widen.net/img/alg/zvlvgfxyym/1600px@1x/BREPC-BAR-EndZone-Terrace-1B-CB.webp?q=80","https://alg.widen.net/img/alg/f2i3qdeedg/1600px@1x/BREPC-EXT-Aerial-MainBeach-02-CPC.webp?q=80","https://alg.widen.net/img/alg/cktvuu9mzj/1600px@1x/BREPC-EXT-FreestylePool-2-CB.webp?q=80","https://alg.widen.net/img/alg/aaa15txmkl/1600px@1x/BREPC-EXT-Main-pool-2-CB.webp?q=80"],about:"An adults-only, all-suite resort in the Uvero Alto region of Punta Cana. Vibrant, chic and modern — featuring 750 ultra-contemporary suites, Unlimited-Luxury® dining and drinks, four pools, world-class spa, and endless entertainment.",highlights:["Adults Only (18+)", "Unlimited Luxury\u00ae", "11 Restaurants", "7 Bars & Lounges", "4 Pools", "Private Beach", "World-Class Spa", "Nightly Entertainment", "Fitness Center"],note:"Plus unlimited access to 11 additional restaurants and 11 bars at Dreams Onyx Resort & Spa next door — included in your stay!",rooms:{"Allure Jr Suite Swim-Up": "The Allure Junior Suite Swim-Up features lush tropical garden views and direct access to one of the lazy-river-style pools right from your private terrace. These 554 sq. ft. ground-floor suites are decorated in ultra-contemporary style. Round-trip airport transfers included.", "Allure Jr Suite Pool View": "The Allure Junior Suite Pool View features stunning views of the pool and lush tropical gardens from a private balcony or terrace. Fresh, ultra-contemporary d\u00e9cor. Located on floors 1\u20133 facing the pool. Round-trip airport transfers included.", "Allure Jr Suite Tropical View": "The Allure Junior Suite Tropical View features stunning views of the lush tropical gardens from a private balcony or terrace. Ultra-contemporary d\u00e9cor with one king or two double beds. Round-trip airport transfers included.", "Allure Jr Suite Partial Ocean View": "The Allure Junior Suite Partial Ocean View features stunning partial views of the Caribbean Sea from your private balcony. Two double beds, floors 2\u20133. Round-trip airport transfers included.", "Xhale Club Jr Suite Pool View": "Features pool and tropical garden views from a private balcony. Includes all upgraded Xhale Club amenities. Floors 1\u20132 facing the pool. Round-trip airport transfers included.", "Xhale Club Jr Suite Swim-Up": "Features tropical garden views and direct access to a lazy-river-style pool. All Xhale Club amenities. Ground floor. Round-trip airport transfers included.", "Xhale Club Jr Suite Partial Ocean View": "Stunning views of the Caribbean Sea. All Xhale Club amenities. Floors 2\u20133 facing the ocean. Round-trip airport transfers included.", "Xhale Club Master Suite Oceanfront": "Picturesque oceanfront views, living area with sofa bed, separate bedroom, large terrace with whirlpool bathtub. Double sinks, rain shower and Jacuzzi. All Xhale Club amenities. Round-trip airport transfers included.", "Custom": ""}},
 {name:"Secrets Tides Punta Cana",about:"Secrets Tides Punta Cana is a stunning adults-only all-inclusive resort set on the pristine shores of Punta Cana, featuring all-suite accommodations with butler service and exclusive Preferred Club amenities. With six beautiful wedding venues from intimate beachside settings to a grand Marea Ballroom for 350 guests, this resort delivers a sophisticated and unforgettable destination wedding experience.",highlights:["All-Inclusive", "Multiple Pools", "Private Beach", "Spa", "Multiple Restaurants", "Nightly Entertainment"],note:"",rooms:{"Preferred Club Jr Suite Ocean View": "Sweeping ocean views with all Preferred Club amenities. Butler service, upgraded dining. Round-trip airport transfers included.", "Jr Suite Tropical View": "Lush tropical garden views. King bed, whirlpool tub, premium amenities. Round-trip airport transfers included.", "Jr Suite Pool View": "Beautiful pool views from a furnished terrace. King or double beds. Round-trip airport transfers included.", "Custom": ""}},
 {name:"Secrets Royal Beach Punta Cana",about:"Secrets Royal Beach Punta Cana is an exquisite adults-only all-inclusive resort set on a stunning stretch of Punta Cana beachfront, featuring elegant Caribbean-style decor and exclusive Preferred Club amenities. With six beautiful wedding venues from an intimate Royal Gazebo to a sweeping beach reception for 200 guests and a sophisticated ballroom, this resort delivers a luxurious and unforgettable destination wedding experience.",highlights:["All-Inclusive", "Multiple Pools", "Private Beach", "Spa", "Multiple Restaurants", "Nightly Entertainment"],note:"",rooms:{"Preferred Club Jr Suite Ocean View": "Sweeping Caribbean views with all Preferred Club amenities \u2014 exclusive pool, upgraded spirits, continental breakfast. Round-trip airport transfers included.", "Jr Suite Tropical View": "Lush tropical garden views from a private furnished balcony. King bed, whirlpool tub. Round-trip airport transfers included.", "Jr Suite Pool View": "Beautiful pool views from a furnished terrace. King or double beds. Round-trip airport transfers included.", "Master Suite Ocean Front": "Panoramic oceanfront views, private plunge pool, separate living area, all Preferred Club benefits. Round-trip airport transfers included.", "Custom": ""}},
 {name:"Hyatt Ziva Cap Cana",about:"Hyatt Ziva Cap Cana is a spectacular all-inclusive resort nestled within the exclusive Cap Cana enclave, offering breathtaking Caribbean Sea views and world-class amenities. With extraordinary venues including the sweeping Larimar Lawn for 2,000 guests, a stunning rooftop terrace, and a grand Santo Domingo Ballroom, this resort delivers a truly magnificent and unforgettable destination wedding experience.",highlights:["All-Inclusive", "Multiple Pools", "Private Beach", "Spa", "Multiple Restaurants", "Nightly Entertainment"],note:"",rooms:{"King Suite Ocean View": "Stunning ocean views from a private furnished terrace. King bed, soaking tub, Hyatt premium amenities. Round-trip airport transfers included.", "Double Suite Ocean View": "Ocean views perfect for two couples or family travel. Two double beds, furnished terrace. Round-trip airport transfers included.", "Ziva Club Suite Ocean View": "Spectacular Caribbean views with all exclusive Ziva Club amenities \u2014 upgraded dining, premium spirits, and VIP services. Round-trip airport transfers included.", "Swim-Up Suite": "Direct swim-up access with garden and pool views. King bed, private outdoor seating. Round-trip airport transfers included.", "Custom": ""}},
@@ -4357,6 +4326,8 @@ let qbEditingResort = null;
 let qbHTML = '';
 
 function qbGetAll(){ const a=[]; Object.entries(QB_RESORTS).forEach(([d,l])=>l.forEach(r=>a.push({...r,destination:d}))); return a; }
+function qbRoomDesc(val){ return typeof val==='object'?val.desc||'':val||''; }
+function qbRoomPhoto(val){ return typeof val==='object'?val.photo||'':''; }
 
 function qbInitDestinations(){
   const sel=document.getElementById('qb-dest'); if(!sel) return;
@@ -4377,6 +4348,13 @@ function qbFilterResorts(){
 function qbOnResortChange(){
   const name=document.getElementById('qb-resort').value;
   const resort=qbGetAll().find(r=>r.name===name);
+  // Show Xhale checkbox only for Breathless resorts
+  const xhaleRow=document.getElementById('qb-xhale-row');
+  if(xhaleRow){
+    const isBreathless=name.toLowerCase().includes('breathless');
+    xhaleRow.style.display=isBreathless?'flex':'none';
+    if(!isBreathless){const cb=document.getElementById('qb-xhale');if(cb)cb.checked=false;}
+  }
   const actions=document.getElementById('qb-resort-actions');
   if(!resort){if(actions) actions.style.display='none'; qbRenderRooms(null); return;}
   if(actions) actions.style.display='flex';
@@ -4424,7 +4402,17 @@ function qbRenderRooms(resort){
 function qbOnRoomChange(i){
   const name=document.getElementById('qb-rname'+i).value;
   const resort=qbGetAll().find(r=>r.name===document.getElementById('qb-resort').value);
-  if(resort&&resort.rooms&&resort.rooms[name]!==undefined) document.getElementById('qb-rdesc'+i).value=resort.rooms[name]||'';
+  if(resort&&resort.rooms&&resort.rooms[name]!==undefined){
+    const val=resort.rooms[name];
+    if(typeof val==='object'){
+      document.getElementById('qb-rdesc'+i).value=val.desc||'';
+      // Store room photo on the element for use in quote generation
+      document.getElementById('qb-rname'+i).dataset.photo=val.photo||'';
+    } else {
+      document.getElementById('qb-rdesc'+i).value=val||'';
+      document.getElementById('qb-rname'+i).dataset.photo='';
+    }
+  }
   qbCheckGenerate();
 }
 
@@ -4518,11 +4506,11 @@ function qbBuildHTML(){
     const sn=occ==='Single'?'<div style="background:#fff8e8;border:1px solid #f0d080;border-radius:6px;padding:10px 14px;margin-top:10px;font-size:.85rem;color:#555">✦ <em>Note:</em> Since you are traveling solo, your rate reflects single occupancy.</div>':'';
     return '<div style="padding:24px 28px;border-bottom:2px solid #eee;margin-bottom:0"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px"><span style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#999">Option '+(i+1)+'</span>'+(o.topPick?'<span style="background:#E8714A;color:white;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase">★ Top Pick</span>':'')+(o.label?'<span style="background:#1B2B4B;color:#c9a96e;font-size:.68rem;font-weight:700;padding:2px 8px;border-radius:10px;text-transform:uppercase">'+o.label+'</span>':'')+'</div><div style="font-size:1.15rem;font-weight:800;color:#1B2B4B;margin-bottom:4px">'+o.name+(o.bed?' — '+o.bed:'')+'</div><div style="font-size:.82rem;color:#777;margin-bottom:14px">'+occ+' Occupancy · Transportation Included</div><div style="font-size:.88rem;color:#444;line-height:1.65;margin-bottom:16px">'+o.desc+sn+'</div><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px"><div><div style="font-size:1.6rem;font-weight:800;color:#1B2B4B">'+qbFmt(o.price)+'</div><div style="font-size:.78rem;color:#888;margin-top:2px">'+nights+' nights · '+(occ==='Double'?'Double occupancy':occ==='Triple'?'Triple occupancy':'Single occupancy')+' · '+pp+'Transportation included</div></div><a href="'+(o.link||'#')+'" style="background:#E8714A;color:white;text-decoration:none;padding:12px 24px;border-radius:6px;font-weight:700;font-size:.88rem;display:inline-block">Book Now →</a></div></div>';
   }).join('');
-  const xhaleHtml=xhale?'<div style="background:#1B2B4B;padding:20px 28px"><div style="color:#c9a96e;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">✦ Xhale Club Perks Included</div><ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px">'+["Exclusive access to 2 private Xhale-only pools","Enhanced concierge service & VIP host","Continental breakfast, afternoon hors doeuvres & desserts","Top-shelf spirits & premium bar service","Preferred restaurant seating","Upgraded mini-bar & bath amenities"].map(p=>'<li style="font-size:.82rem;color:#dde;display:flex;align-items:flex-start;gap:6px"><span style="color:#E8714A">✦</span>'+p+'</li>').join('')+'</ul></div>':'';
+  const xhaleHtml=xhale?'<div style="background:#1B2B4B;padding:20px 28px"><div style="color:#c9a96e;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px">✦ Xhale Club Perks Included</div><ul style="list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:6px">'+["Exclusive access to private Xhale Club pools","Dedicated Xhale Club concierge & VIP host","Daily continental breakfast served in-suite or in the lounge","Afternoon hors d'oeuvres & evening desserts","Top-shelf spirits & premium bar service","Preferred seating at all restaurants","Upgraded in-room mini-bar restocked daily","Upgraded bath amenities & pillow menu","Private Xhale Club beach & pool areas","Late check-out (subject to availability)","Complimentary room upgrades (subject to availability)","Round-trip airport transfers included"].map(p=>'<li style="font-size:.82rem;color:#dde;display:flex;align-items:flex-start;gap:6px"><span style="color:#E8714A">✦</span>'+p+'</li>').join('')+'</ul></div>':'';
   const evD=event.includes('Birthday')?event.replace('Birthday','<em>Birthday</em>'):event;
   const occLabel=occ==='Single'?'Solo (1 Guest)':occ==='Triple'?'3 Guests (Triple)':'2 Guests (Double)';
   const heroPhoto = resort.photo
-    ? '<div style="position:relative;height:260px;overflow:hidden"><img crossorigin="anonymous" src="'+resort.photo+'" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.parentNode.style.display=&quot;none&quot;;this.parentNode.nextSibling.style.display=&quot;block&quot;"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(27,43,75,.2),rgba(27,43,75,.85));display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:28px;text-align:center"><div style="font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px">'+resort.name+(resort.destination?' · '+resort.destination:'')+'</div><div style="font-size:2rem;font-weight:800;color:white;margin-bottom:4px;line-height:1.2">'+evD+'</div><div style="font-size:.82rem;color:#dde;letter-spacing:.08em;text-transform:uppercase;margin-top:10px">✦ Your Personal Quote · '+name+' ✦</div></div></div>'
+    ? '<div style="position:relative;height:260px;overflow:hidden"><img crossorigin="anonymous" src="'+resort.photo+'" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.opacity=0"><div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(27,43,75,.2),rgba(27,43,75,.85));display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:28px;text-align:center"><div style="font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px">'+resort.name+(resort.destination?' · '+resort.destination:'')+'</div><div style="font-size:2rem;font-weight:800;color:white;margin-bottom:4px;line-height:1.2">'+evD+'</div><div style="font-size:.82rem;color:#dde;letter-spacing:.08em;text-transform:uppercase;margin-top:10px">✦ Your Personal Quote · '+name+' ✦</div></div></div>'
     : '<div style="background:#1B2B4B;color:white;padding:32px 28px;text-align:center"><div style="font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:#c9a96e;margin-bottom:8px">'+resort.name+(resort.destination?' · '+resort.destination:'')+'</div><div style="font-size:2rem;font-weight:800;margin-bottom:4px;line-height:1.2">'+evD+'</div><div style="font-size:.82rem;color:#aac;letter-spacing:.08em;text-transform:uppercase;margin-top:10px">✦ Your Personal Quote · '+name+' ✦</div></div>';
   return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+event+' — Quote for '+name+'</title><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;background:#f5f5f5;color:#1a1a1a}.wrap{max-width:680px;margin:0 auto;background:white}</style></head><body><div class="wrap">'+heroPhoto+'<div style="padding:24px 28px;border-bottom:1px solid #eee;font-size:.95rem;line-height:1.6;color:#333"><p style="margin-bottom:12px">Hi <strong>'+(name.split(' ')[0]||name)+'</strong>!</p><p style="margin-bottom:14px">'+qbGetIntro(name,checkIn,checkOut,greeting,custom,resort.name,event)+'</p><p>'+qbGetRoomingLine(name,rooming,occ)+'</p><div style="background:#f9f5ee;border-left:4px solid #E8714A;padding:14px 18px;margin:16px 0 0;font-size:.88rem;color:#444;border-radius:0 6px 6px 0">✦ <strong>Ready to secure your spot?</strong> Just click <strong>Book Now</strong> on your preferred room below — it only takes a few minutes and your room and rate will be locked in!</div></div><div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid #eee;border-bottom:2px solid #1B2B4B">'+[['Check-In',checkIn],['Check-Out',checkOut],['Nights',nights],['Occupancy',occLabel]].map(([l,val])=>'<div style="padding:14px 10px;text-align:center;border-right:1px solid #eee"><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:#999;margin-bottom:4px">'+l+'</div><div style="font-size:.88rem;font-weight:700;color:#1B2B4B">'+val+'</div></div>').join('')+'</div><div style="background:#1B2B4B;padding:20px 28px;color:white"><div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:#c9a96e;margin-bottom:10px;text-align:center">About '+resort.name+'</div><div style="font-size:.85rem;color:#ccd;line-height:1.6;margin-bottom:16px;text-align:center">'+resort.about+'</div><div style="display:grid;grid-template-columns:'+amenCols+';gap:8px'+(resort.note?';margin-bottom:14px':'')+'">'+amenHtml+'</div>'+(resort.note?'<p style="font-size:.78rem;color:#99a;text-align:center;margin-top:10px">'+resort.note+'</p>':'')+'</div><div style="background:#f9f5ee;padding:12px 28px;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#888;border-bottom:1px solid #eee">Your Room Options</div>'+optHtml+xhaleHtml+'<div style="background:#f9f5ee;padding:24px 28px;border-bottom:1px solid #eee"><div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#888;margin-bottom:16px">Important Details</div>'+[['Deposit to Hold Your Room &amp; Rate',deposit],['Final Payment Due',finalPay]].map(([l,val])=>'<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e8e3d8;font-size:.88rem"><span style="color:#666">'+l+'</span><span style="font-weight:700;color:#1B2B4B;text-align:right;max-width:55%">'+val+'</span></div>').join('')+'<div style="background:#fff0e8;border:2px solid #E8714A;border-radius:8px;padding:14px 18px;margin-top:16px;font-size:.82rem;color:#555;line-height:1.6"><strong style="color:#E8714A">✦ Rates are not locked until your booking is confirmed with a deposit.</strong> Availability and pricing can change at any time — locking in early is the best way to secure your spot!<br><br>✦ <em>Easy Payments:</em> Pay over time between now and '+finalPay+' — your pace, no stress.</div></div><div style="background:#1B2B4B;color:#aac;text-align:center;padding:24px 20px;font-size:.78rem;line-height:1.8">Questions? I am always here — reach out anytime!<br><a href="mailto:amy.cate@celebrationtravel.com" style="color:#c9a96e;text-decoration:none">amy.cate@celebrationtravel.com</a> · <strong style="color:white">(832) 773-8664</strong><br><br><strong style="color:#c9a96e">Amy Cate</strong> — Destination Wedding &amp; Group Travel Specialist<br>Destination Weddings Travel Group | Celebration Travel<div style="font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:#667;margin-top:10px">DestiDiamond Top 10 Agent · AIC Showstopper Award · HIC Top 100 Agent · WeddingWire/The Knot Couples Choice · Hall of Fame</div></div><div style="padding:14px 28px;font-size:.72rem;color:#aaa;text-align:center;border-top:1px solid #eee;line-height:1.6">Prices are estimates and subject to change until booking is confirmed. Not a confirmed booking. All pricing in USD.</div></div></body></html>';
 }
@@ -4577,13 +4565,15 @@ function qbOpenResortModal(resort){
   document.getElementById('qb-nr-about').value=resort?resort.about:'';
   document.getElementById('qb-nr-highlights').value=resort?(resort.highlights||[]).join('\n'):'';
   document.getElementById('qb-nr-note').value=resort?resort.note||'':'';
+  document.getElementById('qb-nr-photo').value=resort?resort.photo||'':'';
+  document.getElementById('qb-nr-resort-photos').value=resort?(resort.resortPhotos||[]).join('\n'):'';
   const rows=document.getElementById('qb-room-rows'); rows.innerHTML='';
-  const roomEntries=resort?Object.entries(resort.rooms||{}).filter(([k])=>k!=='Custom'):[['',''],['','']];
+  const roomEntries=resort?Object.entries(resort.rooms||{}).filter(([k])=>k!=='Custom').map(([k,v])=>[k, typeof v==='object'?v.desc||'':v, typeof v==='object'?v.photo||'':'']):[['','',''],['','','']];
   if(!roomEntries.length) roomEntries.push(['',''],['','']);
-  roomEntries.forEach(([rname,rdesc])=>{
+  roomEntries.forEach(([rname,rdesc,rphoto])=>{
     const div=document.createElement('div');
-    div.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
-    div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" value="'+esc(rname)+'"></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem">'+rdesc+'</textarea></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
+    div.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
+    div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" value="'+esc(rname)+'"></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem">'+rdesc+'</textarea></div><div><label class="form-label">Room Photo URL</label><input class="form-input qb-rphoto" value="'+esc(rphoto||'')+'"></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
     rows.appendChild(div);
   });
   document.getElementById('qb-resort-modal').style.display='flex';
@@ -4595,7 +4585,8 @@ function qbAddRoomRow(){
   const rows=document.getElementById('qb-room-rows');
   const div=document.createElement('div');
   div.style.cssText='display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
-  div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" placeholder="Room name..."></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem" placeholder="Description..."></textarea></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
+  div.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;margin-bottom:8px;align-items:start';
+  div.innerHTML='<div><label class="form-label">Room Name</label><input class="form-input qb-rname" placeholder="Room name..."></div><div><label class="form-label">Description</label><textarea class="form-input qb-rdesc" rows="2" style="font-size:.82rem" placeholder="Description..."></textarea></div><div><label class="form-label">Room Photo URL</label><input class="form-input qb-rphoto" placeholder="https://..."></div><button onclick="this.parentNode.remove()" style="padding:6px 8px;background:#fee;border:1px solid #fcc;border-radius:6px;cursor:pointer;color:#c00;align-self:start;margin-top:22px">✕</button>';
   rows.appendChild(div);
 }
 
@@ -4606,16 +4597,19 @@ function qbSaveResort(){
   if(!name||!dest||!about){alert('Please fill in Resort Name, Destination, and About.');return;}
   const highlights=document.getElementById('qb-nr-highlights').value.split('\n').map(s=>s.trim()).filter(Boolean);
   const note=document.getElementById('qb-nr-note').value.trim();
+  const photo=document.getElementById('qb-nr-photo').value.trim();
+  const resortPhotos=document.getElementById('qb-nr-resort-photos').value.split('\n').map(s=>s.trim()).filter(Boolean);
   const rooms={};
   document.querySelectorAll('#qb-room-rows .qb-rname').forEach((input,idx)=>{
     const rname=input.value.trim();
     const rdesc=document.querySelectorAll('#qb-room-rows .qb-rdesc')[idx]?.value.trim()||'';
-    if(rname) rooms[rname]=rdesc;
+    const rphoto=document.querySelectorAll('#qb-room-rows .qb-rphoto')[idx]?.value.trim()||'';
+    if(rname) rooms[rname]=rphoto?{desc:rdesc,photo:rphoto}:rdesc;
   });
   rooms['Custom']='';
   if(qbEditingResort){ Object.keys(QB_RESORTS).forEach(d=>{QB_RESORTS[d]=QB_RESORTS[d].filter(r=>r.name!==qbEditingResort.name);if(QB_RESORTS[d].length===0) delete QB_RESORTS[d];}); }
   if(!QB_RESORTS[dest]) QB_RESORTS[dest]=[];
-  QB_RESORTS[dest].push({name,about,highlights,note,rooms,custom:true});
+  QB_RESORTS[dest].push({name,about,highlights,note,photo,resortPhotos,rooms,custom:true});
   qbInitDestinations(); qbFilterResorts();
   document.getElementById('qb-dest').value=dest; qbFilterResorts();
   document.getElementById('qb-resort').value=name; qbOnResortChange();
@@ -4638,6 +4632,37 @@ function importResortLibrary(event){ const file=event.target.files[0]; if(!file)
 
 // Init when tab opens
 document.addEventListener('DOMContentLoaded', ()=>{ qbInitDestinations(); qbFilterResorts(); });
+</script>
+<script>
+// ── Shared draggable helper ──
+function makeDraggable(panel, handle){
+  let dragging=false, ox=0, oy=0;
+  handle.addEventListener('mousedown', function(e){
+    dragging=true;
+    const r=panel.getBoundingClientRect();
+    ox=e.clientX-r.left; oy=e.clientY-r.top;
+    handle.style.cursor='grabbing';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e){
+    if(!dragging) return;
+    const x=Math.min(Math.max(0,e.clientX-ox), window.innerWidth-panel.offsetWidth);
+    const y=Math.min(Math.max(0,e.clientY-oy), window.innerHeight-panel.offsetHeight);
+    panel.style.right='auto';
+    panel.style.left=x+'px';
+    panel.style.top=y+'px';
+  });
+  document.addEventListener('mouseup', function(){
+    dragging=false;
+    handle.style.cursor='grab';
+  });
+}
+// ── Wire up Send Intake popup drag ──
+document.addEventListener('DOMContentLoaded', function(){
+  const popup = document.getElementById('intakeModal');
+  const handle = document.getElementById('intakeModalHeader');
+  if(popup && handle) makeDraggable(popup, handle);
+});
 </script>
 </body>
 </html>
