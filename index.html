@@ -3312,7 +3312,9 @@ function renderFlightPersonSections(focusGuestId){
   const deptDiv = document.getElementById('f-departureSections');
   if(!arrDiv||!deptDiv) return;
 
-  const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  // If focusGuestId is set, only show that guest; otherwise show all
+  const allWGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const wGuests = focusGuestId ? allWGuests.filter(g=>g.id===focusGuestId) : allWGuests;
   if(!wGuests.length) return;
 
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
