@@ -2326,24 +2326,27 @@ function renderReports(){
   if(!cont) return;
 
   const byYear = {};
+  const today2 = new Date(); today2.setHours(0,0,0,0);
   weddings.forEach(w => {
     const yr = (w.weddingDate||'').slice(0,4) || 'Unknown';
-    if(!byYear[yr]) byYear[yr] = {groups:0, passengers:0, projGross:0, projComm:0, collected:0, commReceived:0};
+    if(!byYear[yr]) byYear[yr] = {groups:0, passengers:0, projGross:0, projComm:0, asOfToday:0, commReceived:0};
     byYear[yr].groups++;
     byYear[yr].projComm += parseFloat(w.commission)||0;
     if(w.commissionReceived) byYear[yr].commReceived += parseFloat(w.commission)||0;
+    const eventDate = w.weddingDate ? new Date(w.weddingDate+'T12:00:00') : null;
+    const eventPast = eventDate && eventDate <= today2;
     const wGuests = guests.filter(g=>g.weddingId===w.id&&g.status!=='Cancelled');
     const override = parseFloat(w.grossSalesOverride)||0;
     if(wGuests.length > 0){
       wGuests.forEach(g=>{
         const f = calcFinancials(g,w);
         byYear[yr].projGross += f.total;
-        byYear[yr].collected += f.totalPaid;
+        if(eventPast) byYear[yr].asOfToday += f.total;
         byYear[yr].passengers += 1 + ((g.additional||'').split(',').filter(x=>x.trim()).length);
       });
     } else if(override > 0){
       byYear[yr].projGross += override;
-      // Override groups have no payment data — don't add to collected
+      if(eventPast) byYear[yr].asOfToday += override;
     }
   });
 
@@ -2356,11 +2359,11 @@ function renderReports(){
   const selYr = window.reportSelectedYear;
   const d = byYear[selYr];
 
-  const gross = isProjected ? d.projGross : d.collected;
+  const gross = isProjected ? d.projGross : d.asOfToday;
   const comm = isProjected ? d.projComm : d.commReceived;
-  const grossLabel = isProjected ? 'Projected Gross' : 'Collected to Date';
+  const grossLabel = isProjected ? 'Projected Gross' : 'Gross As of Today';
   const commLabel = isProjected ? 'Projected Commission' : 'Commission Received';
-  const pct = d.projGross > 0 ? Math.round((d.collected/d.projGross)*100) : 0;
+  const pct = d.projGross > 0 ? Math.round((d.asOfToday/d.projGross)*100) : 0;
 
   const yrBtns = years.map(yr => `<button onclick="window.reportSelectedYear='${yr}';renderReports()" style="padding:8px 20px;border-radius:30px;border:1px solid #ccc;font-size:.9rem;font-weight:700;cursor:pointer;background:${yr===selYr?'#1a1a1a':'white'};color:${yr===selYr?'white':'#1a1a1a'};transition:all .15s">${yr}</button>`).join('');
 
@@ -2371,7 +2374,7 @@ function renderReports(){
   // All years totals
   const totGroups = Object.values(byYear).reduce((s,d)=>s+d.groups,0);
   const totPass = Object.values(byYear).reduce((s,d)=>s+d.passengers,0);
-  const totGross = isProjected ? Object.values(byYear).reduce((s,d)=>s+d.projGross,0) : Object.values(byYear).reduce((s,d)=>s+d.collected,0);
+  const totGross = isProjected ? Object.values(byYear).reduce((s,d)=>s+d.projGross,0) : Object.values(byYear).reduce((s,d)=>s+d.asOfToday,0);
   const totComm = isProjected ? Object.values(byYear).reduce((s,d)=>s+d.projComm,0) : Object.values(byYear).reduce((s,d)=>s+d.commReceived,0);
 
   cont.innerHTML = `
