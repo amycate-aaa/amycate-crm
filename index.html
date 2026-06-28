@@ -1050,8 +1050,14 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <label>30-Day Date</label>
         <input type="date" id="w-date30day" class="form-input">
       </div>
-      <div class="form-group"><label>Payment Date 1</label><input type="date" id="w-pay1"></div>
-      <div class="form-group"><label>Payment Date 2 (insurance guests)</label><input type="date" id="w-pay2"></div>
+      <div class="form-group"><label>Payment Structure</label>
+        <select id="w-payStructure" class="form-input" onchange="togglePaymentStructure()">
+          <option value="1">1 Payment</option>
+          <option value="2">2 Payments</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Payment Date 1</label><input type="date" id="w-pay1" class="form-input"></div>
+      <div class="form-group" id="w-pay2-group"><label>Payment Date 2 <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(insurance guests only)</span></label><input type="date" id="w-pay2" class="form-input"></div>
       <div class="form-group"><label>Reduction Date</label><input type="date" id="w-reductionDate"></div>
       <div class="form-group"><label>Room Listing Due Date</label><input type="date" id="w-roomListingDate"></div>
       <div class="form-group"><label>Deposit — $ per person</label><input type="number" id="w-depositPP" value="50"></div>
@@ -1103,28 +1109,36 @@ const calcFinancials = (g, w) => {
   let p1 = parseFloat(g.pay1)||0, p2 = parseFloat(g.pay2)||0;
   if(!p1 && !p2 && g.totalpaid) {
     const total = rc+ic, hasIns = g.insurance==='Yes';
-    const hasTwoDates = w && w.pay1 && w.pay2;
+    const hasTwoDates = w && (w.payStructure==='2') && w.pay1 && w.pay2;
     const sched1 = (hasTwoDates && hasIns) ? total*0.5 : total;
     const tp = parseFloat(g.totalpaid)||0;
     p1 = Math.min(tp, Math.max(0, sched1-dep));
     p2 = Math.max(0, tp-p1);
   }
   const total = rc+ic, hasIns = g.insurance==='Yes';
-  const hasTwoDates = w && w.pay1 && w.pay2;
-  const sched1 = (hasTwoDates && hasIns) ? total*0.5 : total;
-  const sched2 = (hasTwoDates && hasIns) ? total*0.5 : 0;
+  const isTwoPayment = w && (w.payStructure==='2') && w.pay1 && w.pay2;
+  const isOnePayment = !isTwoPayment;
+  // Schedule: 2-payment + insurance = 50/50 split; everything else = full balance on pay1
+  const sched1 = (isTwoPayment && hasIns) ? total*0.5 : total;
+  const sched2 = (isTwoPayment && hasIns) ? total*0.5 : 0;
   const totalPaid = dep+p1+p2;
-  // Spread total payments across sched1 first, then sched2
+  // Payments reduce sched1 first, overage reduces sched2
   const applied1 = Math.min(totalPaid, sched1);
   const applied2 = Math.max(0, totalPaid - applied1);
   const bal1 = Math.max(0, sched1 - applied1);
-  const bal2 = sched2>0 ? Math.max(0, sched2 - applied2) : null;
-  return {rc,ic,dep,p1,p2,total,hasIns,hasTwoDates,sched1,sched2,totalPaid,bal1,bal2};
+  const bal2 = (isTwoPayment && hasIns) ? Math.max(0, sched2 - applied2) : null;
+  return {rc,ic,dep,p1,p2,total,hasIns,isTwoPayment,isOnePayment,sched1,sched2,totalPaid,bal1,bal2};
 };
 const closeModal = id => document.getElementById(id).classList.remove('open');
 const openModal = id => document.getElementById(id).classList.add('open');
 
 
+function togglePaymentStructure(){
+  const val = document.getElementById('w-payStructure').value;
+  const pay2group = document.getElementById('w-pay2-group');
+  if(pay2group) pay2group.style.display = val==='2' ? '' : 'none';
+  if(val==='1'){ sv('w-pay2',''); }
+}
 function toggleAgreementDates(){
   const na = document.getElementById('w-noAgreement').checked;
   document.getElementById('w-agreementDates').style.display = na ? 'none' : 'grid';
@@ -1424,6 +1438,8 @@ function editWedding(id){
   sv('w-operator',w.operator||'DWT');
   sv('w-portalPassword',w.portalPassword||'');
   sv('w-dateSigned',w.dateSigned); sv('w-date30day',w.date30day);
+  const ps = document.getElementById('w-payStructure');
+  if(ps){ ps.value = w.payStructure||'1'; togglePaymentStructure(); }
   const noAgr = document.getElementById('w-noAgreement');
   if(noAgr){ noAgr.checked = w.noAgreement||false; toggleAgreementDates(); }
   sv('w-pay1',w.pay1); sv('w-pay2',w.pay2);
@@ -1438,7 +1454,7 @@ async function saveWedding(){
     destination:gv('w-destination'), location:gv('w-location'), flightsRequired:gv('w-flightsRequired'),
     operator:gv('w-operator')||'DWT',
     portalPassword:gv('w-portalPassword')||'',
-    dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false,
+    dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false, payStructure:gv('w-payStructure')||'1',
     pay1:gv('w-pay1'), pay2:gv('w-pay2'),
     reductionDate:gv('w-reductionDate'), roomListingDate:gv('w-roomListingDate'),
     depositPP:parseFloat(gv('w-depositPP'))||50, depositMin:parseFloat(gv('w-depositMin'))||100, grossSalesOverride:parseFloat(gv('w-grossSalesOverride'))||0, commission:parseFloat(gv('w-commission'))||0, commissionReceived:document.getElementById('w-commissionReceived').checked
@@ -1607,7 +1623,7 @@ function calcGuestPayments(){
   const total = parseFloat(document.getElementById('g-total').value)||0;
   const hasIns = document.getElementById('g-insurance').value === 'Yes';
   const w = weddings.find(x=>x.id===currentWeddingId);
-  const hasTwoDates = w && w.pay1 && w.pay2;
+  const hasTwoDates = w && (w.payStructure==='2') && w.pay1 && w.pay2;
 
   const sched1 = (hasTwoDates && hasIns) ? total*0.5 : total;
   const sched2 = (hasTwoDates && hasIns) ? total*0.5 : 0;
@@ -2640,7 +2656,7 @@ function renderDetailGuests(){
   document.getElementById('ds-paid').textContent='$'+fmt(paid);
 
   // Show/hide Bal 2 column based on whether wedding has two payment dates
-  const hasTwoDates = w && w.pay1 && w.pay2;
+  const hasTwoDates = w && (w.payStructure==='2') && w.pay1 && w.pay2;
   console.log('hasTwoDates:', hasTwoDates, 'pay1:', w?.pay1, 'pay2:', w?.pay2);
   const bal2Display = hasTwoDates ? '' : 'none';
   const th1 = document.getElementById('thSummaryBal2');
