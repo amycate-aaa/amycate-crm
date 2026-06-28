@@ -1583,12 +1583,10 @@ function calcPaymentSplit(){
   const totalPaid = parseFloat(document.getElementById('g-totalpaid').value)||0;
   const sched1 = parseFloat(document.getElementById('g-pay1due').value)||0;
   const sched2 = parseFloat(document.getElementById('g-pay2due').value)||0;
-  const dep = parseFloat(document.getElementById('g-deposit').value)||0;
 
-  // Available after deposit
-  const remaining = Math.max(0, totalPaid);
-  const p1 = Math.min(remaining, Math.max(0, sched1 - dep));
-  const p2 = Math.max(0, remaining - p1);
+  // Spread total payments across sched1 first, then sched2
+  const p1 = Math.min(totalPaid, sched1);
+  const p2 = Math.max(0, totalPaid - p1);
 
   document.getElementById('g-pay1').value = p1.toFixed(2);
   document.getElementById('g-pay2').value = p2.toFixed(2);
