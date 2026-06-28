@@ -3589,43 +3589,67 @@ function generateFlightReport(){
   <div class="meta-card"><div class="label">Report Generated</div><div class="value">${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</div></div>
 </div>
 
-<div class="section-title">✈ Arrivals</div>
+${(()=>{
+  // Group rows by flight+date for arrivals
+  const groupRows = (rows, type) => {
+    const groups = [];
+    rows.forEach(r => {
+      const f = type==='arr' ? r.arr : r.dept;
+      const key = (f.flight||'') + '|' + (f.date||'');
+      const existing = groups.find(g => g.key === key);
+      if(existing){ existing.members.push(r); }
+      else { groups.push({key, flight:f, members:[r]}); }
+    });
+    return groups;
+  };
+
+  const arrGroups = groupRows(rows, 'arr');
+  const deptGroups = groupRows(rows, 'dept');
+
+  const arrRows = arrGroups.map(g => {
+    const names = g.members.map(r => `<div class="name">${r.name}${r.booking?` <span class="booking">${r.booking}</span>`:''}</div>`).join('');
+    const ti = g.members.map(r=>r.ti).filter(Boolean).join(', ');
+    const room = g.members.map(r=>r.room).filter(Boolean).join(', ');
+    return `<tr>
+      <td>${names}</td>
+      <td class="booking">${ti}</td>
+      <td style="color:#666;font-size:.88rem">${room}</td>
+      <td>${g.flight.date?fmtD(g.flight.date):'<span class="no-flight">Not provided</span>'}</td>
+      <td>${g.flight.flight?`<span class="flight-num">${g.flight.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
+      <td>${g.flight.time||'<span class="no-flight">—</span>'}</td>
+      <td>${g.flight.airport||'<span class="no-flight">—</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  const deptRows = deptGroups.map(g => {
+    const names = g.members.map(r => `<div class="name">${r.name}${r.booking?` <span class="booking">${r.booking}</span>`:''}</div>`).join('');
+    const ti = g.members.map(r=>r.ti).filter(Boolean).join(', ');
+    return `<tr>
+      <td>${names}</td>
+      <td class="booking">${ti}</td>
+      <td>${g.flight.date?fmtD(g.flight.date):'<span class="no-flight">Not provided</span>'}</td>
+      <td>${g.flight.flight?`<span class="flight-num">${g.flight.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
+      <td>${g.flight.time||'<span class="no-flight">—</span>'}</td>
+    </tr>`;
+  }).join('');
+
+  return `<div class="section-title">✈ Arrivals</div>
 <table>
   <thead><tr>
-    <th>Guest</th><th>Booking #</th><th>Res # (TI)</th><th>Room Type</th>
+    <th>Guest(s)</th><th>Res # (TI)</th><th>Room Type</th>
     <th>Arrival Date</th><th>Flight #</th><th>Arrives At</th><th>Airport</th>
   </tr></thead>
-  <tbody>
-    ${rows.map(r=>`<tr>
-      <td><div class="name">${r.name}</div></td>
-      <td class="booking">${r.booking||''}</td>
-      <td class="booking">${r.ti||''}</td>
-      <td style="color:#666;font-size:.88rem">${r.room||''}</td>
-      <td>${r.arr.date?fmtD(r.arr.date):'<span class="no-flight">Not provided</span>'}</td>
-      <td>${r.arr.flight?`<span class="flight-num">${r.arr.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
-      <td>${r.arr.time||'<span class="no-flight">—</span>'}</td>
-      <td>${r.arr.airport||'<span class="no-flight">—</span>'}</td>
-    </tr>`).join('')}
-  </tbody>
+  <tbody>${arrRows}</tbody>
 </table>
-
 <div class="section-title">✈ Departures</div>
 <table>
   <thead><tr>
-    <th>Guest</th><th>Booking #</th><th>Res # (TI)</th>
+    <th>Guest(s)</th><th>Res # (TI)</th>
     <th>Departure Date</th><th>Flight #</th><th>Departs At</th>
   </tr></thead>
-  <tbody>
-    ${rows.map(r=>`<tr>
-      <td><div class="name">${r.name}</div></td>
-      <td class="booking">${r.booking||''}</td>
-      <td class="booking">${r.ti||''}</td>
-      <td>${r.dept.date?fmtD(r.dept.date):'<span class="no-flight">Not provided</span>'}</td>
-      <td>${r.dept.flight?`<span class="flight-num">${r.dept.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
-      <td>${r.dept.time||'<span class="no-flight">—</span>'}</td>
-    </tr>`).join('')}
-  </tbody>
-</table>
+  <tbody>${deptRows}</tbody>
+</table>`;
+})()}
 
 <div class="footer">
   Prepared by Amy Cate · amy.cate@destinationweddings.com · Destination Weddings / Celebration Travel
