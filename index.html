@@ -2343,7 +2343,7 @@ function renderReports(){
       });
     } else if(override > 0){
       byYear[yr].projGross += override;
-      byYear[yr].collected += override;
+      // Override groups have no payment data — don't add to collected
     }
   });
 
