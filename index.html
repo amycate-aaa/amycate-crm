@@ -2427,6 +2427,12 @@ function toggleTimelinePast(){
   renderTimeline();
 }
 
+function dispatchGroupReport(){
+  const t = document.querySelector('input[name="reportType"]:checked')?.value || 'group';
+  if(t === 'roomlisting') generateRoomListingReport();
+  else generateGroupReport();
+}
+
 function generateRoomListingReport(){
   const overlay = document.getElementById('groupReportOverlay');
   if(overlay) overlay.remove();
@@ -4452,7 +4458,7 @@ function openGroupReportModal(){
       </div>
       <div style="display:flex;justify-content:flex-end;gap:10px">
         <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 20px;border:1px solid #ccc;background:white;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer">Cancel</button>
-        <button onclick="const t=document.querySelector('input[name=\'reportType\']:checked')?.value;if(t===\'roomlisting\')generateRoomListingReport();else generateGroupReport();" style="padding:10px 22px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer">&#x1F4C4; Generate PDF</button>
+        <button onclick="dispatchGroupReport()" style="padding:10px 22px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer">&#x1F4C4; Generate PDF</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
@@ -7413,61 +7419,6 @@ function toggleTimelinePast(){
   renderTimeline();
 }
 
-function generateRoomListingReport(){
-  const overlay = document.getElementById('groupReportOverlay');
-  if(overlay) overlay.remove();
-  const w = weddings.find(x=>x.id===currentWeddingId);
-  if(!w) return;
-  const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled')
-    .sort((a,b)=>(a.depart||'').localeCompare(b.depart||''));
-  if(!wGuests.length){ alert('No guests found.'); return; }
-  const fmtDate = d => { if(!d) return '—'; try{ return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } };
-
-  let rows = '';
-  wGuests.forEach((g, idx) => {
-    const persons = [g.names];
-    if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
-    const bg = idx%2===0 ? '#ffffff' : '#f9f9f9';
-    rows += '<tr style="background:'+bg+'">'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;color:#1B2B4B">'+(g.ti||'—')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem"><div style="font-weight:700">'+(g.names||'—')+'</div>'
-      + persons.slice(1).map(n=>'<div style="font-size:.78rem;color:#666">+ '+n+'</div>').join('')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.return)+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem">'+(g.roomtype||'—')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;color:#666">'+(g.notes||'')+'</td>'
-      + '</tr>';
-  });
-
-  const reportHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Room Listing — '+w.names+'</title>'
-    + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:#1a1a1a;background:white;padding:28px;}'
-    + '.header{background:#1B2B4B;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}'
-    + '.header h1{font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}'
-    + '.header .sub{font-size:.85rem;color:#ccc;}'
-    + '.meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;}'
-    + '.meta span{font-size:.82rem;color:#ddd;}'
-    + 'table{width:100%;border-collapse:collapse;font-size:.82rem;}'
-    + 'thead tr{background:#1B2B4B;}'
-    + 'thead th{padding:10px 8px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.05em;color:#c9a96e;}'
-    + '.footer{margin-top:20px;font-size:.75rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:10px;}'
-    + '@media print{body{padding:12px;}}</style></head><body>'
-    + '<div class="header"><h1>&#10022; '+w.names+' — Resort Room Listing</h1>'
-    + '<div class="meta"><span>&#x1F3E8; '+(w.resort||'—')+'</span>'
-    + '<span>&#x1F4CD; '+(w.destination||'')+'</span>'
-    + '<span>&#x1F492; '+(w.weddingDate||'')+'</span>'
-    + '<span>&#x1F5D3; Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+'</span></div>'
-    + '<div class="sub">'+wGuests.length+' rooms &middot; Amy M. Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel</div></div>'
-    + '<table><thead><tr>'
-    + '<th>Res # (TI)</th><th>Guest(s)</th><th>Arrival</th><th>Departure</th><th>Room Category</th><th>Notes</th>'
-    + '</tr></thead><tbody>'+rows+'</tbody></table>'
-    + '<div class="footer">Amy M. Cate &middot; Certified Destination Wedding &amp; Group Travel Specialist &middot; (832) 773-8664 &middot; amy.cate@destinationweddings.com</div>'
-    + '</body></html>';
-
-  const win = window.open('','_blank');
-  win.document.write(reportHtml);
-  win.document.close();
-  setTimeout(()=>win.print(), 600);
-}
 
 function setTimelineView(view){
   timelineView = view;
@@ -9409,148 +9360,7 @@ async function quickOpenGuest(weddingId, guestId){
 </script>
 
 <script>
-function openGroupReportModal(){
-  if(!currentWeddingId){ alert('Select a wedding first.'); return; }
-  const w = weddings.find(x=>x.id===currentWeddingId);
-  if(!w) return;
-  const overlay = document.createElement('div');
-  overlay.id = 'groupReportOverlay';
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px';
-  overlay.innerHTML = `
-    <div style="background:white;border-radius:14px;padding:28px;width:420px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,.3)">
-      <h3 style="font-size:1rem;font-weight:700;color:#1a1a1a;margin-bottom:6px">📄 Group Report</h3>
-      <p style="font-size:.88rem;color:#666;margin-bottom:20px">${w.names} — ${w.resort||''}</p>
-      <div style="margin-bottom:18px">
-        <label style="display:block;font-size:.82rem;font-weight:700;color:#444;margin-bottom:8px">Filter Guests</label>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportFilter" value="all" checked> All Guests</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportFilter" value="unpaid"> Unpaid / Balance Remaining</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportFilter" value="missing_flight"> Missing Flight Info</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportFilter" value="missing_email"> Missing Email</label>
-        </div>
-      </div>
-      <div style="margin-bottom:18px;border-top:1px solid #eee;padding-top:16px">
-        <label style="display:block;font-size:.82rem;font-weight:700;color:#444;margin-bottom:8px">Report Type</label>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportType" value="group" checked> Group Report</label>
-          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportType" value="roomlisting"> Resort Room Listing</label>
-        </div>
-      </div>
-      <div style="display:flex;justify-content:flex-end;gap:10px">
-        <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 20px;border:1px solid #ccc;background:white;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer">Cancel</button>
-        <button onclick="const t=document.querySelector('input[name=\'reportType\']:checked')?.value;if(t===\'roomlisting\')generateRoomListingReport();else generateGroupReport();" style="padding:10px 22px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer">&#x1F4C4; Generate PDF</button>
-      </div>
-    </div>`;
-  document.body.appendChild(overlay);
-}
 
-function generateGroupReport(){
-  const overlay = document.getElementById('groupReportOverlay');
-  const filter = document.querySelector('input[name="reportFilter"]:checked')?.value || 'all';
-  if(overlay) overlay.remove();
-  const w = weddings.find(x=>x.id===currentWeddingId);
-  if(!w) return;
-  const fMap = {}; flights.forEach(f => fMap[f.guestId] = f);
-  let wGuests = guests.filter(g => g.weddingId===currentWeddingId && g.status!=='Cancelled');
-  if(filter === 'unpaid') wGuests = wGuests.filter(g => { const cost=parseFloat(g.roomcost||0)+parseFloat(g.inscost||0); const paid=parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0); return (cost-paid)>0.01; });
-  else if(filter === 'missing_flight') wGuests = wGuests.filter(g => { const f=fMap[g.id]; return !f||(!f.arrFlight&&!f.deptFlight); });
-  else if(filter === 'missing_email') wGuests = wGuests.filter(g => !g.email||!g.email.trim());
-  if(!wGuests.length){ alert('No guests match this filter.'); return; }
-  const allGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
-  const showFlights = w.flightsRequired === 'Yes';
-  let totalCost=0, totalPaid=0, flightsMissing=0;
-  allGuests.forEach(g=>{
-    totalCost+=parseFloat(g.roomcost||0)+parseFloat(g.inscost||0);
-    totalPaid+=parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
-    const f=fMap[g.id]; if(!f||(!f.arrFlight&&!f.deptFlight)) flightsMissing++;
-  });
-  const totalDue = totalCost - totalPaid;
-  const fmt = n => '$'+parseFloat(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
-  const fmtDate = d => { if(!d) return '—'; try{ return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } };
-  const filterLabels = {all:'All Guests',unpaid:'Unpaid',missing_flight:'Missing Flight',missing_email:'Missing Email'};
-
-  // Build rows
-  let rows = '';
-  wGuests.forEach((g, idx) => {
-    const cost = parseFloat(g.roomcost||0)+parseFloat(g.inscost||0);
-    const paid = parseFloat(g.deposit||0)+parseFloat(g.pay1||0)+parseFloat(g.pay2||0);
-    const due = cost - paid;
-    const f = fMap[g.id];
-    const hasArr = f&&f.arrFlight, hasDept = f&&f.deptFlight;
-    const flightCell = showFlights ? '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.8rem">'+(hasArr&&hasDept?'<span style="color:#2a7a4a;font-weight:700">&#10003; Complete</span>':hasArr||hasDept?'<span style="color:#b47a00;font-weight:700">&#9888; Partial</span>':'<span style="color:#c0392b;font-weight:700">&#10007; Missing</span>')+'</td>' : '';
-    const dueColor = due>0.01 ? 'color:#c0392b;font-weight:700' : 'color:#2a7a4a;font-weight:700';
-    const bg = idx%2===0 ? '#ffffff' : '#f9f9f9';
-    rows += '<tr style="background:'+bg+'">'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.8rem;color:#888">'+(idx+1)+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee"><div style="font-weight:700;font-size:.85rem">'+(g.names||'—')+'</div>'+(g.additional?'<div style="font-size:.75rem;color:#666">'+g.additional+'</div>':'')+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem">'+(g.roomtype||'—')+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem">'+(g.booking||'—')+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.return)+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem">'+fmt(cost)+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem">'+fmt(paid)+'</td>'
-      + '<td style="padding:8px 6px;border-bottom:1px solid #eee;font-size:.82rem;'+dueColor+'">'+(due>0.01?fmt(due):'&#10003; Paid')+'</td>'
-      + flightCell
-      + '</tr>';
-  });
-
-  const flightsMissingCard = showFlights ? '<div class="stat"><div class="label">Flights Missing</div><div class="val '+(flightsMissing>0?'red':'')+'">'+flightsMissing+' of '+allGuests.length+'</div></div>' : '';
-  const flightHeader = showFlights ? '<th>Flight</th>' : '';
-
-  const reportHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Group Report — '+w.names+'</title>'
-    + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:#1a1a1a;background:white;padding:32px;}'
-    + '.header{background:#1a1a1a;color:white;padding:20px 24px;border-radius:10px;margin-bottom:20px;}'
-    + '.header h1{font-size:1.2rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}'
-    + '.header .sub{font-size:.88rem;color:#ccc;}'
-    + '.meta{display:flex;gap:24px;margin-bottom:8px;flex-wrap:wrap;}'
-    + '.meta span{font-size:.85rem;color:#ddd;}'
-    + '.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}'
-    + '.stat{background:#f5f5f5;border-radius:8px;padding:12px 16px;}'
-    + '.stat .label{font-size:.75rem;color:#666;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}'
-    + '.stat .val{font-size:1.1rem;font-weight:700;color:#1a1a1a;}'
-    + '.stat .val.red{color:#c0392b;}'
-    + '.filter-badge{display:inline-block;background:#c9a96e;color:white;font-size:.78rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:12px;}'
-    + 'table{width:100%;border-collapse:collapse;font-size:.82rem;}'
-    + 'thead tr{background:#1a1a1a;color:white;}'
-    + 'thead th{padding:10px 6px;text-align:left;font-size:.75rem;font-weight:700;letter-spacing:.04em;}'
-    + '.footer{margin-top:24px;font-size:.78rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:12px;}'
-    + '@media print{body{padding:16px;}}</style></head><body>'
-    + '<div class="header"><h1>&#10022; '+w.names+' — Group Report</h1>'
-    + '<div class="meta"><span>&#x1F4CD; '+(w.resort||'—')+', '+(w.location||w.destination||'')+'</span>'
-    + '<span>&#x1F492; Wedding: '+fmtDate(w.weddingDate)+'</span>'
-    + '<span>&#x1F5D3; Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+'</span></div>'
-    + '<div class="sub">Amy M. Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel</div></div>'
-    + '<div class="summary">'
-    + '<div class="stat"><div class="label">Total Guests</div><div class="val">'+allGuests.length+'</div></div>'
-    + '<div class="stat"><div class="label">Total Collected</div><div class="val" style="color:#2a7a4a">'+fmt(totalPaid)+'</div></div>'
-    + '<div class="stat"><div class="label">Outstanding</div><div class="val '+(totalDue>0?'red':'')+'">'+fmt(totalDue)+'</div></div>'
-    + flightsMissingCard
-    + '</div>'
-    + '<div class="filter-badge">Filter: '+filterLabels[filter]+' ('+wGuests.length+' guest'+(wGuests.length!==1?'s':'')+')</div>'
-    + '<table><thead><tr>'
-    + '<th>#</th><th>Guest</th><th>Room</th><th>Booking #</th><th>Arrives</th><th>Departs</th><th>Total Cost</th><th>Paid</th><th>Balance</th>'
-    + flightHeader
-    + '</tr></thead><tbody>'+rows+'</tbody></table>'
-    + '<div class="footer">Amy M. Cate &middot; Certified Destination Wedding &amp; Group Travel Specialist &middot; (832) 773-8664 &middot; amy.cate@destinationweddings.com</div>'
-    + '</body></html>';
-
-  const win = window.open('','_blank');
-  win.document.write(reportHtml);
-  win.document.close();
-  setTimeout(()=>win.print(), 600);
-}
-
-</script>
-
-<script>
-// ════════════════════════════════════
-// QUOTE BUILDER
-// ════════════════════════════════════
-
-
-
-let qbEditingResort = null;
-let qbHTML = '';
 
 function qbGetAll(){ const a=[]; Object.entries(QB_RESORTS).forEach(([d,l])=>l.forEach(r=>a.push({...r,destination:d}))); return a; }
 function qbRoomDesc(val){ return typeof val==='object'?val.desc||'':val||''; }
