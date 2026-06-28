@@ -2427,6 +2427,62 @@ function toggleTimelinePast(){
   renderTimeline();
 }
 
+function generateRoomListingReport(){
+  const overlay = document.getElementById('groupReportOverlay');
+  if(overlay) overlay.remove();
+  const w = weddings.find(x=>x.id===currentWeddingId);
+  if(!w) return;
+  const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled')
+    .sort((a,b)=>(a.depart||'').localeCompare(b.depart||''));
+  if(!wGuests.length){ alert('No guests found.'); return; }
+  const fmtDate = d => { if(!d) return '—'; try{ return new Date(d+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }catch(e){ return d; } };
+
+  let rows = '';
+  wGuests.forEach((g, idx) => {
+    const persons = [g.names];
+    if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
+    const bg = idx%2===0 ? '#ffffff' : '#f9f9f9';
+    rows += '<tr style="background:'+bg+'">'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;color:#1B2B4B">'+(g.ti||'—')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem"><div style="font-weight:700">'+(g.names||'—')+'</div>'
+      + persons.slice(1).map(n=>'<div style="font-size:.78rem;color:#666">+ '+n+'</div>').join('')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.return)+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem">'+(g.roomtype||'—')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;color:#666">'+(g.notes||'')+'</td>'
+      + '</tr>';
+  });
+
+  const reportHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Room Listing — '+w.names+'</title>'
+    + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:#1a1a1a;background:white;padding:28px;}'
+    + '.header{background:#1B2B4B;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}'
+    + '.header h1{font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}'
+    + '.header .sub{font-size:.85rem;color:#ccc;}'
+    + '.meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;}'
+    + '.meta span{font-size:.82rem;color:#ddd;}'
+    + 'table{width:100%;border-collapse:collapse;font-size:.82rem;}'
+    + 'thead tr{background:#1B2B4B;}'
+    + 'thead th{padding:10px 8px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.05em;color:#c9a96e;}'
+    + '.footer{margin-top:20px;font-size:.75rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:10px;}'
+    + '@media print{body{padding:12px;}}</style></head><body>'
+    + '<div class="header"><h1>&#10022; '+w.names+' — Resort Room Listing</h1>'
+    + '<div class="meta"><span>&#x1F3E8; '+(w.resort||'—')+'</span>'
+    + '<span>&#x1F4CD; '+(w.destination||'')+'</span>'
+    + '<span>&#x1F492; '+(w.weddingDate||'')+'</span>'
+    + '<span>&#x1F5D3; Generated: '+new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})+'</span></div>'
+    + '<div class="sub">'+wGuests.length+' rooms &middot; Amy M. Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel</div></div>'
+    + '<table><thead><tr>'
+    + '<th>Res # (TI)</th><th>Guest(s)</th><th>Arrival</th><th>Departure</th><th>Room Category</th><th>Notes</th>'
+    + '</tr></thead><tbody>'+rows+'</tbody></table>'
+    + '<div class="footer">Amy M. Cate &middot; Certified Destination Wedding &amp; Group Travel Specialist &middot; (832) 773-8664 &middot; amy.cate@destinationweddings.com</div>'
+    + '</body></html>';
+
+  const win = window.open('','_blank');
+  win.document.write(reportHtml);
+  win.document.close();
+  setTimeout(()=>win.print(), 600);
+}
+
 function setTimelineView(view){
   timelineView = view;
   const listBtn = document.getElementById('tl-btn-list');
@@ -4387,9 +4443,16 @@ function openGroupReportModal(){
           <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportFilter" value="missing_email"> Missing Email</label>
         </div>
       </div>
+      <div style="margin-bottom:18px;border-top:1px solid #eee;padding-top:16px">
+        <label style="display:block;font-size:.82rem;font-weight:700;color:#444;margin-bottom:8px">Report Type</label>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportType" value="group" checked> Group Report</label>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:.92rem"><input type="radio" name="reportType" value="roomlisting"> Resort Room Listing</label>
+        </div>
+      </div>
       <div style="display:flex;justify-content:flex-end;gap:10px">
         <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 20px;border:1px solid #ccc;background:white;border-radius:8px;font-size:.92rem;font-weight:600;cursor:pointer">Cancel</button>
-        <button onclick="generateGroupReport()" style="padding:10px 22px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer">📄 Generate PDF</button>
+        <button onclick="const t=document.querySelector('input[name=\'reportType\']:checked')?.value;if(t===\'roomlisting\')generateRoomListingReport();else generateGroupReport();" style="padding:10px 22px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer">&#x1F4C4; Generate PDF</button>
       </div>
     </div>`;
   document.body.appendChild(overlay);
