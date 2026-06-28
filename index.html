@@ -1039,16 +1039,18 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <select id="w-flightsRequired"><option value="Yes">Yes</option><option value="No">No</option></select>
       </div>
       <div class="form-group"><label>🔒 Client Portal Password</label><input type="text" id="w-portalPassword" placeholder="e.g. jinks2026"></div>
-      <div class="form-group">
-        <label>Date Signed</label>
-        <input type="date" id="w-dateSigned" class="form-input">
-        <label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.82rem;font-weight:400;cursor:pointer">
-          <input type="checkbox" id="w-noAgreement" onchange="toggleAgreementDates()" style="width:auto;height:auto;margin:0"> N/A — no group agreement
-        </label>
-      </div>
-      <div class="form-group">
-        <label>30-Day Date</label>
-        <input type="date" id="w-date30day" class="form-input">
+      <div class="form-group" style="grid-column:1/-1">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+          <label style="margin:0">Agreement Dates</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;font-weight:400;cursor:pointer;color:var(--muted)">
+            <input type="checkbox" id="w-noAgreement" onchange="toggleAgreementDates()" style="width:auto;height:auto;margin:0"> N/A — no group agreement
+          </label>
+        </div>
+        <div id="w-agreementDatesRow" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label class="form-label">Date Signed</label><input type="date" id="w-dateSigned" class="form-input"></div>
+          <div><label class="form-label">30-Day Date</label><input type="date" id="w-date30day" class="form-input"></div>
+        </div>
+        <div id="w-noAgreementMsg" style="display:none;font-size:.82rem;color:var(--muted);padding:6px 0;font-style:italic">No group agreement — not applicable</div>
       </div>
       <div class="form-group"><label>Payment Structure</label>
         <select id="w-payStructure" class="form-input" onchange="togglePaymentStructure()">
@@ -1141,9 +1143,15 @@ function togglePaymentStructure(){
 }
 function toggleAgreementDates(){
   const na = document.getElementById('w-noAgreement')?.checked;
-  const d30 = document.getElementById('w-date30day');
-  const ds = document.getElementById('w-dateSigned');
-  if(na){ if(ds) ds.value=''; if(d30) d30.value=''; }
+  const row = document.getElementById('w-agreementDatesRow');
+  const msg = document.getElementById('w-noAgreementMsg');
+  if(row) row.style.display = na ? 'none' : 'grid';
+  if(msg) msg.style.display = na ? 'block' : 'none';
+  if(na){
+    const ds = document.getElementById('w-dateSigned');
+    const d30 = document.getElementById('w-date30day');
+    if(ds) ds.value=''; if(d30) d30.value='';
+  }
 }
 function autoSetFlights(){
   const loc = '';
