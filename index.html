@@ -3544,7 +3544,7 @@ function generateFlightReport(){
     persons.forEach((name, idx) => {
       const arr = arrPersons[idx] || {flight: idx===0?f.arrFlight:'', time: idx===0?f.arrTime:'', airport: idx===0?f.arrAirport:'', date: idx===0?f.arrDate:''};
       const dept = deptPersons[idx] || {flight: idx===0?f.deptFlight:'', time: idx===0?f.deptTime:'', date: idx===0?f.deptDate:''};
-      rows.push({name, booking: idx===0?g.booking:'', room: idx===0?g.roomtype:'', arr, dept});
+      rows.push({name, booking: idx===0?g.booking:'', ti: idx===0?g.ti:'', room: idx===0?g.roomtype:'', arr, dept});
     });
   });
 
@@ -3592,13 +3592,14 @@ function generateFlightReport(){
 <div class="section-title">✈ Arrivals</div>
 <table>
   <thead><tr>
-    <th>Guest</th><th>Booking #</th><th>Room Type</th>
+    <th>Guest</th><th>Booking #</th><th>Res # (TI)</th><th>Room Type</th>
     <th>Arrival Date</th><th>Flight #</th><th>Arrives At</th><th>Airport</th>
   </tr></thead>
   <tbody>
     ${rows.map(r=>`<tr>
       <td><div class="name">${r.name}</div></td>
       <td class="booking">${r.booking||''}</td>
+      <td class="booking">${r.ti||''}</td>
       <td style="color:#666;font-size:.88rem">${r.room||''}</td>
       <td>${r.arr.date?fmtD(r.arr.date):'<span class="no-flight">Not provided</span>'}</td>
       <td>${r.arr.flight?`<span class="flight-num">${r.arr.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
@@ -3611,13 +3612,14 @@ function generateFlightReport(){
 <div class="section-title">✈ Departures</div>
 <table>
   <thead><tr>
-    <th>Guest</th><th>Booking #</th>
+    <th>Guest</th><th>Booking #</th><th>Res # (TI)</th>
     <th>Departure Date</th><th>Flight #</th><th>Departs At</th>
   </tr></thead>
   <tbody>
     ${rows.map(r=>`<tr>
       <td><div class="name">${r.name}</div></td>
       <td class="booking">${r.booking||''}</td>
+      <td class="booking">${r.ti||''}</td>
       <td>${r.dept.date?fmtD(r.dept.date):'<span class="no-flight">Not provided</span>'}</td>
       <td>${r.dept.flight?`<span class="flight-num">${r.dept.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
       <td>${r.dept.time||'<span class="no-flight">—</span>'}</td>
