@@ -1039,7 +1039,14 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <select id="w-flightsRequired"><option value="Yes">Yes</option><option value="No">No</option></select>
       </div>
       <div class="form-group"><label>🔒 Client Portal Password</label><input type="text" id="w-portalPassword" placeholder="e.g. jinks2026"></div>
-      <div class="form-group"><label>💍 Wedding Website URL <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(optional)</span></label><input type="url" id="w-weddingWebsite" class="form-input" placeholder="https://..."></div>
+      <div class="form-group"><label>&#x1F4F7; Portal Hero Photo URL <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(optional)</span></label>
+        <div style="display:flex;gap:8px;align-items:center">
+          <input type="url" id="w-heroPhoto" class="form-input" placeholder="Paste URL or pick from resort library" onchange="updateHeroPhotoPreview()">
+          <button type="button" onclick="openResortPhotoPickerForEvent()" style="white-space:nowrap;padding:8px 12px;background:var(--navy);color:white;border:none;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer">&#x1F5BC; Pick Photo</button>
+        </div>
+        <div id="w-heroPhotoPreview" style="display:none;margin-top:8px;height:80px;border-radius:8px;overflow:hidden;"><img id="w-heroPhotoImg" style="width:100%;height:100%;object-fit:cover;"></div>
+      </div>
+      <div class="form-group"><label>&#x1F48D; Wedding Website URL <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(optional)</span></label><input type="url" id="w-weddingWebsite" class="form-input" placeholder="https://..."></div>
       <div class="form-group" style="grid-column:1/-1">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
           <label style="margin:0">Agreement Dates</label>
@@ -1135,6 +1142,53 @@ const calcFinancials = (g, w) => {
 const closeModal = id => document.getElementById(id).classList.remove('open');
 const openModal = id => document.getElementById(id).classList.add('open');
 
+
+function updateHeroPhotoPreview(){
+  const url = document.getElementById('w-heroPhoto')?.value;
+  const preview = document.getElementById('w-heroPhotoPreview');
+  const img = document.getElementById('w-heroPhotoImg');
+  if(url && preview && img){ img.src=url; preview.style.display='block'; }
+  else if(preview){ preview.style.display='none'; }
+}
+
+function openResortPhotoPickerForEvent(){
+  // Find resort matching current event's resort name
+  const resortName = document.getElementById('w-resort')?.value || '';
+  const all = qbGetAll();
+  const resort = all.find(r => r.name === resortName);
+  const photos = [];
+  if(resort){
+    if(resort.photo) photos.push({url:resort.photo, label:'Hero Photo'});
+    if(resort.resortPhotos) resort.resortPhotos.forEach((p,i)=>photos.push({url:p, label:'Resort Photo '+(i+1)}));
+  }
+  // Remove existing picker
+  const existing = document.getElementById('eventPhotoPicker');
+  if(existing) existing.remove();
+  if(!photos.length){
+    showToast('No photos saved for this resort yet. Paste a URL directly.','#c85a00');
+    return;
+  }
+  const overlay = document.createElement('div');
+  overlay.id = 'eventPhotoPicker';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
+  overlay.innerHTML = '<div style="background:white;border-radius:12px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto">'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-weight:700;font-size:1rem;">Pick Hero Photo — '+esc(resortName)+'</div><button onclick="document.getElementById('eventPhotoPicker').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">&times;</button></div>'
+    + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'
+    + photos.map(p=>'<div onclick="selectEventHeroPhoto(''+p.url+'')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border-color .15s" onmouseover="this.style.borderColor='#1B2B4B'" onmouseout="this.style.borderColor='transparent'">'
+      + '<img src="'+p.url+'" style="width:100%;height:100px;object-fit:cover;display:block;">'
+      + '<div style="padding:4px 6px;font-size:.72rem;color:#666;background:#f9f9f9">'+p.label+'</div>'
+      + '</div>').join('')
+    + '</div></div>';
+  overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
+  document.body.appendChild(overlay);
+}
+
+function selectEventHeroPhoto(url){
+  const input = document.getElementById('w-heroPhoto');
+  if(input){ input.value = url; updateHeroPhotoPreview(); }
+  const picker = document.getElementById('eventPhotoPicker');
+  if(picker) picker.remove();
+}
 
 function togglePaymentStructure(){
   const val = document.getElementById('w-payStructure').value;
@@ -1447,6 +1501,7 @@ function editWedding(id){
   sv('w-operator',w.operator||'DWT');
   sv('w-portalPassword',w.portalPassword||'');
   sv('w-weddingWebsite',w.weddingWebsite||'');
+  sv('w-heroPhoto',w.heroPhoto||''); updateHeroPhotoPreview();
   sv('w-dateSigned',w.dateSigned); sv('w-date30day',w.date30day);
   const ps = document.getElementById('w-payStructure');
   if(ps){ ps.value = w.payStructure||'1'; togglePaymentStructure(); }
@@ -1463,7 +1518,7 @@ async function saveWedding(){
     names:gv('w-names'), resort:gv('w-resort'), weddingDate:gv('w-weddingDate'),
     destination:gv('w-destination'), location:gv('w-location'), flightsRequired:gv('w-flightsRequired'),
     operator:gv('w-operator')||'DWT',
-    portalPassword:gv('w-portalPassword')||'', weddingWebsite:gv('w-weddingWebsite')||'',
+    portalPassword:gv('w-portalPassword')||'', weddingWebsite:gv('w-weddingWebsite')||'', heroPhoto:gv('w-heroPhoto')||'',
     dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false, payStructure:gv('w-payStructure')||'1',
     pay1:gv('w-pay1'), pay2:gv('w-pay2'),
     reductionDate:gv('w-reductionDate'), roomListingDate:gv('w-roomListingDate'),
