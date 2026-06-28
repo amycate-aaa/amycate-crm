@@ -1039,18 +1039,16 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <select id="w-flightsRequired"><option value="Yes">Yes</option><option value="No">No</option></select>
       </div>
       <div class="form-group"><label>🔒 Client Portal Password</label><input type="text" id="w-portalPassword" placeholder="e.g. jinks2026"></div>
-      <div class="form-group" style="grid-column:1/-1">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-          <label style="margin:0">Date Signed &amp; 30-Day Date</label>
-          <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;font-weight:400;color:var(--muted);cursor:pointer">
-            <input type="checkbox" id="w-noAgreement" onchange="toggleAgreementDates()" style="width:auto"> N/A (no group agreement)
-          </label>
-        </div>
-        <div id="w-agreementDates" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div><label class="form-label">Date Signed</label><input type="date" id="w-dateSigned" class="form-input"></div>
-          <div><label class="form-label">30-Day Date</label><input type="date" id="w-date30day" class="form-input"></div>
-        </div>
-        <div id="w-noAgreementMsg" style="display:none;font-size:.82rem;color:var(--muted);padding:8px 0">No group agreement — dates not applicable</div>
+      <div class="form-group">
+        <label>Date Signed</label>
+        <input type="date" id="w-dateSigned" class="form-input">
+        <label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.82rem;font-weight:400;cursor:pointer">
+          <input type="checkbox" id="w-noAgreement" onchange="toggleAgreementDates()" style="width:auto;height:auto;margin:0"> N/A — no group agreement
+        </label>
+      </div>
+      <div class="form-group">
+        <label>30-Day Date</label>
+        <input type="date" id="w-date30day" class="form-input">
       </div>
       <div class="form-group"><label>Payment Date 1</label><input type="date" id="w-pay1"></div>
       <div class="form-group"><label>Payment Date 2 (insurance guests)</label><input type="date" id="w-pay2"></div>
