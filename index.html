@@ -2313,15 +2313,10 @@ async function loadLeads(){
   }catch(e){leads=[];renderLeads();}
 }
 
-let reportYearFilter = 'all';
+let reportYearFilter = 'projected';
 
 function setReportYear(yr) {
   reportYearFilter = yr;
-  // Update button styles
-  document.querySelectorAll('.report-yr-btn').forEach(b => {
-    b.style.background = b.dataset.yr === yr ? '#1a1a1a' : 'white';
-    b.style.color = b.dataset.yr === yr ? 'white' : '#1a1a1a';
-  });
   renderReports();
 }
 
@@ -2329,212 +2324,91 @@ function renderReports(){
   const cont = document.getElementById('reportsContainer');
   if(!cont) return;
 
-  const allActive = weddings; // include archived so past events count in reports
+  const today = new Date(); today.setHours(0,0,0,0);
 
-  // Get available years for filter buttons
-  const years = [...new Set(allActive.map(w=>(w.weddingDate||'').slice(0,4)).filter(Boolean))].sort();
-
-  // Filter weddings by selected year
-  const filtered = reportYearFilter === 'all' ? allActive : allActive.filter(w=>(w.weddingDate||'').startsWith(reportYearFilter));
-
-  // Totals
-  let totalRooms=0, totalGuests=0, totalSales=0, totalCollected=0, totalOutstanding=0, totalCommission=0, totalCommissionReceived=0;
-
-  filtered.forEach(w => {
-    const wGuests = guests.filter(g => g.weddingId===w.id && g.status!=='Cancelled');
-    const override = parseFloat(w.grossSalesOverride)||0;
-    if(wGuests.length > 0) {
-      wGuests.forEach(g => {
-        const f = calcFinancials(g, w);
-        totalSales += f.total;
-        totalCollected += f.totalPaid;
-        totalOutstanding += f.bal1 + (f.bal2||0);
-        totalRooms++;
-        totalGuests += 1 + ((g.additional||'').split(',').filter(x=>x.trim()).length);
-      });
-    } else if(override > 0) {
-      // No guests imported — use manual override
-      totalSales += override;
-      totalCollected += override; // assume fully collected for past events
-    }
-    totalCommission += parseFloat(w.commission)||0;
-    if(w.commissionReceived) totalCommissionReceived += parseFloat(w.commission)||0;
-  });
-
-  // By year (always show all years in table)
+  // Build per-year data
   const byYear = {};
-  allActive.forEach(w => {
+  weddings.forEach(w => {
     const yr = (w.weddingDate||'').slice(0,4) || 'Unknown';
-    if(!byYear[yr]) byYear[yr] = { groups:0, rooms:0, guests:0, sales:0, collected:0, commission:0, commissionReceived:0 };
+    if(!byYear[yr]) byYear[yr] = {groups:0, passengers:0, projGross:0, projComm:0, collected:0, commReceived:0};
     byYear[yr].groups++;
-    byYear[yr].commission += parseFloat(w.commission)||0;
-    if(w.commissionReceived) byYear[yr].commissionReceived += parseFloat(w.commission)||0;
-    const wGuests2 = guests.filter(g => g.weddingId===w.id && g.status!=='Cancelled');
-    const override2 = parseFloat(w.grossSalesOverride)||0;
-    if(wGuests2.length > 0) {
-      wGuests2.forEach(g => {
-        const f = calcFinancials(g, w);
-        byYear[yr].rooms++;
-        byYear[yr].guests += 1 + ((g.additional||'').split(',').filter(x=>x.trim()).length);
-        byYear[yr].sales += f.total;
+    byYear[yr].projComm += parseFloat(w.commission)||0;
+    if(w.commissionReceived) byYear[yr].commReceived += parseFloat(w.commission)||0;
+    const wGuests = guests.filter(g=>g.weddingId===w.id&&g.status!=='Cancelled');
+    const override = parseFloat(w.grossSalesOverride)||0;
+    if(wGuests.length > 0){
+      wGuests.forEach(g=>{
+        const f = calcFinancials(g,w);
+        byYear[yr].projGross += f.total;
         byYear[yr].collected += f.totalPaid;
+        byYear[yr].passengers += 1 + ((g.additional||'').split(',').filter(x=>x.trim()).length);
       });
-    } else if(override2 > 0) {
-      byYear[yr].sales += override2;
-      byYear[yr].collected += override2;
+    } else if(override > 0){
+      byYear[yr].projGross += override;
+      byYear[yr].collected += override;
     }
   });
 
-  const card = (label, value, sub='', color='#1a1a1a') =>
-    `<div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:16px 12px;text-align:center;min-width:0;overflow:hidden">
-      <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${label}</div>
-      <div style="font-size:clamp(1rem,2.5vw,1.5rem);font-weight:700;color:${color};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${value}</div>
-      ${sub?`<div style="font-size:.75rem;color:#aaa;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${sub}</div>`:''}
-    </div>`;
+  const years = Object.keys(byYear).sort();
+  const isProjected = reportYearFilter !== 'today';
 
-  const pct = totalSales > 0 ? Math.round((totalCollected/totalSales)*100) : 0;
-  const pctCommission = totalCommission > 0 ? Math.round((totalCommissionReceived/totalCommission)*100) : 0;
+  // View toggle
+  const toggleHtml = `<div style="display:flex;gap:6px;margin-bottom:20px">
+    <button onclick="setReportYear('projected')" style="padding:8px 18px;border-radius:8px;border:1px solid #ccc;font-weight:700;font-size:.88rem;cursor:pointer;background:${reportYearFilter!=='today'?'#1a1a1a':'white'};color:${reportYearFilter!=='today'?'white':'#1a1a1a'}">&#x1F4CA; Projected</button>
+    <button onclick="setReportYear('today')" style="padding:8px 18px;border-radius:8px;border:1px solid #ccc;font-weight:700;font-size:.88rem;cursor:pointer;background:${reportYearFilter==='today'?'#1a1a1a':'white'};color:${reportYearFilter==='today'?'white':'#1a1a1a'}">&#x1F4C5; As of Today</button>
+  </div>`;
 
-  const yearLabel = reportYearFilter === 'all' ? 'All Years' : reportYearFilter;
+  // Year cards
+  const yearCards = years.map(yr => {
+    const d = byYear[yr];
+    const gross = isProjected ? d.projGross : d.collected;
+    const comm = isProjected ? d.projComm : d.commReceived;
+    const grossLabel = isProjected ? 'Projected Gross' : 'Collected to Date';
+    const commLabel = isProjected ? 'Projected Commission' : 'Commission Received';
+    const pct = d.projGross > 0 ? Math.round((d.collected/d.projGross)*100) : 0;
 
-  const yearBtns = `<button class="report-yr-btn btn btn-sm" data-yr="all" onclick="setReportYear('all')" style="background:${reportYearFilter==='all'?'#1a1a1a':'white'};color:${reportYearFilter==='all'?'white':'#1a1a1a'};border:1px solid #ccc">All</button>`
-    + years.map(yr => `<button class="report-yr-btn btn btn-sm" data-yr="${yr}" onclick="setReportYear('${yr}')" style="background:${reportYearFilter===yr?'#1a1a1a':'white'};color:${reportYearFilter===yr?'white':'#1a1a1a'};border:1px solid #ccc">${yr}</button>`).join('');
-
-  const yearRows = Object.entries(byYear).sort().map(([yr, d]) => {
-    const isSelected = reportYearFilter === 'all' || reportYearFilter === yr;
-    const rowPct = d.sales > 0 ? Math.round((d.collected/d.sales)*100) : 0;
-    return `<tr style="${isSelected?'':'opacity:0.4'}">
-      <td><strong style="cursor:pointer;color:var(--accent)" onclick="setReportYear('${yr}')">${yr}</strong></td>
-      <td style="text-align:center">${d.groups}</td>
-      <td style="text-align:center">${d.rooms}</td>
-      <td style="text-align:center">${d.guests}</td>
-      <td style="text-align:right;color:var(--accent);font-weight:600">$${fmt(d.sales)}</td>
-      <td style="text-align:right;color:var(--green)">$${fmt(d.collected)}</td>
-      <td style="text-align:right;color:#888">$${fmt(d.sales-d.collected)}</td>
-      <td style="text-align:right">
-        <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end">
-          <div style="width:60px;height:6px;background:#eee;border-radius:3px;overflow:hidden">
-            <div style="width:${rowPct}%;height:100%;background:${rowPct>=100?'#4caf88':'var(--accent)'}"></div>
-          </div>
-          <span style="font-size:.85rem;color:${rowPct>=100?'#4caf88':'#888'}">${rowPct}%</span>
+    return `<div style="background:white;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+      <div style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
+        <div style="color:white;font-size:1.1rem;font-weight:800">${yr}</div>
+        <div style="color:#c9a96e;font-size:.8rem">${d.groups} events &middot; ${d.passengers} passengers</div>
+      </div>
+      <div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px">${grossLabel}</div>
+          <div style="font-size:1.4rem;font-weight:800;color:#1B2B4B">$${fmt(gross)}</div>
         </div>
-      </td>
-      <td style="text-align:right;color:#2a7a4a">$${fmt(d.commission)}</td>
-      <td style="text-align:right;color:${d.commissionReceived>0?'#4caf88':'#aaa'}">$${fmt(d.commissionReceived)}</td>
-    </tr>`;
+        <div>
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px">${commLabel}</div>
+          <div style="font-size:1.4rem;font-weight:800;color:#2a7a4a">$${fmt(comm)}</div>
+        </div>
+        ${!isProjected ? `<div style="grid-column:1/-1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:.82rem"><span style="color:#888">Collection Progress</span><span style="font-weight:700;color:${pct>=100?'#4caf88':'#888'}">${pct}%</span></div>
+          <div style="background:#eee;border-radius:6px;height:8px;overflow:hidden">
+            <div style="width:${Math.min(pct,100)}%;height:100%;background:${pct>=100?'#4caf88':'#c9a96e'};border-radius:6px"></div>
+          </div>
+        </div>` : ''}
+      </div>
+    </div>`;
   }).join('');
 
-  // Current year spotlight
-  const thisYear = new Date().getFullYear().toString();
-  const cy = byYear[thisYear] || {groups:0,rooms:0,guests:0,sales:0,collected:0,commission:0,commissionReceived:0};
-  const cyOutstanding = cy.sales - cy.collected;
-  const cyPct = cy.sales > 0 ? Math.round((cy.collected/cy.sales)*100) : 0;
+  // Totals
+  const totGroups = Object.values(byYear).reduce((s,d)=>s+d.groups,0);
+  const totPass = Object.values(byYear).reduce((s,d)=>s+d.passengers,0);
+  const totGross = isProjected ? Object.values(byYear).reduce((s,d)=>s+d.projGross,0) : Object.values(byYear).reduce((s,d)=>s+d.collected,0);
+  const totComm = isProjected ? Object.values(byYear).reduce((s,d)=>s+d.projComm,0) : Object.values(byYear).reduce((s,d)=>s+d.commReceived,0);
 
-  cont.innerHTML = `
-    <div style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);border-radius:14px;padding:24px 28px;margin-bottom:20px;color:white">
-      <div style="font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:#c9a96e;margin-bottom:12px">📅 ${thisYear} At A Glance</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px">
-        <div>
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:4px">Gross Sales</div>
-          <div style="font-size:1.5rem;font-weight:700;color:#c9a96e">$${fmt(cy.sales)}</div>
+  cont.innerHTML = toggleHtml
+    + `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:20px">${yearCards}</div>`
+    + `<div style="background:#1a1a1a;border-radius:12px;padding:18px 22px;color:white">
+        <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#c9a96e;margin-bottom:12px">All Years Total</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px">
+          <div><div style="font-size:.72rem;color:#aaa;margin-bottom:3px">Events</div><div style="font-size:1.3rem;font-weight:800">${totGroups}</div></div>
+          <div><div style="font-size:.72rem;color:#aaa;margin-bottom:3px">Passengers</div><div style="font-size:1.3rem;font-weight:800">${totPass}</div></div>
+          <div><div style="font-size:.72rem;color:#aaa;margin-bottom:3px">${isProjected?'Projected Gross':'Collected'}</div><div style="font-size:1.3rem;font-weight:800;color:#c9a96e">$${fmt(totGross)}</div></div>
+          <div><div style="font-size:.72rem;color:#aaa;margin-bottom:3px">${isProjected?'Projected Comm.':'Comm. Received'}</div><div style="font-size:1.3rem;font-weight:800;color:#4caf88">$${fmt(totComm)}</div></div>
         </div>
-        <div>
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:4px">Collected</div>
-          <div style="font-size:1.5rem;font-weight:700;color:#4caf88">$${fmt(cy.collected)}</div>
-          <div style="font-size:.75rem;color:#aaa">${cyPct}% of sales</div>
-        </div>
-        <div>
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:4px">Outstanding</div>
-          <div style="font-size:1.5rem;font-weight:700;color:#e07070">$${fmt(cyOutstanding)}</div>
-          <div style="font-size:.75rem;color:#aaa">still coming in</div>
-        </div>
-        <div>
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:4px">Commission</div>
-          <div style="font-size:1.5rem;font-weight:700;color:#4caf88">$${fmt(cy.commission)}</div>
-          <div style="font-size:.75rem;color:#aaa">$${fmt(cy.commissionReceived)} received</div>
-        </div>
-      </div>
-      <div style="margin-top:16px">
-        <div style="background:rgba(255,255,255,.15);border-radius:8px;height:10px;overflow:hidden">
-          <div style="width:${Math.min(cyPct,100)}%;height:100%;background:#c9a96e;border-radius:8px"></div>
-        </div>
-        <div style="font-size:.75rem;color:#aaa;margin-top:6px">${cyPct}% collected for ${thisYear}</div>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap">
-      <span style="font-weight:600;color:#888;font-size:.9rem">FILTER BY YEAR:</span>
-      ${yearBtns}
-    </div>
-
-    <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;padding:20px 24px;margin-bottom:20px">
-      <div style="font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:12px">📊 ${yearLabel} — Collection Progress</div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <span style="font-weight:600">$${fmt(totalCollected)} collected of $${fmt(totalSales)} gross</span>
-        <span style="font-weight:700;color:${pct>=100?'#4caf88':'var(--accent)'};">${pct}%</span>
-      </div>
-      <div style="background:#eee;border-radius:8px;height:14px;overflow:hidden;margin-bottom:16px">
-        <div style="width:${Math.min(pct,100)}%;height:100%;background:${pct>=100?'#4caf88':'var(--accent)'};border-radius:8px;transition:width .5s"></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-        <span style="font-weight:600;color:#2a7a4a">$${fmt(totalCommissionReceived)} commission received of $${fmt(totalCommission)} projected</span>
-        <span style="font-weight:700;color:${pctCommission>=100?'#4caf88':'#2a7a4a'}">${pctCommission}%</span>
-      </div>
-      <div style="background:#eee;border-radius:8px;height:14px;overflow:hidden">
-        <div style="width:${Math.min(pctCommission,100)}%;height:100%;background:#4caf88;border-radius:8px;transition:width .5s"></div>
-      </div>
-    </div>
-
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px">
-      ${card('Groups', filtered.length)}
-      ${card('Rooms', totalRooms)}
-      ${card('Guests', totalGuests)}
-      ${card('Gross Sales', '$'+fmt(totalSales), yearLabel, 'var(--accent)')}
-      ${card('Collected', '$'+fmt(totalCollected), pct+'% of sales', 'var(--green)')}
-      ${card('Outstanding', '$'+fmt(totalOutstanding), 'still coming in', totalOutstanding>0?'var(--red)':'var(--green)')}
-      ${card('Projected Commission', '$'+fmt(totalCommission), yearLabel, '#2a7a4a')}
-      ${card('Commission Received', '$'+fmt(totalCommissionReceived), pctCommission+'% received', pctCommission>=100&&totalCommission>0?'#4caf88':'#e07070')}
-    </div>
-
-    <div style="background:white;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden">
-      <div style="padding:16px 20px;border-bottom:1px solid #eee;font-weight:700;font-size:1rem">Year by Year Breakdown <span style="font-size:.8rem;font-weight:400;color:#aaa">(click a year to filter)</span></div>
-      <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:.88rem">
-        <thead>
-          <tr style="background:#1a1a1a;color:white">
-            <th style="padding:8px 10px;text-align:left">Year</th>
-            <th style="padding:8px 10px;text-align:center">Grps</th>
-            <th style="padding:8px 10px;text-align:center">Rms</th>
-            <th style="padding:8px 10px;text-align:center">Guests</th>
-            <th style="padding:8px 10px;text-align:right">Gross Sales</th>
-            <th style="padding:8px 10px;text-align:right">Collected</th>
-            <th style="padding:8px 10px;text-align:right">Outstanding</th>
-            <th style="padding:8px 10px;text-align:right">Progress</th>
-            <th style="padding:8px 10px;text-align:right">Comm.</th>
-            <th style="padding:8px 10px;text-align:right">Rcvd</th>
-          </tr>
-        </thead>
-        <tbody>${yearRows}</tbody>
-        <tfoot>
-          <tr style="background:#f5f5f5;font-weight:700;border-top:2px solid #ddd">
-            <td style="padding:10px 16px">TOTAL</td>
-            <td style="text-align:center;padding:10px 16px">${Object.values(byYear).reduce((s,d)=>s+d.groups,0)}</td>
-            <td style="text-align:center;padding:10px 16px">${Object.values(byYear).reduce((s,d)=>s+d.rooms,0)}</td>
-            <td style="text-align:center;padding:10px 16px">${Object.values(byYear).reduce((s,d)=>s+d.guests,0)}</td>
-            <td style="text-align:right;padding:10px 16px;color:var(--accent)">$${fmt(Object.values(byYear).reduce((s,d)=>s+d.sales,0))}</td>
-            <td style="text-align:right;padding:10px 16px;color:var(--green)">$${fmt(Object.values(byYear).reduce((s,d)=>s+d.collected,0))}</td>
-            <td style="text-align:right;padding:10px 16px">$${fmt(Object.values(byYear).reduce((s,d)=>s+(d.sales-d.collected),0))}</td>
-            <td style="padding:10px 16px"></td>
-            <td style="text-align:right;padding:10px 16px;color:#2a7a4a">$${fmt(Object.values(byYear).reduce((s,d)=>s+d.commission,0))}</td>
-            <td style="text-align:right;padding:10px 16px;color:#4caf88">$${fmt(Object.values(byYear).reduce((s,d)=>s+d.commissionReceived,0))}</td>
-          </tr>
-        </tfoot>
-      </table>
-      </div>
-    </div>`;
+      </div>`;
 }
-
-let timelineView = 'list';
 
 function setTimelineView(view){
   timelineView = view;
