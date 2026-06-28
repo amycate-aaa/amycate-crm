@@ -1154,7 +1154,7 @@ function updateHeroPhotoPreview(){
 function openResortPhotoPickerForEvent(){
   const resortName = document.getElementById('w-resort')?.value || '';
   const all = qbGetAll();
-  const resort = all.find(r => r.name === resortName);
+  const resort = all.find(r => r.name === resortName || r.name.toLowerCase().includes(resortName.toLowerCase()) || resortName.toLowerCase().includes(r.name.toLowerCase()));
   const photos = [];
   if(resort){
     if(resort.photo) photos.push({url:resort.photo, label:'Hero Photo'});
