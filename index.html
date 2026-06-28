@@ -1553,7 +1553,7 @@ async function saveWedding(){
     portalPassword:gv('w-portalPassword')||'', weddingWebsite:gv('w-weddingWebsite')||'', heroPhoto:gv('w-heroPhoto')||'',
     dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false, payStructure:gv('w-payStructure')||'1',
     pay1:gv('w-pay1'), pay2:gv('w-pay2'),
-    reductionDate:gv('w-reductionDate'), roomListingDate:gv('w-roomListingDate'),
+    reductionDate:(document.getElementById('w-noAgreement')?.checked?'':gv('w-reductionDate')), roomListingDate:(document.getElementById('w-noAgreement')?.checked?'':gv('w-roomListingDate')),
     depositPP:parseFloat(gv('w-depositPP'))||50, depositMin:parseFloat(gv('w-depositMin'))||100, grossSalesOverride:parseFloat(gv('w-grossSalesOverride'))||0, commission:parseFloat(gv('w-commission'))||0, commissionReceived:document.getElementById('w-commissionReceived').checked
   };
   if(!data.names||!data.resort){alert('Names and resort required.');return;}
