@@ -2134,7 +2134,7 @@ function renderFlights(){
   const tbody=document.getElementById('flightTableBody');
   if(!currentWeddingId){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr>';return;}
   const w=weddings.find(x=>x.id===currentWeddingId);
-  if(w&&w.flightsRequired==='No'){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>Flights not required for this group</p></div></td></tr>';return;}
+  // Always show flight tab regardless of flightsRequired setting
   const search=(gv('flightSearch')).toLowerCase();
   const tFilter=gv('flightTransferFilter');
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
