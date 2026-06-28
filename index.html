@@ -2175,9 +2175,13 @@ function renderFlights(){
 function openFlightModal(guestId){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editFlightId=null;
-  sv('f-transfer','Not Booked'); sv('f-notes','');
+  // Load existing flight data if available
+  const fMap={}; flights.forEach(f=>fMap[f.guestId]=f);
+  const existingFlight = guestId ? fMap[guestId] : null;
+  sv('f-transfer', existingFlight?.transfer||'Not Booked');
+  sv('f-notes', existingFlight?.notes||'');
   const g = guestId ? guests.find(x=>x.id===guestId) : null;
-  document.getElementById('flightModalTitle').textContent = 'Flight Info — All Guests';
+  document.getElementById('flightModalTitle').textContent = g ? 'Flight Info — '+g.names : 'Flight Info — All Guests';
   setTimeout(()=>renderFlightPersonSections(guestId), 50);
   openModal('flightModal');
 }
@@ -3284,9 +3288,9 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
         <input type="date" id="${prefix}-date" value="${date}">
       </div>
       <div class="form-group">
-        <label>Flight # <span style="color:#888;font-weight:400;font-size:.78rem">(e.g. AA2345)</span></label>
+        <label>Flight #</label>
         <div style="display:flex;gap:6px">
-          <input type="text" id="${prefix}-flight" value="" style="flex:1;text-transform:uppercase" placeholder="AA2345" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="${prefix}-flight" value="" style="flex:1;text-transform:uppercase" placeholder="" oninput="this.value=this.value.toUpperCase()">
           <button type="button" class="btn btn-outline btn-sm" onclick="lookupFlightFor('${type}',${idx})" style="padding:4px 10px">🔍</button>
         </div>
         <div id="${prefix}-result" style="font-size:.8rem;margin-top:3px"></div>
@@ -3328,8 +3332,11 @@ function renderFlightPersonSections(focusGuestId){
     try{ deptPersons = existingFlight?.personsDept ? JSON.parse(existingFlight.personsDept) : []; }catch(e){}
 
     persons.forEach((name, pIdx) => {
-      const arrData  = { flight: '', time: '', airport: '', date: pIdx===0?g.depart||'':g.depart||'' };
-      const deptData = { flight: '', time: '', date: pIdx===0?g.return||'':g.return||'' };
+      // Load existing per-person data if available, fall back to main flight data for person 0
+      const savedArr  = arrPersons[pIdx]  || (pIdx===0 && existingFlight ? {flight:existingFlight.arrFlight||'',  time:existingFlight.arrTime||'',  airport:existingFlight.arrAirport||'',  date:existingFlight.arrDate||g.depart||''}  : {});
+      const savedDept = deptPersons[pIdx] || (pIdx===0 && existingFlight ? {flight:existingFlight.deptFlight||'', time:existingFlight.deptTime||'', date:existingFlight.deptDate||g.return||''} : {});
+      const arrData  = { flight: savedArr.flight||'',  time: savedArr.time||'',  airport: savedArr.airport||'',  date: savedArr.date||g.depart||'' };
+      const deptData = { flight: savedDept.flight||'', time: savedDept.time||'', date: savedDept.date||g.return||'' };
       arrHtml  += flightPersonSection(name, globalIdx, 'arr',  g.depart, arrData);
       deptHtml += flightPersonSection(name, globalIdx, 'dept', g.return, deptData);
       globalIdx++;
