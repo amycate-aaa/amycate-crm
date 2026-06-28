@@ -197,8 +197,7 @@ function render(w,guests,docs){
   document.getElementById('statsSection').innerHTML=`<div class="stat-row">
     <div class="stat-card"><div class="stat-label">Rooms Booked</div><div class="stat-value">${guests.length}</div></div>
     <div class="stat-card"><div class="stat-label">Total Guests</div><div class="stat-value">${totalPeople}</div></div>
-    <div class="stat-card"><div class="stat-label">Total Collected</div><div class="stat-value green">${fmt(totPaid)}</div></div>
-    <div class="stat-card"><div class="stat-label">Balance Remaining</div><div class="stat-value ${totDue>0?'red':'green'}">${fmt(totDue)}</div></div>
+
   </div>`;
 
   // TABS
