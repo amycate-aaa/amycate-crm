@@ -1039,6 +1039,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <select id="w-flightsRequired"><option value="Yes">Yes</option><option value="No">No</option></select>
       </div>
       <div class="form-group"><label>🔒 Client Portal Password</label><input type="text" id="w-portalPassword" placeholder="e.g. jinks2026"></div>
+      <div class="form-group"><label>💍 Wedding Website URL <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(optional)</span></label><input type="url" id="w-weddingWebsite" class="form-input" placeholder="https://..."></div>
       <div class="form-group" style="grid-column:1/-1">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
           <label style="margin:0">Agreement Dates</label>
@@ -1445,6 +1446,7 @@ function editWedding(id){
   sv('w-destination',w.destination); sv('w-location',w.location||''); sv('w-flightsRequired',w.flightsRequired||'Yes');
   sv('w-operator',w.operator||'DWT');
   sv('w-portalPassword',w.portalPassword||'');
+  sv('w-weddingWebsite',w.weddingWebsite||'');
   sv('w-dateSigned',w.dateSigned); sv('w-date30day',w.date30day);
   const ps = document.getElementById('w-payStructure');
   if(ps){ ps.value = w.payStructure||'1'; togglePaymentStructure(); }
@@ -1461,7 +1463,7 @@ async function saveWedding(){
     names:gv('w-names'), resort:gv('w-resort'), weddingDate:gv('w-weddingDate'),
     destination:gv('w-destination'), location:gv('w-location'), flightsRequired:gv('w-flightsRequired'),
     operator:gv('w-operator')||'DWT',
-    portalPassword:gv('w-portalPassword')||'',
+    portalPassword:gv('w-portalPassword')||'', weddingWebsite:gv('w-weddingWebsite')||'',
     dateSigned:gv('w-dateSigned'), date30day:gv('w-date30day'), noAgreement:document.getElementById('w-noAgreement')?.checked||false, payStructure:gv('w-payStructure')||'1',
     pay1:gv('w-pay1'), pay2:gv('w-pay2'),
     reductionDate:gv('w-reductionDate'), roomListingDate:gv('w-roomListingDate'),
