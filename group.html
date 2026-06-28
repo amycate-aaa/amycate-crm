@@ -175,6 +175,7 @@ function render(w,guests,docs){
   const today=new Date();today.setHours(0,0,0,0);
   const eventDate=w.weddingDate?new Date(w.weddingDate+'T12:00:00'):null;
   const daysOut=eventDate?Math.ceil((eventDate-today)/86400000):null;
+  const totalNights=guests.reduce((s,g)=>s+(parseInt(g.nights)||0),0);
   const totalPeople=guests.reduce((s,g)=>{let n=1;if(g.additional)n+=g.additional.split(',').filter(x=>x.trim()).length;return s+n;},0);
   const totPaid=guests.reduce((s,g)=>s+calcFin(g,w).totalPaid,0);
   const totDue=guests.reduce((s,g)=>{const f=calcFin(g,w);return s+f.bal1+(f.bal2||0);},0);
@@ -197,6 +198,7 @@ function render(w,guests,docs){
   document.getElementById('statsSection').innerHTML=`<div class="stat-row">
     <div class="stat-card"><div class="stat-label">Rooms Booked</div><div class="stat-value">${guests.length}</div></div>
     <div class="stat-card"><div class="stat-label">Total Guests</div><div class="stat-value">${totalPeople}</div></div>
+    <div class="stat-card"><div class="stat-label">Room Nights</div><div class="stat-value">${totalNights}</div></div>
 
   </div>`;
 
