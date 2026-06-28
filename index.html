@@ -618,7 +618,13 @@ tr:hover .sticky-col{background:#f8f8f8;}
       </div>
     </div>
 <div id="tab-timeline" class="tab-panel">
-      <div class="section-head"><div><h2>📅 Timeline</h2><p>All events in order</p></div></div>
+      <div class="section-head">
+        <div><h2>&#x1F4C5; Timeline</h2><p>All upcoming events</p></div>
+        <div style="display:flex;gap:6px">
+          <button id="tl-btn-list" onclick="setTimelineView('list')" style="padding:6px 14px;border:1px solid #ccc;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:#1a1a1a;color:white">&#9776; List</button>
+          <button id="tl-btn-quarter" onclick="setTimelineView('quarter')" style="padding:6px 14px;border:1px solid #ccc;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:white;color:#1a1a1a">&#9783; Quarterly</button>
+        </div>
+      </div>
       <div id="timelineContainer" style="max-width:700px;margin:0 auto;padding:10px 0"></div>
     </div>
 
@@ -2528,10 +2534,70 @@ function renderReports(){
     </div>`;
 }
 
+let timelineView = 'list';
+
+function setTimelineView(view){
+  timelineView = view;
+  const listBtn = document.getElementById('tl-btn-list');
+  const qBtn = document.getElementById('tl-btn-quarter');
+  if(listBtn){ listBtn.style.background = view==='list'?'#1a1a1a':'white'; listBtn.style.color = view==='list'?'white':'#1a1a1a'; }
+  if(qBtn){ qBtn.style.background = view==='quarter'?'#1a1a1a':'white'; qBtn.style.color = view==='quarter'?'white':'#1a1a1a'; }
+  const cont = document.getElementById('timelineContainer');
+  if(cont) cont.style.maxWidth = view==='quarter' ? '100%' : '700px';
+  renderTimeline();
+}
+
+function renderTimelineQuarter(cont, weddings, guests){
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = weddings.filter(w=>w.weddingDate && new Date(w.weddingDate+'T12:00:00') >= today);
+  
+  // Group by quarter
+  const quarters = {};
+  upcoming.forEach(w => {
+    const d = new Date(w.weddingDate+'T12:00:00');
+    const year = d.getFullYear();
+    const q = Math.ceil((d.getMonth()+1)/3);
+    const key = `${year}-Q${q}`;
+    if(!quarters[key]) quarters[key] = {label:`${year} - Q${q}`, events:[]};
+    quarters[key].events.push(w);
+  });
+
+  const keys = Object.keys(quarters).sort();
+  if(!keys.length){ cont.innerHTML='<div class="empty-state"><div class="icon">&#x1F4C5;</div><p>No upcoming events</p></div>'; return; }
+
+  const cols = keys.map(key => {
+    const q = quarters[key];
+    const events = q.events.map(w => {
+      const wGuests = guests.filter(g=>g.weddingId===w.id&&g.status!=='Cancelled');
+      const guestCount = wGuests.reduce((s,g)=>{let n=1;if(g.additional)n+=g.additional.split(',').filter(x=>x.trim()).length;return s+n;},0);
+      const d = new Date(w.weddingDate+'T12:00:00');
+      const daysOut = Math.ceil((d-today)/86400000);
+      const color = daysOut<=30?'#c85a00':daysOut<=60?'#856a00':'#1a5c2a';
+      return `<div onclick="openWeddingDetail('${w.id}')" style="padding:8px 10px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .1s" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">
+        <div style="font-size:.82rem;font-weight:700;color:#1a1a1a">${fmtDate(w.weddingDate)} <span style="color:${color};font-size:.72rem">${daysOut}d</span></div>
+        <div style="font-size:.88rem;font-weight:700;color:#1B2B4B;margin-top:1px">${esc(w.names)}</div>
+        ${w.resort?`<div style="font-size:.75rem;color:#888">${esc(w.resort)}</div>`:''}
+        <div style="font-size:.72rem;color:#aaa;margin-top:2px">${guestCount} guests &middot; ${wGuests.length} rooms</div>
+      </div>`;
+    }).join('');
+
+    return `<div style="flex:1;min-width:0;background:white;border:1px solid #e0e0e0;border-radius:10px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+      <div style="background:#1a1a1a;padding:10px 12px">
+        <div style="color:white;font-weight:700;font-size:.88rem">${q.label}</div>
+        <div style="color:#c9a96e;font-size:.75rem;margin-top:2px">${q.events.length} event${q.events.length!==1?'s':''}</div>
+      </div>
+      <div>${events}</div>
+    </div>`;
+  }).join('');
+
+  cont.innerHTML = `<div style="display:grid;grid-template-columns:repeat(${Math.min(keys.length,4)},1fr);gap:12px;align-items:start">${cols}</div>`;
+}
+
 function renderTimeline(){
   const cont = document.getElementById('timelineContainer');
   if(!cont) return;
-  if(!weddings.length){ cont.innerHTML='<div class="empty-state"><div class="icon">📅</div><p>No events yet</p></div>'; return; }
+  if(!weddings.length){ cont.innerHTML='<div class="empty-state"><div class="icon">&#x1F4C5;</div><p>No events yet</p></div>'; return; }
+  if(timelineView === 'quarter'){ renderTimelineQuarter(cont, weddings, guests); return; }
 
   const today = new Date(); today.setHours(0,0,0,0);
   const sorted = [...weddings].filter(w=>w.weddingDate && new Date(w.weddingDate+'T12:00:00') >= today).sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
