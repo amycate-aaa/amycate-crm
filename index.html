@@ -1331,7 +1331,7 @@ async function loadWeddings(){
 function renderWeddingSelector(){
   const sel = document.getElementById('weddingSelect');
   sel.innerHTML='<option value="">— Choose Wedding —</option>';
-  weddings.forEach(w=>{
+  [...weddings].sort((a,b)=>(a.weddingDate||'').localeCompare(b.weddingDate||'')).forEach(w=>{
     const o=document.createElement('option');
     o.value=w.id; o.textContent=`${w.names} · ${fmtDate(w.weddingDate)}`;
     if(w.id===currentWeddingId) o.selected=true;
