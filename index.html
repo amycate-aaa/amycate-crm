@@ -2429,13 +2429,14 @@ function toggleTimelinePast(){
 
 function dispatchGroupReport(){
   const t = document.querySelector('input[name="reportType"]:checked')?.value || 'group';
-  if(t === 'roomlisting') generateRoomListingReport();
-  else generateGroupReport();
-}
-
-function generateRoomListingReport(){
+  const f = document.querySelector('input[name="reportFilter"]:checked')?.value || 'all';
   const overlay = document.getElementById('groupReportOverlay');
   if(overlay) overlay.remove();
+  if(t === 'roomlisting') generateRoomListingReport(f);
+  else generateGroupReport(f);
+}
+
+function generateRoomListingReport(filter){
   const w = weddings.find(x=>x.id===currentWeddingId);
   if(!w) return;
   const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled')
@@ -4464,10 +4465,8 @@ function openGroupReportModal(){
   document.body.appendChild(overlay);
 }
 
-function generateGroupReport(){
-  const overlay = document.getElementById('groupReportOverlay');
-  const filter = document.querySelector('input[name="reportFilter"]:checked')?.value || 'all';
-  if(overlay) overlay.remove();
+function generateGroupReport(filter){
+  filter = filter || document.querySelector('input[name="reportFilter"]:checked')?.value || 'all';
   const w = weddings.find(x=>x.id===currentWeddingId);
   if(!w) return;
   const fMap = {}; flights.forEach(f => fMap[f.guestId] = f);
