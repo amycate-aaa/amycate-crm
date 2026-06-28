@@ -1152,7 +1152,6 @@ function updateHeroPhotoPreview(){
 }
 
 function openResortPhotoPickerForEvent(){
-  // Find resort matching current event's resort name
   const resortName = document.getElementById('w-resort')?.value || '';
   const all = qbGetAll();
   const resort = all.find(r => r.name === resortName);
@@ -1161,24 +1160,43 @@ function openResortPhotoPickerForEvent(){
     if(resort.photo) photos.push({url:resort.photo, label:'Hero Photo'});
     if(resort.resortPhotos) resort.resortPhotos.forEach((p,i)=>photos.push({url:p, label:'Resort Photo '+(i+1)}));
   }
-  // Remove existing picker
   const existing = document.getElementById('eventPhotoPicker');
   if(existing) existing.remove();
-  if(!photos.length){
-    showToast('No photos saved for this resort yet. Paste a URL directly.','#c85a00');
-    return;
-  }
+  if(!photos.length){ showToast('No photos saved for this resort yet — paste a URL directly.','#c85a00'); return; }
   const overlay = document.createElement('div');
   overlay.id = 'eventPhotoPicker';
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px';
-  overlay.innerHTML = '<div style="background:white;border-radius:12px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto">'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px"><div style="font-weight:700;font-size:1rem;">Pick Hero Photo — '+esc(resortName)+'</div><button onclick="document.getElementById('eventPhotoPicker').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">&times;</button></div>'
-    + '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">'
-    + photos.map(p=>'<div onclick="selectEventHeroPhoto(''+p.url+'')" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border-color .15s" onmouseover="this.style.borderColor='#1B2B4B'" onmouseout="this.style.borderColor='transparent'">'
-      + '<img src="'+p.url+'" style="width:100%;height:100px;object-fit:cover;display:block;">'
-      + '<div style="padding:4px 6px;font-size:.72rem;color:#666;background:#f9f9f9">'+p.label+'</div>'
-      + '</div>').join('')
-    + '</div></div>';
+  const inner = document.createElement('div');
+  inner.style.cssText = 'background:white;border-radius:12px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto';
+  const header = document.createElement('div');
+  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;margin-bottom:16px';
+  header.innerHTML = '<div style="font-weight:700;font-size:1rem;">Pick Hero Photo &mdash; '+esc(resortName)+'</div>';
+  const closeBtn = document.createElement('button');
+  closeBtn.innerHTML = '&times;';
+  closeBtn.style.cssText = 'background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888';
+  closeBtn.onclick = ()=>overlay.remove();
+  header.appendChild(closeBtn);
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:10px';
+  photos.forEach(p=>{
+    const card = document.createElement('div');
+    card.style.cssText = 'cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border-color .15s';
+    card.onmouseover = ()=>card.style.borderColor='#1B2B4B';
+    card.onmouseout = ()=>card.style.borderColor='transparent';
+    card.onclick = ()=>selectEventHeroPhoto(p.url);
+    const img = document.createElement('img');
+    img.src = p.url;
+    img.style.cssText = 'width:100%;height:100px;object-fit:cover;display:block';
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'padding:4px 6px;font-size:.72rem;color:#666;background:#f9f9f9';
+    lbl.textContent = p.label;
+    card.appendChild(img);
+    card.appendChild(lbl);
+    grid.appendChild(card);
+  });
+  inner.appendChild(header);
+  inner.appendChild(grid);
+  overlay.appendChild(inner);
   overlay.addEventListener('click', e=>{ if(e.target===overlay) overlay.remove(); });
   document.body.appendChild(overlay);
 }
