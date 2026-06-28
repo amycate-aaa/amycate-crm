@@ -2820,10 +2820,6 @@ function renderDetailFlights(){
   const tbody=document.getElementById('detailFlightBody');
   const w=weddings.find(x=>x.id===currentWeddingId);
   const msg=document.getElementById('detail-flights-msg');
-  if(w&&w.flightsRequired==='No'){
-    msg.innerHTML='<div class="empty-state"><div class="icon">✈️</div><p>Flights not required for this group</p></div>';
-    tbody.innerHTML=''; return;
-  }
   msg.innerHTML='';
   const wGuests=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
