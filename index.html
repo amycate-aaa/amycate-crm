@@ -4459,6 +4459,7 @@ function submitLock() {
     sessionStorage.setItem('crm_unlocked','1');
     document.getElementById('crm-lock-screen').style.display = 'none';
     document.getElementById('app').style.display = 'block';
+    init().then(() => { showTab('setup'); setTimeout(() => { showTab('setup'); loadInbox(); }, 500); });
   } else {
     document.getElementById('crm-pw-error').textContent = 'Incorrect password. Try again.';
     document.getElementById('crm-pw-input').value = '';
