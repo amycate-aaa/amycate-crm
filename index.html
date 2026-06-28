@@ -1140,10 +1140,10 @@ function togglePaymentStructure(){
   if(val==='1'){ sv('w-pay2',''); }
 }
 function toggleAgreementDates(){
-  const na = document.getElementById('w-noAgreement').checked;
-  document.getElementById('w-agreementDates').style.display = na ? 'none' : 'grid';
-  document.getElementById('w-noAgreementMsg').style.display = na ? 'block' : 'none';
-  if(na){ sv('w-dateSigned',''); sv('w-date30day',''); }
+  const na = document.getElementById('w-noAgreement')?.checked;
+  const d30 = document.getElementById('w-date30day');
+  const ds = document.getElementById('w-dateSigned');
+  if(na){ if(ds) ds.value=''; if(d30) d30.value=''; }
 }
 function autoSetFlights(){
   const loc = '';
