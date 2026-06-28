@@ -2434,6 +2434,7 @@ function renderTimelineQuarter(cont, weddings, guests){
     const key = `${year}-Q${q}`;
     if(!quarters[key]) quarters[key] = {label:`${year} - Q${q}`, events:[]};
     quarters[key].events.push(w);
+    quarters[key].events.sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
   });
 
   const keys = Object.keys(quarters).sort();
