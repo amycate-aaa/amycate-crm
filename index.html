@@ -2534,7 +2534,7 @@ function renderTimeline(){
   if(!weddings.length){ cont.innerHTML='<div class="empty-state"><div class="icon">📅</div><p>No events yet</p></div>'; return; }
 
   const today = new Date(); today.setHours(0,0,0,0);
-  const sorted = [...weddings].filter(w=>w.weddingDate).sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
+  const sorted = [...weddings].filter(w=>w.weddingDate && new Date(w.weddingDate+'T12:00:00') >= today).sort((a,b)=>new Date(a.weddingDate)-new Date(b.weddingDate));
 
   cont.innerHTML = sorted.map(w=>{
     const wDate = new Date(w.weddingDate+'T12:00:00');
