@@ -3289,8 +3289,31 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
       </div>
       <div class="form-group">
         <label>Flight #</label>
-        <div style="display:flex;gap:6px">
-          <input type="text" id="${prefix}-flight" value="${flight}" style="flex:1;text-transform:uppercase" placeholder="" oninput="this.value=this.value.toUpperCase()">
+        <div style="display:flex;gap:6px;align-items:center">
+          <select id="${prefix}-airline" style="width:110px;padding:8px 6px;border:1px solid var(--border);border-radius:6px;font-size:.88rem" onchange="updateFlightNum('${type}',${idx})">
+            <option value="">Airline</option>
+            <option value="AA">American (AA)</option>
+            <option value="UA">United (UA)</option>
+            <option value="DL">Delta (DL)</option>
+            <option value="WN">Southwest (WN)</option>
+            <option value="B6">JetBlue (B6)</option>
+            <option value="AS">Alaska (AS)</option>
+            <option value="F9">Frontier (F9)</option>
+            <option value="NK">Spirit (NK)</option>
+            <option value="G4">Allegiant (G4)</option>
+            <option value="SY">Sun Country (SY)</option>
+            <option value="CM">Copa (CM)</option>
+            <option value="AM">Aeromexico (AM)</option>
+            <option value="VB">VivaAerobus (VB)</option>
+            <option value="Y4">Volaris (Y4)</option>
+            <option value="BA">British Airways (BA)</option>
+            <option value="LH">Lufthansa (LH)</option>
+            <option value="AF">Air France (AF)</option>
+            <option value="IB">Iberia (IB)</option>
+            <option value="OTHER">Other</option>
+          </select>
+          <input type="text" id="${prefix}-flightnum" value="" style="width:80px;padding:8px;border:1px solid var(--border);border-radius:6px;font-size:.88rem;text-transform:uppercase" placeholder="1304" oninput="this.value=this.value.replace(/[^0-9]/g,'');updateFlightNum('${type}',${idx})">
+          <input type="hidden" id="${prefix}-flight" value="${flight}">
           <button type="button" class="btn btn-outline btn-sm" onclick="lookupFlightFor('${type}',${idx})" style="padding:4px 10px">🔍</button>
         </div>
         <div id="${prefix}-result" style="font-size:.8rem;margin-top:3px"></div>
@@ -3347,12 +3370,53 @@ function renderFlightPersonSections(focusGuestId){
 
   arrDiv.innerHTML = arrHtml;
   deptDiv.innerHTML = deptHtml;
+
+  // Pre-fill airline dropdown and flight number from existing flight codes
+  let gi = 0;
+  wGuests.forEach(g => {
+    const existingFlight = fMap[g.id];
+    const persons = getFlightPersons(g.id);
+    let arrPersons = [], deptPersons = [];
+    try{ arrPersons = existingFlight?.personsArr ? JSON.parse(existingFlight.personsArr) : []; }catch(e){}
+    try{ deptPersons = existingFlight?.personsDept ? JSON.parse(existingFlight.personsDept) : []; }catch(e){}
+    persons.forEach((name, pIdx) => {
+      ['arr','dept'].forEach(type => {
+        const persons2 = type==='arr' ? arrPersons : deptPersons;
+        const mainFlight = type==='arr' ? existingFlight?.arrFlight : existingFlight?.deptFlight;
+        const saved = persons2[pIdx] || (pIdx===0 ? {flight: mainFlight||''} : {});
+        const code = saved.flight||'';
+        const parsed = parseFlightCode(code);
+        const prefix = `f-${type}-${gi}`;
+        const airlineEl = document.getElementById(`${prefix}-airline`);
+        const numEl = document.getElementById(`${prefix}-flightnum`);
+        if(airlineEl && parsed.airline) airlineEl.value = parsed.airline;
+        if(numEl && parsed.num) numEl.value = parsed.num;
+      });
+      gi++;
+    });
+  });
+}
+
+function updateFlightNum(type, idx){
+  const prefix = `f-${type}-${idx}`;
+  const airline = document.getElementById(`${prefix}-airline`)?.value||'';
+  const num = document.getElementById(`${prefix}-flightnum`)?.value||'';
+  const hidden = document.getElementById(`${prefix}-flight`);
+  if(hidden) hidden.value = airline && num ? airline+num : (airline||num);
+}
+
+function parseFlightCode(code){
+  // Parse "AA1304" into airline "AA" and number "1304"
+  if(!code) return {airline:'', num:''};
+  const m = code.match(/^([A-Z]{1,3})(\d+)$/);
+  if(m) return {airline:m[1], num:m[2]};
+  return {airline:'', num:code};
 }
 
 function copyFlightFromAbove(type, idx){
   if(idx===0) return;
   const prev = idx-1;
-  const fields = ['date','flight','time','airport'];
+  const fields = ['date','flight','time','airport','airline','flightnum'];
   fields.forEach(f=>{
     const from = document.getElementById(`f-${type}-${prev}-${f}`);
     const to = document.getElementById(`f-${type}-${idx}-${f}`);
