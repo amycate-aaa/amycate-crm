@@ -1075,8 +1075,10 @@ tr:hover .sticky-col{background:#f8f8f8;}
       </div>
       <div class="form-group"><label>Payment Date 1</label><input type="date" id="w-pay1" class="form-input"></div>
       <div class="form-group" id="w-pay2-group"><label>Payment Date 2 <span style="font-weight:400;font-size:.8rem;color:var(--muted)">(insurance guests only)</span></label><input type="date" id="w-pay2" class="form-input"></div>
-      <div class="form-group"><label>Reduction Date</label><input type="date" id="w-reductionDate"></div>
-      <div class="form-group"><label>Room Listing Due Date</label><input type="date" id="w-roomListingDate"></div>
+      <div id="w-agreementExtraDates" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;grid-column:1/-1">
+        <div class="form-group"><label>Reduction Date</label><input type="date" id="w-reductionDate"></div>
+        <div class="form-group"><label>Room Listing Due Date</label><input type="date" id="w-roomListingDate"></div>
+      </div>
       <div class="form-group"><label>Deposit — $ per person</label><input type="number" id="w-depositPP" value="50"></div>
       <div class="form-group"><label>Min Deposit per Room ($)</label><input type="number" id="w-depositMin" value="100"></div>
       <div class="form-group"><label>Gross Sales Override ($) <span style="font-size:.8rem;color:#aaa;font-weight:400">— enter total if guests not imported</span></label><input type="number" id="w-grossSalesOverride" placeholder="0.00" step="0.01"></div>
@@ -1225,12 +1227,17 @@ function toggleAgreementDates(){
   const na = document.getElementById('w-noAgreement')?.checked;
   const row = document.getElementById('w-agreementDatesRow');
   const msg = document.getElementById('w-noAgreementMsg');
+  const extra = document.getElementById('w-agreementExtraDates');
   if(row) row.style.display = na ? 'none' : 'grid';
   if(msg) msg.style.display = na ? 'block' : 'none';
+  if(extra) extra.style.display = na ? 'none' : 'grid';
   if(na){
     const ds = document.getElementById('w-dateSigned');
     const d30 = document.getElementById('w-date30day');
+    const rd = document.getElementById('w-reductionDate');
+    const rl = document.getElementById('w-roomListingDate');
     if(ds) ds.value=''; if(d30) d30.value='';
+    if(rd) rd.value=''; if(rl) rl.value='';
   }
 }
 function autoSetFlights(){
