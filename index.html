@@ -3270,7 +3270,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
   const bg = isArr ? '#e8f0f8' : '#f0f0e8';
   const border = isArr ? '#b0c8e0' : '#d0c890';
   const label = isArr ? '✈ Arrival' : '✈ Departure';
-  const flight = '';
+  const flight = existingData?.flight||'';
   const time = existingData?.time||'';
   const airport = existingData?.airport||'';
   const date = (existingData?.date && existingData.date!=='')?existingData.date:'';
@@ -3290,7 +3290,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
       <div class="form-group">
         <label>Flight #</label>
         <div style="display:flex;gap:6px">
-          <input type="text" id="${prefix}-flight" value="" style="flex:1;text-transform:uppercase" placeholder="" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="${prefix}-flight" value="${flight}" style="flex:1;text-transform:uppercase" placeholder="" oninput="this.value=this.value.toUpperCase()">
           <button type="button" class="btn btn-outline btn-sm" onclick="lookupFlightFor('${type}',${idx})" style="padding:4px 10px">🔍</button>
         </div>
         <div id="${prefix}-result" style="font-size:.8rem;margin-top:3px"></div>
