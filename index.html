@@ -3591,65 +3591,54 @@ function generateFlightReport(){
 </div>
 
 ${(()=>{
-  // Group rows by flight+date for arrivals
-  const groupRows = (rows, type) => {
-    const groups = [];
-    rows.forEach(r => {
-      const f = type==='arr' ? r.arr : r.dept;
-      const key = (f.flight||'') + '|' + (f.date||'');
-      const existing = groups.find(g => g.key === key);
-      if(existing){ existing.members.push(r); }
-      else { groups.push({key, flight:f, members:[r]}); }
+  // One row per ROOM with arrivals + departures together, split if different
+  const roomRows = wGuests.map(g => {
+    const f = fMap[g.id]||{};
+    const persons = [g.names];
+    if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
+    let deptPersons = [];
+    try{ deptPersons = f.personsDept ? JSON.parse(f.personsDept) : []; }catch(e){}
+
+    // Group departures by matching flight
+    const deptGroups = [];
+    persons.forEach((name, idx) => {
+      const d = deptPersons[idx] || {flight: idx===0?f.deptFlight:'', time: idx===0?f.deptTime:'', date: idx===0?f.deptDate:''};
+      const key = (d.flight||'')+'|'+(d.date||'');
+      const eg = deptGroups.find(x=>x.key===key);
+      if(eg) eg.names.push(name);
+      else deptGroups.push({key, flight:d, names:[name]});
     });
-    return groups;
-  };
 
-  const arrGroups = groupRows(rows, 'arr');
-  const deptGroups = groupRows(rows, 'dept');
+    const deptHtml = deptGroups.map(dg =>
+      '<div style="margin-bottom:3px">'
+      + (dg.names.length < persons.length ? '<span style="font-size:.78rem;color:#888">'+dg.names.join(', ')+': </span>' : '')
+      + (dg.flight.flight ? '<strong>'+dg.flight.flight+'</strong>' : '<span class="no-flight">Not provided</span>')
+      + (dg.flight.date ? ' &middot; '+fmtD(dg.flight.date) : '')
+      + (dg.flight.time ? ' &middot; '+dg.flight.time : '')
+      + '</div>'
+    ).join('');
 
-  const arrRows = arrGroups.map(g => {
-    const names = g.members.map(r => `<div class="name">${r.name}${r.booking?` <span class="booking">${r.booking}</span>`:''}</div>`).join('');
-    const ti = g.members.map(r=>r.ti).filter(Boolean).join(', ');
-    const room = g.members.map(r=>r.room).filter(Boolean).join(', ');
-    return `<tr>
-      <td>${names}</td>
-      <td class="booking">${ti}</td>
-      <td style="color:#666;font-size:.88rem">${room}</td>
-      <td>${g.flight.date?fmtD(g.flight.date):'<span class="no-flight">Not provided</span>'}</td>
-      <td>${g.flight.flight?`<span class="flight-num">${g.flight.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
-      <td>${g.flight.time||'<span class="no-flight">—</span>'}</td>
-      <td>${g.flight.airport||'<span class="no-flight">—</span>'}</td>
-    </tr>`;
+    return '<tr>'
+      + '<td><div style="font-weight:700">'+persons.join(', ')+'</div><div class="booking">'+(g.booking||'')+'</div></td>'
+      + '<td class="booking">'+(g.ti||'')+'</td>'
+      + '<td style="color:#666;font-size:.88rem">'+(g.roomtype||'')+'</td>'
+      + '<td>'+(f.arrDate?fmtD(f.arrDate):'<span class="no-flight">Not provided</span>')+'</td>'
+      + '<td>'+(f.arrFlight?'<span class="flight-num">'+f.arrFlight+'</span>':'<span class="no-flight">—</span>')+'</td>'
+      + '<td>'+(f.arrTime||'—')+'</td>'
+      + '<td>'+(f.arrAirport||'—')+'</td>'
+      + '<td>'+(deptHtml||'<span class="no-flight">Not provided</span>')+'</td>'
+      + '</tr>';
   }).join('');
 
-  const deptRows = deptGroups.map(g => {
-    const names = g.members.map(r => `<div class="name">${r.name}${r.booking?` <span class="booking">${r.booking}</span>`:''}</div>`).join('');
-    const ti = g.members.map(r=>r.ti).filter(Boolean).join(', ');
-    return `<tr>
-      <td>${names}</td>
-      <td class="booking">${ti}</td>
-      <td>${g.flight.date?fmtD(g.flight.date):'<span class="no-flight">Not provided</span>'}</td>
-      <td>${g.flight.flight?`<span class="flight-num">${g.flight.flight}</span>`:'<span class="no-flight">Not provided</span>'}</td>
-      <td>${g.flight.time||'<span class="no-flight">—</span>'}</td>
-    </tr>`;
-  }).join('');
-
-  return `<div class="section-title">✈ Arrivals</div>
-<table>
-  <thead><tr>
-    <th>Guest(s)</th><th>Res # (TI)</th><th>Room Type</th>
-    <th>Arrival Date</th><th>Flight #</th><th>Arrives At</th><th>Airport</th>
-  </tr></thead>
-  <tbody>${arrRows}</tbody>
-</table>
-<div class="section-title">✈ Departures</div>
-<table>
-  <thead><tr>
-    <th>Guest(s)</th><th>Res # (TI)</th>
-    <th>Departure Date</th><th>Flight #</th><th>Departs At</th>
-  </tr></thead>
-  <tbody>${deptRows}</tbody>
-</table>`;
+  return '<div class="section-title">&#x2708; Arrivals &amp; Departures by Room</div>'
+    + '<table>'
+    + '<thead><tr>'
+    + '<th>Guest(s) / Booking #</th><th>Res # (TI)</th><th>Room Type</th>'
+    + '<th>Arrival Date</th><th>Arr Flight</th><th>Arrives At</th><th>Airport</th>'
+    + '<th>Departure(s)</th>'
+    + '</tr></thead>'
+    + '<tbody>'+(roomRows||'<tr><td colspan="8">No flight data yet</td></tr>')+'</tbody>'
+    + '</table>';
 })()}
 
 <div class="footer">
