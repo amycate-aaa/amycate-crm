@@ -2368,11 +2368,18 @@ function renderReports(){
     const pct = d.projGross > 0 ? Math.round((d.collected/d.projGross)*100) : 0;
 
     return `<div style="background:white;border:1px solid #e0e0e0;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
-      <div style="background:#1a1a1a;padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
-        <div style="color:white;font-size:1.1rem;font-weight:800">${yr}</div>
-        <div style="color:#c9a96e;font-size:.8rem">${d.groups} events &middot; ${d.passengers} passengers</div>
+      <div style="background:#1a1a1a;padding:12px 18px;">
+        <div style="color:white;font-size:1.1rem;font-weight:800;margin-bottom:2px">${yr}</div>
       </div>
       <div style="padding:16px 18px;display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div>
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px">Events</div>
+          <div style="font-size:1.4rem;font-weight:800;color:#1a1a1a">${d.groups}</div>
+        </div>
+        <div>
+          <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px">Passengers</div>
+          <div style="font-size:1.4rem;font-weight:800;color:#1a1a1a">${d.passengers}</div>
+        </div>
         <div>
           <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:#888;margin-bottom:3px">${grossLabel}</div>
           <div style="font-size:1.4rem;font-weight:800;color:#1B2B4B">$${fmt(gross)}</div>
