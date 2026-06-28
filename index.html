@@ -3377,7 +3377,8 @@ async function lookupFlightFor(type, idx){
         const timeEl=document.getElementById(`${prefix}-time`);
         if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        if(dateEl)dateEl.value=arr.scheduledTime.local.split('T')[0];
+        const apiDate=arr.scheduledTime.local.split('T')[0];
+        if(dateEl&&apiDate)dateEl.value=apiDate;
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+( arr.airport?.name||arr.airport?.iata||'');}
     } else if(type==='dept'&&flight.departure){
@@ -3387,7 +3388,8 @@ async function lookupFlightFor(type, idx){
         const timeEl=document.getElementById(`${prefix}-time`);
         if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        if(dateEl)dateEl.value=dept.scheduledTime.local.split('T')[0];
+        const apiDate=dept.scheduledTime.local.split('T')[0];
+        if(dateEl&&apiDate)dateEl.value=apiDate;
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+(flight.departure?.airport?.name||'');}
     }
