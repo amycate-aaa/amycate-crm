@@ -158,6 +158,66 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="stat"><div class="stat-num" id="statSize">0 MB</div><div class="stat-label">Storage Used</div></div>
   </div>
 
+  <!-- RESORT PROFILE SECTION -->
+  <div class="upload-section" style="margin-top:20px;">
+    <h3>&#9998; Resort Profile</h3>
+    <p style="color:#888;font-size:.82rem;margin-bottom:16px;">Save descriptions, highlights and links per resort. These auto-fill in the Quote Builder when you select a resort.</p>
+
+    <div class="upload-form">
+      <div class="form-group">
+        <label>Resort</label>
+        <select class="form-control" id="profileResort" onchange="loadResortProfile()">
+          <option value="">Select resort...</option>
+        </select>
+      </div>
+
+      <div id="profileForm" style="display:none;">
+        <div class="form-group" style="margin-top:12px;">
+          <label>Location Tagline <span style="color:#888;font-size:.75rem;">(e.g. Riviera Maya · 42 miles from CUN)</span></label>
+          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Playa Mujeres · 15.9 miles from CUN">
+        </div>
+
+        <div class="form-group">
+          <label>Description <span style="color:#888;font-size:.75rem;">(appears in quote card)</span></label>
+          <textarea class="form-control" id="profileDescription" rows="4" placeholder="Write a compelling description of this resort for client quotes..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Highlights <span style="color:#888;font-size:.75rem;">(footer bar — separate with · )</span></label>
+          <input type="text" class="form-control" id="profileHighlights" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa">
+        </div>
+
+        <div class="form-group">
+          <label>Star Rating</label>
+          <select class="form-control" id="profileStars">
+            <option value="">Select...</option>
+            <option value="4">4 Star</option>
+            <option value="4.5">4.5 Star</option>
+            <option value="5">5 Star</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Booking Link <span style="color:#888;font-size:.75rem;">(Celebration Travel URL)</span></label>
+          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://booking.celebrationtravel.com/hotels/...">
+        </div>
+
+        <div class="form-group">
+          <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional — AIC media vault etc.)</span></label>
+          <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label>Amy's Notes <span style="color:#888;font-size:.75rem;">(internal — not shown in quote)</span></label>
+          <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes about this resort..."></textarea>
+        </div>
+
+        <button onclick="saveResortProfile()" style="background:#f0c958;color:#1a1a1a;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;">&#10003; Save Resort Profile</button>
+        <span id="profileSaveMsg" style="display:none;margin-left:12px;color:#27ae60;font-size:.85rem;"></span>
+      </div>
+    </div>
+  </div>
+
   <!-- UPLOAD SECTION -->
   <div class="upload-section">
     <h3>&#8593; Upload Photos</h3>
@@ -409,6 +469,80 @@ function handleFiles(files) {
   });
 }
 
+// ── RESORT PROFILE ──
+
+function initProfileResortDropdown() {
+  const sel = document.getElementById('profileResort');
+  if (!sel) return;
+  // Copy options from uploadResort
+  const uploadSel = document.getElementById('uploadResort');
+  if (uploadSel) {
+    sel.innerHTML = uploadSel.innerHTML;
+  }
+}
+
+async function loadResortProfile() {
+  const slug = document.getElementById('profileResort')?.value;
+  const form = document.getElementById('profileForm');
+  if (!slug) { if (form) form.style.display = 'none'; return; }
+  if (form) form.style.display = 'block';
+
+  try {
+    const doc = await db.collection('resortProfiles').doc(slug).get();
+    if (doc.exists) {
+      const d = doc.data();
+      document.getElementById('profileTagline').value = d.tagline || '';
+      document.getElementById('profileDescription').value = d.description || '';
+      document.getElementById('profileHighlights').value = d.highlights || '';
+      document.getElementById('profileStars').value = d.stars || '';
+      document.getElementById('profileBookingLink').value = d.bookingLink || '';
+      document.getElementById('profileGalleryLink').value = d.galleryLink || '';
+      document.getElementById('profileNotes').value = d.notes || '';
+    } else {
+      // Clear form for new resort
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('profileStars').value = '';
+    }
+  } catch(e) {
+    console.error('loadResortProfile error:', e);
+  }
+}
+
+async function saveResortProfile() {
+  const slug = document.getElementById('profileResort')?.value;
+  if (!slug) { toast('Please select a resort first.', 'error'); return; }
+
+  const resortName = document.getElementById('profileResort')?.options[document.getElementById('profileResort').selectedIndex]?.text || slug;
+
+  const data = {
+    slug,
+    resortName,
+    tagline:      document.getElementById('profileTagline').value.trim(),
+    description:  document.getElementById('profileDescription').value.trim(),
+    highlights:   document.getElementById('profileHighlights').value.trim(),
+    stars:        document.getElementById('profileStars').value,
+    bookingLink:  document.getElementById('profileBookingLink').value.trim(),
+    galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
+    notes:        document.getElementById('profileNotes').value.trim(),
+    updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection('resortProfiles').doc(slug).set(data, {merge: true});
+    const msg = document.getElementById('profileSaveMsg');
+    if (msg) {
+      msg.style.display = 'inline';
+      msg.textContent = '✓ Saved!';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+    toast('Resort profile saved!', 'success');
+  } catch(e) {
+    toast('Error saving: ' + e.message, 'error');
+  }
+}
+
 // ── UPLOAD ──
 function toggleCustomCategory(sel) {
   const custom = document.getElementById('uploadCategoryCustom');
@@ -623,6 +757,7 @@ function toast(msg, type='success') {
 
 // ── BOOT ──
 loadPhotos();
+initProfileResortDropdown();
 </script>
 </body>
 </html>
