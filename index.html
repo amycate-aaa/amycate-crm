@@ -2455,47 +2455,108 @@ let qbResortData = null; // loaded from Firestore resortPhotos
 let qbRooms = [];        // array of room option objects
 
 // ── Init ──
-async function qbInitDestinations() {
+const QB_RESORTS = [
+  {slug:'ava-resort-cancun', name:'Ava Resort Cancun', dest:'Cancun'},
+  {slug:'breathless-punta-cana', name:'Breathless Punta Cana Resort & Spa', dest:'Punta Cana'},
+  {slug:'dreams-acapulco', name:'Dreams Acapulco Resort & Spa', dest:'Mexico Pacific'},
+  {slug:'dreams-aventuras', name:'Dreams Aventuras Riviera Maya', dest:'Riviera Maya'},
+  {slug:'dreams-bahia-mita', name:'Dreams Bahia Mita Surf & Spa Resort', dest:'Puerto Vallarta'},
+  {slug:'dreams-cap-cana', name:'Dreams Cap Cana Resort & Spa', dest:'Punta Cana'},
+  {slug:'dreams-cozumel-cape', name:'Dreams Cozumel Cape Resort & Spa', dest:'Cozumel'},
+  {slug:'dreams-curacao', name:'Dreams Curacao Resort, Spa & Casino', dest:'Curacao'},
+  {slug:'dreams-dominicus-la-romana', name:'Dreams Dominicus La Romana', dest:'Dominican Republic'},
+  {slug:'dreams-estrella-del-mar', name:'Dreams Estrella del Mar Mazatlan', dest:'Mexico Pacific'},
+  {slug:'dreams-flora', name:'Dreams Flora Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-huatulco', name:'Dreams Huatulco Resort & Spa', dest:'Mexico Pacific'},
+  {slug:'dreams-jade', name:'Dreams Jade Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-karibana', name:'Dreams Karibana Cartagena Golf & Spa Resort', dest:'Colombia'},
+  {slug:'dreams-la-romana', name:'Dreams La Romana Resort & Spa', dest:'Dominican Republic'},
+  {slug:'dreams-los-cabos', name:'Dreams Los Cabos Suites Golf Resort & Spa', dest:'Los Cabos'},
+  {slug:'dreams-macao', name:'Dreams Macao Beach Punta Cana', dest:'Punta Cana'},
+  {slug:'dreams-natura', name:'Dreams Natura Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-onyx', name:'Dreams Onyx Resort & Spa', dest:'Punta Cana'},
+  {slug:'dreams-playa-bonita', name:'Dreams Playa Bonita Panama', dest:'Panama'},
+  {slug:'dreams-playa-esmeralda', name:'Dreams Playa Esmeralda Resort & Spa', dest:'Punta Cana'},
+  {slug:'dreams-playa-mujeres', name:'Dreams Playa Mujeres Golf & Spa Resort', dest:'Cancun'},
+  {slug:'dreams-puerto-morelos', name:'Dreams Puerto Morelos Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-riviera-cancun', name:'Dreams Riviera Cancun Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-rose-hall', name:'Dreams Rose Hall Resort & Spa', dest:'Jamaica'},
+  {slug:'dreams-royal-beach', name:'Dreams Royal Beach Punta Cana', dest:'Punta Cana'},
+  {slug:'dreams-sands-cancun', name:'Dreams Sands Cancun Resort & Spa', dest:'Cancun'},
+  {slug:'dreams-sapphire', name:'Dreams Sapphire Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-tulum', name:'Dreams Tulum Resort & Spa', dest:'Riviera Maya'},
+  {slug:'dreams-vallarta-bay', name:'Dreams Vallarta Bay Resort & Spa', dest:'Puerto Vallarta'},
+  {slug:'dreams-vista-cancun', name:'Dreams Vista Cancun Golf & Spa Resort', dest:'Cancun'},
+  {slug:'el-dorado-royale', name:'El Dorado Royale', dest:'Riviera Maya'},
+  {slug:'fives-beach', name:'Fives Beach Hotels & Residences', dest:'Riviera Maya'},
+  {slug:'garza-blanca', name:'Garza Blanca Preserve Resort & Spa', dest:'Puerto Vallarta'},
+  {slug:'grand-palladium-costa-mujeres', name:'Grand Palladium Costa Mujeres', dest:'Cancun'},
+  {slug:'hard-rock-los-cabos', name:'Hard Rock Hotel Los Cabos', dest:'Los Cabos'},
+  {slug:'hard-rock-punta-cana', name:'Hard Rock Hotel & Casino Punta Cana', dest:'Punta Cana'},
+  {slug:'hard-rock-riviera-maya', name:'Hard Rock Hotel Riviera Maya', dest:'Riviera Maya'},
+  {slug:'hard-rock-vallarta', name:'Hard Rock Hotel Vallarta', dest:'Puerto Vallarta'},
+  {slug:'hilton-cancun', name:'Hilton Cancun Mar Caribe', dest:'Cancun'},
+  {slug:'hyatt-zilara-cancun', name:'Hyatt Zilara Cancun', dest:'Cancun'},
+  {slug:'hyatt-zilara-cap-cana', name:'Hyatt Zilara Cap Cana', dest:'Punta Cana'},
+  {slug:'hyatt-zilara-riviera-maya', name:'Hyatt Zilara Riviera Maya', dest:'Riviera Maya'},
+  {slug:'hyatt-zilara-rose-hall', name:'Hyatt Zilara Rose Hall', dest:'Jamaica'},
+  {slug:'hyatt-ziva-cancun', name:'Hyatt Ziva Cancun', dest:'Cancun'},
+  {slug:'hyatt-ziva-cap-cana', name:'Hyatt Ziva Cap Cana', dest:'Punta Cana'},
+  {slug:'hyatt-ziva-los-cabos', name:'Hyatt Ziva Los Cabos', dest:'Los Cabos'},
+  {slug:'hyatt-ziva-puerto-vallarta', name:'Hyatt Ziva Puerto Vallarta', dest:'Puerto Vallarta'},
+  {slug:'hyatt-ziva-rose-hall', name:'Hyatt Ziva Rose Hall', dest:'Jamaica'},
+  {slug:'iberostar-selection-cancun', name:'Iberostar Selection Cancun', dest:'Cancun'},
+  {slug:'majestic-elegance', name:'Majestic Elegance Costa Mujeres', dest:'Cancun'},
+  {slug:'majestic-mirage', name:'Majestic Mirage Costa Mujeres', dest:'Cancun'},
+  {slug:'moon-palace-cancun', name:'Moon Palace Cancun', dest:'Cancun'},
+  {slug:'moon-palace-jamaica', name:'Moon Palace Jamaica', dest:'Jamaica'},
+  {slug:'ocean-coral-spring', name:'Ocean Coral Spring', dest:'Jamaica'},
+  {slug:'ocean-eden-bay', name:'Ocean Eden Bay', dest:'Jamaica'},
+  {slug:'royalton-bavaro', name:'Royalton Bavaro – An Autograph Collection', dest:'Punta Cana'},
+  {slug:'royalton-riviera-cancun', name:'Royalton Riviera Cancun', dest:'Riviera Maya'},
+  {slug:'sandos-finisterra', name:'Sandos Finisterra Los Cabos', dest:'Los Cabos'},
+  {slug:'secrets-akumal', name:'Secrets Akumal Riviera Maya', dest:'Riviera Maya'},
+  {slug:'secrets-aura-cozumel', name:'Secrets Aura Cozumel', dest:'Cozumel'},
+  {slug:'secrets-baby-beach', name:'Secrets Baby Beach Aruba', dest:'Aruba'},
+  {slug:'secrets-bahia-mita', name:'Secrets Bahia Mita Surf & Spa', dest:'Puerto Vallarta'},
+  {slug:'secrets-cap-cana', name:'Secrets Cap Cana Resort & Spa', dest:'Punta Cana'},
+  {slug:'secrets-huatulco', name:'Secrets Huatulco Resort & Spa', dest:'Mexico Pacific'},
+  {slug:'secrets-la-romana', name:'Secrets La Romana Resort & Spa', dest:'Dominican Republic'},
+  {slug:'secrets-maroma-beach', name:'Secrets Maroma Beach Riviera Cancun', dest:'Riviera Maya'},
+  {slug:'secrets-mirabel-cancun', name:'Secrets Mirabel Cancun Resort & Spa', dest:'Cancun'},
+  {slug:'secrets-moxche', name:'Secrets Moxche Playa del Carmen', dest:'Riviera Maya'},
+  {slug:'secrets-papagayo', name:'Secrets Papagayo Costa Rica', dest:'Costa Rica'},
+  {slug:'secrets-playa-blanca', name:'Secrets Playa Blanca Costa Mujeres', dest:'Cancun'},
+  {slug:'secrets-playa-esmeralda', name:'Secrets Playa Esmeralda Resort & Spa', dest:'Punta Cana'},
+  {slug:'secrets-playa-mujeres', name:'Secrets Playa Mujeres Golf & Spa Resort', dest:'Cancun'},
+  {slug:'secrets-puerto-los-cabos', name:'Secrets Puerto Los Cabos Golf & Spa Resort', dest:'Los Cabos'},
+  {slug:'secrets-riviera-cancun', name:'Secrets Riviera Cancun Resort & Spa', dest:'Riviera Maya'},
+  {slug:'secrets-royal-beach', name:'Secrets Royal Beach Punta Cana', dest:'Punta Cana'},
+  {slug:'secrets-st-james', name:'Secrets St James Montego Bay', dest:'Jamaica'},
+  {slug:'secrets-st-lucia', name:'Secrets St. Lucia Resort & Spa', dest:'St. Lucia'},
+  {slug:'secrets-the-vine', name:'Secrets The Vine Cancun', dest:'Cancun'},
+  {slug:'secrets-tides-punta-cana', name:'Secrets Tides Punta Cana', dest:'Punta Cana'},
+  {slug:'secrets-tulum', name:'Secrets Tulum Resort & Beach Club', dest:'Riviera Maya'},
+  {slug:'secrets-vallarta-bay', name:'Secrets Vallarta Bay Puerto Vallarta', dest:'Puerto Vallarta'},
+  {slug:'secrets-wild-orchid', name:'Secrets Wild Orchid Montego Bay', dest:'Jamaica'},
+];
+
+function qbInitDestinations() {
   const dest = document.getElementById('qb-dest');
   if (!dest) return;
-  // Load all resort photos from Firestore to get unique destinations
-  try {
-    const snap = await db.collection('resortPhotos').get();
-    const destinations = new Set();
-    snap.docs.forEach(d => { if (d.data().destination) destinations.add(d.data().destination); });
-    dest.innerHTML = '<option value="">— All Destinations —</option>';
-    [...destinations].sort().forEach(d => {
-      dest.innerHTML += `<option value="${d}">${d}</option>`;
-    });
-  } catch(e) {
-    console.error('qbInitDestinations error:', e);
-  }
+  const destinations = [...new Set(QB_RESORTS.map(r => r.dest))].sort();
+  dest.innerHTML = '<option value="">— All Destinations —</option>';
+  destinations.forEach(d => dest.innerHTML += `<option value="${d}">${d}</option>`);
   qbFilterResorts();
 }
 
-async function qbFilterResorts() {
+function qbFilterResorts() {
   const dest = document.getElementById('qb-dest')?.value || '';
   const sel = document.getElementById('qb-resort');
   if (!sel) return;
+  const filtered = dest ? QB_RESORTS.filter(r => r.dest === dest) : QB_RESORTS;
   sel.innerHTML = '<option value="">— Select resort —</option>';
-  try {
-    let q = db.collection('resortPhotos');
-    const snap = await q.get();
-    // Get unique resort slugs/names
-    const resorts = {};
-    snap.docs.forEach(d => {
-      const data = d.data();
-      if (dest && data.destination !== dest) return;
-      const slug = data.resort || data.resortSlug;
-      const name = data.resortName || slug;
-      if (slug) resorts[slug] = name;
-    });
-    Object.entries(resorts).sort((a,b) => a[1].localeCompare(b[1])).forEach(([slug, name]) => {
-      sel.innerHTML += `<option value="${slug}">${name}</option>`;
-    });
-  } catch(e) {
-    console.error('qbFilterResorts error:', e);
-  }
+  filtered.forEach(r => sel.innerHTML += `<option value="${r.slug}">${r.name}</option>`);
 }
 
 async function qbOnResortChange() {
