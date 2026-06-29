@@ -60,8 +60,8 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 60px);c
 .btn{padding:8px 14px;border-radius:6px;font-size:.92rem;cursor:pointer;border:none;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
 .btn-primary{background:#1a1a1a !important;color:white !important;}
 .btn-primary:hover{background:#333 !important;}
-.btn-outline{background:var(--surface) !important;border:1px solid #999 !important;color:#111111 !important;}
-.btn-outline:hover{border-color:#1a1a1a !important;color:#1a1a1a !important;background:#f0f0f0 !important;}
+.btn-outline{background:var(--surface) !important;border:1px solid #999 !important;color:#1B2B4B !important;}
+.btn-outline:hover{border-color:#1a1a1a !important;color:#1a1a1a !important;background:var(--surface2) !important;}
 .btn-danger{background:#fff0f0 !important;border:1px solid #cc8888 !important;color:#8a1a1a !important;}
 .btn-danger:hover{background:#fdf0f0 !important;}
 .btn-sm{padding:4px 9px;font-size:.88rem;}
@@ -98,7 +98,7 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 60px);c
 table{width:100%;border-collapse:collapse;font-size:1rem;}
 thead{background:#1a1a1a;position:sticky;top:0;z-index:10;}
 th{padding:11px 13px;text-align:left;color:#ffffff;font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
-td{padding:9px 10px;border-top:1px solid #e0e0e0;vertical-align:middle;color:#111111 !important;font-size:.9rem;}
+td{padding:9px 10px;border-top:1px solid var(--border);vertical-align:middle;color:#1B2B4B !important;font-size:.9rem;}
 tr:hover td{background:var(--surface2);}
 .sticky-col{position:sticky;right:0;background:var(--surface);box-shadow:-3px 0 8px rgba(0,0,0,.1);z-index:10;min-width:90px;width:90px;}
 thead .sticky-col{background:#1a1a1a;min-width:90px;width:90px;}
@@ -2190,7 +2190,7 @@ function renderFlights(){
       <td class="sticky-col" style="text-align:center;padding:6px">
         <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
           ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:#aaa;font-size:.75rem">No email</span>`}
-          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#111;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
+          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#1B2B4B;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
         </div>
       </td>
     </tr>`;
@@ -2496,18 +2496,18 @@ function generateGroupReport(filter) {
     const bg = idx % 2 === 0 ? '#ffffff' : '#f9f9f9';
     const cancelled = g.status === 'Cancelled';
     rows += `<tr style="background:${bg};${cancelled ? 'opacity:.5;' : ''}">
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.ti || '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;">${g.names || '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${fmtDate(g.depart)}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.nights || '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.roomtype || '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;">${fmt(rc)}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;">${ic ? fmt(ic) : '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;font-weight:700;">${fmt(total)}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:#2a7a2a;">${fmt(paid)}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:${bal > 0 ? '#c0392b' : '#2a7a2a'};">${fmt(bal)}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:#b8973a;">${comm ? fmt(comm) : '—'}</td>
-      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;color:#888;">${g.status || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;">${g.ti || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;font-weight:700;">${g.names || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;">${fmtDate(g.depart)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;">${g.nights || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;">${g.roomtype || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;">${fmt(rc)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;">${ic ? fmt(ic) : '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;font-weight:700;">${fmt(total)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;color:#2a7a2a;">${fmt(paid)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;color:${bal > 0 ? '#c0392b' : '#2a7a2a'};">${fmt(bal)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;text-align:right;color:#b8973a;">${comm ? fmt(comm) : '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;color:#888;">${g.status || '—'}</td>
     </tr>`;
   });
 
@@ -2589,13 +2589,13 @@ function generateRoomListingReport(filter){
     if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
     const bg = idx%2===0 ? '#ffffff' : '#f9f9f9';
     rows += '<tr style="background:'+bg+'">'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;color:var(--text)">'+(g.ti||'—')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem"><div style="font-weight:700">'+(g.names||'—')+'</div>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;font-weight:700;color:var(--text)">'+(g.ti||'—')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem"><div style="font-weight:700">'+(g.names||'—')+'</div>'
       + persons.slice(1).map(n=>'<div style="font-size:.78rem;color:#666">+ '+n+'</div>').join('')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.return)+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem">'+(g.roomtype||'—')+'</td>'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;color:#666">'+(g.notes||'')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;white-space:nowrap">'+fmtDate(g.return)+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem">'+(g.roomtype||'—')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid var(--border);font-size:.82rem;color:#666">'+(g.notes||'')+'</td>'
       + '</tr>';
   });
 
@@ -2781,7 +2781,7 @@ function renderLeads(){
       <td class="sticky-col">
         <button onclick="event.stopPropagation();toggleLeadMenu('${l.id}',this)" style="background:#1a1a1a;border:1px solid #444;color:white;font-size:.85rem;font-weight:700;padding:5px 12px;border-radius:6px;cursor:pointer">⋯</button>
         <div id="leadMenu_${l.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;min-width:150px;padding:4px 0">
-          <div onclick="editLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#111;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
+          <div onclick="editLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1B2B4B;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
           <div onclick="openIntakeModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#2a5a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📋 Send Intake</div>
           <div onclick="viewResponses('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#7a3a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">👁 View Responses</div>
           <div onclick="moveLeadToActive('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">🎉 Activate</div>
@@ -2920,10 +2920,10 @@ function renderDetailGuests(){
     <div style="position:relative;display:inline-block">
       <button onclick="toggleRowMenu('${g.id}', event)" style="background:#1a1a1a;border:none;color:white;font-size:1.2rem;width:32px;height:32px;border-radius:6px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center">⋮</button>
       <div id="rowMenu_${g.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;min-width:130px;padding:4px 0">
-        <div onclick="editGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#111;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
-        <div onclick="openFlightModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#111;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✈️ Flight</div>
+        <div onclick="editGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1B2B4B;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
+        <div onclick="openFlightModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1B2B4B;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✈️ Flight</div>
         <div onclick="openGuestPayModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">💰 Pay</div>
-        ${g.email?`<div onclick="sendGuestFlightEmail('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#111;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📧 Email</div>`:''}
+        ${g.email?`<div onclick="sendGuestFlightEmail('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1B2B4B;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📧 Email</div>`:''}
         <div style="border-top:1px solid #eee;margin:4px 0"></div>
         ${g.status!=='Cancelled'
           ?`<div onclick="cancelGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">🚫 Cancel</div>`
@@ -3011,7 +3011,7 @@ function renderDetailFlights(){
       <td class="sticky-col" style="text-align:center;padding:6px">
         <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
           ${g.email ? `<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>` : `<span style="color:#aaa;font-size:.75rem">No email</span>`}
-          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#111;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
+          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#1B2B4B;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
         </div>
       </td>
     </tr>`;
@@ -3804,8 +3804,8 @@ function generateFlightReport(){
   table{width:100%;border-collapse:collapse;margin-bottom:20px;}
   thead{background:#1a1a1a;}
   th{padding:10px 12px;text-align:left;color:#ccc;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;}
-  td{padding:10px 12px;border-bottom:1px solid #eee;vertical-align:top;}
-  tr:nth-child(even) td{background:#fafafa;}
+  td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;}
+  tr:nth-child(even) td{background:var(--surface2);}
   .name{font-weight:700;}
   .booking{color:#888;font-size:.85rem;}
   .flight-num{font-weight:700;font-size:1rem;}
