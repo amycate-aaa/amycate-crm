@@ -2681,13 +2681,12 @@ function qbRenderRooms() {
     categories[cat].push(p);
   });
 
-  let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
-    const hasKids_render = document.getElementById("qb-has-kids")?.checked;
-  <p style="font-size:.82rem;color:#888;margin-bottom:12px;">${hasKids_render ? "With kids: enter total cost for the whole room." : "Check rooms to include. Enter total room cost — per person auto-calculates."}</p>`;
-
   const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const hasKids = document.getElementById('qb-has-kids')?.checked;
+
+  let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
+    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">${hasKids ? 'With kids: enter total cost for the whole room.' : 'Check rooms to include. Enter total room cost — per person auto-calculates.'}</p>`;
 
   Object.entries(categories).forEach(([cat, photos]) => {
     const photoOptions = photos.map((p,i) => {
