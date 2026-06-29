@@ -2446,6 +2446,352 @@ function toggleTimelinePast(){
   renderTimeline();
 }
 
+// ════════════════════════════════════════════════════════
+// QUOTE BUILDER
+// ════════════════════════════════════════════════════════
+
+// ── State ──
+let qbResortData = null; // loaded from Firestore resortPhotos
+let qbRooms = [];        // array of room option objects
+
+// ── Init ──
+async function qbInitDestinations() {
+  const dest = document.getElementById('qb-dest');
+  if (!dest) return;
+  // Load all resort photos from Firestore to get unique destinations
+  try {
+    const snap = await db.collection('resortPhotos').get();
+    const destinations = new Set();
+    snap.docs.forEach(d => { if (d.data().destination) destinations.add(d.data().destination); });
+    dest.innerHTML = '<option value="">— All Destinations —</option>';
+    [...destinations].sort().forEach(d => {
+      dest.innerHTML += `<option value="${d}">${d}</option>`;
+    });
+  } catch(e) {
+    console.error('qbInitDestinations error:', e);
+  }
+  qbFilterResorts();
+}
+
+async function qbFilterResorts() {
+  const dest = document.getElementById('qb-dest')?.value || '';
+  const sel = document.getElementById('qb-resort');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Select resort —</option>';
+  try {
+    let q = db.collection('resortPhotos');
+    const snap = await q.get();
+    // Get unique resort slugs/names
+    const resorts = {};
+    snap.docs.forEach(d => {
+      const data = d.data();
+      if (dest && data.destination !== dest) return;
+      if (!resorts[data.resort]) resorts[data.resort] = data.resortName || data.resort;
+    });
+    Object.entries(resorts).sort((a,b) => a[1].localeCompare(b[1])).forEach(([slug, name]) => {
+      sel.innerHTML += `<option value="${slug}">${name}</option>`;
+    });
+  } catch(e) {
+    console.error('qbFilterResorts error:', e);
+  }
+}
+
+async function qbOnResortChange() {
+  const slug = document.getElementById('qb-resort')?.value;
+  if (!slug) { qbResortData = null; qbCheckReady(); return; }
+  try {
+    const snap = await db.collection('resortPhotos').where('resort', '==', slug).get();
+    qbResortData = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    qbRenderRooms();
+    qbCheckReady();
+  } catch(e) {
+    console.error('qbOnResortChange error:', e);
+  }
+}
+
+function qbRenderRooms() {
+  const container = document.getElementById('qb-rooms-container');
+  if (!container) return;
+  if (!qbResortData || qbResortData.length === 0) {
+    container.innerHTML = '';
+    return;
+  }
+  // Group photos by category
+  const categories = {};
+  qbResortData.forEach(p => {
+    const cat = p.category || 'General';
+    if (!categories[cat]) categories[cat] = p;
+  });
+  // Render room selection cards
+  let html = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
+    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select room types to include in the quote. Each selected room becomes a card.</p>`;
+  Object.entries(categories).forEach(([cat, photo]) => {
+    const photoUrl = photo.url || '';
+    html += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-url="${photoUrl}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
+        <strong style="font-size:.9rem;">${cat}</strong>
+      </div>
+      ${photoUrl ? `<img src="${photoUrl}" style="width:100%;height:80px;object-fit:cover;border-radius:6px;margin-bottom:8px;" onerror="this.style.display='none'">` : ''}
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+        <div><label style="font-size:.75rem;color:#888;">Rate (per person)</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+        <div><label style="font-size:.75rem;color:#888;">Room Cost (total)</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+        <div><label style="font-size:.75rem;color:#888;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+      </div>
+    </div>`;
+  });
+  html += `<button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:4px;">+ Add Custom Room</button></div>`;
+  container.innerHTML = html;
+}
+
+function qbAddCustomRoom() {
+  const container = document.getElementById('qb-rooms-container');
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;';
+  div.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+    <input type="checkbox" class="qb-room-check" data-cat="" data-url="" checked style="width:16px;height:16px;" onchange="qbCheckReady()">
+    <input placeholder="Room category name" style="flex:1;border:1px solid #e0e0e0;border-radius:6px;padding:6px 10px;font-size:.85rem;" oninput="this.closest('div').querySelector('.qb-room-check').dataset.cat=this.value">
+    <button onclick="this.closest('div').parentElement.remove()" style="background:none;border:none;color:#e05555;cursor:pointer;font-size:1.1rem;">✕</button>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+    <div><label style="font-size:.75rem;color:#888;">Rate (per person)</label><input class="qb-room-rate form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+    <div><label style="font-size:.75rem;color:#888;">Room Cost (total)</label><input class="qb-room-cost form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+    <div><label style="font-size:.75rem;color:#888;">Highlights</label><input class="qb-room-notes form-input" data-cat="" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+  </div>`;
+  container.querySelector('div').appendChild(div);
+}
+
+function qbCheckReady() {
+  const btn = document.getElementById('qb-gen-btn');
+  if (!btn) return;
+  const resort = document.getElementById('qb-resort')?.value;
+  const name = document.getElementById('qb-name')?.value?.trim();
+  const checked = document.querySelectorAll('.qb-room-check:checked').length;
+  btn.disabled = !(resort && name && checked > 0);
+}
+
+function qbCalcCheckout() {
+  const checkin = document.getElementById('qb-checkin')?.value;
+  const nights = parseInt(document.getElementById('qb-nights')?.value) || 0;
+  if (checkin && nights) {
+    const d = new Date(checkin + 'T00:00:00');
+    d.setDate(d.getDate() + nights);
+    const checkout = d.toISOString().split('T')[0];
+    const el = document.getElementById('qb-checkout');
+    if (el) el.value = checkout;
+  }
+}
+
+function qbCalcNights() {
+  const checkin = document.getElementById('qb-checkin')?.value;
+  const checkout = document.getElementById('qb-checkout')?.value;
+  if (checkin && checkout) {
+    const diff = (new Date(checkout) - new Date(checkin)) / 86400000;
+    const el = document.getElementById('qb-nights');
+    if (el && diff > 0) el.value = diff;
+  }
+}
+
+function qbUpdateHints() {}
+
+function qbGenerate() {
+  const resortSlug = document.getElementById('qb-resort')?.value;
+  const resortName = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || resortSlug;
+  const guestName  = document.getElementById('qb-name')?.value?.trim();
+  const roomingWith= document.getElementById('qb-rooming')?.value?.trim();
+  const checkin    = document.getElementById('qb-checkin')?.value;
+  const checkout   = document.getElementById('qb-checkout')?.value;
+  const nights     = document.getElementById('qb-nights')?.value || '?';
+  const eventName  = document.getElementById('qb-event')?.value?.trim();
+  const deposit    = document.getElementById('qb-deposit')?.value?.trim();
+  const finalPay   = document.getElementById('qb-final')?.value?.trim();
+  const customIntro= document.getElementById('qb-intro')?.value?.trim();
+  const greeting   = document.getElementById('qb-greeting')?.value;
+
+  const fmtDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return s;} };
+  const checkinFmt  = fmtDate(checkin);
+  const checkoutFmt = fmtDate(checkout);
+
+  // Collect checked rooms
+  const checkedRooms = [];
+  document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
+    const cat = cb.dataset.cat;
+    const url = cb.dataset.url;
+    const rate = cb.closest('div').querySelector('.qb-room-rate')?.value?.trim() || '';
+    const cost = cb.closest('div').querySelector('.qb-room-cost')?.value?.trim() || '';
+    const notes= cb.closest('div').querySelector('.qb-room-notes')?.value?.trim() || '';
+    checkedRooms.push({cat, url, rate, cost, notes});
+  });
+
+  // Greeting
+  let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
+  let intro = customIntro || `${guestName}, I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
+
+  // Build quick compare rows
+  let compareRows = checkedRooms.map((r,i) => {
+    const bg = i%2===0 ? '' : ' bgcolor="#FAFAFA"';
+    return `<tr${bg}><td style="padding:9px 12px;border-bottom:1px solid #F3F4F6;font-family:Georgia,serif;font-size:13px;border-right:1px solid #F3F4F6;">${r.cat}</td><td style="padding:9px 12px;border-bottom:1px solid #F3F4F6;font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#1B2B4B;text-align:right;">${r.rate || '—'}</td></tr>`;
+  }).join('');
+
+  // Build resort cards
+  let cards = checkedRooms.map(r => {
+    const photoRow = r.url ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
+    return `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:20px;">
+    <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:14px 18px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#FFFFFF;">${r.cat}</td>
+        <td style="text-align:right;white-space:nowrap;vertical-align:top;padding-left:12px;">
+          <span style="font-family:Georgia,serif;font-size:19px;font-weight:bold;color:#B8973A;">${r.rate || ''}</span>
+          <div style="font-family:Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;">per person / ${nights} nights / AI</div>
+        </td>
+      </tr></table>
+    </td></tr>
+    ${photoRow}
+    <tr><td style="padding:14px 18px;border-bottom:1px solid #F3F4F6;">
+      <p style="font-family:Georgia,serif;font-size:12px;color:#374151;line-height:1.75;margin:0;">${r.notes || '&nbsp;'}</p>
+    </td></tr>
+    <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:10px 18px;">
+      <span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">Total: ${r.cost || '—'} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive</span>
+    </td></tr>
+  </table>`;
+  }).join('\n');
+
+  // Payment section
+  let paymentHtml = '';
+  if (deposit || finalPay) {
+    paymentHtml = `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #1B2B4B;background:#F9FAFB;margin-bottom:28px;">
+    <tr><td style="padding:16px 20px;">
+      <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#1B2B4B;margin:0 0 10px 0;">&#128197; Payment Details</p>
+      ${deposit ? `<p style="font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.75;margin:0 0 6px 0;"><span style="color:#B8973A;font-weight:bold;">Deposit:</span> ${deposit}</p>` : ''}
+      ${finalPay ? `<p style="font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.75;margin:0;"><span style="color:#B8973A;font-weight:bold;">Final Payment:</span> ${finalPay}</p>` : ''}
+    </td></tr>
+  </table>`;
+  }
+
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${guestName} &middot; ${resortName} Quote</title></head>
+<body style="margin:0;padding:20px;background:#F0EDE8;font-family:Arial,sans-serif;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="background:#FFFFFF;max-width:600px;margin:0 auto;">
+
+<tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:40px 40px 28px 40px;text-align:center;border-bottom:4px solid #B8973A;">
+  <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B8973A;margin:0 0 10px 0;">Your Personalized Travel Quote</p>
+  <h1 style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#FFFFFF;margin:0 0 8px 0;line-height:1.1;">${resortName}</h1>
+  <p style="font-family:Georgia,serif;font-size:15px;color:rgba(255,255,255,0.85);margin:0 0 4px 0;">${checkinFmt}${checkoutFmt ? ' &nbsp;&middot;&nbsp; ' + checkoutFmt : ''}</p>
+  <p style="font-family:Georgia,serif;font-size:13px;color:rgba(255,255,255,0.55);margin:0;">${nights} Nights &nbsp;&middot;&nbsp; All Inclusive${eventName ? ' &nbsp;&middot;&nbsp; ' + eventName : ''}</p>
+</td></tr>
+
+<tr><td style="padding:32px 40px 24px 40px;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #B8973A;background:#FDF6E3;margin-bottom:28px;">
+    <tr><td style="padding:16px 20px;">
+      <p style="font-family:Georgia,serif;font-size:15px;color:#374151;line-height:1.85;margin:0;">${intro}</p>
+    </td></tr>
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
+    <tr><td colspan="2" bgcolor="#1B2B4B" style="background:#1B2B4B;padding:12px 16px;text-align:center;">
+      <span style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#B8973A;">Quick Compare &mdash; The rates below are for ${guestName}</span>
+    </td></tr>
+    ${compareRows}
+  </table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
+    <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1B2B4B;">Your Room Options</td></tr>
+  </table>
+
+${cards}
+${paymentHtml}
+</td></tr>
+
+<tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:30px 40px;text-align:center;border-top:4px solid #B8973A;">
+  <p style="font-family:Georgia,serif;font-size:13px;color:#B8973A;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px 0;">Questions? I am here for you!</p>
+  <p style="font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#FFFFFF;margin:0 0 2px 0;">Amy M. Cate</p>
+  <p style="font-family:Georgia,serif;font-size:12px;color:#B8973A;font-weight:600;margin:0 0 12px 0;">Certified Destination Wedding &amp; Group Travel Specialist</p>
+  <p style="font-family:Georgia,serif;font-size:12px;color:rgba(255,255,255,0.8);margin:0 0 2px 0;">Destination Weddings Travel Group &amp; Celebration Travel</p>
+  <a href="mailto:amy.cate@destinationweddings.com" style="font-family:Georgia,serif;font-size:13px;color:#B8973A;text-decoration:none;display:block;margin:12px 0 4px 0;">amy.cate@destinationweddings.com</a>
+  <p style="font-family:Georgia,serif;font-size:13px;color:rgba(255,255,255,0.8);margin:0 0 16px 0;">(832) 773-8664</p>
+  <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background:#B8973A;color:#1B2B4B;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;">&#128197; Book a Call With Me!</a>
+  <p style="font-family:Georgia,serif;font-size:11px;color:rgba(255,255,255,0.45);margin:16px 0 0 0;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.</p>
+</td></tr>
+
+</table></body></html>`;
+
+  // Show preview
+  const emptyState = document.getElementById('qb-empty-state');
+  const previewContainer = document.getElementById('qb-preview-container');
+  const iframe = document.getElementById('qb-iframe');
+  if (emptyState) emptyState.style.display = 'none';
+  if (previewContainer) previewContainer.style.display = 'block';
+  if (iframe) {
+    iframe.srcdoc = html;
+    iframe.dataset.html = html;
+  }
+}
+
+function qbOpenNewTab() {
+  const iframe = document.getElementById('qb-iframe');
+  if (!iframe?.dataset.html) return;
+  const w = window.open('', '_blank');
+  w.document.write(iframe.dataset.html);
+  w.document.close();
+}
+
+function qbCopyHTML() {
+  const iframe = document.getElementById('qb-iframe');
+  if (!iframe?.dataset.html) return;
+  // Create a temporary div, set innerHTML, select and copy
+  const ta = document.createElement('textarea');
+  ta.value = iframe.dataset.html;
+  document.body.appendChild(ta);
+  ta.select();
+  document.execCommand('copy');
+  document.body.removeChild(ta);
+  const msg = document.getElementById('qb-copy-msg');
+  if (msg) { msg.style.display='block'; msg.textContent='✅ HTML copied! Open Outlook, create new email, and paste (Cmd+V).'; setTimeout(()=>msg.style.display='none', 4000); }
+}
+
+function exportResortLibrary() {
+  db.collection('resortPhotos').get().then(snap => {
+    const data = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = 'resort-library.json'; a.click();
+  });
+}
+
+function importResortLibrary(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      const batch = db.batch();
+      data.forEach(item => {
+        const ref = item.id ? db.collection('resortPhotos').doc(item.id) : db.collection('resortPhotos').doc();
+        const {id, ...rest} = item;
+        batch.set(ref, rest, {merge: true});
+      });
+      await batch.commit();
+      alert(`✅ Imported ${data.length} resort photos!`);
+      qbFilterResorts();
+    } catch(err) { alert('Import error: ' + err.message); }
+  };
+  reader.readAsText(file);
+}
+
+function showQuoteResortModal() {
+  alert('To add resort photos, use the Resort Library page at amy-cate.com/resort-library.html');
+}
+
+function showManageResortsModal() {
+  alert('To manage resort photos, use the Resort Library page at amy-cate.com/resort-library.html');
+}
+
+// ════════════════════════════════════════════════════════
+// END QUOTE BUILDER
+// ════════════════════════════════════════════════════════
+
 function openGroupReportModal() {
   const existing = document.getElementById('groupReportOverlay');
   if (existing) existing.remove();
