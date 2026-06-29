@@ -203,10 +203,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       </div>
       <div class="form-group">
         <label>Room Category</label>
-        <select class="form-control" id="uploadCategory">
+        <select class="form-control" id="uploadCategory" onchange="toggleCustomCategory(this)">
           <option value="">Select category...</option>
           <option value="Resort Exterior / Property">Resort Exterior / Property</option>
           <option value="Beach & Pool">Beach &amp; Pool</option>
+          <option value="Lobby / Common Areas">Lobby / Common Areas</option>
+          <option value="Dining">Dining</option>
+          <option value="Spa">Spa</option>
           <option value="Premium Deluxe">Premium Deluxe</option>
           <option value="Premium Deluxe Ocean View">Premium Deluxe Ocean View</option>
           <option value="Premium Deluxe Plunge Pool">Premium Deluxe Plunge Pool</option>
@@ -218,10 +221,14 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <option value="Preferred Club Master Suite">Preferred Club Master Suite</option>
           <option value="Preferred Club Governor Suite">Preferred Club Governor Suite</option>
           <option value="Preferred Club Presidential Suite">Preferred Club Presidential Suite</option>
-          <option value="Dining">Dining</option>
-          <option value="Spa">Spa</option>
-          <option value="Other">Other</option>
+          <option value="Junior Suite">Junior Suite</option>
+          <option value="Junior Suite Ocean View">Junior Suite Ocean View</option>
+          <option value="Sky Pool Suite">Sky Pool Suite</option>
+          <option value="Governor Suite">Governor Suite</option>
+          <option value="Presidential Suite">Presidential Suite</option>
+          <option value="custom">Other (type your own)...</option>
         </select>
+        <input type="text" class="form-control" id="uploadCategoryCustom" placeholder="Type room category..." style="display:none;margin-top:8px;">
       </div>
       <div class="form-group">
         <label>Caption (optional)</label>
@@ -354,13 +361,20 @@ function handleFiles(files) {
 }
 
 // ── UPLOAD ──
+function toggleCustomCategory(sel) {
+  const custom = document.getElementById('uploadCategoryCustom');
+  custom.style.display = sel.value === 'custom' ? 'block' : 'none';
+  if (sel.value !== 'custom') custom.value = '';
+}
+
 async function startUpload() {
   const resort   = document.getElementById('uploadResort').value;
-  const category = document.getElementById('uploadCategory').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
   const caption  = document.getElementById('uploadCaption').value.trim();
 
   if (!resort)   { toast('Please select a resort.',   'error'); return; }
-  if (!category) { toast('Please select a room category.', 'error'); return; }
+  if (!category) { toast('Please select or type a room category.', 'error'); return; }
   if (queueItems.filter(q => q.status === 'pending').length === 0) {
     toast('Add at least one photo first.', 'error'); return;
   }
