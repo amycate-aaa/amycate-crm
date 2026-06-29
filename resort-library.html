@@ -365,16 +365,11 @@ const db      = firebase.firestore();
 const storage = firebase.storage();
 
 // ── RESORT NAME MAP ──
-const RESORT_NAMES = {
-  'dreams-riviera-cancun':  'Dreams Riviera Cancun Resort & Spa',
-  'breathless-punta-cana':  'Breathless Punta Cana Resort & Spa',
-  'majestic-mirage':        'Majestic Mirage Costa Mujeres',
-  'majestic-elegance':      'Majestic Elegance Costa Mujeres',
-  'hilton-cancun':          'Hilton Cancun Mar Caribe',
-  'royalton-riviera-cancun':'Royalton Riviera Cancun',
-  'el-dorado-royale':       'El Dorado Royale',
-  'other':                  'Other Resort'
-};
+const RESORT_NAMES = {};
+// Auto-generate names from the dropdown options
+document.querySelectorAll('#uploadResort option').forEach(opt => {
+  if (opt.value && opt.value !== 'other') RESORT_NAMES[opt.value] = opt.text;
+});
 
 // ── STATE ──
 let allPhotos   = [];
@@ -457,10 +452,13 @@ async function startUpload() {
 
       // Write to Firestore
       await db.collection('resortPhotos').add({
+        resort:       resort,
         resortSlug:   resort,
         resortName:   RESORT_NAMES[resort] || resort,
+        category:     category,
         roomCategory: category,
         caption:      caption || '',
+        url:          downloadURL,
         storagePath:  path,
         downloadURL:  downloadURL,
         fileSize:     item.file.size,
