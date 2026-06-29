@@ -3985,6 +3985,33 @@ amy.cate@destinationweddings.com
   closeIntakePopup();
 }
 
+function makeDraggable(el, handle) {
+  let startX, startY, startLeft, startTop;
+  handle.style.cursor = 'move';
+  handle.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = el.getBoundingClientRect();
+    startLeft = rect.left;
+    startTop = rect.top;
+    function onMove(e) {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      el.style.left = (startLeft + dx) + 'px';
+      el.style.top  = (startTop + dy) + 'px';
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+    }
+    function onUp() {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+    }
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+  });
+}
+
 async function viewResponses(leadId) {
   const l = leads.find(x => x.id === leadId);
   const leadName = l ? l.names : 'This Group';
@@ -4010,7 +4037,18 @@ async function viewResponses(leadId) {
   makeDraggable(panel, dragHandle);
 
   try {
-    const snap = await db.collection('intakes').where('leadId','==',leadId).get();
+    // Try by leadId first, then fall back to groupName match
+    let snap = await db.collection('intakes').where('leadId','==',leadId).get();
+    if (snap.empty && l) {
+      // Try matching by groupName containing the lead name
+      const allSnap = await db.collection('intakes').get();
+      const matchName = (l.names||'').toLowerCase();
+      const matched = allSnap.docs.filter(d => {
+        const gn = (d.data().groupName||'').toLowerCase();
+        return gn.includes(matchName) || matchName.includes(gn.split(' ')[0]);
+      });
+      snap = { empty: matched.length === 0, docs: matched };
+    }
     const list = document.getElementById('responses-list');
     if (snap.empty) {
       list.innerHTML = '<p style="color:#888;text-align:center;padding:24px">No responses yet.</p>';
