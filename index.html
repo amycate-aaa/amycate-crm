@@ -2412,7 +2412,7 @@ function renderReports(){
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
         <div>
           <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:8px">${grossLabel}</div>
-          <div style="font-size:2.6rem;font-weight:800;color:#1B2B4B;line-height:1">$${fmt(gross)}</div>
+          <div style="font-size:2.6rem;font-weight:800;color:var(--text);line-height:1">$${fmt(gross)}</div>
         </div>
         <div>
           <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:8px">${commLabel}</div>
@@ -2520,7 +2520,7 @@ function generateGroupReport(filter) {
     .summary{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
     .stat{background:var(--surface2);border-radius:8px;padding:12px;text-align:center;}
     .stat .label{font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
-    .stat .val{font-size:1rem;font-weight:700;color:#1B2B4B;}
+    .stat .val{font-size:1rem;font-weight:700;color:var(--text);}
     .stat .val.green{color:#2a7a2a;} .stat .val.red{color:#c0392b;} .stat .val.gold{color:#b8973a;}
     table{width:100%;border-collapse:collapse;}
     thead tr{background:#1B2B4B;}
@@ -2589,7 +2589,7 @@ function generateRoomListingReport(filter){
     if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
     const bg = idx%2===0 ? '#ffffff' : '#f9f9f9';
     rows += '<tr style="background:'+bg+'">'
-      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;color:#1B2B4B">'+(g.ti||'—')+'</td>'
+      + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;color:var(--text)">'+(g.ti||'—')+'</td>'
       + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem"><div style="font-weight:700">'+(g.names||'—')+'</div>'
       + persons.slice(1).map(n=>'<div style="font-size:.78rem;color:#666">+ '+n+'</div>').join('')+'</td>'
       + '<td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;white-space:nowrap">'+fmtDate(g.depart)+'</td>'
@@ -2669,7 +2669,7 @@ function renderTimelineQuarter(cont, weddings, guests){
       const color = daysOut<=30?'#c85a00':daysOut<=60?'#856a00':'#1a5c2a';
       return `<div onclick="openWeddingDetail('${w.id}')" style="padding:8px 10px;border-bottom:1px solid #f0f0f0;cursor:pointer;transition:background .1s" onmouseover="this.style.background='#f9f9f9'" onmouseout="this.style.background='white'">
         <div style="font-size:.82rem;font-weight:700;color:#1a1a1a">${fmtDate(w.weddingDate)} <span style="color:${color};font-size:.72rem">${daysOut}d</span></div>
-        <div style="font-size:.88rem;font-weight:700;color:#1B2B4B;margin-top:1px">${esc(w.names)}</div>
+        <div style="font-size:.88rem;font-weight:700;color:var(--text);margin-top:1px">${esc(w.names)}</div>
         ${w.resort?`<div style="font-size:.75rem;color:#888">${esc(w.resort)}</div>`:''}
         <div style="font-size:.72rem;color:#aaa;margin-top:2px">${guestCount} guests &middot; ${wGuests.length} rooms</div>
       </div>`;
