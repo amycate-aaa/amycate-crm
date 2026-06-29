@@ -2486,7 +2486,9 @@ async function qbFilterResorts() {
     snap.docs.forEach(d => {
       const data = d.data();
       if (dest && data.destination !== dest) return;
-      if (!resorts[data.resort]) resorts[data.resort] = data.resortName || data.resort;
+      const slug = data.resort || data.resortSlug;
+      const name = data.resortName || slug;
+      if (slug) resorts[slug] = name;
     });
     Object.entries(resorts).sort((a,b) => a[1].localeCompare(b[1])).forEach(([slug, name]) => {
       sel.innerHTML += `<option value="${slug}">${name}</option>`;
@@ -2502,6 +2504,11 @@ async function qbOnResortChange() {
   try {
     const snap = await db.collection('resortPhotos').where('resort', '==', slug).get();
     qbResortData = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    // Also try resortSlug field for older records
+    if (qbResortData.length === 0) {
+      const snap2 = await db.collection('resortPhotos').where('resortSlug', '==', slug).get();
+      qbResortData = snap2.docs.map(d => ({id: d.id, ...d.data()}));
+    }
     qbRenderRooms();
     qbCheckReady();
   } catch(e) {
@@ -2519,7 +2526,7 @@ function qbRenderRooms() {
   // Group photos by category
   const categories = {};
   qbResortData.forEach(p => {
-    const cat = p.category || 'General';
+    const cat = p.category || p.roomCategory || 'General';
     if (!categories[cat]) categories[cat] = p;
   });
   // Render room selection cards
@@ -2527,7 +2534,7 @@ function qbRenderRooms() {
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
     <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select room types to include in the quote. Each selected room becomes a card.</p>`;
   Object.entries(categories).forEach(([cat, photo]) => {
-    const photoUrl = photo.url || '';
+    const photoUrl = photo.url || photo.downloadURL || '';
     html += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-url="${photoUrl}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
