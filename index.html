@@ -524,6 +524,15 @@ tr:hover .sticky-col{background:var(--surface2);}
             <div style="margin-top:10px"><label class="form-label">Custom Intro (optional)</label><textarea id="qb-intro" class="form-input" rows="2" placeholder="Leave blank for auto-generated..."></textarea></div>
           </div>
 
+          <!-- Resort Profile (auto-filled from Resort Library) -->
+          <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Info <span style="font-size:.68rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0;">(auto-fills from Resort Library profile)</span></div>
+            <div style="margin-bottom:10px"><label class="form-label">Location Tagline</label><input id="qb-location" class="form-input" placeholder="e.g. Riviera Maya · 42 miles from CUN"></div>
+            <div style="margin-bottom:10px"><label class="form-label">Resort Description</label><textarea id="qb-desc-text" class="form-input" rows="3" placeholder="Description will auto-fill if you've saved a resort profile..."></textarea></div>
+            <div style="margin-bottom:10px"><label class="form-label">Highlights <span style="color:#888;font-size:.75rem;">separator: &nbsp;·&nbsp;</span></label><input id="qb-highlights" class="form-input" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa"></div>
+            <div><label class="form-label">Booking Link</label><input id="qb-booking-link" class="form-input" placeholder="https://booking.celebrationtravel.com/..."></div>
+          </div>
+
           <!-- Trip -->
           <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
             <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Trip Details</div>
@@ -2557,19 +2566,35 @@ function qbFilterResorts() {
 async function qbOnResortChange() {
   const slug = document.getElementById('qb-resort')?.value;
   if (!slug) { qbResortData = null; qbCheckReady(); return; }
+
+  // Load photos from Resort Library
   try {
     const snap = await db.collection('resortPhotos').where('resort', '==', slug).get();
     qbResortData = snap.docs.map(d => ({id: d.id, ...d.data()}));
-    // Also try resortSlug field for older records
     if (qbResortData.length === 0) {
       const snap2 = await db.collection('resortPhotos').where('resortSlug', '==', slug).get();
       qbResortData = snap2.docs.map(d => ({id: d.id, ...d.data()}));
     }
-    qbRenderRooms();
-    qbCheckReady();
-  } catch(e) {
-    console.error('qbOnResortChange error:', e);
-  }
+  } catch(e) { qbResortData = []; }
+
+  // Load resort profile and auto-fill fields
+  try {
+    const profile = await db.collection('resortProfiles').doc(slug).get();
+    if (profile.exists) {
+      const d = profile.data();
+      const locEl = document.getElementById('qb-location');
+      const descEl = document.getElementById('qb-desc-text');
+      const hlEl = document.getElementById('qb-highlights');
+      const linkEl = document.getElementById('qb-booking-link');
+      if (locEl && d.tagline) locEl.value = d.tagline;
+      if (descEl && d.description) descEl.value = d.description;
+      if (hlEl && d.highlights) hlEl.value = d.highlights;
+      if (linkEl && d.bookingLink) linkEl.value = d.bookingLink;
+    }
+  } catch(e) { console.log('No profile for', slug); }
+
+  qbRenderRooms();
+  qbCheckReady();
 }
 
 function qbRenderRooms() {
@@ -2721,6 +2746,10 @@ function qbGenerate() {
   const finalPay   = document.getElementById('qb-final')?.value?.trim();
   const customIntro= document.getElementById('qb-intro')?.value?.trim();
   const greeting   = document.getElementById('qb-greeting')?.value;
+  const location   = document.getElementById('qb-location')?.value?.trim();
+  const resortDesc = document.getElementById('qb-desc-text')?.value?.trim();
+  const highlights = document.getElementById('qb-highlights')?.value?.trim();
+  const bookingLink= document.getElementById('qb-booking-link')?.value?.trim() || '#';
 
   const fmtDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return s;} };
   const checkinFmt  = fmtDate(checkin);
@@ -2755,10 +2784,15 @@ function qbGenerate() {
   // Build resort cards
   let cards = checkedRooms.map(r => {
     const photoRow = r.url ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
+    const roomLink = bookingLink || '#';
+    const descText = resortDesc || r.notes || '&nbsp;';
+    const footerText = highlights || `Total: ${r.cost || '—'} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
     return `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:20px;">
     <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:14px 18px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td style="font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#FFFFFF;">${r.cat}</td>
+        <td><a href="${roomLink}" style="font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#FFFFFF;text-decoration:none;">${r.cat}</a>
+        ${location ? `<div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.6);margin-top:3px;">${location}</div>` : ''}
+        </td>
         <td style="text-align:right;white-space:nowrap;vertical-align:top;padding-left:12px;">
           <span style="font-family:Georgia,serif;font-size:19px;font-weight:bold;color:#B8973A;">${r.rate || ''}</span>
           <div style="font-family:Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;">per person / ${nights} nights / AI</div>
@@ -2767,10 +2801,11 @@ function qbGenerate() {
     </td></tr>
     ${photoRow}
     <tr><td style="padding:14px 18px;border-bottom:1px solid #F3F4F6;">
-      <p style="font-family:Georgia,serif;font-size:12px;color:#374151;line-height:1.75;margin:0;">${r.notes || '&nbsp;'}</p>
+      <p style="font-family:Georgia,serif;font-size:12px;color:#374151;line-height:1.75;margin:0 0 ${r.notes && resortDesc ? '8px' : '0'} 0;">${descText}</p>
+      ${r.notes && resortDesc ? `<p style="font-family:Georgia,serif;font-size:12px;color:#B8973A;font-style:italic;margin:0;">${r.notes}</p>` : ''}
     </td></tr>
     <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:10px 18px;">
-      <span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">Total: ${r.cost || '—'} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive</span>
+      <span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${footerText}</span>
     </td></tr>
   </table>`;
   }).join('\n');
