@@ -886,6 +886,8 @@ tr:hover .sticky-col{background:#f8f8f8;}
       <div class="form-group"><label>Room Cost ($)</label><input type="number" id="g-roomcost" step="0.01" oninput="calcTotal()"></div>
       <div class="form-group"><label>Insurance Cost ($)</label><input type="number" id="g-inscost" step="0.01" oninput="calcTotal()"></div>
       <div class="form-group full"><label>Total Room Cost ($)</label><input type="number" id="g-total" readonly step="0.01"></div>
+      <div class="form-group"><label>Commission ($)</label><input type="number" id="g-commission" step="0.01" placeholder="0.00"></div>
+      <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="g-commissionReceived" style="width:16px;height:16px;cursor:pointer"> Commission Received</label></div>
       <div class="form-group"><label>Booking Status</label>
         <select id="g-status"><option>Pending</option><option>Confirmed</option><option>Cancelled</option></select>
       </div>
@@ -1814,8 +1816,8 @@ function openGuestModal(){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editGuestId=null;
   document.getElementById('guestModalTitle').textContent='Add Guest';
-  ['g-names','g-additional','g-email','g-phone','g-booking','g-ti','g-roomtype','g-depart','g-nights','g-return','g-roomcost','g-inscost','g-total','g-pay1due','g-pay2due','g-totalpaid','g-pay1','g-pay2','g-notes'].forEach(id=>sv(id,''));
-  sv('g-status','Pending'); sv('g-insurance','No');
+  ['g-names','g-additional','g-email','g-phone','g-booking','g-ti','g-roomtype','g-depart','g-nights','g-return','g-roomcost','g-inscost','g-total','g-pay1due','g-pay2due','g-totalpaid','g-pay1','g-pay2','g-notes','g-commission'].forEach(id=>sv(id,''));
+  sv('g-status','Pending'); sv('g-insurance','No'); document.getElementById('g-commissionReceived').checked=false;
   openModal('guestModal');
 }
 
@@ -1829,6 +1831,7 @@ function editGuest(id){
   sv('g-total',(parseFloat(g.roomcost||0)+parseFloat(g.inscost||0)).toFixed(2));
 sv('g-pay1',g.pay1); sv('g-pay2',g.pay2);
   sv('g-status',g.status); sv('g-insurance',g.insurance); sv('g-notes',g.notes);
+  sv('g-commission',g.commission||''); document.getElementById('g-commissionReceived').checked = g.commissionReceived||false;
   calcGuestPayments();
   const existingPaid = (parseFloat(g.pay1)||0)+(parseFloat(g.pay2)||0);
   if(existingPaid>0){ sv('g-totalpaid',existingPaid.toFixed(2)); calcPaymentSplit(); }
@@ -1842,7 +1845,8 @@ async function saveGuest(){
     depart:gv('g-depart'),nights:parseInt(gv('g-nights'))||0,return:gv('g-return'),
     roomcost:parseFloat(gv('g-roomcost'))||0,inscost:parseFloat(gv('g-inscost'))||0,
     deposit:0,pay1:parseFloat(gv('g-pay1'))||0,pay2:parseFloat(gv('g-pay2'))||0,
-    status:gv('g-status'),insurance:gv('g-insurance'),notes:gv('g-notes')
+    status:gv('g-status'),insurance:gv('g-insurance'),notes:gv('g-notes'),
+    commission:parseFloat(gv('g-commission'))||0, commissionReceived:document.getElementById('g-commissionReceived').checked
   };
   if(!data.names){alert('Guest name required.');return;}
   try{
