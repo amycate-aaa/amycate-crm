@@ -2683,12 +2683,13 @@ function qbRenderRooms() {
 
   let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
-    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Check rooms to include. Edit name if needed. Enter total room cost — per person calculates automatically.</p>`;
+    const hasKids_render = document.getElementById("qb-has-kids")?.checked;
+  <p style="font-size:.82rem;color:#888;margin-bottom:12px;">${hasKids_render ? "With kids: enter total cost for the whole room." : "Check rooms to include. Enter total room cost — per person auto-calculates."}</p>`;
 
   const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
+  const hasKids = document.getElementById('qb-has-kids')?.checked;
 
   Object.entries(categories).forEach(([cat, photos]) => {
-    // Let user pick which photo to use for this room
     const photoOptions = photos.map((p,i) => {
       const url = p.url || p.downloadURL || '';
       return `<label style="cursor:pointer;display:inline-block;margin-right:6px;vertical-align:top;">
@@ -2697,17 +2698,24 @@ function qbRenderRooms() {
       </label>`;
     }).join('');
 
+    const pricingHtml = hasKids
+      ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Cost (everyone)</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 4200" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
+          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+         </div>`
+      : `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 2400" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
+          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Per Person</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
+          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+         </div>`;
+
     roomsHtml += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-photo-group="qb-room-photo-${cat.replace(/\s+/g,'-')}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
         <input class="qb-room-label form-input" value="${cat}" placeholder="Room name (editable)" style="flex:1;padding:6px 10px;font-size:.88rem;font-weight:600;">
       </div>
       ${photos.length > 0 ? `<div style="margin-bottom:8px;">${photoOptions}</div>` : ''}
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 2400" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
-        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Per Person</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
-        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
-      </div>
+      ${pricingHtml}
     </div>`;
   });
 
@@ -2734,6 +2742,8 @@ function qbAddCustomRoom() {
 }
 
 function qbCalcRoomRate(costInput) {
+  const hasKids = document.getElementById('qb-has-kids')?.checked;
+  if (hasKids) return; // total cost only — no per-person calc
   const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const total = parseFloat(costInput.value) || 0;
   const perPerson = total > 0 ? (total / occ) : 0;
@@ -2753,6 +2763,24 @@ function qbToggleKids() {
   const wrap = document.getElementById('qb-kids-wrap');
   if (wrap) wrap.style.display = checked ? 'block' : 'none';
   if (checked && document.getElementById('qb-kids-list').children.length === 0) qbAddKid();
+  // Re-render rooms to switch pricing mode
+  if (qbResortData) qbRenderRooms();
+}
+
+function qbUpdatePricingMode() {
+  const hasKids = document.getElementById('qb-has-kids')?.checked;
+  // Switch all room pricing rows to total-only mode when kids present
+  document.querySelectorAll('.qb-room-pricing').forEach(row => {
+    const costWrap = row.querySelector('.qb-cost-wrap');
+    const rateWrap = row.querySelector('.qb-rate-wrap');
+    if (hasKids) {
+      if (costWrap) { costWrap.querySelector('label').textContent = 'Total Cost (everyone)'; }
+      if (rateWrap) rateWrap.style.display = 'none';
+    } else {
+      if (costWrap) { costWrap.querySelector('label').textContent = 'Total Room Cost'; }
+      if (rateWrap) rateWrap.style.display = 'block';
+    }
+  });
 }
 
 function qbAddKid() {
@@ -2861,8 +2889,8 @@ function qbGenerate() {
     const rate = row.querySelector('.qb-room-rate')?.value?.trim() || '';
     const cost = row.querySelector('.qb-room-cost')?.value?.trim() || '';
     const notes= row.querySelector('.qb-room-notes')?.value?.trim() || '';
-    // rate = per person (auto-calc), cost = total entered
-    const displayRate = rate || (cost ? `$${cost}` : '');
+    const hasKidsMode = kids.length > 0;
+    const displayRate = hasKidsMode ? (cost ? `$${cost} total` : '') : (rate || (cost ? `$${cost}` : ''));
     checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost, notes});
   });
 
