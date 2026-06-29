@@ -2880,17 +2880,15 @@ function qbGenerate() {
   const heroPhoto = document.querySelector('input[name="qb-hero-photo"]:checked')?.value || '';
   const checkedRooms = [];
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
-    const row = cb.closest('div');
-    const cat = row.querySelector('.qb-room-label')?.value || cb.dataset.cat;
-    // Get selected photo from radio group
+    const card = cb.closest('div[style*="border:1px solid #e0e0e0"]') || cb.parentElement.parentElement;
+    const cat = card.querySelector('.qb-room-label')?.value || cb.dataset.cat;
     const photoGroup = cb.dataset.photoGroup;
     const selectedPhoto = photoGroup ? document.querySelector(`input[name="${photoGroup}"]:checked`)?.value || '' : '';
-    const costRaw = row.querySelector('.qb-room-cost')?.value?.trim() || '';
-    const rateRaw = row.querySelector('.qb-room-rate')?.value?.trim() || '';
-    const notes  = row.querySelector('.qb-room-notes')?.value?.trim() || '';
+    const costRaw = card.querySelector('.qb-room-cost')?.value?.trim() || '';
+    const rateRaw = card.querySelector('.qb-room-rate')?.value?.trim() || '';
+    const notes  = card.querySelector('.qb-room-notes')?.value?.trim() || '';
     const hasKidsMode = kids.length > 0;
     const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
-    // Calculate per person from cost if rate field is empty
     const costNum = parseFloat(costRaw) || 0;
     const perPersonNum = costNum > 0 && !hasKidsMode ? costNum / occ : 0;
     const perPersonFmt = perPersonNum > 0 ? '$' + perPersonNum.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : (rateRaw || '');
@@ -2898,7 +2896,6 @@ function qbGenerate() {
     const costFmt = costRaw ? '$' + parseFloat(costRaw).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
     checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost: costFmt, notes});
   });
-
   // Greeting
   let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
   let intro = customIntro || `${fullNames}, I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
