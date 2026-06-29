@@ -4048,6 +4048,7 @@ async function viewResponsesByWedding(weddingId) {
 }
 
 
+function makeDraggable(el, handle) {
   let startX, startY, startLeft, startTop;
   handle.style.cursor = 'move';
   handle.addEventListener('mousedown', function(e) {
