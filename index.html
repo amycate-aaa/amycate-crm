@@ -504,23 +504,36 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
             <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Guest</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div style="grid-column:1/-1"><label class="form-label">Guest Name(s) *</label><input id="qb-name" class="form-input" placeholder="e.g. Tia Hatcher & Brenesha"></div>
-              <div><label class="form-label">Rooming With</label><input id="qb-rooming" class="form-input" placeholder="Roommate or N/A"></div>
+              <div style="grid-column:1/-1"><label class="form-label">Guest Name(s) *</label><input id="qb-name" class="form-input" placeholder="e.g. Tia Hatcher" oninput="qbCheckReady()"></div>
+              <div id="qb-guest2-wrap" style="display:none;grid-column:1/-1"><label class="form-label">2nd Guest Name</label><input id="qb-name2" class="form-input" placeholder="e.g. Brenesha Perkins"></div>
               <div><label class="form-label">Occupancy</label>
-                <select id="qb-occ" class="form-input" onchange="qbUpdateHints()">
-                  <option value="Single">Single (1 Guest)</option>
-                  <option value="Double">Double (2 Guests)</option>
-                  <option value="Triple">Triple (3 Guests)</option>
+                <select id="qb-occ" class="form-input" onchange="qbUpdateHints(); qbToggleGuest2()">
+                  <option value="1">Single (1 guest)</option>
+                  <option value="2" selected>Double (2 guests)</option>
+                  <option value="3">Triple (3 guests)</option>
                 </select>
               </div>
               <div><label class="form-label">Greeting Style</label>
                 <select id="qb-greeting" class="form-input">
                   <option value="standard">Standard</option>
-                  <option value="birthday">Birthday 🎂</option>
-                  <option value="wedding">Wedding 💍</option>
+                  <option value="birthday">Birthday</option>
+                  <option value="wedding">Wedding</option>
                 </select>
               </div>
             </div>
+
+            <!-- Kids -->
+            <div style="margin-top:12px;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <label class="form-label" style="margin:0;">Kids traveling?</label>
+                <input type="checkbox" id="qb-has-kids" style="width:16px;height:16px;cursor:pointer;" onchange="qbToggleKids()">
+              </div>
+              <div id="qb-kids-wrap" style="display:none;">
+                <div id="qb-kids-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div>
+                <button type="button" onclick="qbAddKid()" style="background:none;border:1px dashed #c9a96e;color:#c9a96e;padding:6px 14px;border-radius:6px;font-size:.82rem;cursor:pointer;">+ Add Child</button>
+              </div>
+            </div>
+
             <div style="margin-top:10px"><label class="form-label">Custom Intro (optional)</label><textarea id="qb-intro" class="form-input" rows="2" placeholder="Leave blank for auto-generated..."></textarea></div>
           </div>
 
@@ -2729,6 +2742,34 @@ function qbCalcRoomRate(costInput) {
   if (rateInput) rateInput.value = perPerson > 0 ? '$' + perPerson.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '';
 }
 
+function qbToggleGuest2() {
+  const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
+  const wrap = document.getElementById('qb-guest2-wrap');
+  if (wrap) wrap.style.display = occ >= 2 ? 'block' : 'none';
+}
+
+function qbToggleKids() {
+  const checked = document.getElementById('qb-has-kids')?.checked;
+  const wrap = document.getElementById('qb-kids-wrap');
+  if (wrap) wrap.style.display = checked ? 'block' : 'none';
+  if (checked && document.getElementById('qb-kids-list').children.length === 0) qbAddKid();
+}
+
+function qbAddKid() {
+  const list = document.getElementById('qb-kids-list');
+  if (!list) return;
+  const idx = list.children.length + 1;
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  div.innerHTML = `<input class="form-input qb-kid-name" placeholder="Child ${idx} name" style="flex:1;padding:6px 10px;font-size:.85rem;">
+    <select class="form-input qb-kid-age" style="width:90px;padding:6px 8px;font-size:.85rem;">
+      <option value="">Age</option>
+      ${[...Array(18)].map((_,i)=>`<option value="${i}">${i === 0 ? 'Under 1' : i + ' yrs'}</option>`).join('')}
+    </select>
+    <button type="button" onclick="this.closest('div').remove()" style="background:none;border:none;color:#e05555;cursor:pointer;font-size:1.1rem;padding:0 4px;">✕</button>`;
+  list.appendChild(div);
+}
+
 function qbCheckReady() {
   const btn = document.getElementById('qb-gen-btn');
   if (!btn) return;
@@ -2770,7 +2811,8 @@ function qbGenerate() {
   const resortSlug = document.getElementById('qb-resort')?.value;
   const resortName = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || resortSlug;
   const guestName  = document.getElementById('qb-name')?.value?.trim();
-  const roomingWith= document.getElementById('qb-rooming')?.value?.trim();
+  const guestName2 = document.getElementById('qb-name2')?.value?.trim();
+  const fullNames  = guestName2 ? `${guestName} &amp; ${guestName2}` : guestName;
   const checkin    = document.getElementById('qb-checkin')?.value;
   const checkout   = document.getElementById('qb-checkout')?.value;
   const nights     = document.getElementById('qb-nights')?.value || '?';
@@ -2782,11 +2824,30 @@ function qbGenerate() {
   const location   = document.getElementById('qb-location')?.value?.trim();
   const resortDesc = document.getElementById('qb-desc-text')?.value?.trim();
   const highlights = document.getElementById('qb-highlights')?.value?.trim();
+  // Kids
+  const hasKids = document.getElementById('qb-has-kids')?.checked;
+  const kids = hasKids ? [...document.querySelectorAll('#qb-kids-list > div')].map(div => ({
+    name: div.querySelector('.qb-kid-name')?.value?.trim() || '',
+    age:  div.querySelector('.qb-kid-age')?.value || ''
+  })).filter(k => k.name || k.age) : [];
   const bookingLink= document.getElementById('qb-booking-link')?.value?.trim() || '#';
 
   const fmtDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return s;} };
   const checkinFmt  = fmtDate(checkin);
   const checkoutFmt = fmtDate(checkout);
+
+
+  // Kids section
+  let kidsHtml = '';
+  if (kids.length > 0) {
+    const kidsList = kids.map(k => `${k.name}${k.age ? ' (age ' + k.age + ')' : ''}`).join(', ');
+    kidsHtml = `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #B8973A;background:#FDF6E3;margin-bottom:20px;">
+    <tr><td style="padding:14px 18px;">
+      <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#1B2B4B;margin:0 0 6px 0;">Children Traveling</p>
+      <p style="font-family:Georgia,serif;font-size:13px;color:#374151;margin:0;">${kidsList}</p>
+    </td></tr>
+  </table>`;
+  }
 
   // Get selected hero photo
   const heroPhoto = document.querySelector('input[name="qb-hero-photo"]:checked')?.value || '';
@@ -2807,7 +2868,7 @@ function qbGenerate() {
 
   // Greeting
   let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
-  let intro = customIntro || `${guestName}, I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
+  let intro = customIntro || `${fullNames}, I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
 
   // Build resort hero photo row
   const heroPhotoRow = heroPhoto ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${heroPhoto}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
@@ -2859,7 +2920,7 @@ function qbGenerate() {
   </table>`;
   }
 
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${guestName} &middot; ${resortName} Quote</title></head>
+  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${fullNames} &middot; ${resortName} Quote</title></head>
 <body style="margin:0;padding:20px;background:#F0EDE8;font-family:Arial,sans-serif;">
 <table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="background:#FFFFFF;max-width:600px;margin:0 auto;">
 
@@ -2880,7 +2941,7 @@ ${heroPhotoRow}
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
     <tr><td colspan="2" bgcolor="#1B2B4B" style="background:#1B2B4B;padding:12px 16px;text-align:center;">
-      <span style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#B8973A;">Quick Compare &mdash; The rates below are for ${guestName}</span>
+      <span style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#B8973A;">Quick Compare &mdash; The rates below are for ${fullNames}</span>
     </td></tr>
     ${compareRows}
   </table>
@@ -2891,6 +2952,7 @@ ${heroPhotoRow}
   </table>
 
 ${cards}
+${kidsHtml}
 ${paymentHtml}
 </td></tr>
 
