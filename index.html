@@ -1292,7 +1292,7 @@ function showTab(name){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   const panel = document.getElementById('tab-'+name);
   if(panel) panel.classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>{ if(b.textContent.trim().toLowerCase().includes(name)||b.getAttribute('onclick').includes("'"+name+"'")) b.classList.add('active'); });
+  document.querySelectorAll('.nav-btn').forEach(b=>{ const oc = b.getAttribute('onclick')||''; if(b.textContent.trim().toLowerCase().includes(name)||oc.includes("'"+name+"'")) b.classList.add('active'); });
   // Hide wedding name in header when on top-level tabs
   const topLevelTabs = ['setup','leads','timeline','reports','events'];
   if(topLevelTabs.includes(name)){
