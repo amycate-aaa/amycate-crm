@@ -38,7 +38,7 @@ header{background:#0D1B2A;border-bottom:3px solid #B8973A;padding:12px 20px;disp
 .logo{color:#fff;font-size:1rem;font-weight:700;letter-spacing:.04em;}
 .logo span{color:rgba(255,255,255,0.5);font-weight:400;font-size:.9rem;margin-left:8px;}
 nav{display:flex;gap:3px;flex-wrap:wrap;}
-.nav-btn{background:none;border:none;color:rgba(255,255,255,0.6);font-size:.92rem;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all .15s;}
+.nav-btn{background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.05rem;padding:8px 16px;border-radius:20px;cursor:pointer;transition:all .15s;}
 .nav-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
 .nav-btn.active{background:#B8973A;color:#0D1B2A;font-weight:700;border-radius:20px;}
 .header-right{display:flex;align-items:center;gap:8px;}
@@ -227,15 +227,15 @@ tr:hover .sticky-col{background:var(--surface2);}
     <div class="logo"> Amy Cate CRM <span id="weddingLabel" style="display:none;font-size:.82rem;font-weight:400;color:#aaa"></span></div>
     <nav style="display:flex;flex-direction:column;align-items:center;gap:2px">
       <div style="display:flex;align-items:center;gap:4px">
-        <button type="button" autocomplete="off" name="nav_weddings" class="nav-btn active" onclick="showTab('setup')" style="font-size:.95rem;font-weight:700;padding:4px 12px" data-noautofill="1">Active Events</button>
+        <button type="button" autocomplete="off" name="nav_weddings" class="nav-btn active" onclick="showTab('setup')" style="" data-noautofill="1">Active Events</button>
         <div style="width:1px;height:24px;background:#444"></div>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('leads')" style="font-size:.95rem;font-weight:700;padding:4px 12px">⭐ Leads</button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('inbox')" style="font-size:.95rem;font-weight:700;padding:4px 12px;position:relative">📥 Inbox<span id="inboxBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#e05555;color:white;font-size:.65rem;font-weight:700;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center"></span></button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('quotes')" style="font-size:.95rem;font-weight:700;padding:4px 12px">📄 Quotes</button>
+        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('leads')" style="">⭐ Leads</button>
+        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('inbox')" style="position:relative">📥 Inbox<span id="inboxBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#e05555;color:white;font-size:.65rem;font-weight:700;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center"></span></button>
+        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('quotes')" style="">📄 Quotes</button>
         <div style="width:1px;height:24px;background:#444"></div>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('timeline')" style="font-size:.95rem;font-weight:700;padding:4px 12px">📅 Timeline</button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('reports')" style="font-size:.95rem;font-weight:700;padding:4px 12px">📊 Reports</button>
-        <a href="resort-library.html" class="nav-btn" style="font-size:.95rem;font-weight:700;padding:4px 12px;text-decoration:none;display:inline-flex;align-items:center">🏨 Resort Library</a>
+        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('timeline')" style="">📅 Timeline</button>
+        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('reports')" style="">📊 Reports</button>
+        <a href="resort-library.html" class="nav-btn" style="text-decoration:none;display:inline-flex;align-items:center">🏨 Resort Library</a>
       </div>
       <div style="display:flex;gap:2px">
         <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')" style="font-size:.72rem;padding:1px 8px;color:#aaa">All Guests</button>
@@ -2886,12 +2886,18 @@ function qbGenerate() {
     // Get selected photo from radio group
     const photoGroup = cb.dataset.photoGroup;
     const selectedPhoto = photoGroup ? document.querySelector(`input[name="${photoGroup}"]:checked`)?.value || '' : '';
-    const rate = row.querySelector('.qb-room-rate')?.value?.trim() || '';
-    const cost = row.querySelector('.qb-room-cost')?.value?.trim() || '';
-    const notes= row.querySelector('.qb-room-notes')?.value?.trim() || '';
+    const costRaw = row.querySelector('.qb-room-cost')?.value?.trim() || '';
+    const rateRaw = row.querySelector('.qb-room-rate')?.value?.trim() || '';
+    const notes  = row.querySelector('.qb-room-notes')?.value?.trim() || '';
     const hasKidsMode = kids.length > 0;
-    const displayRate = hasKidsMode ? (cost ? `$${cost} total` : '') : (rate || (cost ? `$${cost}` : ''));
-    checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost, notes});
+    const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
+    // Calculate per person from cost if rate field is empty
+    const costNum = parseFloat(costRaw) || 0;
+    const perPersonNum = costNum > 0 && !hasKidsMode ? costNum / occ : 0;
+    const perPersonFmt = perPersonNum > 0 ? '$' + perPersonNum.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : (rateRaw || '');
+    const displayRate = hasKidsMode ? (costRaw ? '$' + costRaw + ' total' : '') : perPersonFmt;
+    const costFmt = costRaw ? '$' + parseFloat(costRaw).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
+    checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost: costFmt, notes});
   });
 
   // Greeting
