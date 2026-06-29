@@ -2446,6 +2446,126 @@ function toggleTimelinePast(){
   renderTimeline();
 }
 
+function openGroupReportModal() {
+  const existing = document.getElementById('groupReportOverlay');
+  if (existing) existing.remove();
+  const overlay = document.createElement('div');
+  overlay.id = 'groupReportOverlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;display:flex;align-items:center;justify-content:center;';
+  overlay.innerHTML = `<div style="background:white;border-radius:14px;padding:28px;width:380px;box-shadow:0 8px 40px rgba(0,0,0,.3);">
+    <h3 style="margin-bottom:18px;font-size:1.1rem;">📄 Group Report Options</h3>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:.8rem;font-weight:700;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Report Type</div>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;"><input type="radio" name="reportType" value="group" checked> Full Group Report</label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;"><input type="radio" name="reportType" value="roomlisting"> Room Listing Only</label>
+    </div>
+    <div style="margin-bottom:20px;">
+      <div style="font-size:.8rem;font-weight:700;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Include</div>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;"><input type="radio" name="reportFilter" value="all" checked> All Guests</label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;"><input type="radio" name="reportFilter" value="active"> Active Only (exclude cancelled)</label>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 18px;border:1px solid #ccc;border-radius:8px;background:white;cursor:pointer;">Cancel</button>
+      <button onclick="dispatchGroupReport()" style="padding:10px 18px;background:#1B2B4B;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;">Generate Report</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+function generateGroupReport(filter) {
+  const w = weddings.find(x => x.id === currentWeddingId);
+  if (!w) return;
+  let wGuests = guests.filter(g => g.weddingId === currentWeddingId);
+  if (filter === 'active') wGuests = wGuests.filter(g => g.status !== 'Cancelled');
+  wGuests.sort((a, b) => (a.depart || '').localeCompare(b.depart || ''));
+  if (!wGuests.length) { alert('No guests found.'); return; }
+
+  const fmt = n => '$' + (parseFloat(n) || 0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const fmtDate = d => { if (!d) return '—'; try { return new Date(d + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); } catch (e) { return d; } };
+
+  let totalRoom = 0, totalIns = 0, totalPaid = 0, totalBal = 0, totalComm = 0;
+  let rows = '';
+  wGuests.forEach((g, idx) => {
+    const rc = parseFloat(g.roomcost) || 0;
+    const ic = parseFloat(g.inscost) || 0;
+    const total = rc + ic;
+    const paid = (parseFloat(g.pay1) || 0) + (parseFloat(g.pay2) || 0);
+    const bal = total - paid;
+    const comm = parseFloat(g.commission) || 0;
+    totalRoom += rc; totalIns += ic; totalPaid += paid; totalBal += bal; totalComm += comm;
+    const bg = idx % 2 === 0 ? '#ffffff' : '#f9f9f9';
+    const cancelled = g.status === 'Cancelled';
+    rows += `<tr style="background:${bg};${cancelled ? 'opacity:.5;' : ''}">
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.ti || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;">${g.names || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${fmtDate(g.depart)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.nights || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.roomtype || '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;">${fmt(rc)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;">${ic ? fmt(ic) : '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;font-weight:700;">${fmt(total)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:#2a7a2a;">${fmt(paid)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:${bal > 0 ? '#c0392b' : '#2a7a2a'};">${fmt(bal)}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;text-align:right;color:#b8973a;">${comm ? fmt(comm) : '—'}</td>
+      <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;color:#888;">${g.status || '—'}</td>
+    </tr>`;
+  });
+
+  const reportHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Group Report — ${w.names}</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:#1a1a1a;background:white;padding:28px;}
+    .header{background:#1B2B4B;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}
+    .header h1{font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}
+    .meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
+    .meta span{font-size:.82rem;color:#ddd;}
+    .summary{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
+    .stat{background:#f5f5f5;border-radius:8px;padding:12px;text-align:center;}
+    .stat .label{font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+    .stat .val{font-size:1rem;font-weight:700;color:#1B2B4B;}
+    .stat .val.green{color:#2a7a2a;} .stat .val.red{color:#c0392b;} .stat .val.gold{color:#b8973a;}
+    table{width:100%;border-collapse:collapse;}
+    thead tr{background:#1B2B4B;}
+    thead th{padding:10px 8px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.05em;color:#c9a96e;}
+    thead th:nth-child(n+6){text-align:right;}
+    .footer{margin-top:20px;font-size:.75rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:10px;}
+    @media print{body{padding:12px;}}</style></head><body>
+    <div class="header"><h1>✦ ${w.names} — Group Report</h1>
+    <div class="meta">
+      <span>✦ ${w.resort || '—'}</span>
+      <span>✦ ${w.destination || ''}</span>
+      <span>✦ ${w.weddingDate || ''}</span>
+      <span>✦ Generated: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</span>
+    </div>
+    <div style="font-size:.82rem;color:#ccc;">${wGuests.length} rooms · Amy M. Cate · Destination Weddings Travel Group & Celebration Travel</div></div>
+    <div class="summary">
+      <div class="stat"><div class="label">Rooms</div><div class="val">${wGuests.length}</div></div>
+      <div class="stat"><div class="label">Total Cost</div><div class="val">${fmt(totalRoom + totalIns)}</div></div>
+      <div class="stat"><div class="label">Paid</div><div class="val green">${fmt(totalPaid)}</div></div>
+      <div class="stat"><div class="label">Balance Due</div><div class="val red">${fmt(totalBal)}</div></div>
+      <div class="stat"><div class="label">Commission</div><div class="val gold">${fmt(totalComm)}</div></div>
+    </div>
+    <table><thead><tr>
+      <th>Res #</th><th>Guest</th><th>Arrival</th><th>Nts</th><th>Room Type</th>
+      <th>Room Cost</th><th>Insurance</th><th>Total</th><th>Paid</th><th>Balance</th><th>Commission</th><th>Status</th>
+    </tr></thead><tbody>${rows}</tbody>
+    <tfoot><tr style="background:#f0f0f0;font-weight:700;">
+      <td colspan="5" style="padding:10px 8px;font-size:.82rem;">TOTALS</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;">${fmt(totalRoom)}</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;">${fmt(totalIns)}</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;">${fmt(totalRoom + totalIns)}</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;color:#2a7a2a;">${fmt(totalPaid)}</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;color:#c0392b;">${fmt(totalBal)}</td>
+      <td style="padding:10px 8px;font-size:.82rem;text-align:right;color:#b8973a;">${fmt(totalComm)}</td>
+      <td></td>
+    </tr></tfoot></table>
+    <div class="footer">Amy M. Cate · Certified Destination Wedding & Group Travel Specialist · (832) 773-8664 · amy.cate@destinationweddings.com</div>
+    </body></html>`;
+
+  const win = window.open('', '_blank');
+  win.document.write(reportHtml);
+  win.document.close();
+  setTimeout(() => win.print(), 600);
+}
+
 function dispatchGroupReport(){
   const t = document.querySelector('input[name="reportType"]:checked')?.value || 'group';
   const f = document.querySelector('input[name="reportFilter"]:checked')?.value || 'all';
