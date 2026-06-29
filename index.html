@@ -2791,7 +2791,9 @@ function qbGenerate() {
     const rate = row.querySelector('.qb-room-rate')?.value?.trim() || '';
     const cost = row.querySelector('.qb-room-cost')?.value?.trim() || '';
     const notes= row.querySelector('.qb-room-notes')?.value?.trim() || '';
-    checkedRooms.push({cat, url: selectedPhoto, rate, cost, notes});
+    // rate = per person (auto-calc), cost = total entered
+    const displayRate = rate || (cost ? `$${cost}` : '');
+    checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost, notes});
   });
 
   // Greeting
@@ -2812,7 +2814,7 @@ function qbGenerate() {
     const photoRow = r.url ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
     const roomLink = bookingLink || '#';
     const descText = resortDesc || r.notes || '&nbsp;';
-    const footerText = highlights || `Total: ${r.cost || '—'} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
+    const footerText = highlights || `${r.cost ? 'Total: $' + r.cost : ''} ${r.rate ? '&nbsp;&middot;&nbsp; ' + r.rate + ' per person' : ''} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
     return `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:20px;">
     <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:14px 18px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
