@@ -2600,64 +2600,90 @@ async function qbOnResortChange() {
 function qbRenderRooms() {
   const container = document.getElementById('qb-rooms-container');
   if (!container) return;
+
+  const RESORT_CATS = ['Resort Exterior / Property', 'Beach & Pool', 'Lobby / Common Areas', 'Dining', 'Bar', 'Spa', 'Kids Club'];
+
   if (!qbResortData || qbResortData.length === 0) {
     container.innerHTML = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Photo</div>
-      <p style="font-size:.82rem;color:#888;">No photos uploaded yet for this resort. Upload photos in the Resort Library first, or the quote will have no photo.</p>
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Hero Photo</div>
+      <p style="font-size:.82rem;color:#888;">No photos uploaded yet for this resort. Upload photos in the Resort Library first.</p>
+    </div>
+    <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
+      <p style="font-size:.82rem;color:#888;">No photos uploaded yet. You can still add custom rooms below.</p>
+      <button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:8px;">+ Add Custom Room</button>
     </div>`;
-    // Still show room options
-    qbRenderRoomOptions(container, []);
     return;
   }
 
-  // Group by category
-  const categories = {};
-  const allPhotos = [];
-  qbResortData.forEach(p => {
-    const cat = p.category || p.roomCategory || 'General';
-    if (!categories[cat]) categories[cat] = [];
-    categories[cat].push(p);
-    allPhotos.push(p);
+  // Split into resort photos and room photos
+  const resortPhotos = qbResortData.filter(p => {
+    const cat = p.category || p.roomCategory || '';
+    return RESORT_CATS.includes(cat) || cat === '';
+  });
+  const roomPhotos = qbResortData.filter(p => {
+    const cat = p.category || p.roomCategory || '';
+    return !RESORT_CATS.includes(cat) && cat !== '';
   });
 
-  // ── RESORT HERO PHOTO PICKER ──
+  // ── HERO PHOTO PICKER ── (resort/property photos only)
   let heroHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Hero Photo</div>
-    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select one photo to appear at the top of the resort card.</p>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
+    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select one photo to appear at the top of the quote card.</p>`;
 
-  allPhotos.forEach((p, i) => {
-    const url = p.url || p.downloadURL || '';
-    const cat = p.category || p.roomCategory || 'General';
-    if (!url) return;
-    heroHtml += `<label style="cursor:pointer;position:relative;display:block;">
-      <input type="radio" name="qb-hero-photo" value="${url}" data-cat="${cat}" ${i===0?'checked':''} style="position:absolute;top:6px;left:6px;z-index:1;width:16px;height:16px;">
-      <img src="${url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;border:2px solid ${i===0?'#c9a96e':'#e0e0e0'};" 
-        onclick="this.closest('label').querySelector('input').checked=true; document.querySelectorAll('[name=qb-hero-photo]~img, .qb-hero-img').forEach(x=>x.style.borderColor='#e0e0e0'); this.style.borderColor='#c9a96e';"
-        class="qb-hero-img">
-      <div style="font-size:.7rem;color:#888;margin-top:2px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${cat}</div>
-    </label>`;
+  if (resortPhotos.length === 0) {
+    heroHtml += `<p style="font-size:.82rem;color:#e05555;">No resort/property photos found. Upload photos with categories like "Resort Exterior", "Beach & Pool", "Lobby" etc. in the Resort Library.</p>`;
+  } else {
+    heroHtml += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
+    resortPhotos.forEach((p, i) => {
+      const url = p.url || p.downloadURL || '';
+      const cat = p.category || p.roomCategory || 'Photo';
+      if (!url) return;
+      heroHtml += `<label style="cursor:pointer;position:relative;display:block;">
+        <input type="radio" name="qb-hero-photo" value="${url}" ${i===0?'checked':''} style="position:absolute;top:6px;left:6px;z-index:1;width:16px;height:16px;"
+          onchange="document.querySelectorAll('.qb-hero-img').forEach(x=>x.style.borderColor='#e0e0e0'); this.closest('label').querySelector('img').style.borderColor='#c9a96e';">
+        <img src="${url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;border:2px solid ${i===0?'#c9a96e':'#e0e0e0'};" class="qb-hero-img" onerror="this.closest('label').style.display='none'">
+        <div style="font-size:.7rem;color:#888;margin-top:2px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${cat}</div>
+      </label>`;
+    });
+    heroHtml += `</div>`;
+  }
+  heroHtml += `</div>`;
+
+  // ── ROOM OPTIONS ── (room category photos only)
+  // Group by category
+  const categories = {};
+  roomPhotos.forEach(p => {
+    const cat = p.category || p.roomCategory || 'Room';
+    if (!categories[cat]) categories[cat] = [];
+    categories[cat].push(p);
   });
 
-  heroHtml += `</div></div>`;
-
-  // ── ROOM OPTIONS ──
   let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
-    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select room types to include. Each becomes a card in the quote.</p>`;
+    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Check rooms to include. Edit name if needed. Enter total room cost — per person calculates automatically.</p>`;
+
+  const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
 
   Object.entries(categories).forEach(([cat, photos]) => {
-    const firstPhoto = photos[0];
-    const photoUrl = firstPhoto?.url || firstPhoto?.downloadURL || '';
+    // Let user pick which photo to use for this room
+    const photoOptions = photos.map((p,i) => {
+      const url = p.url || p.downloadURL || '';
+      return `<label style="cursor:pointer;display:inline-block;margin-right:6px;vertical-align:top;">
+        <input type="radio" name="qb-room-photo-${cat.replace(/\s+/g,'-')}" value="${url}" ${i===0?'checked':''} style="display:block;margin:0 auto 2px;">
+        <img src="${url}" style="width:60px;height:40px;object-fit:cover;border-radius:4px;border:1px solid #e0e0e0;" onerror="this.closest('label').style.display='none'">
+      </label>`;
+    }).join('');
+
     roomsHtml += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-url="${photoUrl}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
+        <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-photo-group="qb-room-photo-${cat.replace(/\s+/g,'-')}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
         <input class="qb-room-label form-input" value="${cat}" placeholder="Room name (editable)" style="flex:1;padding:6px 10px;font-size:.88rem;font-weight:600;">
       </div>
-      ${photoUrl ? `<img src="${photoUrl}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;margin-bottom:8px;" onerror="this.style.display='none'">` : ''}
+      ${photos.length > 0 ? `<div style="margin-bottom:8px;">${photoOptions}</div>` : ''}
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Rate (per person)</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="e.g. 450" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomTotal(this)"></div>
-        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
+        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 2400" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
+        <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Per Person</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
         <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
       </div>
     </div>`;
@@ -2685,14 +2711,13 @@ function qbAddCustomRoom() {
   container.querySelector('div').appendChild(div);
 }
 
-function qbCalcRoomTotal(rateInput) {
-  const occ = document.getElementById('qb-occ')?.value || 'Double';
-  const guests = occ === 'Single' ? 1 : occ === 'Triple' ? 3 : 2;
-  const rate = parseFloat(rateInput.value) || 0;
-  const total = rate * guests;
-  const row = rateInput.closest('div').parentElement;
-  const costInput = row.querySelector('.qb-room-cost');
-  if (costInput) costInput.value = total > 0 ? '$' + total.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '';
+function qbCalcRoomRate(costInput) {
+  const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
+  const total = parseFloat(costInput.value) || 0;
+  const perPerson = total > 0 ? (total / occ) : 0;
+  const row = costInput.closest('div').parentElement;
+  const rateInput = row.querySelector('.qb-room-rate');
+  if (rateInput) rateInput.value = perPerson > 0 ? '$' + perPerson.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}) : '';
 }
 
 function qbCheckReady() {
@@ -2727,9 +2752,8 @@ function qbCalcNights() {
 }
 
 function qbUpdateHints() {
-  // Recalculate all room totals when occupancy changes
-  document.querySelectorAll('.qb-room-rate').forEach(input => {
-    if (input.value) qbCalcRoomTotal(input);
+  document.querySelectorAll('.qb-room-cost').forEach(input => {
+    if (input.value) qbCalcRoomRate(input);
   });
 }
 
@@ -2761,11 +2785,13 @@ function qbGenerate() {
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
     const row = cb.closest('div');
     const cat = row.querySelector('.qb-room-label')?.value || cb.dataset.cat;
-    const url = cb.dataset.url;
+    // Get selected photo from radio group
+    const photoGroup = cb.dataset.photoGroup;
+    const selectedPhoto = photoGroup ? document.querySelector(`input[name="${photoGroup}"]:checked`)?.value || '' : '';
     const rate = row.querySelector('.qb-room-rate')?.value?.trim() || '';
     const cost = row.querySelector('.qb-room-cost')?.value?.trim() || '';
     const notes= row.querySelector('.qb-room-notes')?.value?.trim() || '';
-    checkedRooms.push({cat, url, rate, cost, notes});
+    checkedRooms.push({cat, url: selectedPhoto, rate, cost, notes});
   });
 
   // Greeting
