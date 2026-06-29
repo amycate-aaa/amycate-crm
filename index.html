@@ -2601,7 +2601,14 @@ function qbRenderRooms() {
   const container = document.getElementById('qb-rooms-container');
   if (!container) return;
 
-  const RESORT_CATS = ['Resort Exterior / Property', 'Beach & Pool', 'Lobby / Common Areas', 'Dining', 'Bar', 'Spa', 'Kids Club'];
+  // Room categories — anything NOT in this list goes to hero photo section
+  const ROOM_CATS = ['Junior Suite', 'Junior Suite Tropical View', 'Junior Suite Ocean View', 
+    'Junior Suite Ocean Front', 'Junior Suite Partial Ocean View', 'Junior Suite Plunge Pool',
+    'Plunge Pool Suite', 'Preferred Club Tropical View', 'Preferred Club Ocean View', 
+    'Preferred Club Plunge Pool', 'Preferred Club Honeymoon Suite', 'Preferred Club Master Suite',
+    'Preferred Club Governor Suite', 'Preferred Club Presidential Suite', 'Governor Suite', 
+    'Presidential Suite', 'Family Suite Premium', 'Premium Deluxe', 'Premium Deluxe Ocean View',
+    'Premium Deluxe Plunge Pool', 'Sky Pool Suite'];
 
   if (!qbResortData || qbResortData.length === 0) {
     container.innerHTML = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
@@ -2617,13 +2624,15 @@ function qbRenderRooms() {
   }
 
   // Split into resort photos and room photos
+  // Hero = anything not a room type (including 'Other', 'Aerial', blank, etc.)
   const resortPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return RESORT_CATS.includes(cat) || cat === '';
+    return !ROOM_CATS.includes(cat);
   });
+  // Rooms = only recognized room categories
   const roomPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return !RESORT_CATS.includes(cat) && cat !== '';
+    return ROOM_CATS.includes(cat);
   });
 
   // ── HERO PHOTO PICKER ── (resort/property photos only)
