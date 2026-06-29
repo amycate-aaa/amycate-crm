@@ -675,6 +675,7 @@ tr:hover .sticky-col{background:#f8f8f8;}
         <div style="margin-left:auto;display:flex;gap:8px">
           <button class="btn btn-outline btn-sm" onclick="openCouplePortal(currentWeddingId)">👁 Client View</button>
           <button class="btn btn-outline btn-sm" onclick="copyCoupleLink(currentWeddingId)">🔗 Copy Link</button>
+          <button class="btn btn-outline btn-sm" onclick="viewResponsesByWedding(currentWeddingId)" style="color:#7a3a8a;border-color:#7a3a8a">📋 Intake Responses</button>
         </div>
       </div>
 
@@ -3985,7 +3986,68 @@ amy.cate@destinationweddings.com
   closeIntakePopup();
 }
 
-function makeDraggable(el, handle) {
+async function viewResponsesByWedding(weddingId) {
+  const w = weddings.find(x => x.id === weddingId);
+  const eventName = w ? (w.names || w.groupName || 'This Event') : 'This Event';
+  const existing = document.getElementById('responses-panel');
+  if (existing) existing.remove();
+
+  const panel = document.createElement('div');
+  panel.id = 'responses-panel';
+  panel.style.cssText = 'position:fixed;top:80px;right:24px;width:520px;max-height:70vh;overflow-y:auto;background:white;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.22);z-index:9999;';
+  const dragHandle = document.createElement('div');
+  dragHandle.style.cssText = 'background:#1a1a2e;padding:14px 18px;border-radius:14px 14px 0 0;display:flex;justify-content:space-between;align-items:center;';
+  dragHandle.innerHTML = '<div style="color:white;font-weight:700;font-size:.95rem">📋 Intake Responses — ' + esc(eventName) + '</div><button onclick="document.getElementById(\'responses-panel\').remove()" style="background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer">&times;</button>';
+  const body = document.createElement('div');
+  body.id = 'responses-list';
+  body.style.cssText = 'padding:16px;';
+  body.innerHTML = '<p style="color:#888;text-align:center;padding:24px">Loading...</p>';
+  panel.appendChild(dragHandle);
+  panel.appendChild(body);
+  document.body.appendChild(panel);
+  makeDraggable(panel, dragHandle);
+
+  try {
+    // Search by weddingId first, then by groupName/eventName
+    let docs = [];
+    const snap1 = await db.collection('intakes').where('weddingId','==',weddingId).get();
+    docs = snap1.docs;
+    if (docs.length === 0) {
+      // Fall back to matching by event name
+      const allSnap = await db.collection('intakes').get();
+      const nameLower = eventName.toLowerCase().split(' ')[0];
+      docs = allSnap.docs.filter(d => {
+        const gn = (d.data().groupName||'').toLowerCase();
+        return gn.includes(nameLower) || (d.data().eventName||'').toLowerCase().includes(nameLower);
+      });
+    }
+    if (docs.length === 0) {
+      body.innerHTML = '<p style="color:#888;text-align:center;padding:24px">No intake responses yet.</p>';
+      return;
+    }
+    body.innerHTML = docs.map(doc => {
+      const d = doc.data();
+      const date = d.submittedAt ? new Date(d.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) : '—';
+      return '<div style="border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:14px">'
+        + '<div style="display:flex;justify-content:space-between;margin-bottom:8px">'
+        + '<strong>' + esc(d.firstName||'') + ' ' + esc(d.lastName||'') + '</strong>'
+        + '<span style="font-size:.8rem;color:#888">' + date + '</span></div>'
+        + '<div style="font-size:.85rem;color:#555;line-height:1.7">'
+        + (d.email ? '✉️ ' + esc(d.email) + '<br>' : '')
+        + (d.phone ? '📞 ' + esc(d.phone) + '<br>' : '')
+        + (d.roomPreference ? '🛏 ' + esc(d.roomPreference) + '<br>' : '')
+        + (d.numTravelers ? '👥 ' + esc(String(d.numTravelers)) + ' travelers<br>' : '')
+        + (d.roomingWith ? '🤝 Rooming with: ' + esc(d.roomingWith) + '<br>' : '')
+        + (d.needsFlights ? '✈️ Needs flights from: ' + esc(d.departureCity||'TBD') + '<br>' : '')
+        + (d.notes ? '<div style="margin-top:8px;padding:8px;background:#f8f8f8;border-radius:6px">📝 ' + esc(d.notes) + '</div>' : '')
+        + '</div></div>';
+    }).join('');
+  } catch(e) {
+    body.innerHTML = '<p style="color:#e05555;padding:16px">Error loading responses: ' + e.message + '</p>';
+  }
+}
+
+
   let startX, startY, startLeft, startTop;
   handle.style.cursor = 'move';
   handle.addEventListener('mousedown', function(e) {
