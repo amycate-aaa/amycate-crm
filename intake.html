@@ -109,14 +109,19 @@ async function loadTrip(){
     document.getElementById('errorBox').style.display='block';
     return;
   }
+  // Best-effort lookup — if the lead doc can't be read (e.g. Firestore rules
+  // require an authenticated CRM session), show generic copy instead of
+  // blocking the form. The lead ID is still attached on submit either way.
   try{
     const doc = await db.collection('leads').doc(leadId).get();
-    if(!doc.exists){
-      document.getElementById('loadingBox').style.display='none';
-      document.getElementById('errorBox').style.display='block';
-      return;
+    if(doc.exists){
+      leadData = doc.data();
     }
-    leadData = doc.data();
+  } catch(e){
+    console.warn('Could not read lead details (non-critical):', e.message);
+  }
+
+  if(leadData){
     document.getElementById('tc-name').textContent = leadData.names || 'Your Trip';
     const subParts = [];
     if(leadData.resort) subParts.push(leadData.resort);
@@ -133,14 +138,13 @@ async function loadTrip(){
     if(leadData.checkOut) document.getElementById('checkoutDate').value = leadData.checkOut;
     if(leadData.roomCategory) document.getElementById('roomPreference').value = leadData.roomCategory;
     if(leadData.email) document.getElementById('email').value = leadData.email;
-
-    document.getElementById('loadingBox').style.display='none';
-    document.getElementById('content').style.display='block';
-  } catch(e){
-    console.error(e);
-    document.getElementById('loadingBox').style.display='none';
-    document.getElementById('errorBox').style.display='block';
+  } else {
+    document.getElementById('tc-name').textContent = 'Your Trip';
+    document.getElementById('tc-sub').textContent = "We'll fill in the details — just complete the form below.";
   }
+
+  document.getElementById('loadingBox').style.display='none';
+  document.getElementById('content').style.display='block';
 }
 loadTrip();
 
