@@ -45,6 +45,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .form-group label{display:block;font-size:.75rem;color:#888;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
 .form-control{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:9px 12px;color:#e8e8e8;font-size:.85rem;font-family:inherit}
 .form-control:focus{outline:none;border-color:#f0c958}
+.rte-toolbar{display:flex;gap:4px;margin-bottom:6px;}
+.rte-toolbar button{background:#222;border:1px solid #333;border-radius:5px;color:#ccc;font-size:.78rem;padding:5px 10px;cursor:pointer;font-family:inherit;}
+.rte-toolbar button:hover{background:#f0c958;color:#111;border-color:#f0c958}
+.rte-box{min-height:70px;line-height:1.45;overflow-y:auto;max-height:220px;}
+.rte-box:empty:before{content:attr(data-placeholder);color:#666;}
+.rte-box ul{margin:4px 0 4px 20px;padding:0;}
+.rte-box b, .rte-box strong{color:#f0c958;}
 .form-control option{background:#1a1a1a}
 
 .drop-zone{border:2px dashed #333;border-radius:8px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
@@ -354,7 +361,16 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
     <div class="form-group" style="margin-top:14px;">
       <label>Room Description <span style="color:#888;font-size:.75rem;">(saved once per resort + category — shown anywhere this room type appears)</span></label>
-      <textarea class="form-control" id="roomDescription" rows="2" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..." onblur="saveRoomDescription()"></textarea>
+      <textarea class="form-control" id="roomDescription" rows="2" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..." onblur="saveRoomDescription()" style="display:none;"></textarea>
+      <div class="rte-toolbar" data-target="roomDescriptionRTE">
+        <button type="button" onclick="rteCmd('bold','roomDescriptionRTE')"><b>B</b></button>
+        <button type="button" onclick="rteCmd('italic','roomDescriptionRTE')"><i>I</i></button>
+        <button type="button" onclick="rteCmd('insertUnorderedList','roomDescriptionRTE')">&#8226; List</button>
+        <button type="button" onclick="rteCmd('removeFormat','roomDescriptionRTE')">Clear</button>
+      </div>
+      <div class="form-control rte-box" id="roomDescriptionRTE" contenteditable="true"
+           data-placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..."
+           onblur="saveRoomDescription()"></div>
       <span id="roomDescSaveMsg" style="display:none;margin-top:4px;color:#27ae60;font-size:.82rem;">&#10003; Saved</span>
     </div>
 
@@ -558,6 +574,12 @@ async function saveResortProfile() {
   }
 }
 
+// ── RICH TEXT EDITOR ──
+function rteCmd(cmd, targetId) {
+  document.getElementById(targetId).focus();
+  document.execCommand(cmd, false, null);
+}
+
 // ── ROOM DESCRIPTIONS (saved once per resort + category) ──
 function roomDescKey(resort, category) {
   return `${resort}__${category}`.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -567,13 +589,13 @@ async function loadRoomDescription() {
   const resort = document.getElementById('uploadResort').value;
   const catSelect = document.getElementById('uploadCategory').value;
   const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
-  const box = document.getElementById('roomDescription');
-  if (!resort || !category) { box.value = ''; return; }
+  const box = document.getElementById('roomDescriptionRTE');
+  if (!resort || !category) { box.innerHTML = ''; return; }
 
   try {
     const key = roomDescKey(resort, category);
     const doc = await db.collection('roomDescriptions').doc(key).get();
-    box.value = doc.exists ? (doc.data().description || '') : '';
+    box.innerHTML = doc.exists ? (doc.data().description || '') : '';
   } catch(e) {
     console.error('loadRoomDescription error:', e);
   }
@@ -583,7 +605,7 @@ async function saveRoomDescription() {
   const resort = document.getElementById('uploadResort').value;
   const catSelect = document.getElementById('uploadCategory').value;
   const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
-  const description = document.getElementById('roomDescription').value.trim();
+  const description = document.getElementById('roomDescriptionRTE').innerHTML.trim();
   if (!resort || !category) return; // nothing selected yet, nothing to save against
 
   try {
@@ -829,12 +851,12 @@ async function openEditPhoto(id) {
   document.getElementById('editPhotoModal').style.display = 'flex';
 
   // Load shared room description for this resort + category
-  const descBox = document.getElementById('editPhotoDescription');
-  descBox.value = '';
+  const descBox = document.getElementById('editPhotoDescriptionRTE');
+  descBox.innerHTML = '';
   try {
     const key = roomDescKey(p.resortSlug || p.resort, p.roomCategory);
     const doc = await db.collection('roomDescriptions').doc(key).get();
-    descBox.value = doc.exists ? (doc.data().description || '') : '';
+    descBox.innerHTML = doc.exists ? (doc.data().description || '') : '';
   } catch(e) {
     console.error('load edit description error:', e);
   }
@@ -849,7 +871,7 @@ async function saveEditPhoto() {
   const resort = document.getElementById('editPhotoResort').value;
   const caption = document.getElementById('editPhotoCaption').value.trim();
   const category = document.getElementById('editPhotoCategory').value.trim();
-  const description = document.getElementById('editPhotoDescription').value.trim();
+  const description = document.getElementById('editPhotoDescriptionRTE').innerHTML.trim();
   if (!category) { toast('Category cannot be empty.', 'error'); return; }
 
   try {
@@ -898,7 +920,15 @@ initProfileResortDropdown();
     </div>
     <div class="form-group" style="margin-top:10px;">
       <label>Description <span style="color:#888;font-size:.7rem;">(shared across all photos in this category)</span></label>
-      <textarea class="form-control" id="editPhotoDescription" rows="3" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony..."></textarea>
+      <textarea class="form-control" id="editPhotoDescription" rows="3" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony..." style="display:none;"></textarea>
+      <div class="rte-toolbar" data-target="editPhotoDescriptionRTE">
+        <button type="button" onclick="rteCmd('bold','editPhotoDescriptionRTE')"><b>B</b></button>
+        <button type="button" onclick="rteCmd('italic','editPhotoDescriptionRTE')"><i>I</i></button>
+        <button type="button" onclick="rteCmd('insertUnorderedList','editPhotoDescriptionRTE')">&#8226; List</button>
+        <button type="button" onclick="rteCmd('removeFormat','editPhotoDescriptionRTE')">Clear</button>
+      </div>
+      <div class="form-control rte-box" id="editPhotoDescriptionRTE" contenteditable="true"
+           data-placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony..."></div>
     </div>
     <div style="display:flex;gap:10px;margin-top:18px;">
       <button class="btn btn-primary" style="flex:1;" onclick="saveEditPhoto()">Save Changes</button>
