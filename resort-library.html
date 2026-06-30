@@ -225,7 +225,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="upload-form">
       <div class="form-group">
         <label>Resort</label>
-        <select class="form-control" id="uploadResort">
+        <select class="form-control" id="uploadResort" onchange="loadRoomDescription()">
                     <option value="">Select resort...</option>
           <option value="ava-resort-cancun">Ava Resort Cancun</option>
           <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
@@ -314,9 +314,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         </select>
       </div>
       <div class="form-group">
-        <label>Room Category</label>
-        <select class="form-control" id="uploadCategory" onchange="toggleCustomCategory(this)">
+        <label>Photo Category</label>
+        <select class="form-control" id="uploadCategory" onchange="toggleCustomCategory(this); loadRoomDescription();">
           <option value="">Select category...</option>
+          <option value="Aerial View">Aerial View</option>
           <option value="Resort Exterior / Property">Resort Exterior / Property</option>
           <option value="Beach & Pool">Beach &amp; Pool</option>
           <option value="Lobby / Common Areas">Lobby / Common Areas</option>
@@ -349,6 +350,12 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <input type="text" class="form-control" id="uploadCaption" placeholder="e.g. King bed with ocean view">
       </div>
       <button class="btn btn-primary" onclick="startUpload()" id="uploadBtn">Upload</button>
+    </div>
+
+    <div class="form-group" style="margin-top:14px;">
+      <label>Room Description <span style="color:#888;font-size:.75rem;">(saved once per resort + category — shown anywhere this room type appears)</span></label>
+      <textarea class="form-control" id="roomDescription" rows="2" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..." onblur="saveRoomDescription()"></textarea>
+      <span id="roomDescSaveMsg" style="display:none;margin-top:4px;color:#27ae60;font-size:.82rem;">&#10003; Saved</span>
     </div>
 
     <!-- DROP ZONE -->
@@ -543,6 +550,50 @@ async function saveResortProfile() {
   }
 }
 
+// ── ROOM DESCRIPTIONS (saved once per resort + category) ──
+function roomDescKey(resort, category) {
+  return `${resort}__${category}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+async function loadRoomDescription() {
+  const resort = document.getElementById('uploadResort').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const box = document.getElementById('roomDescription');
+  if (!resort || !category) { box.value = ''; return; }
+
+  try {
+    const key = roomDescKey(resort, category);
+    const doc = await db.collection('roomDescriptions').doc(key).get();
+    box.value = doc.exists ? (doc.data().description || '') : '';
+  } catch(e) {
+    console.error('loadRoomDescription error:', e);
+  }
+}
+
+async function saveRoomDescription() {
+  const resort = document.getElementById('uploadResort').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const description = document.getElementById('roomDescription').value.trim();
+  if (!resort || !category) return; // nothing selected yet, nothing to save against
+
+  try {
+    const key = roomDescKey(resort, category);
+    await db.collection('roomDescriptions').doc(key).set({
+      resort, category, description,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge: true});
+    const msg = document.getElementById('roomDescSaveMsg');
+    if (msg) {
+      msg.style.display = 'inline';
+      setTimeout(() => msg.style.display = 'none', 2000);
+    }
+  } catch(e) {
+    console.error('saveRoomDescription error:', e);
+  }
+}
+
 // ── UPLOAD ──
 function toggleCustomCategory(sel) {
   const custom = document.getElementById('uploadCategoryCustom');
@@ -700,6 +751,7 @@ function renderGallery(photos) {
         ${p.caption ? `<div class="photo-caption">${escHtml(p.caption)}</div>` : ''}
         <div class="photo-actions">
           <button class="copy-btn" onclick="copyURL('${p.id}','${escAttr(p.downloadURL)}')" id="copy_${p.id}">&#128203; Copy URL</button>
+          <button class="copy-btn" onclick="openEditPhoto('${p.id}')">&#9999; Edit</button>
           <button class="delete-btn" onclick="deletePhoto('${p.id}','${escAttr(p.storagePath)}')">&#128465;</button>
         </div>
       </div>
@@ -755,9 +807,65 @@ function toast(msg, type='success') {
   setTimeout(() => div.remove(), 3500);
 }
 
+// ── EDIT PHOTO ──
+function openEditPhoto(id) {
+  const p = allPhotos.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('editPhotoId').value = id;
+  document.getElementById('editPhotoPreview').src = p.downloadURL;
+  document.getElementById('editPhotoCaption').value = p.caption || '';
+  document.getElementById('editPhotoCategory').value = p.roomCategory || '';
+  document.getElementById('editPhotoModal').style.display = 'flex';
+}
+
+function closeEditPhoto() {
+  document.getElementById('editPhotoModal').style.display = 'none';
+}
+
+async function saveEditPhoto() {
+  const id = document.getElementById('editPhotoId').value;
+  const caption = document.getElementById('editPhotoCaption').value.trim();
+  const category = document.getElementById('editPhotoCategory').value.trim();
+  if (!category) { toast('Category cannot be empty.', 'error'); return; }
+
+  try {
+    await db.collection('resortPhotos').doc(id).update({
+      caption, roomCategory: category, category
+    });
+    const p = allPhotos.find(x => x.id === id);
+    if (p) { p.caption = caption; p.roomCategory = category; p.category = category; }
+    closeEditPhoto();
+    applyFilters();
+    toast('Photo updated!', 'success');
+  } catch(e) {
+    toast('Error saving: ' + e.message, 'error');
+  }
+}
+
 // ── BOOT ──
 loadPhotos();
 initProfileResortDropdown();
 </script>
+
+<!-- EDIT PHOTO MODAL -->
+<div id="editPhotoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:420px;width:90%;">
+    <h3 style="margin:0 0 16px;color:#f0c958;font-size:1.1rem;">Edit Photo</h3>
+    <input type="hidden" id="editPhotoId">
+    <img id="editPhotoPreview" src="" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:14px;">
+    <div class="form-group">
+      <label>Category</label>
+      <input type="text" class="form-control" id="editPhotoCategory">
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+      <label>Caption</label>
+      <input type="text" class="form-control" id="editPhotoCaption" placeholder="e.g. King bed with ocean view">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveEditPhoto()">Save Changes</button>
+      <button class="copy-btn" style="flex:1;" onclick="closeEditPhoto()">Cancel</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
