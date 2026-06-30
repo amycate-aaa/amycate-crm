@@ -471,9 +471,17 @@ function handleFiles(files) {
         <div class="upload-progress"><div class="upload-progress-bar" id="bar_${id}" style="width:0%"></div></div>
       </div>
       <span class="upload-status status-pending" id="status_${id}">Queued</span>
+      <button class="delete-btn" id="remove_${id}" onclick="removeQueueItem('${id}')" style="margin-left:6px;" title="Remove from queue">&#10005;</button>
     `;
     queue.appendChild(el);
   });
+}
+
+function removeQueueItem(id) {
+  const item = queueItems.find(q => q.id === id);
+  if (item && item.status === 'uploading') return; // don't allow removal mid-upload
+  queueItems = queueItems.filter(q => q.id !== id);
+  document.getElementById(id)?.remove();
 }
 
 // ── RESORT PROFILE ──
@@ -683,6 +691,8 @@ function setStatus(id, html, cls) {
   if (!el) return;
   el.className = 'upload-status ' + cls;
   el.innerHTML = html;
+  const removeBtn = document.getElementById('remove_' + id);
+  if (removeBtn) removeBtn.style.display = (cls === 'status-uploading') ? 'none' : 'inline-block';
 }
 
 // ── LOAD & RENDER ──
