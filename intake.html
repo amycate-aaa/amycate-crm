@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Intake | Amy Cate</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+:root{
+  --navy:#1B2B4B; --gold:#c9a96e; --bg:#f0f0f0; --surface:#fff;
+  --border:#e0e0e0; --text:#1a1a1a; --muted:#666; --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:15px;}
+.page-header{background:var(--navy);padding:18px 24px;text-align:center;}
+.logo{color:white;font-size:1.1rem;font-weight:700;letter-spacing:.05em;}
+.logo span{color:var(--gold);}
+main{max-width:560px;margin:0 auto;padding:28px 16px 60px;}
+.trip-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px 24px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.trip-card h1{font-size:1.3rem;color:var(--navy);margin-bottom:6px;}
+.trip-card .sub{color:var(--muted);font-size:.92rem;margin-bottom:10px;}
+.trip-card .note{font-size:.88rem;color:#555;background:#faf7f0;border-radius:8px;padding:10px 12px;margin-top:8px;}
+form{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-row.full{grid-template-columns:1fr;}
+label{display:block;font-size:.82rem;font-weight:600;color:var(--navy);margin-bottom:5px;}
+input, textarea, select{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:.95rem;font-family:inherit;}
+textarea{resize:vertical;min-height:70px;}
+.req{color:#b00;}
+button{width:100%;padding:13px;background:var(--navy);color:white;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:6px;}
+button:hover{opacity:.92;}
+button:disabled{opacity:.5;cursor:default;}
+#status{text-align:center;margin-top:14px;font-size:.9rem;}
+#successBox{display:none;text-align:center;padding:40px 24px;}
+#successBox h2{color:var(--navy);margin-bottom:8px;}
+#successBox p{color:var(--muted);}
+.error-box{text-align:center;padding:40px 24px;color:#888;}
+@media (max-width:480px){.form-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="page-header"><div class="logo">AMY <span>CATE</span></div></div>
+<main>
+  <div id="loadingBox" style="text-align:center;padding:40px;color:#888;">Loading your trip details…</div>
+  <div id="errorBox" class="error-box" style="display:none;">
+    <p>We couldn't find this trip link. Please reach out to Amy directly at <a href="mailto:amy.cate@destinationweddings.com">amy.cate@destinationweddings.com</a>.</p>
+  </div>
+
+  <div id="content" style="display:none;">
+    <div class="trip-card">
+      <h1 id="tc-name">Your Trip</h1>
+      <div class="sub" id="tc-sub"></div>
+      <div class="note" id="tc-note" style="display:none;"></div>
+    </div>
+
+    <form id="intakeForm">
+      <div class="form-row">
+        <div><label>First Name <span class="req">*</span></label><input type="text" id="firstName" required></div>
+        <div><label>Last Name <span class="req">*</span></label><input type="text" id="lastName" required></div>
+      </div>
+      <div class="form-row">
+        <div><label>Email <span class="req">*</span></label><input type="email" id="email" required></div>
+        <div><label>Phone</label><input type="tel" id="phone"></div>
+      </div>
+      <div class="form-row">
+        <div><label>Check-In Date</label><input type="date" id="checkinDate"></div>
+        <div><label>Check-Out Date</label><input type="date" id="checkoutDate"></div>
+      </div>
+      <div class="form-row">
+        <div><label># of Travelers</label><input type="number" id="numTravelers" min="1"></div>
+        <div><label>Room Preference</label><input type="text" id="roomPreference" placeholder="e.g. Ocean View Double"></div>
+      </div>
+      <div class="form-row full">
+        <div><label>Rooming With</label><input type="text" id="roomingWith" placeholder="Names of others in your room"></div>
+      </div>
+      <div class="form-row full">
+        <div><label>Anything else Amy should know?</label><textarea id="notes"></textarea></div>
+      </div>
+      <button type="submit" id="submitBtn">Submit My Info</button>
+      <div id="status"></div>
+    </form>
+
+    <div id="successBox">
+      <h2>Thank you! 🎉</h2>
+      <p>Your info has been sent to Amy. She'll be in touch shortly!</p>
+    </div>
+  </div>
+</main>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  projectId: "wedding-crm-e5d12",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+function qs(name){
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+const leadId = qs('lead');
+let leadData = null;
+
+async function loadTrip(){
+  if(!leadId){
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('errorBox').style.display='block';
+    return;
+  }
+  try{
+    const doc = await db.collection('leads').doc(leadId).get();
+    if(!doc.exists){
+      document.getElementById('loadingBox').style.display='none';
+      document.getElementById('errorBox').style.display='block';
+      return;
+    }
+    leadData = doc.data();
+    document.getElementById('tc-name').textContent = leadData.names || 'Your Trip';
+    const subParts = [];
+    if(leadData.resort) subParts.push(leadData.resort);
+    if(leadData.destination) subParts.push(leadData.destination);
+    if(leadData.datesRequested) subParts.push(leadData.datesRequested);
+    else if(leadData.checkIn) subParts.push(leadData.checkIn + (leadData.checkOut ? ' – ' + leadData.checkOut : ''));
+    document.getElementById('tc-sub').textContent = subParts.join(' · ');
+    if(leadData.intakeNote){
+      const noteEl = document.getElementById('tc-note');
+      noteEl.textContent = leadData.intakeNote;
+      noteEl.style.display = 'block';
+    }
+    if(leadData.checkIn) document.getElementById('checkinDate').value = leadData.checkIn;
+    if(leadData.checkOut) document.getElementById('checkoutDate').value = leadData.checkOut;
+    if(leadData.roomCategory) document.getElementById('roomPreference').value = leadData.roomCategory;
+    if(leadData.email) document.getElementById('email').value = leadData.email;
+
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('content').style.display='block';
+  } catch(e){
+    console.error(e);
+    document.getElementById('loadingBox').style.display='none';
+    document.getElementById('errorBox').style.display='block';
+  }
+}
+loadTrip();
+
+document.getElementById('intakeForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  const status = document.getElementById('status');
+  btn.disabled = true;
+  status.textContent = 'Submitting…';
+  status.style.color = '#666';
+
+  const checkIn = document.getElementById('checkinDate').value;
+  const checkOut = document.getElementById('checkoutDate').value;
+  let nights = '';
+  if(checkIn && checkOut){
+    const d1 = new Date(checkIn), d2 = new Date(checkOut);
+    const diff = Math.round((d2-d1)/(1000*60*60*24));
+    if(diff > 0) nights = diff;
+  }
+
+  const payload = {
+    leadId: leadId,
+    groupName: leadData ? (leadData.names || '') : '',
+    firstName: document.getElementById('firstName').value.trim(),
+    lastName: document.getElementById('lastName').value.trim(),
+    email: document.getElementById('email').value.trim(),
+    phone: document.getElementById('phone').value.trim(),
+    checkinDate: checkIn,
+    checkoutDate: checkOut,
+    nights: nights,
+    numTravelers: document.getElementById('numTravelers').value,
+    roomPreference: document.getElementById('roomPreference').value.trim(),
+    roomingWith: document.getElementById('roomingWith').value.trim(),
+    notes: document.getElementById('notes').value.trim(),
+    submittedAt: new Date().toISOString(),
+    crmDismissed: false
+  };
+
+  try{
+    await db.collection('intakes').add(payload);
+    document.getElementById('intakeForm').style.display = 'none';
+    document.getElementById('successBox').style.display = 'block';
+  } catch(err){
+    console.error(err);
+    status.textContent = 'Something went wrong submitting your info. Please try again or email amy.cate@destinationweddings.com directly.';
+    status.style.color = '#b00';
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>
