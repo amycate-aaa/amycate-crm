@@ -467,6 +467,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div class="section-head">
         <div><h2>📄 Quote Builder</h2><p>Generate beautiful personalized quotes for your clients</p></div>
         <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm" onclick="qbClearForm()" style="color:#c0392b;border-color:#c0392b">✕ Clear Form</button>
           <button class="btn btn-outline btn-sm" onclick="exportResortLibrary()">↓ Export Resorts</button>
           <label class="btn btn-outline btn-sm" style="cursor:pointer">↑ Import Resorts<input type="file" accept=".json" onchange="importResortLibrary(event)" style="display:none"></label>
           <button class="btn btn-outline btn-sm" onclick="showQuoteResortModal()">+ Add Resort</button>
@@ -1412,7 +1413,16 @@ function showTab(name){
   if(name==='timeline') renderTimeline();
   if(name==='reports') renderReports();
   if(name==='events') renderEventsTab();
-  if(name==='quotes'){ qbInitDestinations(); qbFilterResorts(); }
+  if(name==='quotes'){
+    // Only initialize once — re-running this on every tab visit was wiping
+    // out the in-progress quote (resort selection, room prices, etc.)
+    // whenever the person navigated away and came back.
+    if (!qbInitialized) {
+      qbInitDestinations();
+      qbFilterResorts();
+      qbInitialized = true;
+    }
+  }
 }
 
 // ── STATE ──
@@ -2555,6 +2565,52 @@ function toggleTimelinePast(){
 // ── State ──
 let qbResortData = null; // loaded from Firestore resortPhotos
 let qbRooms = [];        // array of room option objects
+let qbInitialized = false; // tracks whether the Quote Builder dropdowns have been populated yet
+
+function qbClearForm() {
+  if (!confirm('Clear the quote form and start fresh? This cannot be undone.')) return;
+
+  // Reset dropdowns
+  const dest = document.getElementById('qb-dest');
+  if (dest) dest.value = '';
+  qbFilterResorts();
+  const resort = document.getElementById('qb-resort');
+  if (resort) resort.value = '';
+  qbResortData = null;
+
+  // Reset guest fields
+  ['qb-name','qb-name2','qb-intro','qb-location','qb-desc-text','qb-highlights',
+   'qb-booking-link','qb-checkin','qb-checkout','qb-event'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  const occ = document.getElementById('qb-occ');
+  if (occ) occ.value = '2';
+  const greeting = document.getElementById('qb-greeting');
+  if (greeting) greeting.value = 'standard';
+  const nights = document.getElementById('qb-nights');
+  if (nights) nights.value = '7';
+  const hasKids = document.getElementById('qb-has-kids');
+  if (hasKids) { hasKids.checked = false; qbToggleKids(); }
+
+  // Reset room options container
+  const roomsContainer = document.getElementById('qb-rooms-container');
+  if (roomsContainer) roomsContainer.innerHTML = '';
+
+  // Clear quote preview — show empty state, hide generated preview
+  const emptyState = document.getElementById('qb-empty-state');
+  const previewContainer = document.getElementById('qb-preview-container');
+  if (emptyState) emptyState.style.display = 'flex';
+  if (previewContainer) previewContainer.style.display = 'none';
+  const iframe = document.getElementById('qb-iframe');
+  if (iframe) iframe.srcdoc = '';
+
+  // Disable generate button until form is filled in again
+  const genBtn = document.getElementById('qb-gen-btn');
+  if (genBtn) genBtn.disabled = true;
+
+  showToast('Quote form cleared.', 'green');
+}
 
 // ── Init ──
 
@@ -3496,7 +3552,14 @@ function showInnerTab(name){
   if(panel) panel.classList.add('active');
   document.querySelectorAll('.inner-tab').forEach(b=>{if(b.getAttribute('onclick').includes("'"+name+"'")) b.classList.add('active');});
   if(name==='inbox') loadInbox();
-  if(name==='quotes'){ qbInitDestinations(); qbFilterResorts(); }
+  if(name==='quotes'){
+    // Only initialize once — see note in showTab() above.
+    if (!qbInitialized) {
+      qbInitDestinations();
+      qbFilterResorts();
+      qbInitialized = true;
+    }
+  }
   if(name==='ipayments') renderDetailPayments();
   if(name==='ifinancials') renderDetailFinancials();
   if(name==='idocs') renderDetailDocs();
