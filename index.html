@@ -2614,14 +2614,12 @@ function qbRenderRooms() {
   const container = document.getElementById('qb-rooms-container');
   if (!container) return;
 
-  // Room categories — anything NOT in this list goes to hero photo section
-  const ROOM_CATS = ['Junior Suite', 'Junior Suite Tropical View', 'Junior Suite Ocean View', 
-    'Junior Suite Ocean Front', 'Junior Suite Partial Ocean View', 'Junior Suite Plunge Pool',
-    'Plunge Pool Suite', 'Preferred Club Tropical View', 'Preferred Club Ocean View', 
-    'Preferred Club Plunge Pool', 'Preferred Club Honeymoon Suite', 'Preferred Club Master Suite',
-    'Preferred Club Governor Suite', 'Preferred Club Presidential Suite', 'Governor Suite', 
-    'Presidential Suite', 'Family Suite Premium', 'Premium Deluxe', 'Premium Deluxe Ocean View',
-    'Premium Deluxe Plunge Pool', 'Sky Pool Suite'];
+  // Non-room categories — anything NOT in this list is treated as a room type.
+  // This way custom/typed-in room names (e.g. "Premium Jr Suite Pool View",
+  // "Two Bedroom Suite") still show up as rooms even though they're not in
+  // the standard dropdown list.
+  const NON_ROOM_CATS = ['Aerial View', 'Resort Exterior / Property', 'Beach & Pool',
+    'Lobby / Common Areas', 'Dining', 'Bar', 'Spa', 'Kids Club', 'Other', ''];
 
   if (!qbResortData || qbResortData.length === 0) {
     container.innerHTML = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
@@ -2637,15 +2635,15 @@ function qbRenderRooms() {
   }
 
   // Split into resort photos and room photos
-  // Hero = anything not a room type (including 'Other', 'Aerial', blank, etc.)
+  // Hero = resort-wide categories only (aerial, lobby, pool, dining, etc.)
   const resortPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return !ROOM_CATS.includes(cat);
+    return NON_ROOM_CATS.includes(cat);
   });
-  // Rooms = only recognized room categories
+  // Rooms = everything else (covers standard AND custom-typed room category names)
   const roomPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return ROOM_CATS.includes(cat);
+    return !NON_ROOM_CATS.includes(cat);
   });
 
   // ── HERO PHOTO PICKER ── (resort/property photos only)
