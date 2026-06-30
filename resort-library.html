@@ -496,6 +496,19 @@ function initProfileResortDropdown() {
   }
 }
 
+function initFilterResortDropdown() {
+  const sel = document.getElementById('filterResort');
+  const uploadSel = document.getElementById('uploadResort');
+  if (!sel || !uploadSel) return;
+  // Keep "All Resorts" as first option, then copy every resort from the upload list
+  const allOption = '<option value="">All Resorts</option>';
+  const resortOptions = Array.from(uploadSel.options)
+    .filter(o => o.value) // skip the blank "Select resort..." option
+    .map(o => `<option value="${o.value}">${o.textContent}</option>`)
+    .join('');
+  sel.innerHTML = allOption + resortOptions;
+}
+
 async function loadResortProfile() {
   const slug = document.getElementById('profileResort')?.value;
   const form = document.getElementById('profileForm');
@@ -879,6 +892,7 @@ async function saveEditPhoto() {
 // ── BOOT ──
 loadPhotos();
 initProfileResortDropdown();
+initFilterResortDropdown();
 </script>
 
 <!-- EDIT PHOTO MODAL -->
