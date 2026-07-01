@@ -2273,42 +2273,64 @@ function renderFlights(){
   const tbody=document.getElementById('flightTableBody');
   if(!currentWeddingId){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr>';return;}
   const w=weddings.find(x=>x.id===currentWeddingId);
-  // Always show flight tab regardless of flightsRequired setting
   const search=(gv('flightSearch')).toLowerCase();
   const tFilter=gv('flightTransferFilter');
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
-  const active=guests.filter(g=>g.status!=='Cancelled');
+  const active=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
   let n=0;
-  const rows=active.filter(g=>{
-    const ms=!search||(g.names||'').toLowerCase().includes(search);
+  const rowHtml=[];
+
+  active.filter(g=>{
+    const ms=!search||(g.names||'').toLowerCase().includes(search)||((g.additional||'').toLowerCase().includes(search));
     const mt=!tFilter||(fMap[g.id]?.transfer||'Not Booked')===tFilter;
     return ms&&mt;
-  }).map(g=>{
-    n++; const f=fMap[g.id]||{};
+  }).forEach(g=>{
+    const f=fMap[g.id]||{};
     const tb={Confirmed:'badge-green',Requested:'badge-yellow','Not Booked':'badge-red','N/A':'badge-muted'}[f.transfer||'Not Booked']||'badge-red';
-    const hasFlight = f.arrFlight || f.deptFlight;
-    const missingIndicator = !hasFlight ? `<span style="color:var(--red);font-size:.8rem;font-weight:700"> ● Missing</span>` : '';
-    return `<tr style="${!hasFlight?'background:#fff8f8':''}">
-      <td style="color:var(--muted)">${n}</td>
-      <td>${nameHtml(g.names)}${missingIndicator}</td>
-      <td style="white-space:nowrap">${f.arrDate?fmtDate((f.arrDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
-      <td style="color:var(--accent);font-weight:600">${esc(f.arrFlight)||'—'}</td>
-      <td>${esc(f.arrTime)||'—'}</td>
-      <td>${esc(f.arrAirport)||'—'}</td>
-      <td style="white-space:nowrap">${f.deptDate?fmtDate((f.deptDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
-      <td style="color:var(--accent);font-weight:600">${esc(f.deptFlight)||'—'}</td>
-      <td>${esc(f.deptTime)||'—'}</td>
-      <td><span class="badge ${tb}">${f.transfer||'Not Booked'}</span></td>
-      <td style="color:var(--muted);font-size:.92rem">${esc(f.notes)}</td>
-      <td class="sticky-col" style="text-align:center;padding:6px">
+    const persons=getFlightPersons(g.id);
+    let arrPersons=[], deptPersons=[];
+    try{arrPersons=f.personsArr?JSON.parse(f.personsArr):[];}catch(e){}
+    try{deptPersons=f.personsDept?JSON.parse(f.personsDept):[];}catch(e){}
+
+    persons.forEach((name, pIdx)=>{
+      n++;
+      // Use per-person data if available, fall back to main record for first person
+      const arrP = arrPersons[pIdx] || (pIdx===0&&f.arrFlight?{flight:f.arrFlight,date:f.arrDate||'',time:f.arrTime||'',airport:f.arrAirport||''}:{});
+      const deptP = deptPersons[pIdx] || (pIdx===0&&f.deptFlight?{flight:f.deptFlight,date:f.deptDate||'',time:f.deptTime||''}:{});
+      const hasFlight = arrP.flight || deptP.flight;
+      const missingIndicator = !hasFlight ? `<span style="color:var(--red);font-size:.8rem;font-weight:700"> ● Missing</span>` : '';
+      // Show room label as subtle indent for additional persons
+      const nameDisplay = pIdx===0
+        ? `${nameHtml(name)}${missingIndicator}`
+        : `<span style="color:var(--muted);font-size:.85rem;padding-left:12px">↳ ${esc(name)}</span>${missingIndicator}`;
+      const arrDate = (arrP.date||'').replace(/T.*/,'').replace(/ .*/,'').trim();
+      const deptDate = (deptP.date||'').replace(/T.*/,'').replace(/ .*/,'').trim();
+      // Only show transfer/action buttons on first person row for the reservation
+      const actionCell = pIdx===0 ? `
         <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
           ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:#aaa;font-size:.75rem">No email</span>`}
           <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#1a1a1a;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-  tbody.innerHTML=rows||'<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>No guests yet</p></div></td></tr>';
+        </div>` : '';
+      const transferCell = pIdx===0 ? `<span class="badge ${tb}">${f.transfer||'Not Booked'}</span>` : '';
+      const notesCell = pIdx===0 ? esc(f.notes) : '';
+      rowHtml.push(`<tr style="${!hasFlight?'background:#fff8f8':pIdx>0?'background:var(--surface2)':''}">
+        <td style="color:var(--muted)">${pIdx===0?n:''}</td>
+        <td>${nameDisplay}</td>
+        <td style="white-space:nowrap">${arrDate?fmtDate(arrDate):'—'}</td>
+        <td style="color:var(--accent);font-weight:600">${esc(arrP.flight)||'—'}</td>
+        <td>${esc(arrP.time)||'—'}</td>
+        <td>${esc(arrP.airport||'')||'—'}</td>
+        <td style="white-space:nowrap">${deptDate?fmtDate(deptDate):'—'}</td>
+        <td style="color:var(--accent);font-weight:600">${esc(deptP.flight)||'—'}</td>
+        <td>${esc(deptP.time)||'—'}</td>
+        <td>${transferCell}</td>
+        <td style="color:var(--muted);font-size:.92rem">${notesCell}</td>
+        <td class="sticky-col" style="text-align:center;padding:6px">${actionCell}</td>
+      </tr>`);
+    });
+  });
+
+  tbody.innerHTML=rowHtml.join('')||'<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>No guests yet</p></div></td></tr>';
 }
 
 function openFlightModal(guestId){
