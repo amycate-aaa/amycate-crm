@@ -369,11 +369,11 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>#</th><th>Res #</th><th>Guest(s)</th><th>Arr Date</th><th>Arr Flight</th><th>Arrives</th><th>Airport</th>
+            <th>#</th><th>Res #</th><th>Guest(s)</th><th>Arr Date</th><th>Arr Flight</th><th>Arrives</th>
             <th>Dept Date</th><th>Dept Flight</th><th>Departs</th><th>Transfer</th><th>Notes</th>
             <th class="sticky-col"></th>
           </tr></thead>
-          <tbody id="flightTableBody"><tr><td colspan="13"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr></tbody>
+          <tbody id="flightTableBody"><tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr></tbody>
         </table>
       </div>
     </div>
@@ -761,11 +761,11 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>#</th><th>Res #</th><th>Guest(s)</th><th>Arr Date</th><th>Arr Flight</th><th>Arrives</th><th>Airport</th>
+              <th>#</th><th>Res #</th><th>Guest(s)</th><th>Arr Date</th><th>Arr Flight</th><th>Arrives</th>
               <th>Dept Date</th><th>Dept Flight</th><th>Departs</th><th>Transfer</th><th>Notes</th>
               <th class="sticky-col"></th>
             </tr></thead>
-            <tbody id="detailFlightBody"><tr><td colspan="13"><div class="empty-state"><div class="icon">✈️</div><p>No flights yet</p></div></td></tr></tbody>
+            <tbody id="detailFlightBody"><tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>No flights yet</p></div></td></tr></tbody>
           </table>
         </div>
       </div>
@@ -2271,7 +2271,7 @@ async function loadFlights(weddingId){
 
 function renderFlights(){
   const tbody=document.getElementById('flightTableBody');
-  if(!currentWeddingId){tbody.innerHTML='<tr><td colspan="13"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr>';return;}
+  if(!currentWeddingId){tbody.innerHTML='<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>Select a wedding above</p></div></td></tr>';return;}
   const w=weddings.find(x=>x.id===currentWeddingId);
   const search=(gv('flightSearch')).toLowerCase();
   const tFilter=gv('flightTransferFilter');
@@ -2320,7 +2320,6 @@ function renderFlights(){
         <td style="white-space:nowrap">${arrDate?fmtDate(arrDate):'—'}</td>
         <td style="color:var(--accent);font-weight:600">${esc(arrP.flight)||'—'}</td>
         <td>${esc(arrP.time)||'—'}</td>
-        <td>${esc(arrP.airport||'')||'—'}</td>
         <td style="white-space:nowrap">${deptDate?fmtDate(deptDate):'—'}</td>
         <td style="color:var(--accent);font-weight:600">${esc(deptP.flight)||'—'}</td>
         <td>${esc(deptP.time)||'—'}</td>
@@ -2331,7 +2330,7 @@ function renderFlights(){
     });
   });
 
-  tbody.innerHTML=rowHtml.join('')||'<tr><td colspan="13"><div class="empty-state"><div class="icon">✈️</div><p>No guests yet</p></div></td></tr>';
+  tbody.innerHTML=rowHtml.join('')||'<tr><td colspan="12"><div class="empty-state"><div class="icon">✈️</div><p>No guests yet</p></div></td></tr>';
 }
 
 function openFlightModal(guestId){
@@ -3721,7 +3720,6 @@ function renderDetailFlights(){
       <td style="white-space:nowrap">${f.arrDate?fmtDate((f.arrDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
       <td style="color:var(--accent);font-weight:600">${esc(f.arrFlight)||'—'}</td>
       <td>${esc(f.arrTime)||'—'}</td>
-      <td>${esc(f.arrAirport)||'—'}</td>
       <td style="white-space:nowrap">${f.deptDate?fmtDate((f.deptDate||'').replace(/T.*/,'').replace(/ .*/,'').trim()||null):'—'}</td>
       <td style="color:var(--accent);font-weight:600">${esc(f.deptFlight)||'—'}</td>
       <td>${esc(f.deptTime)||'—'}</td>
@@ -4205,10 +4203,7 @@ function flightPersonSection(name, idx, type, defaultDate, existingData){
         <label>${isArr?'Arrives':'Departs'} At</label>
         <input type="text" id="${prefix}-time" value="${time}" placeholder="">
       </div>
-      <div class="form-group">
-        <label>Airport</label>
-        <input type="text" id="${prefix}-airport" value="${airport}" placeholder="">
-      </div>
+      
     </div>
   </div>`;
 }
@@ -4299,7 +4294,7 @@ function parseFlightCode(code){
 function copyFlightFromAbove(type, idx){
   if(idx===0) return;
   const prev = idx-1;
-  const fields = ['date','flight','time','airport','airline','flightnum'];
+  const fields = ['date','flight','time','airline','flightnum'];
   fields.forEach(f=>{
     const from = document.getElementById(`f-${type}-${prev}-${f}`);
     const to = document.getElementById(`f-${type}-${idx}-${f}`);
@@ -4581,7 +4576,6 @@ ${(()=>{
       + '<td>'+(f.arrDate?fmtD(f.arrDate):'<span class="no-flight">Not provided</span>')+'</td>'
       + '<td>'+(f.arrFlight?'<span class="flight-num">'+f.arrFlight+'</span>':'<span class="no-flight">—</span>')+'</td>'
       + '<td>'+(f.arrTime||'—')+'</td>'
-      + '<td>'+(f.arrAirport||'—')+'</td>'
       + '<td>'+(deptHtml||'<span class="no-flight">Not provided</span>')+'</td>'
       + '</tr>';
   }).join('');
@@ -4590,7 +4584,7 @@ ${(()=>{
     + '<table>'
     + '<thead><tr>'
     + '<th>Guest(s) / Booking #</th><th>Res #</th><th>Room Type</th>'
-    + '<th>Arrival Date</th><th>Arr Flight</th><th>Arrives At</th><th>Airport</th>'
+    + '<th>Arrival Date</th><th>Arr Flight</th><th>Arrives At</th>'
     + '<th>Departure(s)</th>'
     + '</tr></thead>'
     + '<tbody>'+(roomRows||'<tr><td colspan="8">No flight data yet</td></tr>')+'</tbody>'
