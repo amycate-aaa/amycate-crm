@@ -2276,7 +2276,7 @@ function renderFlights(){
   const search=(gv('flightSearch')).toLowerCase();
   const tFilter=gv('flightTransferFilter');
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
-  const active=guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const active=guests.filter(g=>g.status!=='Cancelled');
   let n=0;
   const rowHtml=[];
 
