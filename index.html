@@ -1429,6 +1429,7 @@ function showTab(name){
 let weddings=[], guests=[], flights=[], docs=[], leads=[];
 let currentWeddingId=null;
 let editGuestId=null, editFlightId=null, editDocId=null, editWeddingId=null, editLeadId=null;
+let currentFlightGuestId=null;
 let payTargetId=null;
 
 // ── INIT ──
@@ -2313,6 +2314,7 @@ function renderFlights(){
 function openFlightModal(guestId){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editFlightId=null;
+  currentFlightGuestId=guestId||null;
   // Load existing flight data if available
   const fMap={}; flights.forEach(f=>fMap[f.guestId]=f);
   const existingFlight = guestId ? fMap[guestId] : null;
@@ -2325,7 +2327,11 @@ function openFlightModal(guestId){
 }
 
 async function saveFlight(){
-  const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const allWGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  // Only save the guest(s) whose form sections are actually rendered in the modal
+  const wGuests = currentFlightGuestId
+    ? allWGuests.filter(g=>g.id===currentFlightGuestId)
+    : allWGuests;
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
   const transfer = gv('f-transfer');
   const notes = gv('f-notes');
@@ -4301,7 +4307,7 @@ async function lookupFlightFor(type, idx){
         const timeEl=document.getElementById(`${prefix}-time`);
         if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        const apiDate=arr.scheduledTime.local.split('T')[0];
+        const apiDate=(arr.scheduledTime.local||'').split('T')[0].split(' ')[0];
         if(dateEl&&apiDate)dateEl.value=apiDate;
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+( arr.airport?.name||arr.airport?.iata||'');}
@@ -4312,7 +4318,7 @@ async function lookupFlightFor(type, idx){
         const timeEl=document.getElementById(`${prefix}-time`);
         if(timeEl)timeEl.value=t.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
         const dateEl=document.getElementById(`${prefix}-date`);
-        const apiDate=dept.scheduledTime.local.split('T')[0];
+        const apiDate=(dept.scheduledTime.local||'').split('T')[0].split(' ')[0];
         if(dateEl&&apiDate)dateEl.value=apiDate;
       }
       if(resultEl){resultEl.style.color='#1a4a1a';resultEl.textContent='✓ Found: '+(flight.departure?.airport?.name||'');}
