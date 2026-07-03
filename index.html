@@ -2797,11 +2797,13 @@ function qbRenderRooms() {
 
     roomsHtml += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-photo-group="qb-room-photo-${cat.replace(/\s+/g,'-')}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
-        <input class="qb-room-label form-input" value="${cat}" placeholder="Room name (editable)" style="flex:1;padding:6px 10px;font-size:.88rem;font-weight:600;">
-        <button type="button" onclick="qbCopyGalleryLink(this,'${galleryUrl}')" title="Copy shareable carousel link for this room" style="flex-shrink:0;white-space:nowrap;padding:6px 10px;background:#fff;color:var(--navy);border:1px solid #c9a96e;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;">&#128279; Gallery Link</button>
+        <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-photo-group="qb-room-photo-${cat.replace(/\s+/g,'-')}" style="width:16px;height:16px;cursor:pointer;flex-shrink:0;" onchange="qbCheckReady()">
+        <input class="qb-room-label form-input" value="${cat}" placeholder="Room name (editable)" style="flex:1;min-width:0;padding:6px 10px;font-size:.88rem;font-weight:600;">
       </div>
       ${photos.length > 0 ? `<div style="margin-bottom:8px;">${photoOptions}</div>` : ''}
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+        <button type="button" onclick="qbCopyGalleryLink(this,'${galleryUrl}')" title="Copy shareable carousel link for this room (all its photos)" style="white-space:nowrap;padding:6px 12px;background:#fff;color:var(--navy);border:1px solid #c9a96e;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;">&#128279; Copy Gallery Link</button>
+      </div>
       ${pricingHtml}
     </div>`;
   });
