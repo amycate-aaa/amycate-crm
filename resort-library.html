@@ -943,7 +943,7 @@ async function saveEditPhoto() {
 }
 
 // ── BOOT ──
-loadPhotos();
+loadPhotos().then(checkGalleryParams);
 initProfileResortDropdown();
 initFilterResortDropdown();
 
