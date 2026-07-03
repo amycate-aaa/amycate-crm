@@ -804,13 +804,15 @@ function renderGallery(photos) {
   let html = '';
   Object.values(groups).forEach(g => {
     const galleryUrl = location.origin + location.pathname + '?gallery=' + encodeURIComponent(g.resort) + '&cat=' + encodeURIComponent(g.cat);
-    const photosJsonStr = JSON.stringify(JSON.stringify(g.photos));
+    const gid = 'grp_' + Math.random().toString(36).slice(2,8);
+    // Store data on a hidden element to avoid escaping hell
     html += `<div style="grid-column:1/-1;" class="cat-group-header">
       <span class="cat-group-resort">${escHtml(g.resortName)}</span>
       <span class="cat-group-title">&mdash; ${escHtml(g.cat)}</span>
       <span class="cat-divider"></span>
-      <button class="gallery-link-btn" onclick="openGalleryViewer(${photosJsonStr}, ${JSON.stringify(g.cat)}, ${JSON.stringify(g.resortName)}, ${JSON.stringify(galleryUrl)})">&#128247; View Gallery</button>
-      <button class="gallery-link-btn" onclick="copyTextToClipboard(${JSON.stringify(galleryUrl)}, this)">&#128203; Copy Link</button>
+      <button class="gallery-link-btn" data-gid="${gid}" onclick="openGalleryFromGroup(this)">&#128247; View Gallery</button>
+      <button class="gallery-link-btn" data-url="${escAttr(galleryUrl)}" onclick="copyTextToClipboard(this.dataset.url, this)">&#128203; Copy Link</button>
+      <script type="application/json" id="${gid}">${JSON.stringify({photos: g.photos, cat: g.cat, resortName: g.resortName, url: galleryUrl})}<\/script>
     </div>`;
     g.photos.forEach(p => {
       html += `
@@ -947,6 +949,12 @@ initFilterResortDropdown();
 
 // ── GALLERY VIEWER ──
 let gvPhotos = [], gvIdx = 0, gvUrl = '';
+
+function openGalleryFromGroup(btn) {
+  const gid = btn.dataset.gid;
+  const data = JSON.parse(document.getElementById(gid).textContent);
+  openGalleryViewer(JSON.stringify(data.photos), data.cat, data.resortName, data.url);
+}
 
 function openGalleryViewer(photosJson, cat, resortName, galleryUrl) {
   gvPhotos = JSON.parse(photosJson);
