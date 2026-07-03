@@ -2839,6 +2839,31 @@ function qbCopyGalleryLink(btn, url){
   }).catch(()=>{ if (typeof showToast === 'function') showToast('Could not copy link.', 'red'); });
 }
 
+// Build an email-safe photo collage (table of static images) from a room's photos.
+// Adapts to count: 1 full-width, 2 side-by-side, 3 across, 2x2 for four, 3x2 for five/six.
+function qbPhotoCollage(urls){
+  const u = (urls||[]).filter(Boolean).slice(0,6);
+  const n = u.length;
+  if (n === 0) return '';
+  if (n === 1){
+    return `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${u[0]}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>`;
+  }
+  const cell = (src,w,h) => `<td width="${w}" style="padding:0;line-height:0;font-size:0;border:2px solid #FFFFFF;"><img src="${src}" width="100%" height="${h}" style="width:100%;height:${h}px;object-fit:cover;display:block;" alt=""/></td>`;
+  const blank = (w) => `<td width="${w}" style="padding:0;"></td>`;
+  let inner = '';
+  if (n === 2){
+    inner = `<tr>${cell(u[0],'50%',180)}${cell(u[1],'50%',180)}</tr>`;
+  } else if (n === 3){
+    inner = `<tr>${cell(u[0],'34%',150)}${cell(u[1],'33%',150)}${cell(u[2],'33%',150)}</tr>`;
+  } else if (n === 4){
+    inner = `<tr>${cell(u[0],'50%',130)}${cell(u[1],'50%',130)}</tr><tr>${cell(u[2],'50%',130)}${cell(u[3],'50%',130)}</tr>`;
+  } else {
+    inner = `<tr>${cell(u[0],'34%',120)}${cell(u[1],'33%',120)}${cell(u[2],'33%',120)}</tr>`
+          + `<tr>${cell(u[3],'34%',120)}${cell(u[4],'33%',120)}${u[5]?cell(u[5],'33%',120):blank('33%')}</tr>`;
+  }
+  return `<tr><td style="padding:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:520px;border-collapse:collapse;table-layout:fixed;">${inner}</table></td></tr>`;
+}
+
 function qbAddCustomRoom() {
   const container = document.getElementById('qb-rooms-container');
   const div = document.createElement('div');
@@ -3010,7 +3035,15 @@ function qbGenerate() {
     const perPersonFmt = perPersonNum > 0 ? '$' + perPersonNum.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : (rateRaw || '');
     const displayRate = hasKidsMode ? (costRaw ? '$' + costRaw + ' total' : '') : perPersonFmt;
     const costFmt = costRaw ? '$' + parseFloat(costRaw).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
-    checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost: costFmt, notes});
+    // Gather ALL photos for this room (selected one first) for the collage
+    const roomKey = cb.dataset.cat || '';
+    const orderedPhotos = [];
+    if (selectedPhoto) orderedPhotos.push(selectedPhoto);
+    (qbResortData || [])
+      .filter(p => (p.category || p.roomCategory || '') === roomKey)
+      .map(p => p.url || p.downloadURL)
+      .forEach(u => { if (u && !orderedPhotos.includes(u)) orderedPhotos.push(u); });
+    checkedRooms.push({cat, url: selectedPhoto, photos: orderedPhotos, rate: displayRate, cost: costFmt, notes});
   });
   // Greeting
   let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
@@ -3027,7 +3060,7 @@ function qbGenerate() {
 
   // Build resort cards
   let cards = checkedRooms.map(r => {
-    const photoRow = r.url ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
+    const photoRow = qbPhotoCollage(r.photos && r.photos.length ? r.photos : (r.url ? [r.url] : []));
     const roomLink = bookingLink || '#';
     const descText = resortDesc || r.notes || '&nbsp;';
     const footerText = highlights || `${r.cost ? 'Total: ' + r.cost : ''} ${r.rate ? '&nbsp;&middot;&nbsp; ' + r.rate + ' per person' : ''} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
