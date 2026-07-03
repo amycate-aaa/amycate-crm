@@ -505,8 +505,9 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
             <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Guest</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div style="grid-column:1/-1"><label class="form-label">Guest Name(s) *</label><input id="qb-name" class="form-input" placeholder="e.g. Tia Hatcher" oninput="qbCheckReady()"></div>
+              <div style="grid-column:1/-1"><label class="form-label">1st Guest Name *</label><input id="qb-name" class="form-input" placeholder="e.g. Tia Hatcher" oninput="qbCheckReady()"></div>
               <div id="qb-guest2-wrap" style="display:none;grid-column:1/-1"><label class="form-label">2nd Guest Name</label><input id="qb-name2" class="form-input" placeholder="e.g. Brenesha Perkins"></div>
+              <div id="qb-guest3-wrap" style="display:none;grid-column:1/-1"><label class="form-label">3rd Guest Name</label><input id="qb-name3" class="form-input" placeholder="e.g. Jordan Smith"></div>
               <div><label class="form-label">Occupancy</label>
                 <select id="qb-occ" class="form-input" onchange="qbUpdateHints(); qbToggleGuest2()">
                   <option value="1">Single (1 guest)</option>
@@ -2607,13 +2608,14 @@ function qbClearForm() {
   qbResortData = null;
 
   // Reset guest fields
-  ['qb-name','qb-name2','qb-intro','qb-location','qb-desc-text','qb-highlights',
+  ['qb-name','qb-name2','qb-name3','qb-intro','qb-location','qb-desc-text','qb-highlights',
    'qb-booking-link','qb-checkin','qb-checkout','qb-event'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
   const occ = document.getElementById('qb-occ');
   if (occ) occ.value = '2';
+  qbToggleGuest2();
   const greeting = document.getElementById('qb-greeting');
   if (greeting) greeting.value = 'standard';
   const nights = document.getElementById('qb-nights');
@@ -2894,8 +2896,10 @@ function qbCalcRoomRate(costInput) {
 
 function qbToggleGuest2() {
   const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
-  const wrap = document.getElementById('qb-guest2-wrap');
-  if (wrap) wrap.style.display = occ >= 2 ? 'block' : 'none';
+  const wrap2 = document.getElementById('qb-guest2-wrap');
+  const wrap3 = document.getElementById('qb-guest3-wrap');
+  if (wrap2) wrap2.style.display = occ >= 2 ? 'block' : 'none';
+  if (wrap3) wrap3.style.display = occ >= 3 ? 'block' : 'none';
 }
 
 function qbToggleKids() {
@@ -2978,9 +2982,16 @@ function qbUpdateHints() {
 function qbGenerate() {
   const resortSlug = document.getElementById('qb-resort')?.value;
   const resortName = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || resortSlug;
+  const occCount  = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const guestName  = document.getElementById('qb-name')?.value?.trim();
-  const guestName2 = document.getElementById('qb-name2')?.value?.trim();
-  const fullNames  = guestName2 ? `${guestName} &amp; ${guestName2}` : guestName;
+  const guestNames = [
+    document.getElementById('qb-name')?.value,
+    document.getElementById('qb-name2')?.value,
+    document.getElementById('qb-name3')?.value
+  ].slice(0, occCount).map(s => (s || '').trim()).filter(Boolean);
+  const fullNames = guestNames.length <= 1
+    ? (guestNames[0] || guestName || '')
+    : guestNames.slice(0, -1).join(', ') + ' &amp; ' + guestNames[guestNames.length - 1];
   const checkin    = document.getElementById('qb-checkin')?.value;
   const checkout   = document.getElementById('qb-checkout')?.value;
   const nights     = document.getElementById('qb-nights')?.value || '?';
