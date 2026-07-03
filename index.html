@@ -2999,19 +2999,18 @@ function qbGenerate() {
     // Build photo carousel (shows all photos for this room category)
     let photoRow = '';
     if (r.allUrls && r.allUrls.length > 1) {
-      const cid = 'carousel_' + Math.random().toString(36).slice(2,8);
-      const imgs = r.allUrls.map((u,i) => `<img src="${u}" style="width:100%;height:180px;object-fit:cover;display:${i===0?'block':'none'};position:${i===0?'relative':'absolute'};top:0;left:0;" data-ci="${i}" alt=""/>`).join('');
-      const dots = r.allUrls.map((_,i) => `<span onclick="qbCarousel('${cid}',${i})" id="${cid}_d${i}" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${i===0?'#B8973A':'rgba(255,255,255,0.5)'};margin:0 3px;cursor:pointer;transition:background .2s;"></span>`).join('');
-      photoRow = `<tr><td style="padding:0;line-height:0;font-size:0;position:relative;">
-  <div id="${cid}" style="position:relative;width:100%;height:180px;overflow:hidden;background:#111;">
-    ${imgs}
-    <button onclick="qbCarousel('${cid}',-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;z-index:10;line-height:1;">&#8249;</button>
-    <button onclick="qbCarousel('${cid}',1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:16px;cursor:pointer;z-index:10;line-height:1;">&#8250;</button>
-    <div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:10;">${dots}</div>
-  </div>
-</td></tr>`;
+      const cid = 'c' + Math.random().toString(36).slice(2,9);
+      const urlsJson = JSON.stringify(r.allUrls).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
+      const imgTags = r.allUrls.map((u,i) => '<img src=' + JSON.stringify(u) + ' data-cid=' + JSON.stringify(cid) + ' data-ci="' + i + '" style="width:100%;height:180px;object-fit:cover;display:' + (i===0?'block':'none') + ';position:' + (i===0?'relative':'absolute') + ';top:0;left:0;" alt=""/>').join('');
+      const dotTags = r.allUrls.map((_,i) => '<span data-cid=' + JSON.stringify(cid) + ' data-ci="' + i + '" data-dot="1" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + (i===0?'#B8973A':'rgba(255,255,255,0.5)') + ';margin:0 3px;cursor:pointer;"></span>').join('');
+      photoRow = '<tr><td style="padding:0;line-height:0;font-size:0;"><div id="' + cid + '" data-carousel="1" data-cur="0" data-total="' + r.allUrls.length + '" style="position:relative;width:100%;height:180px;overflow:hidden;background:#111;">' +
+        imgTags +
+        '<button data-cid="' + cid + '" data-dir="-1" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:18px;cursor:pointer;z-index:10;line-height:1;">&#8249;</button>' +
+        '<button data-cid="' + cid + '" data-dir="1" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:18px;cursor:pointer;z-index:10;line-height:1;">&#8250;</button>' +
+        '<div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:10;" id="' + cid + '_dots">' + dotTags + '</div>' +
+        '</div></td></tr>';
     } else if (r.url) {
-      photoRow = `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>`;
+      photoRow = '<tr><td style="padding:0;line-height:0;font-size:0;"><img src=' + JSON.stringify(r.url) + ' width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>';
     }
     const roomLink = bookingLink || '#';
     const descText = resortDesc || r.notes || '&nbsp;';
@@ -3101,18 +3100,26 @@ ${paymentHtml}
 
 </table>
 <script>
-function qbCarousel(cid,dir){
-  const wrap=document.getElementById(cid);
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-dir]');
+  var dot=e.target.closest('[data-dot]');
+  var el=btn||dot;
+  if(!el)return;
+  var cid=el.getAttribute('data-cid');
+  var wrap=document.getElementById(cid);
   if(!wrap)return;
-  const imgs=wrap.querySelectorAll('img[data-ci]');
-  const n=imgs.length;
-  let cur=[...imgs].findIndex(img=>img.style.display!=='none');
+  var imgs=wrap.querySelectorAll('img[data-ci]');
+  var n=imgs.length;
+  var cur=0;
+  for(var i=0;i<imgs.length;i++){if(imgs[i].style.display!=='none'){cur=i;break;}}
   imgs[cur].style.display='none';imgs[cur].style.position='absolute';
-  const dc=document.getElementById(cid+'_d'+cur);if(dc)dc.style.background='rgba(255,255,255,0.5)';
-  let next=dir===-1?(cur-1+n)%n:dir===1?(cur+1)%n:dir;
+  var dotsEl=document.getElementById(cid+'_dots');
+  if(dotsEl){var dots=dotsEl.querySelectorAll('[data-dot]');if(dots[cur])dots[cur].style.background='rgba(255,255,255,0.5)';}
+  var dir=btn?parseInt(btn.getAttribute('data-dir')):parseInt(dot.getAttribute('data-ci'));
+  var next=btn?(dir===-1?(cur-1+n)%n:(cur+1)%n):dir;
   imgs[next].style.display='block';imgs[next].style.position='relative';
-  const dn=document.getElementById(cid+'_d'+next);if(dn)dn.style.background='#B8973A';
-}
+  if(dotsEl){var dots2=dotsEl.querySelectorAll('[data-dot]');if(dots2[next])dots2[next].style.background='#B8973A';}
+});
 </script>
 </body></html>\`;
 
