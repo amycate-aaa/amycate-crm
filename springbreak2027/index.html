@@ -792,7 +792,7 @@ function updateTravelerNames() {
   const container = document.getElementById('traveler-name-fields');
   if (count >= 2) {
     block.style.display = 'block';
-    container.innerHTML = '';
+    container.innerHTML = '<div style="background:#fef3c7;border:1.5px solid #fcd34d;border-radius:10px;padding:10px 14px;margin-bottom:14px;font-size:.84rem;color:#92400e;">Amy must have the full name of every person in the room to pull an accurate quote. Please enter first and last name for each traveler.</div>';
     for (let i = 1; i <= count; i++) {
       const label = i === 1 ? 'Traveler 1 (You)' : 'Traveler ' + i;
       const placeholder = i === 1 ? 'Your full name' : 'Full name of traveler ' + i;
