@@ -5254,12 +5254,17 @@ async function loadInbox(){
 
   // Merge cleared/read state saved on the backend (survives across devices & incognito)
   try{
-    const metaDoc = await db.collection('crmMeta').doc('inbox').get();
-    if(metaDoc.exists && Array.isArray(metaDoc.data().readIds)){
-      metaDoc.data().readIds.forEach(id => _inboxReadIds.add(id));
-      localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+    const metaRef = db.collection('crmMeta').doc('inbox');
+    const metaDoc = await metaRef.get();
+    const backendIds = (metaDoc.exists && Array.isArray(metaDoc.data().readIds)) ? metaDoc.data().readIds : [];
+    backendIds.forEach(id => _inboxReadIds.add(id));
+    // Push any locally-cleared ids not yet on the backend (one-time migration + safety)
+    const localOnly = [..._inboxReadIds].filter(id => !backendIds.includes(id));
+    if(localOnly.length){
+      metaRef.set({ readIds: firebase.firestore.FieldValue.arrayUnion(...localOnly) }, {merge:true});
     }
-  } catch(e){ console.log('Inbox read-state load error:', e.message); }
+    localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+  } catch(e){ console.log('Inbox read-state sync error:', e.message); }
 
   _inboxItems = items;
   renderInbox();
