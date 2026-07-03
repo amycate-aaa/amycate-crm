@@ -7,7 +7,9 @@
 /resort-library.html    /resort-library.html      200
 /briones/*              /briones/index.html       200
 /ticoya/*               /ticoya/index.html        200
+/springbreak2027/*      /springbreak2027/index.html  200
 
 # Anything else that doesn't match a real file gets a clean 404 —
 # never silently serve the CRM dashboard for a missing/mistyped path.
 /*                      /404.html                 404
+
