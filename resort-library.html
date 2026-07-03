@@ -93,6 +93,20 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .delete-btn{background:#1e1e1e;border:1px solid #333;border-radius:5px;color:#555;font-size:.72rem;padding:5px 8px;cursor:pointer;font-family:inherit;transition:all .15s}
 .delete-btn:hover{background:#c0392b;color:white;border-color:#c0392b}
 
+/* ── ROOM GROUPS ── */
+.room-group{grid-column:1/-1;background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px 18px}
+.room-group-header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #262626}
+.room-group-title{font-size:1rem;color:#e8e8e8;font-weight:600;margin-top:2px}
+.room-group-count{font-size:.72rem;color:#666;font-weight:400;margin-left:8px}
+.room-group-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-gallery{background:#f0c958;color:#111;border:none;border-radius:6px;font-size:.78rem;font-weight:700;padding:8px 14px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn-gallery:hover{background:#e8b83a}
+.btn-gallery.copied{background:#27ae60;color:#fff}
+.btn-gallery-open{background:#222;color:#ccc;border:1px solid #333;border-radius:6px;font-size:.78rem;font-weight:600;padding:8px 12px;cursor:pointer;font-family:inherit;text-decoration:none;white-space:nowrap;transition:all .15s}
+.btn-gallery-open:hover{background:#2a2a2a;color:#fff;border-color:#555}
+.room-group-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.room-group .photo-card img{height:120px}
+
 /* ── EMPTY STATE ── */
 .empty-state{text-align:center;padding:60px 20px;color:#444}
 .empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
@@ -764,22 +778,51 @@ function renderGallery(photos) {
     return;
   }
 
-  grid.innerHTML = photos.map(p => `
-    <div class="photo-card" id="card_${p.id}">
-      <img src="${escHtml(p.downloadURL)}" alt="${escHtml(p.roomCategory)}" loading="lazy"
-           onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'220\\' height=\\'160\\'%3E%3Crect fill=\\'%23222\\' width=\\'220\\' height=\\'160\\'/%3E%3Ctext x=\\'110\\' y=\\'85\\' text-anchor=\\'middle\\' fill=\\'%23444\\' font-size=\\'12\\'%3ENo preview%3C/text%3E%3C/svg%3E'">
-      <div class="photo-card-body">
-        <div class="photo-resort">${escHtml(p.resortName || p.resortSlug)}</div>
-        <div class="photo-category">${escHtml(p.roomCategory)}</div>
-        ${p.caption ? `<div class="photo-caption">${escHtml(p.caption)}</div>` : ''}
-        <div class="photo-actions">
-          <button class="copy-btn" onclick="copyURL('${p.id}','${escAttr(p.downloadURL)}')" id="copy_${p.id}">&#128203; Copy URL</button>
-          <button class="copy-btn" onclick="openEditPhoto('${p.id}')">&#9999; Edit</button>
-          <button class="delete-btn" onclick="deletePhoto('${p.id}','${escAttr(p.storagePath)}')">&#128465;</button>
+  // Group photos by resort + room category so each ROOM = one shareable gallery link
+  const groups = {};
+  photos.forEach(p => {
+    const slug = p.resortSlug || p.resort || '';
+    const cat  = p.roomCategory || p.category || '';
+    const key  = slug + '|||' + cat;
+    if (!groups[key]) groups[key] = { slug, cat, resortName: p.resortName || slug, photos: [] };
+    groups[key].photos.push(p);
+  });
+
+  grid.innerHTML = Object.values(groups).map(g => {
+    const n = g.photos.length;
+    const galleryUrl = `https://amy-cate.com/gallery?gallery=${encodeURIComponent(g.slug)}&cat=${encodeURIComponent(g.cat)}`;
+
+    const photoCards = g.photos.map(p => `
+      <div class="photo-card" id="card_${p.id}">
+        <img src="${escHtml(p.downloadURL)}" alt="${escHtml(p.roomCategory)}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'220\\' height=\\'160\\'%3E%3Crect fill=\\'%23222\\' width=\\'220\\' height=\\'160\\'/%3E%3Ctext x=\\'110\\' y=\\'85\\' text-anchor=\\'middle\\' fill=\\'%23444\\' font-size=\\'12\\'%3ENo preview%3C/text%3E%3C/svg%3E'">
+        <div class="photo-card-body">
+          ${p.caption ? `<div class="photo-caption">${escHtml(p.caption)}</div>` : ''}
+          <div class="photo-actions">
+            <button class="copy-btn" onclick="copyURL('${p.id}','${escAttr(p.downloadURL)}')" id="copy_${p.id}">&#128203; URL</button>
+            <button class="copy-btn" onclick="openEditPhoto('${p.id}')">&#9999; Edit</button>
+            <button class="delete-btn" onclick="deletePhoto('${p.id}','${escAttr(p.storagePath)}')">&#128465;</button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `).join('');
+
+    return `
+      <div class="room-group">
+        <div class="room-group-header">
+          <div>
+            <div class="photo-resort">${escHtml(g.resortName)}</div>
+            <div class="room-group-title">${escHtml(g.cat)}<span class="room-group-count">${n} photo${n!==1?'s':''}</span></div>
+          </div>
+          <div class="room-group-actions">
+            <button class="btn-gallery" onclick="copyGalleryLink(this,'${escAttr(galleryUrl)}')">&#128279; Copy Gallery Link</button>
+            <a class="btn-gallery-open" href="${escAttr(galleryUrl)}" target="_blank" rel="noopener">Preview &#8599;</a>
+          </div>
+        </div>
+        <div class="room-group-photos">${photoCards}</div>
+      </div>
+    `;
+  }).join('');
 }
 
 // ── COPY URL ──
@@ -794,6 +837,20 @@ async function copyURL(id, url) {
       btn.className = 'copy-btn';
     }, 2000);
   } catch { toast('Could not copy to clipboard.', 'error'); }
+}
+
+// ── COPY GALLERY LINK (one URL → all photos for this room, as a carousel) ──
+async function copyGalleryLink(btn, url) {
+  try {
+    await navigator.clipboard.writeText(url);
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    toast('Gallery link copied &mdash; paste it anywhere.', 'success');
+  } catch {
+    toast('Could not copy. Link: ' + url, 'error');
+  }
 }
 
 // ── DELETE ──
