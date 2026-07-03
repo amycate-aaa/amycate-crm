@@ -219,7 +219,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .form-textarea { resize: vertical; min-height: 90px; }
 .checkbox-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
 .checkbox-item { display: flex; align-items: center; gap: 9px; }
-.checkbox-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
+.checkbox-item input[type="checkbox"], .checkbox-item input[type="radio"] { width: 18px; height: 18px; accent-color: var(--teal); flex-shrink: 0; cursor: pointer; }
 .checkbox-item label { font-size: .9rem; color: var(--text); cursor: pointer; }
 .form-divider { border: none; border-top: 1.5px dashed #bae6fd; margin: 28px 0; }
 .form-submit {
@@ -737,6 +737,25 @@ footer a { color: var(--gold2); text-decoration: none; }
  </div>
 
  <div class="form-row">
+ <label class="form-label">Bed Preference</label>
+ <div class="checkbox-grid" style="margin-top:6px;grid-template-columns:1fr 1fr;">
+   <div class="checkbox-item">
+     <input type="radio" id="bed_king" name="bed_preference" value="King bed">
+     <label for="bed_king">King bed</label>
+   </div>
+   <div class="checkbox-item">
+     <input type="radio" id="bed_double" name="bed_preference" value="Double / Queen beds">
+     <label for="bed_double">Double / Queen beds</label>
+   </div>
+   <div class="checkbox-item">
+     <input type="radio" id="bed_either" name="bed_preference" value="Either is fine">
+     <label for="bed_either">Either is fine</label>
+   </div>
+ </div>
+ <p class="form-note">Not all room types offer both options &mdash; Amy will confirm availability.</p>
+ </div>
+
+ <div class="form-row">
  <label class="form-label" for="notes">Questions or Notes for Amy</label>
  <textarea class="form-textarea" id="notes" name="notes" placeholder="Anything else? Special requests, questions, budget range, etc."></textarea>
  </div>
@@ -862,6 +881,8 @@ async function submitQuoteForm() {
  formData.append('trip_dates', 'March 22-26, 2027 - Dreams Onyx Punta Cana DR');
  formData.append('room_preference', rooms.join(', '));
  formData.append('num_travelers', travelers);
+ const bedPref = document.querySelector('input[name="bed_preference"]:checked');
+ formData.append('bed_preference', bedPref ? bedPref.value : 'No preference specified');
  formData.append('traveler_names', allNames);
  formData.append('notes', document.getElementById('notes').value);
  formData.append('_subject', 'Quote Request - Spring Break 2027 - ' + fname + ' ' + lname);
@@ -884,7 +905,8 @@ async function submitQuoteForm() {
     phone: phone,
     roomPreference: rooms.join(', '),
     numTravelers: travelers,
-    travelerNames: allNames,
+    bedPreference: bedPref ? bedPref.value : 'No preference specified',
+   travelerNames: allNames,
     checkinDate: document.getElementById('checkin_date').value || 'Mar 22, 2027 (group date)',
     nights: document.getElementById('nights').value || '4',
     checkoutDate: document.getElementById('checkout_date').value || 'Mar 26, 2027 (group date)',
