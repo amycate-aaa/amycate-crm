@@ -10,103 +10,103 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --sand: #F0F9FF;
-  --sand2: #E0F2FE;
-  --ocean: #0284C7;
-  --deep: #0C4A6E;
-  --coral: #F97316;
-  --coral2: #FB923C;
-  --gold: #D4A836;
-  --gold2: #FCD34D;
-  --navy: #0C4A6E;
-  --teal: #06B6D4;
-  --aqua: #22D3EE;
-  --white: #FFFFFF;
-  --text: #1a1a1a;
-  --muted: #64748b;
+ --sand: #F0F9FF;
+ --sand2: #E0F2FE;
+ --ocean: #0284C7;
+ --deep: #0C4A6E;
+ --coral: #F97316;
+ --coral2: #FB923C;
+ --gold: #D4A836;
+ --gold2: #FCD34D;
+ --navy: #0C4A6E;
+ --teal: #06B6D4;
+ --aqua: #22D3EE;
+ --white: #FFFFFF;
+ --text: #1a1a1a;
+ --muted: #64748b;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(--text); overflow-x: hidden; }
 
 /* ── HERO ── */
 .hero {
-  min-height: 100vh;
-  background: linear-gradient(160deg, #0C4A6E 0%, #075985 40%, #0369A1 100%);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 60px 24px 140px; position: relative; overflow: hidden;
+ min-height: 100vh;
+ background: linear-gradient(160deg, #0C4A6E 0%, #075985 40%, #0369A1 100%);
+ display: flex; flex-direction: column; align-items: center; justify-content: center;
+ text-align: center; padding: 60px 24px 140px; position: relative; overflow: hidden;
 }
 .wave-strip {
-  position: absolute; top: 0; left: 0; right: 0; height: 6px;
-  background: repeating-linear-gradient(90deg, var(--coral) 0 60px, var(--gold2) 60px 120px, var(--teal) 120px 180px, var(--aqua) 180px 240px);
+ position: absolute; top: 0; left: 0; right: 0; height: 6px;
+ background: repeating-linear-gradient(90deg, var(--coral) 0 60px, var(--gold2) 60px 120px, var(--teal) 120px 180px, var(--aqua) 180px 240px);
 }
 .hero-bg-text {
-  position: absolute; font-size: clamp(120px, 25vw, 220px); font-weight: 700;
-  color: rgba(255,255,255,.03); letter-spacing: -4px; user-select: none;
-  font-family: 'Playfair Display', serif; line-height: 1; top: 50%; transform: translateY(-50%);
-  white-space: nowrap;
+ position: absolute; font-size: clamp(120px, 25vw, 220px); font-weight: 700;
+ color: rgba(255,255,255,.03); letter-spacing: -4px; user-select: none;
+ font-family: 'Playfair Display', serif; line-height: 1; top: 50%; transform: translateY(-50%);
+ white-space: nowrap;
 }
 .hero-eyebrow {
-  font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
-  color: var(--gold2); margin-bottom: 16px; position: relative;
+ font-size: .72rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+ color: var(--gold2); margin-bottom: 16px; position: relative;
 }
 .hero-name {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(3.5rem, 12vw, 7rem); font-weight: 700; color: var(--white);
-  line-height: .95; margin-bottom: 6px; position: relative;
+ font-family: 'Playfair Display', serif;
+ font-size: clamp(3.5rem, 12vw, 7rem); font-weight: 700; color: var(--white);
+ line-height: .95; margin-bottom: 6px; position: relative;
 }
 .hero-name em { font-style: italic; color: var(--aqua); }
 .hero-sub {
-  font-family: 'Playfair Display', serif; font-style: italic;
-  font-size: clamp(1rem, 2.5vw, 1.4rem); color: rgba(255,255,255,.55); margin-bottom: 36px; position: relative;
+ font-family: 'Playfair Display', serif; font-style: italic;
+ font-size: clamp(1rem, 2.5vw, 1.4rem); color: rgba(255,255,255,.55); margin-bottom: 36px; position: relative;
 }
 .hero-pills { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 44px; position: relative; }
 .hero-pill {
-  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
-  border-radius: 50px; padding: 9px 20px; font-size: .85rem; color: white; display: flex; align-items: center; gap: 7px;
+ background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+ border-radius: 50px; padding: 9px 20px; font-size: .85rem; color: white; display: flex; align-items: center; gap: 7px;
 }
 .hero-pill strong { color: var(--gold2); }
 .hero-cta {
-  display: inline-block; background: var(--coral); color: white;
-  font-weight: 600; font-size: 1.05rem; padding: 18px 48px; border-radius: 50px;
-  text-decoration: none; letter-spacing: .02em; position: relative;
-  box-shadow: 0 8px 32px rgba(249,115,22,.45);
+ display: inline-block; background: var(--coral); color: white;
+ font-weight: 600; font-size: 1.05rem; padding: 18px 48px; border-radius: 50px;
+ text-decoration: none; letter-spacing: .02em; position: relative;
+ box-shadow: 0 8px 32px rgba(249,115,22,.45);
 }
 .hero-cta-sub { margin-top: 14px; font-size: .8rem; color: rgba(255,255,255,.4); position: relative; }
 .hero-wave {
-  position: absolute; bottom: 0; left: 0; right: 0; line-height: 0; overflow: hidden;
+ position: absolute; bottom: 0; left: 0; right: 0; line-height: 0; overflow: hidden;
 }
 .hero-wave svg { width: 100%; display: block; }
 
 /* ── VIBE STRIP ── */
 .vibe-strip {
-  background: var(--teal); padding: 16px 24px; overflow: hidden;
-  white-space: nowrap; display: flex; gap: 0;
+ background: var(--teal); padding: 16px 24px; overflow: hidden;
+ white-space: nowrap; display: flex; gap: 0;
 }
 .vibe-text {
-  display: inline-block; font-size: .82rem; font-weight: 600; color: white;
-  letter-spacing: .1em; text-transform: uppercase; animation: marquee 18s linear infinite;
-  padding-right: 60px;
+ display: inline-block; font-size: .82rem; font-weight: 600; color: white;
+ letter-spacing: .1em; text-transform: uppercase; animation: marquee 18s linear infinite;
+ padding-right: 60px;
 }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* ── SECTIONS ── */
 .section { max-width: 800px; margin: 0 auto; padding: 80px 24px; }
 .eyebrow {
-  font-size: .7rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--teal); margin-bottom: 10px;
+ font-size: .7rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase;
+ color: var(--teal); margin-bottom: 10px;
 }
 .title {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: var(--navy);
-  line-height: 1.15; margin-bottom: 18px;
+ font-family: 'Playfair Display', serif;
+ font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: var(--navy);
+ line-height: 1.15; margin-bottom: 18px;
 }
 .body-text { font-size: 1.05rem; color: var(--muted); line-height: 1.9; max-width: 600px; }
 
 /* ── DETAIL CARDS ── */
 .detail-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-top: 40px; }
 .detail-card {
-  background: white; border-radius: 20px; padding: 24px 18px; text-align: center;
-  box-shadow: 0 2px 16px rgba(0,0,0,.06);
+ background: white; border-radius: 20px; padding: 24px 18px; text-align: center;
+ box-shadow: 0 2px 16px rgba(0,0,0,.06);
 }
 .dc-icon { font-size: 2rem; margin-bottom: 10px; }
 .dc-label { font-size: .68rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--teal); margin-bottom: 5px; }
@@ -121,13 +121,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .resort-body { font-size: 1.05rem; color: rgba(255,255,255,.6); line-height: 1.9; max-width: 600px; }
 .perks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-top: 36px; }
 .perk-chip {
-  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
-  border-radius: 12px; padding: 13px 16px; color: rgba(255,255,255,.85); font-size: .88rem;
-  display: flex; align-items: center; gap: 10px;
+ background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+ border-radius: 12px; padding: 13px 16px; color: rgba(255,255,255,.85); font-size: .88rem;
+ display: flex; align-items: center; gap: 10px;
 }
 .reveal-box {
-  margin-top: 36px; background: rgba(212,168,54,.12); border: 1px solid rgba(212,168,54,.35);
-  border-radius: 16px; padding: 28px 32px; text-align: center;
+ margin-top: 36px; background: rgba(212,168,54,.12); border: 1px solid rgba(212,168,54,.35);
+ border-radius: 16px; padding: 28px 32px; text-align: center;
 }
 .reveal-box p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.15rem; color: var(--gold2); line-height: 1.7; }
 
@@ -142,9 +142,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .room-top-swim { background: linear-gradient(145deg, #155e75, #0C4A6E); }
 .room-top-ocean { background: linear-gradient(145deg, #0369a1, #1e3a5f); }
 .room-badge-pill {
-  display: inline-block; background: var(--gold2); color: var(--navy);
-  font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
+ display: inline-block; background: var(--gold2); color: var(--navy);
+ font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+ padding: 4px 12px; border-radius: 20px; margin-bottom: 14px;
 }
 .room-icon-big { font-size: 2.2rem; margin-bottom: 10px; }
 .room-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: white; font-weight: 700; margin-bottom: 4px; }
@@ -162,10 +162,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .rp-gold { background: var(--gold); }
 .popular-ring { outline: 3px solid var(--gold2); outline-offset: 0; }
 .room-cta-btn {
-  display: block; width: 100%; margin-top: 18px; padding: 13px;
-  background: var(--ocean); color: white; border: none; border-radius: 50px;
-  font-family: 'DM Sans', sans-serif; font-size: .92rem; font-weight: 700;
-  letter-spacing: .02em; cursor: pointer; text-align: center; text-decoration: none;
+ display: block; width: 100%; margin-top: 18px; padding: 13px;
+ background: var(--ocean); color: white; border: none; border-radius: 50px;
+ font-family: 'DM Sans', sans-serif; font-size: .92rem; font-weight: 700;
+ letter-spacing: .02em; cursor: pointer; text-align: center; text-decoration: none;
 }
 .room-cta-btn:hover { background: #0369a1; }
 .rooms-note { text-align: center; font-size: .8rem; color: var(--muted); font-style: italic; margin-top: 24px; }
@@ -176,9 +176,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 40px; }
 .step { text-align: center; padding: 10px; }
 .step-bubble {
-  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 18px;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white;
+ width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 18px;
+ display: flex; align-items: center; justify-content: center;
+ font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: white;
 }
 .sb-coral { background: var(--coral); }
 .sb-teal { background: var(--teal); }
@@ -194,9 +194,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3rem); color: white; font-weight: 700; margin-bottom: 16px; line-height: 1.15; }
 .cta-body { font-size: 1rem; color: rgba(255,255,255,.8); line-height: 1.85; margin-bottom: 40px; max-width: 480px; margin-left: auto; margin-right: auto; }
 .cta-btn {
-  display: inline-block; background: white; color: var(--ocean);
-  font-weight: 700; font-size: 1.05rem; padding: 18px 52px; border-radius: 50px;
-  text-decoration: none; letter-spacing: .02em; box-shadow: 0 8px 32px rgba(0,0,0,.15);
+ display: inline-block; background: white; color: var(--ocean);
+ font-weight: 700; font-size: 1.05rem; padding: 18px 52px; border-radius: 50px;
+ text-decoration: none; letter-spacing: .02em; box-shadow: 0 8px 32px rgba(0,0,0,.15);
 }
 .cta-contact { margin-top: 30px; font-size: .84rem; color: rgba(255,255,255,.6); line-height: 2; }
 .cta-contact a { color: white; text-decoration: none; font-weight: 500; }
@@ -210,10 +210,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .form-label { display: block; font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); margin-bottom: 7px; }
 .form-note { font-size: .78rem; color: var(--muted); font-style: italic; margin-top: 5px; font-weight: 400; text-transform: none; letter-spacing: 0; }
 .form-input, .form-select, .form-textarea {
-  width: 100%; padding: 13px 16px; border: 1.5px solid #bae6fd; border-radius: 12px;
-  font-family: 'DM Sans', sans-serif; font-size: .95rem; color: var(--text);
-  background: #f0f9ff; outline: none; transition: border-color .2s;
-  appearance: none; -webkit-appearance: none;
+ width: 100%; padding: 13px 16px; border: 1.5px solid #bae6fd; border-radius: 12px;
+ font-family: 'DM Sans', sans-serif; font-size: .95rem; color: var(--text);
+ background: #f0f9ff; outline: none; transition: border-color .2s;
+ appearance: none; -webkit-appearance: none;
 }
 .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); background: white; }
 .form-textarea { resize: vertical; min-height: 90px; }
@@ -223,9 +223,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .checkbox-item label { font-size: .9rem; color: var(--text); cursor: pointer; }
 .form-divider { border: none; border-top: 1.5px dashed #bae6fd; margin: 28px 0; }
 .form-submit {
-  width: 100%; padding: 17px; background: var(--ocean); color: white; border: none;
-  border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 700;
-  cursor: pointer; letter-spacing: .03em; box-shadow: 0 6px 24px rgba(2,132,199,.35);
+ width: 100%; padding: 17px; background: var(--ocean); color: white; border: none;
+ border-radius: 50px; font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 700;
+ cursor: pointer; letter-spacing: .03em; box-shadow: 0 6px 24px rgba(2,132,199,.35);
 }
 .form-submit:hover { background: #0369a1; }
 .form-disclaimer { font-size: .78rem; color: var(--muted); text-align: center; margin-top: 14px; font-style: italic; }
@@ -234,9 +234,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--sand); color: var(-
 .success-msg h3 { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--navy); margin-bottom: 10px; }
 .success-msg p { color: var(--muted); font-size: .95rem; line-height: 1.7; }
 @media (max-width: 600px) {
-  .form-row-2 { grid-template-columns: 1fr; }
-  .form-card { padding: 28px 20px; }
-  .checkbox-grid { grid-template-columns: 1fr; }
+ .form-row-2 { grid-template-columns: 1fr; }
+ .form-card { padding: 28px 20px; }
+ .checkbox-grid { grid-template-columns: 1fr; }
 }
 
 /* ── FOOTER ── */
@@ -248,11 +248,11 @@ footer a { color: var(--gold2); text-decoration: none; }
 .wave.flip { transform: scaleY(-1); }
 
 @media (max-width: 600px) {
-  .hero { padding-bottom: 120px; }
-  .section, .resort-inner, .rooms-inner, .how-inner { padding: 56px 20px; }
-  .cta-inner { padding: 64px 20px; }
-  .rooms-grid { grid-template-columns: 1fr; }
-  .steps { grid-template-columns: 1fr 1fr; }
+ .hero { padding-bottom: 120px; }
+ .section, .resort-inner, .rooms-inner, .how-inner { padding: 56px 20px; }
+ .cta-inner { padding: 64px 20px; }
+ .rooms-grid { grid-template-columns: 1fr; }
+ .steps { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -260,519 +260,515 @@ footer a { color: var(--gold2); text-decoration: none; }
 
 <!-- HERO -->
 <section class="hero" style="position:relative;">
-  <div class="wave-strip"></div>
-  <div class="hero-bg-text">PUNTA CANA</div>
-  <p class="hero-eyebrow">&#9733; Spring Break 2027 &#9733;</p>
-  <h1 class="hero-name">Spring<br><em>Break!</em></h1>
-  <p class="hero-sub">Dreams Onyx Resort &amp; Spa &nbsp;&middot;&nbsp; Punta Cana, Dominican Republic</p>
-  <div class="hero-pills">
-    <div class="hero-pill">&#128197; <strong>March 22&ndash;26, 2027</strong></div>
-    <div class="hero-pill">&#127754; <strong>4 Nights All-Inclusive</strong></div>
-    <div class="hero-pill">&#9992; <strong>Punta Cana, DR</strong></div>
-    <div class="hero-pill">&#127881; <strong>Limited Spots!</strong></div>
-  </div>
-  <a href="#quote-form" class="hero-cta">Count Me In &rarr;</a>
-  <p class="hero-cta-sub">No commitment &mdash; just tell Amy you're interested</p>
-  <div class="hero-wave">
-    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F9FF"/>
-    </svg>
-  </div>
+ <div class="wave-strip"></div>
+ <div class="hero-bg-text">PUNTA CANA</div>
+ <p class="hero-eyebrow"> Spring Break 2027 </p>
+ <h1 class="hero-name">Spring<br><em>Break!</em></h1>
+ <p class="hero-sub">Dreams Onyx Resort &amp; Spa &nbsp;&middot;&nbsp; Punta Cana, Dominican Republic</p>
+ <div class="hero-pills">
+ <div class="hero-pill"> <strong>March 22&ndash;26, 2027</strong></div>
+ <div class="hero-pill"> <strong>4 Nights All-Inclusive</strong></div>
+ <div class="hero-pill"> <strong>Punta Cana, DR</strong></div>
+ <div class="hero-pill"> <strong>Limited Spots!</strong></div>
+ </div>
+ <a href="#quote-form" class="hero-cta">Count Me In &rarr;</a>
+ <p class="hero-cta-sub">No commitment &mdash; just tell Amy you're interested</p>
+ <div class="hero-wave">
+ <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+ <path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z" fill="#F0F9FF"/>
+ </svg>
+ </div>
 </section>
 
 <!-- VIBE MARQUEE -->
 <div class="vibe-strip">
-  <span class="vibe-text">
-    Sun &amp; Sand &nbsp;&bull;&nbsp; Premium Open Bar &nbsp;&bull;&nbsp; Gourmet Dining &nbsp;&bull;&nbsp; Swim-Up Bars &nbsp;&bull;&nbsp; Ocean Views &nbsp;&bull;&nbsp; Spa Day &nbsp;&bull;&nbsp; Live Entertainment &nbsp;&bull;&nbsp; White Sand Beach &nbsp;&bull;&nbsp; Crystal Blue Water &nbsp;&bull;&nbsp; Spring Break 2027 &nbsp;&bull;&nbsp; Sun &amp; Sand &nbsp;&bull;&nbsp; Premium Open Bar &nbsp;&bull;&nbsp; Gourmet Dining &nbsp;&bull;&nbsp; Swim-Up Bars &nbsp;&bull;&nbsp; Ocean Views &nbsp;&bull;&nbsp; Spa Day &nbsp;&bull;&nbsp; Live Entertainment &nbsp;&bull;&nbsp; White Sand Beach &nbsp;&bull;&nbsp; Crystal Blue Water &nbsp;&bull;&nbsp; Spring Break 2027 &nbsp;&bull;&nbsp;
-  </span>
+ <span class="vibe-text">
+ Sun &amp; Sand &nbsp;&bull;&nbsp; Premium Open Bar &nbsp;&bull;&nbsp; Gourmet Dining &nbsp;&bull;&nbsp; Swim-Up Bars &nbsp;&bull;&nbsp; Ocean Views &nbsp;&bull;&nbsp; Spa Day &nbsp;&bull;&nbsp; Live Entertainment &nbsp;&bull;&nbsp; White Sand Beach &nbsp;&bull;&nbsp; Crystal Blue Water &nbsp;&bull;&nbsp; Spring Break 2027 &nbsp;&bull;&nbsp; Sun &amp; Sand &nbsp;&bull;&nbsp; Premium Open Bar &nbsp;&bull;&nbsp; Gourmet Dining &nbsp;&bull;&nbsp; Swim-Up Bars &nbsp;&bull;&nbsp; Ocean Views &nbsp;&bull;&nbsp; Spa Day &nbsp;&bull;&nbsp; Live Entertainment &nbsp;&bull;&nbsp; White Sand Beach &nbsp;&bull;&nbsp; Crystal Blue Water &nbsp;&bull;&nbsp; Spring Break 2027 &nbsp;&bull;&nbsp;
+ </span>
 </div>
 
 <!-- ABOUT -->
 <div style="background:var(--sand);">
-  <div class="section">
-    <p class="eyebrow">The getaway</p>
-    <h2 class="title">Spring Break done<br>right &mdash; Punta Cana!</h2>
-    <p class="body-text">Picture this: four nights at an incredible all-inclusive resort on the white-sand beaches of Punta Cana, Dominican Republic. Crystal-clear water, unlimited drinks, gourmet food, and your people &mdash; all in one gorgeous place. March 22&ndash;26, 2027. This is the trip you've been waiting for!</p>
-    <div class="detail-grid">
-      <div class="detail-card">
-        <div class="dc-icon">&#127754;</div>
-        <div class="dc-label">Resort</div>
-        <div class="dc-value">Dreams Onyx</div>
-        <div class="dc-sub">Resort &amp; Spa</div>
-      </div>
-      <div class="detail-card">
-        <div class="dc-icon">&#128197;</div>
-        <div class="dc-label">Check-In</div>
-        <div class="dc-value">March 22</div>
-        <div class="dc-sub">2027</div>
-      </div>
-      <div class="detail-card">
-        <div class="dc-icon">&#9992;</div>
-        <div class="dc-label">Check-Out</div>
-        <div class="dc-value">March 26</div>
-        <div class="dc-sub">2027</div>
-      </div>
-      <div class="detail-card">
-        <div class="dc-icon">&#127758;</div>
-        <div class="dc-label">Destination</div>
-        <div class="dc-value">Punta Cana</div>
-        <div class="dc-sub">Dominican Republic</div>
-      </div>
-      <div class="detail-card">
-        <div class="dc-icon">&#127836;</div>
-        <div class="dc-label">Nights</div>
-        <div class="dc-value">4 Nights</div>
-        <div class="dc-sub">All-Inclusive</div>
-      </div>
-    </div>
-  </div>
+ <div class="section">
+ <p class="eyebrow">The getaway</p>
+ <h2 class="title">Spring Break done<br>right &mdash; Punta Cana!</h2>
+ <p class="body-text">Picture this: four nights at an incredible all-inclusive resort on the white-sand beaches of Punta Cana, Dominican Republic. Crystal-clear water, unlimited drinks, gourmet food, and your people &mdash; all in one gorgeous place. March 22&ndash;26, 2027. This is the trip you've been waiting for!</p>
+ <div class="detail-grid">
+ <div class="detail-card">
+ <div class="dc-icon"></div>
+ <div class="dc-label">Resort</div>
+ <div class="dc-value">Dreams Onyx</div>
+ <div class="dc-sub">Resort &amp; Spa</div>
+ </div>
+ <div class="detail-card">
+ <div class="dc-icon"></div>
+ <div class="dc-label">Check-In</div>
+ <div class="dc-value">March 22</div>
+ <div class="dc-sub">2027</div>
+ </div>
+ <div class="detail-card">
+ <div class="dc-icon"></div>
+ <div class="dc-label">Check-Out</div>
+ <div class="dc-value">March 26</div>
+ <div class="dc-sub">2027</div>
+ </div>
+ <div class="detail-card">
+ <div class="dc-icon"></div>
+ <div class="dc-label">Destination</div>
+ <div class="dc-value">Punta Cana</div>
+ <div class="dc-sub">Dominican Republic</div>
+ </div>
+ <div class="detail-card">
+ <div class="dc-icon"></div>
+ <div class="dc-label">Nights</div>
+ <div class="dc-value">4 Nights</div>
+ <div class="dc-sub">All-Inclusive</div>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- WAVE -->
 <svg class="wave" viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="#0C4A6E"/>
+ <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="#0C4A6E"/>
 </svg>
 
 <!-- RESORT -->
 <div class="resort-bg">
-  <div class="resort-inner">
-    <p class="resort-eyebrow">Your home away from home</p>
-    <h2 class="resort-title">Dreams Onyx<br>Resort &amp; Spa</h2>
-    <p class="resort-body">Dreams Onyx is a stunning all-inclusive resort nestled along the pristine beaches of Uvero Alto, Punta Cana. With the Unlimited-Luxury&reg; experience, everything is included &mdash; food, drinks, entertainment, and more. No wristbands, no tipping, no worrying about the bill. Just pure vacation mode.</p>
-    <div class="perks-grid">
-      <div class="perk-chip">&#127944; 11 Restaurants &amp; Cafes</div>
-      <div class="perk-chip">&#127867; 8 Bars &amp; Lounges</div>
-      <div class="perk-chip">&#127946; 5 Pools + Lazy River</div>
-      <div class="perk-chip">&#127958; Private Beach</div>
-      <div class="perk-chip">&#128149; Unlimited Luxury&reg;</div>
-      <div class="perk-chip">&#127807; World-Class Spa</div>
-      <div class="perk-chip">&#127926; Nightly Entertainment</div>
-      <div class="perk-chip">&#127938; Fitness Center</div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:32px;border-radius:16px;overflow:hidden;">
-      <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831827554_dropc-ext-pc-adultspool-aerial-2-cb.webp?alt=media&token=4596a86d-4183-4acd-a87c-1a2a195da7fe" alt="Dreams Onyx aerial view" style="width:100%;height:160px;object-fit:cover;display:block;">
-      <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831792754_dropc-ext-jungle-water-park2-tc.webp?alt=media&token=012f569e-7759-46f5-8abb-1d22c50e106d" alt="Dreams Onyx water park" style="width:100%;height:160px;object-fit:cover;display:block;">
-      <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831676343_dropc-bar-pc-poolbar-3-cb.webp?alt=media&token=d1f12f08-9d59-4e42-99e6-d226639a7483" alt="Dreams Onyx pool bar" style="width:100%;height:160px;object-fit:cover;display:block;">
-    </div>
-    <div class="reveal-box">
-      <p>&#127754; Plus unlimited access to all restaurants and bars at Breathless Punta Cana Resort &amp; Spa next door &mdash; included with your stay! &#127754;</p>
-    </div>
-  </div>
+ <div class="resort-inner">
+ <p class="resort-eyebrow">Your home away from home</p>
+ <h2 class="resort-title">Dreams Onyx<br>Resort &amp; Spa</h2>
+ <p class="resort-body">Dreams Onyx is a stunning all-inclusive resort nestled along the pristine beaches of Uvero Alto, Punta Cana. With the Unlimited-Luxury&reg; experience, everything is included &mdash; food, drinks, entertainment, and more. No wristbands, no tipping, no worrying about the bill. Just pure vacation mode.</p>
+ <div class="perks-grid">
+ <div class="perk-chip"> 11 Restaurants &amp; Cafes</div>
+ <div class="perk-chip"> 8 Bars &amp; Lounges</div>
+ <div class="perk-chip"> 5 Pools + Lazy River</div>
+ <div class="perk-chip"> Private Beach</div>
+ <div class="perk-chip"> Unlimited Luxury&reg;</div>
+ <div class="perk-chip"> World-Class Spa</div>
+ <div class="perk-chip"> Nightly Entertainment</div>
+ <div class="perk-chip"> Fitness Center</div>
+ </div>
+ <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:32px;border-radius:16px;overflow:hidden;">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831827554_dropc-ext-pc-adultspool-aerial-2-cb.webp?alt=media&token=4596a86d-4183-4acd-a87c-1a2a195da7fe" alt="Dreams Onyx aerial view" style="width:100%;height:160px;object-fit:cover;display:block;">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831792754_dropc-ext-jungle-water-park2-tc.webp?alt=media&token=012f569e-7759-46f5-8abb-1d22c50e106d" alt="Dreams Onyx water park" style="width:100%;height:160px;object-fit:cover;display:block;">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831676343_dropc-bar-pc-poolbar-3-cb.webp?alt=media&token=d1f12f08-9d59-4e42-99e6-d226639a7483" alt="Dreams Onyx pool bar" style="width:100%;height:160px;object-fit:cover;display:block;">
+ </div>
+ <div class="reveal-box">
+ <p> Plus unlimited access to all restaurants and bars at Breathless Punta Cana Resort &amp; Spa next door &mdash; included with your stay! </p>
+ </div>
+ </div>
 </div>
 
 <!-- WAVE -->
 <svg class="wave flip" viewBox="0 0 1440 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="#0C4A6E"/>
+ <path d="M0,25 C480,50 960,0 1440,25 L1440,50 L0,50 Z" fill="#0C4A6E"/>
 </svg>
 
 <!-- ROOM OPTIONS -->
 <div class="rooms-bg">
-  <div class="rooms-inner">
-    <p class="eyebrow">Where you'll sleep</p>
-    <h2 class="title">Featured Room Options</h2>
-    <p class="body-text" style="margin-bottom:4px;">Prices below are starting rates for <strong>2 guests sharing a room, 4 nights all-inclusive</strong> (taxes included, free cancellation until Feb 28, 2027). Most rooms are available with a <strong>King bed or 2 Queen/Double beds</strong> &mdash; same price either way. Amy will confirm availability of your preferred bed type!</p>
-    <div class="rooms-grid">
+ <div class="rooms-inner">
+ <p class="eyebrow">Where you'll sleep</p>
+ <h2 class="title">Featured Room Options</h2>
+ <p class="body-text" style="margin-bottom:4px;">Prices below are starting rates for <strong>2 guests sharing a room, 4 nights all-inclusive</strong> (taxes included, free cancellation until Feb 28, 2027). Most rooms are available with a <strong>King bed or 2 Queen/Double beds</strong> &mdash; same price either way. Amy will confirm availability of your preferred bed type!</p>
+ <div class="rooms-grid">
 
-      <!-- 1: Jr Suite Tropical View -->
-      <div class="room-card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1783041631573_junior_suite_garden_view_double-a.webp?alt=media&token=36b5eea2-807d-4d5c-8b4f-9e0bfef043cd" alt="Jr Suite Tropical View" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-standard">
-          <div class="room-badge-pill">Great Value</div>
-          <div class="room-name">Jr Suite Tropical View</div>
-          <div class="room-tag">King or Double Beds &middot; Garden Views</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$2,276</div>
-          <div class="room-price-note">$1,138/person &middot; King or Double beds available</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-teal"></span>Lush tropical garden views</li>
-            <li><span class="rp-dot rp-teal"></span>Private balcony or terrace</li>
-            <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
-            <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 1: Jr Suite Tropical View -->
+ <div class="room-card">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1783041631573_junior_suite_garden_view_double-a.webp?alt=media&token=36b5eea2-807d-4d5c-8b4f-9e0bfef043cd" alt="Jr Suite Tropical View" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-standard">
+ <div class="room-badge-pill">Great Value</div>
+ <div class="room-name">Jr Suite Tropical View</div>
+ <div class="room-tag">King or Double Beds &middot; Garden Views</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$2,276</div>
+ <div class="room-price-note">$1,138/person &middot; King or Double beds available</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-teal"></span>Lush tropical garden views</li>
+ <li><span class="rp-dot rp-teal"></span>Private balcony or terrace</li>
+ <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
+ <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-      <!-- 2: Premium Jr Suite Tropical View -->
-      <div class="room-card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782828766910_garden-view-onyx.webp?alt=media&token=66e5f27f-c6b8-4e35-8e06-0baff3e93460" alt="Premium Jr Suite Tropical View" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-preferred">
-          <div class="room-badge-pill">Popular</div>
-          <div class="room-name">Premium Jr Suite</div>
-          <div class="room-tag">Tropical View &middot; King or Queen Beds</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$2,340</div>
-          <div class="room-price-note">$1,170/person &middot; King or Queen beds available</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-teal"></span>Tropical garden views</li>
-            <li><span class="rp-dot rp-teal"></span>Premium room finishes</li>
-            <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
-            <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 2: Premium Jr Suite Tropical View -->
+ <div class="room-card">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782828766910_garden-view-onyx.webp?alt=media&token=66e5f27f-c6b8-4e35-8e06-0baff3e93460" alt="Premium Jr Suite Tropical View" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-preferred">
+ <div class="room-badge-pill">Popular</div>
+ <div class="room-name">Premium Jr Suite</div>
+ <div class="room-tag">Tropical View &middot; King or Queen Beds</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$2,340</div>
+ <div class="room-price-note">$1,170/person &middot; King or Queen beds available</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-teal"></span>Tropical garden views</li>
+ <li><span class="rp-dot rp-teal"></span>Premium room finishes</li>
+ <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
+ <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-      <!-- 3: Premium Jr Suite Pool View -->
-      <div class="room-card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782828830711_jr-pool-view-onyx.webp?alt=media&token=3ebe9b8f-bc2b-48e1-802f-c82140aeb326" alt="Premium Jr Suite Pool View" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-swim">
-          <div class="room-badge-pill">Pool Views</div>
-          <div class="room-name">Premium Jr Suite</div>
-          <div class="room-tag">Pool View &middot; King or Queen Beds</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$2,408</div>
-          <div class="room-price-note">$1,204/person &middot; King or Queen beds available</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-teal"></span>Stunning pool views</li>
-            <li><span class="rp-dot rp-teal"></span>Private balcony or terrace</li>
-            <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
-            <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 3: Premium Jr Suite Pool View -->
+ <div class="room-card">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782828830711_jr-pool-view-onyx.webp?alt=media&token=3ebe9b8f-bc2b-48e1-802f-c82140aeb326" alt="Premium Jr Suite Pool View" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-swim">
+ <div class="room-badge-pill">Pool Views</div>
+ <div class="room-name">Premium Jr Suite</div>
+ <div class="room-tag">Pool View &middot; King or Queen Beds</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$2,408</div>
+ <div class="room-price-note">$1,204/person &middot; King or Queen beds available</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-teal"></span>Stunning pool views</li>
+ <li><span class="rp-dot rp-teal"></span>Private balcony or terrace</li>
+ <li><span class="rp-dot rp-teal"></span>Unlimited Luxury&reg; included</li>
+ <li><span class="rp-dot rp-teal"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-      <!-- 4: Jr Swim-Up Suite -->
-      <div class="room-card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782830584269_dropc-pcjr-su-1a-cb.webp?alt=media&token=8c018f71-3d4c-4006-94d8-165f748cee89" alt="Jr Swim-Up Suite" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-ocean">
-          <div class="room-badge-pill">Swim-Up!</div>
-          <div class="room-name">Jr Swim-Up Suite</div>
-          <div class="room-tag">Direct Pool Access &middot; King or Double Beds</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$2,796</div>
-          <div class="room-price-note">$1,398/person &middot; King or Double beds available</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-navy"></span>Step directly into the pool</li>
-            <li><span class="rp-dot rp-navy"></span>Private furnished terrace</li>
-            <li><span class="rp-dot rp-navy"></span>Unlimited Luxury&reg; included</li>
-            <li><span class="rp-dot rp-navy"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 4: Jr Swim-Up Suite -->
+ <div class="room-card">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782830584269_dropc-pcjr-su-1a-cb.webp?alt=media&token=8c018f71-3d4c-4006-94d8-165f748cee89" alt="Jr Swim-Up Suite" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-ocean">
+ <div class="room-badge-pill">Swim-Up!</div>
+ <div class="room-name">Jr Swim-Up Suite</div>
+ <div class="room-tag">Direct Pool Access &middot; King or Double Beds</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$2,796</div>
+ <div class="room-price-note">$1,398/person &middot; King or Double beds available</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-navy"></span>Step directly into the pool</li>
+ <li><span class="rp-dot rp-navy"></span>Private furnished terrace</li>
+ <li><span class="rp-dot rp-navy"></span>Unlimited Luxury&reg; included</li>
+ <li><span class="rp-dot rp-navy"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-      <!-- 5: Preferred Club Jr Suite Ocean View -->
-      <div class="room-card popular-ring">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831008385_dropc-pc-jr-ov-ter-ap.webp?alt=media&token=81c621e0-26a5-40d0-b336-9d3adef160c5" alt="Preferred Club Jr Suite Ocean View" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-preferred">
-          <div class="room-badge-pill">&#11088; Amy's Pick</div>
-          <div class="room-name">Preferred Club Jr Suite</div>
-          <div class="room-tag">Ocean View &middot; Adults-Only Club &middot; King</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$3,060</div>
-          <div class="room-price-note">$1,530/person &middot; King bed</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-gold"></span>Stunning ocean views</li>
-            <li><span class="rp-dot rp-gold"></span>Exclusive Preferred Club lounge</li>
-            <li><span class="rp-dot rp-gold"></span>Private concierge service</li>
-            <li><span class="rp-dot rp-gold"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 5: Preferred Club Jr Suite Ocean View -->
+ <div class="room-card popular-ring">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782831008385_dropc-pc-jr-ov-ter-ap.webp?alt=media&token=81c621e0-26a5-40d0-b336-9d3adef160c5" alt="Preferred Club Jr Suite Ocean View" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-preferred">
+ <div class="room-badge-pill"> Amy's Pick</div>
+ <div class="room-name">Preferred Club Jr Suite</div>
+ <div class="room-tag">Ocean View &middot; Adults-Only Club &middot; King</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$3,060</div>
+ <div class="room-price-note">$1,530/person &middot; King bed</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-gold"></span>Stunning ocean views</li>
+ <li><span class="rp-dot rp-gold"></span>Exclusive Preferred Club lounge</li>
+ <li><span class="rp-dot rp-gold"></span>Private concierge service</li>
+ <li><span class="rp-dot rp-gold"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-      <!-- 6: Preferred Club Jr Swim-Up Suite -->
-      <div class="room-card">
-        <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782830929235_dropc-pcjr-su-1a-cb--1-.webp?alt=media&token=724216bb-dec9-468d-a777-855e61cf6a83" alt="Preferred Club Jr Swim-Up Suite" style="width:100%;height:180px;object-fit:cover;display:block;">
-        <div class="room-top room-top-standard" style="background:linear-gradient(145deg,#0e4f6e,#0a3352);">
-          <div class="room-badge-pill">Top Upgrade</div>
-          <div class="room-name">Preferred Club Jr Swim-Up</div>
-          <div class="room-tag">Pool Access + Club &middot; King or Double &middot; ⚠️ Limited!</div>
-        </div>
-        <div class="room-body">
-          <div class="room-from">Starting from (2 guests, 4 nights)</div>
-          <div class="room-price">$3,388</div>
-          <div class="room-price-note">$1,694/person &middot; King or Double beds &middot; last rooms!</div>
-          <ul class="room-perks">
-            <li><span class="rp-dot rp-navy"></span>Direct pool access from terrace</li>
-            <li><span class="rp-dot rp-navy"></span>Exclusive Preferred Club lounge</li>
-            <li><span class="rp-dot rp-navy"></span>Private concierge &amp; premium perks</li>
-            <li><span class="rp-dot rp-navy"></span>Airport transfers included</li>
-          </ul>
-        </div>
-      </div>
+ <!-- 6: Preferred Club Jr Swim-Up Suite -->
+ <div class="room-card">
+ <img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-onyx%2F1782830929235_dropc-pcjr-su-1a-cb--1-.webp?alt=media&token=724216bb-dec9-468d-a777-855e61cf6a83" alt="Preferred Club Jr Swim-Up Suite" style="width:100%;height:180px;object-fit:cover;display:block;">
+ <div class="room-top room-top-standard" style="background:linear-gradient(145deg,#0e4f6e,#0a3352);">
+ <div class="room-badge-pill">Top Upgrade</div>
+ <div class="room-name">Preferred Club Jr Swim-Up</div>
+ <div class="room-tag">Pool Access + Club &middot; King or Double &middot; LIMITED Limited!</div>
+ </div>
+ <div class="room-body">
+ <div class="room-from">Starting from (2 guests, 4 nights)</div>
+ <div class="room-price">$3,388</div>
+ <div class="room-price-note">$1,694/person &middot; King or Double beds &middot; last rooms!</div>
+ <ul class="room-perks">
+ <li><span class="rp-dot rp-navy"></span>Direct pool access from terrace</li>
+ <li><span class="rp-dot rp-navy"></span>Exclusive Preferred Club lounge</li>
+ <li><span class="rp-dot rp-navy"></span>Private concierge &amp; premium perks</li>
+ <li><span class="rp-dot rp-navy"></span>Airport transfers included</li>
+ </ul>
+ </div>
+ </div>
 
-    </div>
+ </div>
 
-    <!-- FULL RATE TABLE -->
-    <div style="margin-top:48px;">
-      <p class="eyebrow" style="margin-bottom:8px;">All available room categories</p>
-      <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:6px;">More Options &mdash; All Rates</h3>
-      <p style="font-size:.88rem;color:var(--muted);margin-bottom:20px;">2 guests &middot; 4 nights &middot; all-inclusive &middot; taxes included &middot; free cancellation until Feb 28, 2027. Not seeing what you want? <a href="#quote-form" style="color:var(--ocean);font-weight:600;">Ask Amy</a> &mdash; she can check availability for any configuration.</p>
-      <div style="background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);">
-        <table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:.9rem;">
-          <thead>
-            <tr style="background:var(--navy);">
-              <th style="padding:14px 18px;text-align:left;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Room Category</th>
-              <th style="padding:14px 18px;text-align:center;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Per Night</th>
-              <th style="padding:14px 18px;text-align:right;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">4 Nights Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Junior Suite King</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$547</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,188</td>
-            </tr>
-            <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Jr Suite Garden View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$569</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,276</td>
-            </tr>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Premium Jr Suite Tropical View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Queen</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$585</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,340</td>
-            </tr>
-            <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Premium Jr Suite Pool View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Queen</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$602</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,408</td>
-            </tr>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Jr Suite Swim-Up &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$699</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,796</td>
-            </tr>
-            <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Pool View &mdash; King</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$738</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,952</td>
-            </tr>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Partial Ocean View &mdash; King</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$750</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,000</td>
-            </tr>
-            <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Ocean View &mdash; King</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$765</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,060</td>
-            </tr>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Swim-Up &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double <span style="background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;">Last Room!</span></td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$847</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,388</td>
-            </tr>
-            <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Private Pool &mdash; King</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$858</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,432</td>
-            </tr>
-            <tr style="border-bottom:1px solid #e0f2fe;">
-              <td style="padding:13px 18px;color:var(--text);">Preferred Club Master Suite Ocean Front</td>
-              <td style="padding:13px 18px;text-align:center;color:var(--muted);">$1,122</td>
-              <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$4,488</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size:.75rem;color:var(--muted);font-style:italic;margin-top:12px;text-align:center;">All rates are all-inclusive with taxes included. Prices are per room for 2 guests and subject to change until booking is confirmed. Free cancellation until February 28, 2027.</p>
-    </div>
+ <!-- FULL RATE TABLE -->
+ <div style="margin-top:48px;">
+ <p class="eyebrow" style="margin-bottom:8px;">All available room categories</p>
+ <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);margin-bottom:6px;">More Options &mdash; All Rates</h3>
+ <p style="font-size:.88rem;color:var(--muted);margin-bottom:20px;">2 guests &middot; 4 nights &middot; all-inclusive &middot; taxes included &middot; free cancellation until Feb 28, 2027. Not seeing what you want? <a href="#quote-form" style="color:var(--ocean);font-weight:600;">Ask Amy</a> &mdash; she can check availability for any configuration.</p>
+ <div style="background:white;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08);">
+ <table style="width:100%;border-collapse:collapse;font-family:'DM Sans',sans-serif;font-size:.9rem;">
+ <thead>
+ <tr style="background:var(--navy);">
+ <th style="padding:14px 18px;text-align:left;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Room Category</th>
+ <th style="padding:14px 18px;text-align:center;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">Per Night</th>
+ <th style="padding:14px 18px;text-align:right;color:var(--gold2);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;">4 Nights Total</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Junior Suite King</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$547</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,188</td>
+ </tr>
+ <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Jr Suite Garden View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$569</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,276</td>
+ </tr>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Premium Jr Suite Tropical View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Queen</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$585</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,340</td>
+ </tr>
+ <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Premium Jr Suite Pool View &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Queen</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$602</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,408</td>
+ </tr>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Jr Suite Swim-Up &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$699</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,796</td>
+ </tr>
+ <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Pool View &mdash; King</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$738</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$2,952</td>
+ </tr>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Partial Ocean View &mdash; King</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$750</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,000</td>
+ </tr>
+ <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Ocean View &mdash; King</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$765</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,060</td>
+ </tr>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Swim-Up &mdash; King <em style="font-size:.8rem;color:var(--muted);">or</em> Double <span style="background:#fef3c7;color:#92400e;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;">Last Room!</span></td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$847</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,388</td>
+ </tr>
+ <tr style="background:#f8fbff;border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Jr Suite Private Pool &mdash; King</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$858</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$3,432</td>
+ </tr>
+ <tr style="border-bottom:1px solid #e0f2fe;">
+ <td style="padding:13px 18px;color:var(--text);">Preferred Club Master Suite Ocean Front</td>
+ <td style="padding:13px 18px;text-align:center;color:var(--muted);">$1,122</td>
+ <td style="padding:13px 18px;text-align:right;font-weight:700;color:var(--navy);">$4,488</td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ <p style="font-size:.75rem;color:var(--muted);font-style:italic;margin-top:12px;text-align:center;">All rates are all-inclusive with taxes included. Prices are per room for 2 guests and subject to change until booking is confirmed. Free cancellation until February 28, 2027.</p>
+ </div>
 
-    <p class="rooms-note" style="margin-top:32px;">&#10024; Want a solo rate, a group of 3, or a different room not listed? <a href="#quote-form" style="color:var(--ocean);font-weight:600;">Fill out the form</a> and Amy will price it out for you!</p>
-  </div>
+ <p class="rooms-note" style="margin-top:32px;"> Want a solo rate, a group of 3, or a different room not listed? <a href="#quote-form" style="color:var(--ocean);font-weight:600;">Fill out the form</a> and Amy will price it out for you!</p>
+ </div>
 </div>
 
 <!-- HOW IT WORKS -->
 <div class="how-bg">
-  <div class="how-inner">
-    <p class="eyebrow" style="text-align:center;">Easy as 1-2-3-4</p>
-    <h2 class="title" style="text-align:center;">How This Works</h2>
-    <div class="steps">
-      <div class="step">
-        <div class="step-bubble sb-teal">1</div>
-        <div class="step-title">Fill Out the Form</div>
-        <div class="step-body">Tell Amy your room preference, dates, and who you're rooming with.</div>
-      </div>
-      <div class="step">
-        <div class="step-bubble sb-coral">2</div>
-        <div class="step-title">Get Your Quote</div>
-        <div class="step-body">Amy pulls your exact pricing and sends a personalized quote just for you.</div>
-      </div>
-      <div class="step">
-        <div class="step-bubble sb-gold">3</div>
-        <div class="step-title">Pay Your Deposit</div>
-        <div class="step-body">Lock in your spot with a small deposit. No full payment required today!</div>
-      </div>
-      <div class="step">
-        <div class="step-bubble sb-navy">4</div>
-        <div class="step-title">Pack Your Bags</div>
-        <div class="step-body">Amy handles everything. You just show up and enjoy Spring Break 2027!</div>
-      </div>
-    </div>
-  </div>
+ <div class="how-inner">
+ <p class="eyebrow" style="text-align:center;">Easy as 1-2-3-4</p>
+ <h2 class="title" style="text-align:center;">How This Works</h2>
+ <div class="steps">
+ <div class="step">
+ <div class="step-bubble sb-teal">1</div>
+ <div class="step-title">Fill Out the Form</div>
+ <div class="step-body">Tell Amy your room preference, dates, and who you're rooming with.</div>
+ </div>
+ <div class="step">
+ <div class="step-bubble sb-coral">2</div>
+ <div class="step-title">Get Your Quote</div>
+ <div class="step-body">Amy pulls your exact pricing and sends a personalized quote just for you.</div>
+ </div>
+ <div class="step">
+ <div class="step-bubble sb-gold">3</div>
+ <div class="step-title">Pay Your Deposit</div>
+ <div class="step-body">Lock in your spot with a small deposit. No full payment required today!</div>
+ </div>
+ <div class="step">
+ <div class="step-bubble sb-navy">4</div>
+ <div class="step-title">Pack Your Bags</div>
+ <div class="step-body">Amy handles everything. You just show up and enjoy Spring Break 2027!</div>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- CTA -->
 <div class="cta-bg" id="request">
-  <div class="cta-inner">
-    <p class="cta-eyebrow">Let's make it happen</p>
-    <h2 class="cta-title">Ready to Join<br>Spring Break 2027?!</h2>
-    <p class="cta-body">Fill out the quick form below and Amy will send your personalized quote fast. No commitment yet &mdash; just the info you need to say yes and get on that plane.</p>
-    <a href="#quote-form" class="cta-btn">Fill Out the Form &rarr;</a>
-    <div class="cta-contact">
-      Have questions? Reach Amy directly:<br>
-      <a href="mailto:amy.cate@celebrationtravel.com">amy.cate@celebrationtravel.com</a>
-      &nbsp;&middot;&nbsp;
-      <a href="tel:8327738664">(832) 773-8664</a><br>
-      <a href="https://zcal.co/amymcate/letschat">Schedule a quick chat &rarr;</a>
-    </div>
-  </div>
+ <div class="cta-inner">
+ <p class="cta-eyebrow">Let's make it happen</p>
+ <h2 class="cta-title">Ready to Join<br>Spring Break 2027?!</h2>
+ <p class="cta-body">Fill out the quick form below and Amy will send your personalized quote fast. No commitment yet &mdash; just the info you need to say yes and get on that plane.</p>
+ <a href="#quote-form" class="cta-btn">Fill Out the Form &rarr;</a>
+ <div class="cta-contact">
+ Have questions? Reach Amy directly:<br>
+ <a href="mailto:amy.cate@celebrationtravel.com">amy.cate@celebrationtravel.com</a>
+ &nbsp;&middot;&nbsp;
+ <a href="tel:8327738664">(832) 773-8664</a><br>
+ <a href="https://zcal.co/amymcate/letschat">Schedule a quick chat &rarr;</a>
+ </div>
+ </div>
 </div>
 
 <!-- QUOTE REQUEST FORM -->
 <div class="form-bg" id="quote-form">
-  <div class="form-inner">
-    <p class="eyebrow" style="color:var(--teal);text-align:center;">Step 1 of getting there</p>
-    <h2 class="title" style="text-align:center;margin-bottom:8px;">Request Your Quote</h2>
-    <p class="body-text" style="text-align:center;margin:0 auto 36px;">Fill this out and Amy will pull your exact rate and send everything you need. Easy!</p>
+ <div class="form-inner">
+ <p class="eyebrow" style="color:var(--teal);text-align:center;">Step 1 of getting there</p>
+ <h2 class="title" style="text-align:center;margin-bottom:8px;">Request Your Quote</h2>
+ <p class="body-text" style="text-align:center;margin:0 auto 36px;">Fill this out and Amy will pull your exact rate and send everything you need. Easy!</p>
 
-    <div class="form-card">
-      <div id="form-fields">
+ <div class="form-card">
+ <div id="form-fields">
 
-        <div class="form-row-2">
-          <div>
-            <label class="form-label" for="fname">First Name</label>
-            <input class="form-input" type="text" id="fname" name="first_name" placeholder="First name" required>
-          </div>
-          <div>
-            <label class="form-label" for="lname">Last Name</label>
-            <input class="form-input" type="text" id="lname" name="last_name" placeholder="Last name" required>
-          </div>
-        </div>
+ <div class="form-row-2">
+ <div>
+ <label class="form-label" for="fname">First Name</label>
+ <input class="form-input" type="text" id="fname" name="first_name" placeholder="First name" required>
+ </div>
+ <div>
+ <label class="form-label" for="lname">Last Name</label>
+ <input class="form-input" type="text" id="lname" name="last_name" placeholder="Last name" required>
+ </div>
+ </div>
 
-        <div class="form-row-2">
-          <div>
-            <label class="form-label" for="email">Email Address</label>
-            <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
-          </div>
-          <div>
-            <label class="form-label" for="phone">Phone Number</label>
-            <input class="form-input" type="tel" id="phone" name="phone" placeholder="(555) 000-0000">
-          </div>
-        </div>
+ <div class="form-row-2">
+ <div>
+ <label class="form-label" for="email">Email Address</label>
+ <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
+ </div>
+ <div>
+ <label class="form-label" for="phone">Phone Number</label>
+ <input class="form-input" type="tel" id="phone" name="phone" placeholder="(555) 000-0000">
+ </div>
+ </div>
 
-        <hr class="form-divider">
+ <hr class="form-divider">
 
-        <div class="form-row">
-          <label class="form-label">Trip Dates</label>
-          <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:12px;padding:13px 16px;font-size:.95rem;color:var(--muted);margin-bottom:10px;">
-            Group Dates: March 22&ndash;26, 2027 &nbsp;&bull;&nbsp; 4 Nights &nbsp;&bull;&nbsp; Punta Cana, Dominican Republic
-          </div>
-          <p class="form-note" style="margin-bottom:12px;">Want to arrive early or stay longer? Pick your dates below &mdash; Amy will price it out!</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end;">
-            <div>
-              <label class="form-label" for="checkin_date">Check-In Date</label>
-              <input class="form-input" type="date" id="checkin_date" name="checkin_date" onchange="calcCheckout()">
-            </div>
-            <div>
-              <label class="form-label" for="nights">Nights</label>
-              <input class="form-input" type="number" id="nights" name="nights" min="1" max="30" placeholder="e.g. 4" oninput="calcCheckout()">
-            </div>
-            <div>
-              <label class="form-label">Check-Out Date</label>
-              <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:12px;padding:13px 16px;font-size:.95rem;color:var(--muted);" id="checkout_display">Auto-calculated</div>
-              <input type="hidden" id="checkout_date" name="checkout_date">
-            </div>
-          </div>
-        </div>
+ <div class="form-row">
+ <label class="form-label">Trip Dates</label>
+ <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:12px;padding:13px 16px;font-size:.95rem;color:var(--muted);margin-bottom:10px;">
+ Group Dates: March 22&ndash;26, 2027 &nbsp;&bull;&nbsp; 4 Nights &nbsp;&bull;&nbsp; Punta Cana, Dominican Republic
+ </div>
+ <p class="form-note" style="margin-bottom:12px;">Want to arrive early or stay longer? Pick your dates below &mdash; Amy will price it out!</p>
+ <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:end;">
+ <div>
+ <label class="form-label" for="checkin_date">Check-In Date</label>
+ <input class="form-input" type="date" id="checkin_date" name="checkin_date" onchange="calcCheckout()">
+ </div>
+ <div>
+ <label class="form-label" for="nights">Nights</label>
+ <input class="form-input" type="number" id="nights" name="nights" min="1" max="30" placeholder="e.g. 4" oninput="calcCheckout()">
+ </div>
+ <div>
+ <label class="form-label">Check-Out Date</label>
+ <div style="background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:12px;padding:13px 16px;font-size:.95rem;color:var(--muted);" id="checkout_display">Auto-calculated</div>
+ <input type="hidden" id="checkout_date" name="checkout_date">
+ </div>
+ </div>
+ </div>
 
-        <div class="form-row">
-          <label class="form-label">Room Preference <span class="form-note" style="display:inline;">(select all that interest you &mdash; at least one required)</span></label>
-          <div class="checkbox-grid" style="margin-top:10px;grid-template-columns:1fr;">
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d1" name="room_preference" value="Jr Suite Garden View - King or Double (from $2,276 total / $1,138pp)">
-              <label for="room_d1">Jr Suite Garden View &mdash; from $1,138/pp &middot; King or Double</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d2" name="room_preference" value="Premium Jr Suite Tropical View - King or Queen (from $2,340 total / $1,170pp)">
-              <label for="room_d2">Premium Jr Suite Tropical View &mdash; from $1,170/pp &middot; King or Queen</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d3" name="room_preference" value="Premium Jr Suite Pool View - King or Queen (from $2,408 total / $1,204pp)">
-              <label for="room_d3">Premium Jr Suite Pool View &mdash; from $1,204/pp &middot; King or Queen</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d4" name="room_preference" value="Jr Swim-Up Suite - King or Double (from $2,796 total / $1,398pp)">
-              <label for="room_d4">Jr Swim-Up Suite &mdash; from $1,398/pp &middot; King or Double</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d5" name="room_preference" value="Preferred Club Jr Suite Ocean View - King (from $3,060 total / $1,530pp)">
-              <label for="room_d5">Preferred Club Jr Suite Ocean View &mdash; from $1,530/pp &middot; King</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d6" name="room_preference" value="Preferred Club Jr Swim-Up Suite - King or Double (from $3,388 total / $1,694pp) - LIMITED AVAILABILITY">
-              <label for="room_d6">Preferred Club Jr Swim-Up &mdash; from $1,694/pp &middot; &#9888;&#65039; Last rooms!</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_d7" name="room_preference" value="Other - see full rate table or let Amy recommend">
-              <label for="room_d7">Something else &mdash; see the full rate table below or let Amy recommend!</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox" id="room_unsure" name="room_preference" value="Not sure - let Amy recommend">
-              <label for="room_unsure">Not sure yet &mdash; let Amy pick the best option!</label>
-            </div>
-          </div>
-        </div>
+ <div class="form-row">
+ <label class="form-label">Room Preference <span class="form-note" style="display:inline;">(select all that interest you &mdash; at least one required)</span></label>
+ <div class="checkbox-grid" style="margin-top:10px;grid-template-columns:1fr;">
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d1" name="room_preference" value="Jr Suite Garden View - King or Double (from $2,276 total / $1,138pp)">
+ <label for="room_d1">Jr Suite Garden View &mdash; from $1,138/pp &middot; King or Double</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d2" name="room_preference" value="Premium Jr Suite Tropical View - King or Queen (from $2,340 total / $1,170pp)">
+ <label for="room_d2">Premium Jr Suite Tropical View &mdash; from $1,170/pp &middot; King or Queen</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d3" name="room_preference" value="Premium Jr Suite Pool View - King or Queen (from $2,408 total / $1,204pp)">
+ <label for="room_d3">Premium Jr Suite Pool View &mdash; from $1,204/pp &middot; King or Queen</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d4" name="room_preference" value="Jr Swim-Up Suite - King or Double (from $2,796 total / $1,398pp)">
+ <label for="room_d4">Jr Swim-Up Suite &mdash; from $1,398/pp &middot; King or Double</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d5" name="room_preference" value="Preferred Club Jr Suite Ocean View - King (from $3,060 total / $1,530pp)">
+ <label for="room_d5">Preferred Club Jr Suite Ocean View &mdash; from $1,530/pp &middot; King</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d6" name="room_preference" value="Preferred Club Jr Swim-Up Suite - King or Double (from $3,388 total / $1,694pp) - LIMITED AVAILABILITY">
+ <label for="room_d6">Preferred Club Jr Swim-Up &mdash; from $1,694/pp &middot; Last rooms!</label>
+ </div>
+ <div class="checkbox-item">
+ <input type="checkbox" id="room_d7" name="room_preference" value="Other - see full rate table or let Amy recommend">
+ <label for="room_d7">Something else &mdash; see the full rate table below or let Amy recommend!</label>
+ </div>
+ </div>
+ </div>
 
-        <div class="form-row">
-          <label class="form-label" for="travelers"># of Travelers in Your Room</label>
-          <select class="form-select" id="travelers" name="num_travelers">
-            <option value="">Select...</option>
-            <option value="1">1 &mdash; Solo traveler</option>
-            <option value="2">2 &mdash; Double occupancy</option>
-            <option value="3">3 &mdash; Triple occupancy</option>
-            <option value="4">4 &mdash; Quad occupancy</option>
-          </select>
-          <p class="form-note">The number of people sharing your room affects your per-person rate.</p>
-        </div>
+ <div class="form-row">
+ <label class="form-label" for="travelers"># of Travelers in Your Room</label>
+ <select class="form-select" id="travelers" name="num_travelers">
+ <option value="">Select...</option>
+ <option value="1">1 &mdash; Solo traveler</option>
+ <option value="2">2 &mdash; Double occupancy</option>
+ <option value="3">3 &mdash; Triple occupancy</option>
+ <option value="4">4 &mdash; Quad occupancy</option>
+ </select>
+ <p class="form-note">The number of people sharing your room affects your per-person rate.</p>
+ </div>
 
-        <div class="form-row">
-          <label class="form-label" for="roommate">Rooming With</label>
-          <input class="form-input" type="text" id="roommate" name="rooming_with" placeholder="Name(s) of roommate(s), or type N/A if solo">
-        </div>
+ <div class="form-row">
+ <label class="form-label" for="roommate">Rooming With</label>
+ <input class="form-input" type="text" id="roommate" name="rooming_with" placeholder="Name(s) of roommate(s), or type N/A if solo">
+ </div>
 
-        <div class="form-row">
-          <label class="form-label" for="notes">Questions or Notes for Amy</label>
-          <textarea class="form-textarea" id="notes" name="notes" placeholder="Anything else? Special requests, questions, budget range, etc."></textarea>
-        </div>
+ <div class="form-row">
+ <label class="form-label" for="notes">Questions or Notes for Amy</label>
+ <textarea class="form-textarea" id="notes" name="notes" placeholder="Anything else? Special requests, questions, budget range, etc."></textarea>
+ </div>
 
-        <!-- Hidden Formspree form -->
-        <form id="quote-form-el" action="https://formspree.io/f/xqevendj" method="POST" style="display:none;"></form>
+ <!-- Hidden Formspree form -->
+ <form id="quote-form-el" action="https://formspree.io/f/xqevendj" method="POST" style="display:none;"></form>
 
-        <button type="button" class="form-submit" onclick="submitQuoteForm()">Send My Quote Request &#127754;</button>
-        <p class="form-disclaimer">No commitment &mdash; Amy will reach out with your personalized quote. Rates are estimates and subject to change until booking is confirmed.</p>
+ <button type="button" class="form-submit" onclick="submitQuoteForm()">Send My Quote Request </button>
+ <p class="form-disclaimer">No commitment &mdash; Amy will reach out with your personalized quote. Rates are estimates and subject to change until booking is confirmed.</p>
 
-      </div>
+ </div>
 
-      <div class="success-msg" id="success-msg">
-        <div class="s-icon">&#127754;</div>
-        <h3>You're on the list!</h3>
-        <p>Amy got your request and will be in touch soon with your personalized quote. Get ready for Spring Break 2027 &mdash; Punta Cana, here we come!</p>
-        <p style="margin-top:16px;">Questions? <a href="mailto:amy.cate@celebrationtravel.com" style="color:var(--ocean);font-weight:600;">amy.cate@celebrationtravel.com</a></p>
-      </div>
-    </div>
-  </div>
+ <div class="success-msg" id="success-msg">
+ <div class="s-icon"></div>
+ <h3>You're on the list!</h3>
+ <p>Amy got your request and will be in touch soon with your personalized quote. Get ready for Spring Break 2027 &mdash; Punta Cana, here we come!</p>
+ <p style="margin-top:16px;">Questions? <a href="mailto:amy.cate@celebrationtravel.com" style="color:var(--ocean);font-weight:600;">amy.cate@celebrationtravel.com</a></p>
+ </div>
+ </div>
+ </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <p>Spring Break Vacation 2027 &nbsp;&bull;&nbsp; Dreams Onyx Resort &amp; Spa &nbsp;&bull;&nbsp; Punta Cana, Dominican Republic</p>
-  <p style="margin-top:8px;">
-    Organized by <a href="mailto:amy.cate@celebrationtravel.com">Amy Cate</a> &nbsp;&middot;&nbsp;
-    Destination Wedding &amp; Group Travel Specialist<br>
-    Destination Weddings Travel Group | Celebration Travel<br>
-    DestiDiamond Top 10 &nbsp;&bull;&nbsp; AIC Showstopper Award &nbsp;&bull;&nbsp; HIC Top 100 Agent
-  </p>
-  <p style="margin-top:12px;">Prices are estimates and subject to change until booking is confirmed. Not a confirmed booking. All pricing in USD.</p>
+ <p>Spring Break Vacation 2027 &nbsp;&bull;&nbsp; Dreams Onyx Resort &amp; Spa &nbsp;&bull;&nbsp; Punta Cana, Dominican Republic</p>
+ <p style="margin-top:8px;">
+ Organized by <a href="mailto:amy.cate@celebrationtravel.com">Amy Cate</a> &nbsp;&middot;&nbsp;
+ Destination Wedding &amp; Group Travel Specialist<br>
+ Destination Weddings Travel Group | Celebration Travel<br>
+ DestiDiamond Top 10 &nbsp;&bull;&nbsp; AIC Showstopper Award &nbsp;&bull;&nbsp; HIC Top 100 Agent
+ </p>
+ <p style="margin-top:12px;">Prices are estimates and subject to change until booking is confirmed. Not a confirmed booking. All pricing in USD.</p>
 </footer>
 
 <!-- Firebase + Scripts -->
@@ -780,105 +776,134 @@ footer a { color: var(--gold2); text-decoration: none; }
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig = {
-  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
-  authDomain: "wedding-crm-e5d12.firebaseapp.com",
-  projectId: "wedding-crm-e5d12",
-  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
-  messagingSenderId: "123456789",
-  appId: "1:123456789:web:abcdef"
+ apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+ authDomain: "wedding-crm-e5d12.firebaseapp.com",
+ projectId: "wedding-crm-e5d12",
+ storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+ messagingSenderId: "123456789",
+ appId: "1:123456789:web:abcdef"
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function calcCheckout() {
-  const cin = document.getElementById('checkin_date').value;
-  const n = parseInt(document.getElementById('nights').value);
-  if (cin && n && n > 0) {
-    const d = new Date(cin + 'T12:00:00');
-    d.setDate(d.getDate() + n);
-    const opts = { month: 'short', day: 'numeric', year: 'numeric' };
-    document.getElementById('checkout_display').textContent = d.toLocaleDateString('en-US', opts);
-    document.getElementById('checkout_date').value = d.toISOString().split('T')[0];
+function updateTravelerNames() {
+  const count = parseInt(document.getElementById('travelers').value) || 0;
+  const block = document.getElementById('traveler-names-block');
+  const container = document.getElementById('traveler-name-fields');
+  if (count >= 2) {
+    block.style.display = 'block';
+    container.innerHTML = '';
+    for (let i = 1; i <= count; i++) {
+      const label = i === 1 ? 'Traveler 1 (You)' : 'Traveler ' + i;
+      const placeholder = i === 1 ? 'Your full name' : 'Full name of traveler ' + i;
+      container.innerHTML += '<div style="margin-bottom:12px;"><label class="form-label" style="font-size:.72rem;margin-bottom:5px;">' + label + '</label><input class="form-input traveler-name-input" type="text" placeholder="' + placeholder + '"></div>';
+    }
   } else {
-    document.getElementById('checkout_display').textContent = 'Auto-calculated';
-    document.getElementById('checkout_date').value = '';
+    block.style.display = 'none';
+    container.innerHTML = '';
   }
 }
 
+function calcCheckout() {
+ const cin = document.getElementById('checkin_date').value;
+ const n = parseInt(document.getElementById('nights').value);
+ if (cin && n && n > 0) {
+  const d = new Date(cin + 'T12:00:00');
+  d.setDate(d.getDate() + n);
+  const opts = { month: 'short', day: 'numeric', year: 'numeric' };
+  document.getElementById('checkout_display').textContent = d.toLocaleDateString('en-US', opts);
+  document.getElementById('checkout_date').value = d.toISOString().split('T')[0];
+ } else {
+  document.getElementById('checkout_display').textContent = 'Auto-calculated';
+  document.getElementById('checkout_date').value = '';
+ }
+}
+
 async function submitQuoteForm() {
-  const btn = document.querySelector('.form-submit');
-  const fname = document.getElementById('fname').value.trim();
-  const lname = document.getElementById('lname').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const roommate = document.getElementById('roommate').value.trim();
-  const travelers = document.getElementById('travelers').value;
-  const rooms = [...document.querySelectorAll('input[name="room_preference"]:checked')].map(c => c.value);
+ const btn = document.querySelector('.form-submit');
+ const fname = document.getElementById('fname').value.trim();
+ const lname = document.getElementById('lname').value.trim();
+ const email = document.getElementById('email').value.trim();
+ const phone = document.getElementById('phone').value.trim();
+ const travelers = document.getElementById('travelers').value;
+ const rooms = [...document.querySelectorAll('input[name="room_preference"]:checked')].map(c => c.value);
 
-  const missing = [];
-  if (!fname) missing.push('First name');
-  if (!lname) missing.push('Last name');
-  if (!email) missing.push('Email');
-  if (!phone) missing.push('Phone');
-  if (!travelers) missing.push('# of travelers');
-  if (!roommate) missing.push('Rooming with (type N/A if solo)');
-  if (rooms.length === 0) missing.push('Room preference');
+ // Collect traveler names
+ const nameFields = document.querySelectorAll('.traveler-name-input');
+ const travelerNames = [];
+ let namesMissing = false;
+ nameFields.forEach(f => {
+   const val = f.value.trim();
+   if (!val) namesMissing = true;
+   else travelerNames.push(val);
+ });
 
-  if (missing.length > 0) {
-    alert('Please complete the following fields:\n\n' + missing.join('\n'));
-    return;
-  }
+ const missing = [];
+ if (!fname) missing.push('First name');
+ if (!lname) missing.push('Last name');
+ if (!email) missing.push('Email');
+ if (!phone) missing.push('Phone');
+ if (!travelers) missing.push('# of travelers');
+ if (rooms.length === 0) missing.push('Room preference');
+ if (parseInt(travelers) >= 2 && namesMissing) missing.push('Full name(s) of ALL travelers in your room (required to run your quote)');
 
-  const formData = new FormData();
-  formData.append('first_name', fname);
-  formData.append('last_name', lname);
-  formData.append('email', email);
-  formData.append('phone', phone);
-  formData.append('trip_dates', 'March 22-26, 2027 - Dreams Onyx Punta Cana DR');
-  formData.append('room_preference', rooms.join(', '));
-  formData.append('num_travelers', travelers);
-  formData.append('rooming_with', roommate);
-  formData.append('notes', document.getElementById('notes').value);
-  formData.append('_subject', 'Quote Request - Spring Break 2027 - ' + fname + ' ' + lname);
+ if (missing.length > 0) {
+  alert('Please complete the following fields:\n\n' + missing.join('\n'));
+  return;
+ }
 
-  btn.textContent = 'Sending...';
-  btn.disabled = true;
+ const allNames = travelerNames.length ? travelerNames.join(', ') : (fname + ' ' + lname + ' (solo)');
+
+ const formData = new FormData();
+ formData.append('first_name', fname);
+ formData.append('last_name', lname);
+ formData.append('email', email);
+ formData.append('phone', phone);
+ formData.append('trip_dates', 'March 22-26, 2027 - Dreams Onyx Punta Cana DR');
+ formData.append('room_preference', rooms.join(', '));
+ formData.append('num_travelers', travelers);
+ formData.append('traveler_names', allNames);
+ formData.append('notes', document.getElementById('notes').value);
+ formData.append('_subject', 'Quote Request - Spring Break 2027 - ' + fname + ' ' + lname);
+
+ btn.textContent = 'Sending...';
+ btn.disabled = true;
+
+ try {
+  const res = await fetch(document.getElementById('quote-form-el').action, {
+   method: 'POST', body: formData, headers: { 'Accept': 'application/json' }
+  });
+  if (!res.ok) throw new Error('Formspree failed');
 
   try {
-    const res = await fetch(document.getElementById('quote-form-el').action, {
-      method: 'POST', body: formData, headers: { 'Accept': 'application/json' }
-    });
-    if (!res.ok) throw new Error('Formspree failed');
-
-    try {
-      await db.collection('intakes').add({
-        groupName: 'Spring Break 2027 - Dreams Onyx Punta Cana',
-        firstName: fname,
-        lastName: lname,
-        email: email,
-        phone: phone,
-        roomPreference: rooms.join(', '),
-        numTravelers: travelers,
-        roomingWith: roommate,
-        checkinDate: document.getElementById('checkin_date').value || 'Mar 22, 2027 (group date)',
-        nights: document.getElementById('nights').value || '4',
-        checkoutDate: document.getElementById('checkout_date').value || 'Mar 26, 2027 (group date)',
-        notes: document.getElementById('notes').value,
-        source: 'Website Form',
-        submittedAt: new Date().toISOString()
-      });
-    } catch(fsErr) {
-      console.warn('Firestore write failed (non-critical):', fsErr);
-    }
-
-    document.getElementById('form-fields').style.display = 'none';
-    document.getElementById('success-msg').style.display = 'block';
-
-  } catch(e) {
-    btn.textContent = 'Send My Quote Request 🌊';
-    btn.disabled = false;
-    alert('Something went wrong. Please email Amy directly at amy.cate@celebrationtravel.com');
+   await db.collection('intakes').add({
+    groupName: 'Spring Break 2027 - Dreams Onyx Punta Cana',
+    firstName: fname,
+    lastName: lname,
+    email: email,
+    phone: phone,
+    roomPreference: rooms.join(', '),
+    numTravelers: travelers,
+    travelerNames: allNames,
+    checkinDate: document.getElementById('checkin_date').value || 'Mar 22, 2027 (group date)',
+    nights: document.getElementById('nights').value || '4',
+    checkoutDate: document.getElementById('checkout_date').value || 'Mar 26, 2027 (group date)',
+    notes: document.getElementById('notes').value,
+    source: 'Website Form',
+    submittedAt: new Date().toISOString()
+   });
+  } catch(fsErr) {
+   console.warn('Firestore write failed (non-critical):', fsErr);
   }
+
+  document.getElementById('form-fields').style.display = 'none';
+  document.getElementById('success-msg').style.display = 'block';
+
+ } catch(e) {
+  btn.textContent = 'Send My Quote Request';
+  btn.disabled = false;
+  alert('Something went wrong. Please email Amy directly at amy.cate@celebrationtravel.com');
+ }
 }
 </script>
 
