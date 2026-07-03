@@ -112,6 +112,35 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .toast.error{border-color:#e74c3c;color:#e74c3c}
 @keyframes slideIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
 
+/* ── GALLERY VIEW MODE ── */
+#galleryViewer{display:none;position:fixed;inset:0;background:#000;z-index:9999;flex-direction:column}
+#galleryViewer.active{display:flex}
+.gv-header{background:rgba(0,0,0,.85);padding:16px 24px;display:flex;align-items:center;gap:16px;border-bottom:1px solid #222;flex-shrink:0}
+.gv-title{font-family:'Playfair Display',serif;color:#f0c958;font-size:1.1rem;font-weight:700;flex:1}
+.gv-sub{color:#666;font-size:.8rem;margin-top:2px}
+.gv-close{background:none;border:1px solid #444;color:#aaa;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-family:inherit}
+.gv-close:hover{border-color:#f0c958;color:#f0c958}
+.gv-copy{background:#f0c958;border:none;color:#111;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit}
+.gv-copy:hover{background:#e8b83a}
+.gv-stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.gv-img{max-width:100%;max-height:100%;object-fit:contain;display:block;transition:opacity .2s}
+.gv-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.6);border:none;color:#fff;width:48px;height:48px;border-radius:50%;font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10}
+.gv-btn:hover{background:rgba(240,201,88,.4)}
+.gv-prev{left:16px}
+.gv-next{right:16px}
+.gv-footer{background:rgba(0,0,0,.85);padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:8px;border-top:1px solid #222;flex-shrink:0}
+.gv-dot{width:10px;height:10px;border-radius:50%;background:#444;cursor:pointer;transition:background .15s;border:none}
+.gv-dot.active{background:#f0c958}
+.gv-counter{position:absolute;bottom:60px;right:24px;color:#888;font-size:.75rem}
+
+/* ── CATEGORY GROUP HEADER ── */
+.cat-group-header{display:flex;align-items:center;gap:10px;margin:24px 0 10px 0}
+.cat-group-title{font-size:.85rem;font-weight:600;color:#ccc;text-transform:uppercase;letter-spacing:.08em}
+.cat-group-resort{font-size:.75rem;color:#f0c958;margin-left:4px}
+.gallery-link-btn{background:#1a1a1a;border:1px solid #333;color:#aaa;border-radius:5px;padding:4px 12px;font-size:.72rem;cursor:pointer;font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:5px}
+.gallery-link-btn:hover{background:#f0c958;color:#111;border-color:#f0c958}
+.cat-divider{flex:1;height:1px;background:#2a2a2a}
+
 /* ── LOADING ── */
 .loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid #333;border-top-color:#f0c958;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -696,7 +725,7 @@ async function startUpload() {
     });
   }, 2500);
 
-  loadPhotos();
+  loadPhotos().then(checkGalleryParams);
 }
 
 function setStatus(id, html, cls) {
@@ -764,10 +793,29 @@ function renderGallery(photos) {
     return;
   }
 
-  grid.innerHTML = photos.map(p => `
+  // Group by resort + category
+  const groups = {};
+  photos.forEach(p => {
+    const key = (p.resortSlug || '') + '|||' + (p.roomCategory || p.category || '');
+    if (!groups[key]) groups[key] = { resort: p.resortSlug || '', resortName: p.resortName || p.resortSlug || '', cat: p.roomCategory || p.category || '', photos: [] };
+    groups[key].photos.push(p);
+  });
+
+  let html = '';
+  Object.values(groups).forEach(g => {
+    const galleryUrl = location.origin + location.pathname + '?gallery=' + encodeURIComponent(g.resort) + '&cat=' + encodeURIComponent(g.cat);
+    const photosJsonStr = JSON.stringify(JSON.stringify(g.photos));
+    html += `<div style="grid-column:1/-1;" class="cat-group-header">
+      <span class="cat-group-resort">${escHtml(g.resortName)}</span>
+      <span class="cat-group-title">&mdash; ${escHtml(g.cat)}</span>
+      <span class="cat-divider"></span>
+      <button class="gallery-link-btn" onclick="openGalleryViewer(${photosJsonStr}, ${JSON.stringify(g.cat)}, ${JSON.stringify(g.resortName)}, ${JSON.stringify(galleryUrl)})">&#128247; View Gallery</button>
+      <button class="gallery-link-btn" onclick="copyTextToClipboard(${JSON.stringify(galleryUrl)}, this)">&#128203; Copy Link</button>
+    </div>`;
+    g.photos.forEach(p => {
+      html += `
     <div class="photo-card" id="card_${p.id}">
-      <img src="${escHtml(p.downloadURL)}" alt="${escHtml(p.roomCategory)}" loading="lazy"
-           onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'220\\' height=\\'160\\'%3E%3Crect fill=\\'%23222\\' width=\\'220\\' height=\\'160\\'/%3E%3Ctext x=\\'110\\' y=\\'85\\' text-anchor=\\'middle\\' fill=\\'%23444\\' font-size=\\'12\\'%3ENo preview%3C/text%3E%3C/svg%3E'">
+      <img src="${escHtml(p.downloadURL)}" alt="${escHtml(p.roomCategory)}" loading="lazy">
       <div class="photo-card-body">
         <div class="photo-resort">${escHtml(p.resortName || p.resortSlug)}</div>
         <div class="photo-category">${escHtml(p.roomCategory)}</div>
@@ -778,9 +826,12 @@ function renderGallery(photos) {
           <button class="delete-btn" onclick="deletePhoto('${p.id}','${escAttr(p.storagePath)}')">&#128465;</button>
         </div>
       </div>
-    </div>
-  `).join('');
+    </div>`;
+    });
+  });
+  grid.innerHTML = html;
 }
+
 
 // ── COPY URL ──
 async function copyURL(id, url) {
@@ -893,6 +944,91 @@ async function saveEditPhoto() {
 loadPhotos();
 initProfileResortDropdown();
 initFilterResortDropdown();
+
+// ── GALLERY VIEWER ──
+let gvPhotos = [], gvIdx = 0, gvUrl = '';
+
+function openGalleryViewer(photosJson, cat, resortName, galleryUrl) {
+  gvPhotos = JSON.parse(photosJson);
+  gvIdx = 0;
+  gvUrl = galleryUrl;
+  document.getElementById('gvTitle').textContent = cat;
+  document.getElementById('gvSub').textContent = resortName + ' · ' + gvPhotos.length + ' photo' + (gvPhotos.length !== 1 ? 's' : '');
+  renderGvSlide();
+  document.getElementById('galleryViewer').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  // Update URL so the link is shareable
+  history.replaceState({}, '', galleryUrl);
+}
+
+function closeGalleryViewer() {
+  document.getElementById('galleryViewer').classList.remove('active');
+  document.body.style.overflow = '';
+  history.replaceState({}, '', location.pathname);
+}
+
+function renderGvSlide() {
+  const p = gvPhotos[gvIdx];
+  const img = document.getElementById('gvImg');
+  img.style.opacity = '0';
+  setTimeout(() => { img.src = p.downloadURL || p.url || ''; img.style.opacity = '1'; }, 100);
+  document.getElementById('gvCounter').textContent = (gvIdx + 1) + ' / ' + gvPhotos.length;
+  const dots = document.getElementById('gvDots');
+  dots.innerHTML = gvPhotos.map((_, i) => `<button class="gv-dot ${i === gvIdx ? 'active' : ''}" onclick="gvGoTo(${i})"></button>`).join('');
+}
+
+function gvNav(dir) {
+  gvIdx = (gvIdx + dir + gvPhotos.length) % gvPhotos.length;
+  renderGvSlide();
+}
+
+function gvGoTo(i) {
+  gvIdx = i;
+  renderGvSlide();
+}
+
+function copyGalleryLink() {
+  copyTextToClipboard(gvUrl, document.getElementById('gvCopyBtn'));
+}
+
+function copyTextToClipboard(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied!';
+    btn.style.background = '#27ae60';
+    btn.style.color = 'white';
+    setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+  }).catch(() => toast('Could not copy.', 'error'));
+}
+
+// Keyboard nav for gallery viewer
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('galleryViewer').classList.contains('active')) return;
+  if (e.key === 'ArrowRight') gvNav(1);
+  if (e.key === 'ArrowLeft') gvNav(-1);
+  if (e.key === 'Escape') closeGalleryViewer();
+});
+
+// Auto-open gallery if URL params present
+function checkGalleryParams() {
+  const params = new URLSearchParams(location.search);
+  const resort = params.get('gallery');
+  const cat = params.get('cat');
+  if (!resort || !cat) return;
+  // Wait for photos to load then open
+  const tryOpen = () => {
+    const matching = allPhotos.filter(p => p.resortSlug === resort && (p.roomCategory || p.category || '') === cat);
+    if (matching.length > 0) {
+      const resortName = matching[0].resortName || resort;
+      const galleryUrl = location.origin + location.pathname + '?gallery=' + encodeURIComponent(resort) + '&cat=' + encodeURIComponent(cat);
+      openGalleryViewer(JSON.stringify(matching), cat, resortName, galleryUrl);
+    }
+  };
+  // Retry until photos are loaded
+  if (allPhotos.length > 0) tryOpen();
+  else setTimeout(tryOpen, 1500);
+}
+
 </script>
 
 <!-- EDIT PHOTO MODAL -->
@@ -919,6 +1055,25 @@ initFilterResortDropdown();
       <button class="copy-btn" style="flex:1;" onclick="closeEditPhoto()">Cancel</button>
     </div>
   </div>
+</div>
+
+<!-- GALLERY VIEWER -->
+<div id="galleryViewer">
+  <div class="gv-header">
+    <div>
+      <div class="gv-title" id="gvTitle">Room Gallery</div>
+      <div class="gv-sub" id="gvSub"></div>
+    </div>
+    <button class="gv-copy" onclick="copyGalleryLink()" id="gvCopyBtn">&#128203; Copy Link</button>
+    <button class="gv-close" onclick="closeGalleryViewer()">&#10005; Close</button>
+  </div>
+  <div class="gv-stage">
+    <button class="gv-btn gv-prev" onclick="gvNav(-1)">&#8249;</button>
+    <img id="gvImg" class="gv-img" src="" alt="">
+    <button class="gv-btn gv-next" onclick="gvNav(1)">&#8250;</button>
+    <div class="gv-counter" id="gvCounter"></div>
+  </div>
+  <div class="gv-footer" id="gvDots"></div>
 </div>
 </body>
 </html>
