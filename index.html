@@ -2963,7 +2963,9 @@ function qbGenerate() {
   const checkedRooms = [];
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
     const card = cb.closest('div[style*="border:1px solid #e0e0e0"]') || cb.parentElement.parentElement;
-    const cat = card.querySelector('.qb-room-label')?.value || cb.dataset.cat;
+    const displayCat = card.querySelector('.qb-room-label')?.value || cb.dataset.cat;
+    const origCat = cb.dataset.cat; // original Firestore category key for photo lookup
+    const cat = displayCat;
     const photoGroup = cb.dataset.photoGroup;
     const selectedPhoto = photoGroup ? document.querySelector(`input[name="${photoGroup}"]:checked`)?.value || '' : '';
     const costRaw = card.querySelector('.qb-room-cost')?.value?.trim() || '';
@@ -2976,8 +2978,8 @@ function qbGenerate() {
     const perPersonFmt = perPersonNum > 0 ? '$' + perPersonNum.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : (rateRaw || '');
     const displayRate = hasKidsMode ? (costRaw ? '$' + costRaw + ' total' : '') : perPersonFmt;
     const costFmt = costRaw ? '$' + parseFloat(costRaw).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
-    // Collect ALL photo URLs for this category (for carousel)
-    const allCatPhotos = (qbResortData || []).filter(p => (p.category || p.roomCategory || '') === cat).map(p => p.url || p.downloadURL || '').filter(Boolean);
+    // Collect ALL photo URLs using original category key (not editable label)
+    const allCatPhotos = (qbResortData || []).filter(p => (p.category || p.roomCategory || '') === origCat).map(p => p.url || p.downloadURL || '').filter(Boolean);
     if (selectedPhoto && !allCatPhotos.includes(selectedPhoto)) allCatPhotos.unshift(selectedPhoto);
     checkedRooms.push({cat, url: selectedPhoto, allUrls: allCatPhotos, rate: displayRate, cost: costFmt, notes});
   });
