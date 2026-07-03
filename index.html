@@ -5213,6 +5213,7 @@ async function loadInbox(){
     leadSnap.docs.forEach(d => {
       const data = d.data();
       if(!data.createdAt || data.createdAt < thirtyDaysAgo) return;
+      if(data.crmDismissed === true) return; // skip dismissed leads
       items.push({
         id: 'lead_'+d.id,
         type: 'lead',
@@ -5250,6 +5251,16 @@ async function loadInbox(){
       });
     });
   } catch(e){ console.log('Inbox email error:', e.message); }
+
+  // Merge cleared/read state saved on the backend (survives across devices & incognito)
+  try{
+    const metaDoc = await db.collection('crmMeta').doc('inbox').get();
+    if(metaDoc.exists && Array.isArray(metaDoc.data().readIds)){
+      metaDoc.data().readIds.forEach(id => _inboxReadIds.add(id));
+      localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+    }
+  } catch(e){ console.log('Inbox read-state load error:', e.message); }
+
   _inboxItems = items;
   renderInbox();
   updateInboxBadge();
@@ -5291,6 +5302,7 @@ async function dismissInboxItem(id){
   _inboxItems = _inboxItems.filter(i => i.id !== id);
   _inboxReadIds.add(id);
   localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+  _saveInboxRead([id]);
   // Mark as dismissed in Firestore so it doesn't come back
   if(item){
     try{
@@ -5311,16 +5323,29 @@ async function dismissInboxItem(id){
   renderInbox();
 }
 
+// Persist read/cleared inbox item ids to the backend (fire-and-forget)
+function _saveInboxRead(ids){
+  if(!ids || !ids.length) return;
+  try{
+    db.collection('crmMeta').doc('inbox').set({
+      readIds: firebase.firestore.FieldValue.arrayUnion(...ids)
+    }, {merge:true});
+  }catch(e){ console.log('Inbox read-state save error:', e.message); }
+}
+
 function markInboxRead(id){
   _inboxReadIds.add(id);
   localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+  _saveInboxRead([id]);
   updateInboxBadge();
   renderInbox();
 }
 
 function markAllInboxRead(){
-  _inboxItems.forEach(i => _inboxReadIds.add(i.id));
+  const ids = _inboxItems.map(i => i.id);
+  ids.forEach(i => _inboxReadIds.add(i));
   localStorage.setItem('crmInboxRead', JSON.stringify([..._inboxReadIds]));
+  _saveInboxRead(ids);
   updateInboxBadge();
   renderInbox();
 }
