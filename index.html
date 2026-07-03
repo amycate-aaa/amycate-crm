@@ -2766,11 +2766,16 @@ function qbRenderRooms() {
   const occ = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const hasKids = document.getElementById('qb-has-kids')?.checked;
 
+  // Resort slug for building shareable gallery (carousel) links per room
+  const qbSlug = document.getElementById('qb-resort')?.value
+    || qbResortData[0]?.resortSlug || qbResortData[0]?.resort || '';
+
   let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
     <p style="font-size:.82rem;color:#888;margin-bottom:12px;">${hasKids ? 'With kids: enter total cost for the whole room.' : 'Check rooms to include. Enter total room cost — per person auto-calculates.'}</p>`;
 
   Object.entries(categories).forEach(([cat, photos]) => {
+    const galleryUrl = `https://amy-cate.com/gallery?gallery=${encodeURIComponent(qbSlug)}&cat=${encodeURIComponent(cat)}`;
     const photoOptions = photos.map((p,i) => {
       const url = p.url || p.downloadURL || '';
       return `<label style="cursor:pointer;display:inline-block;margin-right:6px;vertical-align:top;">
@@ -2794,6 +2799,7 @@ function qbRenderRooms() {
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <input type="checkbox" class="qb-room-check" data-cat="${cat}" data-photo-group="qb-room-photo-${cat.replace(/\s+/g,'-')}" style="width:16px;height:16px;cursor:pointer" onchange="qbCheckReady()">
         <input class="qb-room-label form-input" value="${cat}" placeholder="Room name (editable)" style="flex:1;padding:6px 10px;font-size:.88rem;font-weight:600;">
+        <button type="button" onclick="qbCopyGalleryLink(this,'${galleryUrl}')" title="Copy shareable carousel link for this room" style="flex-shrink:0;white-space:nowrap;padding:6px 10px;background:#fff;color:var(--navy);border:1px solid #c9a96e;border-radius:6px;font-size:.72rem;font-weight:700;cursor:pointer;">&#128279; Gallery Link</button>
       </div>
       ${photos.length > 0 ? `<div style="margin-bottom:8px;">${photoOptions}</div>` : ''}
       ${pricingHtml}
@@ -2803,6 +2809,17 @@ function qbRenderRooms() {
   roomsHtml += `<button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:4px;">+ Add Custom Room</button></div>`;
 
   container.innerHTML = heroHtml + roomsHtml;
+}
+
+// Copy a room's shareable gallery (carousel) link to clipboard
+function qbCopyGalleryLink(btn, url){
+  navigator.clipboard.writeText(url).then(()=>{
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied';
+    btn.style.background = '#e8f5e9'; btn.style.borderColor = '#4caf50'; btn.style.color = '#2e7d32';
+    setTimeout(()=>{ btn.innerHTML = orig; btn.style.background='#fff'; btn.style.borderColor='#c9a96e'; btn.style.color='var(--navy)'; }, 1800);
+    if (typeof showToast === 'function') showToast('Gallery link copied.', 'green');
+  }).catch(()=>{ if (typeof showToast === 'function') showToast('Could not copy link.', 'red'); });
 }
 
 function qbAddCustomRoom() {
