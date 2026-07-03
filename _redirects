@@ -1,16 +1,18 @@
-# Explicit real pages — never fall through to index.html for these
+# Explicit real pages — serve directly
 /index.html             /index.html              200
-/intake.html            /intake.html              200
-/group.html             /group.html               200
-/couple.html            /couple.html              200
-/flights.html           /flights.html             200
-/resort-library.html    /resort-library.html      200
-/resort-library         /resort-library.html      200
-/briones/*              /briones/index.html       200
-/ticoya/*               /ticoya/index.html        200
+/intake.html            /intake.html             200
+/group.html             /group.html              200
+/couple.html            /couple.html             200
+/flights.html           /flights.html            200
+/resort-library.html    /resort-library.html     200
+
+# Extensionless alias for gallery links
+/resort-library         /resort-library.html     301
+
+/briones/*              /briones/index.html      200
+/ticoya/*               /ticoya/index.html       200
 /springbreak2027/*      /springbreak2027/index.html  200
 
-# Anything else that doesn't match a real file gets a clean 404 —
-# never silently serve the CRM dashboard for a missing/mistyped path.
-/*                      /404.html                 404
+# Anything else
+/*                      /404.html                404
 
