@@ -2763,6 +2763,9 @@ function qbRenderRooms() {
       heroHtml += `</div>`;
     }
     if (roomPhotos.length > 0) {
+      if (resortPhotos.length === 0) {
+        heroHtml += `<p style="font-size:.78rem;color:#8a6d1a;background:#FDF6E3;border:1px solid #EBD9A8;border-radius:6px;padding:8px 10px;margin:0 0 10px 0;line-height:1.5;">No resort/property photos yet for this resort &mdash; showing room photos. Upload a pool or exterior shot in the Resort Library to use as a hero.</p>`;
+      }
       heroHtml += `<div style="font-size:.68rem;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Room Photos</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
       roomPhotos.forEach(p => { heroHtml += renderHeroCell(p); });
