@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Room Gallery</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a0a;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100vh;display:flex;flex-direction:column}
+.header{background:#111;border-bottom:1px solid #222;padding:16px 24px;display:flex;align-items:center;gap:16px}
+.logo{font-family:'Playfair Display',serif;color:#f0c958;font-size:1rem;font-weight:700;letter-spacing:.05em;white-space:nowrap}
+.header-info{flex:1}
+.header-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:#fff;font-weight:700}
+.header-sub{font-size:.78rem;color:#666;margin-top:2px}
+.stage{flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:#000;min-height:0}
+.main-img{max-width:100%;max-height:100%;object-fit:contain;display:block;transition:opacity .2s;user-select:none}
+.nav-btn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.55);border:none;color:#fff;width:52px;height:52px;border-radius:50%;font-size:1.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;z-index:10}
+.nav-btn:hover{background:rgba(240,201,88,.5)}
+.prev{left:16px}
+.next{right:16px}
+.footer{background:#111;border-top:1px solid #222;padding:12px 24px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.dot{width:10px;height:10px;border-radius:50%;background:#333;cursor:pointer;border:none;transition:background .15s;flex-shrink:0}
+.dot.active{background:#f0c958}
+.counter{position:absolute;bottom:70px;right:20px;background:rgba(0,0,0,.6);color:#aaa;font-size:.75rem;padding:4px 10px;border-radius:20px}
+.thumbs{background:#0d0d0d;border-top:1px solid #1a1a1a;padding:10px 16px;display:flex;gap:8px;overflow-x:auto;flex-shrink:0}
+.thumb{width:72px;height:50px;object-fit:cover;border-radius:4px;cursor:pointer;opacity:.5;transition:opacity .15s;border:2px solid transparent;flex-shrink:0}
+.thumb.active{opacity:1;border-color:#f0c958}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:16px;color:#555}
+.spinner{width:36px;height:36px;border:3px solid #222;border-top-color:#f0c958;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{text-align:center;color:#666;padding:40px}
+.error h2{color:#f0c958;margin-bottom:8px;font-family:'Playfair Display',serif}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">&#10022; Amy Cate</div>
+  <div class="header-info">
+    <div class="header-title" id="hTitle">Loading...</div>
+    <div class="header-sub" id="hSub"></div>
+  </div>
+</div>
+
+<div class="stage" id="stage">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <div>Loading photos...</div>
+  </div>
+  <img class="main-img" id="mainImg" src="" alt="" style="display:none">
+  <button class="nav-btn prev" id="prevBtn" onclick="nav(-1)" style="display:none">&#8249;</button>
+  <button class="nav-btn next" id="nextBtn" onclick="nav(1)" style="display:none">&#8250;</button>
+  <div class="counter" id="counter" style="display:none"></div>
+</div>
+
+<div class="footer" id="dots"></div>
+<div class="thumbs" id="thumbs"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  authDomain: "wedding-crm-e5d12.firebaseapp.com",
+  projectId: "wedding-crm-e5d12",
+  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+  messagingSenderId: "246819649586",
+  appId: "1:246819649586:web:a74debd217ce048d26242b"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let photos = [], idx = 0;
+
+const params = new URLSearchParams(location.search);
+const resort = params.get('gallery') || '';
+const cat    = params.get('cat') || '';
+
+async function load() {
+  if (!resort || !cat) {
+    showError('No gallery specified.', 'Share a gallery link from the Resort Library.');
+    return;
+  }
+
+  try {
+    let snap = await db.collection('resortPhotos')
+      .where('resortSlug', '==', resort)
+      .where('roomCategory', '==', cat)
+      .get();
+
+    // fallback: try 'category' field and 'resort' field
+    if (snap.empty) {
+      snap = await db.collection('resortPhotos')
+        .where('resort', '==', resort)
+        .where('category', '==', cat)
+        .get();
+    }
+
+    if (snap.empty) {
+      showError('No photos found.', 'This gallery may have been removed or the link is outdated.');
+      return;
+    }
+
+    photos = snap.docs.map(d => ({id: d.id, ...d.data()}));
+    const resortName = photos[0].resortName || resort;
+
+    document.getElementById('hTitle').textContent = cat;
+    document.getElementById('hSub').textContent = resortName + ' \u00b7 ' + photos.length + ' photo' + (photos.length !== 1 ? 's' : '');
+    document.title = cat + ' \u2014 ' + resortName;
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('mainImg').style.display = 'block';
+    if (photos.length > 1) {
+      document.getElementById('prevBtn').style.display = 'flex';
+      document.getElementById('nextBtn').style.display = 'flex';
+      document.getElementById('counter').style.display = 'block';
+    }
+
+    // Thumbs
+    const thumbsEl = document.getElementById('thumbs');
+    thumbsEl.innerHTML = photos.map((p,i) => {
+      const url = p.downloadURL || p.url || '';
+      return '<img class="thumb' + (i===0?' active':'') + '" src="' + url + '" onclick="goTo(' + i + ')" alt="">';
+    }).join('');
+
+    goTo(0);
+  } catch(e) {
+    console.error(e);
+    showError('Could not load photos.', e.message);
+  }
+}
+
+function goTo(i) {
+  idx = (i + photos.length) % photos.length;
+  const p = photos[idx];
+  const img = document.getElementById('mainImg');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = p.downloadURL || p.url || '';
+    img.style.opacity = '1';
+  }, 100);
+  document.getElementById('counter').textContent = (idx+1) + ' / ' + photos.length;
+
+  // Dots
+  const dotsEl = document.getElementById('dots');
+  dotsEl.innerHTML = photos.map((_,i) =>
+    '<button class="dot' + (i===idx?' active':'') + '" onclick="goTo(' + i + ')"></button>'
+  ).join('');
+
+  // Thumbs
+  document.querySelectorAll('.thumb').forEach((t,i) => t.classList.toggle('active', i===idx));
+  const activeThumb = document.querySelectorAll('.thumb')[idx];
+  if (activeThumb) activeThumb.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
+}
+
+function nav(dir) { goTo(idx + dir); }
+
+function showError(title, msg) {
+  document.getElementById('loading').innerHTML =
+    '<div class="error"><h2>' + title + '</h2><p>' + msg + '</p></div>';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') nav(1);
+  if (e.key === 'ArrowLeft')  nav(-1);
+});
+
+load();
+</script>
+</body>
+</html>
