@@ -3047,7 +3047,7 @@ function qbGenerate() {
   });
   // Greeting
   let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
-  let intro = customIntro || `${fullNames}, I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
+  let intro = customIntro || `<strong style="color:#1B2B4B;">Guests:</strong> ${fullNames}<br><br>I put together your personalized quote for ${eventName || resortName}${greetEmoji}. Take a look at the options below and let me know what calls your name!`;
 
   // Build resort hero photo row
   const heroPhotoRow = heroPhoto ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${heroPhoto}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
