@@ -5,10 +5,6 @@
 /couple.html            /couple.html             200
 /flights.html           /flights.html            200
 /resort-library.html    /resort-library.html     200
-
-# Extensionless alias for gallery links
-/resort-library         /resort-library.html     301
-
 /briones/*              /briones/index.html      200
 /ticoya/*               /ticoya/index.html       200
 /springbreak2027/*      /springbreak2027/index.html  200
