@@ -803,7 +803,7 @@ function renderGallery(photos) {
 
   let html = '';
   Object.values(groups).forEach(g => {
-    const galleryUrl = location.origin + location.pathname + '?gallery=' + encodeURIComponent(g.resort) + '&cat=' + encodeURIComponent(g.cat);
+    const galleryUrl = location.origin + '/resort-library.html' + '?gallery=' + encodeURIComponent(g.resort) + '&cat=' + encodeURIComponent(g.cat);
     const gid = 'grp_' + Math.random().toString(36).slice(2,8);
     // Store data on a hidden element to avoid escaping hell
     html += `<div style="grid-column:1/-1;" class="cat-group-header">
@@ -1028,7 +1028,7 @@ function checkGalleryParams() {
     const matching = allPhotos.filter(p => p.resortSlug === resort && (p.roomCategory || p.category || '') === cat);
     if (matching.length > 0) {
       const resortName = matching[0].resortName || resort;
-      const galleryUrl = location.origin + location.pathname + '?gallery=' + encodeURIComponent(resort) + '&cat=' + encodeURIComponent(cat);
+      const galleryUrl = location.origin + '/resort-library.html' + '?gallery=' + encodeURIComponent(resort) + '&cat=' + encodeURIComponent(cat);
       openGalleryViewer(JSON.stringify(matching), cat, resortName, galleryUrl);
     }
   };
