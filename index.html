@@ -2963,9 +2963,7 @@ function qbGenerate() {
   const checkedRooms = [];
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
     const card = cb.closest('div[style*="border:1px solid #e0e0e0"]') || cb.parentElement.parentElement;
-    const displayCat = card.querySelector('.qb-room-label')?.value || cb.dataset.cat;
-    const origCat = cb.dataset.cat; // original Firestore category key for photo lookup
-    const cat = displayCat;
+    const cat = card.querySelector('.qb-room-label')?.value || cb.dataset.cat;
     const photoGroup = cb.dataset.photoGroup;
     const selectedPhoto = photoGroup ? document.querySelector(`input[name="${photoGroup}"]:checked`)?.value || '' : '';
     const costRaw = card.querySelector('.qb-room-cost')?.value?.trim() || '';
@@ -2978,10 +2976,7 @@ function qbGenerate() {
     const perPersonFmt = perPersonNum > 0 ? '$' + perPersonNum.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : (rateRaw || '');
     const displayRate = hasKidsMode ? (costRaw ? '$' + costRaw + ' total' : '') : perPersonFmt;
     const costFmt = costRaw ? '$' + parseFloat(costRaw).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) : '';
-    // Collect ALL photo URLs using original category key (not editable label)
-    const allCatPhotos = (qbResortData || []).filter(p => (p.category || p.roomCategory || '') === origCat).map(p => p.url || p.downloadURL || '').filter(Boolean);
-    if (selectedPhoto && !allCatPhotos.includes(selectedPhoto)) allCatPhotos.unshift(selectedPhoto);
-    checkedRooms.push({cat, url: selectedPhoto, allUrls: allCatPhotos, rate: displayRate, cost: costFmt, notes});
+    checkedRooms.push({cat, url: selectedPhoto, rate: displayRate, cost: costFmt, notes});
   });
   // Greeting
   let greetEmoji = greeting === 'birthday' ? ' 🎂' : greeting === 'wedding' ? ' 💍' : '';
@@ -2998,22 +2993,7 @@ function qbGenerate() {
 
   // Build resort cards
   let cards = checkedRooms.map(r => {
-    // Build photo carousel (shows all photos for this room category)
-    let photoRow = '';
-    if (r.allUrls && r.allUrls.length > 1) {
-      const cid = 'c' + Math.random().toString(36).slice(2,9);
-      const urlsJson = JSON.stringify(r.allUrls).replace(/</g,'\\u003c').replace(/>/g,'\\u003e');
-      const imgTags = r.allUrls.map((u,i) => '<img src=' + JSON.stringify(u) + ' data-cid=' + JSON.stringify(cid) + ' data-ci="' + i + '" style="width:100%;height:180px;object-fit:cover;display:' + (i===0?'block':'none') + ';position:' + (i===0?'relative':'absolute') + ';top:0;left:0;" alt=""/>').join('');
-      const dotTags = r.allUrls.map((_,i) => '<span data-cid=' + JSON.stringify(cid) + ' data-ci="' + i + '" data-dot="1" style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + (i===0?'#B8973A':'rgba(255,255,255,0.5)') + ';margin:0 3px;cursor:pointer;"></span>').join('');
-      photoRow = '<tr><td style="padding:0;line-height:0;font-size:0;"><div id="' + cid + '" data-carousel="1" data-cur="0" data-total="' + r.allUrls.length + '" style="position:relative;width:100%;height:180px;overflow:hidden;background:#111;">' +
-        imgTags +
-        '<button data-cid="' + cid + '" data-dir="-1" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:18px;cursor:pointer;z-index:10;line-height:1;">&#8249;</button>' +
-        '<button data-cid="' + cid + '" data-dir="1" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:rgba(0,0,0,0.5);color:#fff;border:none;border-radius:50%;width:28px;height:28px;font-size:18px;cursor:pointer;z-index:10;line-height:1;">&#8250;</button>' +
-        '<div style="position:absolute;bottom:8px;left:0;right:0;text-align:center;z-index:10;" id="' + cid + '_dots">' + dotTags + '</div>' +
-        '</div></td></tr>';
-    } else if (r.url) {
-      photoRow = '<tr><td style="padding:0;line-height:0;font-size:0;"><img src=' + JSON.stringify(r.url) + ' width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>';
-    }
+    const photoRow = r.url ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${r.url}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
     const roomLink = bookingLink || '#';
     const descText = resortDesc || r.notes || '&nbsp;';
     const footerText = highlights || `${r.cost ? 'Total: $' + r.cost : ''} ${r.rate ? '&nbsp;&middot;&nbsp; ' + r.rate + ' per person' : ''} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
@@ -3100,31 +3080,7 @@ ${paymentHtml}
   <p style="font-family:Georgia,serif;font-size:11px;color:rgba(255,255,255,0.45);margin:16px 0 0 0;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.</p>
 </td></tr>
 
-</table>
-<scr'+'ipt>
-document.addEventListener('click',function(e){
-  var btn=e.target.closest('[data-dir]');
-  var dot=e.target.closest('[data-dot]');
-  var el=btn||dot;
-  if(!el)return;
-  var cid=el.getAttribute('data-cid');
-  var wrap=document.getElementById(cid);
-  if(!wrap)return;
-  var imgs=wrap.querySelectorAll('img[data-ci]');
-  var n=imgs.length;
-  var cur=0;
-  for(var i=0;i<imgs.length;i++){if(imgs[i].style.display!=='none'){cur=i;break;}}
-  imgs[cur].style.display='none';imgs[cur].style.position='absolute';
-  var dotsEl=document.getElementById(cid+'_dots');
-  if(dotsEl){var dots=dotsEl.querySelectorAll('[data-dot]');if(dots[cur])dots[cur].style.background='rgba(255,255,255,0.5)';}
-  var dir=btn?parseInt(btn.getAttribute('data-dir')):parseInt(dot.getAttribute('data-ci'));
-  var next=btn?(dir===-1?(cur-1+n)%n:(cur+1)%n):dir;
-  imgs[next].style.display='block';imgs[next].style.position='relative';
-  if(dotsEl){var dots2=dotsEl.querySelectorAll('[data-dot]');if(dots2[next])dots2[next].style.background='#B8973A';}
-});
-<\/script>
-</body></html>`;
-
+</table></body></html>`;
 
   // Show preview
   const emptyState = document.getElementById('qb-empty-state');
@@ -3136,26 +3092,6 @@ document.addEventListener('click',function(e){
     iframe.srcdoc = html;
     iframe.dataset.html = html;
   }
-}
-
-function qbCarousel(cid, dir) {
-  const wrap = document.getElementById(cid);
-  if (!wrap) return;
-  const imgs = wrap.querySelectorAll('img[data-ci]');
-  const n = imgs.length;
-  let cur = [...imgs].findIndex(img => img.style.display !== 'none');
-  imgs[cur].style.display = 'none';
-  imgs[cur].style.position = 'absolute';
-  const dot_cur = document.getElementById(cid + '_d' + cur);
-  if (dot_cur) dot_cur.style.background = 'rgba(255,255,255,0.5)';
-  let next;
-  if (dir === -1) next = (cur - 1 + n) % n;
-  else if (dir === 1) next = (cur + 1) % n;
-  else next = dir; // absolute index
-  imgs[next].style.display = 'block';
-  imgs[next].style.position = 'relative';
-  const dot_next = document.getElementById(cid + '_d' + next);
-  if (dot_next) dot_next.style.background = '#B8973A';
 }
 
 function qbOpenNewTab() {
