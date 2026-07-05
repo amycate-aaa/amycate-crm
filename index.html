@@ -999,8 +999,8 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div class="form-group full"><label>URL / Link</label><input type="url" id="doc-url"></div>
       <div class="form-group"><label>Category</label>
         <select id="doc-category">
-          <option>Contract</option><option>Room Block</option><option>BEO</option>
-          <option>Invoice</option><option>Itinerary</option><option>Other</option>
+          <option>Wedding Agreement</option><option>Room Agreement</option><option>Summary Report</option>
+          <option>Transfer Documents</option><option>Travel Documents</option>
         </select>
       </div>
       <div class="form-group"><label>Notes</label><input type="text" id="doc-notes"></div>
@@ -2438,7 +2438,7 @@ function openDocModal(){
   if(!currentWeddingId){alert('Select a wedding first.');return;}
   editDocId=null;
   document.getElementById('docModalTitle').textContent='Add Document / Link';
-  sv('doc-name',''); sv('doc-url',''); sv('doc-category','Contract'); sv('doc-notes','');
+  sv('doc-name',''); sv('doc-url',''); sv('doc-category','Wedding Agreement'); sv('doc-notes','');
   openModal('docModal');
 }
 function editDoc(id){
@@ -3899,7 +3899,7 @@ function renderDetailFinancials(){
   document.getElementById('df-due2').textContent=w&&w.pay2?fmtDate(w.pay2):'—';
 }
 
-const docIcons={Contract:'📄','Room Block':'🏨',BEO:'📋',Invoice:'🧾',Itinerary:'🗺️',Other:'🔗'};
+const docIcons={'Wedding Agreement':'📄','Room Agreement':'🏨','Summary Report':'📊','Transfer Documents':'🚐','Travel Documents':'✈️',Contract:'📄','Room Block':'🏨',BEO:'📋',Invoice:'🧾',Itinerary:'🗺️',Other:'🔗'};
 
 function renderDetailDocs(){
   const cont=document.getElementById('detailDocsContainer');
