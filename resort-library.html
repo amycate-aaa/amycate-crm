@@ -226,7 +226,17 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes about this resort..."></textarea>
         </div>
 
-        <button onclick="saveResortProfile()" style="background:#f0c958;color:#1a1a1a;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;">&#10003; Save Resort Profile</button>
+        <div class="form-group">
+          <label>Club Level Name <span style="color:#888;font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label>
+          <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Preferred Club">
+        </div>
+
+        <div class="form-group">
+          <label>Club Level Perks <span style="color:#888;font-size:.75rem;">auto-shows in quote when a club room is selected &mdash; one perk per line</span></label>
+          <textarea class="form-control" id="profileClubPerks" rows="5" placeholder="Personalized check-in &amp; checkout&#10;Private lounge access&#10;Upgraded mini-bar &amp; room service&#10;Pool concierge &amp; bar service"></textarea>
+        </div>
+
+        <button onclick="saveResortProfile()"  style="background:#f0c958;color:#1a1a1a;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;">&#10003; Save Resort Profile</button>
         <span id="profileSaveMsg" style="display:none;margin-left:12px;color:#27ae60;font-size:.85rem;"></span>
       </div>
     </div>
@@ -542,9 +552,11 @@ async function loadResortProfile() {
       document.getElementById('profileBookingLink').value = d.bookingLink || '';
       document.getElementById('profileGalleryLink').value = d.galleryLink || '';
       document.getElementById('profileNotes').value = d.notes || '';
+      document.getElementById('profileClubName').value = d.clubName || '';
+      document.getElementById('profileClubPerks').value = d.clubPerks || '';
     } else {
       // Clear form for new resort
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes'].forEach(id => {
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks'].forEach(id => {
         document.getElementById(id).value = '';
       });
       document.getElementById('profileStars').value = '';
@@ -570,6 +582,8 @@ async function saveResortProfile() {
     bookingLink:  document.getElementById('profileBookingLink').value.trim(),
     galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
     notes:        document.getElementById('profileNotes').value.trim(),
+    clubName:     document.getElementById('profileClubName').value.trim(),
+    clubPerks:    document.getElementById('profileClubPerks').value.trim(),
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
   };
 
