@@ -2716,6 +2716,8 @@ async function qbOnResortChange() {
       const clubPerksEl = document.getElementById('qb-club-perks');
       if (clubNameEl && d.clubName) clubNameEl.value = d.clubName;
       if (clubPerksEl && d.clubPerks) clubPerksEl.value = d.clubPerks;
+      // Store packages for use in wedding generator
+      window.qbResortPackages = d.packages || [];
     }
   } catch(e) { console.log('No profile for', slug); }
 
@@ -3453,6 +3455,28 @@ function qbGenerateWedding() {
   </table>`;
   }
 
+  // Wedding packages from resort profile
+  const pkgs = window.qbResortPackages || [];
+  let packagesHtml = '';
+  if (pkgs.length > 0) {
+    const pkgCards = pkgs.map(p => {
+      const featured = p.featured;
+      const nameStyle = featured
+        ? 'font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#B8973A;margin:0 0 4px 0;'
+        : 'font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#0A0A0A;margin:0 0 4px 0;';
+      return `<tr><td style="padding:14px 18px;border-bottom:1px solid #F3F4F6;">
+        <p style="${nameStyle}">${p.name}${p.price?' <span style=\'font-family:Arial,sans-serif;font-size:12px;font-weight:normal;color:#888;\'>— from '+p.price+'</span>':''}</p>
+        <p style="font-family:Arial,sans-serif;font-size:12px;color:#6B7280;font-style:italic;margin:0;line-height:1.6;">${p.highlights}</p>
+      </td></tr>`;
+    }).join('');
+    packagesHtml = `
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;">
+    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
+    <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">&#128081; Wedding Packages</td></tr>
+  </table>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:28px;">${pkgCards}</table>`;
+  }
+
   const intro = customIntro || `${partner1}${partner2?' &amp; '+partner2:''}, I am so excited to share this stunning option for your${weddingDateFmt?' '+weddingDateFmt:''} wedding! ${resortName} offers the signature Unlimited-Luxury&#174; experience where everything is included &mdash; from gourmet dining to top-shelf drinks to endless activities. Below you'll find estimated guest pricing${venuesRaw?', wedding venues,':''} and resort details. Take a look and let me know what you think!`;
 
   const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${partner1}${partner2?' & '+partner2:''} &middot; ${resortName}${weddingDateFmt?' &middot; '+weddingDateFmt:''}</title></head>
@@ -3518,8 +3542,9 @@ ${heroPhoto ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhoto}" 
     ${highlights ? `<tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:10px 18px;"><span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${highlights}</span></td></tr>` : ''}
   </table>
 
-  ${venuesHtml}
-  ${roomCardsHtml}
+  \${venuesHtml}
+  \${packagesHtml}
+  \${roomCardsHtml}
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">
     <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
