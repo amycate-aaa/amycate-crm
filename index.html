@@ -2846,28 +2846,27 @@ function qbCopyGalleryLink(btn, url){
 }
 
 // Build an email-safe photo collage (table of static images) from a room's photos.
-// Adapts to count: 1 full-width, 2 side-by-side, 3 across, 2x2 for four, 3x2 for five/six.
+// No fixed heights — images render at natural proportions for Outlook compatibility.
 function qbPhotoCollage(urls){
   const u = (urls||[]).filter(Boolean).slice(0,6);
   const n = u.length;
   if (n === 0) return '';
   if (n === 1){
-    return `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${u[0]}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>`;
+    return `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${u[0]}" width="520" style="width:100%;max-width:520px;display:block;" alt=""/></td></tr>`;
   }
-  const cell = (src,w,h) => `<td width="${w}" style="padding:0;line-height:0;font-size:0;border:2px solid #FFFFFF;"><img src="${src}" width="100%" height="${h}" style="width:100%;height:${h}px;object-fit:cover;display:block;" alt=""/></td>`;
-  const blank = (w) => `<td width="${w}" style="padding:0;"></td>`;
+  const cell = (src,w) => `<td width="${w}" style="padding:0;line-height:0;font-size:0;border-right:2px solid #FFFFFF;"><img src="${src}" width="100%" style="width:100%;display:block;" alt=""/></td>`;
   let inner = '';
   if (n === 2){
-    inner = `<tr>${cell(u[0],'50%',180)}${cell(u[1],'50%',180)}</tr>`;
+    inner = `<tr>${cell(u[0],'50%')}${cell(u[1],'50%')}</tr>`;
   } else if (n === 3){
-    inner = `<tr>${cell(u[0],'34%',150)}${cell(u[1],'33%',150)}${cell(u[2],'33%',150)}</tr>`;
+    inner = `<tr>${cell(u[0],'34%')}${cell(u[1],'33%')}${cell(u[2],'33%')}</tr>`;
   } else if (n === 4){
-    inner = `<tr>${cell(u[0],'50%',130)}${cell(u[1],'50%',130)}</tr><tr>${cell(u[2],'50%',130)}${cell(u[3],'50%',130)}</tr>`;
+    inner = `<tr>${cell(u[0],'50%')}${cell(u[1],'50%')}</tr><tr>${cell(u[2],'50%')}${cell(u[3],'50%')}</tr>`;
   } else {
-    inner = `<tr>${cell(u[0],'34%',120)}${cell(u[1],'33%',120)}${cell(u[2],'33%',120)}</tr>`
-          + `<tr>${cell(u[3],'34%',120)}${cell(u[4],'33%',120)}${u[5]?cell(u[5],'33%',120):blank('33%')}</tr>`;
+    inner = `<tr>${cell(u[0],'34%')}${cell(u[1],'33%')}${cell(u[2],'33%')}</tr>`
+          + `<tr>${cell(u[3],'34%')}${cell(u[4],'33%')}${u[5]?cell(u[5],'33%'):''}</tr>`;
   }
-  return `<tr><td style="padding:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:520px;border-collapse:collapse;table-layout:fixed;">${inner}</table></td></tr>`;
+  return `<tr><td style="padding:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%;border-collapse:collapse;table-layout:fixed;">${inner}</table></td></tr>`;
 }
 
 function qbAddCustomRoom() {
@@ -3067,102 +3066,120 @@ function qbGenerate() {
   // Build resort hero photo row
   const heroPhotoRow = heroPhoto ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${heroPhoto}" width="520" height="180" style="width:100%;max-width:520px;height:180px;object-fit:cover;display:block;" alt=""/></td></tr>` : '';
 
-  // Build quick compare rows
-  let compareRows = checkedRooms.map((r,i) => {
-    const bg = i%2===0 ? '' : ' bgcolor="#FAFAFA"';
-    return `<tr${bg}><td style="padding:9px 12px;border-bottom:1px solid #F3F4F6;font-family:Georgia,serif;font-size:13px;border-right:1px solid #F3F4F6;">${r.cat}</td><td style="padding:9px 12px;border-bottom:1px solid #F3F4F6;font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#1B2B4B;text-align:right;">${r.cost || '—'}</td></tr>`;
-  }).join('');
+  // Build quick compare rows — new format with Room Total + Per Person columns
+  let compareRows = `<tr style="background-color:#1a3a4a;">
+    <td style="padding:8px 12px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Room Type</td>
+    <td style="padding:8px 12px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;text-align:center;">Room Total</td>
+    <td style="padding:8px 12px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;text-align:right;">Per Person</td>
+  </tr>`;
+  checkedRooms.forEach((r, i) => {
+    const bg = i % 2 === 0 ? '#f9f9f9' : '#ffffff';
+    const pcBadge = /preferred.club/i.test(r.cat || '') ? ` <span style="font-size:10px;color:#c9a96e;">&#9670; Adult Only</span>` : '';
+    compareRows += `<tr style="background-color:${bg};"><td style="padding:9px 12px;font-family:Arial,sans-serif;font-size:12px;color:#333333;border-bottom:1px solid #eeeeee;">${r.cat}${pcBadge}</td><td style="padding:9px 12px;font-family:Arial,sans-serif;font-size:12px;color:#666666;text-align:center;border-bottom:1px solid #eeeeee;">${r.cost || '&mdash;'}</td><td style="padding:9px 12px;font-family:Arial,sans-serif;font-size:12px;color:#1a3a4a;font-weight:bold;text-align:right;border-bottom:1px solid #eeeeee;">${r.rate || '&mdash;'}</td></tr>`;
+  });
 
-  // Build resort cards
+  // Format final payment date nicely
+  const finalPayFmt = finalPay ? (() => { try { const d = new Date(finalPay+'T00:00:00'); return isNaN(d.getTime()) ? finalPay : d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e) { return finalPay; } })() : '';
+
+  // Occupancy label
+  const occLabel = occCount === 1 ? 'Solo Rate &#10022; Single Occupancy' :
+    occCount === 2 ? 'Double Occupancy &#10022; 2 Guests / 1 Room' :
+    `Triple Occupancy &#10022; ${occCount} Guests / 1 Room`;
+
+  // Build room cards — new format
   let cards = checkedRooms.map(r => {
+    const preferred = /preferred.club/i.test(r.cat || '');
+    const headerBg = preferred ? '#c9a96e' : '#1a3a4a';
+    const headerColor = preferred ? '#1a3a4a' : '#ffffff';
+    const subColor = preferred ? '#1a3a4a' : '#a8c4d0';
+    const cardBorder = preferred ? '#c9a96e' : '#e0e0e0';
+    const cardBg = preferred ? '#fffdf5' : '#fafafa';
+    const occDisplay = preferred ? `&#9670; Adult Only &#10022; ${occLabel}` : occLabel;
     const photoRow = qbPhotoCollage(r.photos && r.photos.length ? r.photos : (r.url ? [r.url] : []));
-    const roomLink = bookingLink || '#';
-    const descText = resortDesc || r.notes || '&nbsp;';
-    const footerText = highlights || `${r.cost ? 'Total: ' + r.cost : ''} ${r.rate ? '&nbsp;&middot;&nbsp; ' + r.rate + ' per person' : ''} &nbsp;&middot;&nbsp; ${nights} nights &nbsp;&middot;&nbsp; All Inclusive`;
-    return `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:20px;">
-    <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:14px 18px;">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td><a href="${roomLink}" style="font-family:Georgia,serif;font-size:16px;font-weight:bold;color:#FFFFFF;text-decoration:none;">${r.cat}</a>
-        ${location ? `<div style="font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.6);margin-top:3px;">${location}</div>` : ''}
-        </td>
-        <td style="text-align:right;white-space:nowrap;vertical-align:top;padding-left:12px;">
-          <span style="font-family:Georgia,serif;font-size:19px;font-weight:bold;color:#B8973A;">${r.rate || ''}</span>
-          <div style="font-family:Arial,sans-serif;font-size:10px;color:rgba(255,255,255,0.55);margin-top:2px;">per person / ${nights} nights / AI</div>
-        </td>
-      </tr></table>
-    </td></tr>
-    ${photoRow}
-    <tr><td style="padding:14px 18px;border-bottom:1px solid #F3F4F6;">
-      <p style="font-family:Georgia,serif;font-size:12px;color:#374151;line-height:1.75;margin:0 0 ${r.notes && resortDesc ? '8px' : '0'} 0;">${descText}</p>
-      ${r.notes && resortDesc ? `<p style="font-family:Georgia,serif;font-size:12px;color:#B8973A;font-style:italic;margin:0;">${r.notes}</p>` : ''}
-    </td></tr>
-    <tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:10px 18px;">
-      <span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${footerText}</span>
-    </td></tr>
-    ${bookingLink && bookingLink !== '#' ? `<tr><td style="padding:14px 18px;text-align:center;background:#FFFFFF;"><a href="${roomLink}" style="display:inline-block;background:#B8973A;color:#1B2B4B;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:11px 32px;text-decoration:none;letter-spacing:0.5px;">&#10003;&nbsp; Book This Room</a></td></tr>` : ''}
-  </table>`;
+    const priceBlock = r.cost
+      ? `<p style="margin:0;font-family:Georgia,serif;font-size:11px;color:#888888;">Room Total</p><p style="margin:0 0 6px 0;font-family:Georgia,serif;font-size:14px;color:#888888;">${r.cost}</p><p style="margin:0;font-family:Georgia,serif;font-size:11px;color:#1a3a4a;">Per Person</p><p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p>`
+      : `<p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p><p style="margin:2px 0 0 0;font-family:Arial,sans-serif;font-size:10px;color:#888888;">per person / ${nights} nights</p>`;
+    return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;border:1px solid ${cardBorder};border-radius:3px;overflow:hidden;">${photoRow}<tr><td style="background-color:${headerBg};padding:12px 16px;"><p style="margin:0;font-family:Georgia,serif;font-size:14px;color:${headerColor};font-weight:normal;">${r.cat}</p><p style="margin:3px 0 0 0;font-family:Arial,sans-serif;font-size:11px;color:${subColor};">${occDisplay}</p></td></tr><tr><td style="padding:14px 16px;background-color:${cardBg};"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12.5px;color:#444444;line-height:1.65;vertical-align:top;">${r.notes || (resortDesc ? '' : '&nbsp;')}</td><td width="110" style="text-align:right;vertical-align:top;padding-left:16px;">${priceBlock}</td></tr></table></td></tr></table>`;
   }).join('\n');
 
-  // Payment section
+  // Easy Payments section
   let paymentHtml = '';
   if (deposit || finalPay) {
-    paymentHtml = `  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #1B2B4B;background:#F9FAFB;margin-bottom:28px;">
-    <tr><td style="padding:16px 20px;">
-      <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#1B2B4B;margin:0 0 10px 0;">&#128197; Payment Details</p>
-      ${deposit ? `<p style="font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.75;margin:0 0 6px 0;"><span style="color:#B8973A;font-weight:bold;">Deposit:</span> ${deposit}</p>` : ''}
-      ${finalPay ? `<p style="font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.75;margin:0;"><span style="color:#B8973A;font-weight:bold;">Final Payment:</span> ${finalPay}</p>` : ''}
-    </td></tr>
-  </table>`;
+    let payRows = deposit ? `<tr style="background-color:#f9f9f9;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#333333;border-bottom:1px solid #eeeeee;">Deposit</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#333333;border-bottom:1px solid #eeeeee;">At Booking</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#1a3a4a;font-weight:bold;text-align:right;border-bottom:1px solid #eeeeee;">${deposit}</td></tr>` : '';
+    payRows += finalPay ? `<tr style="background-color:#ffffff;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#333333;">Final Payment</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#333333;">${finalPayFmt || finalPay}</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:12px;color:#1a3a4a;font-weight:bold;text-align:right;">Remaining Balance</td></tr>` : '';
+    paymentHtml = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:1px;border-top:1px solid #e0e0e0;"></table>
+    <p style="margin:24px 0 12px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Easy Payments</p>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;border-collapse:collapse;"><tr style="background-color:#1a3a4a;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>${payRows}</table>`;
   }
 
   const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${fullNames} &middot; ${resortName} Quote</title></head>
-<body style="margin:0;padding:20px;background:#F0EDE8;font-family:Arial,sans-serif;">
-<table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="background:#FFFFFF;max-width:600px;margin:0 auto;">
+<body style="margin:0;padding:20px;background-color:#f4f4f4;font-family:Georgia,serif;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4;">
+<tr><td align="center" style="padding:30px 10px;">
+<table width="580" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;background-color:#ffffff;border-radius:4px;overflow:hidden;">
 
-<tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:40px 40px 28px 40px;text-align:center;border-bottom:4px solid #B8973A;">
-  <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B8973A;margin:0 0 10px 0;">Your Personalized Travel Quote</p>
-  <h1 style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#FFFFFF;margin:0 0 8px 0;line-height:1.1;">${resortName}</h1>
-  <p style="font-family:Georgia,serif;font-size:15px;color:rgba(255,255,255,0.85);margin:0 0 4px 0;">${checkinFmt}${checkoutFmt ? ' &nbsp;&middot;&nbsp; ' + checkoutFmt : ''}</p>
-  <p style="font-family:Georgia,serif;font-size:13px;color:rgba(255,255,255,0.55);margin:0;">${nights} Nights &nbsp;&middot;&nbsp; All Inclusive${eventName ? ' &nbsp;&middot;&nbsp; ' + eventName : ''}</p>
+<tr><td style="background-color:#1a3a4a;padding:22px 40px 18px 40px;text-align:center;">
+  <p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:11px;letter-spacing:3px;color:#c9a96e;text-transform:uppercase;">Travel Quote &#10022; ${eventName || 'Your Trip'}</p>
+  <h1 style="margin:0;font-family:Georgia,serif;font-size:26px;color:#ffffff;font-weight:normal;letter-spacing:1px;">${resortName}</h1>
+  <p style="margin:6px 0 0 0;font-family:Arial,sans-serif;font-size:12px;color:#a8c4d0;letter-spacing:1px;">${location ? location.toUpperCase() + ' &#10022; ' : ''}${checkinFmt}${checkoutFmt ? ' &ndash; ' + checkoutFmt : ''}</p>
 </td></tr>
-${heroPhotoRow}
+
+${heroPhoto ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhoto}" width="580" style="width:100%;max-width:580px;display:block;" alt="${resortName}"/></td></tr>` : ''}
 
 <tr><td style="padding:32px 40px 24px 40px;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #B8973A;background:#FDF6E3;margin-bottom:28px;">
-    <tr><td style="padding:16px 20px;">
-      <p style="font-family:Georgia,serif;font-size:15px;color:#374151;line-height:1.85;margin:0;">${intro}</p>
-    </td></tr>
-  </table>
 
+  <p style="margin:0 0 10px 0;font-family:Georgia,serif;font-size:15px;color:#1a3a4a;font-weight:bold;">Hi ${fullNames}!</p>
+  <p style="margin:0 0 24px 0;font-family:Arial,sans-serif;font-size:13px;line-height:1.7;color:#444444;">${intro}</p>
+
+  ${resortDesc ? `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;background-color:#f0f5f8;border-left:3px solid #1a3a4a;"><tr><td style="padding:16px 18px;"><p style="margin:0 0 6px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#c9a96e;text-transform:uppercase;">About the Resort</p><p style="margin:0;font-family:Arial,sans-serif;font-size:12.5px;line-height:1.75;color:#444444;">${resortDesc}</p>${highlights ? `<p style="margin:8px 0 0 0;font-family:Arial,sans-serif;font-size:12px;color:#c9a96e;font-style:italic;">${highlights}</p>` : ''}</td></tr></table>` : ''}
+
+  <p style="margin:0 0 12px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Quick Compare</p>
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:32px;border-collapse:collapse;">${compareRows}</table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;"><tr><td style="border-top:1px solid #e0e0e0;font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+  <p style="margin:0 0 18px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Room Details</p>
+
+  ${cards}
+
+  ${kidsHtml}
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr><td style="border-top:1px solid #e0e0e0;font-size:0;line-height:0;">&nbsp;</td></tr></table>
+
+  <p style="margin:0 0 12px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; What&rsquo;s Included</p>
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
-    <tr><td colspan="2" bgcolor="#1B2B4B" style="background:#1B2B4B;padding:12px 16px;text-align:center;">
-      <span style="font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#B8973A;">Quick Compare &mdash; The totals below are for ${fullNames}</span>
-    </td></tr>
-    ${compareRows}
+    <tr>
+      <td width="50%" style="padding:4px 8px 4px 0;font-family:Arial,sans-serif;font-size:12.5px;color:#444444;vertical-align:top;">&#10022; ${nights} Nights All-Inclusive</td>
+      <td width="50%" style="padding:4px 0 4px 8px;font-family:Arial,sans-serif;font-size:12.5px;color:#444444;vertical-align:top;">&#10022; Round-Trip Airport Transfers</td>
+    </tr>
+    <tr>
+      <td style="padding:4px 8px 4px 0;font-family:Arial,sans-serif;font-size:12.5px;color:#444444;vertical-align:top;">&#10022; Unlimited Dining &amp; Beverages</td>
+      <td style="padding:4px 0 4px 8px;font-family:Arial,sans-serif;font-size:12.5px;color:#444444;vertical-align:top;">&#10022; Entertainment &amp; Nightly Shows</td>
+    </tr>
+    <tr><td colspan="2" style="padding:6px 0 0 0;font-family:Arial,sans-serif;font-size:12px;color:#888888;font-style:italic;">Flights are independent and not included in pricing above.</td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
-    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
-    <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#1B2B4B;">Your Room Options</td></tr>
-  </table>
+  ${paymentHtml}
 
-${cards}
-${kidsHtml}
-${paymentHtml}
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;background-color:#f0f5f8;border-left:3px solid #c9a96e;"><tr><td style="padding:14px 16px;"><p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:11px;letter-spacing:1px;color:#1a3a4a;text-transform:uppercase;">Travel Protection Available</p><p style="margin:0;font-family:Arial,sans-serif;font-size:12px;line-height:1.65;color:#555555;">Travel insurance is available and strongly recommended. Coverage options and per-person pricing will be provided separately.</p></td></tr></table>
+
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:10px;"><tr><td align="center">
+    <p style="margin:0 0 16px 0;font-family:Arial,sans-serif;font-size:13px;color:#444444;text-align:center;">Ready to reserve your spot? Questions? I&rsquo;m here!</p>
+    ${bookingLink && bookingLink !== '#' ? `<a href="${bookingLink}" style="display:inline-block;background-color:#1a3a4a;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;padding:13px 32px;text-decoration:none;border-radius:3px;letter-spacing:1px;">SECURE MY SPOT</a>` : `<a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;background-color:#1a3a4a;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;padding:13px 32px;text-decoration:none;border-radius:3px;letter-spacing:1px;">CONTACT ME TO BOOK</a>`}
+  </td></tr></table>
+
 </td></tr>
 
-<tr><td bgcolor="#1B2B4B" style="background:#1B2B4B;padding:30px 40px;text-align:center;border-top:4px solid #B8973A;">
-  <p style="font-family:Georgia,serif;font-size:13px;color:#B8973A;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px 0;">Questions? I am here for you!</p>
-  <p style="font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#FFFFFF;margin:0 0 2px 0;">Amy M. Cate</p>
-  <p style="font-family:Georgia,serif;font-size:12px;color:#B8973A;font-weight:600;margin:0 0 12px 0;">Certified Destination Wedding &amp; Group Travel Specialist</p>
-  <p style="font-family:Georgia,serif;font-size:12px;color:rgba(255,255,255,0.8);margin:0 0 2px 0;">Destination Weddings Travel Group &amp; Celebration Travel</p>
-  <a href="mailto:amy.cate@destinationweddings.com" style="font-family:Georgia,serif;font-size:13px;color:#B8973A;text-decoration:none;display:block;margin:12px 0 4px 0;">amy.cate@destinationweddings.com</a>
-  <p style="font-family:Georgia,serif;font-size:13px;color:rgba(255,255,255,0.8);margin:0 0 16px 0;">(832) 773-8664</p>
-  <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background:#B8973A;color:#1B2B4B;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;">&#128197; Book a Call With Me!</a>
-  <p style="font-family:Georgia,serif;font-size:11px;color:rgba(255,255,255,0.45);margin:16px 0 0 0;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.</p>
+<tr><td style="background-color:#1a3a4a;padding:20px 40px;text-align:center;">
+  <p style="margin:0 0 4px 0;font-family:Georgia,serif;font-size:13px;color:#c9a96e;letter-spacing:1px;">Amy Cate</p>
+  <p style="margin:0 0 2px 0;font-family:Arial,sans-serif;font-size:11px;color:#a8c4d0;">Certified Destination Wedding &amp; Group Travel Specialist</p>
+  <p style="margin:0 0 6px 0;font-family:Arial,sans-serif;font-size:11px;color:#a8c4d0;">Destination Weddings Travel Group &amp; Celebration Travel</p>
+  <a href="mailto:amy.cate@destinationweddings.com" style="font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;text-decoration:none;">amy.cate@destinationweddings.com</a>
+  <p style="margin:4px 0 0 0;font-family:Arial,sans-serif;font-size:10px;color:#6a8a9a;">Rates are subject to availability and may change until reserved with deposit. Flights not included. All pricing in USD.</p>
 </td></tr>
 
-</table></body></html>`;
+</table></td></tr></table>
+</body></html>`;
 
   // Show preview
   const emptyState = document.getElementById('qb-empty-state');
