@@ -1422,7 +1422,10 @@ function showTab(name){
     if (!qbInitialized) {
       qbInitDestinations();
       qbFilterResorts();
+      qbToggleGuest2();
       qbInitialized = true;
+    } else {
+      qbToggleGuest2();
     }
   }
 }
@@ -3685,7 +3688,10 @@ function showInnerTab(name){
     if (!qbInitialized) {
       qbInitDestinations();
       qbFilterResorts();
+      qbToggleGuest2();
       qbInitialized = true;
+    } else {
+      qbToggleGuest2();
     }
   }
   if(name==='ipayments') renderDetailPayments();
