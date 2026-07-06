@@ -545,6 +545,8 @@ tr:hover .sticky-col{background:var(--surface2);}
             <div style="margin-bottom:10px"><label class="form-label">Location Tagline</label><input id="qb-location" class="form-input" placeholder="e.g. Riviera Maya · 42 miles from CUN"></div>
             <div style="margin-bottom:10px"><label class="form-label">Resort Description</label><textarea id="qb-desc-text" class="form-input" rows="3" placeholder="Description will auto-fill if you've saved a resort profile..."></textarea></div>
             <div style="margin-bottom:10px"><label class="form-label">Highlights <span style="color:#888;font-size:.75rem;">separator: &nbsp;·&nbsp;</span></label><input id="qb-highlights" class="form-input" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa"></div>
+            <div style="margin-bottom:10px"><label class="form-label">Club Level Name <span style="color:#888;font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label><input id="qb-club-name" class="form-input" placeholder="e.g. Preferred Club"></div>
+            <div style="margin-bottom:10px"><label class="form-label">Club Level Perks <span style="color:#888;font-size:.75rem;">auto-shows in quote only when a club room is selected</span></label><textarea id="qb-club-perks" class="form-input" rows="4" placeholder="e.g. Personalized check-in & checkout · Private lounge access · Upgraded mini-bar · Pool concierge service"></textarea></div>
             <div><label class="form-label">Booking Link</label><input id="qb-booking-link" class="form-input" placeholder="https://booking.celebrationtravel.com/..."></div>
           </div>
 
@@ -2613,7 +2615,7 @@ function qbClearForm() {
 
   // Reset guest fields
   ['qb-name','qb-name2','qb-name3','qb-intro','qb-location','qb-desc-text','qb-highlights',
-   'qb-booking-link','qb-checkin','qb-checkout','qb-event'].forEach(id => {
+   'qb-booking-link','qb-club-name','qb-club-perks','qb-checkin','qb-checkout','qb-event'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -2693,11 +2695,38 @@ async function qbOnResortChange() {
       if (descEl && d.description) descEl.value = d.description;
       if (hlEl && d.highlights) hlEl.value = d.highlights;
       if (linkEl && d.bookingLink) linkEl.value = d.bookingLink;
+      const clubNameEl = document.getElementById('qb-club-name');
+      const clubPerksEl = document.getElementById('qb-club-perks');
+      if (clubNameEl && d.clubName) clubNameEl.value = d.clubName;
+      if (clubPerksEl && d.clubPerks) clubPerksEl.value = d.clubPerks;
     }
   } catch(e) { console.log('No profile for', slug); }
 
   qbRenderRooms();
   qbCheckReady();
+}
+
+async function qbSaveResort() {
+  const slug = document.getElementById('qb-resort')?.value;
+  if (!slug) { showToast('Select a resort first.', 'red'); return; }
+  const btn = document.getElementById('qb-save-resort-btn');
+  if (btn) { btn.textContent = 'Saving...'; btn.disabled = true; }
+  try {
+    await db.collection('resortProfiles').doc(slug).set({
+      tagline:   document.getElementById('qb-location')?.value?.trim() || '',
+      description: document.getElementById('qb-desc-text')?.value?.trim() || '',
+      highlights: document.getElementById('qb-highlights')?.value?.trim() || '',
+      bookingLink: document.getElementById('qb-booking-link')?.value?.trim() || '',
+      clubName:  document.getElementById('qb-club-name')?.value?.trim() || '',
+      clubPerks: document.getElementById('qb-club-perks')?.value?.trim() || '',
+      updatedAt: new Date().toISOString()
+    }, { merge: true });
+    showToast('Resort profile saved!', 'green');
+  } catch(e) {
+    showToast('Error saving: ' + e.message, 'red');
+  } finally {
+    if (btn) { btn.textContent = '✓ Save Resort'; btn.disabled = false; }
+  }
 }
 
 function qbRenderRooms() {
@@ -3017,6 +3046,8 @@ function qbGenerate() {
     age:  div.querySelector('.qb-kid-age')?.value || ''
   })).filter(k => k.name || k.age) : [];
   const bookingLink= document.getElementById('qb-booking-link')?.value?.trim() || '#';
+  const clubName   = document.getElementById('qb-club-name')?.value?.trim() || '';
+  const clubPerks  = document.getElementById('qb-club-perks')?.value?.trim() || '';
 
   const fmtDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return s;} };
   const checkinFmt  = fmtDate(checkin);
@@ -3141,7 +3172,9 @@ ${heroPhoto ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhoto}" 
 
   <p style="margin:0 0 18px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Room Details</p>
 
-  ${cards}
+  \${clubName && checkedRooms.some(r => r.cat.toLowerCase().includes(clubName.toLowerCase())) && clubPerks ? (() => { const perksLines = clubPerks.split('\n').filter(Boolean).map(l => '&#10022; ' + l.replace(/^[\u2022\u00B7\-\*]\s*/,'')).join('<br>'); return '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;background-color:#fffdf5;border:1px solid #c9a96e;border-radius:3px;"><tr><td style="padding:14px 16px;"><p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#c9a96e;text-transform:uppercase;">&#9670; ' + clubName + ' Benefits</p><p style="margin:0;font-family:Arial,sans-serif;font-size:12px;line-height:1.8;color:#444444;">' + perksLines + '</p></td></tr></table>'; })() : ''}
+
+  \${cards}
 
   ${kidsHtml}
 
