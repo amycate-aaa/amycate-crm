@@ -3523,6 +3523,7 @@ function qbGenerateWedding(travelMode) {
   const fmtTripDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){ return s; } };
   const checkinFmt  = fmtTripDate(checkin);
   const checkoutFmt = fmtTripDate(checkout);
+  const _finalPayFmt = fmtTripDate(finalPay);
   const _occT = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const _guestsT = [document.getElementById('qb-name')?.value, document.getElementById('qb-name2')?.value, document.getElementById('qb-name3')?.value].slice(0,_occT).map(s=>(s||'').trim()).filter(Boolean);
   const _guestHeadline = _guestsT.length <= 1 ? (_guestsT[0] || partner1 || '') : _guestsT.slice(0,-1).join(', ') + ' <span style="color:#B8973A;">&amp;</span> ' + _guestsT[_guestsT.length-1];
@@ -3805,7 +3806,24 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
   </table>
 
   <!-- WHAT HAPPENS NEXT 3-COL -->
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+  ${travelMode ? `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
+    <tr>
+      <td width="283" valign="top" style="padding:0 6px 0 0;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
+          <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:22px;">&#128652;</td></tr>
+          <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">Transportation</td></tr>
+          <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">Round-trip airport transportation is included &mdash; and I coordinate all of it for your group.</td></tr>
+        </table>
+      </td>
+      <td width="283" valign="top" style="padding:0 0 0 6px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
+          <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:22px;">&#128737;&#65039;</td></tr>
+          <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">Travel Protection</td></tr>
+          <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">I highly recommend a Cancel for Any Reason (CFAR) plan to protect your investment.</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>` : `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
     <tr>
       <td width="186" valign="top" style="padding:0 6px 0 0;">
         <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
@@ -3829,19 +3847,24 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
         </table>
       </td>
     </tr>
-  </table>
+  </table>`}
 
   <!-- NEXT STEPS -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #0A0A0A;background-color:#F9FAFB;margin-bottom:36px;">
     <tr><td style="padding:18px 22px;">
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#0A0A0A;margin:0 0 12px 0;">&#128640; Next Steps</p>
-      <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      ${travelMode ? `<table width="100%" cellpadding="0" cellspacing="0" border="0">
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">1.</span>Love it? Use the button below to book your trip.</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">2.</span>A deposit locks it in.</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">3.</span>Pay the balance &mdash; your final payment is due ${_finalPayFmt || '____'}.</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">4.</span>Pack your bags &mdash; I look forward to helping you have the best trip ever! &#128151;</td></tr>
+      </table>` : `<table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">1.</span>Let me know if ${resortName} is calling your name!</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">2.</span>I will request group rates and check ${travelMode?'availability for your travel dates':`your${weddingDateFmt?' '+weddingDateFmt:''} wedding date availability`}</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">3.</span>A deposit locks in your ${travelMode?'group rate and space':'wedding date and time'} with the resort</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">2.</span>I will request group rates and check your${weddingDateFmt?' '+weddingDateFmt:''} wedding date availability</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">3.</span>A deposit locks in your wedding date and time with the resort</td></tr>
         <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">4.</span>I secure your room block &mdash; you are not responsible for all rooms and guests can add or drop as needed</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">5.</span>I look forward to helping you have the ${travelMode?'trip of your dreams':'destination wedding of your dreams'}! &#128151;</td></tr>
-      </table>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">5.</span>I look forward to helping you have the destination wedding of your dreams! &#128151;</td></tr>
+      </table>`}
     </td></tr>
   </table>
 
