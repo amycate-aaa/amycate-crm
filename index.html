@@ -3168,7 +3168,14 @@ function qbGenerate() {
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;border-collapse:collapse;"><tr style="background-color:#1a3a4a;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>${payRows}</table>`;
   }
 
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${fullNames} &middot; ${resortName} Quote</title></head>
+  // Pre-compute club perks box
+  let clubPerksBox = '';
+  if (clubName && checkedRooms.some(r => r.cat.toLowerCase().includes(clubName.toLowerCase())) && clubPerks) {
+    const _lines = clubPerks.split('\n').filter(Boolean).map(l => '&#10022; ' + l.replace(/^[\u2022\u00B7\-\*]\s*/,'')).join('<br>');
+    clubPerksBox = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;background-color:#fffdf5;border:1px solid #c9a96e;border-radius:3px;"><tr><td style="padding:14px 16px;"><p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#c9a96e;text-transform:uppercase;">&#9670; ' + clubName + ' Benefits</p><p style="margin:0;font-family:Arial,sans-serif;font-size:12px;line-height:1.8;color:#444444;">' + _lines + '</p></td></tr></table>';
+  }
+
+    const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${fullNames} &middot; ${resortName} Quote</title></head>
 <body style="margin:0;padding:20px;background-color:#f4f4f4;font-family:Georgia,serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4;">
 <tr><td align="center" style="padding:30px 10px;">
@@ -3195,10 +3202,9 @@ ${heroPhoto ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhoto}" 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;"><tr><td style="border-top:1px solid #e0e0e0;font-size:0;line-height:0;">&nbsp;</td></tr></table>
 
   <p style="margin:0 0 18px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Room Details</p>
+${clubPerksBox}
 
-  \${clubName && checkedRooms.some(r => r.cat.toLowerCase().includes(clubName.toLowerCase())) && clubPerks ? (() => { const perksLines = clubPerks.split('\n').filter(Boolean).map(l => '&#10022; ' + l.replace(/^[\u2022\u00B7\-\*]\s*/,'')).join('<br>'); return '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;background-color:#fffdf5;border:1px solid #c9a96e;border-radius:3px;"><tr><td style="padding:14px 16px;"><p style="margin:0 0 8px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#c9a96e;text-transform:uppercase;">&#9670; ' + clubName + ' Benefits</p><p style="margin:0;font-family:Arial,sans-serif;font-size:12px;line-height:1.8;color:#444444;">' + perksLines + '</p></td></tr></table>'; })() : ''}
-
-  \${cards}
+  ${cards}
 
   ${kidsHtml}
 
