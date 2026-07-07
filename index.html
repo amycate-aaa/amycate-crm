@@ -566,6 +566,19 @@ tr:hover .sticky-col{background:var(--surface2);}
             <!-- Wedding-only fields -->
             <div id="qb-tags-wrap" style="display:none;margin-top:10px"><label class="form-label">Amenity Tags <span style="color:#888;font-size:.75rem;">comma-separated — show as pill badges on resort card</span></label><input id="qb-tags" class="form-input" placeholder="e.g. Family-Friendly, Unlimited-Luxury, Water Park, Swim-Out Suites"></div>
             <div id="qb-venues-wrap" style="display:none;margin-top:10px"><label class="form-label">Wedding Venues <span style="color:#888;font-size:.75rem;">one venue per line — name: description</span></label><textarea id="qb-venues" class="form-input" rows="4" placeholder="Beach Terrace: Ceremony overlooking the ocean&#10;Grand Ballroom: Indoor reception for up to 300 guests&#10;Garden Gazebo: Intimate outdoor ceremony"></textarea></div>
+            <div id="qb-wedding-payment-wrap" style="display:none;margin-top:10px;background:#f0f5f8;border:1px solid #1a3a4a;border-radius:8px;padding:12px;">
+              <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a3a4a;margin-bottom:8px;">&#10022; Payment / Deposit Info</div>
+              <label style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:.85rem;cursor:pointer;">
+                <input type="checkbox" id="qb-wedding-show-payment" onchange="document.getElementById('qb-wedding-payment-fields').style.display=this.checked?'block':'none'" style="width:16px;height:16px;">
+                Include payment details on quote
+              </label>
+              <div id="qb-wedding-payment-fields" style="display:none;">
+                <div style="margin-bottom:8px;"><label class="form-label" style="margin-bottom:3px;">Deposit Amount</label><input id="qb-wedding-deposit" class="form-input" placeholder="e.g. $50 per person / $100 per room"></div>
+                <div style="margin-bottom:8px;"><label class="form-label" style="margin-bottom:3px;">Final Payment Due</label><input id="qb-wedding-final-pay" type="date" class="form-input"></div>
+                <div><label class="form-label" style="margin-bottom:3px;">Payment Notes <span style="color:#888;font-size:.75rem;">optional</span></label><input id="qb-wedding-pay-notes" class="form-input" placeholder="e.g. Room block held until Dec 1, 2026"></div>
+              </div>
+            </div>
+
             <div id="qb-promos-wrap" style="display:none;margin-top:10px;background:#fffdf5;border:1px solid #c9a96e;border-radius:8px;padding:12px;">
               <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a3a4a;margin-bottom:8px;">&#10022; Exclusive Promotions</div>
               <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.85rem;cursor:pointer;">
@@ -2642,7 +2655,7 @@ function qbClearForm() {
 
   // Reset guest fields
   ['qb-name','qb-name2','qb-name3','qb-partner2','qb-intro','qb-location','qb-desc-text','qb-highlights',
-   'qb-booking-link','qb-club-name','qb-club-perks','qb-tags','qb-venues','qb-wedding-date','qb-resort-info-link','qb-promo-custom-label','qb-promo-custom-url','qb-checkin','qb-checkout','qb-event'].forEach(id => {
+   'qb-booking-link','qb-club-name','qb-club-perks','qb-tags','qb-venues','qb-wedding-date','qb-resort-info-link','qb-promo-custom-label','qb-promo-custom-url','qb-wedding-deposit','qb-wedding-final-pay','qb-wedding-pay-notes','qb-checkin','qb-checkout','qb-event'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
@@ -3084,8 +3097,12 @@ function qbGenerate() {
   const bookingLink    = document.getElementById('qb-booking-link')?.value?.trim() || 'https://zcal.co/amymcate/letschat';
   const clubName       = document.getElementById('qb-club-name')?.value?.trim() || '';
   const clubPerks      = document.getElementById('qb-club-perks')?.value?.trim() || '';
-  const resortInfoLink = document.getElementById('qb-resort-info-link')?.value?.trim() || '';
-  const promo2500      = document.getElementById('qb-promo-2500')?.checked || false;
+  const resortInfoLink   = document.getElementById('qb-resort-info-link')?.value?.trim() || '';
+  const showPayment      = document.getElementById('qb-wedding-show-payment')?.checked || false;
+  const weddingDeposit   = document.getElementById('qb-wedding-deposit')?.value?.trim() || '';
+  const weddingFinalPay  = document.getElementById('qb-wedding-final-pay')?.value || '';
+  const weddingPayNotes  = document.getElementById('qb-wedding-pay-notes')?.value?.trim() || '';
+  const promo2500        = document.getElementById('qb-promo-2500')?.checked || false;
   const promoLabel     = document.getElementById('qb-promo-custom-label')?.value?.trim() || '';
   const promoUrl       = document.getElementById('qb-promo-custom-url')?.value?.trim() || '';
 
@@ -3182,6 +3199,19 @@ function qbGenerate() {
     paymentHtml = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:1px;border-top:1px solid #e0e0e0;"></table>
     <p style="margin:24px 0 12px 0;font-family:Georgia,serif;font-size:12px;letter-spacing:2px;color:#1a3a4a;text-transform:uppercase;">&#10022; Easy Payments</p>
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;border-collapse:collapse;"><tr style="background-color:#1a3a4a;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#c9a96e;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>${payRows}</table>`;
+  }
+
+  // Wedding payment section
+  let weddingPaymentHtml = '';
+  if (showPayment && (weddingDeposit || weddingFinalPay)) {
+    const finalPayFmtW = weddingFinalPay ? (() => { try { const d = new Date(weddingFinalPay+'T00:00:00'); return isNaN(d.getTime()) ? weddingFinalPay : d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return weddingFinalPay;} })() : '';
+    let payRows = weddingDeposit ? '<tr style="background-color:#f9f9f9;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">Deposit to Reserve</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">At Booking</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;border-bottom:1px solid #eeeeee;">' + weddingDeposit + '</td></tr>' : '';
+    payRows += finalPayFmtW ? '<tr style="background-color:#ffffff;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">Final Payment</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">' + finalPayFmtW + '</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;">Remaining Balance</td></tr>' : '';
+    const notesRow = weddingPayNotes ? '<tr><td colspan="3" style="padding:10px 14px;font-family:Arial,sans-serif;font-size:12px;color:#888888;font-style:italic;">' + weddingPayNotes + '</td></tr>' : '';
+    weddingPaymentHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;"><tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td><td style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#0A0A0A;">Easy Payments</td></tr></table>'
+      + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-bottom:28px;">'
+      + '<tr style="background-color:#0A0A0A;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>'
+      + payRows + notesRow + '</table>';
   }
 
   // Resort Info button + Wedding Guide button
@@ -3372,7 +3402,7 @@ function qbSetMode(mode) {
   if (n1Label) n1Label.textContent = isWedding ? 'Partner 1 Name *' : '1st Guest Name *';
 
   // Show/hide wedding fields
-  ['qb-partner2-wrap','qb-wedding-date-wrap','qb-resort-info-wrap','qb-tags-wrap','qb-venues-wrap','qb-promos-wrap'].forEach(id => {
+  ['qb-partner2-wrap','qb-wedding-date-wrap','qb-resort-info-wrap','qb-tags-wrap','qb-venues-wrap','qb-wedding-payment-wrap','qb-promos-wrap'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = isWedding ? 'block' : 'none';
   });
@@ -3407,8 +3437,12 @@ function qbGenerateWedding() {
   const highlights = document.getElementById('qb-highlights')?.value?.trim() || '';
   const customIntro= document.getElementById('qb-intro')?.value?.trim() || '';
   const bookingLink= document.getElementById('qb-booking-link')?.value?.trim() || 'https://zcal.co/amymcate/letschat';
-  const resortInfoLink = document.getElementById('qb-resort-info-link')?.value?.trim() || '';
-  const promo2500      = document.getElementById('qb-promo-2500')?.checked || false;
+  const resortInfoLink   = document.getElementById('qb-resort-info-link')?.value?.trim() || '';
+  const showPayment      = document.getElementById('qb-wedding-show-payment')?.checked || false;
+  const weddingDeposit   = document.getElementById('qb-wedding-deposit')?.value?.trim() || '';
+  const weddingFinalPay  = document.getElementById('qb-wedding-final-pay')?.value || '';
+  const weddingPayNotes  = document.getElementById('qb-wedding-pay-notes')?.value?.trim() || '';
+  const promo2500        = document.getElementById('qb-promo-2500')?.checked || false;
   const promoLabel     = document.getElementById('qb-promo-custom-label')?.value?.trim() || '';
   const promoUrl       = document.getElementById('qb-promo-custom-url')?.value?.trim() || '';
   const tagsRaw    = document.getElementById('qb-tags')?.value?.trim() || '';
@@ -3512,6 +3546,19 @@ function qbGenerateWedding() {
       </table>
     </td></tr>
   </table>`;
+  }
+
+  // Wedding payment section
+  let weddingPaymentHtml = '';
+  if (showPayment && (weddingDeposit || weddingFinalPay)) {
+    const finalPayFmtW = weddingFinalPay ? (() => { try { const d = new Date(weddingFinalPay+'T00:00:00'); return isNaN(d.getTime()) ? weddingFinalPay : d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return weddingFinalPay;} })() : '';
+    let payRows = weddingDeposit ? '<tr style="background-color:#f9f9f9;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">Deposit to Reserve</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">At Booking</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;border-bottom:1px solid #eeeeee;">' + weddingDeposit + '</td></tr>' : '';
+    payRows += finalPayFmtW ? '<tr style="background-color:#ffffff;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">Final Payment</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">' + finalPayFmtW + '</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;">Remaining Balance</td></tr>' : '';
+    const notesRow = weddingPayNotes ? '<tr><td colspan="3" style="padding:10px 14px;font-family:Arial,sans-serif;font-size:12px;color:#888888;font-style:italic;">' + weddingPayNotes + '</td></tr>' : '';
+    weddingPaymentHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;"><tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td><td style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#0A0A0A;">Easy Payments</td></tr></table>'
+      + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-bottom:28px;">'
+      + '<tr style="background-color:#0A0A0A;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>'
+      + payRows + notesRow + '</table>';
   }
 
   // Resort Info button + Wedding Guide button
@@ -3624,6 +3671,7 @@ ${heroPhoto ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhoto}" 
   ${promosHtml}
   ${roomCardsHtml}
   ${packagesHtml}
+  ${weddingPaymentHtml}
   ${venuesHtml}
 
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">
