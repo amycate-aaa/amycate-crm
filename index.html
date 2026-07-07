@@ -2842,6 +2842,28 @@ function qbRenderRooms() {
   }
   heroHtml += `</div>`;
 
+  // ── RESORT GALLERY (for wedding sneak peek body photos) ──
+  let galleryPickerHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:6px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Gallery Photos <span style="font-weight:400;font-size:.7rem;color:#888;text-transform:none;">(wedding sneak peek — shown after resort card)</span></div>
+    <p style="font-size:.78rem;color:#888;margin-bottom:10px;">Check photos to include as a resort gallery collage in the quote body.</p>`;
+  if (resortPhotos.length > 0) {
+    galleryPickerHtml += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
+    resortPhotos.forEach(p => {
+      const url = p.url || p.downloadURL || '';
+      if (!url) return;
+      galleryPickerHtml += `<label style="cursor:pointer;position:relative;display:block;">
+        <input type="checkbox" class="qb-gallery-photo" value="${url}" style="position:absolute;top:4px;left:4px;z-index:1;width:14px;height:14px;"
+          onchange="this.closest('label').querySelector('img').style.borderColor=this.checked?'#c9a96e':'#e0e0e0';">
+        <img src="${url}" style="width:100%;height:60px;object-fit:cover;border-radius:6px;border:2px solid #e0e0e0;" onerror="this.closest('label').style.display='none'">
+      </label>`;
+    });
+    galleryPickerHtml += `</div>`;
+  } else {
+    galleryPickerHtml += `<p style="font-size:.82rem;color:#aaa;">No resort/property photos uploaded yet.</p>`;
+  }
+  galleryPickerHtml += `</div>`;
+  document.getElementById('qb-gallery-picker').innerHTML = galleryPickerHtml;
+
   // ── ROOM OPTIONS ── (room category photos only)
   // Group by category
   const categories = {};
@@ -2899,7 +2921,7 @@ function qbRenderRooms() {
 
   roomsHtml += `<button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:4px;">+ Add Custom Room</button></div>`;
 
-  container.innerHTML = heroHtml + roomsHtml;
+  container.innerHTML = heroHtml + galleryPickerHtml + roomsHtml;
 }
 
 // Copy a room's shareable gallery (carousel) link to clipboard
@@ -3464,8 +3486,9 @@ function qbGenerateWedding() {
   const venuesRaw  = document.getElementById('qb-venues')?.value?.trim() || '';
   const deposit    = document.getElementById('qb-deposit')?.value?.trim() || '';
   const finalPay   = document.getElementById('qb-final')?.value?.trim() || '';
-  const heroPhotos = [...document.querySelectorAll('.qb-hero-photo:checked')].map(el => el.value);
-  const heroPhoto  = heroPhotos[0] || '';
+  const heroPhotos   = [...document.querySelectorAll('.qb-hero-photo:checked')].map(el => el.value);
+  const heroPhoto    = heroPhotos[0] || '';
+  const galleryPhotos = [...document.querySelectorAll('.qb-gallery-photo:checked')].map(el => el.value);
 
   const checkedRooms = [];
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
@@ -3596,6 +3619,21 @@ function qbGenerateWedding() {
     promosHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0A0A0A;margin-bottom:28px;"><tr><td style="padding:20px 28px;text-align:center;"><p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#B8973A;margin:0 0 12px 0;">&#10022; Exclusive Promotions &#10022;</p><table width="100%" cellpadding="0" cellspacing="0" border="0">' + promoLinks + '</table></td></tr></table>';
   }
 
+  // Resort gallery photo collage (shown after resort card)
+  let resortGalleryHtml = '';
+  if (galleryPhotos.length > 0) {
+    const cols = Math.min(galleryPhotos.length, 3);
+    const cells = galleryPhotos.slice(0, 6).reduce((rows, url, i) => {
+      if (i % cols === 0) rows.push([]);
+      rows[rows.length - 1].push(url);
+      return rows;
+    }, []).map(row => {
+      const tds = row.map(url => '<td style="padding:0 2px 2px 0;line-height:0;"><img src="' + url + '" style="width:100%;display:block;" alt=""/></td>').join('');
+      return '<tr>' + tds + '</tr>';
+    }).join('');
+    resortGalleryHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;border-collapse:collapse;">' + cells + '</table>';
+  }
+
   // Wedding packages from resort profile
   const pkgs = window.qbResortPackages || [];
   let packagesHtml = '';
@@ -3683,6 +3721,7 @@ ${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="
     ${highlights ? `<tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:10px 18px;"><span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${highlights}</span></td></tr>` : ''}
   </table>
 
+  ${resortGalleryHtml}
   ${resortInfoBtn}
   ${promosHtml}
   ${roomCardsHtml}
