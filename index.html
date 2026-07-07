@@ -3407,6 +3407,10 @@ function qbGenerateWedding() {
   const highlights = document.getElementById('qb-highlights')?.value?.trim() || '';
   const customIntro= document.getElementById('qb-intro')?.value?.trim() || '';
   const bookingLink= document.getElementById('qb-booking-link')?.value?.trim() || 'https://zcal.co/amymcate/letschat';
+  const resortInfoLink = document.getElementById('qb-resort-info-link')?.value?.trim() || '';
+  const promo2500      = document.getElementById('qb-promo-2500')?.checked || false;
+  const promoLabel     = document.getElementById('qb-promo-custom-label')?.value?.trim() || '';
+  const promoUrl       = document.getElementById('qb-promo-custom-url')?.value?.trim() || '';
   const tagsRaw    = document.getElementById('qb-tags')?.value?.trim() || '';
   const venuesRaw  = document.getElementById('qb-venues')?.value?.trim() || '';
   const deposit    = document.getElementById('qb-deposit')?.value?.trim() || '';
