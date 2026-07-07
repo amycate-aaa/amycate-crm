@@ -3413,6 +3413,22 @@ function qbSetMode(mode) {
   });
   if (!isWedding) qbToggleGuest2();
 
+  // Clear/restore deposit default based on mode
+  const depositEl = document.getElementById('qb-deposit');
+  if (depositEl) {
+    if (isWedding) {
+      depositEl.dataset.travelValue = depositEl.value;
+      depositEl.value = '';
+      depositEl.placeholder = 'e.g. $500 wedding deposit';
+    } else {
+      depositEl.value = depositEl.dataset.travelValue || '$50/person ($100 total for 2 guests)';
+      depositEl.placeholder = '';
+    }
+  }
+  // Uncheck payment checkbox when switching modes
+  const payChk = document.getElementById('qb-include-payment');
+  if (payChk) payChk.checked = false;
+
   // Generate button label
   const genBtn = document.getElementById('qb-gen-btn');
   if (genBtn) genBtn.textContent = isWedding ? 'Generate Wedding Sneak Peek →' : 'Generate Quote →';
