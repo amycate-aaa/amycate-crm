@@ -3505,6 +3505,21 @@ function qbGenerateWedding() {
   </table>`;
   }
 
+  // Resort Info button
+  const resortInfoBtn = resortInfoLink
+    ? '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;"><tr><td align="center"><a href="' + resortInfoLink + '" style="display:inline-block;background:#F2EFE9;border:2px solid #B8973A;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:11px 28px;text-decoration:none;border-radius:4px;">&#127970; View Full Resort Details &rarr;</a></td></tr></table>'
+    : '';
+
+  // Exclusive promos banner
+  let promosHtml = '';
+  const promoItems = [];
+  if (promo2500) promoItems.push({label:'Up to $2,500 Off Your Destination Wedding',url:'https://www.destinationweddings.com/exclusive-offers/major-wedding-savings'});
+  if (promoLabel && promoUrl) promoItems.push({label:promoLabel, url:promoUrl});
+  if (promoItems.length > 0) {
+    const promoLinks = promoItems.map(p => '<tr><td style="padding:6px 0;text-align:center;"><a href="' + p.url + '" style="display:inline-block;background:#B8973A;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:10px 24px;text-decoration:none;border-radius:4px;margin:4px;">' + p.label + ' &rarr;</a></td></tr>').join('');
+    promosHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0A0A0A;margin-bottom:28px;"><tr><td style="padding:20px 28px;text-align:center;"><p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#B8973A;margin:0 0 12px 0;">&#10022; Exclusive Promotions &#10022;</p><table width="100%" cellpadding="0" cellspacing="0" border="0">' + promoLinks + '</table></td></tr></table>';
+  }
+
   // Wedding packages from resort profile
   const pkgs = window.qbResortPackages || [];
   let packagesHtml = '';
