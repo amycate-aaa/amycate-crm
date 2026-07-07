@@ -7,6 +7,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
 :root {
   --bg:#f4f4f4; --surface:#ffffff; --surface2:#f0f0f0; --border:#cccccc;
@@ -789,6 +790,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button type="button" class="btn btn-primary" onclick="openFlightModal()">+ Add Flight</button>
             <button type="button" class="btn btn-outline" onclick="generateFlightReport()" style="color:white;border-color:rgba(255,255,255,.5)">📋 Flight Report</button>
+            <button type="button" class="btn btn-outline" onclick="exportFlightReportExcel()" style="color:white;border-color:rgba(255,255,255,.5)">⬇ Download Excel</button>
             <button type="button" class="btn btn-outline" onclick="sendFlightRequestEmails()" style="color:white;border-color:rgba(255,255,255,.5)">📧 Send Flight Request</button>
           </div>
         </div>
@@ -5313,6 +5315,99 @@ ${(()=>{
   win.document.close();
   win.focus();
   setTimeout(()=>win.print(), 500);
+}
+
+// ════════════════════════════════════
+// FLIGHT REPORT — EXCEL EXPORT
+// ════════════════════════════════════
+async function exportFlightReportExcel(){
+  const w = weddings.find(x=>x.id===currentWeddingId);
+  if(!w){ alert('Select a wedding first.'); return; }
+  if(typeof ExcelJS==='undefined'){ alert('Excel library is still loading — give it a second and try again.'); return; }
+
+  const wGuests = guests.filter(g=>g.weddingId===currentWeddingId&&g.status!=='Cancelled');
+  const fMap={};flights.forEach(f=>{ if(f.weddingId===currentWeddingId) fMap[f.guestId]=f; });
+  const DASH='\u2014';
+  const parseD = s => { s=(s||'').replace(/T.*/,'').trim(); const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s); return m?new Date(+m[1],+m[2]-1,+m[3]):null; };
+
+  // Build one row per PERSON — identical logic to generateFlightReport()
+  const rows=[];
+  wGuests.forEach(g=>{
+    const f=fMap[g.id]||{};
+    const persons=[g.names];
+    if(g.additional) g.additional.split(',').forEach(a=>{ if(a.trim()) persons.push(a.trim()); });
+    let arrPersons=[], deptPersons=[];
+    try{ arrPersons=f.personsArr?JSON.parse(f.personsArr):[]; }catch(e){}
+    try{ deptPersons=f.personsDept?JSON.parse(f.personsDept):[]; }catch(e){}
+    persons.forEach((name,i)=>{
+      const a=arrPersons[i]||(i===0?{flight:f.arrFlight,time:f.arrTime,date:f.arrDate}:{});
+      const de=deptPersons[i]||(i===0?{flight:f.deptFlight,time:f.deptTime,date:f.deptDate}:{});
+      rows.push({first:i===0, name, booking:i===0?(g.booking||''):'', ti:i===0?(g.ti||''):'', room:i===0?(g.roomtype||''):'',
+        ad:parseD(a.date), af:((a.flight||'').trim())||DASH, at:((a.time||'').trim())||DASH,
+        dd:parseD(de.date), df:((de.flight||'').trim())||DASH, dt:((de.time||'').trim())||DASH});
+    });
+  });
+
+  const NAVY='FF0D1B2A',GOLD='FFC9A84C',GREY='FF6B6B6B',DARK='FF1A1A1A',SUB='FF4A4A4A',LINE='FFE6E2D6',ROOMLINE='FFB8B0A0';
+  const wb=new ExcelJS.Workbook();
+  const ws=wb.addWorksheet('Flight Report',{views:[{state:'frozen',ySplit:6}],pageSetup:{orientation:'landscape',fitToWidth:1,fitToHeight:0,margins:{left:0.3,right:0.3,top:0.4,bottom:0.4,header:0.2,footer:0.2}}});
+  ws.pageSetup.printTitlesRow='6:6';
+  ws.columns=[26,15,9,34,17,12,12,17,13,12].map(wd=>({width:wd}));
+
+  const loc = w.location||w.destination||'';
+  const wedD = parseD(w.weddingDate);
+  const genTxt='Generated '+new Date().toLocaleDateString('en-US',{month:'numeric',day:'numeric',year:'2-digit'})
+    +'   \u00b7   Wedding date '+(wedD?wedD.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'');
+
+  ws.mergeCells('A1:J1'); ws.getCell('A1').value='\u2708  Flight Report \u2014 '+w.names;
+  ws.getCell('A1').font={name:'Arial',bold:true,size:16,color:{argb:NAVY}};
+  ws.mergeCells('A2:J2'); ws.getCell('A2').value=w.resort+(loc?'   \u00b7   '+loc:'');
+  ws.getCell('A2').font={name:'Arial',size:11,color:{argb:GREY}};
+  ws.mergeCells('A3:H3'); ws.getCell('A3').value='Arrivals & Departures by Room';
+  ws.getCell('A3').font={name:'Arial',bold:true,size:10,color:{argb:GOLD}};
+  ws.getCell('I3').value='TOTAL GUESTS'; ws.getCell('I3').font={name:'Arial',bold:true,size:8,color:{argb:GREY}}; ws.getCell('I3').alignment={horizontal:'right'};
+  ws.getCell('J3').value=rows.length; ws.getCell('J3').font={name:'Arial',bold:true,size:14,color:{argb:NAVY}}; ws.getCell('J3').alignment={horizontal:'right'};
+  ws.mergeCells('A4:J4'); ws.getCell('A4').value=genTxt;
+  ws.getCell('A4').font={name:'Arial',italic:true,size:8,color:{argb:GREY}};
+  ws.getRow(5).height=6;
+
+  const headers=['GUEST','BOOKING #','RES #','ROOM TYPE','ARRIVAL DATE','ARR FLIGHT','ARRIVES AT','DEPT DATE','DEPT FLIGHT','DEPARTS AT'];
+  const hr=ws.getRow(6); hr.height=24;
+  headers.forEach((h,i)=>{ const c=hr.getCell(i+1); c.value=h; c.fill={type:'pattern',pattern:'solid',fgColor:{argb:NAVY}};
+    c.font={name:'Arial',bold:true,size:9,color:{argb:'FFFFFFFF'}}; c.alignment={horizontal:'left',vertical:'middle',wrapText:true}; });
+
+  const DATEFMT='ddd, mmm d, yyyy';
+  let R=6;
+  rows.forEach(r=>{
+    R++; const row=ws.getRow(R);
+    row.getCell(1).value=r.first?r.name:'   \u21b3 '+r.name;
+    row.getCell(1).font=r.first?{name:'Arial',bold:true,size:10,color:{argb:DARK}}:{name:'Arial',size:10,color:{argb:SUB}};
+    row.getCell(2).value=r.booking; row.getCell(2).font={name:'Arial',size:8,color:{argb:GREY}};
+    row.getCell(3).value=r.ti; row.getCell(3).font={name:'Arial',size:10,color:{argb:DARK}};
+    row.getCell(4).value=r.room; row.getCell(4).font={name:'Arial',size:9,color:{argb:DARK}}; row.getCell(4).alignment={vertical:'top',wrapText:true};
+    const setDate=(ci,val)=>{ const c=row.getCell(ci); if(val){ c.value=val; c.numFmt=DATEFMT; } else { c.value=DASH; } c.font={name:'Arial',size:10,color:{argb:DARK}}; };
+    setDate(5,r.ad);
+    row.getCell(6).value=r.af; row.getCell(6).font={name:'Arial',size:10,bold:r.af!==DASH,color:{argb:DARK}};
+    row.getCell(7).value=r.at; row.getCell(7).font={name:'Arial',size:10,color:{argb:DARK}};
+    setDate(8,r.dd);
+    row.getCell(9).value=r.df; row.getCell(9).font={name:'Arial',size:10,bold:r.df!==DASH,color:{argb:DARK}};
+    row.getCell(10).value=r.dt; row.getCell(10).font={name:'Arial',size:10,color:{argb:DARK}};
+    for(let c=1;c<=10;c++){ const cell=row.getCell(c);
+      cell.border={top:{style:r.first?'thin':'hair',color:{argb:r.first?ROOMLINE:LINE}},bottom:{style:'hair',color:{argb:LINE}}};
+      if(c!==4) cell.alignment=Object.assign({vertical:'middle'},cell.alignment||{});
+    }
+  });
+  R+=2; ws.mergeCells('A'+R+':J'+R);
+  ws.getCell('A'+R).value='Prepared by Amy Cate  \u00b7  amy.cate@destinationweddings.com  \u00b7  Destination Weddings / Celebration Travel';
+  ws.getCell('A'+R).font={name:'Arial',italic:true,size:8,color:{argb:GREY}};
+
+  const slug=(w.names||'group').replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'');
+  const buf=await wb.xlsx.writeBuffer();
+  const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='Flight-Report-'+slug+'.xlsx';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 // ════════════════════════════════════
