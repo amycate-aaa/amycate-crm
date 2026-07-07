@@ -2717,6 +2717,7 @@ async function qbOnResortChange() {
   } catch(e) { qbResortData = []; }
 
   // Load resort profile and auto-fill fields
+  window.qbRoomDescriptions = {};
   try {
     const profile = await db.collection('resortProfiles').doc(slug).get();
     if (profile.exists) {
@@ -2737,6 +2738,7 @@ async function qbOnResortChange() {
       window.qbResortPackages = d.packages || [];
       window.qbWeddingGuide = d.weddingGuide || '';
       window.qbResortVenues = d.venues || [];
+      window.qbRoomDescriptions = d.roomDescriptions || {};
     }
   } catch(e) { console.log('No profile for', slug); }
 
@@ -2764,6 +2766,26 @@ async function qbSaveResort() {
     showToast('Error saving: ' + e.message, 'red');
   } finally {
     if (btn) { btn.textContent = '✓ Save Resort'; btn.disabled = false; }
+  }
+}
+
+// Save each room's Highlights text to the resort profile so descriptions live in the library
+async function qbSaveRoomDescriptions() {
+  const slug = document.getElementById('qb-resort')?.value;
+  if (!slug) { showToast('Select a resort first.', 'red'); return; }
+  // Merge with existing map so rooms without photos (not currently rendered) aren't wiped
+  const map = Object.assign({}, window.qbRoomDescriptions || {});
+  document.querySelectorAll('#qb-rooms-container .qb-room-notes').forEach(inp => {
+    const cat = (inp.dataset.cat || '').trim();
+    const val = (inp.value || '').trim();
+    if (cat) { if (val) map[cat] = val; else delete map[cat]; }
+  });
+  try {
+    await db.collection('resortProfiles').doc(slug).set({ roomDescriptions: map, updatedAt: new Date().toISOString() }, { merge: true });
+    window.qbRoomDescriptions = map;
+    showToast('Room descriptions saved to library!', 'green');
+  } catch(e) {
+    showToast('Error saving: ' + e.message, 'red');
   }
 }
 
@@ -2921,9 +2943,17 @@ function qbRenderRooms() {
     </div>`;
   });
 
-  roomsHtml += `<button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:4px;">+ Add Custom Room</button></div>`;
+  roomsHtml += `<button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:4px;">+ Add Custom Room</button>
+    <button class="btn btn-outline btn-sm" onclick="qbSaveRoomDescriptions()" style="margin-top:4px;margin-left:6px;" title="Save the Highlights text for each room to this resort's library profile so they auto-fill next time">&#128190; Save Descriptions to Library</button></div>`;
 
   container.innerHTML = heroHtml + galleryPickerHtml + roomsHtml;
+
+  // Auto-fill saved room descriptions from the Resort Library (feeds both Quote Builder and Wedding Sneak Peek)
+  const savedDescs = window.qbRoomDescriptions || {};
+  container.querySelectorAll('.qb-room-notes').forEach(inp => {
+    const c = (inp.dataset.cat || '').trim();
+    if (c && savedDescs[c] && !inp.value) inp.value = savedDescs[c];
+  });
 }
 
 // Copy a room's shareable gallery (carousel) link to clipboard
