@@ -2718,6 +2718,7 @@ async function qbOnResortChange() {
       if (clubPerksEl && d.clubPerks) clubPerksEl.value = d.clubPerks;
       // Store packages for use in wedding generator
       window.qbResortPackages = d.packages || [];
+      window.qbResortVenues = d.venues || [];
     }
   } catch(e) { console.log('No profile for', slug); }
 
@@ -3396,35 +3397,45 @@ function qbGenerateWedding() {
     `<span style="display:inline-block;background:#F2EFE9;border:1px solid #D8CFBE;border-radius:5px;font-size:12px;padding:4px 11px;margin:2px;color:#0A0A0A;font-weight:600;font-family:Arial,sans-serif;">${t}</span>`
   ).join('') : '';
 
-  // Wedding venues
+  // Wedding venues — from Resort Library profile (with photos)
+  const storedVenues = window.qbResortVenues || [];
   let venuesHtml = '';
-  if (venuesRaw) {
+  if (storedVenues.length > 0) {
+    // Build venue cards 2-up layout with photos
+    const venueCards = storedVenues.map(v => {
+      const bestForBadge = v.bestFor ? `<span style="display:inline-block;background:#0A0A0A;color:#B8973A;font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;margin-bottom:6px;">${v.bestFor}</span>` : '';
+      const capacityBadge = v.capacity ? `<span style="display:inline-block;background:#F2EFE9;border:1px solid #D8CFBE;color:#0A0A0A;font-family:Arial,sans-serif;font-size:10px;font-weight:700;padding:3px 8px;border-radius:3px;margin-bottom:6px;margin-left:4px;">&#128101; ${v.capacity}</span>` : '';
+      return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:16px;overflow:hidden;">
+        ${v.photo ? `<tr><td style="padding:0;line-height:0;"><img src="${v.photo}" width="520" style="width:100%;max-width:520px;display:block;" alt="${v.name}"/></td></tr>` : ''}
+        <tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:12px 16px;">
+          <p style="margin:0;font-family:Georgia,serif;font-size:16px;color:#FFFFFF;font-weight:bold;">${v.name}</p>
+          <div style="margin-top:4px;">${bestForBadge}${capacityBadge}</div>
+        </td></tr>
+        ${v.description ? `<tr><td style="padding:12px 16px;font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.7;">${v.description}</td></tr>` : ''}
+      </table>`;
+    }).join('');
+    venuesHtml = `
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">
+    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
+    <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">&#127979; Wedding Venues</td></tr>
+  </table>
+  ${venueCards}`;
+  } else if (venuesRaw) {
+    // Fallback to manual text entry
     const venueLines = venuesRaw.split('\n').filter(Boolean);
     const venueCells = venueLines.map(line => {
       const parts = line.split(':');
       const name = parts[0]?.trim() || line;
       const desc = parts.slice(1).join(':').trim();
-      return `<td valign="top" style="padding:0 6px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EFE9;border-top:3px solid #B8973A;">
-          <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:20px;">&#127979;</td></tr>
-          <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">${name}</td></tr>
-          <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">${desc}</td></tr>
-        </table>
-      </td>`;
+      return `<td valign="top" style="padding:0 6px;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EFE9;border-top:3px solid #B8973A;"><tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:20px;">&#127979;</td></tr><tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">${name}</td></tr><tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">${desc}</td></tr></table></td>`;
     });
-    // Split into rows of 3
     let rows = '';
     for (let i=0; i<venueCells.length; i+=3) {
       const chunk = venueCells.slice(i,i+3);
       while(chunk.length < 3) chunk.push('<td></td>');
       rows += `<tr>${chunk.join('')}</tr>`;
     }
-    venuesHtml = `
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">
-    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
-    <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">Wedding Venues</td></tr>
-  </table>
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">${rows}</table>`;
+    venuesHtml = `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;"><tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td><td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">Wedding Venues</td></tr></table><table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">${rows}</table>`;
   }
 
   // Room cards for wedding (estimated pricing style)
