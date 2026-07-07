@@ -3650,11 +3650,14 @@ function qbGenerateWedding() {
 
   const intro = customIntro || `${partner1}${partner2?' &amp; '+partner2:''}, I am so excited to share this stunning option for your${weddingDateFmt?' '+weddingDateFmt:''} wedding! ${resortName} offers the signature Unlimited-Luxury&#174; experience where everything is included &mdash; from gourmet dining to top-shelf drinks to endless activities. Below you'll find estimated guest pricing${venuesRaw?', wedding venues,':''} and resort details. Take a look and let me know what you think!`;
 
-  const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${partner1}${partner2?' & '+partner2:''} &middot; ${resortName}${weddingDateFmt?' &middot; '+weddingDateFmt:''}</title></head>
-<body style="margin:0;padding:20px;background:#F0EDE8;font-family:Arial,sans-serif;">
-<table width="600" cellpadding="0" cellspacing="0" border="0" align="center" style="background:#FFFFFF;max-width:600px;margin:0 auto;">
+const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${partner1}${partner2?' & '+partner2:''} · ${resortName}${weddingDateFmt?' · '+weddingDateFmt:''}</title></head>
+<body style="margin:0;padding:20px;background-color:#F0EDE8;font-family:Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F0EDE8" style="background-color:#F0EDE8;">
+<tr><td align="center" style="padding:20px 10px;">
+<table width="600" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="max-width:600px;background-color:#FFFFFF;margin:0 auto;">
 
-<tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:40px 40px 30px 40px;text-align:center;border-bottom:4px solid #B8973A;">
+<!-- HEADER -->
+<tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;padding:40px 40px 30px 40px;text-align:center;border-bottom:4px solid #B8973A;">
   <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B8973A;margin:0 0 14px 0;">Your Destination Wedding Sneak Peek</p>
   <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px auto;"><tr>
     <td style="border-top:1px solid #B8973A;width:40px;">&nbsp;</td>
@@ -3666,15 +3669,19 @@ function qbGenerateWedding() {
   ${weddingDateFmt ? `<p style="font-family:Georgia,serif;font-size:13px;color:#9C9489;margin:0;">Wedding Date: <strong style="color:#B8973A;">${weddingDateFmt}</strong></p>` : ''}
 </td></tr>
 
-${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="${heroPhotos[0]}" width="600" style="width:100%;max-width:600px;display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;"><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="width:100%;display:block;" alt="${resortName}"/></td>`).join('')}</tr></table></td></tr>` : ''}
+<!-- HERO PHOTO -->
+${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><img src="${heroPhotos[0]}" width="600" style="width:100%;max-width:600px;display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;font-size:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="width:100%;display:block;" alt=""/></td>`).join('')}</tr></table></td></tr>` : ''}
 
-<tr><td style="padding:36px 40px 24px 40px;">
+<!-- CONTENT -->
+<tr><td style="padding:36px 40px 24px 40px;" bgcolor="#FFFFFF">
 
+  <!-- INTRO -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:28px;">
     <tr><td style="font-family:Georgia,serif;font-size:15px;color:#374151;line-height:1.9;">${intro}</td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0A0A0A;margin-bottom:32px;">
+  <!-- GROUP PERKS BANNER -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
     <tr><td style="padding:22px 28px;text-align:center;">
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#B8973A;margin:0 0 8px 0;">&#10022; Exclusive Group Perks &mdash; Through Me &#10022;</p>
       <p style="font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#FFFFFF;margin:0 0 6px 0;">Unlimited-Luxury&#174; for Every Guest</p>
@@ -3682,67 +3689,87 @@ ${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="
     </td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #B8973A;background:#FDF6E3;margin-bottom:32px;">
+  <!-- YOU PICK THE DATES -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #B8973A;background-color:#FDF6E3;margin-bottom:32px;">
     <tr><td style="padding:16px 20px;">
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#0A0A0A;margin:0 0 6px 0;">&#128197; You Pick the Dates</p>
       <p style="font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.7;margin:0;">${weddingDateFmt?weddingDateFmt+' is your wedding day &mdash; your':'Your'} guests can arrive within 5 days before or after and everyone books their own travel window. I help every guest through the process from start to finish.</p>
     </td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0A0A0A;margin-bottom:32px;">
+  <!-- GROUP BOOKING CALLOUT -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
     <tr><td style="padding:16px 22px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">&#128161; With a group booking, you unlock complimentary room upgrades, comp rooms, wedding perks, and more &mdash; I will negotiate every detail on your behalf.</p>
     </td></tr>
   </table>
 
+  <!-- YOUR RESORT HEADER -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px 0;">
-    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
+    <tr><td width="4" bgcolor="#B8973A" style="background-color:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
     <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">Your Resort &mdash; In Detail</td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:28px;">
-    <tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:18px 22px;">
+  <!-- RESORT CARD -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:20px;">
+    <tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;padding:18px 22px;">
       <table cellpadding="0" cellspacing="0" border="0"><tr>
         <td style="font-family:Georgia,serif;font-size:28px;color:#B8973A;font-weight:bold;padding-right:14px;vertical-align:middle;">&#10022;</td>
         <td><div style="font-family:Georgia,serif;font-size:19px;color:#FFFFFF;font-weight:bold;">${resortName}</div>
-        <div style="font-family:Georgia,serif;font-size:12px;color:#8C8C8C;margin-top:3px;">${location || ''}</div></td>
+        <div style="font-family:Georgia,serif;font-size:12px;color:#8C8C8C;margin-top:3px;">${location||''}</div></td>
       </tr></table>
     </td></tr>
-    ${tagPills ? `<tr><td style="padding:12px 18px;border-bottom:1px solid #F3F4F6;background:#FAFAFA;">${tagPills}</td></tr>` : ''}
+    ${tagPills ? `<tr><td bgcolor="#FAFAFA" style="background-color:#FAFAFA;padding:12px 18px;border-bottom:1px solid #F3F4F6;">${tagPills}</td></tr>` : ''}
     ${resortDesc ? `<tr><td style="padding:16px 20px;font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.75;border-bottom:1px solid #F3F4F6;">${resortDesc}</td></tr>` : ''}
-    ${highlights ? `<tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:10px 18px;"><span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${highlights}</span></td></tr>` : ''}
+    ${highlights ? `<tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;padding:10px 18px;"><span style="font-family:Arial,sans-serif;font-size:11px;color:#B8973A;font-weight:bold;">${highlights}</span></td></tr>` : ''}
   </table>
 
+  <!-- RESORT GALLERY PHOTOS -->
   ${resortGalleryHtml}
+
+  <!-- RESORT INFO + GUIDE BUTTONS -->
   ${resortInfoBtn}
+
+  <!-- EXCLUSIVE PROMOTIONS -->
   ${promosHtml}
+
+  <!-- GUEST PRICING -->
   ${roomCardsHtml}
+
+  <!-- WEDDING PACKAGES -->
   ${packagesHtml}
+
+  <!-- PAYMENT DETAILS -->
   ${weddingPaymentHtml}
+
+  <!-- WEDDING VENUES -->
   ${venuesHtml}
 
+  <!-- WHAT HAPPENS NEXT HEADER -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 16px 0;">
-    <tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
+    <tr><td width="4" bgcolor="#B8973A" style="background-color:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td>
     <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">What Happens Next</td></tr>
   </table>
+
+  <!-- WHAT HAPPENS NEXT 3-COL -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
     <tr>
-      <td width="160" valign="top" style="padding:0 6px 0 0;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EFE9;border-top:3px solid #B8973A;">
+      <td width="33%" valign="top" style="padding:0 6px 0 0;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
           <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:22px;">&#128197;</td></tr>
           <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">Guest Travel Dates</td></tr>
           <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">Your guests choose their own preferred travel dates. I assist every one of them through booking and answer any questions along the way.</td></tr>
         </table>
       </td>
-      <td width="160" valign="top" style="padding:0 3px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EFE9;border-top:3px solid #B8973A;">
+      <td width="34%" valign="top" style="padding:0 3px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
           <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:22px;">&#128652;</td></tr>
           <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">Transportation</td></tr>
           <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">I coordinate all airport-to-resort transportation for your entire group &mdash; arrivals and departures both. Nothing for guests to figure out!</td></tr>
         </table>
       </td>
-      <td width="160" valign="top" style="padding:0 0 0 6px;">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F2EFE9;border-top:3px solid #B8973A;">
+      <td width="33%" valign="top" style="padding:0 0 0 6px;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2EFE9" style="background-color:#F2EFE9;border-top:3px solid #B8973A;">
           <tr><td style="padding:14px 14px 4px 14px;font-family:Arial,sans-serif;font-size:22px;">&#128737;&#65039;</td></tr>
           <tr><td style="padding:0 14px 6px 14px;font-family:Georgia,serif;font-size:13px;font-weight:bold;color:#0A0A0A;">Travel Protection</td></tr>
           <tr><td style="padding:0 14px 14px 14px;font-family:Georgia,serif;font-size:12px;color:#4B5563;line-height:1.6;">I highly recommend a Cancel for Any Reason (CFAR) plan to protect your investment &mdash; typically $70&ndash;$130 per adult.</td></tr>
@@ -3751,7 +3778,8 @@ ${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="
     </tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #0A0A0A;background:#F9FAFB;margin-bottom:36px;">
+  <!-- NEXT STEPS -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #0A0A0A;background-color:#F9FAFB;margin-bottom:36px;">
     <tr><td style="padding:18px 22px;">
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#0A0A0A;margin:0 0 12px 0;">&#128640; Next Steps</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
@@ -3764,17 +3792,19 @@ ${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="
     </td></tr>
   </table>
 
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#B8973A;margin-bottom:36px;">
+  <!-- GOLD CTA -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#B8973A" style="background-color:#B8973A;margin-bottom:36px;">
     <tr><td style="padding:22px 28px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#0A0A0A;margin:0 0 8px 0;">Ready to take the next step?</p>
-      <p style="font-family:Georgia,serif;font-size:13px;color:#0A0A0A;margin:0 0 16px 0;">Book a quick call with me and let's start planning your${resortName?' '+resortName:''} wedding!</p>
-      <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background:#0A0A0A;color:#B8973A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;border-radius:4px;">&#128197; Book a Call With Me!</a>
+      <p style="font-family:Georgia,serif;font-size:13px;color:#0A0A0A;margin:0 0 16px 0;">Book a quick call with me and let&rsquo;s start planning your${resortName?' '+resortName:''} wedding!</p>
+      <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background:#0A0A0A;color:#B8973A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;">&#128197; Book a Call With Me!</a>
     </td></tr>
   </table>
 
 </td></tr>
 
-<tr><td bgcolor="#0A0A0A" style="background:#0A0A0A;padding:30px 40px;text-align:center;border-top:4px solid #B8973A;">
+<!-- FOOTER -->
+<tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;padding:30px 40px;text-align:center;border-top:4px solid #B8973A;">
   <p style="font-family:Georgia,serif;font-size:13px;color:#B8973A;font-weight:bold;letter-spacing:2px;text-transform:uppercase;margin:0 0 6px 0;">I cannot wait to hear what you think!</p>
   <p style="font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#FFFFFF;margin:0 0 2px 0;">Amy M. Cate</p>
   <p style="font-family:Georgia,serif;font-size:12px;color:#B8973A;font-weight:600;letter-spacing:.05em;margin:0 0 12px 0;">Certified Destination Wedding &amp; Group Travel Specialist</p>
@@ -3782,12 +3812,13 @@ ${heroPhotos.length === 1 ? `<tr><td style="padding:0;line-height:0;"><img src="
   <p style="font-family:Georgia,serif;font-size:12px;color:#CCCCCC;margin:0 0 12px 0;">&#127942; DestiDiamond 2025 &nbsp;&bull;&nbsp; DestiRuby 2024 &nbsp;&bull;&nbsp; DestiStar 2022&ndash;2025</p>
   <a href="mailto:amy.cate@destinationweddings.com" style="font-family:Georgia,serif;font-size:13px;color:#B8973A;text-decoration:none;display:block;margin-bottom:4px;">amy.cate@destinationweddings.com</a>
   <p style="font-family:Georgia,serif;font-size:13px;color:#CCCCCC;margin:0 0 16px 0;">(832) 773-8664 &nbsp;&bull;&nbsp; M&ndash;TH 9&ndash;5 &nbsp;&bull;&nbsp; FRI 9&ndash;3 &nbsp;&bull;&nbsp; Weekends by appt</p>
-  <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background:#B8973A;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;border-radius:4px;margin-bottom:16px;">&#128197; Book a Call With Me!</a>
+  <a href="https://zcal.co/amymcate/letschat" style="display:inline-block;background-color:#B8973A;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;margin-bottom:16px;">&#128197; Book a Call With Me!</a>
   <p style="font-family:Georgia,serif;font-size:11px;color:#737373;margin:0;">Prices are estimates and subject to change. Not a confirmed booking. All pricing in USD.</p>
 </td></tr>
 
-</table></body></html>`;
-
+</table>
+</td></tr></table>
+</body></html>`;
   // Show preview
   const emptyState = document.getElementById('qb-empty-state');
   const previewContainer = document.getElementById('qb-preview-container');
