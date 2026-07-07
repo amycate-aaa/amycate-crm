@@ -621,6 +621,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div id="qb-preview-container" style="display:none">
             <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
               <button onclick="qbOpenNewTab()" style="padding:8px 16px;background:#1a1a1a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">👁 Open Full Preview</button>
+              <button onclick="qbDownloadHTML()" style="padding:8px 16px;background:#1a3a4a;color:white;border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">⬇ Download HTML</button>
               <button onclick="qbCopyHTML()" style="padding:8px 16px;background:#c9a96e;color:var(--text);border:none;border-radius:8px;font-size:.85rem;font-weight:700;cursor:pointer">📋 Copy HTML</button>
             </div>
             <div id="qb-copy-msg" style="display:none;background:#eaf3de;color:#3b6d11;padding:8px 14px;border-radius:8px;font-size:.82rem;margin-bottom:10px"></div>
@@ -3364,6 +3365,21 @@ function qbCopyHTML() {
   if (msg) { msg.style.display='block'; msg.textContent='✅ HTML copied! Open Outlook, create new email, and paste (Cmd+V).'; setTimeout(()=>msg.style.display='none', 4000); }
 }
 
+function qbDownloadHTML() {
+  const iframe = document.getElementById('qb-iframe');
+  if (!iframe?.dataset.html) return;
+  const html = iframe.dataset.html;
+  const blob = new Blob([html], {type: 'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const name = document.getElementById('qb-name')?.value?.trim() || 'quote';
+  const resort = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || 'resort';
+  a.href = url;
+  a.download = (name + ' - ' + resort).replace(/[^a-z0-9\-_ ]/gi,'').trim() + '.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 function exportResortLibrary() {
   db.collection('resortPhotos').get().then(snap => {
     const data = snap.docs.map(d => ({id: d.id, ...d.data()}));
@@ -3670,7 +3686,7 @@ const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>
 </td></tr>
 
 <!-- HERO PHOTO -->
-${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;font-size:0;"><img src="${heroPhotos[0]}" width="600" height="auto" style="display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;font-size:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="display:block;" alt=""/></td>`).join('')}</tr></table></td></tr>` : ''}
+${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;font-size:0;"><img src="${heroPhotos[0]}" width="600" style="display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;font-size:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="display:block;" alt=""/></td>`).join('')}</tr></table></td></tr>` : ''}
 
 <!-- CONTENT -->
 <tr><td style="padding:36px 40px 24px 40px;" bgcolor="#FFFFFF">
