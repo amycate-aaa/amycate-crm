@@ -236,6 +236,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <textarea class="form-control" id="profileClubPerks" rows="5" placeholder="Personalized check-in &amp; checkout&#10;Private lounge access&#10;Upgraded mini-bar &amp; room service&#10;Pool concierge &amp; bar service"></textarea>
         </div>
 
+        <!-- Wedding Venues -->
+        <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">📍 Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
+          <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+          <button type="button" onclick="addVenueRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Venue</button>
+        </div>
+
         <!-- Wedding Packages -->
         <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
           <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">💍 Wedding Packages <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
@@ -561,6 +568,12 @@ async function loadResortProfile() {
       document.getElementById('profileNotes').value = d.notes || '';
       document.getElementById('profileClubName').value = d.clubName || '';
       document.getElementById('profileClubPerks').value = d.clubPerks || '';
+      // Load wedding venues
+      const venueList = document.getElementById('venue-list');
+      if (venueList) {
+        venueList.innerHTML = '';
+        (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo));
+      }
       // Load wedding packages
       const pkgList = document.getElementById('pkg-list');
       if (pkgList) {
@@ -569,6 +582,8 @@ async function loadResortProfile() {
       }
     } else {
       // Clear form for new resort
+      const venueListClear = document.getElementById('venue-list');
+      if (venueListClear) venueListClear.innerHTML = '';
       const pkgListClear = document.getElementById('pkg-list');
       if (pkgListClear) pkgListClear.innerHTML = '';
       ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks'].forEach(id => {
@@ -579,6 +594,38 @@ async function loadResortProfile() {
   } catch(e) {
     console.error('loadResortProfile error:', e);
   }
+}
+
+function addVenueRow(name='', capacity='', bestFor='', description='', photo='') {
+  const list = document.getElementById('venue-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">✕</button>
+    ${photo ? `<img src="${photo}" style="width:100%;height:120px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
+    <div style="padding:10px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-name" placeholder="Venue name" value="${name}" style="font-weight:600;">
+        <input class="form-control venue-capacity" placeholder="Capacity e.g. 120 Guests" value="${capacity}">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-bestfor" placeholder="Best For e.g. Ceremony" value="${bestFor}">
+        <input class="form-control venue-photo" placeholder="Photo URL" value="${photo}" oninput="this.previousElementSibling.previousElementSibling.previousElementSibling.querySelector('img') && (this.previousElementSibling.previousElementSibling.previousElementSibling.querySelector('img').src = this.value)">
+      </div>
+      <textarea class="form-control venue-desc" rows="2" placeholder="Venue description">${description}</textarea>
+    </div>`;
+  list.appendChild(div);
+}
+
+function getVenues() {
+  return [...document.querySelectorAll('#venue-list > div')].map(div => ({
+    name:        div.querySelector('.venue-name')?.value?.trim() || '',
+    capacity:    div.querySelector('.venue-capacity')?.value?.trim() || '',
+    bestFor:     div.querySelector('.venue-bestfor')?.value?.trim() || '',
+    description: div.querySelector('.venue-desc')?.value?.trim() || '',
+    photo:       div.querySelector('.venue-photo')?.value?.trim() || ''
+  })).filter(v => v.name);
 }
 
 function addPackageRow(name='', highlights='', price='', isFeatured=false) {
@@ -627,6 +674,7 @@ async function saveResortProfile() {
     notes:        document.getElementById('profileNotes').value.trim(),
     clubName:     document.getElementById('profileClubName').value.trim(),
     clubPerks:    document.getElementById('profileClubPerks').value.trim(),
+    venues:       getVenues(),
     packages:     getPackages(),
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
   };
