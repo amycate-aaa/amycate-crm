@@ -3096,7 +3096,8 @@ function qbUpdateHints() {
 }
 
 function qbGenerate() {
-  if (qbMode === 'wedding') { qbGenerateWedding(); return; }
+  // Travel quotes now use the Wedding Sneak Peek layout, minus wedding packages & venues
+  return qbGenerateWedding(qbMode !== 'wedding');
   const resortSlug = document.getElementById('qb-resort')?.value;
   const resortName = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || resortSlug;
   const occCount  = parseInt(document.getElementById('qb-occ')?.value) || 2;
@@ -3484,7 +3485,7 @@ function qbSetMode(mode) {
 }
 
 // ── Wedding Sneak Peek Generator ──
-function qbGenerateWedding() {
+function qbGenerateWedding(travelMode) {
   const resortSlug = document.getElementById('qb-resort')?.value;
   const resortName = document.getElementById('qb-resort')?.options[document.getElementById('qb-resort').selectedIndex]?.text || resortSlug;
   const partner1   = document.getElementById('qb-name')?.value?.trim() || '';
@@ -3516,6 +3517,20 @@ function qbGenerateWedding() {
   const heroPhotos   = [...document.querySelectorAll('.qb-hero-photo:checked')].map(el => el.value);
   const heroPhoto    = heroPhotos[0] || '';
   const galleryPhotos = [...document.querySelectorAll('.qb-gallery-photo:checked')].map(el => el.value);
+
+  // ── TRAVEL MODE: travel quote = Wedding Sneak Peek layout, minus wedding packages/venues ──
+  travelMode = travelMode === true;
+  const fmtTripDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){ return s; } };
+  const checkinFmt  = fmtTripDate(checkin);
+  const checkoutFmt = fmtTripDate(checkout);
+  const _occT = parseInt(document.getElementById('qb-occ')?.value) || 2;
+  const _guestsT = [document.getElementById('qb-name')?.value, document.getElementById('qb-name2')?.value, document.getElementById('qb-name3')?.value].slice(0,_occT).map(s=>(s||'').trim()).filter(Boolean);
+  const _guestHeadline = _guestsT.length <= 1 ? (_guestsT[0] || partner1 || '') : _guestsT.slice(0,-1).join(', ') + ' <span style="color:#B8973A;">&amp;</span> ' + _guestsT[_guestsT.length-1];
+  const headlineName = travelMode ? _guestHeadline : coupleNames;
+  const eyebrowText  = travelMode ? 'Your Personalized Trip Quote' : 'Your Destination Wedding Sneak Peek';
+  const dateLineHtml = travelMode
+    ? ((checkinFmt || checkoutFmt) ? `<p style="font-family:Georgia,serif;font-size:13px;color:#9C9489;margin:0;">Travel Dates: <strong style="color:#B8973A;">${checkinFmt}${checkoutFmt?' &ndash; '+checkoutFmt:''}</strong></p>` : '')
+    : (weddingDateFmt ? `<p style="font-family:Georgia,serif;font-size:13px;color:#9C9489;margin:0;">Wedding Date: <strong style="color:#B8973A;">${weddingDateFmt}</strong></p>` : '');
 
   const checkedRooms = [];
   document.querySelectorAll('.qb-room-check:checked').forEach(cb => {
@@ -3683,7 +3698,11 @@ function qbGenerateWedding() {
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E7EB;margin-bottom:28px;">${pkgCards}</table>`;
   }
 
-  const intro = customIntro || `${partner1}${partner2?' &amp; '+partner2:''}, I am so excited to share this stunning option for your${weddingDateFmt?' '+weddingDateFmt:''} wedding! ${resortName} offers the signature Unlimited-Luxury&#174; experience where everything is included &mdash; from gourmet dining to top-shelf drinks to endless activities. Below you'll find estimated guest pricing${venuesRaw?', wedding venues,':''} and resort details. Take a look and let me know what you think!`;
+  const intro = customIntro || (travelMode
+    ? `${_guestHeadline || 'Hello'}, I am so excited to share this stunning option for your${eventName?' '+eventName:''} trip! ${resortName} offers an all-inclusive experience where everything is included &mdash; from gourmet dining to top-shelf drinks to endless activities. Below you'll find estimated guest pricing and resort details. Take a look and let me know what you think!`
+    : `${partner1}${partner2?' &amp; '+partner2:''}, I am so excited to share this stunning option for your${weddingDateFmt?' '+weddingDateFmt:''} wedding! ${resortName} offers the signature Unlimited-Luxury&#174; experience where everything is included &mdash; from gourmet dining to top-shelf drinks to endless activities. Below you'll find estimated guest pricing${venuesRaw?', wedding venues,':''} and resort details. Take a look and let me know what you think!`);
+
+  if (travelMode) { packagesHtml = ''; venuesHtml = ''; }
 
 const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${partner1}${partner2?' & '+partner2:''} · ${resortName}${weddingDateFmt?' · '+weddingDateFmt:''}</title></head>
 <body style="margin:0;padding:0;background:#F0EDE8;font-family:Arial,sans-serif;">
@@ -3693,15 +3712,15 @@ const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>
 
 <!-- HEADER -->
 <tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;padding:40px 40px 30px 40px;text-align:center;border-bottom:4px solid #B8973A;">
-  <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B8973A;margin:0 0 14px 0;">Your Destination Wedding Sneak Peek</p>
+  <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B8973A;margin:0 0 14px 0;">${eyebrowText}</p>
   <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 12px auto;"><tr>
     <td style="border-top:1px solid #B8973A;width:40px;">&nbsp;</td>
     <td style="padding:0 12px;font-family:Georgia,serif;font-size:13px;color:#B8973A;">&#10022;</td>
     <td style="border-top:1px solid #B8973A;width:40px;">&nbsp;</td>
   </tr></table>
-  <h1 style="font-family:Georgia,serif;font-size:36px;font-weight:bold;color:#FFFFFF;margin:0 0 8px 0;line-height:1.15;">${coupleNames}</h1>
+  <h1 style="font-family:Georgia,serif;font-size:36px;font-weight:bold;color:#FFFFFF;margin:0 0 8px 0;line-height:1.15;">${headlineName}</h1>
   <p style="font-family:Georgia,serif;font-size:15px;color:#D6D8DC;margin:0 0 4px 0;">${resortName}${location?' &middot; '+location:''}</p>
-  ${weddingDateFmt ? `<p style="font-family:Georgia,serif;font-size:13px;color:#9C9489;margin:0;">Wedding Date: <strong style="color:#B8973A;">${weddingDateFmt}</strong></p>` : ''}
+  ${dateLineHtml}
 </td></tr>
 
 <!-- HERO PHOTO -->
@@ -3720,7 +3739,7 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
     <tr><td style="padding:22px 28px;text-align:center;">
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#B8973A;margin:0 0 8px 0;">&#10022; Exclusive Group Perks &mdash; Through Me &#10022;</p>
       <p style="font-family:Georgia,serif;font-size:22px;font-weight:bold;color:#FFFFFF;margin:0 0 6px 0;">Unlimited-Luxury&#174; for Every Guest</p>
-      <p style="font-family:Georgia,serif;font-size:13px;color:#A6A6A6;margin:0;">Book as a group to unlock lower rates, comp rooms, upgrades &amp; wedding perks</p>
+      <p style="font-family:Georgia,serif;font-size:13px;color:#A6A6A6;margin:0;">Book as a group to unlock lower rates, comp rooms, upgrades &amp; ${travelMode?'group perks':'wedding perks'}</p>
     </td></tr>
   </table>
 
@@ -3735,7 +3754,7 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
   <!-- GROUP BOOKING CALLOUT -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
     <tr><td style="padding:16px 22px;text-align:center;">
-      <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">&#128161; With a group booking, you unlock complimentary room upgrades, comp rooms, wedding perks, and more &mdash; I will negotiate every detail on your behalf.</p>
+      <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">&#128161; With a group booking, you unlock complimentary room upgrades, comp rooms, ${travelMode?'group perks':'wedding perks'}, and more &mdash; I will negotiate every detail on your behalf.</p>
     </td></tr>
   </table>
 
@@ -3818,10 +3837,10 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
       <p style="font-family:Arial,sans-serif;font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;color:#0A0A0A;margin:0 0 12px 0;">&#128640; Next Steps</p>
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">1.</span>Let me know if ${resortName} is calling your name!</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">2.</span>I will request group rates and check your${weddingDateFmt?' '+weddingDateFmt:''} wedding date availability</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">3.</span>A deposit locks in your wedding date and time with the resort</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">2.</span>I will request group rates and check ${travelMode?'availability for your travel dates':`your${weddingDateFmt?' '+weddingDateFmt:''} wedding date availability`}</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">3.</span>A deposit locks in your ${travelMode?'group rate and space':'wedding date and time'} with the resort</td></tr>
         <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">4.</span>I secure your room block &mdash; you are not responsible for all rooms and guests can add or drop as needed</td></tr>
-        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">5.</span>I look forward to helping you have the destination wedding of your dreams! &#128151;</td></tr>
+        <tr><td style="padding:4px 0;font-family:Georgia,serif;font-size:14px;color:#374151;line-height:1.6;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">5.</span>I look forward to helping you have the ${travelMode?'trip of your dreams':'destination wedding of your dreams'}! &#128151;</td></tr>
       </table>
     </td></tr>
   </table>
@@ -3830,7 +3849,7 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
   <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#B8973A" style="background-color:#B8973A;margin-bottom:36px;">
     <tr><td style="padding:22px 28px;text-align:center;">
       <p style="font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#0A0A0A;margin:0 0 8px 0;">Ready to take the next step?</p>
-      <p style="font-family:Georgia,serif;font-size:13px;color:#0A0A0A;margin:0 0 16px 0;">Book a quick call with me and let&rsquo;s start planning your${resortName?' '+resortName:''} wedding!</p>
+      <p style="font-family:Georgia,serif;font-size:13px;color:#0A0A0A;margin:0 0 16px 0;">Book a quick call with me and let&rsquo;s start planning your${resortName?' '+resortName:''} ${travelMode?'getaway':'wedding'}!</p>
       <table cellpadding="0" cellspacing="0" border="0" align="center"><tr><td bgcolor="#0A0A0A" style="background-color:#0A0A0A;"><a href="https://zcal.co/amymcate/letschat" style="display:block;color:#B8973A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;mso-padding-alt:0;white-space:nowrap;">&#128197; Book a Call With Me!</a></td></tr></table>
     </td></tr>
   </table>
