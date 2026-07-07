@@ -5272,22 +5272,18 @@ ${(()=>{
       else deptGroups.push({key, flight:d, names:[name]});
     });
 
-    const deptDateHtml = deptGroups.map(dg =>
-      '<div style="margin-bottom:3px">'
-      + (dg.flight.date ? fmtD(dg.flight.date) : '—')
-      + '</div>'
-    ).join('');
-
     const deptFlightHtml = deptGroups.map(dg =>
-      '<div style="margin-bottom:3px">'
+      '<div style="margin-bottom:4px">'
       + (dg.names.length < persons.length ? '<span style="font-size:.78rem;color:#888">'+dg.names.join(', ')+': </span>' : '')
       + (dg.flight.flight ? '<span class="flight-num">'+dg.flight.flight+'</span>' : '<span class="no-flight">Not provided</span>')
+      + (dg.flight.date ? '<br><span style="font-size:.78rem;color:#666;">'+fmtD(dg.flight.date)+'</span>' : '')
       + '</div>'
     ).join('');
 
     const deptTimeHtml = deptGroups.map(dg =>
-      '<div style="margin-bottom:3px">'
+      '<div style="margin-bottom:4px;padding-top:1px">'
       + (dg.flight.time ? dg.flight.time : '—')
+      + (dg.flight.date ? '<br>&nbsp;' : '')
       + '</div>'
     ).join('');
 
@@ -5298,7 +5294,6 @@ ${(()=>{
       + '<td>'+(f.arrDate?fmtD(f.arrDate):'<span class="no-flight">Not provided</span>')+'</td>'
       + '<td>'+(f.arrFlight?'<span class="flight-num">'+f.arrFlight+'</span>':'<span class="no-flight">—</span>')+'</td>'
       + '<td>'+(f.arrTime||'—')+'</td>'
-      + '<td style="white-space:nowrap">'+(deptDateHtml||'<span class="no-flight">—</span>')+'</td>'
       + '<td style="white-space:nowrap">'+(deptFlightHtml||'<span class="no-flight">Not provided</span>')+'</td>'
       + '<td style="white-space:nowrap">'+(deptTimeHtml||'—')+'</td>'
       + '</tr>';
@@ -5309,9 +5304,9 @@ ${(()=>{
     + '<thead><tr>'
     + '<th>Guest(s) / Booking #</th><th>Res #</th><th>Room Type</th>'
     + '<th>Arrival Date</th><th>Arr Flight</th><th>Arrives At</th>'
-    + '<th style="white-space:nowrap">Dept Date</th><th style="white-space:nowrap">Dept Flight</th><th style="white-space:nowrap">Departs At</th>'
+    + '<th style="white-space:nowrap">Dept Flight</th><th style="white-space:nowrap">Departs At</th>'
     + '</tr></thead>'
-    + '<tbody>'+(roomRows||'<tr><td colspan="10">No flight data yet</td></tr>')+'</tbody>'
+    + '<tbody>'+(roomRows||'<tr><td colspan="9">No flight data yet</td></tr>')+'</tbody>'
     + '</table>';
 })()}
 
