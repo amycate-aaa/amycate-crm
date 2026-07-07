@@ -2787,9 +2787,6 @@ function qbRenderRooms() {
   // the standard dropdown list.
   const NON_ROOM_CATS = ['Aerial View', 'Resort Exterior / Property', 'Beach & Pool',
     'Lobby / Common Areas', 'Dining', 'Bar', 'Spa', 'Kids Club', 'Other', ''];
-  // Wedding venue photos (category prefixed "Wedding Venue -") belong to the venues
-  // section — keep them out of the Quote Builder's room & hero photo pickers.
-  const isVenueCat = c => /^Wedding Venue\b/i.test((c || '').trim());
 
   if (!qbResortData || qbResortData.length === 0) {
     container.innerHTML = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
@@ -2808,12 +2805,12 @@ function qbRenderRooms() {
   // Hero = resort-wide categories only (aerial, lobby, pool, dining, etc.)
   const resortPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return NON_ROOM_CATS.includes(cat) && !isVenueCat(cat);
+    return NON_ROOM_CATS.includes(cat);
   });
   // Rooms = everything else (covers standard AND custom-typed room category names)
   const roomPhotos = qbResortData.filter(p => {
     const cat = p.category || p.roomCategory || '';
-    return !NON_ROOM_CATS.includes(cat) && !isVenueCat(cat);
+    return !NON_ROOM_CATS.includes(cat);
   });
 
   // ── HERO PHOTO PICKER ── (any resort photo; property shots first, room types after)
@@ -2821,7 +2818,7 @@ function qbRenderRooms() {
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Hero Photo</div>
     <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select one photo to appear at the top of the quote card.</p>`;
 
-  const allHeroPhotos = qbResortData.filter(p => (p.url || p.downloadURL) && !isVenueCat(p.category || p.roomCategory || ''));
+  const allHeroPhotos = qbResortData.filter(p => (p.url || p.downloadURL));
   if (allHeroPhotos.length === 0) {
     heroHtml += `<p style="font-size:.82rem;color:#e05555;">No photos uploaded yet for this resort. Upload photos in the Resort Library first.</p>`;
   } else {
