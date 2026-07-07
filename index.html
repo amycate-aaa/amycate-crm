@@ -3620,14 +3620,14 @@ function qbGenerateWedding(travelMode) {
     <td style="font-family:Georgia,serif;font-size:20px;font-weight:bold;color:#0A0A0A;">Estimated Guest Pricing</td></tr>
   </table>
   ${roomRows}
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #E5E7EB;background:#F9FAFB;margin-bottom:28px;">
+  ${travelMode ? '' : `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-left:4px solid #E5E7EB;background:#F9FAFB;margin-bottom:28px;">
     <tr><td style="padding:14px 18px;">
       <table width="100%" cellpadding="0" cellspacing="0" border="0">
         <tr><td style="padding:5px 0;font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.7;vertical-align:top;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">&bull;</span>All pricing shown is a sample estimate and does not include airfare. Final group rates are negotiated once we confirm your date.</td></tr>
         <tr><td style="padding:5px 0;font-family:Georgia,serif;font-size:13px;color:#374151;line-height:1.7;vertical-align:top;"><span style="color:#B8973A;font-weight:bold;margin-right:8px;">&bull;</span>We can hold group rates and rooms &mdash; you can add or drop rooms and you are NOT responsible for all rooms.</td></tr>
       </table>
     </td></tr>
-  </table>`;
+  </table>`}`;
   }
 
   // Wedding payment section
@@ -3752,12 +3752,12 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
     </td></tr>
   </table>`}
 
-  <!-- GROUP BOOKING CALLOUT (wedding: top; travel: moved to bottom as Fun Fact) -->
-  ${travelMode ? '' : `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
+  <!-- GROUP BOOKING CALLOUT -->
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
     <tr><td style="padding:16px 22px;text-align:center;">
-      <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">&#128161; With a group booking, you unlock complimentary room upgrades, comp rooms, wedding perks, and more &mdash; I will negotiate every detail on your behalf.</p>
+      <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">&#128161; With a group booking, you unlock complimentary room upgrades, comp rooms, ${travelMode?'group perks':'wedding perks'}, and more &mdash; I will negotiate every detail on your behalf.</p>
     </td></tr>
-  </table>`}
+  </table>
 
   <!-- YOUR RESORT HEADER -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px 0;">
@@ -3868,14 +3868,6 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
     </td></tr>
   </table>
 
-  <!-- FUN FACT (travel only — the group box moved to the bottom) -->
-  ${travelMode ? `<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0A0A0A" style="background-color:#0A0A0A;margin-bottom:32px;">
-    <tr><td style="padding:16px 22px;text-align:center;">
-      <p style="font-family:Arial,sans-serif;font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:2px;color:#B8973A;margin:0 0 6px 0;">&#128161; Fun Fact</p>
-      <p style="font-family:Georgia,serif;font-size:14px;font-weight:bold;color:#B8973A;margin:0;">With a group booking, you unlock complimentary room upgrades, comp rooms, group perks, and more &mdash; I will negotiate every detail on your behalf.</p>
-    </td></tr>
-  </table>` : ''}
-
   <!-- GOLD CTA -->
   <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#B8973A" style="background-color:#B8973A;margin-bottom:36px;">
     <tr><td style="padding:22px 28px;text-align:center;">
@@ -3896,7 +3888,7 @@ ${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;
   <p style="font-family:Georgia,serif;font-size:12px;color:#CCCCCC;margin:0 0 12px 0;">&#127942; DestiDiamond 2025 &nbsp;&bull;&nbsp; DestiRuby 2024 &nbsp;&bull;&nbsp; DestiStar 2022&ndash;2025</p>
   <a href="mailto:amy.cate@destinationweddings.com" style="font-family:Georgia,serif;font-size:13px;color:#B8973A;text-decoration:none;display:block;margin-bottom:4px;">amy.cate@destinationweddings.com</a>
   <p style="font-family:Georgia,serif;font-size:13px;color:#CCCCCC;margin:0 0 16px 0;">(832) 773-8664 &nbsp;&bull;&nbsp; M&ndash;TH 9&ndash;5 &nbsp;&bull;&nbsp; FRI 9&ndash;3 &nbsp;&bull;&nbsp; Weekends by appt</p>
-  ${travelMode ? '' : `<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:16px;"><tr><td bgcolor="#B8973A" style="background-color:#B8973A;"><a href="https://zcal.co/amymcate/letschat" style="display:block;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;mso-padding-alt:0;white-space:nowrap;">&#128197; Book a Call With Me!</a></td></tr></table>`}
+  <table cellpadding="0" cellspacing="0" border="0" align="center" style="margin-bottom:16px;"><tr><td bgcolor="#B8973A" style="background-color:#B8973A;"><a href="https://zcal.co/amymcate/letschat" style="display:block;color:#0A0A0A;font-family:Georgia,serif;font-size:13px;font-weight:bold;padding:12px 28px;text-decoration:none;mso-padding-alt:0;white-space:nowrap;">&#128197; Book a Call With Me!</a></td></tr></table>
   <p style="font-family:Georgia,serif;font-size:11px;color:#737373;margin:0;">Prices are estimates and subject to change. Not a confirmed booking. All pricing in USD.</p>
 </td></tr>
 
