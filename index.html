@@ -3523,7 +3523,7 @@ function qbGenerateWedding(travelMode) {
   const fmtTripDate = s => { if(!s) return ''; try { return new Date(s+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){ return s; } };
   const checkinFmt  = fmtTripDate(checkin);
   const checkoutFmt = fmtTripDate(checkout);
-  const _finalPayFmt = fmtTripDate(finalPay);
+  const _finalPayFmt = (() => { if(!finalPay) return ''; const d = new Date(finalPay+'T00:00:00'); return isNaN(d.getTime()) ? finalPay : d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); })();
   const _occT = parseInt(document.getElementById('qb-occ')?.value) || 2;
   const _guestsT = [document.getElementById('qb-name')?.value, document.getElementById('qb-name2')?.value, document.getElementById('qb-name3')?.value].slice(0,_occT).map(s=>(s||'').trim()).filter(Boolean);
   const _guestHeadline = _guestsT.length <= 1 ? (_guestsT[0] || partner1 || '') : _guestsT.slice(0,-1).join(', ') + ' <span style="color:#B8973A;">&amp;</span> ' + _guestsT[_guestsT.length-1];
