@@ -5298,9 +5298,9 @@ ${(()=>{
       + '<td>'+(f.arrDate?fmtD(f.arrDate):'<span class="no-flight">Not provided</span>')+'</td>'
       + '<td>'+(f.arrFlight?'<span class="flight-num">'+f.arrFlight+'</span>':'<span class="no-flight">—</span>')+'</td>'
       + '<td>'+(f.arrTime||'—')+'</td>'
-      + '<td>'+(deptDateHtml||'<span class="no-flight">Not provided</span>')+'</td>'
-      + '<td>'+(deptFlightHtml||'<span class="no-flight">Not provided</span>')+'</td>'
-      + '<td>'+(deptTimeHtml||'—')+'</td>'
+      + '<td style="white-space:nowrap">'+(deptDateHtml||'<span class="no-flight">—</span>')+'</td>'
+      + '<td style="white-space:nowrap">'+(deptFlightHtml||'<span class="no-flight">Not provided</span>')+'</td>'
+      + '<td style="white-space:nowrap">'+(deptTimeHtml||'—')+'</td>'
       + '</tr>';
   }).join('');
 
@@ -5309,7 +5309,7 @@ ${(()=>{
     + '<thead><tr>'
     + '<th>Guest(s) / Booking #</th><th>Res #</th><th>Room Type</th>'
     + '<th>Arrival Date</th><th>Arr Flight</th><th>Arrives At</th>'
-    + '<th>Dept Date</th><th>Dept Flight</th><th>Departs At</th>'
+    + '<th style="white-space:nowrap">Dept Date</th><th style="white-space:nowrap">Dept Flight</th><th style="white-space:nowrap">Departs At</th>'
     + '</tr></thead>'
     + '<tbody>'+(roomRows||'<tr><td colspan="10">No flight data yet</td></tr>')+'</tbody>'
     + '</table>';
