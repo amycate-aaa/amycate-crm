@@ -237,6 +237,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         </div>
 
         <!-- Wedding Venues -->
+        <div style="margin-bottom:10px;margin-top:10px;">
+          <label class="form-label">Wedding Guide PDF Link <span style="color:#888;font-size:.75rem;">public URL — shows as download button on quote</span></label>
+          <input type="text" class="form-control" id="profileWeddingGuide" placeholder="https://storage.googleapis.com/...">
+        </div>
+
         <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
           <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">📍 Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
           <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
@@ -585,6 +590,7 @@ async function loadResortProfile() {
       document.getElementById('profileNotes').value = d.notes || '';
       document.getElementById('profileClubName').value = d.clubName || '';
       document.getElementById('profileClubPerks').value = d.clubPerks || '';
+      document.getElementById('profileWeddingGuide').value = d.weddingGuide || '';
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
       if (venueList) {
@@ -603,7 +609,7 @@ async function loadResortProfile() {
       if (venueListClear) venueListClear.innerHTML = '';
       const pkgListClear = document.getElementById('pkg-list');
       if (pkgListClear) pkgListClear.innerHTML = '';
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks'].forEach(id => {
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
         document.getElementById(id).value = '';
       });
       document.getElementById('profileStars').value = '';
@@ -691,6 +697,7 @@ async function saveResortProfile() {
     notes:        document.getElementById('profileNotes').value.trim(),
     clubName:     document.getElementById('profileClubName').value.trim(),
     clubPerks:    document.getElementById('profileClubPerks').value.trim(),
+    weddingGuide: document.getElementById('profileWeddingGuide').value.trim(),
     venues:       getVenues(),
     packages:     getPackages(),
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
