@@ -3671,7 +3671,7 @@ function qbGenerateWedding(travelMode) {
       rows[rows.length - 1].push(url);
       return rows;
     }, []).map(row => {
-      const tds = row.map(url => '<td style="padding:0 2px 2px 0;line-height:0;"><img src="' + url + '" style="width:100%;display:block;" alt=""/></td>').join('');
+      const tds = row.map(url => '<td style="padding:0 2px 2px 0;line-height:0;"><img src="' + url + '" style="width:100%;max-width:100%;height:auto;display:block;" alt=""/></td>').join('');
       return '<tr>' + tds + '</tr>';
     }).join('');
     resortGalleryHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;border-collapse:collapse;">' + cells + '</table>';
@@ -3723,7 +3723,7 @@ const html = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>
 </td></tr>
 
 <!-- HERO PHOTO -->
-${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;font-size:0;"><img src="${heroPhotos[0]}" width="600" style="display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;font-size:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="display:block;" alt=""/></td>`).join('')}</tr></table></td></tr>` : ''}
+${heroPhotos.length === 1 ? `<tr><td width="600" style="padding:0;line-height:0;font-size:0;"><img src="${heroPhotos[0]}" width="600" style="width:100%;max-width:600px;height:auto;display:block;" alt="${resortName}"/></td></tr>` : heroPhotos.length > 1 ? `<tr><td style="padding:0;line-height:0;font-size:0;"><table width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;"><tr>${heroPhotos.slice(0,3).map(u=>`<td style="padding:0 1px 0 0;line-height:0;font-size:0;"><img src="${u}" width="${Math.floor(600/Math.min(heroPhotos.length,3))}" style="width:100%;max-width:100%;height:auto;display:block;" alt=""/></td>`).join('')}</tr></table></td></tr>` : ''}
 
 <!-- CONTENT -->
 <tr><td style="padding:36px 40px 24px 40px;" bgcolor="#FFFFFF">
