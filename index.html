@@ -773,7 +773,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div class="table-wrap">
           <table>
             <thead id="guestTheadSummary" style="display:table-header-group">
-              <tr><th style="text-align:center">#</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('ti')">Res #</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('names')">Guest(s)</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('depart')">Arrival</th><th style="text-align:center">Nts</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('roomtype')">Room Type</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('roomcost')">Total</th><th style="text-align:center">Bal 1</th><th id="thSummaryBal2" style="text-align:center">Bal 2</th><th class="sticky-col"></th></tr>
+              <tr><th style="text-align:center">#</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('ti')">Res #</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('names')">Guest(s)</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('depart')">Arrival</th><th style="text-align:center">Nts</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('roomtype')">Room Type</th><th style="cursor:pointer;user-select:none;text-align:center" onclick="detailGuestsSortClick('roomcost')">Total</th><th style="text-align:center">Bal 1</th><th id="thSummaryBal2" style="text-align:center">Bal 2</th><th id="thSummaryTransport" style="display:none;text-align:center">Transport</th><th class="sticky-col"></th></tr>
             </thead>
             <thead id="guestTheadFull" style="display:none">
               <tr><th>#</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('booking')">Booking #</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('roomtype')">Room Type</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('names')">Guest(s)</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('depart')">Arrival</th><th>Nights</th><th>Depart</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('roomcost')">Room Cost</th><th>Insurance</th><th style="cursor:pointer;user-select:none" onclick="detailGuestsSortClick('roomcost')">Total Cost</th><th>Payments</th><th>Bal Due 1</th><th id="thFullBal2">Bal Due 2</th><th>Notes</th><th id="thFullTransport" style="display:none">Transport</th><th class="sticky-col"></th></tr>
@@ -4391,10 +4391,12 @@ function renderDetailGuests(){
   if(th1) th1.style.display = bal2Display;
   if(th2) th2.style.display = bal2Display;
 
-  // Show/hide Transport column (Full view) only if this group uses it
+  // Show/hide Transport column only if this group uses it
   const hasTransport = active.some(g=>g.transport);
   const thT = document.getElementById('thFullTransport');
   if(thT) thT.style.display = hasTransport ? '' : 'none';
+  const thTS = document.getElementById('thSummaryTransport');
+  if(thTS) thTS.style.display = hasTransport ? '' : 'none';
 
   if(!wGuests.length){tbody.innerHTML='<tr><td colspan="16"><div class="empty-state"><div class="icon">👥</div><p>No guests yet</p></div></td></tr>';return;}
   let n=0;
@@ -4439,6 +4441,7 @@ function renderDetailGuests(){
         <td style="font-weight:700;color:var(--accent);text-align:center;font-size:.9rem">$${fmt(f.total)}</td>
         <td style="text-align:center;font-size:.9rem;color:${f.bal1>0?'var(--red)':'var(--green)'}">${f.bal1>0?'$'+fmt(f.bal1):'✓'}</td>
         <td style="text-align:center;font-size:.9rem;display:${hasTwoDates?'':'none'}">${f.bal2!==null?(f.bal2>0?`<span style="color:var(--red)">$${fmt(f.bal2)}</span>`:'<span style="color:var(--green)">✓</span>'):'<span style="color:var(--muted)">—</span>'}</td>
+        <td style="display:${hasTransport?'':'none'};text-align:center;font-size:.9rem">${g.transport?`<span style="font-weight:700;color:${g.transport==='Yes'?'var(--green)':'var(--muted)'}">${esc(g.transport)}</span>`:'—'}</td>
         ${menuCell(g)}
       </tr>`;
     } else {
