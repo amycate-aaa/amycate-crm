@@ -158,6 +158,45 @@ function calcFin(g,w){
   return {rc,ic,total,totalPaid,bal1,bal2,isTwoPayment,hasIns};
 }
 
+/* Client CSV export — guest list + payment summary. Read-only: uses the
+   same _guests/_wedding data and calcFin math the portal already renders. */
+function exportCSV(){
+  const w=_wedding, gs=_guests||[];
+  if(!gs.length){ alert('Nothing to export yet.'); return; }
+  const anyTransport=gs.some(g=>g.transport);
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const money=n=>(n==null?'':Math.round(n*100)/100);
+  const cols=['#','Guest(s)','Room Type','Arrival','Departure','Nights','Status'];
+  if(anyTransport) cols.push('Transportation');
+  cols.push('Room Cost','Travel Insurance','Total','Total Paid','Balance Due','Final Balance');
+  const rows=[cols.map(q).join(',')];
+  const tot={total:0,paid:0,bal1:0,bal2:0};
+  gs.forEach((g,i)=>{
+    const f=calcFin(g,w);
+    tot.total+=f.total; tot.paid+=f.totalPaid; tot.bal1+=f.bal1; tot.bal2+=(f.bal2||0);
+    const names=[g.names,...(g.additional?g.additional.split(',').map(x=>x.trim()).filter(Boolean):[])].join('; ');
+    const r=[i+1,names,g.roomtype||'',g.depart||'',g.return||'',g.nights||'',g.status||'Pending'];
+    if(anyTransport) r.push(g.transport||'');
+    r.push(money(f.rc),money(f.ic),money(f.total),money(f.totalPaid),money(f.bal1),f.bal2==null?'':money(f.bal2));
+    rows.push(r.map(q).join(','));
+  });
+  const totRow=new Array(cols.length).fill('');
+  totRow[1]='TOTALS';
+  totRow[cols.indexOf('Total')]=money(tot.total);
+  totRow[cols.indexOf('Total Paid')]=money(tot.paid);
+  totRow[cols.indexOf('Balance Due')]=money(tot.bal1);
+  totRow[cols.indexOf('Final Balance')]=money(tot.bal2);
+  rows.push(totRow.map(q).join(','));
+  const csv='\uFEFF'+rows.join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});
+  const name=((w&&w.names)?w.names:'group').replace(/[^\w]+/g,'-').replace(/^-+|-+$/g,'');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name+'-guest-list.csv';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(a.href);},100);
+}
+
 function checkPassword(){
   const entered=document.getElementById('pwInput').value.trim();
   if(!_wedding.portalPassword||entered===_wedding.portalPassword){
@@ -243,6 +282,9 @@ function render(w,guests,docs){
   // GUESTS
   const hasTransport = guests.some(g=>g.transport);
   panels+=`<div id="cp-guests" class="tab-panel">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <button onclick="exportCSV()" style="background:var(--navy);color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:.85rem;font-weight:600;cursor:pointer;">&#11015; Export to Excel (CSV)</button>
+    </div>
     <div class="table-wrap"><table>
       <thead><tr>
         <th>#</th><th>Guest(s)</th><th>Room Type</th>
