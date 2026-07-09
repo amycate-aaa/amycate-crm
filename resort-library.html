@@ -9,7 +9,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100vh}
 
-/* ── NAV ── */
+/* ââ NAV ââ */
 .nav{background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:0 24px;display:flex;align-items:center;gap:0;height:52px;position:sticky;top:0;z-index:100}
 .nav-logo{font-family:'Playfair Display',serif;font-size:1rem;color:#f0c958;font-weight:700;letter-spacing:.05em;margin-right:28px;white-space:nowrap}
 .nav-link{color:#999;font-size:.8rem;padding:0 14px;height:52px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
@@ -17,13 +17,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .nav-link.active{color:#f0c958;border-bottom-color:#f0c958}
 .nav-spacer{flex:1}
 
-/* ── HEADER ── */
+/* ââ HEADER ââ */
 .page-header{background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:20px 28px;display:flex;align-items:center;gap:16px}
 .page-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#f0c958;font-weight:700}
 .page-sub{color:#666;font-size:.82rem;margin-top:2px}
 .header-actions{margin-left:auto;display:flex;gap:10px}
 
-/* ── BUTTONS ── */
+/* ââ BUTTONS ââ */
 .btn{padding:8px 18px;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
 .btn-primary{background:#f0c958;color:#111}
 .btn-primary:hover{background:#e8b83a}
@@ -35,10 +35,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .btn-ghost:hover{color:#e8e8e8;border-color:#666}
 .btn-sm{padding:5px 12px;font-size:.75rem}
 
-/* ── LAYOUT ── */
+/* ââ LAYOUT ââ */
 .container{max-width:1300px;margin:0 auto;padding:24px 28px}
 
-/* ── UPLOAD ZONE ── */
+/* ââ UPLOAD ZONE ââ */
 .upload-section{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px}
 .upload-section h3{font-size:.9rem;color:#ccc;font-weight:600;margin-bottom:16px;letter-spacing:.05em;text-transform:uppercase}
 .upload-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
@@ -54,7 +54,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .drop-zone-text strong{color:#999}
 .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
 
-/* ── UPLOAD QUEUE ── */
+/* ââ UPLOAD QUEUE ââ */
 .upload-queue{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 .upload-item{background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px}
 .upload-thumb{width:48px;height:48px;border-radius:4px;object-fit:cover;background:#222}
@@ -69,7 +69,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .status-done{color:#27ae60}
 .status-error{color:#e74c3c}
 
-/* ── FILTERS ── */
+/* ââ FILTERS ââ */
 .filters-bar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
 .filter-select{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:7px 12px;color:#ccc;font-size:.82rem;font-family:inherit;cursor:pointer}
 .filter-select:focus{outline:none;border-color:#f0c958}
@@ -77,7 +77,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .search-input:focus{outline:none;border-color:#f0c958}
 .photo-count{color:#555;font-size:.8rem;margin-left:auto}
 
-/* ── GALLERY GRID ── */
+/* ââ GALLERY GRID ââ */
 .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
 .photo-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;transition:border-color .2s}
 .photo-card:hover{border-color:#444}
@@ -93,7 +93,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .delete-btn{background:#1e1e1e;border:1px solid #333;border-radius:5px;color:#555;font-size:.72rem;padding:5px 8px;cursor:pointer;font-family:inherit;transition:all .15s}
 .delete-btn:hover{background:#c0392b;color:white;border-color:#c0392b}
 
-/* ── ROOM GROUPS ── */
+/* ââ ROOM GROUPS ââ */
 .room-group{grid-column:1/-1;background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px 18px}
 .room-group-header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #262626}
 .room-group-title{font-size:1rem;color:#e8e8e8;font-weight:600;margin-top:2px}
@@ -107,26 +107,26 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 .room-group-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
 .room-group .photo-card img{height:120px}
 
-/* ── EMPTY STATE ── */
+/* ââ EMPTY STATE ââ */
 .empty-state{text-align:center;padding:60px 20px;color:#444}
 .empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
 .empty-title{color:#666;font-size:.95rem;margin-bottom:6px}
 
-/* ── STATS BAR ── */
+/* ââ STATS BAR ââ */
 .stats-bar{display:flex;gap:24px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:14px 20px;margin-bottom:20px}
 .stat{text-align:center}
 .stat-num{font-size:1.4rem;font-weight:700;color:#f0c958;line-height:1}
 .stat-label{font-size:.7rem;color:#555;margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
 .stat-divider{width:1px;background:#2a2a2a}
 
-/* ── TOAST ── */
+/* ââ TOAST ââ */
 .toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9999}
 .toast{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px 16px;font-size:.82rem;color:#ccc;box-shadow:0 4px 20px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;animation:slideIn .2s ease}
 .toast.success{border-color:#27ae60;color:#27ae60}
 .toast.error{border-color:#e74c3c;color:#e74c3c}
 @keyframes slideIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
 
-/* ── LOADING ── */
+/* ââ LOADING ââ */
 .loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid #333;border-top-color:#f0c958;border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:200;display:none}
@@ -187,8 +187,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
       <div id="profileForm" style="display:none;">
         <div class="form-group" style="margin-top:12px;">
-          <label>Location Tagline <span style="color:#888;font-size:.75rem;">(e.g. Riviera Maya · 42 miles from CUN)</span></label>
-          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Playa Mujeres · 15.9 miles from CUN">
+          <label>Location Tagline <span style="color:#888;font-size:.75rem;">(e.g. Riviera Maya Â· 42 miles from CUN)</span></label>
+          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Playa Mujeres Â· 15.9 miles from CUN">
         </div>
 
         <div class="form-group">
@@ -197,8 +197,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         </div>
 
         <div class="form-group">
-          <label>Highlights <span style="color:#888;font-size:.75rem;">(footer bar — separate with · )</span></label>
-          <input type="text" class="form-control" id="profileHighlights" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa">
+          <label>Highlights <span style="color:#888;font-size:.75rem;">(footer bar â separate with Â· )</span></label>
+          <input type="text" class="form-control" id="profileHighlights" placeholder="e.g. Unlimited-LuxuryÂ® Â· Championship Golf Â· Full Spa">
         </div>
 
         <div class="form-group">
@@ -217,12 +217,12 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         </div>
 
         <div class="form-group">
-          <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional — AIC media vault etc.)</span></label>
+          <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional â AIC media vault etc.)</span></label>
           <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
         </div>
 
         <div class="form-group">
-          <label>Amy's Notes <span style="color:#888;font-size:.75rem;">(internal — not shown in quote)</span></label>
+          <label>Amy's Notes <span style="color:#888;font-size:.75rem;">(internal â not shown in quote)</span></label>
           <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes about this resort..."></textarea>
         </div>
 
@@ -238,19 +238,19 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
         <!-- Wedding Venues -->
         <div style="margin-bottom:10px;margin-top:10px;">
-          <label class="form-label">Wedding Guide PDF Link <span style="color:#888;font-size:.75rem;">public URL — shows as download button on quote</span></label>
+          <label class="form-label">Wedding Guide PDF Link <span style="color:#888;font-size:.75rem;">public URL â shows as download button on quote</span></label>
           <input type="text" class="form-control" id="profileWeddingGuide" placeholder="https://storage.googleapis.com/...">
         </div>
 
         <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
-          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">📍 Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">ð Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
           <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
           <button type="button" onclick="addVenueRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Venue</button>
         </div>
 
         <!-- Wedding Packages -->
         <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
-          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">💍 Wedding Packages <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">ð Wedding Packages <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
           <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
           <button type="button" onclick="addPackageRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Package</button>
         </div>
@@ -355,6 +355,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
           <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
           <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
+          <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
+          <option value="majestic-elegance-costa-mujeres">Majestic Elegance Costa Mujeres</option>
+          <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
+          <option value="riu-cancun">Riu Cancun</option>
+          <option value="riu-latino">Riu Latino</option>
+          <option value="royalton-chic-cancun">Royalton CHIC Cancun</option>
+          <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
           <option value="other">Other Resort</option>
         </select>
       </div>
@@ -387,7 +394,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <option value="Governor Suite">Governor Suite</option>
           <option value="Presidential Suite">Presidential Suite</option>
           <!-- Wedding Venues -->
-          <optgroup label="── Wedding Venues ──">
+          <optgroup label="ââ Wedding Venues ââ">
             <option value="Wedding Venue - Beach Front Ceremony">Beach Front Ceremony</option>
             <option value="Wedding Venue - Ocean View Gazebo">Ocean View Gazebo</option>
             <option value="Wedding Venue - Beach Wedding Reception">Beach Wedding Reception</option>
@@ -415,7 +422,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     </div>
 
     <div class="form-group" style="margin-top:14px;">
-      <label>Room Description <span style="color:#888;font-size:.75rem;">(saved once per resort + category — shown anywhere this room type appears)</span></label>
+      <label>Room Description <span style="color:#888;font-size:.75rem;">(saved once per resort + category â shown anywhere this room type appears)</span></label>
       <textarea class="form-control" id="roomDescription" rows="3" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..." onblur="saveRoomDescription()"></textarea>
       <span id="roomDescSaveMsg" style="display:none;margin-top:4px;color:#27ae60;font-size:.82rem;">&#10003; Saved</span>
     </div>
@@ -482,7 +489,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
-// ── FIREBASE INIT ──
+// ââ FIREBASE INIT ââ
 const firebaseConfig = {
   apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
   authDomain: "wedding-crm-e5d12.firebaseapp.com",
@@ -495,18 +502,18 @@ if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db      = firebase.firestore();
 const storage = firebase.storage();
 
-// ── RESORT NAME MAP ──
+// ââ RESORT NAME MAP ââ
 const RESORT_NAMES = {};
 // Auto-generate names from the dropdown options
 document.querySelectorAll('#uploadResort option').forEach(opt => {
   if (opt.value && opt.value !== 'other') RESORT_NAMES[opt.value] = opt.text;
 });
 
-// ── STATE ──
+// ââ STATE ââ
 let allPhotos   = [];
 let queueItems  = [];
 
-// ── DRAG & DROP ──
+// ââ DRAG & DROP ââ
 const dropZone = document.getElementById('dropZone');
 dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag-over'));
@@ -546,7 +553,7 @@ function removeQueueItem(id) {
   document.getElementById(id)?.remove();
 }
 
-// ── RESORT PROFILE ──
+// ââ RESORT PROFILE ââ
 
 function initProfileResortDropdown() {
   const sel = document.getElementById('profileResort');
@@ -625,7 +632,7 @@ function addVenueRow(name='', capacity='', bestFor='', description='', photo='')
   const div = document.createElement('div');
   div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
   div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">✕</button>
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">â</button>
     ${photo ? `<img src="${photo}" style="width:100%;height:120px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
     <div style="padding:10px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
@@ -658,12 +665,12 @@ function addPackageRow(name='', highlights='', price='', isFeatured=false) {
   const div = document.createElement('div');
   div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;padding:12px;background:#fafafa;position:relative;';
   div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">✕</button>
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">â</button>
     <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:6px;">
       <input class="form-control pkg-name" placeholder="Package name e.g. Eternal Love" value="${name}" style="font-weight:600;">
       <input class="form-control pkg-price" placeholder="From $X" value="${price}">
     </div>
-    <textarea class="form-control pkg-highlights" rows="2" placeholder="Key highlights — e.g. Minister · Semi-private rehearsal dinner · Cocktail hour · Private reception · Up to 20 guests">${highlights}</textarea>
+    <textarea class="form-control pkg-highlights" rows="2" placeholder="Key highlights â e.g. Minister Â· Semi-private rehearsal dinner Â· Cocktail hour Â· Private reception Â· Up to 20 guests">${highlights}</textarea>
     <label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.78rem;color:#555;cursor:pointer;">
       <input type="checkbox" class="pkg-featured" ${isFeatured?'checked':''}> Highlight this package (shown in gold)
     </label>`;
@@ -708,7 +715,7 @@ async function saveResortProfile() {
     const msg = document.getElementById('profileSaveMsg');
     if (msg) {
       msg.style.display = 'inline';
-      msg.textContent = '✓ Saved!';
+      msg.textContent = 'â Saved!';
       setTimeout(() => msg.style.display = 'none', 3000);
     }
     toast('Resort profile saved!', 'success');
@@ -717,7 +724,7 @@ async function saveResortProfile() {
   }
 }
 
-// ── ROOM DESCRIPTIONS (saved once per resort + category) ──
+// ââ ROOM DESCRIPTIONS (saved once per resort + category) ââ
 function roomDescKey(resort, category) {
   return `${resort}__${category}`.replace(/[^a-zA-Z0-9_-]/g, '_');
 }
@@ -761,7 +768,7 @@ async function saveRoomDescription() {
   }
 }
 
-// ── UPLOAD ──
+// ââ UPLOAD ââ
 function toggleCustomCategory(sel) {
   const custom = document.getElementById('uploadCategoryCustom');
   custom.style.display = sel.value === 'custom' ? 'block' : 'none';
@@ -854,7 +861,7 @@ function setStatus(id, html, cls) {
   if (removeBtn) removeBtn.style.display = (cls === 'status-uploading') ? 'none' : 'inline-block';
 }
 
-// ── LOAD & RENDER ──
+// ââ LOAD & RENDER ââ
 async function loadPhotos() {
   try {
     const snap = await db.collection('resortPhotos')
@@ -957,7 +964,7 @@ function renderGallery(photos) {
   }).join('');
 }
 
-// ── COPY URL ──
+// ââ COPY URL ââ
 async function copyURL(id, url) {
   try {
     await navigator.clipboard.writeText(url);
@@ -971,7 +978,7 @@ async function copyURL(id, url) {
   } catch { toast('Could not copy to clipboard.', 'error'); }
 }
 
-// ── COPY GALLERY LINK (one URL → all photos for this room, as a carousel) ──
+// ââ COPY GALLERY LINK (one URL â all photos for this room, as a carousel) ââ
 async function copyGalleryLink(btn, url) {
   try {
     await navigator.clipboard.writeText(url);
@@ -985,7 +992,7 @@ async function copyGalleryLink(btn, url) {
   }
 }
 
-// ── DELETE ──
+// ââ DELETE ââ
 async function deletePhoto(id, storagePath) {
   if (!confirm('Delete this photo? This cannot be undone.')) return;
   try {
@@ -1006,7 +1013,7 @@ async function deletePhoto(id, storagePath) {
   }
 }
 
-// ── HELPERS ──
+// ââ HELPERS ââ
 function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escAttr(s) { return String(s||'').replace(/'/g,"\\'"); }
 
@@ -1019,7 +1026,7 @@ function toast(msg, type='success') {
   setTimeout(() => div.remove(), 3500);
 }
 
-// ── EDIT PHOTO ──
+// ââ EDIT PHOTO ââ
 async function openEditPhoto(id) {
   const p = allPhotos.find(x => x.id === id);
   if (!p) return;
@@ -1078,7 +1085,7 @@ async function saveEditPhoto() {
   }
 }
 
-// ── BOOT ──
+// ââ BOOT ââ
 loadPhotos();
 initProfileResortDropdown();
 initFilterResortDropdown();
