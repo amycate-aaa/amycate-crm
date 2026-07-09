@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resort Photo Library &mdash; Amy Cate CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100vh}
+
+/* Ã¢ÂÂÃ¢ÂÂ NAV Ã¢ÂÂÃ¢ÂÂ */
+.nav{background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:0 24px;display:flex;align-items:center;gap:0;height:52px;position:sticky;top:0;z-index:100}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1rem;color:#f0c958;font-weight:700;letter-spacing:.05em;margin-right:28px;white-space:nowrap}
+.nav-link{color:#999;font-size:.8rem;padding:0 14px;height:52px;display:flex;align-items:center;text-decoration:none;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap}
+.nav-link:hover{color:#e8e8e8}
+.nav-link.active{color:#f0c958;border-bottom-color:#f0c958}
+.nav-spacer{flex:1}
+
+/* Ã¢ÂÂÃ¢ÂÂ HEADER Ã¢ÂÂÃ¢ÂÂ */
+.page-header{background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:20px 28px;display:flex;align-items:center;gap:16px}
+.page-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#f0c958;font-weight:700}
+.page-sub{color:#666;font-size:.82rem;margin-top:2px}
+.header-actions{margin-left:auto;display:flex;gap:10px}
+
+/* Ã¢ÂÂÃ¢ÂÂ BUTTONS Ã¢ÂÂÃ¢ÂÂ */
+.btn{padding:8px 18px;border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
+.btn-primary{background:#f0c958;color:#111}
+.btn-primary:hover{background:#e8b83a}
+.btn-secondary{background:#2a2a2a;color:#ccc;border:1px solid #3a3a3a}
+.btn-secondary:hover{background:#333;color:#e8e8e8}
+.btn-danger{background:#c0392b;color:white}
+.btn-danger:hover{background:#e74c3c}
+.btn-ghost{background:transparent;color:#888;border:1px solid #333;font-size:.75rem;padding:5px 10px}
+.btn-ghost:hover{color:#e8e8e8;border-color:#666}
+.btn-sm{padding:5px 12px;font-size:.75rem}
+
+/* Ã¢ÂÂÃ¢ÂÂ LAYOUT Ã¢ÂÂÃ¢ÂÂ */
+.container{max-width:1300px;margin:0 auto;padding:24px 28px}
+
+/* Ã¢ÂÂÃ¢ÂÂ UPLOAD ZONE Ã¢ÂÂÃ¢ÂÂ */
+.upload-section{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px}
+.upload-section h3{font-size:.9rem;color:#ccc;font-weight:600;margin-bottom:16px;letter-spacing:.05em;text-transform:uppercase}
+.upload-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
+.form-group label{display:block;font-size:.75rem;color:#888;margin-bottom:5px;text-transform:uppercase;letter-spacing:.06em}
+.form-control{width:100%;background:#111;border:1px solid #333;border-radius:6px;padding:9px 12px;color:#e8e8e8;font-size:.85rem;font-family:inherit}
+.form-control:focus{outline:none;border-color:#f0c958}
+.form-control option{background:#1a1a1a}
+
+.drop-zone{border:2px dashed #333;border-radius:8px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;position:relative}
+.drop-zone.drag-over{border-color:#f0c958;background:rgba(240,201,88,.05)}
+.drop-zone-icon{font-size:2rem;margin-bottom:8px;opacity:.5}
+.drop-zone-text{color:#666;font-size:.85rem}
+.drop-zone-text strong{color:#999}
+.drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+
+/* Ã¢ÂÂÃ¢ÂÂ UPLOAD QUEUE Ã¢ÂÂÃ¢ÂÂ */
+.upload-queue{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.upload-item{background:#111;border:1px solid #2a2a2a;border-radius:6px;padding:10px 14px;display:flex;align-items:center;gap:12px}
+.upload-thumb{width:48px;height:48px;border-radius:4px;object-fit:cover;background:#222}
+.upload-info{flex:1;min-width:0}
+.upload-name{font-size:.82rem;color:#ccc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.upload-size{font-size:.72rem;color:#555;margin-top:2px}
+.upload-progress{height:3px;background:#222;border-radius:2px;margin-top:6px;overflow:hidden}
+.upload-progress-bar{height:100%;background:#f0c958;border-radius:2px;transition:width .3s}
+.upload-status{font-size:.72rem;font-weight:600;white-space:nowrap}
+.status-pending{color:#888}
+.status-uploading{color:#f0c958}
+.status-done{color:#27ae60}
+.status-error{color:#e74c3c}
+
+/* Ã¢ÂÂÃ¢ÂÂ FILTERS Ã¢ÂÂÃ¢ÂÂ */
+.filters-bar{display:flex;gap:10px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.filter-select{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:7px 12px;color:#ccc;font-size:.82rem;font-family:inherit;cursor:pointer}
+.filter-select:focus{outline:none;border-color:#f0c958}
+.search-input{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:6px;padding:7px 12px;color:#e8e8e8;font-size:.82rem;font-family:inherit;width:220px}
+.search-input:focus{outline:none;border-color:#f0c958}
+.photo-count{color:#555;font-size:.8rem;margin-left:auto}
+
+/* Ã¢ÂÂÃ¢ÂÂ GALLERY GRID Ã¢ÂÂÃ¢ÂÂ */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.photo-card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;transition:border-color .2s}
+.photo-card:hover{border-color:#444}
+.photo-card img{width:100%;height:160px;object-fit:cover;display:block;background:#222}
+.photo-card-body{padding:12px}
+.photo-resort{font-size:.7rem;color:#f0c958;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.photo-category{font-size:.82rem;color:#ccc;font-weight:500;margin-bottom:3px}
+.photo-caption{font-size:.75rem;color:#666;margin-bottom:10px;line-height:1.5}
+.photo-actions{display:flex;gap:6px}
+.copy-btn{flex:1;background:#222;border:1px solid #333;border-radius:5px;color:#aaa;font-size:.72rem;padding:5px 8px;cursor:pointer;font-family:inherit;transition:all .15s;text-align:center}
+.copy-btn:hover{background:#f0c958;color:#111;border-color:#f0c958}
+.copy-btn.copied{background:#27ae60;color:white;border-color:#27ae60}
+.delete-btn{background:#1e1e1e;border:1px solid #333;border-radius:5px;color:#555;font-size:.72rem;padding:5px 8px;cursor:pointer;font-family:inherit;transition:all .15s}
+.delete-btn:hover{background:#c0392b;color:white;border-color:#c0392b}
+
+/* Ã¢ÂÂÃ¢ÂÂ ROOM GROUPS Ã¢ÂÂÃ¢ÂÂ */
+.room-group{grid-column:1/-1;background:#161616;border:1px solid #2a2a2a;border-radius:10px;padding:16px 18px}
+.room-group-header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #262626}
+.room-group-title{font-size:1rem;color:#e8e8e8;font-weight:600;margin-top:2px}
+.room-group-count{font-size:.72rem;color:#666;font-weight:400;margin-left:8px}
+.room-group-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-gallery{background:#f0c958;color:#111;border:none;border-radius:6px;font-size:.78rem;font-weight:700;padding:8px 14px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.btn-gallery:hover{background:#e8b83a}
+.btn-gallery.copied{background:#27ae60;color:#fff}
+.btn-gallery-open{background:#222;color:#ccc;border:1px solid #333;border-radius:6px;font-size:.78rem;font-weight:600;padding:8px 12px;cursor:pointer;font-family:inherit;text-decoration:none;white-space:nowrap;transition:all .15s}
+.btn-gallery-open:hover{background:#2a2a2a;color:#fff;border-color:#555}
+.room-group-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.room-group .photo-card img{height:120px}
+
+/* Ã¢ÂÂÃ¢ÂÂ EMPTY STATE Ã¢ÂÂÃ¢ÂÂ */
+.empty-state{text-align:center;padding:60px 20px;color:#444}
+.empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
+.empty-title{color:#666;font-size:.95rem;margin-bottom:6px}
+
+/* Ã¢ÂÂÃ¢ÂÂ STATS BAR Ã¢ÂÂÃ¢ÂÂ */
+.stats-bar{display:flex;gap:24px;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:8px;padding:14px 20px;margin-bottom:20px}
+.stat{text-align:center}
+.stat-num{font-size:1.4rem;font-weight:700;color:#f0c958;line-height:1}
+.stat-label{font-size:.7rem;color:#555;margin-top:3px;text-transform:uppercase;letter-spacing:.06em}
+.stat-divider{width:1px;background:#2a2a2a}
+
+/* Ã¢ÂÂÃ¢ÂÂ TOAST Ã¢ÂÂÃ¢ÂÂ */
+.toast-container{position:fixed;bottom:24px;right:24px;display:flex;flex-direction:column;gap:8px;z-index:9999}
+.toast{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:12px 16px;font-size:.82rem;color:#ccc;box-shadow:0 4px 20px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;animation:slideIn .2s ease}
+.toast.success{border-color:#27ae60;color:#27ae60}
+.toast.error{border-color:#e74c3c;color:#e74c3c}
+@keyframes slideIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* Ã¢ÂÂÃ¢ÂÂ LOADING Ã¢ÂÂÃ¢ÂÂ */
+.loading-spinner{display:inline-block;width:18px;height:18px;border:2px solid #333;border-top-color:#f0c958;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;z-index:200;display:none}
+.loading-overlay.show{display:flex}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner" style="width:36px;height:36px;border-width:3px"></div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <span class="nav-logo">&#10022; Amy Cate CRM</span>
+  <a href="index.html"    class="nav-link">Dashboard</a>
+  <a href="index.html#weddings" class="nav-link">Weddings</a>
+  <a href="index.html#guests"   class="nav-link">Guests</a>
+  <a href="index.html#flights"  class="nav-link">Flights</a>
+  <a href="index.html#leads"    class="nav-link">Leads</a>
+  <a href="resort-library.html" class="nav-link active">Resort Library</a>
+  <span class="nav-spacer"></span>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div>
+    <div class="page-title">&#127968; Resort Photo Library</div>
+    <div class="page-sub">Upload &amp; manage resort photos for group sites &mdash; one upload, use everywhere</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <!-- STATS -->
+  <div class="stats-bar" id="statsBar">
+    <div class="stat"><div class="stat-num" id="statTotal">0</div><div class="stat-label">Photos</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num" id="statResorts">0</div><div class="stat-label">Resorts</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><div class="stat-num" id="statSize">0 MB</div><div class="stat-label">Storage Used</div></div>
+  </div>
+
+  <!-- RESORT PROFILE SECTION -->
+  <div class="upload-section" style="margin-top:20px;">
+    <h3>&#9998; Resort Profile</h3>
+    <p style="color:#888;font-size:.82rem;margin-bottom:16px;">Save descriptions, highlights and links per resort. These auto-fill in the Quote Builder when you select a resort.</p>
+
+    <div class="upload-form">
+      <div class="form-group">
+        <label>Resort</label>
+        <select class="form-control" id="profileResort" onchange="loadResortProfile()">
+          <option value="">Select resort...</option>
+        </select>
+      </div>
+
+      <div id="profileForm" style="display:none;">
+        <div class="form-group" style="margin-top:12px;">
+          <label>Location Tagline <span style="color:#888;font-size:.75rem;">(e.g. Riviera Maya ÃÂ· 42 miles from CUN)</span></label>
+          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Playa Mujeres ÃÂ· 15.9 miles from CUN">
+        </div>
+
+        <div class="form-group">
+          <label>Description <span style="color:#888;font-size:.75rem;">(appears in quote card)</span></label>
+          <textarea class="form-control" id="profileDescription" rows="4" placeholder="Write a compelling description of this resort for client quotes..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Highlights <span style="color:#888;font-size:.75rem;">(footer bar Ã¢ÂÂ separate with ÃÂ· )</span></label>
+          <input type="text" class="form-control" id="profileHighlights" placeholder="e.g. Unlimited-LuxuryÃÂ® ÃÂ· Championship Golf ÃÂ· Full Spa">
+        </div>
+
+        <div class="form-group">
+          <label>Star Rating</label>
+          <select class="form-control" id="profileStars">
+            <option value="">Select...</option>
+            <option value="4">4 Star</option>
+            <option value="4.5">4.5 Star</option>
+            <option value="5">5 Star</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Booking Link <span style="color:#888;font-size:.75rem;">(Celebration Travel URL)</span></label>
+          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://booking.celebrationtravel.com/hotels/...">
+        </div>
+
+        <div class="form-group">
+          <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional Ã¢ÂÂ AIC media vault etc.)</span></label>
+          <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label>Amy's Notes <span style="color:#888;font-size:.75rem;">(internal Ã¢ÂÂ not shown in quote)</span></label>
+          <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes about this resort..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Club Level Name <span style="color:#888;font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label>
+          <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Preferred Club">
+        </div>
+
+        <div class="form-group">
+          <label>Club Level Perks <span style="color:#888;font-size:.75rem;">auto-shows in quote when a club room is selected &mdash; one perk per line</span></label>
+          <textarea class="form-control" id="profileClubPerks" rows="5" placeholder="Personalized check-in &amp; checkout&#10;Private lounge access&#10;Upgraded mini-bar &amp; room service&#10;Pool concierge &amp; bar service"></textarea>
+        </div>
+
+        <!-- Wedding Venues -->
+        <div style="margin-bottom:10px;margin-top:10px;">
+          <label class="form-label">Wedding Guide PDF Link <span style="color:#888;font-size:.75rem;">public URL Ã¢ÂÂ shows as download button on quote</span></label>
+          <input type="text" class="form-control" id="profileWeddingGuide" placeholder="https://storage.googleapis.com/...">
+        </div>
+
+        <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">Ã°ÂÂÂ Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
+          <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+          <button type="button" onclick="addVenueRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Venue</button>
+        </div>
+
+        <!-- Wedding Packages -->
+        <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
+          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">Ã°ÂÂÂ Wedding Packages <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
+          <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+          <button type="button" onclick="addPackageRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Package</button>
+        </div>
+
+        <button onclick="saveResortProfile()"  style="background:#f0c958;color:#1a1a1a;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;margin-top:14px;">&#10003; Save Resort Profile</button>
+        <span id="profileSaveMsg" style="display:none;margin-left:12px;color:#27ae60;font-size:.85rem;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPLOAD SECTION -->
+  <div class="upload-section">
+    <h3>&#8593; Upload Photos</h3>
+
+    <div class="upload-form">
+      <div class="form-group">
+        <label>Resort</label>
+        <select class="form-control" id="uploadResort" onchange="loadRoomDescription()">
+                    <option value="">Select resort...</option>
+          <option value="ava-resort-cancun">Ava Resort Cancun</option>
+          <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
+          <option value="dreams-acapulco">Dreams Acapulco Resort &amp; Spa</option>
+          <option value="dreams-aventuras">Dreams Aventuras Riviera Maya</option>
+          <option value="dreams-bahia-mita">Dreams Bahia Mita Surf &amp; Spa Resort</option>
+          <option value="dreams-cap-cana">Dreams Cap Cana Resort &amp; Spa</option>
+          <option value="dreams-cozumel-cape">Dreams Cozumel Cape Resort &amp; Spa</option>
+          <option value="dreams-curacao">Dreams Curacao Resort, Spa &amp; Casino</option>
+          <option value="dreams-dominicus-la-romana">Dreams Dominicus La Romana</option>
+          <option value="dreams-estrella-del-mar">Dreams Estrella del Mar Mazatlan Golf &amp; Spa Resort</option>
+          <option value="dreams-flora">Dreams Flora Resort &amp; Spa</option>
+          <option value="dreams-huatulco">Dreams Huatulco Resort &amp; Spa</option>
+          <option value="dreams-jade">Dreams Jade Resort &amp; Spa</option>
+          <option value="dreams-karibana">Dreams Karibana Cartagena Golf &amp; Spa Resort</option>
+          <option value="dreams-la-romana">Dreams La Romana Resort &amp; Spa</option>
+          <option value="dreams-los-cabos">Dreams Los Cabos Suites Golf Resort &amp; Spa</option>
+          <option value="dreams-macao">Dreams Macao Beach Punta Cana</option>
+          <option value="dreams-natura">Dreams Natura Resort &amp; Spa</option>
+          <option value="dreams-onyx">Dreams Onyx Resort &amp; Spa</option>
+          <option value="dreams-playa-bonita">Dreams Playa Bonita Panama</option>
+          <option value="dreams-playa-esmeralda">Dreams Playa Esmeralda Resort &amp; Spa</option>
+          <option value="dreams-playa-mujeres">Dreams Playa Mujeres Golf &amp; Spa Resort</option>
+          <option value="dreams-puerto-morelos">Dreams Puerto Morelos Resort &amp; Spa</option>
+          <option value="dreams-riviera-cancun">Dreams Riviera Cancun Resort &amp; Spa</option>
+          <option value="dreams-rose-hall">Dreams Rose Hall Resort &amp; Spa</option>
+          <option value="dreams-royal-beach">Dreams Royal Beach Punta Cana</option>
+          <option value="dreams-sands-cancun">Dreams Sands Cancun Resort &amp; Spa</option>
+          <option value="dreams-sapphire">Dreams Sapphire Resort &amp; Spa</option>
+          <option value="dreams-tulum">Dreams Tulum Resort &amp; Spa</option>
+          <option value="dreams-vallarta-bay">Dreams Vallarta Bay Resort &amp; Spa</option>
+          <option value="dreams-vista-cancun">Dreams Vista Cancun Golf &amp; Spa Resort</option>
+          <option value="el-dorado-casitas">El Dorado Casitas Royale</option>
+          <option value="el-dorado-royale">El Dorado Royale</option>
+          <option value="fives-beach">Fives Beach Hotels &amp; Residences</option>
+          <option value="garza-blanca">Garza Blanca Preserve Resort &amp; Spa</option>
+          <option value="grand-palladium-costa-mujeres">Grand Palladium Costa Mujeres Resort &amp; Spa</option>
+          <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
+          <option value="hard-rock-punta-cana">Hard Rock Hotel &amp; Casino Punta Cana</option>
+          <option value="hard-rock-riviera-maya">Hard Rock Hotel Riviera Maya</option>
+          <option value="hard-rock-vallarta">Hard Rock Hotel Vallarta</option>
+          <option value="hilton-cancun">Hilton Cancun Mar Caribe</option>
+          <option value="hyatt-zilara-cancun">Hyatt Zilara Cancun</option>
+          <option value="hyatt-zilara-cap-cana">Hyatt Zilara Cap Cana</option>
+          <option value="hyatt-zilara-riviera-maya">Hyatt Zilara Riviera Maya</option>
+          <option value="hyatt-zilara-rose-hall">Hyatt Zilara Rose Hall</option>
+          <option value="hyatt-ziva-cancun">Hyatt Ziva Cancun</option>
+          <option value="hyatt-ziva-cap-cana">Hyatt Ziva Cap Cana</option>
+          <option value="hyatt-ziva-los-cabos">Hyatt Ziva Los Cabos</option>
+          <option value="hyatt-ziva-puerto-vallarta">Hyatt Ziva Puerto Vallarta</option>
+          <option value="hyatt-ziva-rose-hall">Hyatt Ziva Rose Hall</option>
+          <option value="iberostar-selection-cancun">Iberostar Selection Cancun</option>
+          <option value="majestic-elegance">Majestic Elegance Costa Mujeres</option>
+          <option value="majestic-mirage">Majestic Mirage Costa Mujeres</option>
+          <option value="majestic-mirage-punta-cana">Majestic Mirage Punta Cana</option>
+          <option value="moon-palace-cancun">Moon Palace Cancun</option>
+          <option value="moon-palace-jamaica">Moon Palace Jamaica</option>
+          <option value="ocean-coral-spring">Ocean Coral Spring</option>
+          <option value="ocean-eden-bay">Ocean Eden Bay</option>
+          <option value="royalton-bavaro">Royalton Bavaro &ndash; An Autograph Collection</option>
+          <option value="royalton-riviera-cancun">Royalton Riviera Cancun</option>
+          <option value="sandos-finisterra">Sandos Finisterra Los Cabos</option>
+          <option value="secrets-akumal">Secrets Akumal Riviera Maya</option>
+          <option value="secrets-aura-cozumel">Secrets Aura Cozumel</option>
+          <option value="secrets-baby-beach">Secrets Baby Beach Aruba</option>
+          <option value="secrets-bahia-mita">Secrets Bahia Mita Surf &amp; Spa</option>
+          <option value="secrets-cap-cana">Secrets Cap Cana Resort &amp; Spa</option>
+          <option value="secrets-huatulco">Secrets Huatulco Resort &amp; Spa</option>
+          <option value="secrets-la-romana">Secrets La Romana Resort &amp; Spa</option>
+          <option value="secrets-maroma-beach">Secrets Maroma Beach Riviera Cancun</option>
+          <option value="secrets-mirabel-cancun">Secrets Mirabel Cancun Resort &amp; Spa</option>
+          <option value="secrets-moxche">Secrets Moxche Playa del Carmen</option>
+          <option value="secrets-papagayo">Secrets Papagayo Costa Rica</option>
+          <option value="secrets-playa-blanca">Secrets Playa Blanca Costa Mujeres</option>
+          <option value="secrets-playa-esmeralda">Secrets Playa Esmeralda Resort &amp; Spa</option>
+          <option value="secrets-playa-mujeres">Secrets Playa Mujeres Golf &amp; Spa Resort</option>
+          <option value="secrets-puerto-los-cabos">Secrets Puerto Los Cabos Golf &amp; Spa Resort</option>
+          <option value="secrets-riviera-cancun">Secrets Riviera Cancun Resort &amp; Spa</option>
+          <option value="secrets-royal-beach">Secrets Royal Beach Punta Cana</option>
+          <option value="secrets-st-james">Secrets St James Montego Bay</option>
+          <option value="secrets-st-lucia">Secrets St. Lucia Resort &amp; Spa</option>
+          <option value="secrets-the-vine">Secrets The Vine Cancun</option>
+          <option value="secrets-tides-punta-cana">Secrets Tides Punta Cana</option>
+          <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
+          <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
+          <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
+          <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
+          <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
+          <option value="riu-cancun">Riu Cancun</option>
+          <option value="riu-latino">Riu Latino</option>
+          <option value="royalton-chic-cancun">Royalton CHIC Cancun</option>
+          <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
+          <option value="other">Other Resort</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Photo Category</label>
+        <select class="form-control" id="uploadCategory" onchange="toggleCustomCategory(this); loadRoomDescription();">
+          <option value="">Select category...</option>
+          <option value="Aerial View">Aerial View</option>
+          <option value="Resort Exterior / Property">Resort Exterior / Property</option>
+          <option value="Beach & Pool">Beach &amp; Pool</option>
+          <option value="Lobby / Common Areas">Lobby / Common Areas</option>
+          <option value="Dining">Dining</option>
+          <option value="Bar">Bar</option>
+          <option value="Spa">Spa</option>
+          <option value="Kids Club">Kids Club</option>
+          <option value="Junior Suite">Junior Suite</option>
+          <option value="Junior Suite Tropical View">Junior Suite Tropical View</option>
+          <option value="Junior Suite Ocean View">Junior Suite Ocean View</option>
+          <option value="Junior Suite Ocean Front">Junior Suite Ocean Front</option>
+          <option value="Junior Suite Partial Ocean View">Junior Suite Partial Ocean View</option>
+          <option value="Junior Suite Plunge Pool">Junior Suite Plunge Pool</option>
+          <option value="Plunge Pool Suite">Plunge Pool Suite</option>
+          <option value="Preferred Club Tropical View">Preferred Club Tropical View</option>
+          <option value="Preferred Club Ocean View">Preferred Club Ocean View</option>
+          <option value="Preferred Club Plunge Pool">Preferred Club Plunge Pool</option>
+          <option value="Preferred Club Honeymoon Suite">Preferred Club Honeymoon Suite</option>
+          <option value="Preferred Club Master Suite">Preferred Club Master Suite</option>
+          <option value="Preferred Club Governor Suite">Preferred Club Governor Suite</option>
+          <option value="Preferred Club Presidential Suite">Preferred Club Presidential Suite</option>
+          <option value="Governor Suite">Governor Suite</option>
+          <option value="Presidential Suite">Presidential Suite</option>
+          <!-- Wedding Venues -->
+          <optgroup label="Ã¢ÂÂÃ¢ÂÂ Wedding Venues Ã¢ÂÂÃ¢ÂÂ">
+            <option value="Wedding Venue - Beach Front Ceremony">Beach Front Ceremony</option>
+            <option value="Wedding Venue - Ocean View Gazebo">Ocean View Gazebo</option>
+            <option value="Wedding Venue - Beach Wedding Reception">Beach Wedding Reception</option>
+            <option value="Wedding Venue - Indoor Reception">Indoor Reception</option>
+            <option value="Wedding Venue - Preferred Deck">Preferred Deck</option>
+            <option value="Wedding Venue - Fountain Gazebo">Fountain Gazebo</option>
+            <option value="Wedding Venue - Stone Beach">Stone Beach</option>
+            <option value="Wedding Venue - Preferred Beach">Preferred Beach</option>
+            <option value="Wedding Venue - Gardens">Gardens</option>
+            <option value="Wedding Venue - Pool Area">Pool Area</option>
+            <option value="Wedding Venue - Ballroom">Ballroom</option>
+            <option value="Wedding Venue - Rooftop Terrace">Rooftop Terrace</option>
+            <option value="Wedding Venue - Garden Terrace">Garden Terrace</option>
+            <option value="Wedding Venue - Custom" id="venue-custom-opt">Other Venue (type your own)...</option>
+          </optgroup>
+          <option value="custom">Other (type your own)...</option>
+        </select>
+        <input type="text" class="form-control" id="uploadCategoryCustom" placeholder="Type room category..." style="display:none;margin-top:8px;">
+      </div>
+      <div class="form-group">
+        <label>Caption (optional)</label>
+        <input type="text" class="form-control" id="uploadCaption" placeholder="e.g. King bed with ocean view">
+      </div>
+      <button class="btn btn-primary" onclick="startUpload()" id="uploadBtn">Upload</button>
+    </div>
+
+    <div class="form-group" style="margin-top:14px;">
+      <label>Room Description <span style="color:#888;font-size:.75rem;">(saved once per resort + category Ã¢ÂÂ shown anywhere this room type appears)</span></label>
+      <textarea class="form-control" id="roomDescription" rows="3" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony overlooking the pool..." onblur="saveRoomDescription()"></textarea>
+      <span id="roomDescSaveMsg" style="display:none;margin-top:4px;color:#27ae60;font-size:.82rem;">&#10003; Saved</span>
+    </div>
+
+    <!-- DROP ZONE -->
+    <div class="drop-zone" id="dropZone">
+      <div class="drop-zone-icon">&#128247;</div>
+      <div class="drop-zone-text"><strong>Drop photos here</strong> or click to browse<br><span style="font-size:.75rem;color:#555">JPG, PNG, WebP &mdash; up to 10MB each &mdash; multiple files OK</span></div>
+      <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFiles(this.files)">
+    </div>
+
+    <!-- UPLOAD QUEUE -->
+    <div class="upload-queue" id="uploadQueue"></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-bar">
+    <select class="filter-select" id="filterResort" onchange="applyFilters()">
+      <option value="">All Resorts</option>
+      <option value="dreams-riviera-cancun">Dreams Riviera Cancun</option>
+      <option value="breathless-punta-cana">Breathless Punta Cana</option>
+      <option value="majestic-mirage">Majestic Mirage</option>
+      <option value="majestic-elegance">Majestic Elegance</option>
+      <option value="hilton-cancun">Hilton Cancun</option>
+      <option value="royalton-riviera-cancun">Royalton Riviera Cancun</option>
+      <option value="el-dorado-royale">El Dorado Royale</option>
+    </select>
+    <select class="filter-select" id="filterCategory" onchange="applyFilters()">
+      <option value="">All Categories</option>
+      <option>Resort Exterior / Property</option>
+      <option>Beach &amp; Pool</option>
+      <option>Premium Deluxe</option>
+      <option>Premium Deluxe Ocean View</option>
+      <option>Premium Deluxe Plunge Pool</option>
+      <option>Family Suite Premium</option>
+      <option>Preferred Club Tropical View</option>
+      <option>Preferred Club Ocean View</option>
+      <option>Preferred Club Plunge Pool</option>
+      <option>Preferred Club Honeymoon Suite</option>
+      <option>Preferred Club Master Suite</option>
+      <option>Preferred Club Governor Suite</option>
+      <option>Preferred Club Presidential Suite</option>
+      <option>Dining</option>
+      <option>Spa</option>
+    </select>
+    <input type="search" class="search-input" id="filterSearch" placeholder="Search captions..." oninput="applyFilters()">
+    <span class="photo-count" id="photoCount"></span>
+  </div>
+
+  <!-- GALLERY -->
+  <div class="gallery-grid" id="galleryGrid">
+    <div style="grid-column:1/-1;padding:40px 0">
+      <div class="loading-spinner"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<script>
+// Ã¢ÂÂÃ¢ÂÂ FIREBASE INIT Ã¢ÂÂÃ¢ÂÂ
+const firebaseConfig = {
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  authDomain: "wedding-crm-e5d12.firebaseapp.com",
+  projectId: "wedding-crm-e5d12",
+  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+  messagingSenderId: "246819649586",
+  appId: "1:246819649586:web:a74debd217ce048d26242b"
+};
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const db      = firebase.firestore();
+const storage = firebase.storage();
+
+// Ã¢ÂÂÃ¢ÂÂ RESORT NAME MAP Ã¢ÂÂÃ¢ÂÂ
+const RESORT_NAMES = {};
+// Auto-generate names from the dropdown options
+document.querySelectorAll('#uploadResort option').forEach(opt => {
+  if (opt.value && opt.value !== 'other') RESORT_NAMES[opt.value] = opt.text;
+});
+
+// Ã¢ÂÂÃ¢ÂÂ STATE Ã¢ÂÂÃ¢ÂÂ
+let allPhotos   = [];
+let queueItems  = [];
+
+// Ã¢ÂÂÃ¢ÂÂ DRAG & DROP Ã¢ÂÂÃ¢ÂÂ
+const dropZone = document.getElementById('dropZone');
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+
+function handleFiles(files) {
+  const queue = document.getElementById('uploadQueue');
+  Array.from(files).forEach(file => {
+    const id  = 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    const url = URL.createObjectURL(file);
+    queueItems.push({ id, file, url, status: 'pending' });
+    const el  = document.createElement('div');
+    el.className = 'upload-item';
+    el.id = id;
+    el.innerHTML = `
+      <img src="${url}" class="upload-thumb" alt="">
+      <div class="upload-info">
+        <div class="upload-name">${file.name}</div>
+        <div class="upload-size">${(file.size/1024).toFixed(0)} KB</div>
+        <div class="upload-progress"><div class="upload-progress-bar" id="bar_${id}" style="width:0%"></div></div>
+      </div>
+      <span class="upload-status status-pending" id="status_${id}">Queued</span>
+      <button class="delete-btn" id="remove_${id}" onclick="removeQueueItem('${id}')" style="margin-left:6px;" title="Remove from queue">&#10005;</button>
+    `;
+    queue.appendChild(el);
+  });
+}
+
+function removeQueueItem(id) {
+  const item = queueItems.find(q => q.id === id);
+  if (item && item.status === 'uploading') return; // don't allow removal mid-upload
+  queueItems = queueItems.filter(q => q.id !== id);
+  document.getElementById(id)?.remove();
+}
+
+// Ã¢ÂÂÃ¢ÂÂ RESORT PROFILE Ã¢ÂÂÃ¢ÂÂ
+
+function initProfileResortDropdown() {
+  const sel = document.getElementById('profileResort');
+  if (!sel) return;
+  // Copy options from uploadResort
+  const uploadSel = document.getElementById('uploadResort');
+  if (uploadSel) {
+    sel.innerHTML = uploadSel.innerHTML;
+  }
+}
+
+function initFilterResortDropdown() {
+  const sel = document.getElementById('filterResort');
+  const uploadSel = document.getElementById('uploadResort');
+  if (!sel || !uploadSel) return;
+  // Keep "All Resorts" as first option, then copy every resort from the upload list
+  const allOption = '<option value="">All Resorts</option>';
+  const resortOptions = Array.from(uploadSel.options)
+    .filter(o => o.value) // skip the blank "Select resort..." option
+    .map(o => `<option value="${o.value}">${o.textContent}</option>`)
+    .join('');
+  sel.innerHTML = allOption + resortOptions;
+}
+
+async function loadResortProfile() {
+  const slug = document.getElementById('profileResort')?.value;
+  const form = document.getElementById('profileForm');
+  if (!slug) { if (form) form.style.display = 'none'; return; }
+  if (form) form.style.display = 'block';
+
+  try {
+    const doc = await db.collection('resortProfiles').doc(slug).get();
+    if (doc.exists) {
+      const d = doc.data();
+      document.getElementById('profileTagline').value = d.tagline || '';
+      document.getElementById('profileDescription').value = d.description || '';
+      document.getElementById('profileHighlights').value = d.highlights || '';
+      document.getElementById('profileStars').value = d.stars || '';
+      document.getElementById('profileBookingLink').value = d.bookingLink || '';
+      document.getElementById('profileGalleryLink').value = d.galleryLink || '';
+      document.getElementById('profileNotes').value = d.notes || '';
+      document.getElementById('profileClubName').value = d.clubName || '';
+      document.getElementById('profileClubPerks').value = d.clubPerks || '';
+      document.getElementById('profileWeddingGuide').value = d.weddingGuide || '';
+      // Load wedding venues
+      const venueList = document.getElementById('venue-list');
+      if (venueList) {
+        venueList.innerHTML = '';
+        (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo));
+      }
+      // Load wedding packages
+      const pkgList = document.getElementById('pkg-list');
+      if (pkgList) {
+        pkgList.innerHTML = '';
+        (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured));
+      }
+    } else {
+      // Clear form for new resort
+      const venueListClear = document.getElementById('venue-list');
+      if (venueListClear) venueListClear.innerHTML = '';
+      const pkgListClear = document.getElementById('pkg-list');
+      if (pkgListClear) pkgListClear.innerHTML = '';
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('profileStars').value = '';
+    }
+  } catch(e) {
+    console.error('loadResortProfile error:', e);
+  }
+}
+
+function addVenueRow(name='', capacity='', bestFor='', description='', photo='') {
+  const list = document.getElementById('venue-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">Ã¢ÂÂ</button>
+    ${photo ? `<img src="${photo}" style="width:100%;height:120px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
+    <div style="padding:10px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-name" placeholder="Venue name" value="${name}" style="font-weight:600;">
+        <input class="form-control venue-capacity" placeholder="Capacity e.g. 120 Guests" value="${capacity}">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-bestfor" placeholder="Best For e.g. Ceremony" value="${bestFor}">
+        <input class="form-control venue-photo" placeholder="Photo URL" value="${photo}" oninput="this.previousElementSibling.previousElementSibling.previousElementSibling.querySelector('img') && (this.previousElementSibling.previousElementSibling.previousElementSibling.querySelector('img').src = this.value)">
+      </div>
+      <textarea class="form-control venue-desc" rows="2" placeholder="Venue description">${description}</textarea>
+    </div>`;
+  list.appendChild(div);
+}
+
+function getVenues() {
+  return [...document.querySelectorAll('#venue-list > div')].map(div => ({
+    name:        div.querySelector('.venue-name')?.value?.trim() || '',
+    capacity:    div.querySelector('.venue-capacity')?.value?.trim() || '',
+    bestFor:     div.querySelector('.venue-bestfor')?.value?.trim() || '',
+    description: div.querySelector('.venue-desc')?.value?.trim() || '',
+    photo:       div.querySelector('.venue-photo')?.value?.trim() || ''
+  })).filter(v => v.name);
+}
+
+function addPackageRow(name='', highlights='', price='', isFeatured=false) {
+  const list = document.getElementById('pkg-list');
+  if (!list) return;
+  const idx = list.children.length;
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;padding:12px;background:#fafafa;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">Ã¢ÂÂ</button>
+    <div style="display:grid;grid-template-columns:1fr 80px;gap:8px;margin-bottom:6px;">
+      <input class="form-control pkg-name" placeholder="Package name e.g. Eternal Love" value="${name}" style="font-weight:600;">
+      <input class="form-control pkg-price" placeholder="From $X" value="${price}">
+    </div>
+    <textarea class="form-control pkg-highlights" rows="2" placeholder="Key highlights Ã¢ÂÂ e.g. Minister ÃÂ· Semi-private rehearsal dinner ÃÂ· Cocktail hour ÃÂ· Private reception ÃÂ· Up to 20 guests">${highlights}</textarea>
+    <label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.78rem;color:#555;cursor:pointer;">
+      <input type="checkbox" class="pkg-featured" ${isFeatured?'checked':''}> Highlight this package (shown in gold)
+    </label>`;
+  list.appendChild(div);
+}
+
+function getPackages() {
+  return [...document.querySelectorAll('#pkg-list > div')].map(div => ({
+    name:       div.querySelector('.pkg-name')?.value?.trim() || '',
+    highlights: div.querySelector('.pkg-highlights')?.value?.trim() || '',
+    price:      div.querySelector('.pkg-price')?.value?.trim() || '',
+    featured:   div.querySelector('.pkg-featured')?.checked || false
+  })).filter(p => p.name);
+}
+
+async function saveResortProfile() {
+  const slug = document.getElementById('profileResort')?.value;
+  if (!slug) { toast('Please select a resort first.', 'error'); return; }
+
+  const resortName = document.getElementById('profileResort')?.options[document.getElementById('profileResort').selectedIndex]?.text || slug;
+
+  const data = {
+    slug,
+    resortName,
+    tagline:      document.getElementById('profileTagline').value.trim(),
+    description:  document.getElementById('profileDescription').value.trim(),
+    highlights:   document.getElementById('profileHighlights').value.trim(),
+    stars:        document.getElementById('profileStars').value,
+    bookingLink:  document.getElementById('profileBookingLink').value.trim(),
+    galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
+    notes:        document.getElementById('profileNotes').value.trim(),
+    clubName:     document.getElementById('profileClubName').value.trim(),
+    clubPerks:    document.getElementById('profileClubPerks').value.trim(),
+    weddingGuide: document.getElementById('profileWeddingGuide').value.trim(),
+    venues:       getVenues(),
+    packages:     getPackages(),
+    updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection('resortProfiles').doc(slug).set(data, {merge: true});
+    const msg = document.getElementById('profileSaveMsg');
+    if (msg) {
+      msg.style.display = 'inline';
+      msg.textContent = 'Ã¢ÂÂ Saved!';
+      setTimeout(() => msg.style.display = 'none', 3000);
+    }
+    toast('Resort profile saved!', 'success');
+  } catch(e) {
+    toast('Error saving: ' + e.message, 'error');
+  }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ ROOM DESCRIPTIONS (saved once per resort + category) Ã¢ÂÂÃ¢ÂÂ
+function roomDescKey(resort, category) {
+  return `${resort}__${category}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
+async function loadRoomDescription() {
+  const resort = document.getElementById('uploadResort').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const box = document.getElementById('roomDescription');
+  if (!resort || !category) { box.value = ''; return; }
+
+  try {
+    const key = roomDescKey(resort, category);
+    const doc = await db.collection('roomDescriptions').doc(key).get();
+    box.value = doc.exists ? (doc.data().description || '') : '';
+  } catch(e) {
+    console.error('loadRoomDescription error:', e);
+  }
+}
+
+async function saveRoomDescription() {
+  const resort = document.getElementById('uploadResort').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const description = document.getElementById('roomDescription').value.trim();
+  if (!resort || !category) return; // nothing selected yet, nothing to save against
+
+  try {
+    const key = roomDescKey(resort, category);
+    await db.collection('roomDescriptions').doc(key).set({
+      resort, category, description,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge: true});
+    const msg = document.getElementById('roomDescSaveMsg');
+    if (msg) {
+      msg.style.display = 'inline';
+      setTimeout(() => msg.style.display = 'none', 2000);
+    }
+  } catch(e) {
+    console.error('saveRoomDescription error:', e);
+  }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ UPLOAD Ã¢ÂÂÃ¢ÂÂ
+function toggleCustomCategory(sel) {
+  const custom = document.getElementById('uploadCategoryCustom');
+  custom.style.display = sel.value === 'custom' ? 'block' : 'none';
+  if (sel.value !== 'custom') custom.value = '';
+}
+
+async function startUpload() {
+  const resort   = document.getElementById('uploadResort').value;
+  const catSelect = document.getElementById('uploadCategory').value;
+  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const caption  = document.getElementById('uploadCaption').value.trim();
+
+  if (!resort)   { toast('Please select a resort.',   'error'); return; }
+  if (!category) { toast('Please select or type a room category.', 'error'); return; }
+  if (queueItems.filter(q => q.status === 'pending').length === 0) {
+    toast('Add at least one photo first.', 'error'); return;
+  }
+
+  const pending = queueItems.filter(q => q.status === 'pending');
+  for (const item of pending) {
+    item.status = 'uploading';
+    setStatus(item.id, 'Uploading...', 'status-uploading');
+    try {
+      const ext      = item.file.name.split('.').pop().toLowerCase();
+      const safeName = item.file.name.replace(/[^a-z0-9._-]/gi, '-').toLowerCase();
+      const path     = `resorts/${resort}/${Date.now()}_${safeName}`;
+      const ref      = storage.ref(path);
+      const task     = ref.put(item.file);
+
+      await new Promise((res, rej) => {
+        task.on('state_changed',
+          snap => {
+            const pct = (snap.bytesTransferred / snap.totalBytes * 100).toFixed(0);
+            document.getElementById('bar_' + item.id).style.width = pct + '%';
+          },
+          err => rej(err),
+          () => res()
+        );
+      });
+
+      const downloadURL = await ref.getDownloadURL();
+
+      // Write to Firestore
+      await db.collection('resortPhotos').add({
+        resort:       resort,
+        resortSlug:   resort,
+        resortName:   RESORT_NAMES[resort] || resort,
+        category:     category,
+        roomCategory: category,
+        caption:      caption || '',
+        url:          downloadURL,
+        storagePath:  path,
+        downloadURL:  downloadURL,
+        fileSize:     item.file.size,
+        uploadedAt:   firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      item.status = 'done';
+      setStatus(item.id, '&#10003; Done', 'status-done');
+      document.getElementById('bar_' + item.id).style.width = '100%';
+      document.getElementById('bar_' + item.id).style.background = '#27ae60';
+    } catch(err) {
+      item.status = 'error';
+      setStatus(item.id, '&#10005; Error', 'status-error');
+      console.error(err);
+    }
+  }
+
+  toast(`${pending.length} photo${pending.length > 1 ? 's' : ''} uploaded successfully!`, 'success');
+  document.getElementById('uploadCaption').value = '';
+  // Clear done items after a moment
+  setTimeout(() => {
+    queueItems = queueItems.filter(q => q.status !== 'done');
+    const queue = document.getElementById('uploadQueue');
+    queue.querySelectorAll('.upload-item').forEach(el => {
+      const item = queueItems.find(q => q.id === el.id);
+      if (!item) el.remove();
+    });
+  }, 2500);
+
+  loadPhotos();
+}
+
+function setStatus(id, html, cls) {
+  const el = document.getElementById('status_' + id);
+  if (!el) return;
+  el.className = 'upload-status ' + cls;
+  el.innerHTML = html;
+  const removeBtn = document.getElementById('remove_' + id);
+  if (removeBtn) removeBtn.style.display = (cls === 'status-uploading') ? 'none' : 'inline-block';
+}
+
+// Ã¢ÂÂÃ¢ÂÂ LOAD & RENDER Ã¢ÂÂÃ¢ÂÂ
+async function loadPhotos() {
+  try {
+    const snap = await db.collection('resortPhotos')
+      .orderBy('uploadedAt', 'desc')
+      .get();
+    allPhotos = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    updateStats();
+    applyFilters();
+  } catch(err) {
+    console.error(err);
+    document.getElementById('galleryGrid').innerHTML =
+      `<div style="grid-column:1/-1;color:#555;padding:40px;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:8px">&#9888;</div>
+        <div>Could not load photos. Make sure Firebase Storage is enabled on Blaze plan.</div>
+        <div style="margin-top:8px;font-size:.8rem;color:#444">${err.message}</div>
+      </div>`;
+  }
+}
+
+function updateStats() {
+  document.getElementById('statTotal').textContent   = allPhotos.length;
+  const resorts = new Set(allPhotos.map(p => p.resortSlug)).size;
+  document.getElementById('statResorts').textContent = resorts;
+  const totalBytes = allPhotos.reduce((a, p) => a + (p.fileSize || 0), 0);
+  document.getElementById('statSize').textContent    = (totalBytes / 1048576).toFixed(1) + ' MB';
+}
+
+function applyFilters() {
+  const resort   = document.getElementById('filterResort').value;
+  const category = document.getElementById('filterCategory').value;
+  const search   = document.getElementById('filterSearch').value.toLowerCase();
+
+  let filtered = allPhotos;
+  if (resort)   filtered = filtered.filter(p => p.resortSlug === resort);
+  if (category) filtered = filtered.filter(p => p.roomCategory === category);
+  if (search)   filtered = filtered.filter(p =>
+    (p.caption || '').toLowerCase().includes(search) ||
+    (p.roomCategory || '').toLowerCase().includes(search) ||
+    (p.resortName || '').toLowerCase().includes(search)
+  );
+
+  document.getElementById('photoCount').textContent = `${filtered.length} photo${filtered.length !== 1 ? 's' : ''}`;
+  renderGallery(filtered);
+}
+
+function renderGallery(photos) {
+  const grid = document.getElementById('galleryGrid');
+  if (photos.length === 0) {
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px">
+      <div style="font-size:2.5rem;opacity:.3;margin-bottom:12px">&#127968;</div>
+      <div style="color:#555;font-size:.9rem">No photos yet &mdash; upload some above!</div>
+    </div>`;
+    return;
+  }
+
+  // Group photos by resort + room category so each ROOM = one shareable gallery link
+  const groups = {};
+  photos.forEach(p => {
+    const slug = p.resortSlug || p.resort || '';
+    const cat  = p.roomCategory || p.category || '';
+    const key  = slug + '|||' + cat;
+    if (!groups[key]) groups[key] = { slug, cat, resortName: p.resortName || slug, photos: [] };
+    groups[key].photos.push(p);
+  });
+
+  grid.innerHTML = Object.values(groups).map(g => {
+    const n = g.photos.length;
+    const galleryUrl = `https://amy-cate.com/gallery?gallery=${encodeURIComponent(g.slug)}&cat=${encodeURIComponent(g.cat)}`;
+
+    const photoCards = g.photos.map(p => `
+      <div class="photo-card" id="card_${p.id}">
+        <img src="${escHtml(p.downloadURL)}" alt="${escHtml(p.roomCategory)}" loading="lazy"
+             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'220\\' height=\\'160\\'%3E%3Crect fill=\\'%23222\\' width=\\'220\\' height=\\'160\\'/%3E%3Ctext x=\\'110\\' y=\\'85\\' text-anchor=\\'middle\\' fill=\\'%23444\\' font-size=\\'12\\'%3ENo preview%3C/text%3E%3C/svg%3E'">
+        <div class="photo-card-body">
+          ${p.caption ? `<div class="photo-caption">${escHtml(p.caption)}</div>` : ''}
+          <div class="photo-actions">
+            <button class="copy-btn" onclick="copyURL('${p.id}','${escAttr(p.downloadURL)}')" id="copy_${p.id}">&#128203; URL</button>
+            <button class="copy-btn" onclick="openEditPhoto('${p.id}')">&#9999; Edit</button>
+            <button class="delete-btn" onclick="deletePhoto('${p.id}','${escAttr(p.storagePath)}')">&#128465;</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="room-group">
+        <div class="room-group-header">
+          <div>
+            <div class="photo-resort">${escHtml(g.resortName)}</div>
+            <div class="room-group-title">${escHtml(g.cat)}<span class="room-group-count">${n} photo${n!==1?'s':''}</span></div>
+          </div>
+          <div class="room-group-actions">
+            <button class="btn-gallery" onclick="copyGalleryLink(this,'${escAttr(galleryUrl)}')">&#128279; Copy Gallery Link</button>
+            <a class="btn-gallery-open" href="${escAttr(galleryUrl)}" target="_blank" rel="noopener">Preview &#8599;</a>
+          </div>
+        </div>
+        <div class="room-group-photos">${photoCards}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Ã¢ÂÂÃ¢ÂÂ COPY URL Ã¢ÂÂÃ¢ÂÂ
+async function copyURL(id, url) {
+  try {
+    await navigator.clipboard.writeText(url);
+    const btn = document.getElementById('copy_' + id);
+    btn.textContent = '&#10003; Copied!';
+    btn.className = 'copy-btn copied';
+    setTimeout(() => {
+      btn.innerHTML = '&#128203; Copy URL';
+      btn.className = 'copy-btn';
+    }, 2000);
+  } catch { toast('Could not copy to clipboard.', 'error'); }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ COPY GALLERY LINK (one URL Ã¢ÂÂ all photos for this room, as a carousel) Ã¢ÂÂÃ¢ÂÂ
+async function copyGalleryLink(btn, url) {
+  try {
+    await navigator.clipboard.writeText(url);
+    const orig = btn.innerHTML;
+    btn.innerHTML = '&#10003; Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+    toast('Gallery link copied &mdash; paste it anywhere.', 'success');
+  } catch {
+    toast('Could not copy. Link: ' + url, 'error');
+  }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ DELETE Ã¢ÂÂÃ¢ÂÂ
+async function deletePhoto(id, storagePath) {
+  if (!confirm('Delete this photo? This cannot be undone.')) return;
+  try {
+    // Delete from Storage
+    if (storagePath) {
+      try { await storage.ref(storagePath).delete(); } catch(e) { /* may already be gone */ }
+    }
+    // Delete from Firestore
+    await db.collection('resortPhotos').doc(id).delete();
+    allPhotos = allPhotos.filter(p => p.id !== id);
+    document.getElementById('card_' + id)?.remove();
+    updateStats();
+    document.getElementById('photoCount').textContent =
+      `${allPhotos.length} photo${allPhotos.length !== 1 ? 's' : ''}`;
+    toast('Photo deleted.', 'success');
+  } catch(err) {
+    toast('Delete failed: ' + err.message, 'error');
+  }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ HELPERS Ã¢ÂÂÃ¢ÂÂ
+function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escAttr(s) { return String(s||'').replace(/'/g,"\\'"); }
+
+function toast(msg, type='success') {
+  const c   = document.getElementById('toastContainer');
+  const div = document.createElement('div');
+  div.className = 'toast ' + type;
+  div.innerHTML = (type==='success' ? '&#10003; ' : '&#9888; ') + msg;
+  c.appendChild(div);
+  setTimeout(() => div.remove(), 3500);
+}
+
+// Ã¢ÂÂÃ¢ÂÂ EDIT PHOTO Ã¢ÂÂÃ¢ÂÂ
+async function openEditPhoto(id) {
+  const p = allPhotos.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('editPhotoId').value = id;
+  document.getElementById('editPhotoResort').value = p.resortSlug || p.resort || '';
+  document.getElementById('editPhotoPreview').src = p.downloadURL;
+  document.getElementById('editPhotoCaption').value = p.caption || '';
+  document.getElementById('editPhotoCategory').value = p.roomCategory || '';
+  document.getElementById('editPhotoModal').style.display = 'flex';
+
+  // Load shared room description for this resort + category
+  const descBox = document.getElementById('editPhotoDescription');
+  descBox.value = '';
+  try {
+    const key = roomDescKey(p.resortSlug || p.resort, p.roomCategory);
+    const doc = await db.collection('roomDescriptions').doc(key).get();
+    descBox.value = doc.exists ? (doc.data().description || '') : '';
+  } catch(e) {
+    console.error('load edit description error:', e);
+  }
+}
+
+function closeEditPhoto() {
+  document.getElementById('editPhotoModal').style.display = 'none';
+}
+
+async function saveEditPhoto() {
+  const id = document.getElementById('editPhotoId').value;
+  const resort = document.getElementById('editPhotoResort').value;
+  const caption = document.getElementById('editPhotoCaption').value.trim();
+  const category = document.getElementById('editPhotoCategory').value.trim();
+  const description = document.getElementById('editPhotoDescription').value.trim();
+  if (!category) { toast('Category cannot be empty.', 'error'); return; }
+
+  try {
+    await db.collection('resortPhotos').doc(id).update({
+      caption, roomCategory: category, category
+    });
+    const p = allPhotos.find(x => x.id === id);
+    if (p) { p.caption = caption; p.roomCategory = category; p.category = category; }
+
+    // Save shared room description (per resort + category)
+    if (resort && category) {
+      const key = roomDescKey(resort, category);
+      await db.collection('roomDescriptions').doc(key).set({
+        resort, category, description,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      }, {merge: true});
+    }
+
+    closeEditPhoto();
+    applyFilters();
+    toast('Photo updated!', 'success');
+  } catch(e) {
+    toast('Error saving: ' + e.message, 'error');
+  }
+}
+
+// Ã¢ÂÂÃ¢ÂÂ BOOT Ã¢ÂÂÃ¢ÂÂ
+loadPhotos();
+initProfileResortDropdown();
+initFilterResortDropdown();
+</script>
+
+<!-- EDIT PHOTO MODAL -->
+<div id="editPhotoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:420px;width:90%;max-height:90vh;overflow-y:auto;">
+    <h3 style="margin:0 0 16px;color:#f0c958;font-size:1.1rem;">Edit Photo</h3>
+    <input type="hidden" id="editPhotoId">
+    <input type="hidden" id="editPhotoResort">
+    <img id="editPhotoPreview" src="" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:14px;">
+    <div class="form-group">
+      <label>Category</label>
+      <input type="text" class="form-control" id="editPhotoCategory">
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+      <label>Caption</label>
+      <input type="text" class="form-control" id="editPhotoCaption" placeholder="e.g. King bed with ocean view">
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+      <label>Description <span style="color:#888;font-size:.7rem;">(shared across all photos in this category)</span></label>
+      <textarea class="form-control" id="editPhotoDescription" rows="4" placeholder="e.g. Spacious suite with king bed, soaking tub, and private balcony..."></textarea>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn btn-primary" style="flex:1;" onclick="saveEditPhoto()">Save Changes</button>
+      <button class="copy-btn" style="flex:1;" onclick="closeEditPhoto()">Cancel</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
