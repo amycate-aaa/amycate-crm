@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elisabeth Liechty · Your Room at Majestic Elegance</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#1E1A14; --black-2:#2A241B; --cream:#FAF7F2; --cream-2:#F3EDE3; --cream-3:#E2D9CC;
+  --gold:#D4B882; --gold-2:#B8975A; --brown:#5C5044; --brown-lt:#9C8E80; --white:#FFFFFF;
+}
+body{font-family:'Jost',sans-serif;font-weight:300;background:#cec9c0;color:var(--brown);display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR (tool chrome) ─────────────────── */
+.sidebar{width:250px;min-width:250px;background:var(--black);display:flex;flex-direction:column;border-right:1px solid rgba(212,184,130,0.18)}
+.sidebar-header{padding:22px 20px 16px;border-bottom:1px solid rgba(212,184,130,0.14)}
+.sidebar-logo{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;letter-spacing:.02em}
+.sidebar-sub{color:rgba(255,255,255,0.4);font-size:11px;line-height:1.6;margin-top:6px;letter-spacing:.3px}
+.sidebar-sub b{color:rgba(255,255,255,0.62);font-weight:400}
+.guest-list{flex:1;overflow-y:auto;padding:8px 0}
+.guest-btn{display:block;width:100%;text-align:left;background:none;border:none;border-left:2px solid transparent;padding:11px 18px;cursor:pointer;transition:all .12s;font-family:inherit}
+.guest-btn:hover{background:rgba(212,184,130,0.06)}
+.guest-btn.active{background:rgba(212,184,130,0.1);border-left-color:var(--gold)}
+.gbtn-name{color:rgba(255,255,255,0.88);font-size:13px;font-weight:400;display:block;letter-spacing:.2px}
+.gbtn-meta{color:rgba(255,255,255,0.34);font-size:10.5px;margin-top:2px;display:block;letter-spacing:.3px}
+.sidebar-note{padding:14px 18px;border-top:1px solid rgba(212,184,130,0.1);color:rgba(255,255,255,0.3);font-size:10px;line-height:1.7;letter-spacing:.3px}
+
+.main{flex:1;overflow-y:auto;background:#cec9c0}
+.toolbar{position:sticky;top:0;z-index:100;background:var(--black-2);padding:11px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gold-2);gap:12px}
+.toolbar-info{color:rgba(255,255,255,0.5);font-size:11px;flex:1;letter-spacing:1px;text-transform:uppercase}
+.toolbar-guest{color:var(--gold);font-weight:400;text-transform:none;letter-spacing:.3px}
+.toolbar-actions{display:flex;gap:8px}
+.btn{padding:8px 16px;border:none;font-family:'Jost',sans-serif;font-size:10.5px;font-weight:500;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
+.btn-gold{background:var(--gold-2);color:var(--white)}
+.btn-gold:hover{background:var(--gold);color:var(--black)}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid rgba(212,184,130,0.4)}
+.btn-outline:hover{border-color:var(--gold);color:var(--white)}
+.preview-wrap{padding:28px;display:flex;justify-content:center}
+
+/* ── EMAIL ─────────────────────────────────── */
+.email{width:720px;background:var(--cream);box-shadow:0 8px 50px rgba(0,0,0,0.4)}
+.email-brandbar{background:var(--black);padding:13px 44px;text-align:center}
+.brand-name{color:var(--gold);font-size:10px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase}
+.brand-tag{color:rgba(255,255,255,0.4);font-size:9.5px;letter-spacing:1.5px;margin-top:4px}
+
+.hero{position:relative;height:340px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.hero-ph{position:absolute;inset:0;background:linear-gradient(135deg,var(--black),#3a3226);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,26,20,0.15) 0%,rgba(30,26,20,0.0) 30%,rgba(30,26,20,0.68) 72%,rgba(30,26,20,0.9) 100%)}
+.hero-content{position:relative;padding:0 44px 34px}
+.hero-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--white);line-height:1.05}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:rgba(255,255,255,0.72);margin-top:8px}
+
+.body{padding:44px}
+.eyebrow{font-size:9.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold-2);margin-bottom:14px}
+.gold-rule{width:36px;height:1px;background:var(--gold-2);margin-bottom:20px}
+.greet{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--black);line-height:1.08;margin-bottom:6px}
+.greet em{font-style:italic;color:var(--brown)}
+p.copy{font-size:14px;line-height:1.85;color:var(--brown);margin-bottom:16px}
+p.copy strong{color:var(--black);font-weight:400}
+
+.overview{background:var(--white);border:1px solid var(--cream-3);margin:30px 0 6px}
+.overview-head{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--black);padding:20px 28px 16px;border-bottom:1px solid var(--cream-3)}
+.ov-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 28px;border-bottom:1px solid var(--cream-2)}
+.ov-row:last-child{border-bottom:none}
+.ov-label{font-size:9.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--brown-lt)}
+.ov-value{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--black);text-align:right}
+
+.section-lead{text-align:center;margin:46px 0 28px}
+.section-lead .st{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--black);line-height:1.1;margin-bottom:8px}
+.section-lead .ss{font-size:12px;color:var(--brown-lt);font-style:italic;letter-spacing:.3px}
+.section-lead .gold-rule{margin:14px auto 0}
+
+/* resort showcase */
+.showcase{margin:34px 0 6px}
+.showcase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.sc-card{display:flex;flex-direction:column}
+.sc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--cream-2)}
+.sc-cap{font-size:10.5px;color:var(--brown-lt);letter-spacing:.3px;padding:8px 2px 0;line-height:1.4}
+.hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-3);border:1px solid var(--cream-3)}
+.hl{background:var(--white);padding:16px 18px}
+.hl-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--black);margin-bottom:5px}
+.hl-desc{font-size:11.5px;color:var(--brown-lt);line-height:1.55}
+
+/* pick-this-room button */
+.btn-pick{display:block;text-align:center;background:var(--gold-2);color:var(--white);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:15px;transition:background .2s}
+.btn-pick:hover{background:var(--gold);color:var(--black)}
+.btn-resort{display:block;text-align:center;margin-top:16px;border:1px solid var(--gold-2);color:var(--gold-2);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:15px;transition:all .2s}
+.btn-resort:hover{background:var(--gold-2);color:var(--white)}
+
+/* room cards */
+.rcard{background:var(--white);border:1px solid var(--cream-3);margin-bottom:22px}
+.rcard.match{border:1px solid var(--gold-2);box-shadow:0 4px 30px rgba(184,151,90,0.16)}
+.rphoto{width:100%;height:280px;object-fit:cover;display:block;background:var(--cream-2)}
+.rphoto-ph{width:100%;height:200px;background:linear-gradient(135deg,var(--black),#3a3226);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);text-align:center}
+.rphoto-ph span{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
+.rphoto-ph small{color:rgba(255,255,255,0.5);font-size:9.5px;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
+.rthumbs{display:flex;gap:4px;background:var(--cream-3)}
+.rthumbs img{flex:1;min-width:0;height:110px;object-fit:cover;display:block}
+.rbody{padding:26px 30px 28px}
+.rlabel{font-size:9.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-2);margin-bottom:9px}
+.rcard.match .rlabel{color:var(--gold-2)}
+.rname{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:300;color:var(--black);line-height:1.12;margin-bottom:6px}
+.rspecs{font-size:11.5px;color:var(--brown-lt);letter-spacing:.3px;margin-bottom:16px}
+.rfeat{list-style:none;margin:0 0 20px}
+.rfeat li{font-size:12.5px;color:var(--brown);padding:4px 0 4px 18px;position:relative;line-height:1.55}
+.rfeat li::before{content:'✦';position:absolute;left:0;color:var(--gold-2);font-size:9px;top:6px}
+.rprice{background:var(--black);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.rprice-l{font-size:9.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.rprice-r{text-align:right}
+.rprice-amt{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--white);line-height:1}
+.rprice-note{font-size:9.5px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-top:3px;text-transform:uppercase}
+.rdiff{padding:10px 22px;font-size:12px;letter-spacing:.3px;text-align:center;background:var(--cream-2)}
+.rdiff.pay{color:#9a5a3c}
+.rdiff.refund{color:#3f6b47}
+.rdiff.same{color:var(--brown-lt)}
+
+.action-banner{background:#FBF1D9;border:1px solid var(--gold-2);border-left:5px solid var(--gold-2);padding:16px 20px;margin-bottom:30px}
+.ab-title{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#9c7a2e;margin-bottom:8px}
+.ab-text{font-size:13px;line-height:1.7;color:var(--brown)}
+.ab-text strong{color:var(--black);font-weight:500}
+.note{background:var(--white);border-left:2px solid var(--gold-2);padding:14px 18px;font-size:11.5px;color:var(--brown-lt);line-height:1.7;margin:6px 0 30px}
+.note strong{color:var(--brown);font-weight:400}
+
+/* restaurant */
+.dining{border-top:3px solid var(--black);margin:6px -44px 0;padding:44px}
+.dining .st{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--black);margin-bottom:6px}
+.dining-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 22px}
+.dining-photos img{width:100%;height:150px;object-fit:cover;display:block}
+.dining-cap{font-size:10px;color:var(--brown-lt);letter-spacing:.3px;text-align:center;margin-top:6px;font-style:italic;line-height:1.35}
+.dining-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-3);border:1px solid var(--cream-3)}
+.dine{background:var(--cream);padding:13px 16px}
+.dine-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--black)}
+.dine-desc{font-size:11px;color:var(--brown-lt);margin-top:2px;line-height:1.5}
+.dining-foot{font-size:11.5px;color:var(--brown-lt);text-align:center;margin-top:16px;font-style:italic}
+
+.cta{background:var(--black);margin:0 -44px;padding:52px 44px;text-align:center}
+.cta .st{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--white);line-height:1.12;margin-bottom:14px}
+.cta p{font-size:13.5px;font-weight:300;color:rgba(255,255,255,0.62);max-width:460px;margin:0 auto;line-height:1.8}
+
+.sign{padding:34px 0 6px}
+.sign-closer{font-size:14px;color:var(--brown);line-height:1.8;margin-bottom:16px;font-style:italic;font-family:'Cormorant Garamond',serif}
+.sign-name{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--black)}
+.sign-title{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brown-lt);margin-top:4px}
+.sign-contact{font-size:13px;color:var(--gold-2);margin-top:8px}
+.email-foot{background:var(--black-2);padding:16px 44px;text-align:center;font-size:9.5px;color:rgba(255,255,255,0.25);letter-spacing:.6px;line-height:1.7}
+
+.placeholder{text-align:center;padding:90px 40px}
+.placeholder-t{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold-2);margin-bottom:10px}
+.placeholder-s{font-size:13px;color:var(--brown-lt);font-style:italic}
+
+@media print{
+  body{background:#fff;overflow:visible;display:block}
+  .sidebar,.toolbar{display:none!important}
+  .main{overflow:visible}
+  .preview-wrap{padding:0}
+  .email{box-shadow:none;width:100%}
+}
+
+/* standalone page wrapper */
+body{display:block;height:auto;overflow:auto;background:#cec9c0;padding:28px 16px}
+.email{margin:0 auto}
+@media (max-width:760px){ .email{width:100%!important} }
+</style>
+</head><body>
+<div class="email">
+    <div class="email-brandbar"><div class="brand-name">Destination Weddings Travel Group · Celebration Travel</div><div class="brand-tag">Amy Cate · Certified Destination Wedding &amp; Group Travel Specialist</div></div>
+    <div class="hero"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784236619409_aerial-view-ocean.jpg?alt=media&amp;token=04c4e693-7096-4894-8ad2-421c328fb29d" alt="Majestic Elegance Costa Mujeres"><div class="hero-overlay"></div>
+      <div class="hero-content"><div class="hero-eyebrow">Destination DnA: Double Fiesta Getaway · August 2026</div>
+        <div class="hero-title">Your New Room Awaits</div><div class="hero-sub">Majestic Elegance Costa Mujeres</div></div></div>
+    <div class="body">
+      <div class="action-banner"><div class="ab-title">⚡ What to Do — Please Read &amp; Reply Soon</div><div class="ab-text">Take a look at your room options below, choose your favorite, and tap <strong>"Pick This Room"</strong> as soon as you can. These are <strong>live rates that change with availability</strong>, so the sooner you decide, the better chance I have to lock in today's price for you. Right after you select, <strong>keep an eye out for your updated invoice</strong> showing any balance due.</div></div>
+      <p class="eyebrow">A Beautiful New Home for Our Group</p>
+      <h1 class="greet">Hello,<br><em>Elisabeth.</em></h1>
+      <div class="gold-rule"></div>
+      <p class="copy">I'm reaching out with an exciting update on your August getaway. With <strong>El Dorado Seaside &amp; Palms</strong> unavailable for our dates, your whole group's new home is <strong>Majestic Elegance Costa Mujeres</strong> — an adults-only <strong>Elegance Club</strong> resort with 24-hour butler service, seven pools, a private beach, and a private outdoor jacuzzi in every suite.</p>
+      <p class="copy">Below you'll find your <strong>new room most comparable to your El Dorado Junior Suite</strong> — the Elegance Club Jr. Suite — followed by other options to consider. Every rate shown is all-inclusive for your stay.</p>
+      <div class="showcase">
+        <p class="eyebrow">Welcome to Majestic Elegance</p>
+        <div class="gold-rule"></div>
+        <div class="showcase-grid">
+          <div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237402656_images.jpeg?alt=media&amp;token=6aef22c5-a921-4684-8e82-99c1827a7960" alt="Adults-only private beach" loading="lazy"><div class="sc-cap">Adults-only private beach</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784176193386_19_img-p_mecm_lobby-motor-exterior_01.jpg?alt=media&amp;token=705d7e23-746c-4625-8d18-09edd1aab042" alt="Grand arrival &amp; lobby" loading="lazy"><div class="sc-cap">Grand arrival &amp; lobby</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784236737480_main-pool.jpg?alt=media&amp;token=6daf4c4c-a3be-4c5d-b4d7-a7888055f049" alt="The main pool" loading="lazy"><div class="sc-cap">The main pool</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784236753516_pools-club-infinity-pool-and-swim-up-bar.jpg?alt=media&amp;token=3fa6088b-505d-4a7a-9ba3-94342c96f3c4" alt="Club infinity pool &amp; swim-up bar" loading="lazy"><div class="sc-cap">Club infinity pool &amp; swim-up bar</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1783632153587_club-infinity-pool-and-swim-up-bar.jpg?alt=media&amp;token=e6e59716-25e6-4c41-ac03-6d955b901189" alt="Elegance Club pool &amp; swim-up bar" loading="lazy"><div class="sc-cap">Elegance Club pool &amp; swim-up bar</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237047351_moon-bar.jpg?alt=media&amp;token=e328c320-c780-4fbb-bfc2-ff80e2ab5ba3" alt="Moon Bar" loading="lazy"><div class="sc-cap">Moon Bar</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237242742_20_img-p_mecm_bar_legends_1.jpg?alt=media&amp;token=58e79aa3-1585-4e14-b2c8-c2f2dfe764b1" alt="Legends Bar" loading="lazy"><div class="sc-cap">Legends Bar</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237489792_images-2.jpeg?alt=media&amp;token=1f2c0d27-806f-444d-a1e8-a12b49e86493" alt="The spa" loading="lazy"><div class="sc-cap">The spa</div></div><div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237822970_23_img-p_mecm_restaurants_el-mariachi-loco_02.jpg?alt=media&amp;token=1f34504b-ca22-4f56-96bf-446c767e3dbc" alt="Fiesta nights at Mariachi Loco" loading="lazy"><div class="sc-cap">Fiesta nights at Mariachi Loco</div></div>
+        </div>
+        <div class="hl-grid">
+          <div class="hl"><div class="hl-name">Elegance Club · Adults-Only</div><div class="hl-desc">24-hour butler service, a private lounge, and exclusive swim-up bars for our section.</div></div><div class="hl"><div class="hl-name">Costa Mujeres, Mexico</div><div class="hl-desc">Twenty minutes north of Cancún on a quiet, exclusive stretch of Caribbean coastline.</div></div><div class="hl"><div class="hl-name">Seven Pools + Private Beach</div><div class="hl-desc">Bali beds, swim-up bars, and an adults-only stretch of white-sand beach.</div></div><div class="hl"><div class="hl-name">Nine Restaurants Included</div><div class="hl-desc">Italian, Japanese teppanyaki, Argentinian steakhouse, French, Mexican, and more.</div></div>
+        </div>
+        <a class="btn-resort" href="https://booking.celebrationtravel.com/hotels/3142" target="_blank" rel="noopener">Explore the Full Resort &amp; Photos →</a>
+      </div>
+      <div class="overview">
+        <div class="overview-head">Your Current El Dorado Reservation</div>
+        <div class="ov-row"><span class="ov-label">Guests</span><span class="ov-value">Elisabeth Jane Koop Liechty + William Clark Tinder</span></div>
+        <div class="ov-row"><span class="ov-label">Reservation #</span><span class="ov-value">447393</span></div>
+        <div class="ov-row"><span class="ov-label">Arrival → Departure</span><span class="ov-value">August 27 → August 31, 2026</span></div>
+        <div class="ov-row"><span class="ov-label">Nights</span><span class="ov-value">4</span></div>
+        <div class="ov-row"><span class="ov-label">Room Type</span><span class="ov-value">Junior Suite</span></div>
+        <div class="ov-row"><span class="ov-label">Current Room Cost</span><span class="ov-value">$1,216.00 · room only</span></div>
+      </div>
+      <div class="section-lead"><div class="st">Your Room at Majestic Elegance</div><div class="ss">Most comparable first, then options · all-inclusive</div><div class="gold-rule"></div></div>
+      <div class="rcard match">
+    <img class="rphoto" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1783632058853_small_4x3_01_elegance-club-junior-suite-interior-with-view-medium-_1_.jpg?alt=media&amp;token=b465ffdb-fff0-4c66-aeb2-7b5a71fd3b96" alt="Elegance Club Jr. Suite" loading="lazy">
+    
+    <div class="rbody">
+      <div class="rlabel">★ Your New Room · Most Comparable</div>
+      <div class="rname">Elegance Club Jr. Suite</div>
+      <div class="rspecs">625 sq ft · 1 King or 2 Double beds · max 2 adults · Garden or pool view</div>
+      <ul class="rfeat"><li>Private outdoor jacuzzi &amp; lounge bed</li><li>Elegance Club lounge + 24-hr butler service</li><li>Adults-only (18+) Elegance Club section</li></ul>
+    </div>
+    <div class="rprice"><div class="rprice-l">Today's rate · subject to change</div>
+      <div class="rprice-r"><div class="rprice-amt">$1,429</div><div class="rprice-note">approx. total · 4 nights · transfers included</div></div></div>
+    <div class="rdiff pay">+$213 vs your current El Dorado room</div>
+    <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Selection%20%E2%80%94%20Elisabeth%20Jane%20Koop%20Liechty%20%C2%B7%20Reservation%20%23447393&amp;body=Hi%20Amy%2C%0A%0AI'd%20like%20to%20select%20this%20room%20for%20our%20Majestic%20Elegance%20stay%3A%0A%0AChosen%20room%3A%20Elegance%20Club%20Jr.%20Suite%0ARate%3A%20%241%2C429%20%E2%80%94%20all-inclusive%2C%20approximate%20live%20rate%20(4%20nights%2C%20transfers%20included)%0A%0AGuest(s)%3A%20Elisabeth%20Jane%20Koop%20Liechty%20%2B%20William%20Clark%20Tinder%0AReservation%20%23%3A%20447393%0ADates%3A%20August%2027%20%E2%80%93%20August%2031%2C%202026%0A%0AThank%20you!">Pick This Room →</a>
+  </div><div class="rcard">
+    <img class="rphoto" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784179325803_23_img-p_mecm_rooms_family_one-bedroom-suite_interior_01.jpg?alt=media&amp;token=0e1606a3-3896-4c15-91a2-3800b2401f28" alt="Elegance Club One Bedroom Suite" loading="lazy">
+    
+    <div class="rbody">
+      <div class="rlabel">Option 1</div>
+      <div class="rname">Elegance Club One Bedroom Suite</div>
+      <div class="rspecs">850 sq ft · 1 King · max 4 adults · Garden or pool view</div>
+      <ul class="rfeat"><li>Living room &amp; bedroom separated by doors</li><li>Private outdoor jacuzzi &amp; lounge bed</li><li>24-hr butler service</li></ul>
+    </div>
+    <div class="rprice"><div class="rprice-l">Today's rate · subject to change</div>
+      <div class="rprice-r"><div class="rprice-amt">$1,536</div><div class="rprice-note">approx. total · 4 nights · transfers included</div></div></div>
+    <div class="rdiff pay">+$320 vs your current El Dorado room</div>
+    <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Selection%20%E2%80%94%20Elisabeth%20Jane%20Koop%20Liechty%20%C2%B7%20Reservation%20%23447393&amp;body=Hi%20Amy%2C%0A%0AI'd%20like%20to%20select%20this%20room%20for%20our%20Majestic%20Elegance%20stay%3A%0A%0AChosen%20room%3A%20Elegance%20Club%20One%20Bedroom%20Suite%0ARate%3A%20%241%2C536%20%E2%80%94%20all-inclusive%2C%20approximate%20live%20rate%20(4%20nights%2C%20transfers%20included)%0A%0AGuest(s)%3A%20Elisabeth%20Jane%20Koop%20Liechty%20%2B%20William%20Clark%20Tinder%0AReservation%20%23%3A%20447393%0ADates%3A%20August%2027%20%E2%80%93%20August%2031%2C%202026%0A%0AThank%20you!">Pick This Room →</a>
+  </div><div class="rcard">
+    <img class="rphoto" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784179132916_21_img-p_mecm_rooms_club-rooms_majestic-junior-suite-swim-up_01.jpg?alt=media&amp;token=3642b2a4-042d-4eed-a938-14a425d2624c" alt="Elegance Club Majestic Jr. Suite · Swim-Up" loading="lazy">
+    
+    <div class="rbody">
+      <div class="rlabel">Option 2</div>
+      <div class="rname">Elegance Club Majestic Jr. Suite · Swim-Up</div>
+      <div class="rspecs">725 sq ft · 1 King · max 2 adults · Ground floor · Garden or pool view</div>
+      <ul class="rfeat"><li>Direct access to a private pool or the main swimming pool</li><li>Private outdoor jacuzzi &amp; lounge bed</li><li>24-hr butler service</li></ul>
+    </div>
+    <div class="rprice"><div class="rprice-l">Today's rate · subject to change</div>
+      <div class="rprice-r"><div class="rprice-amt">$1,622</div><div class="rprice-note">approx. total · 4 nights · transfers included</div></div></div>
+    <div class="rdiff pay">+$406 vs your current El Dorado room</div>
+    <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Selection%20%E2%80%94%20Elisabeth%20Jane%20Koop%20Liechty%20%C2%B7%20Reservation%20%23447393&amp;body=Hi%20Amy%2C%0A%0AI'd%20like%20to%20select%20this%20room%20for%20our%20Majestic%20Elegance%20stay%3A%0A%0AChosen%20room%3A%20Elegance%20Club%20Majestic%20Jr.%20Suite%20%C2%B7%20Swim-Up%0ARate%3A%20%241%2C622%20%E2%80%94%20all-inclusive%2C%20approximate%20live%20rate%20(4%20nights%2C%20transfers%20included)%0A%0AGuest(s)%3A%20Elisabeth%20Jane%20Koop%20Liechty%20%2B%20William%20Clark%20Tinder%0AReservation%20%23%3A%20447393%0ADates%3A%20August%2027%20%E2%80%93%20August%2031%2C%202026%0A%0AThank%20you!">Pick This Room →</a>
+  </div><div class="rcard">
+    <img class="rphoto" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1783632013220_small_4x3_01_elegance-club-swim-up-suite-poolside-terrace-medium.jpg?alt=media&amp;token=b02dec95-6275-4947-82e3-bbab3841fb66" alt="Elegance Club Swim-Up Suite" loading="lazy">
+    
+    <div class="rbody">
+      <div class="rlabel">Option 3</div>
+      <div class="rname">Elegance Club Swim-Up Suite</div>
+      <div class="rspecs">1,000 sq ft · 1 King · max 4 adults · Ground floor · Garden or pool view</div>
+      <ul class="rfeat"><li>Access to a private pool or the main swimming pool</li><li>Living room &amp; bedroom separated by doors</li><li>Private outdoor jacuzzi · 24-hr butler service</li></ul>
+    </div>
+    <div class="rprice"><div class="rprice-l">Today's rate · subject to change</div>
+      <div class="rprice-r"><div class="rprice-amt">$1,730</div><div class="rprice-note">approx. total · 4 nights · transfers included</div></div></div>
+    <div class="rdiff pay">+$514 vs your current El Dorado room</div>
+    <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Selection%20%E2%80%94%20Elisabeth%20Jane%20Koop%20Liechty%20%C2%B7%20Reservation%20%23447393&amp;body=Hi%20Amy%2C%0A%0AI'd%20like%20to%20select%20this%20room%20for%20our%20Majestic%20Elegance%20stay%3A%0A%0AChosen%20room%3A%20Elegance%20Club%20Swim-Up%20Suite%0ARate%3A%20%241%2C730%20%E2%80%94%20all-inclusive%2C%20approximate%20live%20rate%20(4%20nights%2C%20transfers%20included)%0A%0AGuest(s)%3A%20Elisabeth%20Jane%20Koop%20Liechty%20%2B%20William%20Clark%20Tinder%0AReservation%20%23%3A%20447393%0ADates%3A%20August%2027%20%E2%80%93%20August%2031%2C%202026%0A%0AThank%20you!">Pick This Room →</a>
+  </div><div class="rcard">
+    <img class="rphoto" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784179474929_21_img-p_mecm_club-rooms_pps-view_02.jpg?alt=media&amp;token=f5f40c98-f452-4ff7-a657-5ebfc552fd28" alt="Elegance Club Plunge Pool Suite" loading="lazy">
+    
+    <div class="rbody">
+      <div class="rlabel">Option 4</div>
+      <div class="rname">Elegance Club Plunge Pool Suite</div>
+      <div class="rspecs">1,025 sq ft · two-story · 1 King · max 2 adults · 5th floor</div>
+      <ul class="rfeat"><li>Private rooftop terrace with plunge pool</li><li>Divided over two floors — main room + terrace</li><li>Outdoor jacuzzi &amp; lounge bed · the couples’ favorite</li></ul>
+    </div>
+    <div class="rprice"><div class="rprice-l">Today's rate · subject to change</div>
+      <div class="rprice-r"><div class="rprice-amt">$1,794</div><div class="rprice-note">approx. total · 4 nights · transfers included</div></div></div>
+    <div class="rdiff pay">+$578 vs your current El Dorado room</div>
+    <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Selection%20%E2%80%94%20Elisabeth%20Jane%20Koop%20Liechty%20%C2%B7%20Reservation%20%23447393&amp;body=Hi%20Amy%2C%0A%0AI'd%20like%20to%20select%20this%20room%20for%20our%20Majestic%20Elegance%20stay%3A%0A%0AChosen%20room%3A%20Elegance%20Club%20Plunge%20Pool%20Suite%0ARate%3A%20%241%2C794%20%E2%80%94%20all-inclusive%2C%20approximate%20live%20rate%20(4%20nights%2C%20transfers%20included)%0A%0AGuest(s)%3A%20Elisabeth%20Jane%20Koop%20Liechty%20%2B%20William%20Clark%20Tinder%0AReservation%20%23%3A%20447393%0ADates%3A%20August%2027%20%E2%80%93%20August%2031%2C%202026%0A%0AThank%20you!">Pick This Room →</a>
+  </div>
+      <div class="note">Rates are all-inclusive for your 4-night stay, with round-trip airport transfers included, and are compared to your current El Dorado room-only cost. <strong>These are live rates based on current availability and can change at any time; the figure shown is an approximate total of all costs for the room.</strong> If your preferred room is no longer available or the pricing changes, I'll do my very best to accommodate you and will be in direct touch. <strong>All rooms and rates are subject to availability at the time of booking or making changes.</strong></div>
+      <div class="dining">
+        <p class="eyebrow">All-Inclusive Dining</p>
+        <div class="st">Nine Restaurants &amp; Fourteen Bars</div>
+        <div class="dining-photos"><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance-costa-mujeres%2F1784177906598_22_mecm_restaurant_el-mariachi-loco_01.jpg?alt=media&amp;token=5c06c581-9907-4a60-bd54-6077f78d1d65" alt="Mariachi Loco · Mexican with live mariachi" loading="lazy"><div class="dining-cap">Mariachi Loco · Mexican with live mariachi</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance-costa-mujeres%2F1784177904837_20_img-p_mecm_restaurant-kabuki-interior_01.jpg?alt=media&amp;token=b8614099-3b03-41d4-8037-71c28428944f" alt="Kabuki · Japanese teppanyaki &amp; sushi" loading="lazy"><div class="dining-cap">Kabuki · Japanese teppanyaki &amp; sushi</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance-costa-mujeres%2F1784177903139_19_img-p_mecm_restaurants_don-jaume-steakhouse_01.jpg?alt=media&amp;token=d794ef8c-84ed-4ba1-86e6-db1a379a666d" alt="Don Jaume · Argentinian steakhouse" loading="lazy"><div class="dining-cap">Don Jaume · Argentinian steakhouse</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237836978_21_img-p_restaurants_bistro_03.jpg?alt=media&amp;token=5becbf64-a1f1-4268-8778-80e4a3233786" alt="Bistro · gourmet French" loading="lazy"><div class="dining-cap">Bistro · gourmet French</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784237855530_19_img-p_mecm_restaurant-mar-house_01.jpg?alt=media&amp;token=97f23ede-0c02-449d-bd8f-817c98a9f0b9" alt="Mar House · beachfront seafood" loading="lazy"><div class="dining-cap">Mar House · beachfront seafood</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance-costa-mujeres%2F1784177901300_19_img-p_mecm_restaurant-flavours-buffet_02.jpg?alt=media&amp;token=a37f0084-98be-4e5e-816f-1480ff0ff591" alt="Flavors · international buffet" loading="lazy"><div class="dining-cap">Flavors · international buffet</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784238194454_23_img-p_mecm_bars_la-tequileria_06.jpg?alt=media&amp;token=fd0bf0b9-ba37-41fb-b589-264fa2d54257" alt="La Tequileria · tequila bar" loading="lazy"><div class="dining-cap">La Tequileria · tequila bar</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784238186155_23_img-p_mecm_bars_theater-bar_01.jpg?alt=media&amp;token=7a629c2c-94e8-49c3-b4b9-ba68c54fa85b" alt="Theater Bar" loading="lazy"><div class="dining-cap">Theater Bar</div></div><div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-elegance%2F1784238307344_23_img-p_mecm_restaurants_beach-grill_02.jpg?alt=media&amp;token=b4f861eb-f439-4566-88f1-fcb5cd9585ae" alt="Beach Grill · casual beachfront bites" loading="lazy"><div class="dining-cap">Beach Grill · casual beachfront bites</div></div></div>
+        <div class="dining-grid"><div class="dine"><div class="dine-name">Il Botaccio</div><div class="dine-desc">Italian fine dining</div></div><div class="dine"><div class="dine-name">Kabuki</div><div class="dine-desc">Japanese teppanyaki &amp; sushi</div></div><div class="dine"><div class="dine-name">Don Jaume</div><div class="dine-desc">Argentinian steakhouse</div></div><div class="dine"><div class="dine-name">Mariachi Loco</div><div class="dine-desc">Mexican · live mariachi &amp; tequila</div></div><div class="dine"><div class="dine-name">Bistro</div><div class="dine-desc">Gourmet French · adults-only</div></div><div class="dine"><div class="dine-name">Mar House</div><div class="dine-desc">Beachfront seafood &amp; buffet</div></div><div class="dine"><div class="dine-name">Flavors</div><div class="dine-desc">International buffet · show cooking</div></div><div class="dine"><div class="dine-name">McJestic &amp; Beach Grill</div><div class="dine-desc">Casual bites &amp; late-night</div></div></div>
+        <div class="dining-foot">Plus five Elegance Club swim-up bars, exclusively for our adults-only section.</div>
+      </div>
+      <div class="cta"><div class="st">Ready to Choose Your Room?</div>
+        <p>Just reply with your pick — your most comparable room or any option — and I'll get right on it. Because these are today's rates and rooms are filling quickly, <strong style="color:#D4B882;">please reply as soon as you can</strong> so I can book yours before it's no longer available at this price. I'm here for any questions along the way!</p></div>
+      <div class="sign">
+        <div class="sign-closer">With so much excitement for what's ahead — this is going to be an incredible trip,</div>
+        <div class="sign-name">Amy Cate</div>
+        <div class="sign-title">Certified Destination Wedding &amp; Group Travel Specialist</div>
+        <div class="sign-contact">amy.cate@destinationweddings.com · (832) 773-8664</div>
+      </div>
+    </div>
+    <div class="email-foot">Reservation #447393 · Destination DnA: Double Fiesta Getaway · August 2026<br>Destination Weddings Travel Group · Celebration Travel</div>
+  </div>
+</body></html>
