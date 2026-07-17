@@ -704,15 +704,14 @@ function resetAgent() {
   }
   document.getElementById('agent-modal').style.display = 'flex';
 }
-// Show modal on first load if no agent saved
+// Always show agent modal on load — pre-fill if already saved so it's a quick confirm/switch
 window.addEventListener('DOMContentLoaded', function() {
   const a = getAgent();
-  if (!a) {
-    document.getElementById('agent-modal').style.display = 'flex';
-  } else {
-    document.getElementById('agent-modal').style.display = 'none';
-    updateAgentBadge();
+  if(a) {
+    const set = (id,v) => { const el=document.getElementById(id); if(el) el.value=v||''; };
+    set('am-first', a.first); set('am-full', a.full); set('am-email', a.email); set('am-phone', a.phone);
   }
+  document.getElementById('agent-modal').style.display = 'flex';
 });
 
 // Default wedding hero — your existing template photo (replace URL with your beach photo once uploaded to Firebase Storage)
