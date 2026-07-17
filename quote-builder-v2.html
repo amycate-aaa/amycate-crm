@@ -455,6 +455,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r1guide" placeholder="https://storage.googleapis.com/dwt-documents/…"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-filled from CRM if saved</span></label><input id="w-r1realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r1weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL (optional)</label><input id="w-r1offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label (optional)</label><input id="w-r1offerLabel" placeholder="Free Catamaran Cruise in Punta Cana →"></div></div>
     </div>
@@ -493,6 +494,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r2guide"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL</label><input id="w-r2realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r2weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL</label><input id="w-r2offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label</label><input id="w-r2offerLabel"></div></div>
     </div>
@@ -531,6 +533,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r3guide"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL</label><input id="w-r3realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r3weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL</label><input id="w-r3offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label</label><input id="w-r3offerLabel"></div></div>
     </div>
@@ -565,6 +568,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r4guide"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL</label><input id="w-r4realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r4weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL</label><input id="w-r4offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label</label><input id="w-r4offerLabel"></div></div>
     </div>
@@ -599,6 +603,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r5guide"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL</label><input id="w-r5realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r5weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL</label><input id="w-r5offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label</label><input id="w-r5offerLabel"></div></div>
     </div>
@@ -633,6 +638,7 @@ Complimentary concierge and computer access</textarea>
       </div></div>
       <div class="row full"><div class="field"><label>Wedding Guide PDF URL</label><input id="w-r6guide"></div></div>
       <div class="row full"><div class="field"><label>Real Weddings URL</label><input id="w-r6realWeddings" placeholder="https://www.destinationweddings.com/real-weddings/…"></div></div>
+      <input type="hidden" id="w-r6weddingUrl">
       <div class="row full"><div class="field"><label>Exclusive Offer URL</label><input id="w-r6offer"></div></div>
       <div class="row full"><div class="field"><label>Exclusive Offer Label</label><input id="w-r6offerLabel"></div></div>
     </div>
@@ -642,6 +648,7 @@ Complimentary concierge and computer access</textarea>
 
 <div class="generate-bar">
   <button class="btn-gen" id="genBtn" onclick="generate()">Generate Quote Files</button>
+  <button class="btn-gen" id="regenBtn" onclick="generate()" style="display:none;background:#2a2a2a;border:1px solid #555;">🔄 Regenerate</button>
   <span class="gen-status" id="genStatus">Ready — fill in the form then click Generate.</span>
   <div class="dl-links" id="dlLinks"></div>
 </div>
@@ -1048,6 +1055,11 @@ async function onWResortChange(n){
   if(rwField&&!rwField.value&&(r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl)){
     rwField.value=r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl;
   }
+  // Auto-populate Wedding Page URL
+  const wuField=document.getElementById('w-r'+n+'weddingUrl');
+  if(wuField&&!wuField.value&&r.weddingUrl){
+    wuField.value=r.weddingUrl;
+  }
   // Auto-populate Wedding Guide PDF URL — from Firestore, then localStorage, then built-in fallback
   const guideField=document.getElementById('w-r'+n+'guide');
   if(guideField&&!guideField.value){
@@ -1133,6 +1145,8 @@ async function generate(){
       status.textContent='Loading resort data from CRM…';
       await generateWedding(status);
     }
+    document.getElementById('regenBtn').style.display='inline-block';
+    document.getElementById('genBtn').style.display='none';
   }catch(err){
     status.textContent='❌ '+err.message;
     console.error(err);
@@ -1467,12 +1481,12 @@ async function generateWedding(status){
     savingsLink:val('w-savingsLink')||'https://www.destinationweddings.com/exclusive-offers/major-wedding-savings',
     resorts,
     rf:[
-      {heroPhoto:val('w-r1heroPhoto'),nights:val('w-r1nights'),roomName:val('w-r1roomName'),price:val('w-r1price'),priceNote:val('w-r1priceNote'),desc:val('w-r1desc'),guide:val('w-r1guide'),realWeddings:val('w-r1realWeddings'),offer:val('w-r1offer'),offerLabel:val('w-r1offerLabel')},
-      {heroPhoto:val('w-r2heroPhoto'),nights:val('w-r2nights'),roomName:val('w-r2roomName'),price:val('w-r2price'),priceNote:val('w-r2priceNote'),desc:val('w-r2desc'),guide:val('w-r2guide'),realWeddings:val('w-r2realWeddings'),offer:val('w-r2offer'),offerLabel:val('w-r2offerLabel')},
-      {heroPhoto:val('w-r3heroPhoto'),nights:val('w-r3nights'),roomName:val('w-r3roomName'),price:val('w-r3price'),priceNote:val('w-r3priceNote'),desc:val('w-r3desc'),guide:val('w-r3guide'),realWeddings:val('w-r3realWeddings'),offer:val('w-r3offer'),offerLabel:val('w-r3offerLabel')},
-      {heroPhoto:val('w-r4heroPhoto'),nights:val('w-r4nights'),roomName:val('w-r4roomName'),price:val('w-r4price'),priceNote:val('w-r4priceNote'),desc:val('w-r4desc'),guide:val('w-r4guide'),realWeddings:val('w-r4realWeddings'),offer:val('w-r4offer'),offerLabel:val('w-r4offerLabel')},
-      {heroPhoto:val('w-r5heroPhoto'),nights:val('w-r5nights'),roomName:val('w-r5roomName'),price:val('w-r5price'),priceNote:val('w-r5priceNote'),desc:val('w-r5desc'),guide:val('w-r5guide'),realWeddings:val('w-r5realWeddings'),offer:val('w-r5offer'),offerLabel:val('w-r5offerLabel')},
-      {heroPhoto:val('w-r6heroPhoto'),nights:val('w-r6nights'),roomName:val('w-r6roomName'),price:val('w-r6price'),priceNote:val('w-r6priceNote'),desc:val('w-r6desc'),guide:val('w-r6guide'),realWeddings:val('w-r6realWeddings'),offer:val('w-r6offer'),offerLabel:val('w-r6offerLabel')}
+      {heroPhoto:val('w-r1heroPhoto'),nights:val('w-r1nights'),roomName:val('w-r1roomName'),price:val('w-r1price'),priceNote:val('w-r1priceNote'),desc:val('w-r1desc'),guide:val('w-r1guide'),realWeddings:val('w-r1realWeddings'),weddingUrl:val('w-r1weddingUrl'),offer:val('w-r1offer'),offerLabel:val('w-r1offerLabel')},
+      {heroPhoto:val('w-r2heroPhoto'),nights:val('w-r2nights'),roomName:val('w-r2roomName'),price:val('w-r2price'),priceNote:val('w-r2priceNote'),desc:val('w-r2desc'),guide:val('w-r2guide'),realWeddings:val('w-r2realWeddings'),weddingUrl:val('w-r2weddingUrl'),offer:val('w-r2offer'),offerLabel:val('w-r2offerLabel')},
+      {heroPhoto:val('w-r3heroPhoto'),nights:val('w-r3nights'),roomName:val('w-r3roomName'),price:val('w-r3price'),priceNote:val('w-r3priceNote'),desc:val('w-r3desc'),guide:val('w-r3guide'),realWeddings:val('w-r3realWeddings'),weddingUrl:val('w-r3weddingUrl'),offer:val('w-r3offer'),offerLabel:val('w-r3offerLabel')},
+      {heroPhoto:val('w-r4heroPhoto'),nights:val('w-r4nights'),roomName:val('w-r4roomName'),price:val('w-r4price'),priceNote:val('w-r4priceNote'),desc:val('w-r4desc'),guide:val('w-r4guide'),realWeddings:val('w-r4realWeddings'),weddingUrl:val('w-r4weddingUrl'),offer:val('w-r4offer'),offerLabel:val('w-r4offerLabel')},
+      {heroPhoto:val('w-r5heroPhoto'),nights:val('w-r5nights'),roomName:val('w-r5roomName'),price:val('w-r5price'),priceNote:val('w-r5priceNote'),desc:val('w-r5desc'),guide:val('w-r5guide'),realWeddings:val('w-r5realWeddings'),weddingUrl:val('w-r5weddingUrl'),offer:val('w-r5offer'),offerLabel:val('w-r5offerLabel')},
+      {heroPhoto:val('w-r6heroPhoto'),nights:val('w-r6nights'),roomName:val('w-r6roomName'),price:val('w-r6price'),priceNote:val('w-r6priceNote'),desc:val('w-r6desc'),guide:val('w-r6guide'),realWeddings:val('w-r6realWeddings'),weddingUrl:val('w-r6weddingUrl'),offer:val('w-r6offer'),offerLabel:val('w-r6offerLabel')}
     ]
   };
   const safe=safeName(wv.couple);
@@ -1687,6 +1701,7 @@ function buildWeddingFull(wv){
         ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Destination Weddings</div><div class="resort-link-text">View on Destination Weddings →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.guide?`<a href="${escUrl(rf.guide)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Wedding Guide</div><div class="resort-link-text">View ${esc(r.name)} Wedding Guide →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.realWeddings?`<a href="${escUrl(rf.realWeddings)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Real Weddings</div><div class="resort-link-text">See Real Weddings at ${esc(r.name)} →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
+        ${rf.weddingUrl?`<a href="${escUrl(rf.weddingUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Explore Weddings</div><div class="resort-link-text">Wedding Options at ${esc(r.name)} →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.offer?`<a href="${escUrl(rf.offer)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Exclusive Offer</div><div class="resort-link-text">${esc(offerLabel)}</div></div><span class="resort-link-arrow">↗</span></a>`:''}
       </div>
     </div>
