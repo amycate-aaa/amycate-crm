@@ -217,6 +217,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         </div>
 
         <div class="form-group">
+          <label>Wedding Page URL <span style="color:#888;font-size:.75rem;">(resort wedding page &mdash; shows as &ldquo;Explore Weddings&rdquo; link on quote)</span></label>
+          <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://www.destinationweddings.com/resorts/...">
+        </div>
+
+        <div class="form-group">
           <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional â AIC media vault etc.)</span></label>
           <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
         </div>
@@ -592,13 +597,15 @@ async function loadResortProfile() {
       const d = doc.data();
       document.getElementById('profileTagline').value = d.tagline || '';
       document.getElementById('profileDescription').value = d.description || '';
-      document.getElementById('profileHighlights').value = d.highlights || '';
+      document.getElementById('profileHighlights').value = Array.isArray(d.highlights) ? d.highlights.join(' · ') : (d.highlights || '');
       document.getElementById('profileStars').value = d.stars || '';
       document.getElementById('profileBookingLink').value = d.bookingLink || '';
       document.getElementById('profileGalleryLink').value = d.galleryLink || '';
       document.getElementById('profileNotes').value = d.notes || '';
-      document.getElementById('profileClubName').value = d.clubName || '';
-      document.getElementById('profileClubPerks').value = d.clubPerks || '';
+      document.getElementById('profileWeddingUrl').value = d.weddingUrl || '';
+      document.getElementById('profileClubName').value = d.clubLevelName || d.clubName || '';
+      const rawPerks = d.clubLevelPerks || d.clubPerks || '';
+      document.getElementById('profileClubPerks').value = Array.isArray(rawPerks) ? rawPerks.join('\n') : rawPerks;
       document.getElementById('profileWeddingGuide').value = d.weddingGuide || '';
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
@@ -618,7 +625,7 @@ async function loadResortProfile() {
       if (venueListClear) venueListClear.innerHTML = '';
       const pkgListClear = document.getElementById('pkg-list');
       if (pkgListClear) pkgListClear.innerHTML = '';
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileWeddingUrl','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
         document.getElementById(id).value = '';
       });
       document.getElementById('profileStars').value = '';
@@ -703,10 +710,13 @@ async function saveResortProfile() {
     stars:        document.getElementById('profileStars').value,
     bookingLink:  document.getElementById('profileBookingLink').value.trim(),
     galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
-    notes:        document.getElementById('profileNotes').value.trim(),
-    clubName:     document.getElementById('profileClubName').value.trim(),
-    clubPerks:    document.getElementById('profileClubPerks').value.trim(),
-    weddingGuide: document.getElementById('profileWeddingGuide').value.trim(),
+    notes:           document.getElementById('profileNotes').value.trim(),
+    weddingUrl:      document.getElementById('profileWeddingUrl').value.trim(),
+    clubLevelName:   document.getElementById('profileClubName').value.trim(),
+    clubName:        document.getElementById('profileClubName').value.trim(),
+    clubLevelPerks:  document.getElementById('profileClubPerks').value.trim(),
+    clubPerks:       document.getElementById('profileClubPerks').value.trim(),
+    weddingGuide:    document.getElementById('profileWeddingGuide').value.trim(),
     venues:       getVenues(),
     packages:     getPackages(),
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
