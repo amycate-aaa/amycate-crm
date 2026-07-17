@@ -696,12 +696,13 @@ function updateAgentBadge() {
   if (badge) badge.innerHTML = `Sending as: <strong style="color:#7A6348">${agentVal('full')}</strong> &nbsp;<a href="#" onclick="resetAgent();return false;" style="color:#B8A992;font-size:11px;">change</a>`;
 }
 function resetAgent() {
-  try { localStorage.removeItem('quoteBuilderAgent'); } catch(e){}
-  const m = document.getElementById('agent-modal');
-  m.style.display = 'flex';
-  ['am-first','am-full','am-email','am-phone'].forEach(id => {
-    const el = document.getElementById(id); if(el) el.value='';
-  });
+  // Pre-fill modal with existing values so you can just change what you need
+  const a = getAgent();
+  if(a) {
+    const set = (id,v) => { const el=document.getElementById(id); if(el) el.value=v||''; };
+    set('am-first', a.first); set('am-full', a.full); set('am-email', a.email); set('am-phone', a.phone);
+  }
+  document.getElementById('agent-modal').style.display = 'flex';
 }
 // Show modal on first load if no agent saved
 window.addEventListener('DOMContentLoaded', function() {
@@ -728,6 +729,18 @@ function setMode(m){
   document.getElementById('form-wedding').classList.toggle('hidden', m!=='wedding');
   document.getElementById('tab-fit').classList.toggle('active', m==='fit');
   document.getElementById('tab-wedding').classList.toggle('active', m==='wedding');
+  if(m==='wedding'){
+    const coupleField = document.getElementById('w-couple');
+    if(coupleField && !coupleField.value.trim()){
+      setTimeout(()=>{
+        coupleField.scrollIntoView({behavior:'smooth',block:'center'});
+        coupleField.focus();
+        coupleField.style.borderColor='var(--gold-2)';
+        coupleField.style.boxShadow='0 0 0 3px rgba(184,151,90,0.3)';
+        setTimeout(()=>{coupleField.style.borderColor='';coupleField.style.boxShadow='';},2500);
+      },150);
+    }
+  }
 }
 
 function esc(s){
