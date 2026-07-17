@@ -1505,7 +1505,13 @@ function pkgPrice(p){
   // Try all possible Firestore field names for price
   const v=p.price??p.startingPrice??p.priceFrom??p.cost??p.basePrice??p.amount??p.priceUsd??p.rate??p.packagePrice??p.pricePerPerson??p.totalPrice??p.listPrice??null;
   if(v===null||v===undefined||v==='') return '';
-  return formatMoney(v);
+  const s=String(v).trim().toLowerCase();
+  // Suppress non-price placeholder text
+  if(s==='0'||s==='$0'||s.includes('contact')||s.includes('tbd')||s.includes('poa')||s==='n/a'||s==='-'||s==='—'||s==='free') return '';
+  const formatted=formatMoney(v);
+  // If formatMoney returned a string with no digits, suppress it
+  if(!/\d/.test(formatted)) return '';
+  return formatted;
 }
 
 function pkgHighlights(p){
@@ -1638,10 +1644,10 @@ function buildWeddingFull(wv){
           ${hi&&!bulletsHTML&&!desc?`<div class="pkg-row-highlights">${esc(hi)}</div>`:''}
           ${bulletsHTML}
         </div>
-        <div style="text-align:right;min-width:140px;">
-          <div class="pkg-row-price">${price?esc(price):'—'}</div>
-          <div class="pkg-row-price-note">${price?'starting price':'contact for pricing'}</div>
-        </div>
+        ${price?`<div style="text-align:right;min-width:140px;">
+          <div class="pkg-row-price">${esc(price)}</div>
+          <div class="pkg-row-price-note">starting price</div>
+        </div>`:''}
       </div>`;
     }).join('');
 
