@@ -1505,13 +1505,18 @@ function pkgPrice(p){
   // Try all possible Firestore field names for price
   const v=p.price??p.startingPrice??p.priceFrom??p.cost??p.basePrice??p.amount??p.priceUsd??p.rate??p.packagePrice??p.pricePerPerson??p.totalPrice??p.listPrice??null;
   if(v===null||v===undefined||v==='') return '';
-  const s=String(v).trim().toLowerCase();
+  const s=String(v).trim();
+  const sl=s.toLowerCase();
   // Suppress non-price placeholder text
-  if(s==='0'||s==='$0'||s.includes('contact')||s.includes('tbd')||s.includes('poa')||s==='n/a'||s==='-'||s==='—'||s==='free') return '';
-  const formatted=formatMoney(v);
-  // If formatMoney returned a string with no digits, suppress it
-  if(!/\d/.test(formatted)) return '';
-  return formatted;
+  if(sl==='0'||sl==='$0'||sl.includes('contact')||sl.includes('tbd')||sl.includes('poa')||sl==='n/a'||sl==='-'||sl==='—') return '';
+  // If it already contains a $ or "From", return as-is (already formatted)
+  if(s.includes('$')||sl.startsWith('from')||sl==='free'||sl==='complimentary'||sl==='included') return s;
+  // Pure number — format it
+  const num=parseFloat(s.replace(/[,$]/g,''));
+  if(!isNaN(num)) return formatMoney(num);
+  // Unknown non-empty string with no digits = treat as missing
+  if(!/\d/.test(s)) return '';
+  return s;
 }
 
 function pkgHighlights(p){
