@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DWT Profile Auto-Importer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-height:100vh;}
+.header{background:#1E1A14;padding:20px 32px;display:flex;align-items:center;gap:16px;}
+.header h1{font-family:Georgia,serif;font-size:20px;color:#fff;font-weight:400;}
+.header .sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B8975A;}
+.wrapper{max-width:860px;margin:0 auto;padding:32px 24px 80px;}
+.card{background:#fff;border:1px solid #ddd;border-radius:6px;margin-bottom:20px;overflow:hidden;}
+.card-head{padding:14px 20px;background:#f9f6f1;border-bottom:1px solid #eee;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5C5044;display:flex;justify-content:space-between;align-items:center;}
+.card-body{padding:20px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:none;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.2s;}
+.btn-primary{background:#D4B882;color:#1E1A14;}
+.btn-primary:hover{background:#B8975A;color:#fff;}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.btn-sm{padding:8px 16px;font-size:10px;}
+.progress-bar-wrap{background:#eee;border-radius:20px;height:12px;margin:12px 0;}
+.progress-bar{background:linear-gradient(90deg,#B8975A,#D4B882);height:12px;border-radius:20px;transition:width .4s;}
+.status-line{font-size:13px;color:#5C5044;margin:6px 0;}
+.log{background:#1E1A14;border-radius:4px;padding:16px;max-height:320px;overflow-y:auto;font-family:monospace;font-size:12px;color:#ccc;line-height:1.7;}
+.log .ok{color:#27ae60;}
+.log .skip{color:#f0c958;}
+.log .err{color:#e74c3c;}
+.log .info{color:#3498db;}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;}
+.stat-box{background:#f9f6f1;border-radius:4px;padding:14px;text-align:center;}
+.stat-num{font-size:28px;font-weight:700;color:#B8975A;font-family:Georgia,serif;}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#9C8E80;margin-top:4px;}
+.field-row{display:flex;gap:16px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+.field-row label{display:flex;align-items:center;gap:6px;font-size:13px;color:#5C5044;cursor:pointer;}
+.field-row input[type=checkbox]{width:16px;height:16px;accent-color:#B8975A;cursor:pointer;}
+iframe#scraper{display:none;width:1400px;height:900px;position:fixed;top:-9999px;left:-9999px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><div class="sub">CRM Tools</div><h1>DWT Profile Auto-Importer</h1></div>
+</div>
+
+<iframe id="scraper"></iframe>
+
+<div class="wrapper">
+
+  <div class="card">
+    <div class="card-head">What This Does</div>
+    <div class="card-body" style="font-size:14px;color:#5C5044;line-height:1.8;">
+      Loads each resort's Destination Weddings page, extracts <strong>description, tagline, highlights, venues (with photos), wedding packages, and resort photos</strong> — then writes them to Firestore.
+      <br><br>
+      <strong style="color:#c0392b;">⚠ Photo protection:</strong> Only replaces photos previously imported by this tool (<code>source: dwt-import</code>). Any photos you manually uploaded are <strong>never touched</strong>.
+      <br>
+      <strong style="color:#1E1A14;">Text data always overwrites</strong> (description, highlights, venues, packages) — so you always get the latest from DWT.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">Import Settings</div>
+    <div class="card-body">
+      <div class="field-row">
+        <label><input type="checkbox" id="opt-desc" checked> Description &amp; Tagline</label>
+        <label><input type="checkbox" id="opt-highlights" checked> Highlights</label>
+        <label><input type="checkbox" id="opt-venues" checked> Venues (with photos)</label>
+        <label><input type="checkbox" id="opt-packages" checked> Wedding Packages</label>
+        <label><input type="checkbox" id="opt-photos" checked> Resort Photos → resortPhotos</label>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="startBtn" onclick="startImport()">▶ Start Import</button>
+        <button class="btn btn-sm" id="stopBtn" onclick="stopImport()" style="display:none;background:#e74c3c;color:#fff;">⏹ Stop</button>
+        <span id="loginStatus" style="font-size:12px;color:#9C8E80;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="card-head">Progress</div>
+    <div class="card-body">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="status-line" id="statusLine">Starting…</div>
+      <div class="summary-grid">
+        <div class="stat-box"><div class="stat-num" id="statDone">0</div><div class="stat-label">Processed</div></div>
+        <div class="stat-box"><div class="stat-num" id="statUpdated">0</div><div class="stat-label">Updated</div></div>
+        <div class="stat-box"><div class="stat-num" id="statSkipped">0</div><div class="stat-label">Skipped</div></div>
+        <div class="stat-box"><div class="stat-num" id="statErrors">0</div><div class="stat-label">Errors</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="logCard" style="display:none;">
+    <div class="card-head">
+      <span>Import Log</span>
+      <button class="btn btn-sm" onclick="document.getElementById('log').innerHTML=''" style="background:#eee;color:#555;padding:4px 10px;">Clear</button>
+    </div>
+    <div class="card-body" style="padding:12px;">
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+if (!firebase.apps.length) {
+  firebase.initializeApp({apiKey:'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js', projectId:'wedding-crm-e5d12'});
+}
+const db = firebase.firestore();
+
+let _resorts = [], _running = false;
+let _statDone=0, _statUpdated=0, _statSkipped=0, _statErrors=0;
+
+function log(msg, type=''){
+  const el=document.getElementById('log');
+  const d=document.createElement('div'); d.className=type; d.textContent=msg;
+  el.appendChild(d); el.scrollTop=el.scrollHeight;
+}
+function updateStats(){
+  document.getElementById('statDone').textContent=_statDone;
+  document.getElementById('statUpdated').textContent=_statUpdated;
+  document.getElementById('statSkipped').textContent=_statSkipped;
+  document.getElementById('statErrors').textContent=_statErrors;
+}
+
+// ── DWT Page Scraper ──────────────────────────────────────
+function scrapeDwtPage(doc) {
+  try {
+    const bodyText = doc.body?.innerText || '';
+
+    // Name
+    const name = doc.querySelector('h1')?.textContent?.trim() || '';
+
+    // Description: first large text blocks
+    const paragraphs = [...doc.querySelectorAll('p')]
+      .map(p => p.textContent.trim())
+      .filter(t => t.length > 60 && !t.startsWith('©') && !t.includes('cookie'));
+    const description = paragraphs.slice(0, 4).join('\n\n');
+    const tagline = paragraphs[0]?.split('.')[0]?.trim() || '';
+
+    // Highlights: look for bullet lists or highlight sections
+    const highlights = [];
+    doc.querySelectorAll('ul li, .highlights li, .amenities li').forEach(li => {
+      const t = li.textContent.trim();
+      if (t.length > 3 && t.length < 120) highlights.push(t);
+    });
+
+    // Venues: sections with "venue" in heading or class
+    const venues = [];
+    const seenVenues = new Set();
+    doc.querySelectorAll('h2,h3,h4').forEach(h => {
+      const hText = h.textContent.trim();
+      // Look for venue-like headings (capacity, outdoor, indoor, ceremony, etc.)
+      const isVenue = /venue|ceremony|reception|terrace|garden|beach|chapel|rooftop|ballroom|gazebo/i.test(hText);
+      if (!isVenue || seenVenues.has(hText) || hText.length < 4) return;
+      seenVenues.add(hText);
+
+      let container = h.parentElement;
+      for (let i=0; i<4; i++) {
+        if (!container) break;
+        const img = container.querySelector('img[src]');
+        const desc = [...container.querySelectorAll('p')].map(p=>p.textContent.trim()).filter(t=>t.length>20)[0]||'';
+        const cap = (container.textContent.match(/(\d+)\s*(guests?|people|persons?)/i)||[])[1]||'';
+        if (img || desc) {
+          venues.push({ name: hText, description: desc, capacity: cap ? cap+' guests' : '', photo: img?.src||'' });
+          break;
+        }
+        container = container.parentElement;
+      }
+    });
+
+    // Wedding packages
+    const packages = [];
+    const seenPkgs = new Set();
+    doc.querySelectorAll('h2,h3,h4').forEach(h => {
+      const hText = h.textContent.trim();
+      const isPkg = /package|collection|ceremony|all\s*inclusive|elopement|intimate/i.test(hText);
+      if (!isPkg || seenPkgs.has(hText) || hText.length < 4 || venues.some(v=>v.name===hText)) return;
+      seenPkgs.add(hText);
+
+      let container = h.parentElement;
+      for (let i=0; i<4; i++) {
+        if (!container) break;
+        const desc = [...container.querySelectorAll('p,li')].map(e=>e.textContent.trim()).filter(t=>t.length>20).join(' · ').substring(0,400);
+        const price = (container.textContent.match(/\$[\d,]+/)||[])[0]||'';
+        if (desc) {
+          packages.push({ name: hText, highlights: desc, price });
+          break;
+        }
+        container = container.parentElement;
+      }
+    });
+
+    // Photos: quality images only
+    const photos = [...new Set(
+      [...doc.querySelectorAll('img[src]')]
+        .map(i => i.src)
+        .filter(s => s.startsWith('https') && !s.includes('icon') && !s.includes('logo')
+          && !s.includes('star') && !s.includes('.svg') && !s.includes('flag')
+          && !s.includes('avatar') && !s.includes('placeholder')
+          && (s.includes('.jpg')||s.includes('.jpeg')||s.includes('.png')||s.includes('.webp')))
+    )];
+
+    return { name, description, tagline, highlights, venues, packages, photos };
+  } catch(e) { return null; }
+}
+
+// ── Load iframe ───────────────────────────────────────────
+function loadInIframe(url) {
+  return new Promise(resolve => {
+    const frame = document.getElementById('scraper');
+    const timeout = setTimeout(() => resolve(frame.contentDocument), 15000);
+    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(frame.contentDocument), 4000); };
+    frame.src = url;
+  });
+}
+
+// ── Write to Firestore ────────────────────────────────────
+async function writeProfile(slug, scraped, opts) {
+  const update = {};
+  let changed = false;
+  const set = (k,v) => { if(v!==undefined && v!=='' && (Array.isArray(v)?v.length>0:true)){ update[k]=v; changed=true; } };
+
+  if (opts.desc) {
+    set('description', scraped.description);
+    set('tagline', scraped.tagline);
+  }
+  if (opts.highlights && scraped.highlights.length) set('highlights', scraped.highlights.join(' · '));
+  if (opts.venues    && scraped.venues.length)     set('venues', scraped.venues);
+  if (opts.packages  && scraped.packages.length)   set('packages', scraped.packages);
+
+  if (changed) await db.collection('resortProfiles').doc(slug).set(update, { merge: true });
+
+  // Photos: only replace previously dwt-imported photos
+  if (opts.photos && scraped.photos.length) {
+    const oldSnap = await db.collection('resortPhotos')
+      .where('resortSlug','==',slug).where('source','==','dwt-import').get();
+    if (!oldSnap.empty) {
+      const del = db.batch();
+      oldSnap.docs.forEach(d => del.delete(d.ref));
+      await del.commit();
+    }
+    // Only add if resort has NO manually-uploaded photos OR only has dwt-import photos
+    const manualSnap = await db.collection('resortPhotos')
+      .where('resortSlug','==',slug).limit(1).get();
+    if (manualSnap.empty) {
+      const add = db.batch();
+      scraped.photos.slice(0, 12).forEach(url => {
+        add.set(db.collection('resortPhotos').doc(), {
+          resortSlug: slug, url,
+          roomCategory: '', category: 'Resort',
+          source: 'dwt-import',
+          importedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      });
+      await add.commit();
+    }
+    changed = true;
+  }
+
+  return changed;
+}
+
+// ── Main loop ─────────────────────────────────────────────
+async function startImport() {
+  if (_running) return;
+  const opts = {
+    desc:       document.getElementById('opt-desc').checked,
+    highlights: document.getElementById('opt-highlights').checked,
+    venues:     document.getElementById('opt-venues').checked,
+    packages:   document.getElementById('opt-packages').checked,
+    photos:     document.getElementById('opt-photos').checked,
+  };
+
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('stopBtn').style.display = 'inline-flex';
+  document.getElementById('progressCard').style.display = 'block';
+  document.getElementById('logCard').style.display = 'block';
+  document.getElementById('scraper').style.display = 'block';
+
+  _running = true;
+  _statDone=_statUpdated=_statSkipped=_statErrors=0;
+
+  log('Loading resorts with DWT URLs from Firestore…', 'info');
+  try {
+    const snap = await db.collection('resortProfiles').where('dwtUrl','!=','').get();
+    const seen = new Set();
+    _resorts = [];
+    snap.docs.forEach(d => {
+      const data = d.data();
+      const url = data.dwtUrl || data.bookingLink || '';
+      if (!url || !url.includes('destinationweddings.com')) return;
+      if (seen.has(url)) return;
+      seen.add(url);
+      _resorts.push({ slug: d.id, name: data.name||d.id, dwtUrl: url });
+    });
+  } catch(e) {
+    log('❌ Failed to load resorts: ' + e.message, 'err');
+    stopImport(); return;
+  }
+  log(`Found ${_resorts.length} resorts with DWT URLs. Starting…`, 'info');
+
+  for (let i=0; i<_resorts.length; i++) {
+    if (!_running) break;
+    const r = _resorts[i];
+    const pct = Math.round((i/_resorts.length)*100);
+    document.getElementById('progressBar').style.width = pct+'%';
+    document.getElementById('statusLine').textContent = `[${i+1}/${_resorts.length}] ${r.name}…`;
+
+    try {
+      log(`[${i+1}/${_resorts.length}] ${r.name}`, 'info');
+      const doc = await loadInIframe(r.dwtUrl);
+      if (!doc) throw new Error('iframe timeout');
+
+      const scraped = scrapeDwtPage(doc);
+      if (!scraped || !scraped.name) {
+        log('  ⚠ Could not extract — skipping', 'skip');
+        _statSkipped++; _statDone++; updateStats(); continue;
+      }
+      log(`  ✓ ${scraped.venues.length} venues · ${scraped.packages.length} pkgs · ${scraped.photos.length} photos`, 'ok');
+
+      const changed = await writeProfile(r.slug, scraped, opts);
+      if (changed) { log('  ✅ Saved to Firestore', 'ok'); _statUpdated++; }
+      else          { log('  ○ No changes', 'skip'); _statSkipped++; }
+
+    } catch(e) {
+      log('  ❌ ' + e.message, 'err');
+      _statErrors++;
+    }
+    _statDone++; updateStats();
+    await new Promise(r => setTimeout(r, 600));
+  }
+
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('statusLine').textContent =
+    `✅ Done! ${_statUpdated} updated · ${_statSkipped} skipped · ${_statErrors} errors`;
+  log(`\n✅ COMPLETE — ${_statUpdated} updated · ${_statSkipped} skipped · ${_statErrors} errors`, 'ok');
+  stopImport();
+}
+
+function stopImport() {
+  _running = false;
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').style.display = 'none';
+  document.getElementById('scraper').src = 'about:blank';
+}
+
+window.addEventListener('load', async () => {
+  try {
+    const snap = await db.collection('resortProfiles').where('dwtUrl','!=','').get();
+    const count = snap.size;
+    document.getElementById('loginStatus').textContent = `✓ Firebase connected · ${count} resorts with DWT URLs`;
+    document.getElementById('loginStatus').style.color = '#27ae60';
+    document.getElementById('startBtn').textContent = `▶ Start Import (${count} Resorts)`;
+  } catch(e) {
+    document.getElementById('loginStatus').textContent = '⚠ ' + e.message;
+    document.getElementById('loginStatus').style.color = '#c0392b';
+  }
+});
+</script>
+</body>
+</html>
