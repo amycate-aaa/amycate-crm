@@ -158,6 +158,107 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="page-title">&#127968; Resort Photo Library</div>
     <div class="page-sub">Upload &amp; manage resort photos for group sites &mdash; one upload, use everywhere</div>
   </div>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+    <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
+    <select class="form-control" id="masterResort" onchange="onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
+      <option value="">Select resort...</option>
+      <option value="ava-resort-cancun">Ava Resort Cancun</option>
+      <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
+      <option value="dreams-acapulco">Dreams Acapulco Resort &amp; Spa</option>
+      <option value="dreams-aventuras">Dreams Aventuras Riviera Maya</option>
+      <option value="dreams-bahia-mita">Dreams Bahia Mita Surf &amp; Spa Resort</option>
+      <option value="dreams-cap-cana">Dreams Cap Cana Resort &amp; Spa</option>
+      <option value="dreams-cozumel-cape">Dreams Cozumel Cape Resort &amp; Spa</option>
+      <option value="dreams-curacao">Dreams Curacao Resort, Spa &amp; Casino</option>
+      <option value="dreams-dominicus-la-romana">Dreams Dominicus La Romana</option>
+      <option value="dreams-estrella-del-mar">Dreams Estrella del Mar Mazatlan Golf &amp; Spa Resort</option>
+      <option value="dreams-flora">Dreams Flora Resort &amp; Spa</option>
+      <option value="dreams-huatulco">Dreams Huatulco Resort &amp; Spa</option>
+      <option value="dreams-jade">Dreams Jade Resort &amp; Spa</option>
+      <option value="dreams-karibana">Dreams Karibana Cartagena Golf &amp; Spa Resort</option>
+      <option value="dreams-la-romana">Dreams La Romana Resort &amp; Spa</option>
+      <option value="dreams-los-cabos">Dreams Los Cabos Suites Golf Resort &amp; Spa</option>
+      <option value="dreams-macao">Dreams Macao Beach Punta Cana</option>
+      <option value="dreams-natura">Dreams Natura Resort &amp; Spa</option>
+      <option value="dreams-onyx">Dreams Onyx Resort &amp; Spa</option>
+      <option value="dreams-playa-bonita">Dreams Playa Bonita Panama</option>
+      <option value="dreams-playa-esmeralda">Dreams Playa Esmeralda Resort &amp; Spa</option>
+      <option value="dreams-playa-mujeres">Dreams Playa Mujeres Golf &amp; Spa Resort</option>
+      <option value="dreams-puerto-morelos">Dreams Puerto Morelos Resort &amp; Spa</option>
+      <option value="dreams-riviera-cancun">Dreams Riviera Cancun Resort &amp; Spa</option>
+      <option value="dreams-rose-hall">Dreams Rose Hall Resort &amp; Spa</option>
+      <option value="dreams-royal-beach">Dreams Royal Beach Punta Cana</option>
+      <option value="dreams-sands-cancun">Dreams Sands Cancun Resort &amp; Spa</option>
+      <option value="dreams-sapphire">Dreams Sapphire Resort &amp; Spa</option>
+      <option value="dreams-tulum">Dreams Tulum Resort &amp; Spa</option>
+      <option value="dreams-vallarta-bay">Dreams Vallarta Bay Resort &amp; Spa</option>
+      <option value="dreams-vista-cancun">Dreams Vista Cancun Golf &amp; Spa Resort</option>
+      <option value="el-dorado-casitas">El Dorado Casitas Royale</option>
+      <option value="el-dorado-royale">El Dorado Royale</option>
+      <option value="fives-beach">Fives Beach Hotels &amp; Residences</option>
+      <option value="garza-blanca">Garza Blanca Preserve Resort &amp; Spa</option>
+      <option value="grand-palladium-costa-mujeres">Grand Palladium Costa Mujeres Resort &amp; Spa</option>
+      <option value="grand-velas-riviera-maya">Grand Velas Riviera Maya</option>
+      <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
+      <option value="hard-rock-punta-cana">Hard Rock Hotel &amp; Casino Punta Cana</option>
+      <option value="hard-rock-riviera-maya">Hard Rock Hotel Riviera Maya</option>
+      <option value="hard-rock-vallarta">Hard Rock Hotel Vallarta</option>
+      <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
+      <option value="hilton-cancun">Hilton Cancun Mar Caribe</option>
+      <option value="hyatt-zilara-cancun">Hyatt Zilara Cancun</option>
+      <option value="hyatt-zilara-cap-cana">Hyatt Zilara Cap Cana</option>
+      <option value="hyatt-zilara-riviera-maya">Hyatt Zilara Riviera Maya</option>
+      <option value="hyatt-zilara-rose-hall">Hyatt Zilara Rose Hall</option>
+      <option value="hyatt-ziva-cancun">Hyatt Ziva Cancun</option>
+      <option value="hyatt-ziva-cap-cana">Hyatt Ziva Cap Cana</option>
+      <option value="hyatt-ziva-los-cabos">Hyatt Ziva Los Cabos</option>
+      <option value="hyatt-ziva-puerto-vallarta">Hyatt Ziva Puerto Vallarta</option>
+      <option value="hyatt-ziva-rose-hall">Hyatt Ziva Rose Hall</option>
+      <option value="iberostar-selection-cancun">Iberostar Selection Cancun</option>
+      <option value="majestic-elegance">Majestic Elegance Costa Mujeres</option>
+      <option value="majestic-elegance-costa-mujeres">Majestic Elegance Costa Mujeres (new)</option>
+      <option value="majestic-mirage">Majestic Mirage Costa Mujeres</option>
+      <option value="majestic-mirage-punta-cana">Majestic Mirage Punta Cana</option>
+      <option value="moon-palace-cancun">Moon Palace Cancun</option>
+      <option value="moon-palace-jamaica">Moon Palace Jamaica</option>
+      <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
+      <option value="ocean-coral-spring">Ocean Coral Spring</option>
+      <option value="ocean-eden-bay">Ocean Eden Bay</option>
+      <option value="riu-cancun">Riu Cancun</option>
+      <option value="riu-latino">Riu Latino</option>
+      <option value="riu-montego-bay">Riu Montego Bay</option>
+      <option value="royalton-bavaro">Royalton Bavaro &ndash; An Autograph Collection</option>
+      <option value="royalton-chic-cancun">Royalton CHIC Cancun</option>
+      <option value="royalton-riviera-cancun">Royalton Riviera Cancun</option>
+      <option value="sandos-finisterra">Sandos Finisterra Los Cabos</option>
+      <option value="secrets-akumal">Secrets Akumal Riviera Maya</option>
+      <option value="secrets-aura-cozumel">Secrets Aura Cozumel</option>
+      <option value="secrets-baby-beach">Secrets Baby Beach Aruba</option>
+      <option value="secrets-bahia-mita">Secrets Bahia Mita Surf &amp; Spa</option>
+      <option value="secrets-cap-cana">Secrets Cap Cana Resort &amp; Spa</option>
+      <option value="secrets-huatulco">Secrets Huatulco Resort &amp; Spa</option>
+      <option value="secrets-la-romana">Secrets La Romana Resort &amp; Spa</option>
+      <option value="secrets-maroma-beach">Secrets Maroma Beach Riviera Cancun</option>
+      <option value="secrets-mirabel-cancun">Secrets Mirabel Cancun Resort &amp; Spa</option>
+      <option value="secrets-moxche">Secrets Moxche Playa del Carmen</option>
+      <option value="secrets-papagayo">Secrets Papagayo Costa Rica</option>
+      <option value="secrets-playa-blanca">Secrets Playa Blanca Costa Mujeres</option>
+      <option value="secrets-playa-esmeralda">Secrets Playa Esmeralda Resort &amp; Spa</option>
+      <option value="secrets-playa-mujeres">Secrets Playa Mujeres Golf &amp; Spa Resort</option>
+      <option value="secrets-puerto-los-cabos">Secrets Puerto Los Cabos Golf &amp; Spa Resort</option>
+      <option value="secrets-riviera-cancun">Secrets Riviera Cancun Resort &amp; Spa</option>
+      <option value="secrets-royal-beach">Secrets Royal Beach Punta Cana</option>
+      <option value="secrets-st-james">Secrets St James Montego Bay</option>
+      <option value="secrets-st-lucia">Secrets St. Lucia Resort &amp; Spa</option>
+      <option value="secrets-the-vine">Secrets The Vine Cancun</option>
+      <option value="secrets-tides-punta-cana">Secrets Tides Punta Cana</option>
+      <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
+      <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
+      <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
+      <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
+      <option value="other">Other Resort</option>
+    </select>
+  </div>
 </div>
 
 <!-- MAIN -->
@@ -177,257 +278,26 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <h3>&#9998; Resort Profile</h3>
     <p style="color:#888;font-size:.82rem;margin-bottom:16px;">Save descriptions, highlights and links per resort. These auto-fill in the Quote Builder when you select a resort.</p>
 
-    <div class="upload-form">
-      <div class="form-group">
-        <label>Resort</label>
-        <select class="form-control" id="profileResort" onchange="loadResortProfile()">
-          <option value="">Select resort...</option>
-        </select>
-      </div>
-
-      <div id="profileForm" style="display:none;">
-        <div class="form-group" style="margin-top:12px;">
-          <label>Location Tagline <span style="color:#888;font-size:.75rem;">(e.g. Riviera Maya Â· 42 miles from CUN)</span></label>
-          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Playa Mujeres Â· 15.9 miles from CUN">
-        </div>
-
-        <div class="form-group">
-          <label>Description <span style="color:#888;font-size:.75rem;">(appears in quote card)</span></label>
-          <textarea class="form-control" id="profileDescription" rows="4" placeholder="Write a compelling description of this resort for client quotes..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Highlights <span style="color:#888;font-size:.75rem;">(footer bar â separate with Â· )</span></label>
-          <input type="text" class="form-control" id="profileHighlights" placeholder="e.g. Unlimited-LuxuryÂ® Â· Championship Golf Â· Full Spa">
-        </div>
-
-        <div class="form-group">
-          <label>Star Rating</label>
-          <select class="form-control" id="profileStars">
-            <option value="">Select...</option>
-            <option value="4">4 Star</option>
-            <option value="4.5">4.5 Star</option>
-            <option value="5">5 Star</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>Booking Link <span style="color:#888;font-size:.75rem;">(Celebration Travel URL)</span></label>
-          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://booking.celebrationtravel.com/hotels/...">
-        </div>
-
-        <div class="form-group">
-          <label>Wedding Page URL <span style="color:#888;font-size:.75rem;">(resort wedding page &mdash; shows as &ldquo;Explore Weddings&rdquo; link on quote)</span></label>
-          <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://www.destinationweddings.com/resorts/...">
-        </div>
-
-        <div class="form-group">
-          <label>Real Wedding Story URL <span style="color:#888;font-size:.75rem;">(link to a real wedding at this resort &mdash; e.g. destinationweddings.com/real-weddings/...)</span></label>
-          <input type="url" class="form-control" id="profileRealWeddingUrl" placeholder="https://www.destinationweddings.com/real-weddings/...">
-          <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="Couple names e.g. Katie &amp; Alex" style="margin-top:6px;">
-        </div>
-
-        <div class="form-group">
-          <label>Media Gallery Link <span style="color:#888;font-size:.75rem;">(optional â AIC media vault etc.)</span></label>
-          <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
-        </div>
-
-        <div class="form-group">
-          <label>Amy's Notes <span style="color:#888;font-size:.75rem;">(internal â not shown in quote)</span></label>
-          <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes about this resort..."></textarea>
-        </div>
-
-        <div class="form-group">
-          <label>Club Level Name <span style="color:#888;font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label>
-          <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Preferred Club">
-        </div>
-
-        <div class="form-group">
-          <label>Club Level Perks <span style="color:#888;font-size:.75rem;">auto-shows in quote when a club room is selected &mdash; one perk per line</span></label>
-          <textarea class="form-control" id="profileClubPerks" rows="5" placeholder="Personalized check-in &amp; checkout&#10;Private lounge access&#10;Upgraded mini-bar &amp; room service&#10;Pool concierge &amp; bar service"></textarea>
-        </div>
-
-        <!-- Wedding Venues -->
-        <div style="margin-bottom:10px;margin-top:10px;">
-          <label class="form-label">Wedding Guide PDF Link <span style="color:#888;font-size:.75rem;">public URL â shows as download button on quote</span></label>
-          <input type="text" class="form-control" id="profileWeddingGuide" placeholder="https://storage.googleapis.com/...">
-        </div>
-
-        <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
-          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">ð Wedding Venues <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
-          <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
-          <button type="button" onclick="addVenueRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Venue</button>
-        </div>
-
-        <!-- Wedding Packages -->
-        <div style="margin-top:16px;border-top:1px solid #e0e0e0;padding-top:14px;">
-          <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a1a1a;margin-bottom:10px;">ð Wedding Packages <span style="font-size:.7rem;color:#888;font-weight:400;text-transform:none;">(shown on Wedding Sneak Peek quotes)</span></div>
-          <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
-          <button type="button" onclick="addPackageRow()" style="background:#f5f5f5;border:1px dashed #ccc;padding:7px 16px;border-radius:6px;font-size:.82rem;cursor:pointer;color:#555;">+ Add Package</button>
-        </div>
-
-        <button onclick="saveResortProfile()"  style="background:#f0c958;color:#1a1a1a;border:none;padding:10px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:.9rem;margin-top:14px;">&#10003; Save Resort Profile</button>
-        <span id="profileSaveMsg" style="display:none;margin-left:12px;color:#27ae60;font-size:.85rem;"></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- UPLOAD SECTION -->
-  <div class="upload-section">
-    <h3>&#8593; Upload Photos</h3>
-
-    <div class="upload-form">
-      <div class="form-group">
-        <label>Resort</label>
-        <select class="form-control" id="uploadResort" onchange="loadRoomDescription()">
-                    <option value="">Select resort...</option>
-          <option value="ava-resort-cancun">Ava Resort Cancun</option>
-          <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
-          <option value="dreams-acapulco">Dreams Acapulco Resort &amp; Spa</option>
-          <option value="dreams-aventuras">Dreams Aventuras Riviera Maya</option>
-          <option value="dreams-bahia-mita">Dreams Bahia Mita Surf &amp; Spa Resort</option>
-          <option value="dreams-cap-cana">Dreams Cap Cana Resort &amp; Spa</option>
-          <option value="dreams-cozumel-cape">Dreams Cozumel Cape Resort &amp; Spa</option>
-          <option value="dreams-curacao">Dreams Curacao Resort, Spa &amp; Casino</option>
-          <option value="dreams-dominicus-la-romana">Dreams Dominicus La Romana</option>
-          <option value="dreams-estrella-del-mar">Dreams Estrella del Mar Mazatlan Golf &amp; Spa Resort</option>
-          <option value="dreams-flora">Dreams Flora Resort &amp; Spa</option>
-          <option value="dreams-huatulco">Dreams Huatulco Resort &amp; Spa</option>
-          <option value="dreams-jade">Dreams Jade Resort &amp; Spa</option>
-          <option value="dreams-karibana">Dreams Karibana Cartagena Golf &amp; Spa Resort</option>
-          <option value="dreams-la-romana">Dreams La Romana Resort &amp; Spa</option>
-          <option value="dreams-los-cabos">Dreams Los Cabos Suites Golf Resort &amp; Spa</option>
-          <option value="dreams-macao">Dreams Macao Beach Punta Cana</option>
-          <option value="dreams-natura">Dreams Natura Resort &amp; Spa</option>
-          <option value="dreams-onyx">Dreams Onyx Resort &amp; Spa</option>
-          <option value="dreams-playa-bonita">Dreams Playa Bonita Panama</option>
-          <option value="dreams-playa-esmeralda">Dreams Playa Esmeralda Resort &amp; Spa</option>
-          <option value="dreams-playa-mujeres">Dreams Playa Mujeres Golf &amp; Spa Resort</option>
-          <option value="dreams-puerto-morelos">Dreams Puerto Morelos Resort &amp; Spa</option>
-          <option value="dreams-riviera-cancun">Dreams Riviera Cancun Resort &amp; Spa</option>
-          <option value="dreams-rose-hall">Dreams Rose Hall Resort &amp; Spa</option>
-          <option value="dreams-royal-beach">Dreams Royal Beach Punta Cana</option>
-          <option value="dreams-sands-cancun">Dreams Sands Cancun Resort &amp; Spa</option>
-          <option value="dreams-sapphire">Dreams Sapphire Resort &amp; Spa</option>
-          <option value="dreams-tulum">Dreams Tulum Resort &amp; Spa</option>
-          <option value="dreams-vallarta-bay">Dreams Vallarta Bay Resort &amp; Spa</option>
-          <option value="dreams-vista-cancun">Dreams Vista Cancun Golf &amp; Spa Resort</option>
-          <option value="el-dorado-casitas">El Dorado Casitas Royale</option>
-          <option value="el-dorado-royale">El Dorado Royale</option>
-          <option value="fives-beach">Fives Beach Hotels &amp; Residences</option>
-          <option value="garza-blanca">Garza Blanca Preserve Resort &amp; Spa</option>
-          <option value="grand-palladium-costa-mujeres">Grand Palladium Costa Mujeres Resort &amp; Spa</option>
-          <option value="grand-velas-riviera-maya">Grand Velas Riviera Maya</option>
-          <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
-          <option value="hard-rock-punta-cana">Hard Rock Hotel &amp; Casino Punta Cana</option>
-          <option value="hard-rock-riviera-maya">Hard Rock Hotel Riviera Maya</option>
-          <option value="hard-rock-vallarta">Hard Rock Hotel Vallarta</option>
-          <option value="hilton-cancun">Hilton Cancun Mar Caribe</option>
-          <option value="hyatt-zilara-cancun">Hyatt Zilara Cancun</option>
-          <option value="hyatt-zilara-cap-cana">Hyatt Zilara Cap Cana</option>
-          <option value="hyatt-zilara-riviera-maya">Hyatt Zilara Riviera Maya</option>
-          <option value="hyatt-zilara-rose-hall">Hyatt Zilara Rose Hall</option>
-          <option value="hyatt-ziva-cancun">Hyatt Ziva Cancun</option>
-          <option value="hyatt-ziva-cap-cana">Hyatt Ziva Cap Cana</option>
-          <option value="hyatt-ziva-los-cabos">Hyatt Ziva Los Cabos</option>
-          <option value="hyatt-ziva-puerto-vallarta">Hyatt Ziva Puerto Vallarta</option>
-          <option value="hyatt-ziva-rose-hall">Hyatt Ziva Rose Hall</option>
-          <option value="iberostar-selection-cancun">Iberostar Selection Cancun</option>
-          <option value="majestic-elegance">Majestic Elegance Costa Mujeres</option>
-          <option value="majestic-mirage">Majestic Mirage Costa Mujeres</option>
-          <option value="majestic-mirage-punta-cana">Majestic Mirage Punta Cana</option>
-          <option value="moon-palace-cancun">Moon Palace Cancun</option>
-          <option value="moon-palace-jamaica">Moon Palace Jamaica</option>
-          <option value="ocean-coral-spring">Ocean Coral Spring</option>
-          <option value="ocean-eden-bay">Ocean Eden Bay</option>
-          <option value="royalton-bavaro">Royalton Bavaro &ndash; An Autograph Collection</option>
-          <option value="royalton-riviera-cancun">Royalton Riviera Cancun</option>
-          <option value="sandos-finisterra">Sandos Finisterra Los Cabos</option>
-          <option value="secrets-akumal">Secrets Akumal Riviera Maya</option>
-          <option value="secrets-aura-cozumel">Secrets Aura Cozumel</option>
-          <option value="secrets-baby-beach">Secrets Baby Beach Aruba</option>
-          <option value="secrets-bahia-mita">Secrets Bahia Mita Surf &amp; Spa</option>
-          <option value="secrets-cap-cana">Secrets Cap Cana Resort &amp; Spa</option>
-          <option value="secrets-huatulco">Secrets Huatulco Resort &amp; Spa</option>
-          <option value="secrets-la-romana">Secrets La Romana Resort &amp; Spa</option>
-          <option value="secrets-maroma-beach">Secrets Maroma Beach Riviera Cancun</option>
-          <option value="secrets-mirabel-cancun">Secrets Mirabel Cancun Resort &amp; Spa</option>
-          <option value="secrets-moxche">Secrets Moxche Playa del Carmen</option>
-          <option value="secrets-papagayo">Secrets Papagayo Costa Rica</option>
-          <option value="secrets-playa-blanca">Secrets Playa Blanca Costa Mujeres</option>
-          <option value="secrets-playa-esmeralda">Secrets Playa Esmeralda Resort &amp; Spa</option>
-          <option value="secrets-playa-mujeres">Secrets Playa Mujeres Golf &amp; Spa Resort</option>
-          <option value="secrets-puerto-los-cabos">Secrets Puerto Los Cabos Golf &amp; Spa Resort</option>
-          <option value="secrets-riviera-cancun">Secrets Riviera Cancun Resort &amp; Spa</option>
-          <option value="secrets-royal-beach">Secrets Royal Beach Punta Cana</option>
-          <option value="secrets-st-james">Secrets St James Montego Bay</option>
-          <option value="secrets-st-lucia">Secrets St. Lucia Resort &amp; Spa</option>
-          <option value="secrets-the-vine">Secrets The Vine Cancun</option>
-          <option value="secrets-tides-punta-cana">Secrets Tides Punta Cana</option>
-          <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
-          <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
-          <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
-          <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
-          <option value="majestic-elegance-costa-mujeres">Majestic Elegance Costa Mujeres</option>
-          <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
-          <option value="riu-cancun">Riu Cancun</option>
-          <option value="riu-latino">Riu Latino</option>
-          <option value="riu-montego-bay">Riu Montego Bay</option>
-          <option value="royalton-chic-cancun">Royalton CHIC Cancun</option>
-          <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
-          <option value="other">Other Resort</option>
-        </select>
-      </div>
-      <div class="form-group">
+    <!-- uploadResort is driven by the master resort dropdown in the header -->
+    <input type="hidden" id="uploadResort">
+    <div class="upload-form" style="grid-template-columns:1fr 1fr auto;">
+      <div class="form-group" style="grid-column:1/2;">
         <label>Photo Category</label>
-        <select class="form-control" id="uploadCategory" onchange="toggleCustomCategory(this); loadRoomDescription();">
-          <option value="">Select category...</option>
+        <select class="form-control" id="uploadCategorySelect" onchange="onCategorySelectChange(this);">
+          <option value="">-- select standard --</option>
           <option value="Aerial View">Aerial View</option>
-          <option value="Resort Exterior / Property">Resort Exterior / Property</option>
-          <option value="Beach & Pool">Beach &amp; Pool</option>
-          <option value="Lobby / Common Areas">Lobby / Common Areas</option>
+          <option value="Resort &amp; Property">Resort &amp; Property</option>
+          <option value="Beach &amp; Pool">Beach &amp; Pool</option>
+          <option value="Lobby &amp; Common Areas">Lobby &amp; Common Areas</option>
           <option value="Dining">Dining</option>
           <option value="Bar">Bar</option>
           <option value="Spa">Spa</option>
-          <option value="Kids Club">Kids Club</option>
-          <option value="Junior Suite">Junior Suite</option>
-          <option value="Junior Suite Tropical View">Junior Suite Tropical View</option>
-          <option value="Junior Suite Ocean View">Junior Suite Ocean View</option>
-          <option value="Junior Suite Ocean Front">Junior Suite Ocean Front</option>
-          <option value="Junior Suite Partial Ocean View">Junior Suite Partial Ocean View</option>
-          <option value="Junior Suite Plunge Pool">Junior Suite Plunge Pool</option>
-          <option value="Plunge Pool Suite">Plunge Pool Suite</option>
-          <option value="Preferred Club Tropical View">Preferred Club Tropical View</option>
-          <option value="Preferred Club Ocean View">Preferred Club Ocean View</option>
-          <option value="Preferred Club Plunge Pool">Preferred Club Plunge Pool</option>
-          <option value="Preferred Club Honeymoon Suite">Preferred Club Honeymoon Suite</option>
-          <option value="Preferred Club Master Suite">Preferred Club Master Suite</option>
-          <option value="Preferred Club Governor Suite">Preferred Club Governor Suite</option>
-          <option value="Preferred Club Presidential Suite">Preferred Club Presidential Suite</option>
-          <option value="Governor Suite">Governor Suite</option>
-          <option value="Presidential Suite">Presidential Suite</option>
-          <!-- Wedding Venues -->
-          <optgroup label="ââ Wedding Venues ââ">
-            <option value="Wedding Venue - Beach Front Ceremony">Beach Front Ceremony</option>
-            <option value="Wedding Venue - Ocean View Gazebo">Ocean View Gazebo</option>
-            <option value="Wedding Venue - Beach Wedding Reception">Beach Wedding Reception</option>
-            <option value="Wedding Venue - Indoor Reception">Indoor Reception</option>
-            <option value="Wedding Venue - Preferred Deck">Preferred Deck</option>
-            <option value="Wedding Venue - Fountain Gazebo">Fountain Gazebo</option>
-            <option value="Wedding Venue - Stone Beach">Stone Beach</option>
-            <option value="Wedding Venue - Preferred Beach">Preferred Beach</option>
-            <option value="Wedding Venue - Gardens">Gardens</option>
-            <option value="Wedding Venue - Pool Area">Pool Area</option>
-            <option value="Wedding Venue - Ballroom">Ballroom</option>
-            <option value="Wedding Venue - Rooftop Terrace">Rooftop Terrace</option>
-            <option value="Wedding Venue - Garden Terrace">Garden Terrace</option>
-            <option value="Wedding Venue - Custom" id="venue-custom-opt">Other Venue (type your own)...</option>
-          </optgroup>
-          <option value="custom">Other (type your own)...</option>
+          <option value="Activities">Activities</option>
+          <option value="Wedding Venues">Wedding Venues</option>
         </select>
-        <input type="text" class="form-control" id="uploadCategoryCustom" placeholder="Type room category..." style="display:none;margin-top:8px;">
+        <input type="text" class="form-control" id="uploadCategory" placeholder="Or type any category name here..." style="margin-top:8px;" oninput="loadRoomDescription()">
       </div>
-      <div class="form-group">
+      <div class="form-group" style="grid-column:2/3;">
         <label>Caption (optional)</label>
         <input type="text" class="form-control" id="uploadCaption" placeholder="e.g. King bed with ocean view">
       </div>
@@ -517,8 +387,8 @@ const storage = firebase.storage();
 
 // ââ RESORT NAME MAP ââ
 const RESORT_NAMES = {};
-// Auto-generate names from the dropdown options
-document.querySelectorAll('#uploadResort option').forEach(opt => {
+// Auto-generate names from the master dropdown
+document.querySelectorAll('#masterResort option').forEach(opt => {
   if (opt.value && opt.value !== 'other') RESORT_NAMES[opt.value] = opt.text;
 });
 
@@ -569,26 +439,23 @@ function removeQueueItem(id) {
 // ââ RESORT PROFILE ââ
 
 function initProfileResortDropdown() {
-  const sel = document.getElementById('profileResort');
-  if (!sel) return;
-  // Copy options from uploadResort
-  const uploadSel = document.getElementById('uploadResort');
-  if (uploadSel) {
-    sel.innerHTML = uploadSel.innerHTML;
-  }
+  // Copy options from masterResort to profileResort
+  const masterSel = document.getElementById('masterResort');
+  const profileSel = document.getElementById('profileResort');
+  if (!masterSel || !profileSel) return;
+  profileSel.innerHTML = masterSel.innerHTML;
 }
 
 function initFilterResortDropdown() {
-  const sel = document.getElementById('filterResort');
-  const uploadSel = document.getElementById('uploadResort');
-  if (!sel || !uploadSel) return;
-  // Keep "All Resorts" as first option, then copy every resort from the upload list
+  const masterSel = document.getElementById('masterResort');
+  const filterSel = document.getElementById('filterResort');
+  if (!masterSel || !filterSel) return;
   const allOption = '<option value="">All Resorts</option>';
-  const resortOptions = Array.from(uploadSel.options)
-    .filter(o => o.value) // skip the blank "Select resort..." option
+  const resortOptions = Array.from(masterSel.options)
+    .filter(o => o.value)
     .map(o => `<option value="${o.value}">${o.textContent}</option>`)
     .join('');
-  sel.innerHTML = allOption + resortOptions;
+  filterSel.innerHTML = allOption + resortOptions;
 }
 
 async function loadResortProfile() {
@@ -753,8 +620,7 @@ function roomDescKey(resort, category) {
 
 async function loadRoomDescription() {
   const resort = document.getElementById('uploadResort').value;
-  const catSelect = document.getElementById('uploadCategory').value;
-  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const category = document.getElementById('uploadCategory').value.trim();
   const box = document.getElementById('roomDescription');
   if (!resort || !category) { box.value = ''; return; }
 
@@ -769,8 +635,7 @@ async function loadRoomDescription() {
 
 async function saveRoomDescription() {
   const resort = document.getElementById('uploadResort').value;
-  const catSelect = document.getElementById('uploadCategory').value;
-  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const category = document.getElementById('uploadCategory').value.trim();
   const description = document.getElementById('roomDescription').value.trim();
   if (!resort || !category) return; // nothing selected yet, nothing to save against
 
@@ -799,8 +664,7 @@ function toggleCustomCategory(sel) {
 
 async function startUpload() {
   const resort   = document.getElementById('uploadResort').value;
-  const catSelect = document.getElementById('uploadCategory').value;
-  const category = catSelect === 'custom' ? document.getElementById('uploadCategoryCustom').value.trim() : catSelect;
+  const category = document.getElementById('uploadCategory').value.trim();
   const caption  = document.getElementById('uploadCaption').value.trim();
 
   if (!resort)   { toast('Please select a resort.',   'error'); return; }
