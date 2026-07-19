@@ -1067,7 +1067,7 @@ function renderGallery(photos) {
     groups[key].photos.push(p);
   });
 
-  grid.innerHTML = Object.values(groups).map(g => {
+  grid.innerHTML = Object.values(groups).sort((a,b) => (a.resortName||'').localeCompare(b.resortName||'')).map(g => {
     const n = g.photos.length;
     const galleryUrl = `https://amy-cate.com/gallery?gallery=${encodeURIComponent(g.slug)}&cat=${encodeURIComponent(g.cat)}`;
 
@@ -1235,9 +1235,16 @@ async function setAsHeroPhoto() {
   const url = p.url || p.downloadURL;
   if (!url) { toast("No URL found on this photo.", "error"); return; }
   try {
-    await db.collection("resortProfiles").doc(slug).set({ heroPhoto: url }, { merge: true });
+    // Find the canonical Firestore document by resort name (handles slug mismatches)
+    let targetSlug = slug;
+    const resortName = p.resortName || '';
+    if (resortName) {
+      const snap = await db.collection('resortProfiles').where('name', '==', resortName).limit(1).get();
+      if (!snap.empty) targetSlug = snap.docs[0].id;
+    }
+    await db.collection("resortProfiles").doc(targetSlug).set({ heroPhoto: url }, { merge: true });
     closeEditPhoto();
-    toast("Hero photo set for " + slug + "!", "success");
+    toast("Hero photo set for " + targetSlug + "!", "success");
   } catch(e) {
     toast("Error: " + e.message, "error");
   }
