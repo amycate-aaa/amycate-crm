@@ -321,6 +321,91 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="upload-queue" id="uploadQueue"></div>
   </div>
 
+  <!-- RESORT PROFILE FORM -->
+  <div id="profileForm" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
+    <h3 style="font-size:1rem;color:#ccc;font-weight:600;margin-bottom:4px;letter-spacing:.05em;text-transform:uppercase;">&#127970; Resort Profile</h3>
+    <p style="color:#666;font-size:.82rem;margin-bottom:18px;">These details auto-fill in your Quote Builder when you select this resort.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Tagline</label>
+        <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Where luxury meets paradise">
+      </div>
+      <div class="form-group">
+        <label>Stars / Rating</label>
+        <select class="form-control" id="profileStars">
+          <option value="">-- select --</option>
+          <option value="5">5 Stars</option>
+          <option value="4.5">4.5 Stars</option>
+          <option value="4">4 Stars</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Description</label>
+      <textarea class="form-control" id="profileDescription" rows="3" placeholder="Resort overview for client quotes..."></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Highlights <span style="color:#555;font-size:.75rem;">(separate with · )</span></label>
+      <input type="text" class="form-control" id="profileHighlights" placeholder="All-inclusive · Adults-only · Beachfront · 10 restaurants">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Booking Link</label>
+        <input type="url" class="form-control" id="profileBookingLink" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>Gallery Link</label>
+        <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Wedding Package URL</label>
+        <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>Real Wedding URL</label>
+        <input type="url" class="form-control" id="profileRealWeddingUrl" placeholder="https://...">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="form-group">
+        <label>Real Wedding Couple Names</label>
+        <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James">
+      </div>
+      <div class="form-group">
+        <label>Club Level Name</label>
+        <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Preferred Club, Elegance Club">
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
+      <textarea class="form-control" id="profileClubPerks" rows="3" placeholder="Butler service&#10;Private pool access&#10;Premium minibar"></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Wedding Guide / Notes</label>
+      <textarea class="form-control" id="profileWeddingGuide" rows="2" placeholder="Internal notes about weddings at this resort..."></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:12px;">
+      <label>Agent Notes</label>
+      <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes visible only to you..."></textarea>
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <label>Wedding Venues</label>
+      <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addVenueRow()">+ Add Venue</button>
+    </div>
+    <div class="form-group" style="margin-bottom:16px;">
+      <label>Wedding Packages</label>
+      <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="btn btn-primary" onclick="saveResortProfile()">Save Profile</button>
+      <span id="profileSaveMsg" style="display:none;color:#27ae60;font-size:.85rem;"></span>
+    </div>
+  </div>
+
   <!-- FILTERS -->
   <div class="filters-bar">
     <select class="filter-select" id="filterResort" onchange="applyFilters()">
