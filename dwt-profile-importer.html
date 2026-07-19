@@ -211,8 +211,8 @@ function scrapeDwtPage(doc) {
 function loadInIframe(url) {
   return new Promise(resolve => {
     const frame = document.getElementById('scraper');
-    const timeout = setTimeout(() => resolve(frame.contentDocument), 15000);
-    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(frame.contentDocument), 4000); };
+    const timeout = setTimeout(() => resolve(frame.contentDocument), 30000);
+    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(frame.contentDocument), 7000); };
     frame.src = url;
   });
 }
