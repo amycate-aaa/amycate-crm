@@ -272,13 +272,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   </div>
 
   <!-- RESORT AUDIT SECTION -->
-  <div id="auditSection" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-      <h3 style="font-size:1rem;color:#ccc;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin:0;">&#128202; Resort Completion Audit</h3>
-      <button class="btn btn-primary btn-sm" onclick="runAudit()">Run Audit</button>
-      <span id="auditStatus" style="color:#666;font-size:.82rem;"></span>
+  <div id="auditSection" style="display:none;background:#fff;border:2px solid #ddd;border-radius:10px;padding:24px;margin-bottom:24px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+      <h3 style="font-size:1.1rem;color:#111;font-weight:700;margin:0;">&#128202; Resort Completion Audit</h3>
+      <button onclick="runAudit()" style="background:#f0c958;border:none;color:#111;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;">&#8635; Refresh</button>
+      <span id="auditStatus" style="color:#555;font-size:.85rem;"></span>
     </div>
-    <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Shows what's complete and what's still needed for each resort in the library.</p>
+    <p style="color:#666;font-size:.85rem;margin-bottom:16px;">Click any resort name to open and edit it. ✅ = complete &nbsp; ❌ = missing.</p>
     <div id="auditGrid" style="overflow-x:auto;"></div>
   </div>
 
@@ -1298,10 +1298,10 @@ async function runAudit() {
         let ok = false;
         if (c.isArr) { ok = Array.isArray(p[c.key]) ? p[c.key].length > 0 : false; }
         else         { ok = !!(p[c.key] && p[c.key].toString().trim()); }
-        return `<td style="text-align:center;padding:8px 6px;font-size:.85rem;">${ok ? '&#9989;' : '&#10060;'}</td>`;
+        return `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${ok ? '✅' : '❌'}</td>`;
       });
 
-      const photoCell = `<td style="text-align:center;padding:8px 6px;font-size:.85rem;color:${photos>0?'#27ae60':'#c0392b'};">${photos} <span style="font-size:.72rem;color:#555;">(${catCount} cats)</span></td>`;
+      const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
 
       const allOk = checks.every(c => {
         if (c.isArr) return Array.isArray(p[c.key]) && p[c.key].length > 0;
@@ -1309,11 +1309,12 @@ async function runAudit() {
       }) && photos > 0;
       if (allOk) completedResorts++;
 
-      const rowBg = !hasProfile ? '#1e1212' : allOk ? '#121e12' : '#1a1a1a';
+      const rowBg = !hasProfile ? '#fff0f0' : allOk ? '#f0fff4' : '#fff';
+      const rowBorder = allOk ? '#b2dfdb' : '#eee';
 
-      return `<tr style="border-bottom:1px solid #222;background:${rowBg};">
-        <td style="padding:8px 12px;font-size:.85rem;white-space:nowrap;">
-          <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#f0c958;text-decoration:none;">${r.name}</a>
+      return `<tr style="border-bottom:1px solid ${rowBorder};background:${rowBg};">
+        <td style="padding:10px 14px;font-size:.92rem;white-space:nowrap;font-weight:500;">
+          <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#1a56db;text-decoration:underline;">${r.name}</a>
         </td>
         ${cells.join('')}
         ${photoCell}
@@ -1321,14 +1322,14 @@ async function runAudit() {
     });
 
     const headers = ['Resort', ...checks.map(c=>c.label), 'Photos'].map(h =>
-      `<th style="padding:8px 10px;font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};">${h}</th>`
+      `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
-    grid.innerHTML = `<table style="width:100%;border-collapse:collapse;">
-      <thead><tr style="border-bottom:2px solid #333;">${headers}</tr></thead>
+    grid.innerHTML = `<table style="width:100%;border-collapse:collapse;font-family:inherit;border:1px solid #ddd;border-radius:8px;overflow:hidden;">
+      <thead><tr>${headers}</tr></thead>
       <tbody>${rows.join('')}</tbody>
     </table>
-    <div style="margin-top:12px;font-size:.82rem;color:#666;">&#9989; = complete &nbsp;&nbsp; &#10060; = missing &nbsp;&nbsp; Green row = fully complete &nbsp;&nbsp; Red row = no profile yet. Click resort name to edit.</div>`;
+    <div style="margin-top:10px;font-size:.82rem;color:#666;">Green row = fully complete &nbsp;|&nbsp; Pink row = no profile yet &nbsp;|&nbsp; <strong>${completedResorts} of ${resorts.length} resorts complete</strong></div>`;
 
     if (status) status.textContent = `${completedResorts} of ${resorts.length} resorts fully complete`;
 
