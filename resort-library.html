@@ -325,6 +325,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   <div id="profileForm" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
     <h3 style="font-size:1rem;color:#ccc;font-weight:600;margin-bottom:4px;letter-spacing:.05em;text-transform:uppercase;">&#127970; Resort Profile</h3>
     <p style="color:#666;font-size:.82rem;margin-bottom:18px;">These details auto-fill in your Quote Builder when you select this resort.</p>
+    <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in any details above and click Save Profile.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="form-group">
         <label>Tagline</label>
@@ -509,7 +510,12 @@ function removeQueueItem(id) {
 function onMasterResortChange(slug) {
   const uploadRes = document.getElementById('uploadResort');
   if (uploadRes) uploadRes.value = slug;
-  loadResortProfile(slug);
+  if (!slug) {
+    const form = document.getElementById('profileForm');
+    if (form) form.style.display = 'none';
+  } else {
+    loadResortProfile(slug);
+  }
   const filterSel = document.getElementById('filterResort');
   if (filterSel) {
     filterSel.value = slug;
@@ -601,15 +607,20 @@ async function loadResortProfile(slugOverride) {
         (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured));
       }
     } else {
-      // Clear form for new resort
+      // No profile saved yet — clear all fields
       const venueListClear = document.getElementById('venue-list');
       if (venueListClear) venueListClear.innerHTML = '';
       const pkgListClear = document.getElementById('pkg-list');
       if (pkgListClear) pkgListClear.innerHTML = '';
       ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
-        document.getElementById(id).value = '';
+        const el = document.getElementById(id);
+        if (el) el.value = '';
       });
-      document.getElementById('profileStars').value = '';
+      const starsEl = document.getElementById('profileStars');
+      if (starsEl) starsEl.value = '';
+      // Show a subtle notice
+      const noProfileMsg = document.getElementById('noProfileMsg');
+      if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
   } catch(e) {
     console.error('loadResortProfile error:', e);
