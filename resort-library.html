@@ -325,6 +325,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   <div id="profileForm" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
     <h3 style="font-size:1rem;color:#ccc;font-weight:600;margin-bottom:4px;letter-spacing:.05em;text-transform:uppercase;">&#127970; Resort Profile</h3>
     <p style="color:#666;font-size:.82rem;margin-bottom:18px;">These details auto-fill in your Quote Builder when you select this resort.</p>
+    <div id="profileLoadingMsg" style="display:none;color:#f0c958;font-size:.85rem;padding:8px 0;margin-bottom:8px;">&#9203; Loading profile data...</div>
+    <div id="profileFields">
     <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in any details above and click Save Profile.</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="form-group">
@@ -401,6 +403,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
     </div>
+    </div><!-- /profileFields -->
     <div style="display:flex;align-items:center;gap:12px;">
       <button class="btn btn-primary" onclick="saveResortProfile()">Save Profile</button>
       <span id="profileSaveMsg" style="display:none;color:#27ae60;font-size:.85rem;"></span>
@@ -576,8 +579,16 @@ async function loadResortProfile(slugOverride) {
   const profileSel = document.getElementById('profileResort');
   if (profileSel) profileSel.value = slug;
 
+  // Show loading state
+  const profileLoadingMsg = document.getElementById('profileLoadingMsg');
+  const profileFields = document.getElementById('profileFields');
+  if (profileLoadingMsg) profileLoadingMsg.style.display = 'block';
+  if (profileFields) profileFields.style.opacity = '0.3';
+
   try {
     const doc = await db.collection('resortProfiles').doc(slug).get();
+    if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
+    if (profileFields) profileFields.style.opacity = '1';
     if (doc.exists) {
       const d = doc.data();
       document.getElementById('profileTagline').value = d.tagline || '';
@@ -607,6 +618,8 @@ async function loadResortProfile(slugOverride) {
         (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured));
       }
     } else {
+      if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
+      if (profileFields) profileFields.style.opacity = '1';
       // No profile saved yet — clear all fields
       const venueListClear = document.getElementById('venue-list');
       if (venueListClear) venueListClear.innerHTML = '';
@@ -623,6 +636,8 @@ async function loadResortProfile(slugOverride) {
       if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
   } catch(e) {
+    if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
+    if (profileFields) profileFields.style.opacity = '1';
     console.error('loadResortProfile error:', e);
   }
 }
