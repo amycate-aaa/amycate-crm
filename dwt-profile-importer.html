@@ -211,8 +211,10 @@ function scrapeDwtPage(doc) {
 function loadInIframe(url) {
   return new Promise(resolve => {
     const frame = document.getElementById('scraper');
-    const timeout = setTimeout(() => resolve(frame.contentDocument), 30000);
-    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(frame.contentDocument), 7000); };
+    const tryGet = () => { try { return frame.contentDocument; } catch(e) { return null; } };
+    const timeout = setTimeout(() => resolve(tryGet()), 30000);
+    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(tryGet()), 7000); };
+    frame.onerror = () => { clearTimeout(timeout); resolve(null); };
     frame.src = url;
   });
 }
@@ -312,7 +314,7 @@ async function startImport() {
     try {
       log(`[${i+1}/${_resorts.length}] ${r.name}`, 'info');
       const doc = await loadInIframe(r.dwtUrl);
-      if (!doc) throw new Error('iframe timeout');
+      if (!doc) { log('  ⚠ Page blocked or unreachable — skipping', 'skip'); _statSkipped++; _statDone++; updateStats(); continue; }
 
       const scraped = scrapeDwtPage(doc);
       if (!scraped || !scraped.name) {
