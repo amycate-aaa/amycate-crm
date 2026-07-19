@@ -436,6 +436,39 @@ function removeQueueItem(id) {
   document.getElementById(id)?.remove();
 }
 
+// ── MASTER RESORT CHANGE ──
+
+function onMasterResortChange(slug) {
+  const uploadRes = document.getElementById('uploadResort');
+  if (uploadRes) uploadRes.value = slug;
+  loadResortProfile(slug);
+  const filterSel = document.getElementById('filterResort');
+  if (filterSel) {
+    filterSel.value = slug;
+    if (filterSel.value !== slug && slug) {
+      const masterSel = document.getElementById('masterResort');
+      const masterOpt = [...masterSel.options].find(o => o.value === slug);
+      if (masterOpt) {
+        const opt = new Option(masterOpt.text, slug);
+        filterSel.add(opt);
+        filterSel.value = slug;
+      }
+    }
+  }
+  applyFilters();
+  loadRoomDescription();
+}
+
+function onCategorySelectChange(sel) {
+  if (sel.value && sel.value !== 'custom') {
+    document.getElementById('uploadCategory').value = sel.value;
+    loadRoomDescription();
+  } else if (sel.value === 'custom') {
+    document.getElementById('uploadCategory').value = '';
+    document.getElementById('uploadCategory').focus();
+  }
+}
+
 // ââ RESORT PROFILE ââ
 
 function initProfileResortDropdown() {
@@ -458,11 +491,14 @@ function initFilterResortDropdown() {
   filterSel.innerHTML = allOption + resortOptions;
 }
 
-async function loadResortProfile() {
-  const slug = document.getElementById('profileResort')?.value;
+async function loadResortProfile(slugOverride) {
+  const slug = slugOverride || document.getElementById('profileResort')?.value;
   const form = document.getElementById('profileForm');
   if (!slug) { if (form) form.style.display = 'none'; return; }
   if (form) form.style.display = 'block';
+  // Keep hidden select in sync
+  const profileSel = document.getElementById('profileResort');
+  if (profileSel) profileSel.value = slug;
 
   try {
     const doc = await db.collection('resortProfiles').doc(slug).get();
@@ -571,10 +607,11 @@ function getPackages() {
 }
 
 async function saveResortProfile() {
-  const slug = document.getElementById('profileResort')?.value;
-  if (!slug) { toast('Please select a resort first.', 'error'); return; }
+  const slug = document.getElementById('masterResort')?.value || document.getElementById('profileResort')?.value;
+  if (!slug) { toast('Please select a resort from the Active Resort dropdown first.', 'error'); return; }
 
-  const resortName = document.getElementById('profileResort')?.options[document.getElementById('profileResort').selectedIndex]?.text || slug;
+  const masterSel = document.getElementById('masterResort');
+  const resortName = masterSel?.options[masterSel.selectedIndex]?.text || slug;
 
   const data = {
     slug,
