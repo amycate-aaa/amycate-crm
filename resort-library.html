@@ -1225,6 +1225,23 @@ async function saveEditPhoto() {
   }
 }
 
+
+async function setAsHeroPhoto() {
+  const id = document.getElementById("editPhotoId").value;
+  const slug = document.getElementById("editPhotoResort").value;
+  if (!slug) { toast("No resort linked to this photo.", "error"); return; }
+  const p = allPhotos.find(x => x.id === id);
+  if (!p) return;
+  const url = p.url || p.downloadURL;
+  if (!url) { toast("No URL found on this photo.", "error"); return; }
+  try {
+    await db.collection("resortProfiles").doc(slug).set({ heroPhoto: url }, { merge: true });
+    closeEditPhoto();
+    toast("Hero photo set for " + slug + "!", "success");
+  } catch(e) {
+    toast("Error: " + e.message, "error");
+  }
+}
 // ââ BOOT ââ
 loadPhotos();
 initProfileResortDropdown();
@@ -1374,6 +1391,12 @@ async function runAudit() {
     <div style="display:flex;gap:10px;margin-top:18px;">
       <button class="btn btn-primary" style="flex:1;" onclick="saveEditPhoto()">Save Changes</button>
       <button class="copy-btn" style="flex:1;" onclick="closeEditPhoto()">Cancel</button>
+    </div>
+    <div style="margin-top:12px;border-top:1px solid #333;padding-top:12px;">
+      <button onclick="setAsHeroPhoto()" style="width:100%;background:linear-gradient(135deg,#b8860b,#daa520);color:white;border:none;border-radius:8px;padding:12px;font-size:.85rem;font-weight:600;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+        &#9733; Set as Hero Photo for This Resort
+      </button>
+      <p style="margin:8px 0 0;font-size:.7rem;color:#888;text-align:center;">Sets the main preview photo shown to visitors on the public site</p>
     </div>
   </div>
 </div>
