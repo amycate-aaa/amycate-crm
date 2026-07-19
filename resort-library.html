@@ -670,7 +670,7 @@ async function loadResortProfile(slugOverride) {
       set('profileDescription', d.description);
       set('profileHighlights', Array.isArray(d.highlights) ? d.highlights.join(' · ') : d.highlights);
       set('profileStars', d.stars);
-      set('profileBookingLink', d.bookingLink);
+      set('profileBookingLink', d.bookingLink || d.dwtUrl);
       set('profileGalleryLink', d.galleryLink);
       set('profileNotes', d.notes);
       set('profileWeddingUrl', d.weddingUrl);
