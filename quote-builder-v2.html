@@ -113,9 +113,20 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
   <div class="section-card">
     <div class="section-card-head">1 · Resort</div>
     <div class="section-card-body">
-      <div class="row full">
+      <div class="row" style="align-items:end;">
         <div class="field"><label>Resort</label>
           <select id="f-resort" onchange="onFITResortChange()"><option value="">Loading resorts…</option></select>
+        </div>
+        <div class="field"><label>Brand / Booking Link</label>
+          <div style="display:flex;border:1px solid #d0ccc6;border-radius:3px;overflow:hidden;">
+            <label id="brand-ct-label" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;cursor:pointer;font-size:13px;font-weight:600;background:var(--black);color:var(--gold-2);transition:.15s;">
+              <input type="radio" name="f-brand" id="brand-ct" value="ct" checked onchange="onBrandChange()" style="accent-color:var(--gold-2);"> CT
+            </label>
+            <label id="brand-dwt-label" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;cursor:pointer;font-size:13px;font-weight:600;background:#fff;color:var(--brown-lt);transition:.15s;">
+              <input type="radio" name="f-brand" id="brand-dwt" value="dwt" onchange="onBrandChange()" style="accent-color:var(--gold-2);"> DWT
+            </label>
+          </div>
+          <span class="hint" id="brand-link-hint" style="margin-top:4px;">CT = Celebration Travel booking link · DWT = Destination Weddings link</span>
         </div>
       </div>
       <div id="f-photo-picker" class="photo-picker hidden">
@@ -931,6 +942,8 @@ async function onFITResortChange(){
   // Auto-populate destination + experience
   if(!val('f-destination')) document.getElementById('f-destination').value=[r.city,r.country].filter(Boolean).join(', ');
   if(!val('f-experience')) document.getElementById('f-experience').value=inferExperience(r);
+  // Auto-populate booking link based on selected brand
+  _fillBrandLink(r);
   // Build main picker (hero/about targets)
   const targets=[
     {label:'Set Hero',fieldId:'f-heroPhoto'},
@@ -949,6 +962,25 @@ async function onFITResortChange(){
   document.getElementById('f-r4-mini-picker').classList.remove('hidden');
   // Populate room category dropdowns from CRM
   populateRoomCatGrids(r.roomCategories||[]);
+}
+
+function _fillBrandLink(r){
+  const brand=document.querySelector('input[name="f-brand"]:checked')?.value||'ct';
+  const link=brand==='dwt'?(r.dwtUrl||r.bookingLink||''):(r.ctUrl||'');
+  document.getElementById('f-bookingLink').value=link;
+  // Update toggle visual
+  document.getElementById('brand-ct-label').style.background=brand==='ct'?'var(--black)':'#fff';
+  document.getElementById('brand-ct-label').style.color=brand==='ct'?'var(--gold-2)':'var(--brown-lt)';
+  document.getElementById('brand-dwt-label').style.background=brand==='dwt'?'var(--black)':'#fff';
+  document.getElementById('brand-dwt-label').style.color=brand==='dwt'?'var(--gold-2)':'var(--brown-lt)';
+  const hint=document.getElementById('brand-link-hint');
+  if(hint) hint.textContent=link?`Auto-filled: ${link.replace(/^https?:\/\//,'').substring(0,50)}…`:'No '+brand.toUpperCase()+' link saved for this resort — enter manually below.';
+}
+async function onBrandChange(){
+  const slug=val('f-resort');
+  if(!slug) return;
+  const r=await getResort(slug);
+  if(r) _fillBrandLink(r);
 }
 
 let _roomCats=[];

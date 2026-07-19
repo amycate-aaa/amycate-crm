@@ -379,9 +379,15 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Booking, wedding and real wedding URLs used in quotes and emails.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="form-group">
-          <label>Booking Link (DWT / CT site) <span style="color:#c0392b;">*</span></label>
-          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://www.destinationweddings.com/...">
+          <label>DWT Link <span style="color:#888;font-size:.75rem;">(destinationweddings.com)</span></label>
+          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://www.destinationweddings.com/resort-name">
         </div>
+        <div class="form-group">
+          <label>CT Link <span style="color:#888;font-size:.75rem;">(booking.celebrationtravel.com)</span></label>
+          <input type="url" class="form-control" id="profileCtUrl" placeholder="https://booking.celebrationtravel.com/hotels/...">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="form-group">
           <label>Gallery Link</label>
           <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://amy-cate.com/gallery?gallery=...">
@@ -674,7 +680,8 @@ async function loadResortProfile(slugOverride) {
       set('profileDescription', d.description);
       set('profileHighlights', Array.isArray(d.highlights) ? d.highlights.join(' · ') : d.highlights);
       set('profileStars', d.stars);
-      set('profileBookingLink', d.bookingLink || d.dwtUrl);
+      set('profileBookingLink', d.dwtUrl || d.bookingLink);
+      set('profileCtUrl', d.ctUrl);
       set('profileGalleryLink', d.galleryLink);
       set('profileNotes', d.notes);
       set('profileWeddingUrl', d.weddingUrl);
@@ -695,7 +702,7 @@ async function loadResortProfile(slugOverride) {
       if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
     } else {
       // No profile yet — clear everything
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink',
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
        'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
        'profileClubName','profileClubPerks','profileWeddingGuide','profileStars'].forEach(id => set(id, ''));
       ['roomcat-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
@@ -815,7 +822,8 @@ async function saveResortProfile() {
     description:  document.getElementById('profileDescription').value.trim(),
     highlights:   document.getElementById('profileHighlights').value.trim(),
     stars:        document.getElementById('profileStars').value,
-    bookingLink:  document.getElementById('profileBookingLink').value.trim(),
+    dwtUrl:       document.getElementById('profileBookingLink').value.trim(),
+    ctUrl:        document.getElementById('profileCtUrl')?.value?.trim() || '',
     galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
     notes:           document.getElementById('profileNotes').value.trim(),
     weddingUrl:      document.getElementById('profileWeddingUrl').value.trim(),
