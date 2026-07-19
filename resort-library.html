@@ -643,80 +643,71 @@ function initFilterResortDropdown() {
 async function loadResortProfile(slugOverride) {
   const slug = slugOverride || document.getElementById('profileResort')?.value;
   const form = document.getElementById('profileForm');
-  if (!slug) { if (form) form.style.display = 'none'; return; }
-  if (form) form.style.display = 'block';
+  const loadMsg = document.getElementById('profileLoadingMsg');
+
+  if (!slug) {
+    if (form) form.style.display = 'none';
+    if (loadMsg) loadMsg.style.display = 'none';
+    return;
+  }
+
   // Keep hidden select in sync
   const profileSel = document.getElementById('profileResort');
   if (profileSel) profileSel.value = slug;
 
-  // Show loading state
-  const profileLoadingMsg = document.getElementById('profileLoadingMsg');
-  const profileFields = document.getElementById('profileFields');
-  if (profileLoadingMsg) profileLoadingMsg.style.display = 'block';
-  if (profileFields) profileFields.style.opacity = '0.3';
+  // HIDE form, show spinner — never show blank fields
+  if (form) form.style.display = 'none';
+  if (loadMsg) { loadMsg.style.display = 'block'; loadMsg.textContent = '⏳ Loading profile...'; }
+
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
 
   try {
     const doc = await db.collection('resortProfiles').doc(slug).get();
-    if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
-    if (profileFields) profileFields.style.opacity = '1';
+
     if (doc.exists) {
       const d = doc.data();
-      document.getElementById('profileTagline').value = d.tagline || '';
-      document.getElementById('profileDescription').value = d.description || '';
-      document.getElementById('profileHighlights').value = Array.isArray(d.highlights) ? d.highlights.join(' · ') : (d.highlights || '');
-      document.getElementById('profileStars').value = d.stars || '';
-      document.getElementById('profileBookingLink').value = d.bookingLink || '';
-      document.getElementById('profileGalleryLink').value = d.galleryLink || '';
-      document.getElementById('profileNotes').value = d.notes || '';
-      document.getElementById('profileWeddingUrl').value = d.weddingUrl || '';
-      document.getElementById('profileRealWeddingUrl').value = d.realWeddingUrl || '';
-      document.getElementById('profileRealWeddingNames').value = d.realWeddingNames || '';
-      document.getElementById('profileClubName').value = d.clubLevelName || d.clubName || '';
+      set('profileTagline', d.tagline);
+      set('profileDescription', d.description);
+      set('profileHighlights', Array.isArray(d.highlights) ? d.highlights.join(' · ') : d.highlights);
+      set('profileStars', d.stars);
+      set('profileBookingLink', d.bookingLink);
+      set('profileGalleryLink', d.galleryLink);
+      set('profileNotes', d.notes);
+      set('profileWeddingUrl', d.weddingUrl);
+      set('profileRealWeddingUrl', d.realWeddingUrl);
+      set('profileRealWeddingNames', d.realWeddingNames);
+      set('profileClubName', d.clubLevelName || d.clubName);
       const rawPerks = d.clubLevelPerks || d.clubPerks || '';
-      document.getElementById('profileClubPerks').value = Array.isArray(rawPerks) ? rawPerks.join('\n') : rawPerks;
-      document.getElementById('profileWeddingGuide').value = d.weddingGuide || '';
+      set('profileClubPerks', Array.isArray(rawPerks) ? rawPerks.join('\n') : rawPerks);
+      set('profileWeddingGuide', d.weddingGuide);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) {
-        roomcatList.innerHTML = '';
-        (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description));
-      }
+      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description)); }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
-      if (venueList) {
-        venueList.innerHTML = '';
-        (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo));
-      }
+      if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
       // Load wedding packages
       const pkgList = document.getElementById('pkg-list');
-      if (pkgList) {
-        pkgList.innerHTML = '';
-        (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured));
-      }
+      if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
     } else {
-      if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
-      if (profileFields) profileFields.style.opacity = '1';
-      // No profile saved yet — clear all fields
-      const roomcatListClear = document.getElementById('roomcat-list');
-      if (roomcatListClear) roomcatListClear.innerHTML = '';
-      const venueListClear = document.getElementById('venue-list');
-      if (venueListClear) venueListClear.innerHTML = '';
-      const pkgListClear = document.getElementById('pkg-list');
-      if (pkgListClear) pkgListClear.innerHTML = '';
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink','profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames','profileClubName','profileClubPerks','profileWeddingGuide'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-      });
-      const starsEl = document.getElementById('profileStars');
-      if (starsEl) starsEl.value = '';
-      // Show a subtle notice
+      // No profile yet — clear everything
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileGalleryLink',
+       'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
+       'profileClubName','profileClubPerks','profileWeddingGuide','profileStars'].forEach(id => set(id, ''));
+      ['roomcat-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
       const noProfileMsg = document.getElementById('noProfileMsg');
       if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
+
+    // Show form ONLY after all fields are populated
+    if (loadMsg) loadMsg.style.display = 'none';
+    if (form) form.style.display = 'block';
+
   } catch(e) {
-    if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
-    if (profileFields) profileFields.style.opacity = '1';
     console.error('loadResortProfile error:', e);
+    if (loadMsg) loadMsg.style.display = 'none';
+    if (form) form.style.display = 'block'; // show on error so user isn't stuck
+    toast('Error loading profile: ' + e.message, 'error');
   }
 }
 
