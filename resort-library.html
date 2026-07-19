@@ -1287,7 +1287,8 @@ async function runAudit() {
     const checks = [
       { key:'tagline',      label:'Tagline' },
       { key:'description',  label:'Description' },
-      { key:'bookingLink',  label:'Booking Link' },
+      { key:'dwtUrl',       label:'DWT Link', altKey:'bookingLink' },
+      { key:'ctUrl',        label:'CT Link' },
       { key:'weddingUrl',   label:'Wedding URL' },
       { key:'venues',       label:'Venues',   isArr:true },
       { key:'packages',     label:'Packages', isArr:true },
@@ -1302,19 +1303,20 @@ async function runAudit() {
       const catCount = photoCats[r.slug]?.size || 0;
       const hasProfile = !!profiles[r.slug];
 
+      const checkOk = (c) => {
+        if (c.isArr) return Array.isArray(p[c.key]) && p[c.key].length > 0;
+        const val = p[c.key] || (c.altKey ? p[c.altKey] : '');
+        return !!(val && val.toString().trim());
+      };
+
       const cells = checks.map(c => {
-        let ok = false;
-        if (c.isArr) { ok = Array.isArray(p[c.key]) ? p[c.key].length > 0 : false; }
-        else         { ok = !!(p[c.key] && p[c.key].toString().trim()); }
+        const ok = checkOk(c);
         return `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${ok ? '✅' : '❌'}</td>`;
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
 
-      const allOk = checks.every(c => {
-        if (c.isArr) return Array.isArray(p[c.key]) && p[c.key].length > 0;
-        return !!(p[c.key] && p[c.key].toString().trim());
-      }) && photos > 0;
+      const allOk = checks.every(c => checkOk(c)) && photos > 0;
       if (allOk) completedResorts++;
 
       const rowBg = !hasProfile ? '#fff0f0' : allOk ? '#f0fff4' : '#fff';
