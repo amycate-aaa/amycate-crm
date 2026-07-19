@@ -273,6 +273,17 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="stat"><div class="stat-num" id="statSize">0 MB</div><div class="stat-label">Storage Used</div></div>
   </div>
 
+  <!-- RESORT AUDIT SECTION -->
+  <div id="auditSection" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+      <h3 style="font-size:1rem;color:#ccc;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin:0;">&#128202; Resort Completion Audit</h3>
+      <button class="btn btn-primary btn-sm" onclick="runAudit()">Run Audit</button>
+      <span id="auditStatus" style="color:#666;font-size:.82rem;"></span>
+    </div>
+    <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Shows what's complete and what's still needed for each resort in the library.</p>
+    <div id="auditGrid" style="overflow-x:auto;"></div>
+  </div>
+
   <!-- RESORT PROFILE SECTION -->
   <div class="upload-section" style="margin-top:20px;">
     <h3>&#9998; Resort Profile</h3>
@@ -322,97 +333,156 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   </div>
 
   <!-- RESORT PROFILE FORM -->
-  <div id="profileForm" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:24px;margin-bottom:24px;">
-    <h3 style="font-size:1rem;color:#ccc;font-weight:600;margin-bottom:4px;letter-spacing:.05em;text-transform:uppercase;">&#127970; Resort Profile</h3>
-    <p style="color:#666;font-size:.82rem;margin-bottom:18px;">These details auto-fill in your Quote Builder when you select this resort.</p>
-    <div id="profileLoadingMsg" style="display:none;color:#f0c958;font-size:.85rem;padding:8px 0;margin-bottom:8px;">&#9203; Loading profile data...</div>
+  <div id="profileForm" style="display:none;margin-bottom:24px;">
+
+    <!-- Loading bar -->
+    <div id="profileLoadingMsg" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:16px 24px;color:#f0c958;font-size:.9rem;">&#9203; Loading resort profile...</div>
+
     <div id="profileFields">
-    <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in any details above and click Save Profile.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="form-group">
-        <label>Tagline</label>
-        <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Where luxury meets paradise">
+
+    <!-- SECTION 1: CORE INFO -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#127968; Core Info</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Name, tagline and description shown in all client-facing quotes.</p>
+      <div style="display:grid;grid-template-columns:1fr 120px;gap:12px;margin-bottom:12px;">
+        <div class="form-group">
+          <label>Tagline <span style="color:#c0392b;">*</span></label>
+          <input type="text" class="form-control" id="profileTagline" placeholder="e.g. Grand-scale adults-only luxury on Costa Mujeres">
+        </div>
+        <div class="form-group">
+          <label>Stars</label>
+          <select class="form-control" id="profileStars">
+            <option value="">--</option>
+            <option value="5">5 Stars</option>
+            <option value="4.5">4.5 Stars</option>
+            <option value="4">4 Stars</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Description <span style="color:#c0392b;">*</span></label>
+        <textarea class="form-control" id="profileDescription" rows="4" placeholder="Full resort description for client quotes — sell it! Mention location, vibe, dining, pools, what makes it special..."></textarea>
       </div>
       <div class="form-group">
-        <label>Stars / Rating</label>
-        <select class="form-control" id="profileStars">
-          <option value="">-- select --</option>
-          <option value="5">5 Stars</option>
-          <option value="4.5">4.5 Stars</option>
-          <option value="4">4 Stars</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group" style="margin-bottom:12px;">
-      <label>Description</label>
-      <textarea class="form-control" id="profileDescription" rows="3" placeholder="Resort overview for client quotes..."></textarea>
-    </div>
-    <div class="form-group" style="margin-bottom:12px;">
-      <label>Highlights <span style="color:#555;font-size:.75rem;">(separate with · )</span></label>
-      <input type="text" class="form-control" id="profileHighlights" placeholder="All-inclusive · Adults-only · Beachfront · 10 restaurants">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="form-group">
-        <label>Booking Link</label>
-        <input type="url" class="form-control" id="profileBookingLink" placeholder="https://...">
-      </div>
-      <div class="form-group">
-        <label>Gallery Link</label>
-        <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://...">
+        <label>Highlights <span style="color:#555;font-size:.75rem;">(key selling points, separate with &middot; )</span></label>
+        <input type="text" class="form-control" id="profileHighlights" placeholder="5 Stars &middot; Adults-Only &middot; Beachfront &middot; Diamond Partner &middot; 570 Rooms">
       </div>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div class="form-group">
-        <label>Wedding Package URL</label>
-        <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://...">
+
+    <!-- SECTION 2: LINKS -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#128279; Links</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Booking, wedding and real wedding URLs used in quotes and emails.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="form-group">
+          <label>Booking Link (DWT / CT site) <span style="color:#c0392b;">*</span></label>
+          <input type="url" class="form-control" id="profileBookingLink" placeholder="https://www.destinationweddings.com/...">
+        </div>
+        <div class="form-group">
+          <label>Gallery Link</label>
+          <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://amy-cate.com/gallery?gallery=...">
+        </div>
       </div>
-      <div class="form-group">
-        <label>Real Wedding URL</label>
-        <input type="url" class="form-control" id="profileRealWeddingUrl" placeholder="https://...">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="form-group">
+          <label>Wedding Package URL <span style="color:#c0392b;">*</span></label>
+          <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://www.destinationweddings.com/.../weddings">
+        </div>
+        <div class="form-group">
+          <label>Real Wedding URL <span style="color:#555;font-size:.75rem;">(if available)</span></label>
+          <input type="url" class="form-control" id="profileRealWeddingUrl" placeholder="https://...">
+        </div>
       </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="form-group">
         <label>Real Wedding Couple Names</label>
-        <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James">
+        <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James — shown with the real wedding link">
+      </div>
+    </div>
+
+    <!-- SECTION 3: CLUB LEVEL -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#10024; Club Level <span style="font-size:.75rem;color:#555;font-weight:400;text-transform:none;letter-spacing:0;">(if applicable)</span></h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Preferred Club, Elegance Club, etc. — shown as an upgrade option in quotes.</p>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Club Level Name</label>
+        <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Elegance Club, Preferred Club, Sky Club">
       </div>
       <div class="form-group">
-        <label>Club Level Name</label>
-        <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Preferred Club, Elegance Club">
+        <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
+        <textarea class="form-control" id="profileClubPerks" rows="4" placeholder="Butler service&#10;Private beach area&#10;Premium minibar stocked daily&#10;Room upgrades subject to availability&#10;Private check-in"></textarea>
       </div>
     </div>
-    <div class="form-group" style="margin-bottom:12px;">
-      <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
-      <textarea class="form-control" id="profileClubPerks" rows="3" placeholder="Butler service&#10;Private pool access&#10;Premium minibar"></textarea>
+
+    <!-- SECTION 4: ROOM CATEGORIES -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#127981; Room Categories &amp; Descriptions <span style="color:#c0392b;">*</span></h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Every room type available at this resort. Descriptions auto-fill in quotes and the gallery. Upload photos for each via the section above.</p>
+      <div id="roomcat-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addRoomCatRow()">+ Add Room Category</button>
     </div>
-    <div class="form-group" style="margin-bottom:12px;">
-      <label>Wedding Guide / Notes</label>
-      <textarea class="form-control" id="profileWeddingGuide" rows="2" placeholder="Internal notes about weddings at this resort..."></textarea>
-    </div>
-    <div class="form-group" style="margin-bottom:12px;">
-      <label>Agent Notes</label>
-      <textarea class="form-control" id="profileNotes" rows="2" placeholder="Internal notes visible only to you..."></textarea>
-    </div>
-    <div class="form-group" style="margin-bottom:16px;">
-      <label>Wedding Venues</label>
-      <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;"></div>
+
+    <!-- SECTION 5: WEDDING VENUES -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#128141; Wedding Venues <span style="color:#c0392b;">*</span></h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All ceremony and reception locations. Include capacity, best use and a photo URL for each.</p>
+      <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addVenueRow()">+ Add Venue</button>
     </div>
-    <div class="form-group" style="margin-bottom:16px;">
-      <label>Wedding Packages</label>
-      <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:8px;"></div>
+
+    <!-- SECTION 6: WEDDING PACKAGES -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#128141; Wedding Packages &amp; Pricing <span style="color:#c0392b;">*</span></h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All available packages with pricing. Mark the most popular one as featured.</p>
+      <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
     </div>
-    </div><!-- /profileFields -->
+
+    <!-- SECTION 7: NOTES -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#128221; Agent Notes</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Internal notes — not shown to clients.</p>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Wedding Guide / Important Notes</label>
+        <textarea class="form-control" id="profileWeddingGuide" rows="3" placeholder="Min guest counts, ceremony restrictions, key coordinator contacts, peak season notes..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>General Notes</label>
+        <textarea class="form-control" id="profileNotes" rows="2" placeholder="Anything else worth remembering about this property..."></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 8: PHOTO REMINDER -->
+    <div style="background:#16201a;border:1px solid #2a3a2a;border-radius:10px;padding:18px 24px;margin-bottom:16px;">
+      <h3 style="font-size:1rem;color:#5a9a5a;font-weight:600;margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;">&#128247; Photos Checklist</h3>
+      <p style="color:#666;font-size:.85rem;margin-bottom:10px;">Upload photos using the section at the top of this page. Make sure you have photos for each category below:</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.83rem;color:#888;" id="photoCategoryChecklist">
+        <div>&#9744; Aerial View</div>
+        <div>&#9744; Resort &amp; Property</div>
+        <div>&#9744; Beach &amp; Pool</div>
+        <div>&#9744; Lobby &amp; Common Areas</div>
+        <div>&#9744; Dining</div>
+        <div>&#9744; Bar</div>
+        <div>&#9744; Spa</div>
+        <div>&#9744; Activities</div>
+        <div>&#9744; Wedding Venues</div>
+        <div>&#9744; Each Room Category</div>
+      </div>
+    </div>
+
+    <!-- SAVE -->
+    <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in the details above and click Save Profile.</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <button class="btn btn-primary" onclick="saveResortProfile()">Save Profile</button>
+      <button class="btn btn-primary" onclick="saveResortProfile()">&#128190; Save Profile</button>
       <span id="profileSaveMsg" style="display:none;color:#27ae60;font-size:.85rem;"></span>
     </div>
+
+    </div><!-- /profileFields -->
   </div>
+
 
   <!-- FILTERS -->
   <div class="filters-bar">
-    <select class="filter-select" id="filterResort" onchange="applyFilters()">
+    <select class="filter-select" id="filterResort" onchange="applyFilters(); if(this.value) { document.getElementById('masterResort').value=this.value; loadResortProfile(this.value); }">
       <option value="">All Resorts</option>
       <option value="dreams-riviera-cancun">Dreams Riviera Cancun</option>
       <option value="breathless-punta-cana">Breathless Punta Cana</option>
@@ -605,6 +675,12 @@ async function loadResortProfile(slugOverride) {
       const rawPerks = d.clubLevelPerks || d.clubPerks || '';
       document.getElementById('profileClubPerks').value = Array.isArray(rawPerks) ? rawPerks.join('\n') : rawPerks;
       document.getElementById('profileWeddingGuide').value = d.weddingGuide || '';
+      // Load room categories
+      const roomcatList = document.getElementById('roomcat-list');
+      if (roomcatList) {
+        roomcatList.innerHTML = '';
+        (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description));
+      }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
       if (venueList) {
@@ -621,6 +697,8 @@ async function loadResortProfile(slugOverride) {
       if (profileLoadingMsg) profileLoadingMsg.style.display = 'none';
       if (profileFields) profileFields.style.opacity = '1';
       // No profile saved yet — clear all fields
+      const roomcatListClear = document.getElementById('roomcat-list');
+      if (roomcatListClear) roomcatListClear.innerHTML = '';
       const venueListClear = document.getElementById('venue-list');
       if (venueListClear) venueListClear.innerHTML = '';
       const pkgListClear = document.getElementById('pkg-list');
@@ -702,6 +780,32 @@ function getPackages() {
   })).filter(p => p.name);
 }
 
+
+function addRoomCatRow(name='', description='') {
+  const list = document.getElementById('roomcat-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;" title="Remove">&#10005;</button>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Room / Suite Name</label>
+      <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
+    </div>
+    <div>
+      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Description</label>
+      <textarea class="form-control roomcat-desc" rows="2" placeholder="Describe the room — size, bed type, view, key amenities...">${description}</textarea>
+    </div>`;
+  list.appendChild(div);
+}
+
+function getRoomCategories() {
+  return [...document.querySelectorAll('#roomcat-list > div')].map(div => ({
+    name:        div.querySelector('.roomcat-name')?.value?.trim() || '',
+    description: div.querySelector('.roomcat-desc')?.value?.trim() || ''
+  })).filter(r => r.name);
+}
+
 async function saveResortProfile() {
   const slug = document.getElementById('masterResort')?.value || document.getElementById('profileResort')?.value;
   if (!slug) { toast('Please select a resort from the Active Resort dropdown first.', 'error'); return; }
@@ -729,6 +833,7 @@ async function saveResortProfile() {
     weddingGuide:    document.getElementById('profileWeddingGuide').value.trim(),
     venues:       getVenues(),
     packages:     getPackages(),
+    roomCategories: getRoomCategories(),
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
   };
 
@@ -1121,6 +1226,110 @@ async function saveEditPhoto() {
 loadPhotos();
 initProfileResortDropdown();
 initFilterResortDropdown();
+// ── RESORT AUDIT ──
+
+function toggleAudit() {
+  const sec = document.getElementById('auditSection');
+  if (!sec) return;
+  const isHidden = sec.style.display === 'none';
+  sec.style.display = isHidden ? 'block' : 'none';
+  if (isHidden) runAudit();
+}
+
+async function runAudit() {
+  const grid = document.getElementById('auditGrid');
+  const status = document.getElementById('auditStatus');
+  if (!grid) return;
+  grid.innerHTML = '<div style="color:#666;padding:20px 0;">Loading all resort profiles...</div>';
+  if (status) status.textContent = 'Fetching...';
+
+  try {
+    // Get all resort profiles
+    const snap = await db.collection('resortProfiles').get();
+    const profiles = {};
+    snap.docs.forEach(d => { profiles[d.id] = d.data(); });
+
+    // Get photo counts per resort
+    const photoSnap = await db.collection('resortPhotos').get();
+    const photoCounts = {};
+    const photoCats   = {};
+    photoSnap.docs.forEach(d => {
+      const p = d.data();
+      const slug = p.resortSlug || p.resort || '';
+      if (!slug) return;
+      photoCounts[slug] = (photoCounts[slug] || 0) + 1;
+      if (!photoCats[slug]) photoCats[slug] = new Set();
+      if (p.roomCategory || p.category) photoCats[slug].add(p.roomCategory || p.category);
+    });
+
+    // Get resort list from master dropdown
+    const masterSel = document.getElementById('masterResort');
+    const resorts = masterSel ? [...masterSel.options].filter(o=>o.value).map(o=>({slug:o.value, name:o.text})) : [];
+
+    // Required fields to check
+    const checks = [
+      { key:'tagline',      label:'Tagline' },
+      { key:'description',  label:'Description' },
+      { key:'bookingLink',  label:'Booking Link' },
+      { key:'weddingUrl',   label:'Wedding URL' },
+      { key:'venues',       label:'Venues',   isArr:true },
+      { key:'packages',     label:'Packages', isArr:true },
+      { key:'roomCategories', label:'Room Cats', isArr:true },
+    ];
+
+    let completedResorts = 0;
+
+    const rows = resorts.map(r => {
+      const p = profiles[r.slug] || {};
+      const photos  = photoCounts[r.slug] || 0;
+      const catCount = photoCats[r.slug]?.size || 0;
+      const hasProfile = !!profiles[r.slug];
+
+      const cells = checks.map(c => {
+        let ok = false;
+        if (c.isArr) { ok = Array.isArray(p[c.key]) ? p[c.key].length > 0 : false; }
+        else         { ok = !!(p[c.key] && p[c.key].toString().trim()); }
+        return `<td style="text-align:center;padding:8px 6px;font-size:.85rem;">${ok ? '&#9989;' : '&#10060;'}</td>`;
+      });
+
+      const photoCell = `<td style="text-align:center;padding:8px 6px;font-size:.85rem;color:${photos>0?'#27ae60':'#c0392b'};">${photos} <span style="font-size:.72rem;color:#555;">(${catCount} cats)</span></td>`;
+
+      const allOk = checks.every(c => {
+        if (c.isArr) return Array.isArray(p[c.key]) && p[c.key].length > 0;
+        return !!(p[c.key] && p[c.key].toString().trim());
+      }) && photos > 0;
+      if (allOk) completedResorts++;
+
+      const rowBg = !hasProfile ? '#1e1212' : allOk ? '#121e12' : '#1a1a1a';
+
+      return `<tr style="border-bottom:1px solid #222;background:${rowBg};">
+        <td style="padding:8px 12px;font-size:.85rem;white-space:nowrap;">
+          <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#f0c958;text-decoration:none;">${r.name}</a>
+        </td>
+        ${cells.join('')}
+        ${photoCell}
+      </tr>`;
+    });
+
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos'].map(h =>
+      `<th style="padding:8px 10px;font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};">${h}</th>`
+    ).join('');
+
+    grid.innerHTML = `<table style="width:100%;border-collapse:collapse;">
+      <thead><tr style="border-bottom:2px solid #333;">${headers}</tr></thead>
+      <tbody>${rows.join('')}</tbody>
+    </table>
+    <div style="margin-top:12px;font-size:.82rem;color:#666;">&#9989; = complete &nbsp;&nbsp; &#10060; = missing &nbsp;&nbsp; Green row = fully complete &nbsp;&nbsp; Red row = no profile yet. Click resort name to edit.</div>`;
+
+    if (status) status.textContent = `${completedResorts} of ${resorts.length} resorts fully complete`;
+
+  } catch(e) {
+    if (grid) grid.innerHTML = '<div style="color:#e74c3c;padding:20px 0;">Error: ' + e.message + '</div>';
+    console.error('Audit error:', e);
+  }
+}
+
+
 </script>
 
 <!-- EDIT PHOTO MODAL -->
