@@ -247,30 +247,34 @@ async function writeProfile(slug, existing, scraped, opts) {
   const update = {};
   let changed = false;
 
-  // Helper: only set if field is blank in Firestore
-  const setIfEmpty = (key, val) => {
-    if (!existing[key] && val) { update[key] = val; changed = true; }
-  };
+  // Always overwrite with CT data if we have it
+  const set = (key, val) => { if (val !== undefined && val !== '') { update[key] = val; changed = true; } };
 
-  if (opts.desc)       setIfEmpty('description', scraped.description);
-  if (opts.tagline)    setIfEmpty('tagline',     scraped.tagline);
-  if (opts.stars)      setIfEmpty('stars',       scraped.stars);
-  if (opts.highlights) setIfEmpty('highlights',  scraped.highlights?.join(' · '));
-  if (opts.rooms && scraped.roomCategories?.length && !existing.roomCategories?.length) {
+  if (opts.desc)       set('description', scraped.description);
+  if (opts.tagline)    set('tagline',     scraped.tagline);
+  if (opts.stars)      set('stars',       scraped.stars);
+  if (opts.highlights) set('highlights',  scraped.highlights?.join(' · '));
+  if (opts.rooms && scraped.roomCategories?.length) {
     update.roomCategories = scraped.roomCategories.map(r => ({ name: r.name, description: r.description || '' }));
     changed = true;
   }
-  if (scraped.city && !existing.city)    { update.city    = scraped.city;    changed = true; }
-  if (scraped.country && !existing.country) { update.country = scraped.country; changed = true; }
+  if (scraped.city)    set('city',    scraped.city);
+  if (scraped.country) set('country', scraped.country);
 
   if (changed) {
     await db.collection('resortProfiles').doc(slug).set(update, { merge: true });
   }
 
-  // Room photos → resortPhotos collection
-  if (opts.photos && opts.rooms) {
-    const photoSnap = await db.collection('resortPhotos').where('resortSlug', '==', slug).limit(1).get();
-    if (photoSnap.empty && scraped.roomCategories?.length) {
+  // Room photos → resortPhotos collection (always replace CT-sourced photos)
+  if (opts.photos && opts.rooms && scraped.roomCategories?.length) {
+    // Delete old CT-imported photos first, then re-add fresh ones
+    const oldSnap = await db.collection('resortPhotos').where('resortSlug', '==', slug).where('source', '==', 'ct-import').get();
+    if (!oldSnap.empty) {
+      const delBatch = db.batch();
+      oldSnap.docs.forEach(d => delBatch.delete(d.ref));
+      await delBatch.commit();
+    }
+    if (scraped.roomCategories?.length) {
       const batch = db.batch();
       let count = 0;
       for (const room of scraped.roomCategories) {
@@ -302,7 +306,6 @@ async function writeProfile(slug, existing, scraped, opts) {
         count++;
       }
       if (count > 0) await batch.commit();
-    }
   }
 
   return changed;
