@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CT Profile Auto-Importer</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-height:100vh;}
+.header{background:#1E1A14;padding:20px 32px;display:flex;align-items:center;gap:16px;}
+.header h1{font-family:Georgia,serif;font-size:20px;color:#fff;font-weight:400;}
+.header .sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B8975A;}
+.wrapper{max-width:860px;margin:0 auto;padding:32px 24px 80px;}
+.card{background:#fff;border:1px solid #ddd;border-radius:6px;margin-bottom:20px;overflow:hidden;}
+.card-head{padding:14px 20px;background:#f9f6f1;border-bottom:1px solid #eee;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5C5044;}
+.card-body{padding:20px;}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border:none;border-radius:4px;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.2s;}
+.btn-primary{background:#D4B882;color:#1E1A14;}
+.btn-primary:hover{background:#B8975A;color:#fff;}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;}
+.btn-danger{background:#c0392b;color:#fff;}
+.btn-sm{padding:8px 16px;font-size:10px;}
+.progress-bar-wrap{background:#eee;border-radius:20px;height:12px;margin:12px 0;}
+.progress-bar{background:linear-gradient(90deg,#B8975A,#D4B882);height:12px;border-radius:20px;transition:width .4s;}
+.status-line{font-size:13px;color:#5C5044;margin:6px 0;}
+.log{background:#1E1A14;border-radius:4px;padding:16px;max-height:300px;overflow-y:auto;font-family:monospace;font-size:12px;color:#ccc;line-height:1.7;}
+.log .ok{color:#27ae60;}
+.log .skip{color:#f0c958;}
+.log .err{color:#e74c3c;}
+.log .info{color:#3498db;}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px;}
+.stat-box{background:#f9f6f1;border-radius:4px;padding:14px;text-align:center;}
+.stat-num{font-size:28px;font-weight:700;color:#B8975A;font-family:Georgia,serif;}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#9C8E80;margin-top:4px;}
+.field-row{display:flex;gap:12px;align-items:center;margin-bottom:10px;flex-wrap:wrap;}
+.field-row label{display:flex;align-items:center;gap:6px;font-size:13px;color:#5C5044;cursor:pointer;}
+.field-row input[type=checkbox]{width:16px;height:16px;accent-color:#B8975A;cursor:pointer;}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.tag-green{background:#d4edda;color:#155724;}
+.tag-yellow{background:#fff3cd;color:#856404;}
+.tag-blue{background:#d1ecf1;color:#0c5460;}
+iframe#scraper{display:none;width:1200px;height:800px;position:fixed;top:-9999px;left:-9999px;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div><div class="sub">CRM Tools</div><h1>CT Profile Auto-Importer</h1></div>
+</div>
+
+<iframe id="scraper"></iframe>
+
+<div class="wrapper">
+
+  <div class="card">
+    <div class="card-head">What This Does</div>
+    <div class="card-body" style="font-size:14px;color:#5C5044;line-height:1.8;">
+      Loads each resort's Celebration Travel page, extracts <strong>description, star rating, highlights, room categories (with photos and descriptions)</strong>, and writes them to Firestore — <em>only filling in fields that are currently blank</em>. Existing data is never overwritten.
+      <br><br>
+      <strong style="color:#1E1A14;">You must be logged into booking.celebrationtravel.com in this same browser for this to work.</strong>
+      <a href="https://booking.celebrationtravel.com" target="_blank" style="color:#B8975A;margin-left:8px;">Open CT ↗</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">Import Settings</div>
+    <div class="card-body">
+      <p style="font-size:12px;color:#9C8E80;margin-bottom:14px;">Choose which fields to import (only fills blank fields — never overwrites existing data):</p>
+      <div class="field-row">
+        <label><input type="checkbox" id="opt-desc" checked> Description</label>
+        <label><input type="checkbox" id="opt-tagline" checked> Tagline</label>
+        <label><input type="checkbox" id="opt-stars" checked> Star Rating</label>
+        <label><input type="checkbox" id="opt-highlights" checked> Highlights</label>
+        <label><input type="checkbox" id="opt-rooms" checked> Room Categories (with photos)</label>
+        <label><input type="checkbox" id="opt-photos" checked> Gallery Photos → resortPhotos</label>
+      </div>
+      <div style="margin-top:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" id="startBtn" onclick="startImport()">▶ Start Import (70 Resorts)</button>
+        <button class="btn btn-sm" id="stopBtn" onclick="stopImport()" style="display:none;background:#e74c3c;color:#fff;">⏹ Stop</button>
+        <span id="loginStatus" style="font-size:12px;color:#9C8E80;"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="progressCard" style="display:none;">
+    <div class="card-head">Progress</div>
+    <div class="card-body">
+      <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+      <div class="status-line" id="statusLine">Starting…</div>
+      <div class="summary-grid">
+        <div class="stat-box"><div class="stat-num" id="statDone">0</div><div class="stat-label">Processed</div></div>
+        <div class="stat-box"><div class="stat-num" id="statUpdated">0</div><div class="stat-label">Updated</div></div>
+        <div class="stat-box"><div class="stat-num" id="statSkipped">0</div><div class="stat-label">Skipped</div></div>
+        <div class="stat-box"><div class="stat-num" id="statErrors">0</div><div class="stat-label">Errors</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" id="logCard" style="display:none;">
+    <div class="card-head" style="display:flex;justify-content:space-between;">
+      <span>Import Log</span>
+      <button class="btn btn-sm" onclick="document.getElementById('log').innerHTML=''" style="background:#eee;color:#555;font-size:10px;padding:4px 10px;">Clear</button>
+    </div>
+    <div class="card-body" style="padding:12px;">
+      <div class="log" id="log"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<script>
+// ── Firebase ──────────────────────────────────────────────
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: 'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
+    projectId: 'wedding-crm-e5d12'
+  });
+}
+const db = firebase.firestore();
+
+// ── State ─────────────────────────────────────────────────
+let _resorts = [];
+let _running = false;
+let _statDone = 0, _statUpdated = 0, _statSkipped = 0, _statErrors = 0;
+
+// ── Log helper ────────────────────────────────────────────
+function log(msg, type='') {
+  const el = document.getElementById('log');
+  const line = document.createElement('div');
+  line.className = type;
+  line.textContent = msg;
+  el.appendChild(line);
+  el.scrollTop = el.scrollHeight;
+}
+
+function updateStats() {
+  document.getElementById('statDone').textContent    = _statDone;
+  document.getElementById('statUpdated').textContent = _statUpdated;
+  document.getElementById('statSkipped').textContent = _statSkipped;
+  document.getElementById('statErrors').textContent  = _statErrors;
+}
+
+// ── Scraper ───────────────────────────────────────────────
+function scrapeCtPage(doc) {
+  try {
+    const getText = sel => doc.querySelector(sel)?.textContent?.trim() || '';
+
+    // Name & location
+    const name     = getText('h1');
+    const location = getText('h4');
+    const [city, country] = location.split(',').map(s => s.trim());
+
+    // Stars
+    const bodyText  = doc.body?.innerText || '';
+    const starMatch = bodyText.match(/(\d)\s*[Ss]tar/);
+    const stars     = starMatch ? starMatch[1] : '';
+
+    // Description: all P tags (non-trivial)
+    const paragraphs = [...doc.querySelectorAll('p')]
+      .map(p => p.textContent.trim())
+      .filter(t => t.length > 40 && !t.startsWith('©'));
+    const description = paragraphs.join('\n\n');
+    const tagline = paragraphs[0] ? paragraphs[0].split('.')[0].trim() : '';
+
+    // Highlights
+    const hlStart = bodyText.indexOf('Top Highlights');
+    let highlights = [];
+    if (hlStart >= 0) {
+      const hlSection = bodyText.substring(hlStart + 14, hlStart + 600);
+      highlights = hlSection.split('\n').map(s => s.trim()).filter(s => s.length > 3 && !s.toLowerCase().includes('highlight'));
+    }
+
+    // Room categories: each H4 is a room name; find its container for photo + desc
+    const roomCategories = [];
+    const seenRooms = new Set();
+    doc.querySelectorAll('h4').forEach(h4 => {
+      const rName = h4.textContent.trim();
+      if (!rName || rName === location || rName.length < 5 || seenRooms.has(rName)) return;
+      seenRooms.add(rName);
+
+      let container = h4.parentElement;
+      for (let i = 0; i < 5; i++) {
+        if (!container) break;
+        const img  = container.querySelector('img[src]');
+        const desc = [...container.querySelectorAll('p,li')]
+          .map(e => e.textContent.trim()).filter(t => t.length > 20)[0] || '';
+        if (img?.src || desc) {
+          roomCategories.push({
+            name: rName,
+            photo: img?.src || '',
+            description: desc
+          });
+          break;
+        }
+        container = container.parentElement;
+      }
+    });
+
+    // Gallery images (deduplicated, decent quality)
+    const galleryPhotos = [...new Set(
+      [...doc.querySelectorAll('img[src]')]
+        .map(i => i.src)
+        .filter(s => s.startsWith('https') &&
+          !s.includes('icon') && !s.includes('logo') && !s.includes('star') &&
+          !s.includes('.svg') && !s.includes('flag') &&
+          (s.includes('.jpg') || s.includes('.jpeg') || s.includes('.png') || s.includes('.webp')))
+    )];
+
+    return { name, city, country, stars, description, tagline, highlights, roomCategories, galleryPhotos };
+  } catch(e) {
+    return null;
+  }
+}
+
+// ── Load resort list from Firestore ──────────────────────
+async function loadResorts() {
+  const snap = await db.collection('resortProfiles').where('ctUrl', '!=', '').get();
+  // Deduplicate by ctUrl (some resorts have duplicate slugs)
+  const seen = new Set();
+  const list = [];
+  snap.docs.forEach(d => {
+    const data = d.data();
+    if (!seen.has(data.ctUrl)) {
+      seen.add(data.ctUrl);
+      list.push({ slug: d.id, name: data.name || d.id, ctUrl: data.ctUrl, existing: data });
+    }
+  });
+  return list;
+}
+
+// ── Load a CT page in the iframe ─────────────────────────
+function loadInIframe(url) {
+  return new Promise((resolve) => {
+    const frame = document.getElementById('scraper');
+    const timeout = setTimeout(() => resolve(frame.contentDocument), 12000); // 12s max
+    frame.onload = () => { clearTimeout(timeout); setTimeout(() => resolve(frame.contentDocument), 3000); };
+    frame.src = url;
+  });
+}
+
+// ── Write to Firestore ────────────────────────────────────
+async function writeProfile(slug, existing, scraped, opts) {
+  const update = {};
+  let changed = false;
+
+  // Helper: only set if field is blank in Firestore
+  const setIfEmpty = (key, val) => {
+    if (!existing[key] && val) { update[key] = val; changed = true; }
+  };
+
+  if (opts.desc)       setIfEmpty('description', scraped.description);
+  if (opts.tagline)    setIfEmpty('tagline',     scraped.tagline);
+  if (opts.stars)      setIfEmpty('stars',       scraped.stars);
+  if (opts.highlights) setIfEmpty('highlights',  scraped.highlights?.join(' · '));
+  if (opts.rooms && scraped.roomCategories?.length && !existing.roomCategories?.length) {
+    update.roomCategories = scraped.roomCategories.map(r => ({ name: r.name, description: r.description || '' }));
+    changed = true;
+  }
+  if (scraped.city && !existing.city)    { update.city    = scraped.city;    changed = true; }
+  if (scraped.country && !existing.country) { update.country = scraped.country; changed = true; }
+
+  if (changed) {
+    await db.collection('resortProfiles').doc(slug).set(update, { merge: true });
+  }
+
+  // Room photos → resortPhotos collection
+  if (opts.photos && opts.rooms) {
+    const photoSnap = await db.collection('resortPhotos').where('resortSlug', '==', slug).limit(1).get();
+    if (photoSnap.empty && scraped.roomCategories?.length) {
+      const batch = db.batch();
+      let count = 0;
+      for (const room of scraped.roomCategories) {
+        if (!room.photo) continue;
+        const ref = db.collection('resortPhotos').doc();
+        batch.set(ref, {
+          resortSlug: slug,
+          url: room.photo,
+          roomCategory: room.name,
+          category: room.name,
+          source: 'ct-import',
+          importedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        count++;
+      }
+      // Gallery photos (first 8)
+      for (const photoUrl of scraped.galleryPhotos.slice(0, 8)) {
+        const isRoomPhoto = scraped.roomCategories.some(r => r.photo === photoUrl);
+        if (isRoomPhoto) continue;
+        const ref = db.collection('resortPhotos').doc();
+        batch.set(ref, {
+          resortSlug: slug,
+          url: photoUrl,
+          roomCategory: '',
+          category: 'Resort',
+          source: 'ct-import',
+          importedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        count++;
+      }
+      if (count > 0) await batch.commit();
+    }
+  }
+
+  return changed;
+}
+
+// ── Main import loop ──────────────────────────────────────
+async function startImport() {
+  if (_running) return;
+
+  const opts = {
+    desc:       document.getElementById('opt-desc').checked,
+    tagline:    document.getElementById('opt-tagline').checked,
+    stars:      document.getElementById('opt-stars').checked,
+    highlights: document.getElementById('opt-highlights').checked,
+    rooms:      document.getElementById('opt-rooms').checked,
+    photos:     document.getElementById('opt-photos').checked,
+  };
+
+  document.getElementById('startBtn').disabled = true;
+  document.getElementById('stopBtn').style.display = 'inline-flex';
+  document.getElementById('progressCard').style.display = 'block';
+  document.getElementById('logCard').style.display = 'block';
+  document.getElementById('scraper').style.display = 'block';
+
+  _running = true;
+  _statDone = _statUpdated = _statSkipped = _statErrors = 0;
+
+  log('Loading resort list from Firestore…', 'info');
+  try {
+    _resorts = await loadResorts();
+  } catch(e) {
+    log('❌ Failed to load resorts: ' + e.message, 'err');
+    stopImport(); return;
+  }
+  log(`Found ${_resorts.length} resorts with CT links. Starting…`, 'info');
+
+  const total = _resorts.length;
+
+  for (let i = 0; i < _resorts.length; i++) {
+    if (!_running) break;
+    const r = _resorts[i];
+    const pct = Math.round((i / total) * 100);
+    document.getElementById('progressBar').style.width = pct + '%';
+    document.getElementById('statusLine').textContent = `[${i+1}/${total}] Loading ${r.name}…`;
+
+    try {
+      log(`[${i+1}/${total}] ${r.name}`, 'info');
+      const doc = await loadInIframe(r.ctUrl);
+      if (!doc) throw new Error('iframe timeout');
+
+      const scraped = scrapeCtPage(doc);
+      if (!scraped || !scraped.name) {
+        log(`  ⚠ Could not extract data — may need CT login`, 'skip');
+        _statSkipped++; _statDone++; updateStats(); continue;
+      }
+
+      log(`  ✓ Scraped: ${scraped.roomCategories.length} rooms, ${scraped.galleryPhotos.length} photos, stars:${scraped.stars}`, 'ok');
+
+      const changed = await writeProfile(r.slug, r.existing, scraped, opts);
+      if (changed) {
+        log(`  ✅ Written to Firestore`, 'ok');
+        _statUpdated++;
+      } else {
+        log(`  ○ No new data (all fields already filled)`, 'skip');
+        _statSkipped++;
+      }
+    } catch(e) {
+      log(`  ❌ Error: ${e.message}`, 'err');
+      _statErrors++;
+    }
+
+    _statDone++;
+    updateStats();
+    // Small pause between resorts to be polite to the server
+    await new Promise(r => setTimeout(r, 500));
+  }
+
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('statusLine').textContent = `✅ Done! ${_statUpdated} resorts updated, ${_statSkipped} skipped, ${_statErrors} errors.`;
+  log(`\n✅ IMPORT COMPLETE — ${_statUpdated} updated · ${_statSkipped} skipped · ${_statErrors} errors`, 'ok');
+  stopImport();
+}
+
+function stopImport() {
+  _running = false;
+  document.getElementById('startBtn').disabled = false;
+  document.getElementById('stopBtn').style.display = 'none';
+  document.getElementById('scraper').src = 'about:blank';
+}
+
+// ── Check CT login on load ────────────────────────────────
+window.addEventListener('load', async () => {
+  try {
+    const snap = await db.collection('resortProfiles').where('ctUrl', '!=', '').limit(1).get();
+    const count = (await db.collection('resortProfiles').where('ctUrl', '!=', '').get()).size;
+    document.getElementById('loginStatus').textContent = `✓ Firebase connected · ${count} resorts with CT links ready`;
+    document.getElementById('loginStatus').style.color = '#27ae60';
+    document.getElementById('startBtn').textContent = `▶ Start Import (${count} Resorts)`;
+  } catch(e) {
+    document.getElementById('loginStatus').textContent = '⚠ Firebase error: ' + e.message;
+    document.getElementById('loginStatus').style.color = '#c0392b';
+  }
+});
+</script>
+</body>
+</html>
