@@ -161,7 +161,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
     <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
-    <select class="form-control" id="masterResort" onchange="onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
+    <select class="form-control" id="masterResort" onchange="localStorage.setItem('lastResort',this.value);onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
       <option value="">Select resort...</option>
       <option value="ava-resort-cancun">Ava Resort Cancun</option>
       <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
@@ -337,9 +337,15 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
   <div id="profileForm" style="display:none;margin-bottom:24px;">
 
     <!-- Loading bar -->
-    <div id="profileLoadingMsg" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:16px 24px;color:#f0c958;font-size:.9rem;">&#9203; Loading resort profile...</div>
+    <div id="profileLoadingMsg" style="display:none;background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;padding:16px 24px;color:#f0c958;font-size:.9rem;display:flex;align-items:center;justify-content:space-between;">
+      <span id="profileLoadingText">&#9203; Loading resort profile...</span>
+      <button onclick="loadResortProfile(document.getElementById('masterResort').value)" style="background:#2a2a2a;border:1px solid #444;color:#ccc;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:.8rem;">&#8635; Reload</button>
+    </div>
 
     <div id="profileFields">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+      <button onclick="loadResortProfile(document.getElementById('masterResort').value)" style="background:#1a1a1a;border:1px solid #444;color:#aaa;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;">&#8635; Reload Profile</button>
+    </div>
 
     <!-- SECTION 1: CORE INFO -->
     <div class="upload-section" style="margin-bottom:16px;">
@@ -1218,6 +1224,20 @@ async function saveEditPhoto() {
 loadPhotos();
 initProfileResortDropdown();
 initFilterResortDropdown();
+
+// Auto-restore last selected resort from localStorage
+(function() {
+  const last = localStorage.getItem('lastResort');
+  if (last) {
+    const sel = document.getElementById('masterResort');
+    if (sel && [...sel.options].some(o => o.value === last)) {
+      sel.value = last;
+      // Wait for Firebase to be ready then load
+      setTimeout(() => onMasterResortChange(last), 800);
+    }
+  }
+})();
+
 // ── RESORT AUDIT ──
 
 function toggleAudit() {
