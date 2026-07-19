@@ -159,6 +159,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="page-sub">Upload &amp; manage resort photos for group sites &mdash; one upload, use everywhere</div>
   </div>
   <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+    <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
     <select class="form-control" id="masterResort" onchange="onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
       <option value="">Select resort...</option>
