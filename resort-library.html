@@ -1547,6 +1547,8 @@ async function runAudit() {
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
+      const hasHero = !!(p.heroPhoto && String(p.heroPhoto).trim());
+      const heroCell = `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${hasHero ? '\u2705' : '\u274C'}</td>`;
       const dining = diningCounts[r.slug] || 0;
       const diningCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${dining>0?'#1a7a3a':'#c0392b'};font-weight:600;">${dining}</td>`;
       const resortPix = resortPhotoCounts[r.slug] || 0;
@@ -1563,13 +1565,14 @@ async function runAudit() {
           <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#1a56db;text-decoration:underline;">${r.name}</a>
         </td>
         ${cells.join('')}
+        ${heroCell}
         ${photoCell}
         ${resortPixCell}
         ${diningCell}
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Hero', 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
