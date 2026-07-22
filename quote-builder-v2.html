@@ -1317,7 +1317,7 @@ function injectQuoteLinkIntoEmail(url){
           'font-size:12px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;' +
           'padding:16px 34px;">View Your Full Quote &nbsp;&rarr;</a>' +
         '<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9C8E80;padding-top:10px;">' +
-          'Photos, room details and everything else</div>' +
+          'Your resort, your rooms, and everything included</div>' +
       '</td></tr>' +
     '</table>';
   if(email.content.indexOf('</body>') !== -1){
@@ -1344,14 +1344,26 @@ function openGmailDraft(){
     ? ((allResorts.find(x=>x.slug===resortSel)||{}).name || '') : '');
   const first = (typeof agentVal === 'function') ? agentVal('first') : 'Amy';
   const subject = wedding
-    ? `Your wedding quote${resortName? ' — '+resortName : ''}`
-    : `Your travel quote${resortName? ' — '+resortName : ''}`;
-  const body =
-    `Hi ${who || 'there'},\n\n` +
-    `Your quote${resortName ? ' for ' + resortName : ''} is ready. You can view it here:\n\n` +
-    `${url}\n\n` +
-    `Have a look and let me know what you think — happy to jump on a quick call if that's easier.\n\n` +
-    `${first}`;
+    ? `${who ? who + ', y' : 'Y'}our wedding at ${resortName || 'your resort'} \u2728`
+    : `${who ? who + ', y' : 'Y'}our getaway to ${resortName || 'paradise'} \u2600\uFE0F`;
+  const body = wedding
+    ? `${who || 'Hi there'},\n\n` +
+      `I have been so excited to put this together for you \u2014 here is your wedding quote` +
+      `${resortName ? ' for ' + resortName : ''}!\n\n` +
+      `${url}\n\n` +
+      `Inside you will find the venues, the wedding packages and pricing, the rooms, and everything ` +
+      `that makes this resort special. Take your time with it, imagine yourselves there, and tell me ` +
+      `what makes your heart skip.\n\n` +
+      `If you would rather talk it through, I would love that \u2014 just say the word and we will find a time.\n\n` +
+      `I cannot wait to hear what you think!\n\n` +
+      `${first}`
+    : `Hi ${who || 'there'},\n\n` +
+      `Your quote${resortName ? ' for ' + resortName : ''} is ready, and I think you are going to love it.\n\n` +
+      `${url}\n\n` +
+      `You will find the resort, your room options and everything that is included. Have a look through ` +
+      `and tell me what stands out \u2014 or if anything is not quite right, we will adjust it together.\n\n` +
+      `Happy to hop on a quick call if that is easier. Just let me know!\n\n` +
+      `${first}`;
   const gmail = 'https://mail.google.com/mail/?view=cm&fs=1'
     + (to ? '&to=' + encodeURIComponent(to) : '')
     + '&su=' + encodeURIComponent(subject)
