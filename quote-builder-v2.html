@@ -861,6 +861,66 @@ async function getResort(slug){
   return data;
 }
 
+// ─── CRM PHOTO LIBRARY ─────────────────────────────────────
+// Reads the same resortPhotos collection the Resort Library writes to.
+const _crmPhotoCache={};
+async function getCrmPhotos(slug){
+  if(!slug) return [];
+  if(_crmPhotoCache[slug]) return _crmPhotoCache[slug];
+  try{
+    const snap=await db.collection('resortPhotos').where('resortSlug','==',slug).get();
+    const list=snap.docs.map(d=>{const x=d.data();return{
+      url:x.url||x.downloadURL||'',
+      category:String(x.roomCategory||x.category||'').trim(),
+      caption:x.caption||''
+    };}).filter(p=>p.url);
+    _crmPhotoCache[slug]=list;
+    return list;
+  }catch(e){ console.warn('CRM photo load failed:',e); return []; }
+}
+
+// The resort's standard hero: designated hero, else Aerial View, else property shot.
+function pickResortHero(r,crm){
+  if(r&&r.heroPhoto) return r.heroPhoto;
+  const byCat=c=>(crm.find(p=>p.category.toLowerCase()===c)||{}).url||'';
+  return byCat('aerial view')||byCat('resort & property')||byCat('beach & pool')||'';
+}
+
+// Order CRM photos so property shots come first, bedrooms last.
+function orderCrmPhotos(crm){
+  const rank=c=>{
+    const k=(c||'').toLowerCase();
+    if(k==='aerial view') return 0;
+    if(k==='resort & property') return 1;
+    if(k==='beach & pool') return 2;
+    if(k==='lobby & common areas') return 3;
+    if(k==='wedding venues') return 4;
+    if(k==='dining'||k==='bar') return 5;
+    if(k==='spa'||k==='activities') return 6;
+    return 7;
+  };
+  return [...crm].sort((a,b)=>rank(a.category)-rank(b.category)).map(p=>p.url);
+}
+
+// Collapse a photo picker behind a small "Change photo" link.
+function attachPickerToggle(pickerId,label){
+  const picker=document.getElementById(pickerId);
+  if(!picker) return;
+  picker.classList.add('hidden');
+  const prev=picker.previousElementSibling;
+  if(prev&&prev.classList&&prev.classList.contains('picker-toggle')) return;
+  const btn=document.createElement('button');
+  btn.type='button';
+  btn.className='picker-toggle';
+  btn.textContent=label||'Change photo';
+  btn.style.cssText='background:none;border:none;color:#b8973a;font-size:12px;text-decoration:underline;cursor:pointer;padding:4px 0;margin:2px 0 8px;display:block;';
+  btn.onclick=()=>{
+    const hidden=picker.classList.toggle('hidden');
+    btn.textContent=hidden?(label||'Change photo'):'Hide photos';
+  };
+  picker.parentNode.insertBefore(btn,picker);
+}
+
 function getPhotos(r){
   const set=new Set();
   const add=u=>{ if(u&&typeof u==='string'&&u.startsWith('http')) set.add(u); };
@@ -933,10 +993,11 @@ async function onFITResortChange(){
   }
   const r=await getResort(slug);
   if(!r) return;
-  const photos=getPhotos(r);
-  // Auto-populate hero and about
-  const primary=photos[0]||'';
-  const secondary=photos[1]||'';
+  const crm=await getCrmPhotos(slug);
+  const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
+  // Auto-populate hero and about — hero is the resort's standard aerial
+  const primary=pickResortHero(r,crm)||photos[0]||'';
+  const secondary=photos.find(u=>u!==primary)||primary;
   if(primary&&!val('f-heroPhoto')) document.getElementById('f-heroPhoto').value=primary;
   if(!val('f-aboutPhoto')) document.getElementById('f-aboutPhoto').value=secondary||primary;
   // Auto-populate destination + experience
@@ -950,16 +1011,16 @@ async function onFITResortChange(){
     {label:'Set About',fieldId:'f-aboutPhoto'},
   ];
   buildPhotoPicker(photos,'f-photo-grid',targets);
-  document.getElementById('f-photo-picker').classList.remove('hidden');
+  attachPickerToggle('f-photo-picker','Change hero / about photo');
   // Build room mini-pickers
   buildPhotoPicker(photos,'f-r1-photo-grid',[{label:'Use for Room 1',fieldId:'f-r1photo'}]);
   buildPhotoPicker(photos,'f-r2-photo-grid',[{label:'Use for Room 2',fieldId:'f-r2photo'}]);
   buildPhotoPicker(photos,'f-r3-photo-grid',[{label:'Use for Room 3',fieldId:'f-r3photo'}]);
   buildPhotoPicker(photos,'f-r4-photo-grid',[{label:'Use for Room 4',fieldId:'f-r4photo'}]);
-  document.getElementById('f-r1-mini-picker').classList.remove('hidden');
-  document.getElementById('f-r2-mini-picker').classList.remove('hidden');
-  document.getElementById('f-r3-mini-picker').classList.remove('hidden');
-  document.getElementById('f-r4-mini-picker').classList.remove('hidden');
+  attachPickerToggle('f-r1-mini-picker','Pick a different room photo');
+  attachPickerToggle('f-r2-mini-picker','Pick a different room photo');
+  attachPickerToggle('f-r3-mini-picker','Pick a different room photo');
+  attachPickerToggle('f-r4-mini-picker','Pick a different room photo');
   // Populate room category dropdowns from CRM
   populateRoomCatGrids(r.roomCategories||[]);
 }
@@ -1090,9 +1151,10 @@ async function onWResortChange(n){
   let r;
   try{ r=await getResort(slug); } catch(e){ console.error('Resort load error:',e); return; }
   if(!r) return;
-  const photos=getPhotos(r);
-  // Auto-populate the resort's section photo field — only if not already set
-  const primary=photos[0]||'';
+  const crm=await getCrmPhotos(slug);
+  const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
+  // Auto-populate the resort's section photo — the resort's standard hero (aerial), not a bedroom
+  const primary=pickResortHero(r,crm)||photos[0]||'';
   const resortPhotoField=document.getElementById('w-r'+n+'heroPhoto');
   if(resortPhotoField&&primary&&!resortPhotoField.value) resortPhotoField.value=primary;
   // Auto-populate Real Weddings URL from Firestore if stored
@@ -1121,7 +1183,7 @@ async function onWResortChange(n){
     ?[{label:'Set as Quote Hero',fieldId:'w-heroImg'},{label:'Set as Resort Photo',fieldId:'w-r1heroPhoto'}]
     :[{label:'Set as Resort Photo',fieldId:'w-r'+n+'heroPhoto'}];
   buildPhotoPicker(photos,gridId,targets);
-  document.getElementById(pickerId).classList.remove('hidden');
+  attachPickerToggle(pickerId,'Change photo');
 }
 
 // Per-person price splitter: enter total for 2 guests, auto-divides by 2
