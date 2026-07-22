@@ -774,7 +774,7 @@ function addVenueRow(name='', capacity='', bestFor='', description='', photo='')
     <div style="display:flex;gap:10px;align-items:flex-start;">
       <div style="flex:0 0 104px;">
         <img class="venue-thumb" src="${photo}" style="width:104px;height:72px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;" onerror="this.style.display='none'">
-        ${rowUploadButton()}
+        <div style="display:flex;flex-direction:column;gap:4px;">${rowUploadButton()}${rowCopyButton()}</div>
       </div>
       <div style="flex:1;min-width:0;padding-right:14px;">
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">
@@ -803,7 +803,7 @@ function addRestaurantRow(name='', type='', description='', photo='') {
     <div style="display:flex;gap:10px;align-items:flex-start;">
       <div style="flex:0 0 104px;">
         <img class="rest-thumb" src="${photo}" style="width:104px;height:72px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;" onerror="this.style.display='none'">
-        ${rowUploadButton()}
+        <div style="display:flex;flex-direction:column;gap:4px;">${rowUploadButton()}${rowCopyButton()}</div>
       </div>
       <div style="flex:1;min-width:0;padding-right:14px;">
         <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">
@@ -870,40 +870,34 @@ function addRoomCatRow(name='', description='', photo='', bedding='', view='', s
   const list = document.getElementById('roomcat-list');
   if (!list) return;
   const div = document.createElement('div');
-  div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;position:relative;';
+  div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:12px;position:relative;';
   div.setAttribute('data-row','roomcat');
+  const L = 'font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;';
   div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;" title="Remove">&#10005;</button>
-    <div style="margin-bottom:8px;">
-      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Room / Suite Name</label>
-      <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
-    </div>
-    <div style="margin-bottom:8px;">
-      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Photo</label>
-      ${rowUploadButton()}
-      <input class="form-control roomcat-photo" placeholder="Paste a photo URL (use Copy URL on any photo below)" value="${photo}">
-    </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
-      <div>
-        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Bedding</label>
-        <input class="form-control roomcat-bedding" placeholder="1 King bed" value="${bedding}">
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;z-index:1;" title="Remove">&#10005;</button>
+    <div style="display:flex;gap:12px;align-items:flex-start;">
+      <div style="flex:0 0 128px;">
+        <img class="roomcat-thumb" src="${photo}" style="width:128px;height:90px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;background:#000;" onerror="this.style.display='none'">
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          ${rowUploadButton()}
+          ${rowCopyButton()}
+        </div>
       </div>
-      <div>
-        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">View</label>
-        <input class="form-control roomcat-view" placeholder="Ocean View" value="${view}">
+      <div style="flex:1;min-width:0;padding-right:14px;">
+        <div style="margin-bottom:6px;">
+          <label style="${L}">Room / Suite Name</label>
+          <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr .6fr;gap:6px;margin-bottom:6px;">
+          <div><label style="${L}">Bedding</label><input class="form-control roomcat-bedding" placeholder="1 King bed" value="${bedding}"></div>
+          <div><label style="${L}">View</label><input class="form-control roomcat-view" placeholder="Ocean View" value="${view}"></div>
+          <div><label style="${L}">Size</label><input class="form-control roomcat-size" placeholder="473 sq. ft." value="${size}"></div>
+          <div><label style="${L}">Sleeps</label><input class="form-control roomcat-sleeps" placeholder="3" value="${sleeps}"></div>
+        </div>
+        <input class="form-control roomcat-photo" placeholder="Photo URL" value="${photo}" style="margin-bottom:6px;font-size:.8rem;"
+          oninput="const t=this.closest('[data-row]').querySelector('.roomcat-thumb'); if(t){t.src=this.value;t.style.display=this.value?'block':'none';}">
+        <textarea class="form-control roomcat-desc" rows="2" placeholder="The selling copy \u2014 setting, style, key amenities.">${description}</textarea>
       </div>
-      <div>
-        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Size</label>
-        <input class="form-control roomcat-size" placeholder="473 sq. ft." value="${size}">
-      </div>
-      <div>
-        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Sleeps</label>
-        <input class="form-control roomcat-sleeps" placeholder="3" value="${sleeps}">
-      </div>
-    </div>
-    <div>
-      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Description</label>
-      <textarea class="form-control roomcat-desc" rows="2" placeholder="The selling copy — setting, style, key amenities. Bedding/view/size go in the boxes above.">${description}</textarea>
     </div>`;
   list.appendChild(div);
 }
@@ -974,6 +968,20 @@ async function uploadRowPhoto(input) {
     if (label) label.innerHTML = original;
   }
   input.value = '';
+}
+
+function copyRowPhotoUrl(btn) {
+  const row = btn.closest('[data-row]');
+  const inp = row && row.querySelector('.roomcat-photo, .rest-photo, .venue-photo');
+  if (!inp || !inp.value.trim()) { alert('No photo URL on this row yet.'); return; }
+  const done = () => { const t = btn.innerHTML; btn.innerHTML = '\u2713 Copied'; setTimeout(() => btn.innerHTML = t, 1500); };
+  if (navigator.clipboard) navigator.clipboard.writeText(inp.value.trim()).then(done).catch(() => { inp.select(); document.execCommand('copy'); done(); });
+  else { inp.select(); document.execCommand('copy'); done(); }
+}
+
+function rowCopyButton() {
+  return `<button type="button" onclick="copyRowPhotoUrl(this)" title="Copy this photo URL"
+    style="background:#2a2a2a;border:1px solid #444;color:#ccc;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:.75rem;">&#128279; Copy URL</button>`;
 }
 
 function rowUploadButton() {
