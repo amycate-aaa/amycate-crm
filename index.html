@@ -6323,6 +6323,50 @@ document.addEventListener('DOMContentLoaded', function(){
   const handle = document.getElementById('intakeModalHeader');
   if(popup && handle) makeDraggable(popup, handle);
 });
+
+// ── QUOTE BUILDER: use the live Quote Builder v2 inside the Quotes tab ──
+// The legacy in-CRM builder markup is left in place but hidden, so this is
+// reversible: delete this block and the old builder returns.
+(function(){
+  function mountQuoteBuilder(){
+    var panel = document.getElementById('tab-quotes');
+    if(!panel || panel.dataset.qbMounted) return;
+    panel.dataset.qbMounted = '1';
+    // hide the legacy builder
+    Array.prototype.forEach.call(panel.children, function(el){
+      el.setAttribute('data-legacy-qb','1');
+      el.style.display = 'none';
+    });
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'width:100%;';
+    wrap.innerHTML =
+      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">' +
+        '<div style="font-size:.95rem;font-weight:700;color:var(--gold,#B8973A);">Quote Builder</div>' +
+        '<a href="quote-builder-v2.html" target="_blank" rel="noopener" ' +
+          'style="font-size:.78rem;color:#888;text-decoration:underline;">open in a new tab</a>' +
+        '<span style="flex:1"></span>' +
+        '<button type="button" onclick="qbShowLegacy()" ' +
+          'style="background:none;border:none;color:#666;font-size:.72rem;text-decoration:underline;cursor:pointer;">' +
+          'show old builder</button>' +
+      '</div>' +
+      '<iframe src="quote-builder-v2.html" title="Quote Builder" ' +
+        'style="width:100%;height:calc(100vh - 190px);min-height:620px;border:1px solid #2a2a2a;border-radius:10px;background:#fff;"></iframe>';
+    panel.appendChild(wrap);
+  }
+  window.qbShowLegacy = function(){
+    var panel = document.getElementById('tab-quotes');
+    if(!panel) return;
+    Array.prototype.forEach.call(panel.querySelectorAll('[data-legacy-qb]'), function(el){
+      el.style.display = '';
+    });
+  };
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', mountQuoteBuilder);
+  } else {
+    mountQuoteBuilder();
+  }
+})();
+
 </script>
 </body>
 </html>
