@@ -702,10 +702,10 @@ async function loadResortProfile(slugOverride) {
       set('profileWeddingGuide', d.weddingGuide);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description)); }
+      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo)); }
       // Load restaurants & bars
       const restList = document.getElementById('rest-list');
-      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description)); }
+      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description, r.photo)); }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
       if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
@@ -756,18 +756,21 @@ function addVenueRow(name='', capacity='', bestFor='', description='', photo='')
   list.appendChild(div);
 }
 
-function addRestaurantRow(name='', type='', description='') {
+function addRestaurantRow(name='', type='', description='', photo='') {
   const list = document.getElementById('rest-list');
   if (!list) return;
   const div = document.createElement('div');
   div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
   div.innerHTML = `
     <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">&times;</button>
+    <img class="rest-thumb" src="${photo}" style="width:100%;height:120px;object-fit:cover;display:${photo?'block':'none'};" onerror="this.style.display='none'">
     <div style="padding:10px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
         <input class="form-control rest-name" placeholder="Restaurant / bar name" value="${name}" style="font-weight:600;">
         <input class="form-control rest-type" placeholder="Type e.g. Italian, Swim-Up Bar" value="${type}">
       </div>
+      <input class="form-control rest-photo" placeholder="Photo URL (use Copy URL on any photo below)" value="${photo}" style="margin-bottom:6px;"
+        oninput="const t=this.closest('div').parentElement.querySelector('.rest-thumb'); if(t){t.src=this.value; t.style.display=this.value?'block':'none';}">
       <textarea class="form-control rest-desc" rows="2" placeholder="Description — cuisine, setting, adults-only, reservations required...">${description}</textarea>
     </div>`;
   list.appendChild(div);
@@ -777,7 +780,8 @@ function getRestaurants() {
   return [...document.querySelectorAll('#rest-list > div')].map(div => ({
     name:        div.querySelector('.rest-name')?.value?.trim() || '',
     type:        div.querySelector('.rest-type')?.value?.trim() || '',
-    description: div.querySelector('.rest-desc')?.value?.trim() || ''
+    description: div.querySelector('.rest-desc')?.value?.trim() || '',
+    photo:       div.querySelector('.rest-photo')?.value?.trim() || ''
   })).filter(r => r.name);
 }
 
@@ -820,7 +824,7 @@ function getPackages() {
 }
 
 
-function addRoomCatRow(name='', description='') {
+function addRoomCatRow(name='', description='', photo='') {
   const list = document.getElementById('roomcat-list');
   if (!list) return;
   const div = document.createElement('div');
@@ -830,6 +834,10 @@ function addRoomCatRow(name='', description='') {
     <div style="margin-bottom:8px;">
       <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Room / Suite Name</label>
       <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Photo URL</label>
+      <input class="form-control roomcat-photo" placeholder="Paste a photo URL (use Copy URL on any photo below)" value="${photo}">
     </div>
     <div>
       <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Description</label>
@@ -841,7 +849,8 @@ function addRoomCatRow(name='', description='') {
 function getRoomCategories() {
   return [...document.querySelectorAll('#roomcat-list > div')].map(div => ({
     name:        div.querySelector('.roomcat-name')?.value?.trim() || '',
-    description: div.querySelector('.roomcat-desc')?.value?.trim() || ''
+    description: div.querySelector('.roomcat-desc')?.value?.trim() || '',
+    photo:       div.querySelector('.roomcat-photo')?.value?.trim() || ''
   })).filter(r => r.name);
 }
 
