@@ -234,7 +234,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
         <div class="field"><label>Per Person Price</label><input id="f-r1price" placeholder="$1,446"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r1total" placeholder="$2,892" style="background:#F9F7F4;"></div>
+        <div class="field"><label style="color:#9C8E80;">Total for <input id="f-r1guests" type="number" min="1" max="8" value="2" oninput="fitSplit(1)" style="width:46px;padding:2px 4px;font-size:12px;border:1px solid #E2D9CC;border-radius:3px;text-align:center;"> Guest(s) <small style="font-weight:400;font-size:10px;">(auto &divide; guests &rarr; per person)</small></label><input id="f-r1total" placeholder="$2,892" style="background:#F9F7F4;" oninput="fitSplit(1)"></div>
         <div class="field"><label>Price Note</label><input id="f-r1priceNote" placeholder="per person · 3 nights · All Inclusive"></div>
       </div>
       <div class="row full">
@@ -282,7 +282,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
         <div class="field"><label>Per Person Price</label><input id="f-r2price" placeholder="$1,783"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r2total" placeholder="$3,566" style="background:#F9F7F4;"></div>
+        <div class="field"><label style="color:#9C8E80;">Total for <input id="f-r2guests" type="number" min="1" max="8" value="2" oninput="fitSplit(2)" style="width:46px;padding:2px 4px;font-size:12px;border:1px solid #E2D9CC;border-radius:3px;text-align:center;"> Guest(s) <small style="font-weight:400;font-size:10px;">(auto &divide; guests &rarr; per person)</small></label><input id="f-r2total" placeholder="$3,566" style="background:#F9F7F4;" oninput="fitSplit(2)"></div>
         <div class="field"><label>Price Note</label><input id="f-r2priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r2desc"></textarea></div></div>
@@ -316,7 +316,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
         <div class="field"><label>Per Person Price</label><input id="f-r3price" placeholder="$2,100"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r3total" placeholder="$4,200" style="background:#F9F7F4;"></div>
+        <div class="field"><label style="color:#9C8E80;">Total for <input id="f-r3guests" type="number" min="1" max="8" value="2" oninput="fitSplit(3)" style="width:46px;padding:2px 4px;font-size:12px;border:1px solid #E2D9CC;border-radius:3px;text-align:center;"> Guest(s) <small style="font-weight:400;font-size:10px;">(auto &divide; guests &rarr; per person)</small></label><input id="f-r3total" placeholder="$4,200" style="background:#F9F7F4;" oninput="fitSplit(3)"></div>
         <div class="field"><label>Price Note</label><input id="f-r3priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r3desc"></textarea></div></div>
@@ -350,7 +350,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
         <div class="field"><label>Per Person Price</label><input id="f-r4price" placeholder="$3,500"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r4total" placeholder="$7,000" style="background:#F9F7F4;"></div>
+        <div class="field"><label style="color:#9C8E80;">Total for <input id="f-r4guests" type="number" min="1" max="8" value="2" oninput="fitSplit(4)" style="width:46px;padding:2px 4px;font-size:12px;border:1px solid #E2D9CC;border-radius:3px;text-align:center;"> Guest(s) <small style="font-weight:400;font-size:10px;">(auto &divide; guests &rarr; per person)</small></label><input id="f-r4total" placeholder="$7,000" style="background:#F9F7F4;" oninput="fitSplit(4)"></div>
         <div class="field"><label>Price Note</label><input id="f-r4priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r4desc"></textarea></div></div>
@@ -1230,20 +1230,32 @@ function wSplitPrice(n){
   if(auto) noteEl.value=per+' per person · All Inclusive';
 }
 
-// Per-person price splitter: enter total for 2 guests, auto-divides by 2
-['1','2','3','4'].forEach(n=>{
+// Per-person price splitter: total ÷ number of guests (default 2, editable per room)
+function fitSplit(n){
   const totalEl=document.getElementById('f-r'+n+'total');
   const priceEl=document.getElementById('f-r'+n+'price');
+  const gEl=document.getElementById('f-r'+n+'guests');
   if(!totalEl||!priceEl) return;
-  totalEl.addEventListener('input',function(){
-    const num=parseFloat(this.value.replace(/[$,]/g,''));
-    if(!isNaN(num)&&num>0){
-      priceEl.value='$'+(num/2).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+  const num=parseFloat(String(totalEl.value).replace(/[$,]/g,''));
+  const guests=Math.max(1,parseInt(gEl&&gEl.value,10)||2);
+  if(isNaN(num)||num<=0) return;
+  priceEl.value='$'+(num/guests).toLocaleString('en-US',{maximumFractionDigits:0});
+  const noteEl=document.getElementById('f-r'+n+'priceNote');
+  if(noteEl){
+    const auto=/per person|^total/i.test(noteEl.value)||!noteEl.value.trim();
+    if(auto){
+      const parts=noteEl.value.split('·').slice(1).map(x=>x.trim()).filter(Boolean);
+      const tail=parts.length?' · '+parts.join(' · '):'';
+      noteEl.value=(guests===1?'total':'per person')+tail;
     }
-  });
+  }
+}
+['1','2','3','4'].forEach(n=>{
+  const totalEl=document.getElementById('f-r'+n+'total');
+  if(!totalEl) return;
   totalEl.addEventListener('blur',function(){
-    const num=parseFloat(this.value.replace(/[$,]/g,''));
-    if(!isNaN(num)&&num>0) this.value='$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+    const num=parseFloat(String(this.value).replace(/[$,]/g,''));
+    if(!isNaN(num)&&num>0) this.value='$'+num.toLocaleString('en-US',{maximumFractionDigits:0});
   });
 });
 
