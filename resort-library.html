@@ -280,6 +280,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <h3 style="font-size:1.1rem;color:#111;font-weight:700;margin:0;">&#128202; Resort Completion Audit</h3>
       <button onclick="runAudit()" style="background:#f0c958;border:none;color:#111;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;">&#8635; Refresh</button>
       <span id="auditStatus" style="color:#555;font-size:.85rem;"></span>
+      <button onclick="document.getElementById('auditSection').style.display='none'" title="Close"
+        style="margin-left:auto;background:#eee;border:1px solid #ccc;color:#333;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;">&times;</button>
     </div>
     <p style="color:#666;font-size:.85rem;margin-bottom:16px;">Click any resort name to open and edit it. ✅ = complete &nbsp; ❌ = missing.</p>
     <div id="auditGrid" style="overflow-x:auto;"></div>
