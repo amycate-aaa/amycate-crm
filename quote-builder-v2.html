@@ -1311,7 +1311,7 @@ async function publishFullQuote(){
   const original = btn ? btn.innerHTML : '';
   if(btn){ btn.innerHTML='Publishing…'; btn.disabled=true; }
   try{
-    const path = 'quotes/' + Date.now() + '-' + full.filename;
+    const path = 'resorts/_quotes/' + Date.now() + '-' + full.filename;
     const ref = qbStorage.ref(path);
     await ref.putString(full.content, 'raw', {contentType:'text/html;charset=utf-8'});
     const url = await ref.getDownloadURL();
