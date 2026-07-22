@@ -376,6 +376,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Highlights <span style="color:#555;font-size:.75rem;">(key selling points, separate with &middot; )</span></label>
         <input type="text" class="form-control" id="profileHighlights" placeholder="5 Stars &middot; Adults-Only &middot; Beachfront &middot; Diamond Partner &middot; 570 Rooms">
       </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 2: LINKS -->
@@ -406,6 +410,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Real Wedding Couple Names</label>
         <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James — shown with the real wedding link">
       </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 3: CLUB LEVEL -->
@@ -420,6 +428,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
         <textarea class="form-control" id="profileClubPerks" rows="4" placeholder="Butler service&#10;Private beach area&#10;Premium minibar stocked daily&#10;Room upgrades subject to availability&#10;Private check-in"></textarea>
       </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 4: ROOM CATEGORIES -->
@@ -428,6 +440,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Every room type available at this resort. Descriptions auto-fill in quotes and the gallery. Upload photos for each via the section above.</p>
       <div id="roomcat-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addRoomCatRow()">+ Add Room Category</button>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 4b: RESTAURANTS & BARS -->
@@ -436,6 +452,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets, bars and lounges. Used in client quotes to sell the property.</p>
       <div id="rest-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant</button>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 5: WEDDING VENUES -->
@@ -444,6 +464,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All ceremony and reception locations. Include capacity, best use and a photo URL for each.</p>
       <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addVenueRow()">+ Add Venue</button>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 6: WEDDING PACKAGES -->
@@ -452,6 +476,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All available packages with pricing. Mark the most popular one as featured.</p>
       <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
+      </div>
     </div>
 
     <!-- SECTION 7: NOTES -->
@@ -465,6 +493,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div class="form-group">
         <label>General Notes</label>
         <textarea class="form-control" id="profileNotes" rows="2" placeholder="Anything else worth remembering about this property..."></textarea>
+      </div>
+      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
+        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
+        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
       </div>
     </div>
 
