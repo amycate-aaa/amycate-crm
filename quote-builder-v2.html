@@ -666,6 +666,7 @@ Complimentary concierge and computer access</textarea>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
 firebase.initializeApp({
   apiKey:'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
@@ -676,6 +677,7 @@ firebase.initializeApp({
   appId:'1:246819649586:web:a74debd217ce048d26242b'
 });
 const db = firebase.firestore();
+const qbStorage = firebase.storage();
 
 // ─── AGENT IDENTITY ────────────────────────────────────────
 const AGENT_DEFAULTS = {
@@ -1289,10 +1291,44 @@ function makeBlob(content){ return URL.createObjectURL(new Blob([content],{type:
 function showDLButtons(files){
   // files = [{label, filename, content}]
   const wrap=document.getElementById('dlLinks');
+  window._qbFiles = files;
+  const full = files.find(f=>/full/i.test(f.filename));
   wrap.innerHTML=files.map(f=>{
     const url=makeBlob(f.content);
     return `<a class="dl-link" href="${url}" download="${f.filename}">${f.label}</a>`;
-  }).join('');
+  }).join('') + (full?`<button type="button" class="dl-link" id="qbPublishBtn" onclick="publishFullQuote()"
+      style="border:none;cursor:pointer;font:inherit;">&#128279; Publish &amp; Copy Link</button>
+      <div id="qbPublishOut" style="width:100%;margin-top:10px;font-size:12px;color:#5C5044;"></div>`:'');
+}
+
+// Upload the full-page quote and put a shareable link on the clipboard
+async function publishFullQuote(){
+  const files = window._qbFiles || [];
+  const full = files.find(f=>/full/i.test(f.filename));
+  const btn = document.getElementById('qbPublishBtn');
+  const out = document.getElementById('qbPublishOut');
+  if(!full){ if(out) out.textContent='No full quote to publish — generate one first.'; return; }
+  const original = btn ? btn.innerHTML : '';
+  if(btn){ btn.innerHTML='Publishing…'; btn.disabled=true; }
+  try{
+    const path = 'quotes/' + Date.now() + '-' + full.filename;
+    const ref = qbStorage.ref(path);
+    await ref.putString(full.content, 'raw', {contentType:'text/html;charset=utf-8'});
+    const url = await ref.getDownloadURL();
+    try{ await navigator.clipboard.writeText(url); }catch(e){}
+    if(out){
+      out.innerHTML = '<div style="margin-bottom:6px;color:#1a7a3a;font-weight:600;">Link copied to your clipboard</div>' +
+        '<input readonly value="'+url.replace(/"/g,'&quot;')+'" onclick="this.select()" ' +
+        'style="width:100%;padding:8px;font-size:11px;border:1px solid #E2D9CC;border-radius:4px;background:#FAF7F2;">' +
+        '<div style="margin-top:6px;color:#9C8E80;">Paste this into the email as the &ldquo;View your full quote&rdquo; link. ' +
+        'Anyone with the link can open it.</div>';
+    }
+    if(btn){ btn.innerHTML='&#10003; Published'; }
+  }catch(e){
+    console.error('Publish failed:', e);
+    if(out) out.innerHTML='<span style="color:#c0392b;">Couldn\'t publish: '+ (e.message||e) +'</span>';
+    if(btn){ btn.innerHTML=original; btn.disabled=false; }
+  }
 }
 
 async function generate(){
