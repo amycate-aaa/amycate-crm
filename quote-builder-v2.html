@@ -1303,6 +1303,35 @@ function showDLButtons(files){
       <div id="qbPublishOut" style="width:100%;margin-top:10px;font-size:12px;color:#5C5044;"></div>`:'');
 }
 
+// Insert a "View your full quote" button into the email file, then rebuild its download link
+function injectQuoteLinkIntoEmail(url){
+  const files = window._qbFiles || [];
+  const email = files.find(f=>/email/i.test(f.filename));
+  if(!email) return;
+  if(email._linked) return;               // don't double-insert
+  const btn =
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' +
+      '<tr><td align="center" style="padding:26px 24px 30px;">' +
+        '<a href="' + url + '" ' +
+          'style="display:inline-block;background:#1E1A14;color:#D4B882;font-family:Arial,Helvetica,sans-serif;' +
+          'font-size:12px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;' +
+          'padding:16px 34px;">View Your Full Quote &nbsp;&rarr;</a>' +
+        '<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9C8E80;padding-top:10px;">' +
+          'Photos, room details and everything else</div>' +
+      '</td></tr>' +
+    '</table>';
+  if(email.content.indexOf('</body>') !== -1){
+    email.content = email.content.replace('</body>', btn + '</body>');
+  } else {
+    email.content += btn;
+  }
+  email._linked = true;
+  // rebuild the download buttons so the email you download now contains the link
+  showDLButtons(files);
+  const out=document.getElementById('qbPublishOut');
+  if(out) out.dataset.relinked='1';
+}
+
 // Open a prefilled Gmail compose window with the published quote link
 function openGmailDraft(){
   const url = window._qbPublishedUrl || '';
@@ -1346,16 +1375,22 @@ async function publishFullQuote(){
     const url = await ref.getDownloadURL();
     try{ await navigator.clipboard.writeText(url); }catch(e){}
     window._qbPublishedUrl = url;
-    if(out){
-      out.innerHTML = '<div style="margin-bottom:6px;color:#1a7a3a;font-weight:600;">Link copied to your clipboard</div>' +
+    // put the link inside the email so one copy-paste carries everything
+    injectQuoteLinkIntoEmail(url);
+    // the buttons were rebuilt, so grab the output panel again
+    const out2 = document.getElementById('qbPublishOut') || out;
+    const btn2 = document.getElementById('qbPublishBtn') || btn;
+    if(out2){
+      out2.innerHTML = '<div style="margin-bottom:6px;color:#1a7a3a;font-weight:600;">Link copied &mdash; and added to the email download</div>' +
         '<input readonly value="'+url.replace(/"/g,'&quot;')+'" onclick="this.select()" ' +
         'style="width:100%;padding:8px;font-size:11px;border:1px solid #E2D9CC;border-radius:4px;background:#FAF7F2;">' +
         '<div style="margin-top:8px;"><button type="button" onclick="openGmailDraft()" ' +
         'style="background:#1E1A14;color:#D4B882;border:none;padding:10px 16px;border-radius:4px;cursor:pointer;' +
         'font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;">&#9993; Draft this in Gmail</button></div>' +
-        '<div style="margin-top:6px;color:#9C8E80;">Anyone with the link can open it.</div>';
+        '<div style="margin-top:6px;color:#9C8E80;">The email download now contains a &ldquo;View Your Full Quote&rdquo; button. ' +
+        'Anyone with the link can open it.</div>';
     }
-    if(btn){ btn.innerHTML='&#10003; Published'; }
+    if(btn2){ btn2.innerHTML='&#10003; Published'; btn2.disabled=true; }
   }catch(e){
     console.error('Publish failed:', e);
     if(out) out.innerHTML='<span style="color:#c0392b;">Couldn\'t publish: '+ (e.message||e) +'</span>';
