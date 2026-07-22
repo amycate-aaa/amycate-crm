@@ -432,6 +432,14 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <button class="btn btn-secondary btn-sm" onclick="addRoomCatRow()">+ Add Room Category</button>
     </div>
 
+    <!-- SECTION 4b: RESTAURANTS & BARS -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">&#127860; Restaurants &amp; Bars</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets, bars and lounges. Used in client quotes to sell the property.</p>
+      <div id="rest-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant</button>
+    </div>
+
     <!-- SECTION 5: WEDDING VENUES -->
     <div class="upload-section" style="margin-bottom:16px;">
       <h3 style="margin-bottom:4px;">&#128141; Wedding Venues <span style="color:#c0392b;">*</span></h3>
@@ -695,6 +703,9 @@ async function loadResortProfile(slugOverride) {
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
       if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description)); }
+      // Load restaurants & bars
+      const restList = document.getElementById('rest-list');
+      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description)); }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
       if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
@@ -706,7 +717,7 @@ async function loadResortProfile(slugOverride) {
       ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
        'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
        'profileClubName','profileClubPerks','profileWeddingGuide','profileStars'].forEach(id => set(id, ''));
-      ['roomcat-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+      ['roomcat-list','rest-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
       const noProfileMsg = document.getElementById('noProfileMsg');
       if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
@@ -743,6 +754,31 @@ function addVenueRow(name='', capacity='', bestFor='', description='', photo='')
       <textarea class="form-control venue-desc" rows="2" placeholder="Venue description">${description}</textarea>
     </div>`;
   list.appendChild(div);
+}
+
+function addRestaurantRow(name='', type='', description='') {
+  const list = document.getElementById('rest-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">&times;</button>
+    <div style="padding:10px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control rest-name" placeholder="Restaurant / bar name" value="${name}" style="font-weight:600;">
+        <input class="form-control rest-type" placeholder="Type e.g. Italian, Swim-Up Bar" value="${type}">
+      </div>
+      <textarea class="form-control rest-desc" rows="2" placeholder="Description — cuisine, setting, adults-only, reservations required...">${description}</textarea>
+    </div>`;
+  list.appendChild(div);
+}
+
+function getRestaurants() {
+  return [...document.querySelectorAll('#rest-list > div')].map(div => ({
+    name:        div.querySelector('.rest-name')?.value?.trim() || '',
+    type:        div.querySelector('.rest-type')?.value?.trim() || '',
+    description: div.querySelector('.rest-desc')?.value?.trim() || ''
+  })).filter(r => r.name);
 }
 
 function getVenues() {
@@ -835,6 +871,7 @@ async function saveResortProfile() {
     clubLevelPerks:  document.getElementById('profileClubPerks').value.trim(),
     clubPerks:       document.getElementById('profileClubPerks').value.trim(),
     weddingGuide:    document.getElementById('profileWeddingGuide').value.trim(),
+    restaurants:  getRestaurants(),
     venues:       getVenues(),
     packages:     getPackages(),
     roomCategories: getRoomCategories(),
@@ -1295,13 +1332,18 @@ async function runAudit() {
     const photoSnap = await db.collection('resortPhotos').get();
     const photoCounts = {};
     const photoCats   = {};
+    const diningCounts = {};
     photoSnap.docs.forEach(d => {
       const p = d.data();
       const slug = p.resortSlug || p.resort || '';
       if (!slug) return;
       photoCounts[slug] = (photoCounts[slug] || 0) + 1;
+      const cat = p.roomCategory || p.category || '';
+      if (String(cat).trim().toLowerCase() === 'dining') {
+        diningCounts[slug] = (diningCounts[slug] || 0) + 1;
+      }
       if (!photoCats[slug]) photoCats[slug] = new Set();
-      if (p.roomCategory || p.category) photoCats[slug].add(p.roomCategory || p.category);
+      if (cat) photoCats[slug].add(cat);
     });
 
     // Get resort list from master dropdown
@@ -1317,6 +1359,7 @@ async function runAudit() {
       { key:'weddingUrl',   label:'Wedding URL' },
       { key:'venues',       label:'Venues',   isArr:true },
       { key:'packages',     label:'Packages', isArr:true },
+      { key:'restaurants',  label:'Restaurants', isArr:true },
       { key:'roomCategories', label:'Room Cats', isArr:true },
     ];
 
@@ -1340,6 +1383,8 @@ async function runAudit() {
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
+      const dining = diningCounts[r.slug] || 0;
+      const diningCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${dining>0?'#1a7a3a':'#c0392b'};font-weight:600;">${dining}</td>`;
 
       const allOk = checks.every(c => checkOk(c)) && photos > 0;
       if (allOk) completedResorts++;
@@ -1353,10 +1398,11 @@ async function runAudit() {
         </td>
         ${cells.join('')}
         ${photoCell}
+        ${diningCell}
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos', 'Dining Photos'].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
