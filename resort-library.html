@@ -696,7 +696,7 @@ async function loadResortProfile(slugOverride) {
       set('profileWeddingGuide', d.weddingGuide);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo)); }
+      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo, r.bedding, r.view, r.size, r.sleeps)); }
       // Load restaurants & bars
       const restList = document.getElementById('rest-list');
       if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description, r.photo)); }
@@ -822,7 +822,7 @@ function getPackages() {
 }
 
 
-function addRoomCatRow(name='', description='', photo='') {
+function addRoomCatRow(name='', description='', photo='', bedding='', view='', size='', sleeps='') {
   const list = document.getElementById('roomcat-list');
   if (!list) return;
   const div = document.createElement('div');
@@ -839,9 +839,27 @@ function addRoomCatRow(name='', description='', photo='') {
       ${rowUploadButton()}
       <input class="form-control roomcat-photo" placeholder="Paste a photo URL (use Copy URL on any photo below)" value="${photo}">
     </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:8px;">
+      <div>
+        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Bedding</label>
+        <input class="form-control roomcat-bedding" placeholder="1 King bed" value="${bedding}">
+      </div>
+      <div>
+        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">View</label>
+        <input class="form-control roomcat-view" placeholder="Ocean View" value="${view}">
+      </div>
+      <div>
+        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Size</label>
+        <input class="form-control roomcat-size" placeholder="473 sq. ft." value="${size}">
+      </div>
+      <div>
+        <label style="font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Sleeps</label>
+        <input class="form-control roomcat-sleeps" placeholder="3" value="${sleeps}">
+      </div>
+    </div>
     <div>
       <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Description</label>
-      <textarea class="form-control roomcat-desc" rows="2" placeholder="Describe the room — size, bed type, view, key amenities...">${description}</textarea>
+      <textarea class="form-control roomcat-desc" rows="2" placeholder="The selling copy — setting, style, key amenities. Bedding/view/size go in the boxes above.">${description}</textarea>
     </div>`;
   list.appendChild(div);
 }
@@ -924,7 +942,11 @@ function getRoomCategories() {
   return [...document.querySelectorAll('#roomcat-list > div')].map(div => ({
     name:        div.querySelector('.roomcat-name')?.value?.trim() || '',
     description: div.querySelector('.roomcat-desc')?.value?.trim() || '',
-    photo:       div.querySelector('.roomcat-photo')?.value?.trim() || ''
+    photo:       div.querySelector('.roomcat-photo')?.value?.trim() || '',
+    bedding:     div.querySelector('.roomcat-bedding')?.value?.trim() || '',
+    view:        div.querySelector('.roomcat-view')?.value?.trim() || '',
+    size:        div.querySelector('.roomcat-size')?.value?.trim() || '',
+    sleeps:      div.querySelector('.roomcat-sleeps')?.value?.trim() || ''
   })).filter(r => r.name);
 }
 
