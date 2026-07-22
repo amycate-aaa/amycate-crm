@@ -1315,30 +1315,14 @@ function injectQuoteLinkIntoEmail(url){
   const email = files.find(f=>/email/i.test(f.filename));
   if(!email || email._linked) return;
 
-  // A proper email row: table-based, inside the 700px container, Outlook-safe
-  const row =
-    '<tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:34px 50px;border-top:1px solid #E2D9CC;border-bottom:1px solid #E2D9CC;" align="center">' +
-      '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>' +
-        '<td bgcolor="#1E1A14" style="background:#1E1A14;">' +
-          '<a href="' + url + '" style="display:inline-block;padding:16px 34px;font-family:Arial,Helvetica,sans-serif;' +
-          'font-size:12px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#D4B882;text-decoration:none;">' +
-          'View Your Full Quote &nbsp;&rarr;</a>' +
-        '</td>' +
-      '</tr></table>' +
-      '<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9C8E80;letter-spacing:1px;padding-top:12px;">' +
-        'Your resort, your rooms, and everything included</div>' +
-    '</td></tr>';
+  const link = '&nbsp; <a href="' + url + '" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;' +
+    'font-weight:bold;color:#B8975A;text-decoration:underline;">View it here &rarr;</a>';
 
   let c = email.content;
-  // put it directly above the dark signature footer
-  const footer = c.lastIndexOf('<tr><td bgcolor="#1E1A14"');
-  if(footer > -1){
-    c = c.slice(0,footer) + row + c.slice(footer);
+  if(c.indexOf('<!--QUOTE_CTA-->') > -1){
+    c = c.split('<!--QUOTE_CTA-->').join(link);      // fills the marker in the cream bar
   } else {
-    // fallback: last row of the container table
-    const close = c.lastIndexOf('</table><!--[if mso]>');
-    if(close > -1) c = c.slice(0,close) + row + c.slice(close);
-    else return;   // structure not recognised — leave the email alone
+    return;                                          // unknown template — leave it alone
   }
   email.content = c;
   email._linked = true;
@@ -1540,7 +1524,7 @@ function buildFITEmail(v){
   </td></tr>
   ${v.expiry?`<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:14px 50px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#C0BFBD;"><span style="color:#B8975A;">&bull;</span>&nbsp;&nbsp;This quote expires <span style="color:#D4B882;font-weight:bold;">${esc(v.expiry)}</span> &mdash; reach out soon!</td></tr>`:''}
   <tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
-    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<strong style="color:#1E1A14;font-family:Arial,Helvetica,sans-serif;font-size:13px;">Full quote attached</strong><span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"> &mdash; open it for the full experience!</span>
+    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<strong style="color:#1E1A14;font-family:Arial,Helvetica,sans-serif;font-size:13px;">Your full quote</strong><span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"> &mdash; the resort, your rooms and everything included.<!--QUOTE_CTA--></span>
   </td></tr>
   <tr><td class="pad" style="padding:60px 50px 44px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:20px;">Your Quote</div>
@@ -1870,7 +1854,7 @@ function buildWeddingEmail(wv){
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#B0AFAD;letter-spacing:1.5px;line-height:1.8;">${[wv.wDate,wv.dest,wv.guests].filter(Boolean).map(s=>esc(s)).join(' &nbsp;&bull;&nbsp; ')}</div>
   </td></tr>
   <tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
-    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Full quote attached</strong> &mdash; open the PDF for resort details, venues, packages, and pricing.</span>
+    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Your full quote</strong> &mdash; resort details, venues, packages and pricing.<!--QUOTE_CTA--></span>
   </td></tr>
   <tr><td class="pad" style="padding:56px 50px 48px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:20px;">Your Quote</div>
