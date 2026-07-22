@@ -1333,14 +1333,22 @@ async function runAudit() {
     const photoCounts = {};
     const photoCats   = {};
     const diningCounts = {};
+    const resortPhotoCounts = {};
+    const DINING_CATS = ['dining','bar'];
+    const PROPERTY_CATS = ['aerial view','resort & property','beach & pool',
+                           'lobby & common areas','spa','activities'];
     photoSnap.docs.forEach(d => {
       const p = d.data();
       const slug = p.resortSlug || p.resort || '';
       if (!slug) return;
       photoCounts[slug] = (photoCounts[slug] || 0) + 1;
       const cat = p.roomCategory || p.category || '';
-      if (String(cat).trim().toLowerCase() === 'dining') {
+      const catKey = String(cat).trim().toLowerCase();
+      if (DINING_CATS.includes(catKey)) {
         diningCounts[slug] = (diningCounts[slug] || 0) + 1;
+      }
+      if (PROPERTY_CATS.includes(catKey)) {
+        resortPhotoCounts[slug] = (resortPhotoCounts[slug] || 0) + 1;
       }
       if (!photoCats[slug]) photoCats[slug] = new Set();
       if (cat) photoCats[slug].add(cat);
@@ -1385,6 +1393,8 @@ async function runAudit() {
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
       const dining = diningCounts[r.slug] || 0;
       const diningCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${dining>0?'#1a7a3a':'#c0392b'};font-weight:600;">${dining}</td>`;
+      const resortPix = resortPhotoCounts[r.slug] || 0;
+      const resortPixCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${resortPix>0?'#1a7a3a':'#c0392b'};font-weight:600;">${resortPix}</td>`;
 
       const allOk = checks.every(c => checkOk(c)) && photos > 0;
       if (allOk) completedResorts++;
@@ -1398,11 +1408,12 @@ async function runAudit() {
         </td>
         ${cells.join('')}
         ${photoCell}
+        ${resortPixCell}
         ${diningCell}
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos', 'Dining Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
