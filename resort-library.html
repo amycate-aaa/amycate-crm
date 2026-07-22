@@ -393,6 +393,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
           <label>Gallery Link</label>
           <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://amy-cate.com/gallery?gallery=...">
         </div>
+        <div class="form-group">
+          <label>Wedding Brochure PDF <span style="color:#888;font-size:.75rem;">(linked in quotes)</span></label>
+          <input type="url" class="form-control" id="profileBrochureUrl" placeholder="https://... link to the resort's wedding guide PDF">
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="form-group">
@@ -692,6 +696,7 @@ async function loadResortProfile(slugOverride) {
       set('profileBookingLink', d.dwtUrl || d.bookingLink);
       set('profileCtUrl', d.ctUrl);
       set('profileGalleryLink', d.galleryLink);
+      set('profileBrochureUrl', d.brochureUrl);
       set('profileNotes', d.notes);
       set('profileWeddingUrl', d.weddingUrl);
       set('profileRealWeddingUrl', d.realWeddingUrl);
@@ -714,7 +719,7 @@ async function loadResortProfile(slugOverride) {
       if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
     } else {
       // No profile yet — clear everything
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink','profileBrochureUrl',
        'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
        'profileClubName','profileClubPerks','profileWeddingGuide','profileStars'].forEach(id => set(id, ''));
       ['roomcat-list','rest-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
@@ -871,6 +876,7 @@ async function saveResortProfile() {
     dwtUrl:       document.getElementById('profileBookingLink').value.trim(),
     ctUrl:        document.getElementById('profileCtUrl')?.value?.trim() || '',
     galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
+    brochureUrl:  document.getElementById('profileBrochureUrl')?.value?.trim() || '',
     notes:           document.getElementById('profileNotes').value.trim(),
     weddingUrl:      document.getElementById('profileWeddingUrl').value.trim(),
     realWeddingUrl:  document.getElementById('profileRealWeddingUrl').value.trim(),
