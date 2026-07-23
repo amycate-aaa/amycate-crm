@@ -1233,12 +1233,19 @@ loadResorts().catch(e=>console.error('Resort load error:',e));
 
 async function getResort(slug){
   if(!slug) return null;
-  if(resortCache[slug]) return resortCache[slug];
-  const snap=await db.collection('resortProfiles').doc(slug).get();
-  if(!snap.exists) return null;
-  const data={slug,...snap.data()};
-  resortCache[slug]=data;
-  return data;
+  // Always re-read: the Resort Library may have been edited in another tab,
+  // and a stale hero photo or description is worse than one extra read.
+  try{
+    const snap=await db.collection('resortProfiles').doc(slug).get();
+    if(snap.exists){
+      const data={slug,...snap.data()};
+      resortCache[slug]=data;
+      return data;
+    }
+    return resortCache[slug]||null;
+  }catch(e){
+    return resortCache[slug]||null;   // offline / error — fall back to what we had
+  }
 }
 
 // ─── CRM PHOTO LIBRARY ─────────────────────────────────────
@@ -1692,8 +1699,7 @@ async function onFSSResortChange(n){
   const crm=await getCrmPhotos(slug);
   const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
   // Auto-fill hero photo field if empty
-  const photoField=document.getElementById('fs-r'+n+'photo');
-  if(photoField&&photos[0]&&!photoField.value) photoField.value=photos[0];
+  setAutoPhoto('fs-r'+n+'photo', pickResortHero(r,crm)||photos[0]||'');
   // Load room categories for this resort options slot
   const fsCats=r.roomCategories||[];
   _fsRoomCats[n]=fsCats;
