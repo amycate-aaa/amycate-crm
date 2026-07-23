@@ -1325,11 +1325,6 @@ async function onFSSResortChange(n){
   // Auto-fill hero photo field if empty
   const photoField=document.getElementById('fs-r'+n+'photo');
   if(photoField&&photos[0]&&!photoField.value) photoField.value=photos[0];
-  // Also auto-fill the top hero photo from resort 1 if empty
-  if(n===1){
-    const heroField=document.getElementById('fs-heroPhoto');
-    if(heroField&&photos[0]&&!heroField.value) heroField.value=photos[0];
-  }
   // Build photo picker
   const targets=[{label:'Set as Resort Photo',fieldId:'fs-r'+n+'photo'}];
   if(n===1) targets.unshift({label:'Set as Quote Hero',fieldId:'fs-heroPhoto'});
@@ -1475,7 +1470,7 @@ function buildFITSneakFull(fsv){
     return `${idx>0?'<div class="resort-divider"><span>✦ &nbsp; ✦ &nbsp; ✦</span></div>':''}
 <div class="resort-section">
   <div class="resort-hero">
-    ${rPhoto?`<img class="resort-hero-img" src="${escUrl(rPhoto)}" alt="">`:''}
+    <img class="resort-hero-img" src="${escUrl(rPhoto||DEFAULT_WEDDING_HERO)}" alt="">
     <div class="resort-hero-overlay"></div>
     <div class="resort-hero-content">
       <p class="resort-num">Option ${num}</p>
@@ -1595,7 +1590,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 }
 </style></head><body>
 <section class="hero">
-  ${fsv.heroPhoto?`<img class="hero-img" src="${escUrl(fsv.heroPhoto)}" alt="">`:''}
+  <img class="hero-img" src="${escUrl(fsv.heroPhoto||DEFAULT_WEDDING_HERO)}" alt="">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Destination Weddings Travel Group &nbsp;·&nbsp; Celebration Travel</p>
@@ -2282,7 +2277,7 @@ function buildWeddingFull(wv){
     return `${idx>0?'<div class="resort-divider"><span>✦ &nbsp; ✦ &nbsp; ✦</span></div>':''}
 <div class="resort-section">
   <div class="resort-hero">
-    ${rPhoto?`<img class="resort-hero-img" src="${escUrl(rPhoto)}" alt="">`:''}
+    <img class="resort-hero-img" src="${escUrl(rPhoto||DEFAULT_WEDDING_HERO)}" alt="">
     <div class="resort-hero-overlay"></div>
     <div class="resort-hero-content">
       <p class="resort-num">Resort Option ${num}</p>
