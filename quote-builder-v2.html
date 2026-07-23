@@ -1090,6 +1090,22 @@ function setMode(m){
   }
 }
 
+// "I like this one" — opens their mail app with a note already written to you.
+function likeThisLink(resortName, clientName, extra){
+  const to = (typeof agentVal==='function') ? agentVal('email') : '';
+  const who = (clientName||'').trim();
+  const sub = who ? `${who} \u2014 I like ${resortName}!` : `I like ${resortName}!`;
+  const body =
+    `Hi${(typeof agentVal==='function')?' '+agentVal('first'):''},\n\n` +
+    `I have been through the options and I really like ${resortName}.\n\n` +
+    (extra ? extra + '\n\n' : '') +
+    `Can we talk about next steps?\n\n` +
+    (who ? who : '');
+  return 'mailto:' + encodeURIComponent(to) +
+    '?subject=' + encodeURIComponent(sub) +
+    '&body=' + encodeURIComponent(body);
+}
+
 function starLine(r){
   const n=parseFloat(r&&r.stars);
   if(!n||isNaN(n)) return '';
@@ -1777,7 +1793,7 @@ function buildFITSneakEmail(fsv){
           ${(f.roomName||f.price)?`
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #EDE6DB;">
             <tr>
-              ${f.roomPhoto?`<td width="112" valign="top" style="padding-top:15px;padding-right:14px;"><img src="${escUrl(f.roomPhoto)}" width="112" alt="${esc(f.roomName||'')}" style="display:block;width:112px;height:80px;border:0;"></td>`:''}
+              ${f.roomPhoto?`<td width="150" valign="top" style="padding-top:15px;padding-right:16px;"><img src="${escUrl(f.roomPhoto)}" width="150" alt="${esc(f.roomName||'')}" style="display:block;width:150px;height:108px;border:0;"></td>`:''}
               <td valign="top" style="padding-top:15px;">
               ${f.roomName?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B8975A;font-weight:bold;padding-bottom:5px;">Starting Accommodations</div><div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C5044;">${esc(f.roomName)}</div>`:''}
               ${f.price?`<div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#1E1A14;padding-top:4px;">${esc(f.price)}</div>`:''}
@@ -1970,6 +1986,7 @@ function buildFITSneakFull(fsv){
     ${highlightsSection(r)}
   </div>
   ${priceBand}
+  <div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, fsv.clientName, 'Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${diningSection(r)}
 </div>`;
   }).join('');
@@ -2006,6 +2023,9 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .resort-hero-content{position:relative;padding:0 7vw 52px;}
 .resort-num{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
 .resort-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4.5vw,64px);font-weight:300;color:var(--white);line-height:1.06;}
+.like-wrap{background:var(--cream);padding:0 7vw 54px;text-align:center;}
+.like-btn{display:inline-block;background:var(--black);color:var(--gold);font-family:'Jost',sans-serif;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:17px 42px;}
+@media print{.like-wrap{display:none;}}
 .resort-tagline{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;letter-spacing:.3px;color:rgba(255,255,255,.92);margin-top:12px;}
 .resort-meta-line{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.62);margin-top:10px;}
 .resort-body{padding:64px 7vw;background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
@@ -2017,7 +2037,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .hi-list li{font-size:14px;font-weight:300;color:var(--brown);padding:11px 0;border-bottom:1px solid var(--cream-3);display:flex;align-items:baseline;gap:10px;line-height:1.5;}
 .hi-list li::before{content:"—";color:var(--gold-2);flex-shrink:0;}
 .price-band{background:var(--black);padding:36px 7vw;display:flex;align-items:center;gap:48px;flex-wrap:wrap;}
-.price-band-img{width:150px;height:105px;object-fit:cover;border-radius:6px;flex-shrink:0;}
+.price-band-img{width:190px;height:134px;object-fit:cover;border-radius:6px;flex-shrink:0;}
 @media print{.price-band-img{width:130px;height:92px;}}
 .price-band-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold-2);margin-bottom:6px;}
 .price-band-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
@@ -2950,6 +2970,7 @@ function buildWeddingFull(wv){
   </div>
   ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${rf.offer?`<div class="pkg-cta"><a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;→</a></div>`:''}</div>`:''}
   ${priceBand}
+  <div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, wv.couple, 'Resort Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${venues.length?`<div class="resort-venues"><div class="venues"><h3 class="venues-title">Ceremony &amp; Reception Venues</h3><div class="venues-grid">${venuesHTML}</div></div></div>`:''}
     ${rests.length?`<div class="resort-dining"><h3 class="venues-title">Dining &amp; Bars</h3>${restaurantsHTML}</div>`:''}
     ${clubPerks.length?`<div class="resort-club"><div class="club-inner">
@@ -3002,6 +3023,9 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .resort-hero-content{position:relative;padding:0 7vw 48px;}
 .resort-num{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
 .resort-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,60px);font-weight:300;color:var(--white);line-height:1.08;}
+.like-wrap{background:var(--cream);padding:0 7vw 54px;text-align:center;}
+.like-btn{display:inline-block;background:var(--black);color:var(--gold);font-family:'Jost',sans-serif;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:17px 42px;}
+@media print{.like-wrap{display:none;}}
 .resort-tagline{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;letter-spacing:.3px;color:rgba(255,255,255,.92);margin-top:12px;}
 .resort-meta-line{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.62);margin-top:10px;}
 .resort-body{padding:60px 7vw;background:var(--cream);}
