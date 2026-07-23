@@ -7,8 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{font-size:18px}
-body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100vh;font-size:16px}
+body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100vh;font-size:15px}
 
 /* ââ NAV ââ */
 .nav{background:#1a1a1a;border-bottom:1px solid #2a2a2a;padding:0 24px;display:flex;align-items:center;gap:0;height:52px;position:sticky;top:0;z-index:100}
@@ -224,7 +223,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
       <option value="ocean-coral-spring">Ocean Coral Spring</option>
       <option value="ocean-eden-bay">Ocean Eden Bay</option>
-      <option value="princess-grand-jamaica">Princess Grand Jamaica</option>
       <option value="riu-cancun">Riu Cancun</option>
       <option value="riu-latino">Riu Latino</option>
       <option value="riu-montego-bay">Riu Montego Bay</option>
@@ -251,6 +249,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="secrets-royal-beach">Secrets Royal Beach Punta Cana</option>
       <option value="secrets-st-james">Secrets St James Montego Bay</option>
       <option value="secrets-st-lucia">Secrets St. Lucia Resort &amp; Spa</option>
+      <option value="royalton-vessence-barbados">Royalton Vessence Barbados</option>
       <option value="secrets-the-vine">Secrets The Vine Cancun</option>
       <option value="secrets-tides-punta-cana">Secrets Tides Punta Cana</option>
       <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
@@ -280,8 +279,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <h3 style="font-size:1.1rem;color:#111;font-weight:700;margin:0;">&#128202; Resort Completion Audit</h3>
       <button onclick="runAudit()" style="background:#f0c958;border:none;color:#111;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;">&#8635; Refresh</button>
       <span id="auditStatus" style="color:#555;font-size:.85rem;"></span>
-      <button onclick="document.getElementById('auditSection').style.display='none'" title="Close"
-        style="margin-left:auto;background:#eee;border:1px solid #ccc;color:#333;width:30px;height:30px;border-radius:6px;cursor:pointer;font-size:16px;line-height:1;flex-shrink:0;">&times;</button>
     </div>
     <p style="color:#666;font-size:.85rem;margin-bottom:16px;">Click any resort name to open and edit it. ✅ = complete &nbsp; ❌ = missing.</p>
     <div id="auditGrid" style="overflow-x:auto;"></div>
@@ -376,10 +373,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Highlights <span style="color:#555;font-size:.75rem;">(key selling points, separate with &middot; )</span></label>
         <input type="text" class="form-control" id="profileHighlights" placeholder="5 Stars &middot; Adults-Only &middot; Beachfront &middot; Diamond Partner &middot; 570 Rooms">
       </div>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
     </div>
 
     <!-- SECTION 2: LINKS -->
@@ -398,6 +391,12 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="form-group">
+          <label>Gallery Link</label>
+          <input type="url" class="form-control" id="profileGalleryLink" placeholder="https://amy-cate.com/gallery?gallery=...">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div class="form-group">
           <label>Wedding Package URL <span style="color:#c0392b;">*</span></label>
           <input type="url" class="form-control" id="profileWeddingUrl" placeholder="https://www.destinationweddings.com/.../weddings">
         </div>
@@ -409,10 +408,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div class="form-group">
         <label>Real Wedding Couple Names</label>
         <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James — shown with the real wedding link">
-      </div>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
       </div>
     </div>
 
@@ -428,10 +423,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
         <textarea class="form-control" id="profileClubPerks" rows="4" placeholder="Butler service&#10;Private beach area&#10;Premium minibar stocked daily&#10;Room upgrades subject to availability&#10;Private check-in"></textarea>
       </div>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
     </div>
 
     <!-- SECTION 4: ROOM CATEGORIES -->
@@ -440,22 +431,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Every room type available at this resort. Descriptions auto-fill in quotes and the gallery. Upload photos for each via the section above.</p>
       <div id="roomcat-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addRoomCatRow()">+ Add Room Category</button>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
-    </div>
-
-    <!-- SECTION 4b: RESTAURANTS & BARS -->
-    <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#127860; Restaurants &amp; Bars</h3>
-      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets, bars and lounges. Used in client quotes to sell the property.</p>
-      <div id="rest-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
-      <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant</button>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
     </div>
 
     <!-- SECTION 5: WEDDING VENUES -->
@@ -464,10 +439,14 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All ceremony and reception locations. Include capacity, best use and a photo URL for each.</p>
       <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addVenueRow()">+ Add Venue</button>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
+    </div>
+
+    <!-- SECTION 5b: RESTAURANTS & BARS -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:4px;">🍽 Restaurants &amp; Bars</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets — restaurants, bars, cafés, and snack spots. Shown on the resort detail page and client quotes.</p>
+      <div id="restaurant-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant / Bar</button>
     </div>
 
     <!-- SECTION 6: WEDDING PACKAGES -->
@@ -476,10 +455,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All available packages with pricing. Mark the most popular one as featured.</p>
       <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
-      </div>
     </div>
 
     <!-- SECTION 7: NOTES -->
@@ -493,10 +468,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div class="form-group">
         <label>General Notes</label>
         <textarea class="form-control" id="profileNotes" rows="2" placeholder="Anything else worth remembering about this property..."></textarea>
-      </div>
-      <div style="margin-top:14px;padding-top:12px;border-top:1px solid #2a2a2a;">
-        <button class="btn btn-primary btn-sm" onclick="saveResortProfile()">&#128190; Save Profile</button>
-        <span style="color:#666;font-size:.75rem;margin-left:8px;">saves the whole profile</span>
       </div>
     </div>
 
@@ -721,6 +692,7 @@ async function loadResortProfile(slugOverride) {
       set('profileStars', d.stars);
       set('profileBookingLink', d.dwtUrl || d.bookingLink);
       set('profileCtUrl', d.ctUrl);
+      set('profileGalleryLink', d.galleryLink);
       set('profileNotes', d.notes);
       set('profileWeddingUrl', d.weddingUrl);
       set('profileRealWeddingUrl', d.realWeddingUrl);
@@ -731,10 +703,10 @@ async function loadResortProfile(slugOverride) {
       set('profileWeddingGuide', d.weddingGuide);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo, r.bedding, r.view, r.size, r.sleeps)); }
-      // Load restaurants & bars
-      const restList = document.getElementById('rest-list');
-      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description, r.photo)); }
+      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description)); }
+      // Load restaurants
+      const restList = document.getElementById('restaurant-list');
+      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description)); }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
       if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
@@ -743,10 +715,10 @@ async function loadResortProfile(slugOverride) {
       if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
     } else {
       // No profile yet — clear everything
-      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl',
+      ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
        'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
        'profileClubName','profileClubPerks','profileWeddingGuide','profileStars'].forEach(id => set(id, ''));
-      ['roomcat-list','rest-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+      ['roomcat-list','restaurant-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
       const noProfileMsg = document.getElementById('noProfileMsg');
       if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
@@ -763,68 +735,104 @@ async function loadResortProfile(slugOverride) {
   }
 }
 
-function addVenueRow(name='', capacity='', bestFor='', description='', photo='') {
-  const list = document.getElementById('venue-list');
-  if (!list) return;
-  const div = document.createElement('div');
-  div.style.cssText = 'border:1px solid #2a2a2a;border-radius:8px;background:#151515;position:relative;padding:10px;';
-  div.setAttribute('data-row','venue');
-  div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#666;font-size:14px;cursor:pointer;z-index:1;">&times;</button>
-    <div style="display:flex;gap:10px;align-items:flex-start;">
-      <div style="flex:0 0 104px;">
-        <img class="venue-thumb" src="${photo}" style="width:104px;height:72px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;" onerror="this.style.display='none'">
-        <div style="display:flex;flex-direction:column;gap:4px;">${rowUploadButton()}${rowCopyButton()}</div>
-      </div>
-      <div style="flex:1;min-width:0;padding-right:14px;">
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">
-          <input class="form-control venue-name" placeholder="Venue name" value="${name}" style="font-weight:600;">
-          <input class="form-control venue-capacity" placeholder="Capacity" value="${capacity}">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
-          <input class="form-control venue-bestfor" placeholder="Best For e.g. Ceremony" value="${bestFor}">
-          <input class="form-control venue-photo" placeholder="Photo URL" value="${photo}"
-            oninput="const t=this.closest('[data-row]').querySelector('.venue-thumb'); if(t){t.src=this.value;t.style.display=this.value?'block':'none';}">
-        </div>
-        <textarea class="form-control venue-desc" rows="2" placeholder="Venue description">${description}</textarea>
-      </div>
-    </div>`;
-  list.appendChild(div);
+function updateVenuePreview(input) {
+  const card = input.closest('div[style*="border:1px solid"]');
+  if (!card) return;
+  let img = card.querySelector('img.venue-preview');
+  if (!img) {
+    img = document.createElement('img');
+    img.className = 'venue-preview';
+    img.style.cssText = 'width:100%;height:120px;object-fit:cover;display:block;';
+    img.onerror = () => img.style.display = 'none';
+    card.insertBefore(img, card.querySelector('div[style*="padding:10px"]'));
+  }
+  img.src = input.value;
+  img.style.display = input.value ? 'block' : 'none';
 }
 
-function addRestaurantRow(name='', type='', description='', photo='') {
-  const list = document.getElementById('rest-list');
+let _venuePickerTarget = null;
+function openVenuePhotoPicker(inputEl) {
+  _venuePickerTarget = inputEl;
+  const slug = document.getElementById('profileResort')?.value || document.getElementById('masterResort')?.value;
+  if (!slug) { alert('Select a resort first'); return; }
+  const modal = document.getElementById('venuePhotoPickerModal');
+  const grid = document.getElementById('venuePhotoGrid');
+  grid.innerHTML = '<div style="color:#888;padding:20px;">Loading photos…</div>';
+  modal.style.display = 'flex';
+  db.collection('resortPhotos').where('resortSlug', '==', slug).get()
+    .then(snap => {
+      const photos = snap.docs.map(d => d.data()).filter(p => p.url || p.downloadURL);
+      if (!photos.length) { grid.innerHTML = '<div style="color:#888;padding:20px;">No photos uploaded for this resort yet.</div>'; return; }
+      grid.innerHTML = photos.map(p => {
+        const url = p.url || p.downloadURL;
+        const cap = p.caption || p.category || '';
+        const safeUrl = url.replace(/'/g,"\\'");
+        return `<div onclick="selectVenuePhoto('${safeUrl}',this)" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .15s;background:#2a2a2a;" title="${cap}">
+          <div style="position:relative;height:90px;background:#222;">
+            <img src="${url}" style="width:100%;height:90px;object-fit:cover;display:block;position:absolute;inset:0;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:1.5rem;">🏖</div>
+          </div>
+          <div style="font-size:.7rem;color:#ccc;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#1a1a1a;">${cap || 'Photo'}</div>
+        </div>`;
+      }).join('');
+    })
+    .catch(e => { grid.innerHTML = `<div style="color:#f44;padding:20px;">Error: ${e.message}</div>`; });
+}
+function selectVenuePhoto(url, el) {
+  if (_venuePickerTarget) {
+    _venuePickerTarget.value = url;
+    updateVenuePreview(_venuePickerTarget);
+  }
+  document.getElementById('venuePhotoPickerModal').style.display = 'none';
+}
+
+function addRestaurantRow(name='', type='', description='') {
+  const list = document.getElementById('restaurant-list');
   if (!list) return;
   const div = document.createElement('div');
-  div.style.cssText = 'border:1px solid #2a2a2a;border-radius:8px;background:#151515;position:relative;padding:10px;';
-  div.setAttribute('data-row','restaurant');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;background:#fafafa;padding:10px;position:relative;';
   div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#666;font-size:14px;cursor:pointer;z-index:1;">&times;</button>
-    <div style="display:flex;gap:10px;align-items:flex-start;">
-      <div style="flex:0 0 104px;">
-        <img class="rest-thumb" src="${photo}" style="width:104px;height:72px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;" onerror="this.style.display='none'">
-        <div style="display:flex;flex-direction:column;gap:4px;">${rowUploadButton()}${rowCopyButton()}</div>
-      </div>
-      <div style="flex:1;min-width:0;padding-right:14px;">
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:6px;margin-bottom:6px;">
-          <input class="form-control rest-name" placeholder="Restaurant / bar name" value="${name}" style="font-weight:600;">
-          <input class="form-control rest-type" placeholder="Type e.g. Italian" value="${type}">
-        </div>
-        <input class="form-control rest-photo" placeholder="Photo URL" value="${photo}" style="margin-bottom:6px;"
-          oninput="const t=this.closest('[data-row]').querySelector('.rest-thumb'); if(t){t.src=this.value;t.style.display=this.value?'block':'none';}">
-        <textarea class="form-control rest-desc" rows="2" placeholder="Description \u2014 cuisine, setting, adults-only, reservations...">${description}</textarea>
-      </div>
-    </div>`;
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">✕</button>
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:6px;">
+      <input class="form-control rest-name" placeholder="Restaurant / Bar name" value="${name}" style="font-weight:600;">
+      <input class="form-control rest-type" placeholder="Type e.g. Italian, Bar, Buffet" value="${type}">
+    </div>
+    <textarea class="form-control rest-desc" rows="2" placeholder="Brief description shown on the resort page and in quotes…">${description}</textarea>`;
   list.appendChild(div);
 }
 
 function getRestaurants() {
-  return [...document.querySelectorAll('#rest-list > div')].map(div => ({
+  return [...document.querySelectorAll('#restaurant-list > div')].map(div => ({
     name:        div.querySelector('.rest-name')?.value?.trim() || '',
     type:        div.querySelector('.rest-type')?.value?.trim() || '',
     description: div.querySelector('.rest-desc')?.value?.trim() || '',
-    photo:       div.querySelector('.rest-photo')?.value?.trim() || ''
+    photos:      []
   })).filter(r => r.name);
+}
+
+function addVenueRow(name='', capacity='', bestFor='', description='', photo='') {
+  const list = document.getElementById('venue-list');
+  if (!list) return;
+  const div = document.createElement('div');
+  div.style.cssText = 'border:1px solid #e0e0e0;border-radius:8px;overflow:hidden;background:#fafafa;position:relative;';
+  div.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;z-index:1;">â</button>
+    ${photo ? `<img src="${photo}" style="width:100%;height:120px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
+    <div style="padding:10px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-name" placeholder="Venue name" value="${name}" style="font-weight:600;">
+        <input class="form-control venue-capacity" placeholder="Capacity e.g. 120 Guests" value="${capacity}">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px;">
+        <input class="form-control venue-bestfor" placeholder="Best For e.g. Ceremony" value="${bestFor}">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input class="form-control venue-photo" placeholder="Photo URL" value="${photo}" style="flex:1;" oninput="updateVenuePreview(this)">
+          <button type="button" title="Pick from uploaded photos" onclick="openVenuePhotoPicker(this.previousElementSibling)" style="background:#2a2a2a;border:1px solid #444;border-radius:6px;color:#f0c958;cursor:pointer;padding:6px 10px;font-size:14px;white-space:nowrap;">📷</button>
+        </div>
+      </div>
+      <textarea class="form-control venue-desc" rows="2" placeholder="Venue description">${description}</textarea>
+    </div>`;
+  list.appendChild(div);
 }
 
 function getVenues() {
@@ -866,139 +874,28 @@ function getPackages() {
 }
 
 
-function addRoomCatRow(name='', description='', photo='', bedding='', view='', size='', sleeps='') {
+function addRoomCatRow(name='', description='') {
   const list = document.getElementById('roomcat-list');
   if (!list) return;
   const div = document.createElement('div');
-  div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:12px;position:relative;';
-  div.setAttribute('data-row','roomcat');
-  const L = 'font-size:.72rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;';
+  div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;padding:14px;position:relative;';
   div.innerHTML = `
-    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;z-index:1;" title="Remove">&#10005;</button>
-    <div style="display:flex;gap:12px;align-items:flex-start;">
-      <div style="flex:0 0 128px;">
-        <img class="roomcat-thumb" src="${photo}" style="width:128px;height:90px;object-fit:cover;border-radius:6px;display:${photo?'block':'none'};margin-bottom:6px;background:#000;" onerror="this.style.display='none'">
-        <div style="display:flex;flex-direction:column;gap:4px;">
-          ${rowUploadButton()}
-          ${rowCopyButton()}
-        </div>
-      </div>
-      <div style="flex:1;min-width:0;padding-right:14px;">
-        <div style="margin-bottom:6px;">
-          <label style="${L}">Room / Suite Name</label>
-          <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr .6fr;gap:6px;margin-bottom:6px;">
-          <div><label style="${L}">Bedding</label><input class="form-control roomcat-bedding" placeholder="1 King bed" value="${bedding}"></div>
-          <div><label style="${L}">View</label><input class="form-control roomcat-view" placeholder="Ocean View" value="${view}"></div>
-          <div><label style="${L}">Size</label><input class="form-control roomcat-size" placeholder="473 sq. ft." value="${size}"></div>
-          <div><label style="${L}">Sleeps</label><input class="form-control roomcat-sleeps" placeholder="3" value="${sleeps}"></div>
-        </div>
-        <input class="form-control roomcat-photo" placeholder="Photo URL" value="${photo}" style="margin-bottom:6px;font-size:.8rem;"
-          oninput="const t=this.closest('[data-row]').querySelector('.roomcat-thumb'); if(t){t.src=this.value;t.style.display=this.value?'block':'none';}">
-        <textarea class="form-control roomcat-desc" rows="2" placeholder="The selling copy \u2014 setting, style, key amenities.">${description}</textarea>
-      </div>
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;" title="Remove">&#10005;</button>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Room / Suite Name</label>
+      <input class="form-control roomcat-name" placeholder="e.g. Elegance Club Jr Suite OceanFront" value="${name}" style="font-weight:600;">
+    </div>
+    <div>
+      <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Description</label>
+      <textarea class="form-control roomcat-desc" rows="2" placeholder="Describe the room — size, bed type, view, key amenities...">${description}</textarea>
     </div>`;
   list.appendChild(div);
-}
-
-/* Upload a photo from inside a Room Category / Restaurant / Venue row.
-   Files it under the correct category automatically and fills the row's Photo URL. */
-async function uploadRowPhoto(input) {
-  const file = input.files && input.files[0];
-  if (!file) return;
-  const slug = document.getElementById('masterResort').value;
-  if (!slug) { alert('Pick a resort at the top of the page first.'); input.value = ''; return; }
-
-  const row  = input.closest('[data-row]');
-  const kind = row ? row.getAttribute('data-row') : '';
-  let category = '', caption = '';
-
-  if (kind === 'roomcat') {
-    const name = row.querySelector('.roomcat-name')?.value?.trim() || '';
-    if (!name) { alert('Type the room name first — the photo is filed under it.'); input.value=''; return; }
-    category = name; caption = name;
-  } else if (kind === 'restaurant') {
-    const name = row.querySelector('.rest-name')?.value?.trim() || '';
-    const type = row.querySelector('.rest-type')?.value?.trim() || '';
-    if (!name) { alert('Type the restaurant name first.'); input.value=''; return; }
-    category = /\bbar\b|lounge/i.test(type) ? 'Bar' : 'Dining';
-    caption  = type ? `${name} \u00b7 ${type}` : name;
-  } else if (kind === 'venue') {
-    const name = row.querySelector('.venue-name')?.value?.trim() || '';
-    if (!name) { alert('Type the venue name first.'); input.value=''; return; }
-    category = 'Wedding Venues'; caption = name;
-  } else { return; }
-
-  const label = input.closest('label');
-  const original = label ? label.innerHTML : '';
-  if (label) label.innerHTML = 'Uploading\u2026';
-
-  try {
-    const safeName = file.name.replace(/[^a-z0-9._-]/gi, '-').toLowerCase();
-    const path = `resorts/${slug}/${Date.now()}_${safeName}`;
-    const ref  = storage.ref(path);
-    await ref.put(file);
-    const downloadURL = await ref.getDownloadURL();
-
-    await db.collection('resortPhotos').add({
-      resort: slug, resortSlug: slug,
-      resortName: RESORT_NAMES[slug] || slug,
-      category: category, roomCategory: category,
-      caption: caption,
-      url: downloadURL, storagePath: path, downloadURL: downloadURL,
-      fileSize: file.size,
-      uploadedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    const photoInput = row.querySelector('.roomcat-photo, .rest-photo, .venue-photo');
-    if (photoInput) {
-      photoInput.value = downloadURL;
-      photoInput.dispatchEvent(new Event('input', { bubbles: true }));
-    }
-    const thumb = row.querySelector('.rest-thumb, img');
-    if (thumb) { thumb.src = downloadURL; thumb.style.display = 'block'; }
-
-    if (label) label.innerHTML = '\u2713 Uploaded';
-    setTimeout(() => { if (label) label.innerHTML = original; }, 2500);
-    if (typeof loadPhotos === 'function') loadPhotos();
-  } catch (e) {
-    console.error('Row photo upload failed:', e);
-    alert('Upload failed: ' + e.message);
-    if (label) label.innerHTML = original;
-  }
-  input.value = '';
-}
-
-function copyRowPhotoUrl(btn) {
-  const row = btn.closest('[data-row]');
-  const inp = row && row.querySelector('.roomcat-photo, .rest-photo, .venue-photo');
-  if (!inp || !inp.value.trim()) { alert('No photo URL on this row yet.'); return; }
-  const done = () => { const t = btn.innerHTML; btn.innerHTML = '\u2713 Copied'; setTimeout(() => btn.innerHTML = t, 1500); };
-  if (navigator.clipboard) navigator.clipboard.writeText(inp.value.trim()).then(done).catch(() => { inp.select(); document.execCommand('copy'); done(); });
-  else { inp.select(); document.execCommand('copy'); done(); }
-}
-
-function rowCopyButton() {
-  return `<button type="button" onclick="copyRowPhotoUrl(this)" title="Copy this photo URL"
-    style="background:#2a2a2a;border:1px solid #444;color:#ccc;padding:5px 10px;border-radius:5px;cursor:pointer;font-size:.75rem;">&#128279; Copy URL</button>`;
-}
-
-function rowUploadButton() {
-  return `<label style="display:inline-block;background:#2a2a2a;border:1px solid #444;color:#ccc;padding:5px 12px;border-radius:5px;cursor:pointer;font-size:.78rem;margin-bottom:6px;">
-      <input type="file" accept="image/*" style="display:none" onchange="uploadRowPhoto(this)">&#11014; Upload Photo
-    </label>`;
 }
 
 function getRoomCategories() {
   return [...document.querySelectorAll('#roomcat-list > div')].map(div => ({
     name:        div.querySelector('.roomcat-name')?.value?.trim() || '',
-    description: div.querySelector('.roomcat-desc')?.value?.trim() || '',
-    photo:       div.querySelector('.roomcat-photo')?.value?.trim() || '',
-    bedding:     div.querySelector('.roomcat-bedding')?.value?.trim() || '',
-    view:        div.querySelector('.roomcat-view')?.value?.trim() || '',
-    size:        div.querySelector('.roomcat-size')?.value?.trim() || '',
-    sleeps:      div.querySelector('.roomcat-sleeps')?.value?.trim() || ''
+    description: div.querySelector('.roomcat-desc')?.value?.trim() || ''
   })).filter(r => r.name);
 }
 
@@ -1018,6 +915,7 @@ async function saveResortProfile() {
     stars:        document.getElementById('profileStars').value,
     dwtUrl:       document.getElementById('profileBookingLink').value.trim(),
     ctUrl:        document.getElementById('profileCtUrl')?.value?.trim() || '',
+    galleryLink:  document.getElementById('profileGalleryLink').value.trim(),
     notes:           document.getElementById('profileNotes').value.trim(),
     weddingUrl:      document.getElementById('profileWeddingUrl').value.trim(),
     realWeddingUrl:  document.getElementById('profileRealWeddingUrl').value.trim(),
@@ -1364,23 +1262,105 @@ function toast(msg, type='success') {
 async function openEditPhoto(id) {
   const p = allPhotos.find(x => x.id === id);
   if (!p) return;
+  const slug = p.resortSlug || p.resort || '';
+  const currentCat = p.roomCategory || p.category || '';
   document.getElementById('editPhotoId').value = id;
-  document.getElementById('editPhotoResort').value = p.resortSlug || p.resort || '';
-  document.getElementById('editPhotoPreview').src = p.downloadURL;
+  document.getElementById('editPhotoResort').value = slug;
+  document.getElementById('editPhotoPreview').src = p.url || p.downloadURL || '';
   document.getElementById('editPhotoCaption').value = p.caption || '';
-  document.getElementById('editPhotoCategory').value = p.roomCategory || '';
+  document.getElementById('editPhotoCategory').value = currentCat;
+  document.getElementById('editPhotoCategoryCustom').style.display = 'none';
   document.getElementById('editPhotoModal').style.display = 'flex';
 
-  // Load shared room description for this resort + category
+  // Populate category dropdown from resort profile
+  const venueGroup = document.getElementById('catGroupVenues');
+  const roomGroup  = document.getElementById('catGroupRooms');
+  venueGroup.innerHTML = '';
+  roomGroup.innerHTML  = '';
+  venueGroup.style.display = 'none';
+  roomGroup.style.display  = 'none';
+  const sel = document.getElementById('editPhotoCategorySelect');
+
+  if (slug) {
+    try {
+      const [profileDoc, photoSnap] = await Promise.all([
+        db.collection('resortProfiles').doc(slug).get(),
+        db.collection('resortPhotos').where('resortSlug','==',slug).get()
+          .catch(() => db.collection('resortPhotos').where('resort','==',slug).get())
+          .catch(() => ({docs:[]}))
+      ]);
+
+      // Categories already in use by existing photos
+      const usedCats = [...new Set(
+        photoSnap.docs.map(d => d.data().roomCategory || d.data().category || '').filter(Boolean)
+      )].sort();
+
+      // Venues and rooms from profile
+      let venues = [], rooms = [];
+      if (profileDoc.exists) {
+        const d = profileDoc.data();
+        venues = (d.venues || []).map(v => v.name).filter(Boolean);
+        rooms  = (d.rooms || d.roomCategories || []).map(r => r.name || r.category || r).filter(Boolean);
+      }
+
+      // Merge: profile items first, then any used cats not already covered
+      const stdCatsSet = new Set(['gallery','dining']);
+      const venueSet = new Set(venues);
+      const roomSet  = new Set(rooms);
+      const extraCats = usedCats.filter(c => !stdCatsSet.has(c) && !venueSet.has(c) && !roomSet.has(c));
+
+      if (venues.length) {
+        venueGroup.style.display = '';
+        venues.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; venueGroup.appendChild(o); });
+      }
+      if (rooms.length) {
+        roomGroup.style.display = '';
+        rooms.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; roomGroup.appendChild(o); });
+      }
+      if (extraCats.length) {
+        const extraGroup = document.createElement('optgroup');
+        extraGroup.label = 'Already Used';
+        extraCats.forEach(n => { const o = document.createElement('option'); o.value = n; o.textContent = n; extraGroup.appendChild(o); });
+        sel.insertBefore(extraGroup, sel.querySelector('option[value="__custom__"]'));
+      }
+    } catch(e) { console.error('profile load error', e); }
+  }
+
+  // Add caption as a "Suggested" option at the top so you can one-click assign it
+  const caption = p.caption || '';
+  if (caption) {
+    const suggestGroup = document.createElement('optgroup');
+    suggestGroup.label = '⬇ Suggested';
+    const so = document.createElement('option');
+    so.value = caption;
+    so.textContent = caption;
+    suggestGroup.appendChild(so);
+    sel.insertBefore(suggestGroup, sel.options[1]);
+  }
+
+  // Set the select to the current category
+  const stdCats = ['gallery','dining'];
+  const allOptions = [...sel.options].map(o => o.value);
+  if (currentCat && allOptions.includes(currentCat)) {
+    sel.value = currentCat;
+  } else if (currentCat) {
+    // Not in list — show custom input
+    sel.value = '__custom__';
+    const ci = document.getElementById('editPhotoCategoryCustom');
+    ci.style.display = 'block';
+    ci.value = currentCat;
+  } else {
+    sel.value = '';
+  }
+
+  // Load shared room description
   const descBox = document.getElementById('editPhotoDescription');
   descBox.value = '';
   try {
-    const key = roomDescKey(p.resortSlug || p.resort, p.roomCategory);
+    const key = roomDescKey(slug, currentCat);
     const doc = await db.collection('roomDescriptions').doc(key).get();
     descBox.value = doc.exists ? (doc.data().description || '') : '';
-  } catch(e) {
-    console.error('load edit description error:', e);
-  }
+  } catch(e) { console.error('load edit description error:', e); }
 }
 
 function closeEditPhoto() {
@@ -1488,26 +1468,13 @@ async function runAudit() {
     const photoSnap = await db.collection('resortPhotos').get();
     const photoCounts = {};
     const photoCats   = {};
-    const diningCounts = {};
-    const resortPhotoCounts = {};
-    const DINING_CATS = ['dining','bar'];
-    const PROPERTY_CATS = ['aerial view','resort & property','beach & pool',
-                           'lobby & common areas','spa','activities'];
     photoSnap.docs.forEach(d => {
       const p = d.data();
       const slug = p.resortSlug || p.resort || '';
       if (!slug) return;
       photoCounts[slug] = (photoCounts[slug] || 0) + 1;
-      const cat = p.roomCategory || p.category || '';
-      const catKey = String(cat).trim().toLowerCase();
-      if (DINING_CATS.includes(catKey)) {
-        diningCounts[slug] = (diningCounts[slug] || 0) + 1;
-      }
-      if (PROPERTY_CATS.includes(catKey)) {
-        resortPhotoCounts[slug] = (resortPhotoCounts[slug] || 0) + 1;
-      }
       if (!photoCats[slug]) photoCats[slug] = new Set();
-      if (cat) photoCats[slug].add(cat);
+      if (p.roomCategory || p.category) photoCats[slug].add(p.roomCategory || p.category);
     });
 
     // Get resort list from master dropdown
@@ -1523,7 +1490,6 @@ async function runAudit() {
       { key:'weddingUrl',   label:'Wedding URL' },
       { key:'venues',       label:'Venues',   isArr:true },
       { key:'packages',     label:'Packages', isArr:true },
-      { key:'restaurants',  label:'Restaurants', isArr:true },
       { key:'roomCategories', label:'Room Cats', isArr:true },
     ];
 
@@ -1547,12 +1513,6 @@ async function runAudit() {
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
-      const hasHero = !!(p.heroPhoto && String(p.heroPhoto).trim());
-      const heroCell = `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${hasHero ? '\u2705' : '\u274C'}</td>`;
-      const dining = diningCounts[r.slug] || 0;
-      const diningCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${dining>0?'#1a7a3a':'#c0392b'};font-weight:600;">${dining}</td>`;
-      const resortPix = resortPhotoCounts[r.slug] || 0;
-      const resortPixCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${resortPix>0?'#1a7a3a':'#c0392b'};font-weight:600;">${resortPix}</td>`;
 
       const allOk = checks.every(c => checkOk(c)) && photos > 0;
       if (allOk) completedResorts++;
@@ -1565,14 +1525,11 @@ async function runAudit() {
           <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#1a56db;text-decoration:underline;">${r.name}</a>
         </td>
         ${cells.join('')}
-        ${heroCell}
         ${photoCell}
-        ${resortPixCell}
-        ${diningCell}
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Hero', 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos'].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
@@ -1593,6 +1550,17 @@ async function runAudit() {
 
 </script>
 
+<!-- VENUE PHOTO PICKER MODAL -->
+<div id="venuePhotoPickerModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:700px;width:95%;max-height:85vh;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;color:#f0c958;font-size:1.05rem;">Pick a Venue Photo</h3>
+      <button onclick="document.getElementById('venuePhotoPickerModal').style.display='none'" style="background:none;border:none;color:#aaa;font-size:20px;cursor:pointer;">✕</button>
+    </div>
+    <div id="venuePhotoGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;overflow-y:auto;flex:1;"></div>
+  </div>
+</div>
+
 <!-- EDIT PHOTO MODAL -->
 <div id="editPhotoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;">
   <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:420px;width:90%;max-height:90vh;overflow-y:auto;">
@@ -1602,7 +1570,18 @@ async function runAudit() {
     <img id="editPhotoPreview" src="" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:14px;">
     <div class="form-group">
       <label>Category</label>
-      <input type="text" class="form-control" id="editPhotoCategory">
+      <select class="form-control" id="editPhotoCategorySelect" onchange="document.getElementById('editPhotoCategory').value=this.value==='__custom__'?'':this.value;document.getElementById('editPhotoCategoryCustom').style.display=this.value==='__custom__'?'block':'none';">
+        <option value="">— Select a category —</option>
+        <optgroup label="Standard" id="catGroupStandard">
+          <option value="gallery">gallery</option>
+          <option value="dining">dining</option>
+        </optgroup>
+        <optgroup label="Venues" id="catGroupVenues" style="display:none;"></optgroup>
+        <optgroup label="Room Categories" id="catGroupRooms" style="display:none;"></optgroup>
+        <option value="__custom__">Other (type below)…</option>
+      </select>
+      <input type="text" class="form-control" id="editPhotoCategoryCustom" placeholder="Type custom category…" style="margin-top:6px;display:none;" oninput="document.getElementById('editPhotoCategory').value=this.value">
+      <input type="hidden" id="editPhotoCategory">
     </div>
     <div class="form-group" style="margin-top:10px;">
       <label>Caption</label>
