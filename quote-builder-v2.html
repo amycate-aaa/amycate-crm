@@ -809,7 +809,7 @@ Complimentary concierge and computer access</textarea>
     <div class="section-card-body">
       <div class="row full">
         <div class="field"><label>Hero Photo URL <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— top of quote (optional — auto-fills from Resort 1)</span></label>
-          <input id="fs-heroPhoto" placeholder="Auto-fills from first resort selected">
+          <input id="fs-heroPhoto" placeholder="Leave blank — default beach photo will be used">
         </div>
       </div>
     </div>
@@ -1033,13 +1033,16 @@ function resetAgent() {
   document.getElementById('agent-modal').style.display = 'flex';
 }
 // Always show agent modal on load — pre-fill if already saved so it's a quick confirm/switch
+// This builder belongs to one agent — don't ask on load.
 window.addEventListener('DOMContentLoaded', function() {
   const a = getAgent();
   if(a) {
     const set = (id,v) => { const el=document.getElementById(id); if(el) el.value=v||''; };
     set('am-first', a.first); set('am-full', a.full); set('am-email', a.email); set('am-phone', a.phone);
   }
-  document.getElementById('agent-modal').style.display = 'flex';
+  const modal = document.getElementById('agent-modal');
+  if(modal) modal.style.display = 'none';
+  if(typeof updateAgentBadge === 'function') updateAgentBadge();
 });
 
 // Default wedding hero — your existing template photo (replace URL with your beach photo once uploaded to Firebase Storage)
@@ -1085,6 +1088,16 @@ function setMode(m){
       },150);
     }
   }
+}
+
+function starLine(r){
+  const n=parseFloat(r&&r.stars);
+  if(!n||isNaN(n)) return '';
+  const f=Math.floor(n), h=(n-f)>=0.5;
+  return '\u2605'.repeat(f)+(h?'\u00BD':'')+'  '+n+' Star Resort';
+}
+function resortMetaLine(r){
+  return [starLine(r),[r.city,r.country].filter(Boolean).join(', ')].filter(Boolean).join('  \u00B7  ');
 }
 
 function esc(s){
@@ -1654,10 +1667,9 @@ async function onFSSResortChange(n){
   // Build photo picker
   const targets=[{label:'Set as Resort Photo',fieldId:'fs-r'+n+'photo'}];
   if(n===1){
+    // Resort Options shows several resorts, so the top hero is the standard
+    // beach photo — same as the wedding quote. Never auto-filled from one resort.
     targets.unshift({label:'Set as Quote Hero',fieldId:'fs-heroPhoto'});
-    const heroEl=document.getElementById('fs-heroPhoto');
-    const hero=pickResortHero(r,crm)||photos[0]||'';
-    if(heroEl&&hero&&!heroEl.value) heroEl.value=hero;
   }
   buildPhotoPicker(photos,gridId,targets);
   attachPickerToggle(pickerId,'Change photo');
@@ -1691,15 +1703,96 @@ async function generateFITSneak(status){
     guests:val('fs-guests'),
     expiry:val('fs-expiry'),
     intro:val('fs-intro'),
-    heroPhoto:val('fs-heroPhoto')||''
+    heroPhoto:val('fs-heroPhoto')||DEFAULT_WEDDING_HERO
   };
   status.textContent='Building files…';
   const fullHTML=buildFITSneakFull(fsv);
+  const emailHTML=buildFITSneakEmail(fsv);
   const safe=safeName(fsv.clientName);
   showDLButtons([
+    {label:'📧 Download Email',filename:safe+'-options-email.html',content:emailHTML},
     {label:'📄 Download Resort Options',filename:safe+'-resort-options.html',content:fullHTML}
   ]);
   status.textContent='✅ Ready — click to download:';
+}
+
+function buildFITSneakEmail(fsv){
+  const card=(r,idx)=>{
+    const f=fsv.rf[idx]||{};
+    const num=String(idx+1).padStart(2,'0');
+    const photo=f.photo||r.heroPhoto||r.photo||(Array.isArray(r.photos)&&r.photos[0])||'';
+    const loc=[r.city,r.country].filter(Boolean).join(', ');
+    const stars=starLine(r);
+    const hi=String(r.highlights||'').split(/\s*[\u00b7\u2022|]\s*/).map(x=>x.trim()).filter(Boolean).slice(0,4);
+    return `
+    <tr><td class="pad" style="padding:0 50px 34px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="background:#FFFFFF;border:1px solid #E2D9CC;">
+        ${photo?`<tr><td style="font-size:0;line-height:0;"><img src="${escUrl(photo)}" width="598" alt="" style="display:block;width:100%;height:auto;border:0;"></td></tr>`:''}
+        <tr><td style="padding:26px 30px 24px;">
+          <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#B8975A;font-weight:bold;">Option ${num}</div>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:25px;color:#1E1A14;padding-top:8px;">${esc(r.name)}</div>
+          ${r.tagline?`<div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:#7A6A58;padding-top:7px;">${esc(r.tagline)}</div>`:''}
+          ${(stars||loc)?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9C8E80;padding-top:9px;">${esc([stars,loc].filter(Boolean).join('  \u00B7  '))}</div>`:''}
+          ${hi.length?`<div style="padding-top:16px;">${hi.map(h=>`<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;padding:3px 0;"><span style="color:#B8975A;">&mdash;</span>&nbsp;&nbsp;${esc(h)}</div>`).join('')}</div>`:''}
+          ${(f.roomName||f.price)?`
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #E2D9CC;">
+            <tr><td style="padding-top:16px;">
+              ${f.roomName?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C5044;">${esc(f.roomName)}</div>`:''}
+              ${f.price?`<div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;color:#1E1A14;padding-top:5px;">${esc(f.price)}</div>`:''}
+              ${f.priceNote?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9C8E80;padding-top:4px;">${esc(f.priceNote)}</div>`:''}
+            </td></tr></table>`:''}
+        </td></tr>
+      </table>
+    </td></tr>`;
+  };
+  return `<!DOCTYPE html>
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>Resort Options &middot; ${esc(fsv.clientName)}</title>
+<!--[if mso]><style>body,table,td,a,div{font-family:Arial,Helvetica,sans-serif !important;}</style><![endif]-->
+<style>@media only screen and (max-width:660px){.container{width:100% !important;}.pad{padding-left:24px !important;padding-right:24px !important;}}</style>
+</head>
+<body style="margin:0;padding:0;background:#FAF7F2;">
+<div style="display:none;font-size:1px;color:#FAF7F2;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">Your resort options for ${esc(fsv.tripName)} are ready &#10022;</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FAF7F2"><tr><td align="center">
+<!--[if mso]><table role="presentation" width="700" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+<table role="presentation" class="container" width="700" cellpadding="0" cellspacing="0" border="0" style="width:700px;max-width:700px;background:#FAF7F2;">
+<tr><td style="font-size:0;line-height:0;"><img src="${escUrl(fsv.heroPhoto||DEFAULT_WEDDING_HERO)}" width="700" alt="" style="display:block;width:100%;height:auto;border:0;"></td></tr>
+<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:46px 50px;">
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:18px;">Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:16px;color:#C0BFBD;">Your Resort Options</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:40px;color:#FFFFFF;padding-top:6px;">${esc(fsv.clientName)}</div>
+  <div style="height:1px;background:#B8975A;margin:20px 0 16px;font-size:0;line-height:0;">&nbsp;</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#9A9895;">${esc([fsv.destination,fsv.dates,fsv.guests].filter(Boolean).join('  \u00B7  '))}</div>
+</td></tr>
+${fsv.expiry?`<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:14px 50px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#C0BFBD;"><span style="color:#B8975A;">&bull;</span>&nbsp;&nbsp;These rates are held until <span style="color:#D4B882;font-weight:bold;">${esc(fsv.expiry)}</span></td></tr>`:''}
+<tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
+  <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Your full resort comparison</strong> &mdash; photos, dining, venues and room details.<!--QUOTE_CTA--></span>
+</td></tr>
+<tr><td class="pad" style="padding:44px 50px 30px;">
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:16px;">A Few Places To Fall In Love With</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;color:#1E1A14;line-height:1.25;">Hello, <span style="font-style:italic;color:#7A6A58;">${esc(fsv.clientName)}.</span></div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.75;color:#5C5044;padding-top:16px;">${esc(fsv.intro||"I have hand-picked these resorts with you in mind. Have a look through, see which one makes you smile, and tell me which you'd like to explore further \u2014 I'll take it from there.")}</div>
+</td></tr>
+${fsv.resorts.map((r,i)=>card(r,i)).join('')}
+<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:42px 50px;" align="center">
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;color:#FFFFFF;">Which one is calling your name?</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C0BFBD;padding-top:10px;">Reply with your favourite and I'll put together the full details.</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:22px;"><tr>
+    <td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:15px 34px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#1E1A14;text-decoration:none;">Book A Planning Call</a></td>
+  </tr></table>
+</td></tr>
+<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:30px 50px;">
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#FFFFFF;">${esc(agentVal('full'))}</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#B8975A;padding-top:5px;">Certified Destination Wedding Specialist</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#9A9895;padding-top:12px;">
+    <a href="mailto:${esc(agentVal('email'))}" style="color:#C0BFBD;text-decoration:none;">${esc(agentVal('email'))}</a>&nbsp;&bull;&nbsp; ${esc(agentVal('phone'))}
+  </div>
+</td></tr>
+</table>
+<!--[if mso]></td></tr></table><![endif]-->
+</td></tr></table>
+</body></html>`;
 }
 
 function buildFITSneakFull(fsv){
@@ -1786,7 +1879,8 @@ function buildFITSneakFull(fsv){
   const resortBlocks=fsv.resorts.map((r,idx)=>{
     const rf=fsv.rf[idx]||{};
     const num=String(idx+1).padStart(2,'0');
-    const tagline=[r.city,r.country].filter(Boolean).join(', ');
+    const tagline=r.tagline||'';
+    const metaLine=resortMetaLine(r);
     const rPhoto=rf.photo||r.photo||(getPhotos(r)[0])||'';
     const description=r.description||r.overview||'';
     const dwtUrl=r.dwtUrl||(r.slug?'https://www.destinationweddings.com/'+r.slug:'');
@@ -1807,6 +1901,7 @@ function buildFITSneakFull(fsv){
       <p class="resort-num">Option ${num}</p>
       <h2 class="resort-title">${esc(r.name)}</h2>
       ${tagline?`<p class="resort-tagline">${esc(tagline)}</p>`:''}
+          ${metaLine?`<p class="resort-meta-line">${esc(metaLine)}</p>`:''}
     </div>
   </div>
   <div class="resort-body">
@@ -1855,7 +1950,8 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .resort-hero-content{position:relative;padding:0 7vw 52px;}
 .resort-num{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
 .resort-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4.5vw,64px);font-weight:300;color:var(--white);line-height:1.06;}
-.resort-tagline{font-size:13px;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-top:10px;}
+.resort-tagline{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;letter-spacing:.3px;color:rgba(255,255,255,.92);margin-top:12px;}
+.resort-meta-line{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.62);margin-top:10px;}
 .resort-body{padding:64px 7vw;background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
 .resort-about{}
 .resort-desc{font-size:15px;line-height:1.9;color:var(--brown);margin-bottom:24px;}
@@ -2292,6 +2388,8 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
 .hero-content{position:relative;padding:0 7vw 64px;max-width:900px;}
 .hero-eyebrow{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
 .hero-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(40px,5.5vw,72px);font-weight:400;color:var(--white);line-height:1.06;margin-bottom:20px;}
+.hero-tagline{font-family:'Cormorant Garamond',serif;font-size:22px;font-style:italic;color:rgba(255,255,255,.92);margin-top:14px;}
+.hero-meta-line{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.62);margin-top:10px;}
 .hero-divider{width:50px;height:2px;background:var(--gold-2);margin-bottom:20px;}
 .hero-meta{display:flex;flex-wrap:wrap;font-size:12px;font-weight:400;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.72);}
 .hero-meta span{margin-right:16px;}.hero-meta .bull{color:var(--gold-2);margin-right:16px;}
@@ -2374,6 +2472,8 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
   <div class="hero-content">
     <p class="hero-eyebrow">Destination Weddings Travel Group &nbsp;·&nbsp; Celebration Travel</p>
     <h1 class="hero-title">${esc(r.name)}</h1>
+    ${r.tagline?`<p class="hero-tagline">${esc(r.tagline)}</p>`:''}
+    ${resortMetaLine(r)?`<p class="hero-meta-line">${esc(resortMetaLine(r))}</p>`:''}
     <div class="hero-divider"></div>
     <div class="hero-meta">
       ${[v.dates,v.nights,v.experience,v.tripName].filter(Boolean).map((m,i)=>i===0?`<span>${esc(m)}</span>`:`<span class="bull">&bull;</span><span>${esc(m)}</span>`).join('')}
@@ -2639,11 +2739,30 @@ function buildWeddingFull(wv){
     const rf=wv.rf[idx]||{};
     const num=String(idx+1).padStart(2,'0');
     const rPhoto=rf.heroPhoto||(wv.resortPhotos&&wv.resortPhotos[idx])||r.photo||(Array.isArray(r.photos)&&r.photos[0])||'';
-    const tagline=[r.city,r.country].filter(Boolean).join(', ');
+    const tagline=r.tagline||'';
+    const metaLine=resortMetaLine(r);
     const dwtUrl=r.dwtUrl||(r.slug?'https://www.destinationweddings.com/'+r.slug:'');
     const description=rf.desc||r.description||r.overview||'';
 
     const venues=Array.isArray(r.venues)?r.venues.slice(0,9):[];
+    const clubName=r.clubLevelName||r.clubName||'';
+    const clubPerksRaw=r.clubLevelPerks||r.clubPerks||'';
+    const clubPerks=Array.isArray(clubPerksRaw)?clubPerksRaw.filter(Boolean)
+      :String(clubPerksRaw).split(/\s*[\u00b7\u2022|\n]\s*/).map(x=>x.trim()).filter(Boolean);
+    const rests=Array.isArray(r.restaurants)?r.restaurants:[];
+    const anyRestPhoto=rests.some(x=>x.photo);
+    const restaurantsHTML = !rests.length ? '' : (anyRestPhoto
+      ? `<div class="dining-grid">${rests.map(x=>`<div class="dining-card">
+          ${x.photo?`<img class="dining-img" src="${escUrl(x.photo)}" alt="${esc(x.name)}">`:`<div class="dining-img dining-noimg">&#127860;</div>`}
+          <div class="dining-body">
+            <div class="dining-name">${esc(x.name)}</div>
+            ${x.type?`<div class="dining-type">${esc(x.type)}</div>`:''}
+            ${x.description?`<div class="dining-desc">${esc(x.description)}</div>`:''}
+          </div></div>`).join('')}</div>`
+      : `<div class="dining-list">${rests.map(x=>`<div class="dining-row">
+          <span class="dining-name">${esc(x.name)}</span>${x.type?`<span class="dining-type-inline">${esc(x.type)}</span>`:''}
+          ${x.description?`<div class="dining-desc">${esc(x.description)}</div>`:''}
+        </div>`).join('')}</div>`);
     const venuesHTML=venues.map(v=>`<div class="venue-card">
       ${v.photo||v.image?`<img class="venue-img" src="${escUrl(v.photo||v.image)}" alt="">`:'<div class="venue-img" style="background:#2A241B;"></div>'}
       <div class="venue-info">
@@ -2694,6 +2813,7 @@ function buildWeddingFull(wv){
       <p class="resort-num">Resort Option ${num}</p>
       <h2 class="resort-title">${esc(r.name)}</h2>
       ${tagline?`<p class="resort-tagline">${esc(tagline)}</p>`:''}
+          ${metaLine?`<p class="resort-meta-line">${esc(metaLine)}</p>`:''}
     </div>
   </div>
   <div class="resort-body">
@@ -2717,6 +2837,12 @@ function buildWeddingFull(wv){
   ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${rf.offer?`<div class="pkg-cta"><a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;→</a></div>`:''}</div>`:''}
   ${priceBand}
   ${venues.length?`<div class="resort-venues"><div class="venues"><h3 class="venues-title">Ceremony &amp; Reception Venues</h3><div class="venues-grid">${venuesHTML}</div></div></div>`:''}
+    ${rests.length?`<div class="resort-dining"><h3 class="venues-title">Dining &amp; Bars</h3>${restaurantsHTML}</div>`:''}
+    ${clubPerks.length?`<div class="resort-club"><div class="club-inner">
+      <div class="club-eyebrow">Upgrade Worth Considering</div>
+      <div class="club-title">${esc(clubName||'Club Level')}</div>
+      <div class="club-grid">${clubPerks.map(x=>`<div class="club-item"><span class="club-dash">&mdash;</span>${esc(x)}</div>`).join('')}</div>
+    </div></div>`:''}
 </div>`;
   }).join('');
 
@@ -2762,7 +2888,8 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .resort-hero-content{position:relative;padding:0 7vw 48px;}
 .resort-num{font-size:10px;font-weight:600;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
 .resort-title{font-family:'Cormorant Garamond',serif;font-size:clamp(34px,4vw,60px);font-weight:300;color:var(--white);line-height:1.08;}
-.resort-tagline{font-size:13px;letter-spacing:1.5px;color:rgba(255,255,255,.6);margin-top:10px;}
+.resort-tagline{font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;letter-spacing:.3px;color:rgba(255,255,255,.92);margin-top:12px;}
+.resort-meta-line{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.62);margin-top:10px;}
 .resort-body{padding:60px 7vw;background:var(--cream);}
 .resort-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;margin-bottom:60px;}
 .resort-summary-text{font-size:15px;line-height:1.9;color:var(--brown);}
@@ -2798,6 +2925,25 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .pkg-includes li::before{content:'✦';position:absolute;left:0;font-size:8px;color:var(--gold-2);top:3px;}
 .pkg-cta{padding:28px 0 0;margin-top:8px;border-top:1px solid rgba(255,255,255,.1);}
 .resort-venues{padding:0 7vw 60px;background:var(--cream);}
+.resort-dining{padding:0 7vw 60px;background:var(--cream);}
+.dining-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.dining-card{display:flex;flex-direction:column;}
+.dining-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+.dining-noimg{display:flex;align-items:center;justify-content:center;background:#EFE9E0;font-size:30px;}
+.dining-body{padding-top:10px;}
+.dining-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--black);margin-bottom:3px;}
+.dining-type{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;}
+.dining-type-inline{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-left:10px;}
+.dining-desc{font-family:'Jost',sans-serif;font-size:13px;line-height:1.6;color:#5C5044;}
+.dining-list{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 32px;}
+.dining-row{border-bottom:1px solid #E2D9CC;padding-bottom:12px;}
+.resort-club{padding:0 7vw 60px;background:var(--cream);}
+.club-inner{background:var(--black);color:#fff;padding:38px 44px;}
+.club-eyebrow{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
+.club-title{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;margin-bottom:22px;}
+.club-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px 32px;}
+.club-item{font-family:'Jost',sans-serif;font-size:13px;line-height:1.6;color:#D8D2C9;}
+.club-dash{color:var(--gold);margin-right:8px;}
 .resort-divider{background:var(--black);padding:28px 0;text-align:center;}
 .resort-divider span{display:inline-block;color:var(--gold);font-size:18px;letter-spacing:24px;opacity:.7;}
 .room-pricing-band{background:var(--cream-2);padding:36px 7vw;display:flex;align-items:center;gap:48px;flex-wrap:wrap;border-top:1px solid var(--cream-3);}
