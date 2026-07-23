@@ -841,7 +841,7 @@ Complimentary concierge and computer access</textarea>
         </div>
       </div>
       <div class="row">
-        <div class="field"><label>Starting Room Type</label><input id="fs-r1roomName" placeholder="Junior Suite Tropical View"></div>
+        <div class="field"><label>Starting Room Type</label><input id="fs-r1roomName" placeholder="Junior Suite Tropical View"></div><div class="field"><label>Room Photo <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; from the room you pick</span></label><input id="fs-r1roomPhoto" placeholder="Auto-fills when you choose a room"></div>
         <div class="field"><label>Full Price</label><input id="fs-r1total" placeholder="$1,446" oninput="calcPerPerson('fs-r1')" onblur="fmtPrice(this)"></div>
         <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r1guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r1')"></div>
         <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r1price" placeholder="auto" style="background:#F9F7F4;"></div>
@@ -880,7 +880,7 @@ Complimentary concierge and computer access</textarea>
         </div>
       </div>
       <div class="row">
-        <div class="field"><label>Starting Room Type</label><input id="fs-r2roomName" placeholder="Junior Suite Ocean View"></div>
+        <div class="field"><label>Starting Room Type</label><input id="fs-r2roomName" placeholder="Junior Suite Ocean View"></div><div class="field"><label>Room Photo <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; from the room you pick</span></label><input id="fs-r2roomPhoto" placeholder="Auto-fills when you choose a room"></div>
         <div class="field"><label>Full Price</label><input id="fs-r2total" placeholder="$1,650" oninput="calcPerPerson('fs-r2')" onblur="fmtPrice(this)"></div>
         <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r2guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r2')"></div>
         <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r2price" placeholder="auto" style="background:#F9F7F4;"></div>
@@ -919,7 +919,7 @@ Complimentary concierge and computer access</textarea>
         </div>
       </div>
       <div class="row">
-        <div class="field"><label>Starting Room Type</label><input id="fs-r3roomName" placeholder="Swim-Out Suite"></div>
+        <div class="field"><label>Starting Room Type</label><input id="fs-r3roomName" placeholder="Swim-Out Suite"></div><div class="field"><label>Room Photo <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; from the room you pick</span></label><input id="fs-r3roomPhoto" placeholder="Auto-fills when you choose a room"></div>
         <div class="field"><label>Full Price</label><input id="fs-r3total" placeholder="$1,900" oninput="calcPerPerson('fs-r3')" onblur="fmtPrice(this)"></div>
         <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r3guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r3')"></div>
         <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r3price" placeholder="auto" style="background:#F9F7F4;"></div>
@@ -958,7 +958,7 @@ Complimentary concierge and computer access</textarea>
         </div>
       </div>
       <div class="row">
-        <div class="field"><label>Starting Room Type</label><input id="fs-r4roomName" placeholder="Presidential Suite"></div>
+        <div class="field"><label>Starting Room Type</label><input id="fs-r4roomName" placeholder="Presidential Suite"></div><div class="field"><label>Room Photo <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; from the room you pick</span></label><input id="fs-r4roomPhoto" placeholder="Auto-fills when you choose a room"></div>
         <div class="field"><label>Full Price</label><input id="fs-r4total" placeholder="$2,200" oninput="calcPerPerson('fs-r4')" onblur="fmtPrice(this)"></div>
         <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r4guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r4')"></div>
         <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r4price" placeholder="auto" style="background:#F9F7F4;"></div>
@@ -1609,10 +1609,10 @@ function applyFSRoomCatSelect(n, idxStr){
   // Fill room name
   const nameEl=document.getElementById('fs-r'+n+'roomName');
   if(nameEl) nameEl.value=cat.name||'';
-  // Fill photo if empty
+  // The room's own photo goes in the room photo field — not the resort photo
   if(cat.photo){
-    const photoEl=document.getElementById('fs-r'+n+'photo');
-    if(photoEl&&!photoEl.value) photoEl.value=cat.photo;
+    const roomPhotoEl=document.getElementById('fs-r'+n+'roomPhoto');
+    if(roomPhotoEl) roomPhotoEl.value=cat.photo;
   }
 }
 
@@ -1729,10 +1729,10 @@ async function generateFITSneak(status){
   ]);
   const resorts=[r1,r2,r3,r4].filter(Boolean);
   const rf=[
-    {photo:val('fs-r1photo'),roomName:val('fs-r1roomName'),price:val('fs-r1price'),nights:val('fs-r1nights'),priceNote:val('fs-r1priceNote')},
-    {photo:val('fs-r2photo'),roomName:val('fs-r2roomName'),price:val('fs-r2price'),nights:val('fs-r2nights'),priceNote:val('fs-r2priceNote')},
-    {photo:val('fs-r3photo'),roomName:val('fs-r3roomName'),price:val('fs-r3price'),nights:val('fs-r3nights'),priceNote:val('fs-r3priceNote')},
-    {photo:val('fs-r4photo'),roomName:val('fs-r4roomName'),price:val('fs-r4price'),nights:val('fs-r4nights'),priceNote:val('fs-r4priceNote')}
+    {photo:val('fs-r1photo'),roomPhoto:val('fs-r1roomPhoto'),roomName:val('fs-r1roomName'),price:val('fs-r1price'),nights:val('fs-r1nights'),priceNote:val('fs-r1priceNote')},
+    {photo:val('fs-r2photo'),roomPhoto:val('fs-r2roomPhoto'),roomName:val('fs-r2roomName'),price:val('fs-r2price'),nights:val('fs-r2nights'),priceNote:val('fs-r2priceNote')},
+    {photo:val('fs-r3photo'),roomPhoto:val('fs-r3roomPhoto'),roomName:val('fs-r3roomName'),price:val('fs-r3price'),nights:val('fs-r3nights'),priceNote:val('fs-r3priceNote')},
+    {photo:val('fs-r4photo'),roomPhoto:val('fs-r4roomPhoto'),roomName:val('fs-r4roomName'),price:val('fs-r4price'),nights:val('fs-r4nights'),priceNote:val('fs-r4priceNote')}
   ];
   const fsv={
     resorts, rf,
@@ -1938,7 +1938,7 @@ function buildFITSneakFull(fsv){
     const rPhoto=rf.photo||r.photo||(getPhotos(r)[0])||'';
     const description=r.description||r.overview||'';
     const dwtUrl=r.dwtUrl||(r.slug?'https://www.destinationweddings.com/'+r.slug:'');
-    const priceBand=(rf.roomName||rf.price)?`<div class="price-band">
+    const priceBand=(rf.roomName||rf.price)?`<div class="price-band">${rf.roomPhoto?`<img class="price-band-img" src="${escUrl(rf.roomPhoto)}" alt="${esc(rf.roomName||'')}">`:''}
       <div class="price-band-left">
         <div class="price-band-eyebrow">Starting Accommodations</div>
         <div class="price-band-name">${esc(rf.roomName||'')}</div>
@@ -2015,6 +2015,8 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .hi-list li{font-size:14px;font-weight:300;color:var(--brown);padding:11px 0;border-bottom:1px solid var(--cream-3);display:flex;align-items:baseline;gap:10px;line-height:1.5;}
 .hi-list li::before{content:"—";color:var(--gold-2);flex-shrink:0;}
 .price-band{background:var(--black);padding:36px 7vw;display:flex;align-items:center;gap:48px;flex-wrap:wrap;}
+.price-band-img{width:150px;height:105px;object-fit:cover;border-radius:6px;flex-shrink:0;}
+@media print{.price-band-img{width:130px;height:92px;}}
 .price-band-eyebrow{font-size:10px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--gold-2);margin-bottom:6px;}
 .price-band-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
 .price-band-note{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6;}
