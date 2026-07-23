@@ -1051,7 +1051,22 @@ let allResorts = [];
 let resortCache = {};
 
 function setMode(m){
+  const changed = (currentMode !== m);
   currentMode = m;
+  // Switching modes must clear the previous mode's downloads, or you can
+  // download a Resort Options file while sitting on the FIT Quote tab.
+  if(changed){
+    const dl = document.getElementById('dlLinks');
+    if(dl) dl.innerHTML = '';
+    window._qbFiles = null;
+    window._qbPublishedUrl = null;
+    const gen = document.getElementById('genBtn');
+    const regen = document.getElementById('regenBtn');
+    if(gen) gen.style.display = 'inline-block';
+    if(regen) regen.style.display = 'none';
+    const st = document.getElementById('genStatus');
+    if(st) st.textContent = 'Ready — fill in the form then click Generate.';
+  }
   document.getElementById('form-fit').classList.toggle('hidden', m!=='fit');
   document.getElementById('form-fitsneak').classList.toggle('hidden', m!=='fitsneak');
   document.getElementById('form-wedding').classList.toggle('hidden', m!=='wedding');
