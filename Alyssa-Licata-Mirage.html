@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alyssa · Your Room at Majestic Mirage</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --black:#1E1A14; --black-2:#2A241B; --cream:#FAF7F2; --cream-2:#F3EDE3; --cream-3:#E2D9CC;
+  --gold:#D4B882; --gold-2:#B8975A; --brown:#5C5044; --brown-lt:#9C8E80; --white:#FFFFFF;
+}
+body{font-family:'Jost',sans-serif;font-weight:300;background:#cec9c0;color:var(--brown);display:flex;height:100vh;overflow:hidden}
+
+/* ── SIDEBAR (tool chrome) ─────────────────── */
+.sidebar{width:250px;min-width:250px;background:var(--black);display:flex;flex-direction:column;border-right:1px solid rgba(212,184,130,0.18)}
+.sidebar-header{padding:22px 20px 16px;border-bottom:1px solid rgba(212,184,130,0.14)}
+.sidebar-logo{color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;letter-spacing:.02em}
+.sidebar-sub{color:rgba(255,255,255,0.4);font-size:11px;line-height:1.6;margin-top:6px;letter-spacing:.3px}
+.sidebar-sub b{color:rgba(255,255,255,0.62);font-weight:400}
+.guest-list{flex:1;overflow-y:auto;padding:8px 0}
+.guest-btn{display:block;width:100%;text-align:left;background:none;border:none;border-left:2px solid transparent;padding:11px 18px;cursor:pointer;transition:all .12s;font-family:inherit}
+.guest-btn:hover{background:rgba(212,184,130,0.06)}
+.guest-btn.active{background:rgba(212,184,130,0.1);border-left-color:var(--gold)}
+.gbtn-name{color:rgba(255,255,255,0.88);font-size:13px;font-weight:400;display:block;letter-spacing:.2px}
+.gbtn-meta{color:rgba(255,255,255,0.34);font-size:10.5px;margin-top:2px;display:block;letter-spacing:.3px}
+.sidebar-note{padding:14px 18px;border-top:1px solid rgba(212,184,130,0.1);color:rgba(255,255,255,0.3);font-size:10px;line-height:1.7;letter-spacing:.3px}
+
+.main{flex:1;overflow-y:auto;background:#cec9c0}
+.toolbar{position:sticky;top:0;z-index:100;background:var(--black-2);padding:11px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--gold-2);gap:12px}
+.toolbar-info{color:rgba(255,255,255,0.5);font-size:11px;flex:1;letter-spacing:1px;text-transform:uppercase}
+.toolbar-guest{color:var(--gold);font-weight:400;text-transform:none;letter-spacing:.3px}
+.toolbar-actions{display:flex;gap:8px}
+.btn{padding:8px 16px;border:none;font-family:'Jost',sans-serif;font-size:10.5px;font-weight:500;cursor:pointer;letter-spacing:2px;text-transform:uppercase;transition:all .15s}
+.btn-gold{background:var(--gold-2);color:var(--white)}
+.btn-gold:hover{background:var(--gold);color:var(--black)}
+.btn-outline{background:transparent;color:var(--gold);border:1px solid rgba(212,184,130,0.4)}
+.btn-outline:hover{border-color:var(--gold);color:var(--white)}
+.preview-wrap{padding:28px;display:flex;justify-content:center}
+
+/* ── EMAIL ─────────────────────────────────── */
+.email{width:720px;background:var(--cream);box-shadow:0 8px 50px rgba(0,0,0,0.4)}
+.email-brandbar{background:var(--black);padding:13px 44px;text-align:center}
+.brand-name{color:var(--gold);font-size:10px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase}
+.brand-tag{color:rgba(255,255,255,0.4);font-size:9.5px;letter-spacing:1.5px;margin-top:4px}
+
+.hero{position:relative;height:340px;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.hero-ph{position:absolute;inset:0;background:linear-gradient(135deg,var(--black),#3a3226);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:20px}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,26,20,0.15) 0%,rgba(30,26,20,0.0) 30%,rgba(30,26,20,0.68) 72%,rgba(30,26,20,0.9) 100%)}
+.hero-content{position:relative;padding:0 44px 34px}
+.hero-eyebrow{font-size:9.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:300;color:var(--white);line-height:1.05}
+.hero-sub{font-family:'Cormorant Garamond',serif;font-size:19px;font-style:italic;color:rgba(255,255,255,0.72);margin-top:8px}
+
+.body{padding:44px}
+.eyebrow{font-size:9.5px;font-weight:600;letter-spacing:3.5px;text-transform:uppercase;color:var(--gold-2);margin-bottom:14px}
+.gold-rule{width:36px;height:1px;background:var(--gold-2);margin-bottom:20px}
+.greet{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;color:var(--black);line-height:1.08;margin-bottom:6px}
+.greet em{font-style:italic;color:var(--brown)}
+p.copy{font-size:14px;line-height:1.85;color:var(--brown);margin-bottom:16px}
+p.copy strong{color:var(--black);font-weight:400}
+
+.overview{background:var(--white);border:1px solid var(--cream-3);margin:30px 0 6px}
+.overview-head{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--black);padding:20px 28px 16px;border-bottom:1px solid var(--cream-3)}
+.ov-row{display:flex;justify-content:space-between;align-items:baseline;padding:11px 28px;border-bottom:1px solid var(--cream-2)}
+.ov-row:last-child{border-bottom:none}
+.ov-label{font-size:9.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--brown-lt)}
+.ov-value{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--black);text-align:right}
+
+.section-lead{text-align:center;margin:46px 0 28px}
+.section-lead .st{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--black);line-height:1.1;margin-bottom:8px}
+.section-lead .ss{font-size:12px;color:var(--brown-lt);font-style:italic;letter-spacing:.3px}
+.section-lead .gold-rule{margin:14px auto 0}
+
+/* resort showcase */
+.showcase{margin:34px 0 6px}
+.showcase-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+.sc-card{display:flex;flex-direction:column}
+.sc-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--cream-2)}
+.sc-cap{font-size:10.5px;color:var(--brown-lt);letter-spacing:.3px;padding:8px 2px 0;line-height:1.4}
+.hl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-3);border:1px solid var(--cream-3)}
+.hl{background:var(--white);padding:16px 18px}
+.hl-name{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--black);margin-bottom:5px}
+.hl-desc{font-size:11.5px;color:var(--brown-lt);line-height:1.55}
+
+/* pick-this-room button */
+.btn-pick{display:block;text-align:center;background:var(--gold-2);color:var(--white);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:15px;transition:background .2s}
+.btn-pick:hover{background:var(--gold);color:var(--black)}
+.btn-resort{display:block;text-align:center;margin-top:16px;border:1px solid var(--gold-2);color:var(--gold-2);font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:15px;transition:all .2s}
+.btn-resort:hover{background:var(--gold-2);color:var(--white)}
+
+/* room cards */
+.rcard{background:var(--white);border:1px solid var(--cream-3);margin-bottom:22px}
+.rcard.match{border:1px solid var(--gold-2);box-shadow:0 4px 30px rgba(184,151,90,0.16)}
+.rphoto{width:100%;height:280px;object-fit:cover;display:block;background:var(--cream-2)}
+.rphoto-ph{width:100%;height:200px;background:linear-gradient(135deg,var(--black),#3a3226);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--gold);text-align:center}
+.rphoto-ph span{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300}
+.rphoto-ph small{color:rgba(255,255,255,0.5);font-size:9.5px;letter-spacing:2px;text-transform:uppercase;margin-top:8px}
+.rthumbs{display:flex;gap:4px;background:var(--cream-3)}
+.rthumbs img{flex:1;min-width:0;height:110px;object-fit:cover;display:block}
+.rbody{padding:26px 30px 28px}
+.rlabel{font-size:9.5px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold-2);margin-bottom:9px}
+.rcard.match .rlabel{color:var(--gold-2)}
+.rname{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:300;color:var(--black);line-height:1.12;margin-bottom:6px}
+.rspecs{font-size:11.5px;color:var(--brown-lt);letter-spacing:.3px;margin-bottom:16px}
+.rfeat{list-style:none;margin:0 0 20px}
+.rfeat li{font-size:12.5px;color:var(--brown);padding:4px 0 4px 18px;position:relative;line-height:1.55}
+.rfeat li::before{content:'✦';position:absolute;left:0;color:var(--gold-2);font-size:9px;top:6px}
+.rprice{background:var(--black);padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.rprice-l{font-size:9.5px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold)}
+.rprice-r{text-align:right}
+.rprice-amt{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:400;color:var(--white);line-height:1}
+.rprice-note{font-size:9.5px;color:rgba(255,255,255,0.4);letter-spacing:1px;margin-top:3px;text-transform:uppercase}
+.rdiff{padding:10px 22px;font-size:12px;letter-spacing:.3px;text-align:center;background:var(--cream-2)}
+.rdiff.pay{color:#9a5a3c}
+.rdiff.refund{color:#3f6b47}
+.rdiff.same{color:var(--brown-lt)}
+
+.action-banner{background:#FBF1D9;border:1px solid var(--gold-2);border-left:5px solid var(--gold-2);padding:16px 20px;margin-bottom:30px}
+.ab-title{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#9c7a2e;margin-bottom:8px}
+.ab-text{font-size:13px;line-height:1.7;color:var(--brown)}
+.ab-text strong{color:var(--black);font-weight:500}
+.note{background:var(--white);border-left:2px solid var(--gold-2);padding:14px 18px;font-size:11.5px;color:var(--brown-lt);line-height:1.7;margin:6px 0 30px}
+.note strong{color:var(--brown);font-weight:400}
+
+/* restaurant */
+.dining{border-top:3px solid var(--black);margin:6px -44px 0;padding:44px}
+.dining .st{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--black);margin-bottom:6px}
+.dining-photos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0 22px}
+.dining-photos img{width:100%;height:150px;object-fit:cover;display:block}
+.dining-cap{font-size:10px;color:var(--brown-lt);letter-spacing:.3px;text-align:center;margin-top:6px;font-style:italic;line-height:1.35}
+.dining-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--cream-3);border:1px solid var(--cream-3)}
+.dine{background:var(--cream);padding:13px 16px}
+.dine-name{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--black)}
+.dine-desc{font-size:11px;color:var(--brown-lt);margin-top:2px;line-height:1.5}
+.dining-foot{font-size:11.5px;color:var(--brown-lt);text-align:center;margin-top:16px;font-style:italic}
+
+.cta{background:var(--black);margin:0 -44px;padding:52px 44px;text-align:center}
+.cta .st{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--white);line-height:1.12;margin-bottom:14px}
+.cta p{font-size:13.5px;font-weight:300;color:rgba(255,255,255,0.62);max-width:460px;margin:0 auto;line-height:1.8}
+
+.sign{padding:34px 0 6px}
+.sign-closer{font-size:14px;color:var(--brown);line-height:1.8;margin-bottom:16px;font-style:italic;font-family:'Cormorant Garamond',serif}
+.sign-name{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:300;color:var(--black)}
+.sign-title{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brown-lt);margin-top:4px}
+.sign-contact{font-size:13px;color:var(--gold-2);margin-top:8px}
+.email-foot{background:var(--black-2);padding:16px 44px;text-align:center;font-size:9.5px;color:rgba(255,255,255,0.25);letter-spacing:.6px;line-height:1.7}
+
+.placeholder{text-align:center;padding:90px 40px}
+.placeholder-t{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--gold-2);margin-bottom:10px}
+.placeholder-s{font-size:13px;color:var(--brown-lt);font-style:italic}
+
+@media print{
+  body{background:#fff;overflow:visible;display:block}
+  .sidebar,.toolbar{display:none!important}
+  .main{overflow:visible}
+  .preview-wrap{padding:0}
+  .email{box-shadow:none;width:100%}
+}
+
+/* standalone page wrapper */
+body{display:block;height:auto;overflow:auto;background:#cec9c0;padding:28px 16px}
+.email{margin:0 auto}
+@media (max-width:760px){ .email{width:100%!important} }
+</style>
+</style>
+</head><body>
+<div class="email">
+  <div class="email-brandbar"><div class="brand-name">Destination Weddings Travel Group · Celebration Travel</div><div class="brand-tag">Amy Cate · Certified Destination Wedding &amp; Group Travel Specialist</div></div>
+  <div class="hero"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1783452049149_26_img_p_mmcm_resort-view_aerial_02.jpg?alt=media&token=e3ea91ae-5bcd-4ffd-bacf-ad456b6407e8" alt="Majestic Mirage Costa Mujeres"><div class="hero-overlay"></div>
+    <div class="hero-content"><div class="hero-eyebrow">Kelly &amp; Briton's Wedding · September 2026</div>
+      <div class="hero-title">Your New Room Awaits</div><div class="hero-sub">Majestic Mirage Costa Mujeres</div></div></div>
+  <div class="body">
+    <div class="action-banner"><div class="ab-title">⚡ What to Do Next</div><div class="ab-text"><strong>Nothing is required on your end!</strong> Your whole group is moving to the beautiful <strong>Majestic Mirage Costa Mujeres</strong>, and I've already reserved your comparable suite. The only reason to reply is if you'd like to <strong>upgrade or make a change</strong> — you'll see your suite and a few options below. Your reserved rate is confirmed; the other prices are <strong>approximate estimates — I'll confirm the exact amount when you're ready, and it may come back a little different</strong>. <strong>And if any occupant names or your travel dates need to change, just email me back and I'll take care of it.</strong> The Mirage Club is our exclusive <strong>adults-only (18+) section</strong> — if you need to add a child or move to the <strong>Family Club</strong> section, just let me know and I'll happily take care of it. If you purchased travel insurance, it carries right over — it's already included in every number below.</div></div>
+    <p class="eyebrow">A Beautiful New Home for Our Group</p>
+    <h1 class="greet">Hello,<br><em>Alyssa.</em></h1>
+    <div class="gold-rule"></div>
+    <p class="copy">I'm reaching out with an exciting update for <strong>Kelly &amp; Briton's celebration</strong>! We've moved the group to <strong>Majestic Mirage Costa Mujeres</strong> — a brand-new (opened December 2025) five-star all-suite resort just north of Cancún — and I've reserved your suite in <strong>The Club</strong>, its exclusive adults-only (18+) section with personal butler service. Your <strong>September 18 – September 22, 2026</strong> stay is all set.</p>
+    <p class="copy">Below you'll find the suite <strong>most comparable to your Dreams Vista Preferred Club Deluxe Ocean View Double</strong> — the Mirage Club One Bedroom Suite — plus a few options to consider. Any travel insurance you purchased transfers right onto your new booking and is already included in every number below.</p>
+    <div class="showcase">
+      <p class="eyebrow">Welcome to Majestic Mirage</p>
+      <div class="gold-rule"></div>
+      <div class="showcase-grid">
+        <div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1783452103172_25_img-p_mmcm_pools_lively-pool_03.jpg?alt=media&token=0abe3c96-3353-4f5c-a49a-25ca988dcdce" alt="Resort pools" loading="lazy"><div class="sc-cap">The resort pools</div></div>
+        <div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784424924794_25_img-P_MMCM_Facilities_Water-Park_01.jpg?alt=media" alt="Water park" loading="lazy"><div class="sc-cap">The water park</div></div>
+        <div class="sc-card"><img class="sc-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784424896276_26_img-P_MMCM_Plaza_02.jpg?alt=media" alt="Resort plaza" loading="lazy"><div class="sc-cap">The resort plaza</div></div>
+      </div>
+      <div class="hl-grid">
+        <div class="hl"><div class="hl-name">Adults-Only · The Club (18+)</div><div class="hl-desc">Your group's exclusive 18+ section — personal butler service and a private tour on arrival.</div></div>
+        <div class="hl"><div class="hl-name">Brand-New for 2026</div><div class="hl-desc">Opened December 2025 — Costa Mujeres' newest all-suite luxury resort, minutes north of Cancún.</div></div>
+        <div class="hl"><div class="hl-name">Six Pools + Swim-Up Bars</div><div class="hl-desc">The Club's own private pools with Bali beds, swim-up bars, and a private beach.</div></div>
+        <div class="hl"><div class="hl-name">Nine Restaurants &amp; 12 Bars</div><div class="hl-desc">À la carte dining from around the world, a 24/7 restaurant, and bars throughout.</div></div>
+      </div>
+    </div>
+    <div class="overview">
+      <div class="overview-head">Your Previous Dreams Vista Reservation</div>
+      <div class="ov-row"><span class="ov-label">Guests</span><span class="ov-value">Alyssa Licata + Michael Newkirk</span></div>
+      <div class="ov-row"><span class="ov-label">Arrival → Departure</span><span class="ov-value">September 18 → September 22, 2026</span></div>
+      <div class="ov-row"><span class="ov-label">Nights</span><span class="ov-value">4</span></div>
+      <div class="ov-row"><span class="ov-label">Room Type</span><span class="ov-value">Preferred Club Deluxe Ocean View Double</span></div>
+      <div class="ov-row"><span class="ov-label">Paid to Date</span><span class="ov-value">$1,792.03</span></div>
+    </div>
+    <div class="section-lead"><div class="st">Your Suite at Majestic Mirage</div><div class="ss">Your comparable suite, plus options to consider · all-inclusive</div><div class="gold-rule"></div></div>
+    <div class="rcard match">
+  <img class="rphoto" src="https://web-resources.hotel.hotetec.com/static/images/hotel.multimedia/MAJE/53260/Room/lg/kpBm1r8DoWjn1AWh.jpg" alt="Mirage Club One Bedroom Suite (Outdoor Jacuzzi)" loading="lazy">
+  <div class="rbody">
+    <div class="rlabel">★ Your New Room · Most Comparable</div>
+    <div class="rname">Mirage Club One Bedroom Suite (Outdoor Jacuzzi)</div>
+    <div class="rspecs">1,000 sq ft · 1 King or 2 Queen · sleeps up to 4 · pool view · 2nd/3rd floor</div>
+    <ul class="rfeat"><li>Living room &amp; bedroom separated by doors</li><li>Private outdoor jacuzzi + indoor bathtub</li><li>Double-vanity bath with walk-in rain shower</li><li>24-hr butler service, Nespresso &amp; premium minibar</li></ul>
+  </div>
+  <div class="rprice"><div class="rprice-l">Your reserved rate · confirmed</div>
+    <div class="rprice-r"><div class="rprice-amt">$1,806</div><div class="rprice-note">total · 4 nights · transfers &amp; insurance included</div></div></div>
+  <div class="rdiff pay">About $14 due vs what you've paid at Dreams Vista</div>
+  <div class="rdiff same" style="border-top:1px solid var(--cream-3);font-weight:600;color:#3f6b47">&#10003; This suite is already reserved for you — <strong>nothing to do</strong> unless you would like to change it.</div>
+</div>
+<div class="rcard">
+  <img class="rphoto" src="https://web-resources.hotel.hotetec.com/static/images/hotel.multimedia/MAJE/53260/Room/lg/p2kfbR6cTfXW3RUS.jpg" alt="Mirage Club Plunge Pool Suite" loading="lazy">
+  <div class="rbody">
+    <div class="rlabel">Upgrade Option</div>
+    <div class="rname">Mirage Club Plunge Pool Suite</div>
+    <div class="rspecs">1,000 sq ft two-story · 1 King · sleeps 2 · sky view · 4th floor</div>
+    <ul class="rfeat"><li>Two-story layout with a rooftop plunge pool</li><li>Two sunbeds on the private terrace</li><li>Double-vanity bath with walk-in rain shower</li><li>24-hr butler service &amp; premium amenities</li></ul>
+  </div>
+  <div class="rprice"><div class="rprice-l">Approx. · confirmed when you request it</div>
+    <div class="rprice-r"><div class="rprice-amt">$1,911</div><div class="rprice-note">approx. total · 4 nights · transfers &amp; insurance included</div></div></div>
+  <div class="rdiff pay">approx. $119 due vs what you've paid — about $105 above your comparable suite</div>
+  <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Choice%20%E2%80%94%20Alyssa%20Licata%20%2B%20Michael%20Newkirk&body=Hi%20Amy%2C%0A%0AThis%20is%20my%20choice%20for%20our%20move%20to%20Majestic%20Mirage%3A%0A%0AChosen%20room%3A%20Mirage%20Club%20Plunge%20Pool%20Suite%20%28upgrade%29%0AApprox.%20rate%3A%20%241%2C911%20%28all-inclusive%2C%204%20nights%2C%20transfers%20%26%20insurance%20included%29%0A%0AGuest%28s%29%3A%20Alyssa%20Licata%20%2B%20Michael%20Newkirk%0ADates%3A%20September%2018%20%E2%80%93%20September%2022%2C%202026%0A%0AThank%20you%21">Upgrade To This Room →</a>
+</div>
+<div class="rcard">
+  <img class="rphoto" src="https://web-resources.hotel.hotetec.com/static/images/hotel.multimedia/MAJE/53260/Room/lg/NVocRTKgo5xNYtNV.jpg" alt="Mirage Club Swim-Up Suite (Outdoor Jacuzzi)" loading="lazy">
+  <div class="rbody">
+    <div class="rlabel">Upgrade Option</div>
+    <div class="rname">Mirage Club Swim-Up Suite (Outdoor Jacuzzi)</div>
+    <div class="rspecs">1,000 sq ft · 1 King · sleeps up to 4 · ocean view · ground floor</div>
+    <ul class="rfeat"><li>Direct swim-up pool access</li><li>Outdoor jacuzzi + indoor bathtub</li><li>Private garden with a Bali bed</li><li>Double-vanity bath &amp; 24-hr butler service</li></ul>
+  </div>
+  <div class="rprice"><div class="rprice-l">Approx. · confirmed when you request it</div>
+    <div class="rprice-r"><div class="rprice-amt">$1,995</div><div class="rprice-note">approx. total · 4 nights · transfers &amp; insurance included</div></div></div>
+  <div class="rdiff pay">approx. $203 due vs what you've paid — about $189 above your comparable suite</div>
+  <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Choice%20%E2%80%94%20Alyssa%20Licata%20%2B%20Michael%20Newkirk&body=Hi%20Amy%2C%0A%0AThis%20is%20my%20choice%20for%20our%20move%20to%20Majestic%20Mirage%3A%0A%0AChosen%20room%3A%20Mirage%20Club%20Swim-Up%20Suite%20%28Outdoor%20Jacuzzi%29%20%28upgrade%29%0AApprox.%20rate%3A%20%241%2C995%20%28all-inclusive%2C%204%20nights%2C%20transfers%20%26%20insurance%20included%29%0A%0AGuest%28s%29%3A%20Alyssa%20Licata%20%2B%20Michael%20Newkirk%0ADates%3A%20September%2018%20%E2%80%93%20September%2022%2C%202026%0A%0AThank%20you%21">Upgrade To This Room →</a>
+</div>
+<div class="rcard">
+  <img class="rphoto" src="https://web-resources.hotel.hotetec.com/static/images/hotel.multimedia/MAJE/53260/Room/lg/4AUuA4id5JVxa6iW.jpg" alt="Mirage Club Oceanfront Suite (Outdoor Jacuzzi)" loading="lazy">
+  <div class="rbody">
+    <div class="rlabel">Upgrade Option</div>
+    <div class="rname">Mirage Club Oceanfront Suite (Outdoor Jacuzzi)</div>
+    <div class="rspecs">1,000 sq ft · 1 King · sleeps up to 4 · oceanfront view · 2nd/3rd floor</div>
+    <ul class="rfeat"><li>Breathtaking ocean views</li><li>Outdoor jacuzzi + indoor bathtub</li><li>Living room &amp; bedroom separated by doors</li><li>Double-vanity bath &amp; 24-hr butler service</li></ul>
+  </div>
+  <div class="rprice"><div class="rprice-l">Approx. · confirmed when you request it</div>
+    <div class="rprice-r"><div class="rprice-amt">$2,100</div><div class="rprice-note">approx. total · 4 nights · transfers &amp; insurance included</div></div></div>
+  <div class="rdiff pay">approx. $308 due vs what you've paid — about $294 above your comparable suite</div>
+  <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Choice%20%E2%80%94%20Alyssa%20Licata%20%2B%20Michael%20Newkirk&body=Hi%20Amy%2C%0A%0AThis%20is%20my%20choice%20for%20our%20move%20to%20Majestic%20Mirage%3A%0A%0AChosen%20room%3A%20Mirage%20Club%20Oceanfront%20Suite%20%28Outdoor%20Jacuzzi%29%20%28upgrade%29%0AApprox.%20rate%3A%20%242%2C100%20%28all-inclusive%2C%204%20nights%2C%20transfers%20%26%20insurance%20included%29%0A%0AGuest%28s%29%3A%20Alyssa%20Licata%20%2B%20Michael%20Newkirk%0ADates%3A%20September%2018%20%E2%80%93%20September%2022%2C%202026%0A%0AThank%20you%21">Upgrade To This Room →</a>
+</div>
+<div class="rcard">
+  <img class="rphoto" src="https://web-resources.hotel.hotetec.com/static/images/hotel.multimedia/MAJE/53260/Room/lg/dLkbN44LdYtAztu3.jpg" alt="Mirage Club Plunge Pool Suite Oceanfront (18+ · on request)" loading="lazy">
+  <div class="rbody">
+    <div class="rlabel">Upgrade Option</div>
+    <div class="rname">Mirage Club Plunge Pool Suite Oceanfront (18+ · on request)</div>
+    <div class="rspecs">1,000 sq ft two-story · 1 King · sleeps 2 · ocean-front · 4th floor</div>
+    <ul class="rfeat"><li>Private rooftop terrace with your own plunge pool</li><li>Two-story layout with two sunbeds &amp; ocean-front views</li><li>Double-vanity bath with walk-in rain shower</li><li>Limited availability — I'll look for it on request</li></ul>
+  </div>
+  <div class="rprice"><div class="rprice-l">Approx. · confirmed when you request it</div>
+    <div class="rprice-r"><div class="rprice-amt">$2,163</div><div class="rprice-note">approx. total · 4 nights · transfers &amp; insurance included</div></div></div>
+  <div class="rdiff pay">approx. $371 due vs what you've paid — about $357 above your comparable suite</div>
+  <a class="btn-pick" href="mailto:amy.cate@destinationweddings.com?subject=Room%20Choice%20%E2%80%94%20Alyssa%20Licata%20%2B%20Michael%20Newkirk&body=Hi%20Amy%2C%0A%0AThis%20is%20my%20choice%20for%20our%20move%20to%20Majestic%20Mirage%3A%0A%0AChosen%20room%3A%20Mirage%20Club%20Plunge%20Pool%20Suite%20Oceanfront%20%2818%2B%20%C2%B7%20on%20request%29%20%28upgrade%29%0AApprox.%20rate%3A%20%242%2C163%20%28all-inclusive%2C%204%20nights%2C%20transfers%20%26%20insurance%20included%29%0A%0AGuest%28s%29%3A%20Alyssa%20Licata%20%2B%20Michael%20Newkirk%0ADates%3A%20September%2018%20%E2%80%93%20September%2022%2C%202026%0A%0AThank%20you%21">Upgrade To This Room →</a>
+</div>
+    <div class="note">Your reserved suite's rate is all-inclusive for your 4-night stay, with round-trip airport transfers and any travel insurance you purchased already included, and is confirmed. <strong>Every other suite shown is an approximate estimate — I'll confirm the exact price when you're ready to move, and it may come back a little different. Inventory can change at any time.</strong> If a suite is no longer available or the price shifts, I'll be in direct touch and do my very best for you. <strong>All rooms and rates are subject to availability at the time of booking or making changes.</strong><br><br><strong>A quick heads-up:</strong> I'm entering everyone's updated invoice and any refund into the system now, so you'll see yours reflected on your account within the next few days.</div>
+    <div class="dining">
+      <p class="eyebrow">All-Inclusive Dining</p>
+      <div class="st">Nine Restaurants &amp; Twelve Bars</div>
+      <div class="dining-photos">
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784428185770_26_img-p_mmcm_restaurants_la-rinascita_02.jpg?alt=media&amp;token=10f1ab34-4883-4588-a750-c6a74479e67c" alt="La Rinascita" loading="lazy"><div class="dining-cap">La Rinascita · Italian (The Club, 18+)</div></div>
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784428189635_26_img-p_mmcm_restaurants_l-essence_01.jpg?alt=media&amp;token=06046166-61b8-442a-8044-b0cf4c32ecb8" alt="L'Essence" loading="lazy"><div class="dining-cap">L'Essence · French · live piano</div></div>
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1783452417169_26_img-p_mmcm_restaurants_kabuki_01.jpg?alt=media&amp;token=8a3338b9-4cdb-480a-bdcb-7bf580e9d59c" alt="Kabuki" loading="lazy"><div class="dining-cap">Kabuki · Japanese teppanyaki &amp; sushi</div></div>
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784428062945_25_img-p_mmcm_restaurants_masala_01.jpg?alt=media&amp;token=3776d2f3-e15c-4db7-a362-0c704788d9b4" alt="Masala" loading="lazy"><div class="dining-cap">Masala · Indian</div></div>
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1783452406413_25_img-p_mmcm_restaurants_fonda-santa-monica_02.jpg?alt=media&amp;token=84757dae-adf4-4431-a09d-2627209a9b32" alt="Fonda Santa Monica" loading="lazy"><div class="dining-cap">Fonda Santa Monica · Mexican</div></div>
+        <div><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fmajestic-mirage%2F1784428125427_25_img-p_mmcm_restaurants_seaside_01.jpg?alt=media&amp;token=a8eb4962-05c4-4995-ad5a-c1e25a90b27c" alt="Seaside" loading="lazy"><div class="dining-cap">Seaside · beachfront seafood</div></div>
+      </div>
+      <div class="dining-grid"><div class="dine"><div class="dine-name">La Rinascita</div><div class="dine-desc">Italian · exclusive to The Club (18+)</div></div><div class="dine"><div class="dine-name">L'Essence</div><div class="dine-desc">Gourmet French · live piano · adults-only</div></div><div class="dine"><div class="dine-name">Kabuki</div><div class="dine-desc">Japanese teppanyaki &amp; sushi</div></div><div class="dine"><div class="dine-name">Masala</div><div class="dine-desc">Fragrant Indian cuisine</div></div><div class="dine"><div class="dine-name">Fonda Santa Monica</div><div class="dine-desc">Authentic Mexican</div></div><div class="dine"><div class="dine-name">Seaside</div><div class="dine-desc">Beachfront seafood</div></div></div>
+      <div class="dining-foot">Nine restaurants in all (one open 24/7), plus twelve bars, six swim-up bars, and a coffee bar — every bite and sip included.</div>
+    </div>
+    <div class="cta"><div class="st">Questions, or Want to Upgrade?</div>
+      <p>Your comparable suite is already reserved — you don't need to do a thing. If you'd like to treat yourselves to an upgrade or make any change, just reply and I'll take care of it. Because these are approximate rates and inventory can change, <strong style="color:#D4B882;">the sooner you let me know, the better</strong> I can lock it in. I'm here for any questions along the way!</p></div>
+    <div class="sign">
+      <div class="sign-closer">So excited for this celebration — it's going to be beautiful,</div>
+      <div class="sign-name">Amy Cate</div>
+      <div class="sign-title">Certified Destination Wedding &amp; Group Travel Specialist</div>
+      <div class="sign-contact">amy.cate@destinationweddings.com · (832) 773-8664</div>
+    </div>
+  </div>
+  <div class="email-foot">Kelly &amp; Briton's Wedding · September 2026<br>Destination Weddings Travel Group · Celebration Travel</div>
+</div>
+</body></html>
