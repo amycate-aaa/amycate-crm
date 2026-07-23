@@ -1100,6 +1100,23 @@ function resortMetaLine(r){
   return [starLine(r),[r.city,r.country].filter(Boolean).join(', ')].filter(Boolean).join('  \u00B7  ');
 }
 
+// Auto-fill a photo field. Replaces the value when it was auto-filled before
+// (e.g. you switched resorts), but never overwrites one you picked yourself.
+const _autoFilled={};
+function setAutoPhoto(id, value){
+  const el=document.getElementById(id);
+  if(!el||!value) return;
+  const cur=(el.value||'').trim();
+  if(cur==='' || cur===_autoFilled[id]){
+    el.value=value;
+    _autoFilled[id]=value;
+  }
+}
+function markManualPhoto(id){
+  const el=document.getElementById(id);
+  if(el) _autoFilled[id]='\u0000';   // user chose this — stop auto-replacing
+}
+
 function esc(s){
   if(s==null||s===undefined||s===false) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -1307,6 +1324,7 @@ function setPhoto(url, fieldId){
   const el=document.getElementById(fieldId);
   if(!el) return;
   el.value=url;
+  markManualPhoto(fieldId);   // you picked this — don't auto-swap it on resort change
   // Show preview for hero fields
   if(fieldId==='w-heroImg'){
     const prev=document.getElementById('w-hero-preview');
@@ -1345,8 +1363,8 @@ async function onFITResortChange(){
   // Auto-populate hero and about
   const primary=pickResortHero(r,crm)||photos[0]||'';
   const secondary=photos[1]||'';
-  if(primary&&!val('f-heroPhoto')) document.getElementById('f-heroPhoto').value=primary;
-  if(!val('f-aboutPhoto')) document.getElementById('f-aboutPhoto').value=secondary||primary;
+  setAutoPhoto('f-heroPhoto', primary);
+  setAutoPhoto('f-aboutPhoto', secondary||primary);
   // Auto-populate destination + experience
   if(!val('f-destination')) document.getElementById('f-destination').value=[r.city,r.country].filter(Boolean).join(', ');
   if(!val('f-experience')) document.getElementById('f-experience').value=inferExperience(r);
@@ -1604,7 +1622,7 @@ async function onWResortChange(n){
   // Auto-populate the resort's section photo field — only if not already set
   const primary=pickResortHero(r,crm)||photos[0]||'';
   const resortPhotoField=document.getElementById('w-r'+n+'heroPhoto');
-  if(resortPhotoField&&primary&&!resortPhotoField.value) resortPhotoField.value=primary;
+  setAutoPhoto('w-r'+n+'heroPhoto', primary);
   // Auto-populate Real Weddings URL from Firestore if stored
   const rwField=document.getElementById('w-r'+n+'realWeddings');
   if(rwField&&!rwField.value&&(r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl)){
