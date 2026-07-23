@@ -1810,9 +1810,7 @@ ${fsv.resorts.map((r,i)=>card(r,i)).join('')}
   <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;color:#FFFFFF;line-height:1.25;">So &mdash; which one is it?</div>
   <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#C0BFBD;padding-top:12px;">Reply and tell me which one you keep coming back to. Or if none of them are quite it, tell me that too &mdash; I have plenty more up my sleeve.</div>
   <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:17px;color:#D4B882;padding-top:18px;">I cannot wait to hear what you think!</div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:26px;"><tr>
-    <td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:16px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#1E1A14;text-decoration:none;">Book A Planning Call</a></td>
-  </tr></table>
+  
 </td></tr>
 
 <tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:32px 50px;">
@@ -1943,7 +1941,7 @@ function buildFITSneakFull(fsv){
       <p class="eyebrow">About the Resort</p>
       <div class="gold-rule"></div>
       ${description?`<p class="resort-desc">${esc(description)}</p>`:''}
-      ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-btn" target="_blank">View on Destination Weddings →</a>`:''}
+      ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-btn" target="_blank">View more…</a>`:''}
     </div>
     ${highlightsSection(r)}
   </div>
@@ -2078,7 +2076,6 @@ ${resortBlocks}
       <a href="tel:${agentVal('phone').replace(/\D/g,'')}">${agentVal('phone')}</a>
     </div>
   </div>
-  <a href="https://zcal.co/amymcate/letschat" class="btn-call">Book a Call With Me</a>
   <div class="footer-disclaimer">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
 </footer>
 </body></html>`;
@@ -2152,7 +2149,25 @@ function injectQuoteLinkIntoEmail(url){
     c = c.split('<!--QUOTE_BTN-->').join(btn);
   }
 
-  if(c === email.content) return;   // no marker found — leave it alone
+  // People tap photos. Make images open the quote too — but never nest links,
+  // so skip any image that already sits inside an <a>.
+  (function(){
+    let out='', i=0, depth=0;
+    const re=/<a\b[^>]*>|<\/a>|<img\b[^>]*>/gi;
+    let m;
+    while((m=re.exec(c))!==null){
+      out += c.slice(i, m.index);
+      const tag=m[0];
+      if(/^<a/i.test(tag)){ depth++; out+=tag; }
+      else if(/^<\/a/i.test(tag)){ depth=Math.max(0,depth-1); out+=tag; }
+      else { out += depth>0 ? tag : '<a href="'+url+'" style="text-decoration:none;">'+tag+'</a>'; }
+      i = m.index + tag.length;
+    }
+    out += c.slice(i);
+    c = out;
+  })();
+
+  if(c === email.content) return;   // nothing changed — leave it alone
   email.content = c;
   email._linked = true;
   showDLButtons(files);
@@ -2413,7 +2428,7 @@ ${(()=>{
       <td bgcolor="#1E1A14" style="background:#1E1A14;"><a href="${escUrl(v.bookingLink)}" style="display:inline-block;padding:17px 40px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#D4B882;text-decoration:none;">Book Your Room &nbsp;&rarr;</a></td>
     </tr></table>`:''}
   </td></tr>
-  <tr><td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Book a Call With Me</a></td></tr></table>
+  </table>
     <div style="border-top:1px solid #34312C;margin-top:34px;padding-top:26px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5D5A56;line-height:1.6;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
   </td></tr>
 </table><!--[if mso]></td></tr></table><![endif]--></td></tr></table>
@@ -2620,7 +2635,6 @@ ${v.note?`<div class="note-section"><div class="note-inner"><strong>A note from 
 ${(v.deposit||v.finalPayment)?`<section class="payment"><p class="section-eyebrow">Easy Payments</p><h2 class="section-title" style="margin-bottom:0;">Lock In Your Spot</h2><div class="payment-grid">${v.deposit?`<div class="payment-cell"><div class="payment-cell-label">Deposit</div><div class="payment-cell-value">${esc(v.deposit)}</div></div>`:''} ${v.finalPayment?`<div class="payment-cell"><div class="payment-cell-label">Final Payment</div><div class="payment-cell-value">${esc(v.finalPayment)}</div></div>`:''}</div></section>`:''}
 <footer class="footer">
   <div><p class="footer-eyebrow">Questions? I'm here for you.</p><div class="footer-name">${agentVal('full')}</div><div class="footer-title">Certified Destination Wedding &amp; Group Travel Specialist</div><div class="footer-contact"><a href="mailto:${agentVal('email')}">${agentVal('email')}</a><a href="tel:${agentVal('phone').replace(/\D/g,'')}">${agentVal('phone')}</a></div></div>
-  <a href="https://zcal.co/amymcate/letschat" class="btn-call">Book a Call With Me</a>
   <div class="footer-disclaimer">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
 </footer>
 </body></html>`;
@@ -2786,7 +2800,7 @@ function buildWeddingEmail(wv){
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#FFFFFF;line-height:1.2;margin-bottom:10px;">Ready to start planning?</div>
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#9A9895;margin-bottom:32px;line-height:1.6;">Reply with any questions or let me know which resort is calling your name!</div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 16px;"><tr><td bgcolor="#B8975A" style="background:#B8975A;"><a href="mailto:${agentVal('email')}?subject=${sub}&body=${body}" style="display:inline-block;padding:16px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Let&rsquo;s Make It Happen</a></td></tr></table>
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td style="border:1px solid #4B4843;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:15px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B0AFAD;text-decoration:none;">Book a Planning Call</a></td></tr></table>
+    
   </td></tr>
   <tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:44px 50px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:16px;">Your Wedding Specialist</div>
@@ -2895,7 +2909,7 @@ function buildWeddingFull(wv){
       <div class="resort-links">
         <p class="eyebrow">Resources</p>
         <div class="gold-rule"></div>
-        ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Destination Weddings</div><div class="resort-link-text">View on Destination Weddings →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
+        ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Destination Weddings</div><div class="resort-link-text">View more…</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.guide?`<a href="${escUrl(rf.guide)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Wedding Guide</div><div class="resort-link-text">View ${esc(r.name)} Wedding Guide →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.realWeddings?`<a href="${escUrl(rf.realWeddings)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Real Weddings</div><div class="resort-link-text">See Real Weddings at ${esc(r.name)} →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
         ${rf.weddingUrl?`<a href="${escUrl(rf.weddingUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Explore Weddings</div><div class="resort-link-text">Wedding Options at ${esc(r.name)} →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
@@ -3142,7 +3156,6 @@ ${resortBlocks}
   <p class="next-body">Have a resort calling your name? Questions about venues or packages? I'd love to talk through your vision and put together a full guest room quote as our next step.</p>
   <div class="next-btns">
     <a href="mailto:${agentVal('email')}?subject=${sub}&body=${body}" class="btn-primary">Let's Make It Happen</a>
-    <a href="https://zcal.co/amymcate/letschat" class="btn-outline">Book a Planning Call</a>
   </div>
 </section>
 
@@ -3156,7 +3169,6 @@ ${resortBlocks}
       <a href="tel:${agentVal('phone').replace(/\D/g,'')}">${agentVal('phone')} &nbsp;·&nbsp; M–Th 9–5, Fri 9–3, Weekends by appt.</a>
     </div>
   </div>
-  <a href="https://zcal.co/amymcate/letschat" class="btn-call">Book a Planning Call</a>
   <div class="footer-bottom">At DestinationWeddings.com, we are committed to providing accurate, up-to-date information. However, resort policies, wedding packages, and legal requirements are subject to change without notice. We strongly encourage you to consult with your Specialist before making any final decisions. All prices are listed in U.S. Dollars and are subject to change. Not a confirmed booking.<br><br>
   <a href="https://www.destinationweddings.com/WhyChooseUs/ContactUs.aspx" style="color:rgba(255,255,255,.35);text-decoration:none;margin-right:20px;">Contact Us</a>
   <a href="https://www.destinationweddings.com/PrivacyPolicy.aspx" style="color:rgba(255,255,255,.35);text-decoration:none;margin-right:20px;">Privacy Policy</a>
