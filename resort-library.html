@@ -1634,6 +1634,13 @@ async function runAudit() {
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
+      const rcArr = Array.isArray(p.roomCategories) ? p.roomCategories : [];
+      const rcDesc = rcArr.filter(rc => rc && String(rc.description||'').trim()).length;
+      const rcPhoto = rcArr.filter(rc => rc && String(rc.photo||'').trim()).length;
+      const descColor = !rcArr.length ? '#c0392b' : (rcDesc===rcArr.length ? '#1a7a3a' : '#b8860b');
+      const roomDescCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${descColor};font-weight:600;">${rcArr.length ? rcDesc+'/'+rcArr.length : '\u274C'}</td>`;
+      const photoColor = !rcArr.length ? '#c0392b' : (rcPhoto===rcArr.length ? '#1a7a3a' : '#b8860b');
+      const roomPhotoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photoColor};font-weight:600;">${rcArr.length ? rcPhoto+'/'+rcArr.length : '\u274C'}</td>`;
       const hasHero = !!(p.heroPhoto && String(p.heroPhoto).trim());
       const heroCell = `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${hasHero ? '\u2705' : '\u274C'}</td>`;
       const resortPix = resortPhotoCounts[r.slug] || 0;
@@ -1652,6 +1659,8 @@ async function runAudit() {
           <a href="#" onclick="document.getElementById('masterResort').value='${r.slug}';onMasterResortChange('${r.slug}');document.getElementById('auditSection').style.display='none';window.scrollTo(0,0);return false;" style="color:#1a56db;text-decoration:underline;">${r.name}</a>
         </td>
         ${cells.join('')}
+        ${roomDescCell}
+        ${roomPhotoCell}
         ${heroCell}
         ${photoCell}
         ${resortPixCell}
@@ -1659,7 +1668,7 @@ async function runAudit() {
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Hero', 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Room Desc', 'Room Photos', 'Hero', 'Photos', 'Resort Photos', 'Dining Photos'].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
