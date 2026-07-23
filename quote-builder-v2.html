@@ -1732,7 +1732,6 @@ function buildFITSneakFull(fsv){
     ${highlightsSection(r)}
   </div>
   ${priceBand}
-  ${roomCatsSection(r)}
   ${diningSection(r)}
 </div>`;
   }).join('');
@@ -2192,7 +2191,7 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
 @media(max-width:800px){.about{grid-template-columns:1fr;}.rooms-grid{grid-template-columns:1fr;}.footer{grid-template-columns:1fr;}.payment-grid{grid-template-columns:1fr;}.dining-grid{grid-template-columns:repeat(2,1fr);}}
 </style></head><body>
 <section class="hero">
-  ${v.heroPhoto?`<img class="hero-img" src="${escUrl(v.heroPhoto)}" alt="">`:'' }
+  <img class="hero-img" src="${escUrl(v.heroPhoto||DEFAULT_WEDDING_HERO)}" alt="">
   <div class="hero-overlay"></div>
   <div class="hero-content">
     <p class="hero-eyebrow">Destination Weddings Travel Group &nbsp;·&nbsp; Celebration Travel</p>
