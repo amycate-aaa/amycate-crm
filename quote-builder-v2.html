@@ -1723,72 +1723,88 @@ function buildFITSneakEmail(fsv){
     const photo=f.photo||r.heroPhoto||r.photo||(Array.isArray(r.photos)&&r.photos[0])||'';
     const loc=[r.city,r.country].filter(Boolean).join(', ');
     const stars=starLine(r);
-    const hi=String(r.highlights||'').split(/\s*[\u00b7\u2022|]\s*/).map(x=>x.trim()).filter(Boolean).slice(0,4);
+    const hi=String(r.highlights||'').split(/\s*[\u00b7\u2022|]\s*/).map(x=>x.trim()).filter(Boolean).slice(0,3);
     return `
-    <tr><td class="pad" style="padding:0 50px 34px;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="background:#FFFFFF;border:1px solid #E2D9CC;">
+    <tr><td class="pad" style="padding:0 50px 26px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FFFFFF" style="background:#FFFFFF;border:1px solid #E8E0D4;">
         ${photo?`<tr><td style="font-size:0;line-height:0;"><img src="${escUrl(photo)}" width="598" alt="" style="display:block;width:100%;height:auto;border:0;"></td></tr>`:''}
-        <tr><td style="padding:26px 30px 24px;">
+        <tr><td style="padding:24px 30px 26px;">
           <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#B8975A;font-weight:bold;">Option ${num}</div>
-          <div style="font-family:Georgia,'Times New Roman',serif;font-size:25px;color:#1E1A14;padding-top:8px;">${esc(r.name)}</div>
-          ${r.tagline?`<div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:#7A6A58;padding-top:7px;">${esc(r.tagline)}</div>`:''}
-          ${(stars||loc)?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#9C8E80;padding-top:9px;">${esc([stars,loc].filter(Boolean).join('  \u00B7  '))}</div>`:''}
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:#1E1A14;padding-top:8px;line-height:1.2;">${esc(r.name)}</div>
+          ${r.tagline?`<div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:16px;color:#8A7862;padding-top:8px;line-height:1.35;">${esc(r.tagline)}</div>`:''}
+          ${(stars||loc)?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#A2947F;padding-top:10px;">${esc([stars,loc].filter(Boolean).join('  \u00B7  '))}</div>`:''}
           ${hi.length?`<div style="padding-top:16px;">${hi.map(h=>`<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;padding:3px 0;"><span style="color:#B8975A;">&mdash;</span>&nbsp;&nbsp;${esc(h)}</div>`).join('')}</div>`:''}
           ${(f.roomName||f.price)?`
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #E2D9CC;">
-            <tr><td style="padding-top:16px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #EDE6DB;">
+            <tr><td style="padding-top:15px;">
               ${f.roomName?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C5044;">${esc(f.roomName)}</div>`:''}
-              ${f.price?`<div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;color:#1E1A14;padding-top:5px;">${esc(f.price)}</div>`:''}
-              ${f.priceNote?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#9C8E80;padding-top:4px;">${esc(f.priceNote)}</div>`:''}
+              ${f.price?`<div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#1E1A14;padding-top:4px;">${esc(f.price)}</div>`:''}
+              ${f.priceNote?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#A2947F;padding-top:4px;">${esc(f.priceNote)}</div>`:''}
             </td></tr></table>`:''}
         </td></tr>
       </table>
     </td></tr>`;
   };
+
+  const count=fsv.resorts.length;
+  const countWord=['','one','two','three','four'][count]||count;
+
   return `<!DOCTYPE html>
 <html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Resort Options &middot; ${esc(fsv.clientName)}</title>
+<title>Your Resort Options &middot; ${esc(fsv.clientName)}</title>
 <!--[if mso]><style>body,table,td,a,div{font-family:Arial,Helvetica,sans-serif !important;}</style><![endif]-->
 <style>@media only screen and (max-width:660px){.container{width:100% !important;}.pad{padding-left:24px !important;padding-right:24px !important;}}</style>
 </head>
 <body style="margin:0;padding:0;background:#FAF7F2;">
-<div style="display:none;font-size:1px;color:#FAF7F2;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">Your resort options for ${esc(fsv.tripName)} are ready &#10022;</div>
+<div style="display:none;font-size:1px;color:#FAF7F2;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;">I found ${countWord} places I think you are going to love &#10022;</div>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FAF7F2"><tr><td align="center">
 <!--[if mso]><table role="presentation" width="700" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
 <table role="presentation" class="container" width="700" cellpadding="0" cellspacing="0" border="0" style="width:700px;max-width:700px;background:#FAF7F2;">
+
 <tr><td style="font-size:0;line-height:0;"><img src="${escUrl(fsv.heroPhoto||DEFAULT_WEDDING_HERO)}" width="700" alt="" style="display:block;width:100%;height:auto;border:0;"></td></tr>
-<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:46px 50px;">
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:18px;">Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
-  <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:16px;color:#C0BFBD;">Your Resort Options</div>
-  <div style="font-family:Georgia,'Times New Roman',serif;font-size:40px;color:#FFFFFF;padding-top:6px;">${esc(fsv.clientName)}</div>
-  <div style="height:1px;background:#B8975A;margin:20px 0 16px;font-size:0;line-height:0;">&nbsp;</div>
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#9A9895;">${esc([fsv.destination,fsv.dates,fsv.guests].filter(Boolean).join('  \u00B7  '))}</div>
+
+<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:48px 50px 44px;">
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;">Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:46px;line-height:1.05;color:#FFFFFF;padding-top:22px;">Your Resort</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:46px;line-height:1.05;color:#FFFFFF;">Options.</div>
+  <div style="width:60px;height:1px;background:#B8975A;margin:24px 0 18px;font-size:0;line-height:0;">&nbsp;</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:#C0BFBD;">${esc(fsv.clientName)}</div>
+  ${[fsv.destination,fsv.dates,fsv.guests].filter(Boolean).length?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8E8B86;padding-top:8px;">${esc([fsv.destination,fsv.dates,fsv.guests].filter(Boolean).join('  \u00B7  '))}</div>`:''}
 </td></tr>
-${fsv.expiry?`<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:14px 50px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#C0BFBD;"><span style="color:#B8975A;">&bull;</span>&nbsp;&nbsp;These rates are held until <span style="color:#D4B882;font-weight:bold;">${esc(fsv.expiry)}</span></td></tr>`:''}
-<tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
-  <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Your full resort comparison</strong> &mdash; photos, dining, venues and room details.<!--QUOTE_CTA--></span>
+
+<tr><td class="pad" style="padding:44px 50px 12px;">
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:31px;color:#1E1A14;line-height:1.25;">Hi <span style="font-style:italic;color:#8A7862;">${esc(fsv.clientName)}</span> &mdash;</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.8;color:#5C5044;padding-top:18px;">${esc(fsv.intro||`I went looking for places that felt right for you, and I found ${countWord} I am genuinely excited about. Each one has something a little different to offer, so have a wander through and see which one makes you smile.`)}</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.8;color:#5C5044;padding-top:14px;">Everything is in here &mdash; the photos, the dining, the rooms, the whole picture.</div>
 </td></tr>
-<tr><td class="pad" style="padding:44px 50px 30px;">
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:16px;">A Few Places To Fall In Love With</div>
-  <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;color:#1E1A14;line-height:1.25;">Hello, <span style="font-style:italic;color:#7A6A58;">${esc(fsv.clientName)}.</span></div>
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.75;color:#5C5044;padding-top:16px;">${esc(fsv.intro||"I have hand-picked these resorts with you in mind. Have a look through, see which one makes you smile, and tell me which you'd like to explore further \u2014 I'll take it from there.")}</div>
+
+<!--QUOTE_BTN-->
+
+<tr><td class="pad" style="padding:8px 50px 26px;">
+  <div style="height:1px;background:#E8E0D4;font-size:0;line-height:0;">&nbsp;</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;padding-top:26px;">A Quick Look</div>
 </td></tr>
+
 ${fsv.resorts.map((r,i)=>card(r,i)).join('')}
-<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:42px 50px;" align="center">
-  <div style="font-family:Georgia,'Times New Roman',serif;font-size:27px;color:#FFFFFF;">Which one is calling your name?</div>
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C0BFBD;padding-top:10px;">Reply with your favourite and I'll put together the full details.</div>
-  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:22px;"><tr>
-    <td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:15px 34px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#1E1A14;text-decoration:none;">Book A Planning Call</a></td>
+
+<tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:46px 50px;" align="center">
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:30px;color:#FFFFFF;line-height:1.25;">So &mdash; which one is it?</div>
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:14px;line-height:1.7;color:#C0BFBD;padding-top:12px;">Reply and tell me which one you keep coming back to. Or if none of them are quite it, tell me that too &mdash; I have plenty more up my sleeve.</div>
+  <div style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:17px;color:#D4B882;padding-top:18px;">I cannot wait to hear what you think!</div>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin-top:26px;"><tr>
+    <td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:16px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#1E1A14;text-decoration:none;">Book A Planning Call</a></td>
   </tr></table>
 </td></tr>
-<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:30px 50px;">
-  <div style="font-family:Georgia,'Times New Roman',serif;font-size:19px;color:#FFFFFF;">${esc(agentVal('full'))}</div>
+
+<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:32px 50px;">
+  <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;color:#FFFFFF;">${esc(agentVal('full'))}</div>
   <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#B8975A;padding-top:5px;">Certified Destination Wedding Specialist</div>
-  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#9A9895;padding-top:12px;">
-    <a href="mailto:${esc(agentVal('email'))}" style="color:#C0BFBD;text-decoration:none;">${esc(agentVal('email'))}</a>&nbsp;&bull;&nbsp; ${esc(agentVal('phone'))}
+  <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#9A9895;padding-top:13px;">
+    <a href="mailto:${esc(agentVal('email'))}" style="color:#C0BFBD;text-decoration:none;">${esc(agentVal('email'))}</a>&nbsp;&nbsp;&bull;&nbsp;&nbsp;${esc(agentVal('phone'))}
   </div>
 </td></tr>
+
 </table>
 <!--[if mso]></td></tr></table><![endif]-->
 </td></tr></table>
@@ -2089,11 +2105,34 @@ function injectQuoteLinkIntoEmail(url){
   const files = window._qbFiles || [];
   const email = files.find(f=>/email/i.test(f.filename));
   if(!email || email._linked) return;
-  const link = '&nbsp; <a href="' + url + '" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;' +
-    'font-weight:bold;color:#B8975A;text-decoration:underline;">View it here &rarr;</a>';
   let c = email.content;
-  if(c.indexOf('<!--QUOTE_CTA-->') === -1) return;
-  email.content = c.split('<!--QUOTE_CTA-->').join(link);
+
+  // Inline text link (used in the FIT / wedding emails' top bar)
+  if(c.indexOf('<!--QUOTE_CTA-->') > -1){
+    const link = '&nbsp; <a href="' + url + '" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;' +
+      'font-weight:bold;color:#B8975A;text-decoration:underline;">View it here &rarr;</a>';
+    c = c.split('<!--QUOTE_CTA-->').join(link);
+  }
+
+  // Big button row (Resort Options email)
+  if(c.indexOf('<!--QUOTE_BTN-->') > -1){
+    const btn =
+      '<tr><td class="pad" style="padding:14px 50px 34px;" align="center">' +
+        '<table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center"><tr>' +
+          '<td bgcolor="#1E1A14" style="background:#1E1A14;">' +
+            '<a href="' + url + '" style="display:inline-block;padding:19px 44px;font-family:Arial,Helvetica,sans-serif;' +
+            'font-size:12px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase;color:#D4B882;' +
+            'text-decoration:none;">Explore Your Options &nbsp;&rarr;</a>' +
+          '</td>' +
+        '</tr></table>' +
+        '<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#A2947F;padding-top:14px;">' +
+          'or open it here: <a href="' + url + '" style="color:#B8975A;">' + url.slice(0,52) + '&hellip;</a></div>' +
+      '</td></tr>';
+    c = c.split('<!--QUOTE_BTN-->').join(btn);
+  }
+
+  if(c === email.content) return;   // no marker found — leave it alone
+  email.content = c;
   email._linked = true;
   showDLButtons(files);
 }
