@@ -216,6 +216,10 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
           <select id="f-r1-cat-select" onchange="applyRoomCatSelect(1,this.value)" style="background:#fff;">
             <option value="">— pick a room category —</option>
           </select>
+
+        <div id="f-r1-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="f-r1-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('f-r1name',this.value)" style="font-style:italic;">
+        </div>
         </div>
         <div id="f-r1-cat-grid" class="room-cat-grid" style="display:none;"></div>
         <div id="f-r1-cat-selected" class="room-cat-selected hidden"></div>
@@ -270,6 +274,10 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
           <select id="f-r2-cat-select" onchange="applyRoomCatSelect(2,this.value)" style="background:#fff;">
             <option value="">— pick a room category —</option>
           </select>
+
+        <div id="f-r2-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="f-r2-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('f-r2name',this.value)" style="font-style:italic;">
+        </div>
         </div>
         <div id="f-r2-cat-grid" class="room-cat-grid" style="display:none;"></div>
         <div id="f-r2-cat-selected" class="room-cat-selected hidden"></div>
@@ -316,6 +324,10 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
           <select id="f-r3-cat-select" onchange="applyRoomCatSelect(3,this.value)" style="background:#fff;">
             <option value="">— pick a room category —</option>
           </select>
+
+        <div id="f-r3-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="f-r3-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('f-r3name',this.value)" style="font-style:italic;">
+        </div>
         </div>
         <div id="f-r3-cat-grid" class="room-cat-grid" style="display:none;"></div>
         <div id="f-r3-cat-selected" class="room-cat-selected hidden"></div>
@@ -356,6 +368,10 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
           <select id="f-r4-cat-select" onchange="applyRoomCatSelect(4,this.value)" style="background:#fff;">
             <option value="">— pick a room category —</option>
           </select>
+
+        <div id="f-r4-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="f-r4-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('f-r4name',this.value)" style="font-style:italic;">
+        </div>
         </div>
         <div id="f-r4-cat-grid" class="room-cat-grid" style="display:none;"></div>
         <div id="f-r4-cat-selected" class="room-cat-selected hidden"></div>
@@ -478,6 +494,17 @@ Complimentary concierge and computer access</textarea>
         <div class="photo-picker-head">CRM Photos <span>click "Set as Hero" to use as the quote hero photo</span></div>
         <div id="w-r1-grid" class="photo-grid"></div>
       </div>
+      <div id="w-r1-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r1-cat-select" onchange="applyWRoomCatSelect(1,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r1-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r1-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r1roomName',this.value)" style="font-style:italic;">
+        </div>
+      </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type Name</label><input id="w-r1roomName" placeholder="Junior Suite · Preferred Club"></div>
         <div class="field"><label>Full Price</label><input id="w-r1total" placeholder="$3,400" oninput="calcPerPerson('w-r1')" onblur="fmtPrice(this)"></div>
@@ -518,6 +545,17 @@ Complimentary concierge and computer access</textarea>
       <div id="w-r2-picker" class="photo-picker hidden">
         <div class="photo-picker-head">CRM Photos</div>
         <div id="w-r2-grid" class="photo-grid"></div>
+      </div>
+      <div id="w-r2-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r2-cat-select" onchange="applyWRoomCatSelect(2,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r2-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r2-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r2roomName',this.value)" style="font-style:italic;">
+        </div>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r2roomName" placeholder="Premium Junior Suite"></div>
@@ -560,6 +598,17 @@ Complimentary concierge and computer access</textarea>
         <div class="photo-picker-head">CRM Photos</div>
         <div id="w-r3-grid" class="photo-grid"></div>
       </div>
+      <div id="w-r3-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r3-cat-select" onchange="applyWRoomCatSelect(3,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r3-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r3-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r3roomName',this.value)" style="font-style:italic;">
+        </div>
+      </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r3roomName" placeholder="Mirage Club Suite"></div>
         <div class="field"><label>Full Price</label><input id="w-r3total" placeholder="$2,100" oninput="calcPerPerson('w-r3')" onblur="fmtPrice(this)"></div>
@@ -596,6 +645,17 @@ Complimentary concierge and computer access</textarea>
       <div id="w-r4-picker" class="photo-picker hidden">
         <div class="photo-picker-head">CRM Photos</div>
         <div id="w-r4-grid" class="photo-grid"></div>
+      </div>
+      <div id="w-r4-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r4-cat-select" onchange="applyWRoomCatSelect(4,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r4-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r4-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r4roomName',this.value)" style="font-style:italic;">
+        </div>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r4roomName" placeholder="Junior Suite"></div>
@@ -634,6 +694,17 @@ Complimentary concierge and computer access</textarea>
         <div class="photo-picker-head">CRM Photos</div>
         <div id="w-r5-grid" class="photo-grid"></div>
       </div>
+      <div id="w-r5-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r5-cat-select" onchange="applyWRoomCatSelect(5,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r5-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r5-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r5roomName',this.value)" style="font-style:italic;">
+        </div>
+      </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r5roomName" placeholder="Junior Suite"></div>
         <div class="field"><label>Full Price</label><input id="w-r5total" placeholder="$2,800" oninput="calcPerPerson('w-r5')" onblur="fmtPrice(this)"></div>
@@ -670,6 +741,17 @@ Complimentary concierge and computer access</textarea>
       <div id="w-r6-picker" class="photo-picker hidden">
         <div class="photo-picker-head">CRM Photos</div>
         <div id="w-r6-grid" class="photo-grid"></div>
+      </div>
+      <div id="w-r6-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="w-r6-cat-select" onchange="applyWRoomCatSelect(6,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="w-r6-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="w-r6-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('w-r6roomName',this.value)" style="font-style:italic;">
+        </div>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r6roomName" placeholder="Junior Suite"></div>
@@ -745,6 +827,17 @@ Complimentary concierge and computer access</textarea>
         <div class="photo-picker-head">CRM Photos <span>click to set resort photo</span></div>
         <div id="fs-r1-grid" class="photo-grid"></div>
       </div>
+      <div id="fs-r1-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="fs-r1-cat-select" onchange="applyFSRoomCatSelect(1,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="fs-r1-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="fs-r1-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('fs-r1roomName',this.value)" style="font-style:italic;">
+        </div>
+      </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r1roomName" placeholder="Junior Suite Tropical View"></div>
         <div class="field"><label>Full Price</label><input id="fs-r1total" placeholder="$1,446" oninput="calcPerPerson('fs-r1')" onblur="fmtPrice(this)"></div>
@@ -772,6 +865,17 @@ Complimentary concierge and computer access</textarea>
       <div id="fs-r2-picker" class="photo-picker hidden">
         <div class="photo-picker-head">CRM Photos</div>
         <div id="fs-r2-grid" class="photo-grid"></div>
+      </div>
+      <div id="fs-r2-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="fs-r2-cat-select" onchange="applyFSRoomCatSelect(2,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="fs-r2-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="fs-r2-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('fs-r2roomName',this.value)" style="font-style:italic;">
+        </div>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r2roomName" placeholder="Junior Suite Ocean View"></div>
@@ -801,6 +905,17 @@ Complimentary concierge and computer access</textarea>
         <div class="photo-picker-head">CRM Photos</div>
         <div id="fs-r3-grid" class="photo-grid"></div>
       </div>
+      <div id="fs-r3-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="fs-r3-cat-select" onchange="applyFSRoomCatSelect(3,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="fs-r3-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="fs-r3-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('fs-r3roomName',this.value)" style="font-style:italic;">
+        </div>
+      </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r3roomName" placeholder="Swim-Out Suite"></div>
         <div class="field"><label>Full Price</label><input id="fs-r3total" placeholder="$1,900" oninput="calcPerPerson('fs-r3')" onblur="fmtPrice(this)"></div>
@@ -828,6 +943,17 @@ Complimentary concierge and computer access</textarea>
       <div id="fs-r4-picker" class="photo-picker hidden">
         <div class="photo-picker-head">CRM Photos</div>
         <div id="fs-r4-grid" class="photo-grid"></div>
+      </div>
+      <div id="fs-r4-cat-wrap" class="hidden" style="margin-bottom:14px;">
+        <div class="field">
+          <label>Room from CRM <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— auto-fills photo &amp; name</span></label>
+          <select id="fs-r4-cat-select" onchange="applyFSRoomCatSelect(4,this.value)" style="background:#fff;">
+            <option value="">— pick a room category —</option>
+          </select>
+        </div>
+        <div id="fs-r4-cat-other" class="field hidden" style="margin-top:6px;">
+          <input id="fs-r4-cat-other-input" placeholder="e.g. Diamond Club Jr. Suite" oninput="syncCatOtherInput('fs-r4roomName',this.value)" style="font-style:italic;">
+        </div>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r4roomName" placeholder="Presidential Suite"></div>
@@ -1197,7 +1323,7 @@ function populateRoomCatGrids(cats){
       dropdown.innerHTML='<option value="">— pick a room category —</option>'+cats.map((c,i)=>{
         const meta=[c.beds,c.view].filter(Boolean).join(' · ');
         return `<option value="${i}">${esc(c.name)}${meta?' — '+esc(meta):''}`;
-      }).join('');
+      }).join('')+'<option value="other">✏ Other (type below)</option>';
     }
     if(selEl) selEl.classList.add('hidden');
     wrap.classList.remove('hidden');
@@ -1235,6 +1361,14 @@ function applyRoomCat(n,idx){
 }
 
 function applyRoomCatSelect(n, idxStr){
+  const otherWrap=document.getElementById('f-r'+n+'-cat-other');
+  if(idxStr==='other'){
+    if(otherWrap) otherWrap.classList.remove('hidden');
+    const inp=document.getElementById('f-r'+n+'-cat-other-input');
+    if(inp){ inp.focus(); }
+    return;
+  }
+  if(otherWrap) otherWrap.classList.add('hidden');
   const idx=parseInt(idxStr);
   if(isNaN(idx)||idxStr==='') return;
   const cat=_roomCats[idx];
@@ -1270,6 +1404,84 @@ function clearRoomCat(n){
   const selEl=document.getElementById('f-r'+n+'-cat-selected');
   if(selEl) selEl.classList.add('hidden');
 }
+// ═══════════════════════════════════════════════════════════
+// ROOM CATEGORY PICKERS — WEDDING + RESORT OPTIONS TABS
+// ═══════════════════════════════════════════════════════════
+let _wRoomCats={};   // keyed by slot number 1-6
+let _fsRoomCats={};  // keyed by slot number 1-4
+
+// Sync "Other" free-text input back to the main room name field
+function syncCatOtherInput(fieldId, value){
+  const el=document.getElementById(fieldId);
+  if(el) el.value=value;
+}
+
+// Populate a slot cat dropdown from a cats array
+function populateSlotCatDropdown(prefix, n, cats){
+  const wrap=document.getElementById(prefix+'-r'+n+'-cat-wrap');
+  const dropdown=document.getElementById(prefix+'-r'+n+'-cat-select');
+  if(!wrap||!dropdown) return;
+  if(!cats||!cats.length){ wrap.classList.add('hidden'); return; }
+  dropdown.innerHTML='<option value="">— pick a room category —</option>'+
+    cats.map((c,i)=>{
+      const meta=[c.beds,c.view].filter(Boolean).join(' · ');
+      return `<option value="${i}">${esc(c.name)}${meta?' — '+esc(meta):''}`;
+    }).join('')+
+    '<option value="other">✏ Other (type below)</option>';
+  // Reset other input
+  const otherWrap=document.getElementById(prefix+'-r'+n+'-cat-other');
+  if(otherWrap) otherWrap.classList.add('hidden');
+  wrap.classList.remove('hidden');
+}
+
+function applyWRoomCatSelect(n, idxStr){
+  const cats=_wRoomCats[n]||[];
+  const otherWrap=document.getElementById('w-r'+n+'-cat-other');
+  if(idxStr==='other'){
+    if(otherWrap) otherWrap.classList.remove('hidden');
+    const inp=document.getElementById('w-r'+n+'-cat-other-input');
+    if(inp){ inp.value=''; inp.focus(); }
+    return;
+  }
+  if(otherWrap) otherWrap.classList.add('hidden');
+  const idx=parseInt(idxStr);
+  if(isNaN(idx)||idxStr==='') return;
+  const cat=cats[idx];
+  if(!cat) return;
+  // Fill room name
+  const nameEl=document.getElementById('w-r'+n+'roomName');
+  if(nameEl) nameEl.value=cat.name||'';
+  // Fill photo if empty
+  if(cat.photo){
+    const photoEl=document.getElementById('w-r'+n+'heroPhoto');
+    if(photoEl&&!photoEl.value) photoEl.value=cat.photo;
+  }
+}
+
+function applyFSRoomCatSelect(n, idxStr){
+  const cats=_fsRoomCats[n]||[];
+  const otherWrap=document.getElementById('fs-r'+n+'-cat-other');
+  if(idxStr==='other'){
+    if(otherWrap) otherWrap.classList.remove('hidden');
+    const inp=document.getElementById('fs-r'+n+'-cat-other-input');
+    if(inp){ inp.value=''; inp.focus(); }
+    return;
+  }
+  if(otherWrap) otherWrap.classList.add('hidden');
+  const idx=parseInt(idxStr);
+  if(isNaN(idx)||idxStr==='') return;
+  const cat=cats[idx];
+  if(!cat) return;
+  // Fill room name
+  const nameEl=document.getElementById('fs-r'+n+'roomName');
+  if(nameEl) nameEl.value=cat.name||'';
+  // Fill photo if empty
+  if(cat.photo){
+    const photoEl=document.getElementById('fs-r'+n+'photo');
+    if(photoEl&&!photoEl.value) photoEl.value=cat.photo;
+  }
+}
+
 
 // Built-in fallback PDF URLs for known resorts
 const KNOWN_WEDDING_PDFS={
@@ -1320,6 +1532,10 @@ async function onWResortChange(n){
   // Save guide URL whenever user types in it
   const guideEl=document.getElementById('w-r'+n+'guide');
   if(guideEl) guideEl.oninput=()=>saveGuideUrl(n,slug,guideEl.value);
+  // Load room categories for this wedding slot
+  const wCats=r.roomCategories||[];
+  _wRoomCats[n]=wCats;
+  populateSlotCatDropdown('w', n, wCats);
   // Picker targets — Resort 1 can also set the top quote hero
   const targets=n===1
     ?[{label:'Set as Quote Hero',fieldId:'w-heroImg'},{label:'Set as Resort Photo',fieldId:'w-r1heroPhoto'}]
@@ -1349,6 +1565,10 @@ async function onFSSResortChange(n){
   // Auto-fill hero photo field if empty
   const photoField=document.getElementById('fs-r'+n+'photo');
   if(photoField&&photos[0]&&!photoField.value) photoField.value=photos[0];
+  // Load room categories for this resort options slot
+  const fsCats=r.roomCategories||[];
+  _fsRoomCats[n]=fsCats;
+  populateSlotCatDropdown('fs', n, fsCats);
   // Build photo picker
   const targets=[{label:'Set as Resort Photo',fieldId:'fs-r'+n+'photo'}];
   if(n===1) targets.unshift({label:'Set as Quote Hero',fieldId:'fs-heroPhoto'});
