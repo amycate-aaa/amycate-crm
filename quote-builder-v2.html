@@ -142,6 +142,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
     <div class="section-card-body">
       <div class="row">
         <div class="field"><label>Client Name</label><input id="f-clientName" placeholder="Ke'Asia Harris"></div>
+        <div class="field"><label>Client Email <small style="font-weight:400;font-size:10px;">(for the Gmail draft)</small></label><input id="f-clientEmail" type="email" placeholder="client@email.com"></div>
         <div class="field"><label>Trip Name</label><input id="f-tripName" placeholder="Ticoya's Birthday Trip"></div>
       </div>
       <div class="row">
@@ -430,6 +431,7 @@ Complimentary concierge and computer access</textarea>
     <div class="section-card-body">
       <div class="row">
         <div class="field"><label>Couple Names</label><input id="w-couple" placeholder="Amy &amp; Brian"></div>
+        <div class="field"><label>Client Email <small style="font-weight:400;font-size:10px;">(for the Gmail draft)</small></label><input id="w-clientEmail" type="email" placeholder="client@email.com"></div>
         <div class="field"><label>Wedding Date</label>
           <div style="display:flex;gap:8px;align-items:center;">
             <input type="date" id="w-date-picker" onchange="computeWeddingDate()" style="flex:1;">
@@ -979,6 +981,7 @@ Complimentary concierge and computer access</textarea>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 <script>
 firebase.initializeApp({
   apiKey:'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
@@ -989,6 +992,7 @@ firebase.initializeApp({
   appId:'1:246819649586:web:a74debd217ce048d26242b'
 });
 const db = firebase.firestore();
+const qbStorage = firebase.storage();
 
 // ─── AGENT IDENTITY ────────────────────────────────────────
 const AGENT_DEFAULTS = {
@@ -1176,6 +1180,66 @@ async function getResort(slug){
   return data;
 }
 
+// ─── CRM PHOTO LIBRARY ─────────────────────────────────────
+// Reads the same resortPhotos collection the Resort Library writes to.
+const _crmPhotoCache={};
+async function getCrmPhotos(slug){
+  if(!slug) return [];
+  if(_crmPhotoCache[slug]) return _crmPhotoCache[slug];
+  try{
+    const snap=await db.collection('resortPhotos').where('resortSlug','==',slug).get();
+    const list=snap.docs.map(d=>{const x=d.data();return{
+      url:x.url||x.downloadURL||'',
+      category:String(x.roomCategory||x.category||'').trim(),
+      caption:x.caption||''
+    };}).filter(p=>p.url);
+    _crmPhotoCache[slug]=list;
+    return list;
+  }catch(e){ console.warn('CRM photo load failed:',e); return []; }
+}
+
+// The resort's standard hero: designated hero, else Aerial View, else property shot.
+function pickResortHero(r,crm){
+  if(r&&r.heroPhoto) return r.heroPhoto;
+  const byCat=c=>((crm||[]).find(p=>p.category.toLowerCase()===c)||{}).url||'';
+  return byCat('aerial view')||byCat('resort & property')||byCat('beach & pool')||'';
+}
+
+// Order CRM photos so property shots come first, bedrooms last.
+function orderCrmPhotos(crm){
+  const rank=c=>{
+    const k=(c||'').toLowerCase();
+    if(k==='aerial view') return 0;
+    if(k==='resort & property') return 1;
+    if(k==='beach & pool') return 2;
+    if(k==='lobby & common areas') return 3;
+    if(k==='wedding venues') return 4;
+    if(k==='dining'||k==='bar') return 5;
+    if(k==='spa'||k==='activities') return 6;
+    return 7;
+  };
+  return [...(crm||[])].sort((a,b)=>rank(a.category)-rank(b.category)).map(p=>p.url);
+}
+
+// Collapse a photo picker behind a small "Change photo" link.
+function attachPickerToggle(pickerId,label){
+  const picker=document.getElementById(pickerId);
+  if(!picker) return;
+  picker.classList.add('hidden');
+  const prev=picker.previousElementSibling;
+  if(prev&&prev.classList&&prev.classList.contains('picker-toggle')) return;
+  const btn=document.createElement('button');
+  btn.type='button';
+  btn.className='picker-toggle';
+  btn.textContent=label||'Change photo';
+  btn.style.cssText='background:none;border:none;color:#b8973a;font-size:12px;text-decoration:underline;cursor:pointer;padding:4px 0;margin:2px 0 8px;display:block;';
+  btn.onclick=()=>{
+    const hidden=picker.classList.toggle('hidden');
+    btn.textContent=hidden?(label||'Change photo'):'Hide photos';
+  };
+  picker.parentNode.insertBefore(btn,picker);
+}
+
 function getPhotos(r){
   const set=new Set();
   const add=u=>{ if(u&&typeof u==='string'&&u.startsWith('http')) set.add(u); };
@@ -1248,9 +1312,10 @@ async function onFITResortChange(){
   }
   const r=await getResort(slug);
   if(!r) return;
-  const photos=getPhotos(r);
+  const crm=await getCrmPhotos(slug);
+  const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
   // Auto-populate hero and about
-  const primary=photos[0]||'';
+  const primary=pickResortHero(r,crm)||photos[0]||'';
   const secondary=photos[1]||'';
   if(primary&&!val('f-heroPhoto')) document.getElementById('f-heroPhoto').value=primary;
   if(!val('f-aboutPhoto')) document.getElementById('f-aboutPhoto').value=secondary||primary;
@@ -1265,7 +1330,7 @@ async function onFITResortChange(){
     {label:'Set About',fieldId:'f-aboutPhoto'},
   ];
   buildPhotoPicker(photos,'f-photo-grid',targets);
-  document.getElementById('f-photo-picker').classList.remove('hidden');
+  attachPickerToggle('f-photo-picker','Change hero / about photo');
   // Build room mini-pickers
   buildPhotoPicker(photos,'f-r1-photo-grid',[{label:'Use for Room 1',fieldId:'f-r1photo'}]);
   buildPhotoPicker(photos,'f-r2-photo-grid',[{label:'Use for Room 2',fieldId:'f-r2photo'}]);
@@ -1506,9 +1571,10 @@ async function onWResortChange(n){
   let r;
   try{ r=await getResort(slug); } catch(e){ console.error('Resort load error:',e); return; }
   if(!r) return;
-  const photos=getPhotos(r);
+  const crm=await getCrmPhotos(slug);
+  const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
   // Auto-populate the resort's section photo field — only if not already set
-  const primary=photos[0]||'';
+  const primary=pickResortHero(r,crm)||photos[0]||'';
   const resortPhotoField=document.getElementById('w-r'+n+'heroPhoto');
   if(resortPhotoField&&primary&&!resortPhotoField.value) resortPhotoField.value=primary;
   // Auto-populate Real Weddings URL from Firestore if stored
@@ -1541,7 +1607,7 @@ async function onWResortChange(n){
     ?[{label:'Set as Quote Hero',fieldId:'w-heroImg'},{label:'Set as Resort Photo',fieldId:'w-r1heroPhoto'}]
     :[{label:'Set as Resort Photo',fieldId:'w-r'+n+'heroPhoto'}];
   buildPhotoPicker(photos,gridId,targets);
-  document.getElementById(pickerId).classList.remove('hidden');
+  attachPickerToggle(pickerId,'Change photo');
 }
 
 // ═══════════════════════════════════════════════════════════
@@ -1561,7 +1627,8 @@ async function onFSSResortChange(n){
   let r;
   try{ r=await getResort(slug); } catch(e){ console.error('Resort load error:',e); return; }
   if(!r) return;
-  const photos=getPhotos(r);
+  const crm=await getCrmPhotos(slug);
+  const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
   // Auto-fill hero photo field if empty
   const photoField=document.getElementById('fs-r'+n+'photo');
   if(photoField&&photos[0]&&!photoField.value) photoField.value=photos[0];
@@ -1571,9 +1638,14 @@ async function onFSSResortChange(n){
   populateSlotCatDropdown('fs', n, fsCats);
   // Build photo picker
   const targets=[{label:'Set as Resort Photo',fieldId:'fs-r'+n+'photo'}];
-  if(n===1) targets.unshift({label:'Set as Quote Hero',fieldId:'fs-heroPhoto'});
+  if(n===1){
+    targets.unshift({label:'Set as Quote Hero',fieldId:'fs-heroPhoto'});
+    const heroEl=document.getElementById('fs-heroPhoto');
+    const hero=pickResortHero(r,crm)||photos[0]||'';
+    if(heroEl&&hero&&!heroEl.value) heroEl.value=hero;
+  }
   buildPhotoPicker(photos,gridId,targets);
-  document.getElementById(pickerId).classList.remove('hidden');
+  attachPickerToggle(pickerId,'Change photo');
 }
 
 async function generateFITSneak(status){
@@ -1901,13 +1973,102 @@ document.getElementById('w-heroImg').addEventListener('input',function(){
 // ─── GENERATE ──────────────────────────────────────────────
 function makeBlob(content){ return URL.createObjectURL(new Blob([content],{type:'text/html;charset=utf-8'})); }
 
+// Insert the published quote link into the email's top bar
+function injectQuoteLinkIntoEmail(url){
+  const files = window._qbFiles || [];
+  const email = files.find(f=>/email/i.test(f.filename));
+  if(!email || email._linked) return;
+  const link = '&nbsp; <a href="' + url + '" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;' +
+    'font-weight:bold;color:#B8975A;text-decoration:underline;">View it here &rarr;</a>';
+  let c = email.content;
+  if(c.indexOf('<!--QUOTE_CTA-->') === -1) return;
+  email.content = c.split('<!--QUOTE_CTA-->').join(link);
+  email._linked = true;
+  showDLButtons(files);
+}
+
+// Open a prefilled Gmail compose window with the published quote link
+function openGmailDraft(){
+  const url = window._qbPublishedUrl || '';
+  if(!url){ alert('Publish the quote first.'); return; }
+  const wedding = (typeof currentMode!=='undefined' && currentMode === 'wedding');
+  const to = (val(wedding ? 'w-clientEmail' : 'f-clientEmail')||'').trim();
+  const who = ((wedding ? val('w-couple') : val('f-clientName'))||'').trim();
+  const resortSel = wedding ? val('w-r1slug') : val('f-resort');
+  const resortName = (typeof allResorts !== 'undefined'
+    ? ((allResorts.find(x=>x.slug===resortSel)||{}).name || '') : '');
+  const first = (typeof agentVal === 'function') ? agentVal('first') : 'Amy';
+  const subject = wedding
+    ? `${who ? who + ', y' : 'Y'}our wedding at ${resortName || 'your resort'} \u2728`
+    : `${who ? who + ', y' : 'Y'}our getaway to ${resortName || 'paradise'} \u2600\uFE0F`;
+  const body = wedding
+    ? `${who || 'Hi there'},\n\n` +
+      `I have been so excited to put this together for you \u2014 here is your wedding quote` +
+      `${resortName ? ' for ' + resortName : ''}!\n\n${url}\n\n` +
+      `Inside you will find the venues, the wedding packages and pricing, the rooms, and everything ` +
+      `that makes this resort special. Take your time with it, imagine yourselves there, and tell me ` +
+      `what makes your heart skip.\n\n` +
+      `If you would rather talk it through, I would love that \u2014 just say the word.\n\n` +
+      `I cannot wait to hear what you think!\n\n${first}`
+    : `Hi ${who || 'there'},\n\n` +
+      `Your quote${resortName ? ' for ' + resortName : ''} is ready, and I think you are going to love it.\n\n` +
+      `${url}\n\n` +
+      `You will find the resort, your room options and everything that is included. Have a look through ` +
+      `and tell me what stands out \u2014 or if anything is not quite right, we will adjust it together.\n\n` +
+      `Happy to hop on a quick call if that is easier. Just let me know!\n\n${first}`;
+  window.open('https://mail.google.com/mail/?view=cm&fs=1'
+    + (to ? '&to=' + encodeURIComponent(to) : '')
+    + '&su=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body), '_blank', 'noopener');
+}
+
+// Upload the full-page quote and put a shareable link on the clipboard
+async function publishFullQuote(){
+  const files = window._qbFiles || [];
+  const full = files.find(f=>/full|resort-options/i.test(f.filename));
+  const btn = document.getElementById('qbPublishBtn');
+  const out = document.getElementById('qbPublishOut');
+  if(!full){ if(out) out.textContent='Nothing to publish \u2014 generate first.'; return; }
+  const original = btn ? btn.innerHTML : '';
+  if(btn){ btn.innerHTML='Publishing\u2026'; btn.disabled=true; }
+  try{
+    const path = 'resorts/_quotes/' + Date.now() + '-' + full.filename;
+    const ref = qbStorage.ref(path);
+    await ref.putString(full.content, 'raw', {contentType:'text/html;charset=utf-8'});
+    const url = await ref.getDownloadURL();
+    try{ await navigator.clipboard.writeText(url); }catch(e){}
+    window._qbPublishedUrl = url;
+    injectQuoteLinkIntoEmail(url);
+    const out2 = document.getElementById('qbPublishOut') || out;
+    const btn2 = document.getElementById('qbPublishBtn') || btn;
+    if(out2){
+      out2.innerHTML = '<div style="margin-bottom:6px;color:#1a7a3a;font-weight:600;">Link copied &mdash; and added to the email download</div>' +
+        '<input readonly value="'+url.replace(/"/g,'&quot;')+'" onclick="this.select()" ' +
+        'style="width:100%;padding:8px;font-size:11px;border:1px solid #E2D9CC;border-radius:4px;background:#FAF7F2;">' +
+        '<div style="margin-top:8px;"><button type="button" onclick="openGmailDraft()" ' +
+        'style="background:#1E1A14;color:#D4B882;border:none;padding:10px 16px;border-radius:4px;cursor:pointer;' +
+        'font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;">&#9993; Draft this in Gmail</button></div>' +
+        '<div style="margin-top:6px;color:#9C8E80;">Anyone with the link can open it.</div>';
+    }
+    if(btn2){ btn2.innerHTML='&#10003; Published'; btn2.disabled=true; }
+  }catch(e){
+    console.error('Publish failed:', e);
+    if(out) out.innerHTML='<span style="color:#c0392b;">Couldn\'t publish: '+ (e.message||e) +'</span>';
+    if(btn){ btn.innerHTML=original; btn.disabled=false; }
+  }
+}
+
 function showDLButtons(files){
   // files = [{label, filename, content}]
   const wrap=document.getElementById('dlLinks');
+  window._qbFiles = files;
+  const publishable = files.find(f=>/full|resort-options/i.test(f.filename));
   wrap.innerHTML=files.map(f=>{
     const url=makeBlob(f.content);
     return `<a class="dl-link" href="${url}" download="${f.filename}">${f.label}</a>`;
-  }).join('');
+  }).join('') + (publishable?`<button type="button" class="dl-link" id="qbPublishBtn" onclick="publishFullQuote()"
+      style="border:none;cursor:pointer;font:inherit;">&#128279; Publish &amp; Copy Link</button>
+      <div id="qbPublishOut" style="width:100%;margin-top:10px;font-size:12px;color:#5C5044;"></div>`:'');
 }
 
 async function generate(){
@@ -2026,11 +2187,11 @@ function buildFITEmail(v){
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:18px;">Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:44px;color:#FFFFFF;line-height:1.06;margin-bottom:18px;">${esc(r.name)}</div>
     <div style="width:50px;height:2px;background:#B8975A;line-height:2px;font-size:0;margin-bottom:18px;">&nbsp;</div>
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(255,255,255,0.78);letter-spacing:1.5px;line-height:1.7;">${[v.dates,v.nights,v.experience].filter(Boolean).map(s=>esc(s)).join(' &nbsp;&bull;&nbsp; ')}</div>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#CECDCB;letter-spacing:1.5px;line-height:1.7;">${[v.dates,v.nights,v.experience].filter(Boolean).map(s=>esc(s)).join(' &nbsp;&bull;&nbsp; ')}</div>
   </td></tr>
-  ${v.expiry?`<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:14px 50px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(255,255,255,0.72);"><span style="color:#B8975A;">&bull;</span>&nbsp;&nbsp;This quote expires <span style="color:#D4B882;font-weight:bold;">${esc(v.expiry)}</span> &mdash; reach out soon!</td></tr>`:''}
+  ${v.expiry?`<tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:14px 50px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#C0BFBD;"><span style="color:#B8975A;">&bull;</span>&nbsp;&nbsp;This quote expires <span style="color:#D4B882;font-weight:bold;">${esc(v.expiry)}</span> &mdash; reach out soon!</td></tr>`:''}
   <tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
-    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<strong style="color:#1E1A14;font-family:Arial,Helvetica,sans-serif;font-size:13px;">Full quote attached</strong><span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"> &mdash; open it for the full experience!</span>
+    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<strong style="color:#1E1A14;font-family:Arial,Helvetica,sans-serif;font-size:13px;">Your full quote</strong><span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"> &mdash; open it for the full experience!<!--QUOTE_CTA--></span>
   </td></tr>
   <tr><td class="pad" style="padding:60px 50px 44px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:20px;">Your Quote</div>
@@ -2062,18 +2223,18 @@ ${(()=>{
     const rm1=rooms[i],rm2=rooms[i+1];
     rowsHtml+=`<tr><td style="padding:${i===0?'24px':'12px'} 24px 0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${fitEmailRoom(rm1,i+1,v.bookingLink,twoCol)}${rm2?'<td class="colspacer" width="16" style="font-size:0;line-height:0;">&nbsp;</td>'+fitEmailRoom(rm2,i+2,v.bookingLink,twoCol):''}</tr></table></td></tr>`;
   }
-  const clubBanner=v.showClubPerks&&v.clubPerks.length?`<tr><td style="padding:12px 24px 0;"><table role="presentation" width="100%" bgcolor="#1E1A14" style="background:#1E1A14;border-top:3px solid #D4B882;" cellpadding="0" cellspacing="0" border="0"><tr><td class="pad" style="padding:34px 40px;"><div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:10px;">What&rsquo;s Included With Your Room</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:#FFFFFF;margin-bottom:20px;">${esc(v.clubName)} Perks</div>${v.clubPerks.map(p=>`<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.75);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.1);"><span style="color:#D4B882;">&mdash;</span>&nbsp;&nbsp;${esc(p)}</div>`).join('')}</td></tr></table></td></tr>`:'';
+  const clubBanner=v.showClubPerks&&v.clubPerks.length?`<tr><td style="padding:12px 24px 0;"><table role="presentation" width="100%" bgcolor="#1E1A14" style="background:#1E1A14;border-top:3px solid #D4B882;" cellpadding="0" cellspacing="0" border="0"><tr><td class="pad" style="padding:34px 40px;"><div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:10px;">What&rsquo;s Included With Your Room</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:26px;color:#FFFFFF;margin-bottom:20px;">${esc(v.clubName)} Perks</div>${v.clubPerks.map(p=>`<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C7C6C4;padding:7px 0;border-bottom:1px solid #34312C;"><span style="color:#D4B882;">&mdash;</span>&nbsp;&nbsp;${esc(p)}</div>`).join('')}</td></tr></table></td></tr>`:'';
   return `<tr><td class="pad" style="padding:52px 50px 8px;background:#FAF7F2;"><div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:10px;">Your Room Options</div><div style="font-family:Georgia,'Times New Roman',serif;font-size:33px;color:#1E1A14;line-height:1.14;">${titles[cnt]||titles[4]}</div></td></tr>${rowsHtml}${clubBanner}`;
 })()}
   ${v.note?`<tr><td bgcolor="#FFFFFF" class="pad" style="background:#FFFFFF;padding:38px 50px;border-top:1px solid #E2D9CC;border-bottom:1px solid #E2D9CC;"><div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;line-height:1.85;"><span style="color:#1E1A14;font-weight:bold;">A note from ${agentVal('first')}:</span> ${esc(v.note)}</div></td></tr>`:''}
   <tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:56px 50px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:20px;">Questions? I&rsquo;m here for you.</div>
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:38px;color:#FFFFFF;line-height:1.05;margin-bottom:8px;">${agentVal('full')}</div>
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(255,255,255,0.45);letter-spacing:1px;margin-bottom:28px;">Certified Destination Wedding &amp; Group Travel Specialist</div>
-    <div style="margin-bottom:6px;"><a href="mailto:${agentVal('email')}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;">${agentVal('email')}</a></div>
-    <div style="margin-bottom:30px;"><a href="tel:${agentVal('phone').replace(/\D/g,'')}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:rgba(255,255,255,0.7);text-decoration:none;">${agentVal('phone')}</a></div>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#83817E;letter-spacing:1px;margin-bottom:28px;">Certified Destination Wedding &amp; Group Travel Specialist</div>
+    <div style="margin-bottom:6px;"><a href="mailto:${agentVal('email')}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#BCBAB8;text-decoration:none;">${agentVal('email')}</a></div>
+    <div style="margin-bottom:30px;"><a href="tel:${agentVal('phone').replace(/\D/g,'')}" style="font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#BCBAB8;text-decoration:none;">${agentVal('phone')}</a></div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#B8975A" style="background:#B8975A;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:14px 28px;font-family:Arial,Helvetica,sans-serif;font-size:12px;font-weight:bold;letter-spacing:2px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Book a Call With Me</a></td></tr></table>
-    <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:34px;padding-top:26px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:rgba(255,255,255,0.28);line-height:1.6;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
+    <div style="border-top:1px solid #34312C;margin-top:34px;padding-top:26px;font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#5D5A56;line-height:1.6;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
   </td></tr>
 </table><!--[if mso]></td></tr></table><![endif]--></td></tr></table>
 </body></html>`;
@@ -2098,6 +2259,7 @@ function buildFITFull(v){
         <div class="room-card-divider"></div>
         ${rm.desc?`<p class="room-card-desc">${esc(rm.desc)}</p>`:''}
         ${perksHTML(rm.perks,rm.perksLabel)}
+        ${v.bookingLink&&v.bookingLink!=='#'?`<a class="room-card-book" href="${escUrl(v.bookingLink)}" target="_blank" rel="noopener">Book This Room &nbsp;&rarr;</a>`:''}
       </div>
     </div>`;
   };
@@ -2152,6 +2314,7 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
 .room-card-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:24px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:14px;min-height:60px;}
 .room-card-price{font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:600;color:var(--black);line-height:1;margin-bottom:4px;}
 .room-card-price-note{font-size:11px;color:var(--brown-lt);margin-bottom:22px;}
+.room-card-book{display:block;text-align:center;margin-top:22px;background:var(--black);color:var(--gold);font-family:'Jost',Arial,sans-serif;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:15px 20px;}
 .room-card-divider{width:36px;height:2px;background:var(--gold-2);margin-bottom:20px;}
 .room-card-desc{font-size:14px;font-weight:300;line-height:1.8;color:var(--brown);margin-bottom:22px;flex:1;}
 .room-perks-label{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-2);margin-bottom:8px;}
@@ -2400,13 +2563,13 @@ function buildWeddingEmail(wv){
   <tr><td style="font-size:0;line-height:0;"><img src="${escUrl(wv.heroImg)}" width="700" alt="" style="display:block;width:100%;max-width:700px;height:auto;border:0;"></td></tr>
   <tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:50px 50px 44px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:20px;">Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
-    <div style="font-family:Georgia,'Times New Roman',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:8px;">Your Personalized Wedding Quote</div>
+    <div style="font-family:Georgia,'Times New Roman',serif;font-size:13px;font-style:italic;color:#8E8C8A;margin-bottom:8px;">Your Personalized Wedding Quote</div>
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:46px;color:#FFFFFF;line-height:1.05;margin-bottom:20px;">${esc(wv.couple)}</div>
     <div style="width:50px;height:1px;background:#B8975A;line-height:1px;font-size:0;margin-bottom:20px;">&nbsp;</div>
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:rgba(255,255,255,.65);letter-spacing:1.5px;line-height:1.8;">${[wv.wDate,wv.dest,wv.guests].filter(Boolean).map(s=>esc(s)).join(' &nbsp;&bull;&nbsp; ')}</div>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#B0AFAD;letter-spacing:1.5px;line-height:1.8;">${[wv.wDate,wv.dest,wv.guests].filter(Boolean).map(s=>esc(s)).join(' &nbsp;&bull;&nbsp; ')}</div>
   </td></tr>
   <tr><td bgcolor="#F3EDE3" class="pad" style="background:#F3EDE3;padding:16px 50px;border-bottom:1px solid #E2D9CC;">
-    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Full quote attached</strong> &mdash; open the PDF for resort details, venues, packages, and pricing.</span>
+    <span style="color:#B8975A;font-size:15px;">&#128206;</span>&nbsp;&nbsp;<span style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;"><strong style="color:#1E1A14;">Your full quote</strong> &mdash; resort details, venues, packages and pricing.<!--QUOTE_CTA--></span>
   </td></tr>
   <tr><td class="pad" style="padding:56px 50px 48px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:20px;">Your Quote</div>
@@ -2430,24 +2593,24 @@ function buildWeddingEmail(wv){
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:#D4B882;font-weight:bold;margin-bottom:14px;">Exclusive Offers</div>
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#FFFFFF;line-height:1.15;margin-bottom:18px;">${esc(wv.savingsTitle)}</div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom:22px;">
-      ${wv.perk1?`<tr><td style="padding:7px 0;border-bottom:1px solid rgba(255,255,255,.07);font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.72);"><span style="color:#B8975A;">&#10022;</span>&nbsp;&nbsp;${esc(wv.perk1)}</td></tr>`:''}
-      ${wv.perk2?`<tr><td style="padding:7px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.72);"><span style="color:#B8975A;">&#10022;</span>&nbsp;&nbsp;${esc(wv.perk2)}</td></tr>`:''}
+      ${wv.perk1?`<tr><td style="padding:7px 0;border-bottom:1px solid #2E2A24;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C0BFBD;"><span style="color:#B8975A;">&#10022;</span>&nbsp;&nbsp;${esc(wv.perk1)}</td></tr>`:''}
+      ${wv.perk2?`<tr><td style="padding:7px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#C0BFBD;"><span style="color:#B8975A;">&#10022;</span>&nbsp;&nbsp;${esc(wv.perk2)}</td></tr>`:''}
     </table>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#B8975A" style="background:#B8975A;"><a href="${escUrl(wv.savingsLink)}" style="display:inline-block;padding:14px 30px;font-family:Arial,Helvetica,sans-serif;font-size:10px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">View Exclusive Offers &rarr;</a></td></tr></table>
   </td></tr>
   <tr><td bgcolor="#1E1A14" class="pad" style="background:#1E1A14;padding:48px 50px;text-align:center;">
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#FFFFFF;line-height:1.2;margin-bottom:10px;">Ready to start planning?</div>
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.55);margin-bottom:32px;line-height:1.6;">Reply with any questions or let me know which resort is calling your name!</div>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#9A9895;margin-bottom:32px;line-height:1.6;">Reply with any questions or let me know which resort is calling your name!</div>
     <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto 16px;"><tr><td bgcolor="#B8975A" style="background:#B8975A;"><a href="mailto:${agentVal('email')}?subject=${sub}&body=${body}" style="display:inline-block;padding:16px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;">Let&rsquo;s Make It Happen</a></td></tr></table>
-    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td style="border:1px solid rgba(255,255,255,.2);"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:15px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.65);text-decoration:none;">Book a Planning Call</a></td></tr></table>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;"><tr><td style="border:1px solid #4B4843;"><a href="https://zcal.co/amymcate/letschat" style="display:inline-block;padding:15px 36px;font-family:Arial,Helvetica,sans-serif;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase;color:#B0AFAD;text-decoration:none;">Book a Planning Call</a></td></tr></table>
   </td></tr>
   <tr><td bgcolor="#2A241B" class="pad" style="background:#2A241B;padding:44px 50px;">
     <div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:3.5px;text-transform:uppercase;color:#B8975A;font-weight:bold;margin-bottom:16px;">Your Wedding Specialist</div>
     <div style="font-family:Georgia,'Times New Roman',serif;font-size:34px;color:#FFFFFF;line-height:1.05;margin-bottom:6px;">${agentVal('full')}</div>
-    <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:rgba(255,255,255,.38);letter-spacing:1px;text-transform:uppercase;margin-bottom:22px;">Certified Destination Wedding &amp; Group Travel Specialist</div>
-    <div style="margin-bottom:5px;"><a href="mailto:${agentVal('email')}" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;">${agentVal('email')}</a></div>
-    <div><a href="tel:${agentVal('phone').replace(/\D/g,'')}" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:rgba(255,255,255,.6);text-decoration:none;">${agentVal('phone')}</a></div>
-    <div style="border-top:1px solid rgba(255,255,255,.08);margin-top:28px;padding-top:22px;font-family:Arial,Helvetica,sans-serif;font-size:10px;color:rgba(255,255,255,.2);line-height:1.7;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
+    <div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#74716D;letter-spacing:1px;text-transform:uppercase;margin-bottom:22px;">Certified Destination Wedding &amp; Group Travel Specialist</div>
+    <div style="margin-bottom:5px;"><a href="mailto:${agentVal('email')}" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#A5A3A1;text-decoration:none;">${agentVal('email')}</a></div>
+    <div><a href="tel:${agentVal('phone').replace(/\D/g,'')}" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#A5A3A1;text-decoration:none;">${agentVal('phone')}</a></div>
+    <div style="border-top:1px solid #302C27;margin-top:28px;padding-top:22px;font-family:Arial,Helvetica,sans-serif;font-size:10px;color:#4B4843;line-height:1.7;">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
   </td></tr>
 </table><!--[if mso]></td></tr></table><![endif]--></td></tr></table>
 </body></html>`;
