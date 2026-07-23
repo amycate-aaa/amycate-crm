@@ -789,7 +789,7 @@ Complimentary concierge and computer access</textarea>
         <div class="field"><label>Trip Name / Occasion</label><input id="fs-tripName" placeholder="Cancun Girls Trip 2025"></div>
       </div>
       <div class="row">
-        <div class="field"><label>Travel Dates</label><input id="fs-dates" placeholder="March 14–18, 2025"></div>
+        <div class="field"><label>Arrival Date</label><input type="date" id="fs-startDate" onchange="computeSneakDates()"></div><div class="field"><label>Nights</label><input type="number" id="fs-nights" min="1" max="60" placeholder="3" style="appearance:auto;-moz-appearance:number-input;" onchange="computeSneakDates()"></div><div class="field"><label>Travel Dates <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-filled</span></label><input id="fs-dates" placeholder="Select arrival date + nights above"></div><div class="field"><label>Departure Date <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-filled</span></label><input id="fs-departure" readonly placeholder="Auto-calculated" style="background:var(--cream-2);color:var(--brown);"></div>
         <div class="field"><label>Destination</label><input id="fs-destination" placeholder="Cancun, Mexico"></div>
       </div>
       <div class="row">
@@ -1132,6 +1132,22 @@ function val(id){ return (document.getElementById(id)||{}).value||''; }
 // ── DATE HELPERS ───────────────────────────────────────────
 const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
 function formatDateLong(d){return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;}
+
+function computeSneakDates(){
+  const startVal=document.getElementById('fs-startDate').value;
+  const nights=parseInt(document.getElementById('fs-nights').value)||0;
+  if(!startVal||!nights) return;
+  const start=new Date(startVal+'T12:00:00');
+  const end=new Date(start); end.setDate(end.getDate()+nights);
+  let range;
+  if(start.getMonth()===end.getMonth()&&start.getFullYear()===end.getFullYear()){
+    range=`${MONTHS[start.getMonth()]} ${start.getDate()} – ${end.getDate()}, ${end.getFullYear()}`;
+  } else {
+    range=`${MONTHS[start.getMonth()]} ${start.getDate()} – ${MONTHS[end.getMonth()]} ${end.getDate()}, ${end.getFullYear()}`;
+  }
+  document.getElementById('fs-dates').value=range;
+  document.getElementById('fs-departure').value=formatDateLong(end);
+}
 
 function computeFITDates(){
   const startVal=document.getElementById('f-startDate').value;
