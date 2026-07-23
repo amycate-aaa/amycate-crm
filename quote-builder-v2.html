@@ -2184,6 +2184,11 @@ function openGmailDraft(){
   const resortName = (typeof allResorts !== 'undefined'
     ? ((allResorts.find(x=>x.slug===resortSel)||{}).name || '') : '');
   const first = (typeof agentVal === 'function') ? agentVal('first') : 'Amy';
+  const sig = '\n\n' + first + '\n\n' +
+    (typeof agentVal==='function' ? agentVal('full') : 'Amy M. Cate') + '\n' +
+    'Certified Destination Wedding Specialist\n' +
+    (typeof agentVal==='function' ? agentVal('email') : '') + '\n' +
+    (typeof agentVal==='function' ? agentVal('phone') : '');
   const subject = wedding
     ? `${who ? who + ', y' : 'Y'}our wedding at ${resortName || 'your resort'} \u2728`
     : `${who ? who + ', y' : 'Y'}our getaway to ${resortName || 'paradise'} \u2600\uFE0F`;
@@ -2195,13 +2200,13 @@ function openGmailDraft(){
       `that makes this resort special. Take your time with it, imagine yourselves there, and tell me ` +
       `what makes your heart skip.\n\n` +
       `If you would rather talk it through, I would love that \u2014 just say the word.\n\n` +
-      `I cannot wait to hear what you think!\n\n${first}`
+      `I cannot wait to hear what you think!` + sig
     : `Hi ${who || 'there'},\n\n` +
       `Your quote${resortName ? ' for ' + resortName : ''} is ready, and I think you are going to love it.\n\n` +
       `${url}\n\n` +
       `You will find the resort, your room options and everything that is included. Have a look through ` +
       `and tell me what stands out \u2014 or if anything is not quite right, we will adjust it together.\n\n` +
-      `Happy to hop on a quick call if that is easier. Just let me know!\n\n${first}`;
+      `Happy to hop on a quick call if that is easier. Just let me know!` + sig;
   window.open('https://mail.google.com/mail/?view=cm&fs=1'
     + (to ? '&to=' + encodeURIComponent(to) : '')
     + '&su=' + encodeURIComponent(subject)
