@@ -237,10 +237,11 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
       </div>
       <div class="row">
         <div class="field"><label>Room Name</label><input id="f-r1name" placeholder="Allure Junior Suite Tropical View"></div>
-        <div class="field"><label>Per Person Price</label><input id="f-r1price" placeholder="$1,446"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="f-r1price" placeholder="$1,446" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r1total" placeholder="$2,892" style="background:#F9F7F4;"></div>
+        <div class="field"><label>Full Price</label><input id="f-r1total" placeholder="$2,892" oninput="calcPerPerson('f-r1')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="f-r1guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('f-r1')"></div>
         <div class="field"><label>Price Note</label><input id="f-r1priceNote" placeholder="per person · 3 nights · All Inclusive"></div>
       </div>
       <div class="row full">
@@ -290,10 +291,11 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
       </div>
       <div class="row">
         <div class="field"><label>Room Name</label><input id="f-r2name" placeholder="Xhale Club Junior Suite Pool View"></div>
-        <div class="field"><label>Per Person Price</label><input id="f-r2price" placeholder="$1,783"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="f-r2price" placeholder="$1,783" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r2total" placeholder="$3,566" style="background:#F9F7F4;"></div>
+        <div class="field"><label>Full Price</label><input id="f-r2total" placeholder="$3,566" oninput="calcPerPerson('f-r2')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="f-r2guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('f-r2')"></div>
         <div class="field"><label>Price Note</label><input id="f-r2priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r2desc"></textarea></div></div>
@@ -329,10 +331,11 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
       </div>
       <div class="row">
         <div class="field"><label>Room Name</label><input id="f-r3name" placeholder="Junior Suite Swim-Out Ocean View"></div>
-        <div class="field"><label>Per Person Price</label><input id="f-r3price" placeholder="$2,100"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="f-r3price" placeholder="$2,100" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r3total" placeholder="$4,200" style="background:#F9F7F4;"></div>
+        <div class="field"><label>Full Price</label><input id="f-r3total" placeholder="$4,200" oninput="calcPerPerson('f-r3')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="f-r3guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('f-r3')"></div>
         <div class="field"><label>Price Note</label><input id="f-r3priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r3desc"></textarea></div></div>
@@ -368,10 +371,11 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
       </div>
       <div class="row">
         <div class="field"><label>Room Name</label><input id="f-r4name" placeholder="Presidential Suite Ocean Front"></div>
-        <div class="field"><label>Per Person Price</label><input id="f-r4price" placeholder="$3,500"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="f-r4price" placeholder="$3,500" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
-        <div class="field"><label style="color:#9C8E80;">Total for 2 Guests <small style="font-weight:400;font-size:10px;">(auto ÷ 2 → per person)</small></label><input id="f-r4total" placeholder="$7,000" style="background:#F9F7F4;"></div>
+        <div class="field"><label>Full Price</label><input id="f-r4total" placeholder="$7,000" oninput="calcPerPerson('f-r4')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="f-r4guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('f-r4')"></div>
         <div class="field"><label>Price Note</label><input id="f-r4priceNote"></div>
       </div>
       <div class="row full"><div class="field"><label>Description</label><textarea id="f-r4desc"></textarea></div></div>
@@ -476,7 +480,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type Name</label><input id="w-r1roomName" placeholder="Junior Suite · Preferred Club"></div>
-        <div class="field"><label>Starting Price (per person)</label><input id="w-r1price" placeholder="$3,400"></div>
+        <div class="field"><label>Full Price</label><input id="w-r1total" placeholder="$3,400" oninput="calcPerPerson('w-r1')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r1guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r1')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r1price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r1nights" placeholder="3"></div>
@@ -515,7 +521,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r2roomName" placeholder="Premium Junior Suite"></div>
-        <div class="field"><label>Starting Price</label><input id="w-r2price" placeholder="$1,500"></div>
+        <div class="field"><label>Full Price</label><input id="w-r2total" placeholder="$1,500" oninput="calcPerPerson('w-r2')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r2guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r2')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r2price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r2nights" placeholder="3"></div>
@@ -554,7 +562,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r3roomName" placeholder="Mirage Club Suite"></div>
-        <div class="field"><label>Starting Price</label><input id="w-r3price" placeholder="$2,100"></div>
+        <div class="field"><label>Full Price</label><input id="w-r3total" placeholder="$2,100" oninput="calcPerPerson('w-r3')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r3guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r3')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r3price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r3nights" placeholder="3"></div>
@@ -589,7 +599,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r4roomName" placeholder="Junior Suite"></div>
-        <div class="field"><label>Starting Price</label><input id="w-r4price" placeholder="$2,400"></div>
+        <div class="field"><label>Full Price</label><input id="w-r4total" placeholder="$2,400" oninput="calcPerPerson('w-r4')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r4guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r4')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r4price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r4nights" placeholder="3"></div>
@@ -624,7 +636,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r5roomName" placeholder="Junior Suite"></div>
-        <div class="field"><label>Starting Price</label><input id="w-r5price" placeholder="$2,800"></div>
+        <div class="field"><label>Full Price</label><input id="w-r5total" placeholder="$2,800" oninput="calcPerPerson('w-r5')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r5guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r5')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r5price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r5nights" placeholder="3"></div>
@@ -659,7 +673,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row" style="margin-top:14px;">
         <div class="field"><label>Sample Room Type</label><input id="w-r6roomName" placeholder="Junior Suite"></div>
-        <div class="field"><label>Starting Price</label><input id="w-r6price" placeholder="$3,200"></div>
+        <div class="field"><label>Full Price</label><input id="w-r6total" placeholder="$3,200" oninput="calcPerPerson('w-r6')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="w-r6guests" type="number" min="2" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('w-r6')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="w-r6price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="w-r6nights" placeholder="3"></div>
@@ -731,7 +747,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r1roomName" placeholder="Junior Suite Tropical View"></div>
-        <div class="field"><label>Starting Price (per person)</label><input id="fs-r1price" placeholder="$1,446"></div>
+        <div class="field"><label>Full Price</label><input id="fs-r1total" placeholder="$1,446" oninput="calcPerPerson('fs-r1')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r1guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r1')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r1price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r1nights" placeholder="3"></div>
@@ -757,7 +775,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r2roomName" placeholder="Junior Suite Ocean View"></div>
-        <div class="field"><label>Starting Price (per person)</label><input id="fs-r2price" placeholder="$1,650"></div>
+        <div class="field"><label>Full Price</label><input id="fs-r2total" placeholder="$1,650" oninput="calcPerPerson('fs-r2')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r2guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r2')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r2price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r2nights" placeholder="3"></div>
@@ -783,7 +803,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r3roomName" placeholder="Swim-Out Suite"></div>
-        <div class="field"><label>Starting Price (per person)</label><input id="fs-r3price" placeholder="$1,900"></div>
+        <div class="field"><label>Full Price</label><input id="fs-r3total" placeholder="$1,900" oninput="calcPerPerson('fs-r3')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r3guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r3')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r3price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r3nights" placeholder="3"></div>
@@ -809,7 +831,9 @@ Complimentary concierge and computer access</textarea>
       </div>
       <div class="row">
         <div class="field"><label>Starting Room Type</label><input id="fs-r4roomName" placeholder="Presidential Suite"></div>
-        <div class="field"><label>Starting Price (per person)</label><input id="fs-r4price" placeholder="$2,200"></div>
+        <div class="field"><label>Full Price</label><input id="fs-r4total" placeholder="$2,200" oninput="calcPerPerson('fs-r4')" onblur="fmtPrice(this)"></div>
+        <div class="field" style="max-width:90px;"><label>Guests</label><input id="fs-r4guests" type="number" min="1" value="2" style="appearance:auto;-moz-appearance:number-input;" oninput="calcPerPerson('fs-r4')"></div>
+        <div class="field"><label>Per Person Price <small style="font-weight:400;color:#9C8E80;">(auto)</small></label><input id="fs-r4price" placeholder="auto" style="background:#F9F7F4;"></div>
       </div>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r4nights" placeholder="3"></div>
@@ -1360,7 +1384,7 @@ async function generateFITSneak(status){
     guests:val('fs-guests'),
     expiry:val('fs-expiry'),
     intro:val('fs-intro'),
-    heroPhoto:val('fs-heroPhoto')||(rf[0].photo)||(r1.photo)||(getPhotos(r1)[0])||''
+    heroPhoto:val('fs-heroPhoto')||''
   };
   status.textContent='Building files…';
   const fullHTML=buildFITSneakFull(fsv);
@@ -1624,34 +1648,24 @@ ${resortBlocks}
 </body></html>`;
 }
 
-// Per-person price splitter: enter total for 2 guests, auto-divides by 2
-['1','2','3','4'].forEach(n=>{
-  const totalEl=document.getElementById('f-r'+n+'total');
-  const priceEl=document.getElementById('f-r'+n+'price');
+// Per-person price calculator: Full Price ÷ Guests
+function calcPerPerson(prefix){
+  const totalEl=document.getElementById(prefix+'total');
+  const guestsEl=document.getElementById(prefix+'guests');
+  const priceEl=document.getElementById(prefix+'price');
   if(!totalEl||!priceEl) return;
-  totalEl.addEventListener('input',function(){
-    const num=parseFloat(this.value.replace(/[$,]/g,''));
-    if(!isNaN(num)&&num>0){
-      priceEl.value='$'+(num/2).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-    }
-  });
-  totalEl.addEventListener('blur',function(){
-    const num=parseFloat(this.value.replace(/[$,]/g,''));
-    if(!isNaN(num)&&num>0) this.value='$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-  });
-});
-
-// Auto-format price fields on blur
-['f-r1price','f-r2price','f-r3price','f-r4price','w-r1price','w-r2price','w-r3price'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el) return;
-  el.addEventListener('blur',function(){
-    if(!this.value) return;
-    const clean=this.value.replace(/[$,]/g,'').trim();
-    const num=parseFloat(clean);
-    if(!isNaN(num)) this.value='$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
-  });
-});
+  const total=parseFloat((totalEl.value||'').replace(/[$,]/g,''));
+  const guests=parseInt(guestsEl?guestsEl.value:'2')||2;
+  if(!isNaN(total)&&total>0){
+    priceEl.value='$'+(total/guests).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+  } else {
+    priceEl.value='';
+  }
+}
+function fmtPrice(el){
+  const num=parseFloat((el.value||'').replace(/[$,]/g,''));
+  if(!isNaN(num)&&num>0) el.value='$'+num.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0});
+}
 
 document.getElementById('w-heroImg').addEventListener('input',function(){
   const prev=document.getElementById('w-hero-preview');
