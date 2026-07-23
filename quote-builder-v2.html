@@ -1776,8 +1776,10 @@ function buildFITSneakEmail(fsv){
           ${hi.length?`<div style="padding-top:16px;">${hi.map(h=>`<div style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#5C5044;padding:3px 0;"><span style="color:#B8975A;">&mdash;</span>&nbsp;&nbsp;${esc(h)}</div>`).join('')}</div>`:''}
           ${(f.roomName||f.price)?`
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;border-top:1px solid #EDE6DB;">
-            <tr><td style="padding-top:15px;">
-              ${f.roomName?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C5044;">${esc(f.roomName)}</div>`:''}
+            <tr>
+              ${f.roomPhoto?`<td width="112" valign="top" style="padding-top:15px;padding-right:14px;"><img src="${escUrl(f.roomPhoto)}" width="112" alt="${esc(f.roomName||'')}" style="display:block;width:112px;height:80px;border:0;"></td>`:''}
+              <td valign="top" style="padding-top:15px;">
+              ${f.roomName?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#B8975A;font-weight:bold;padding-bottom:5px;">Starting Accommodations</div><div style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#5C5044;">${esc(f.roomName)}</div>`:''}
               ${f.price?`<div style="font-family:Georgia,'Times New Roman',serif;font-size:28px;color:#1E1A14;padding-top:4px;">${esc(f.price)}</div>`:''}
               ${f.priceNote?`<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#A2947F;padding-top:4px;">${esc(f.priceNote)}</div>`:''}
             </td></tr></table>`:''}
