@@ -23,11 +23,12 @@
 <div class="info">
   <strong>What will be imported:</strong><br>
   • Full description + tagline + highlights<br>
+  • 5 wedding venues (Zilara Gazebo, Waves Lawn, Santiago Lawn, Beach, Rooftop)<br>
+  • 5 wedding packages with 2026–2027 pricing (Big Day Preview through Luxury)<br>
   • 12 room categories with descriptions + photos (Playa CDN)<br>
   • 6 dining venues with photos (Playa CDN)<br>
-  • Club Level amenities<br>
-  • General resort gallery photos<br>
-  • Hero photo, brand, location, highlights<br><br>
+  • Club Level amenities + CT booking URL<br>
+  • General resort gallery photos<br><br>
   <strong>Note:</strong> Restaurants/venues already in Firestore will be preserved (not overwritten).<br><br>
   <strong>Slug:</strong> <code>hyatt-zilara-cap-cana</code>
 </div>
@@ -67,6 +68,79 @@ const RESORT_DATA = {
   highlights: '5-Star Adults-Only Resort · 375 All-Suite Accommodations · 25 Restaurants & Bars · Infinity Pools with Swim-Up Bars · #1 Tripadvisor Best of the Best 2026 · Beach Butlers Included · Club Level Available · 15 Min from Punta Cana Airport',
 
   heroPhoto: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/gallery-2/hyatt-zilara-cap-cana-aerial-resort-3.jpg/eba86fc34c6ca24f9885a9e491a8e826',
+
+  weddingUrl: 'https://booking.celebrationtravel.com/hotels/3127',
+
+  venues: [
+    {
+      name: 'Zilara Beach Gazebo',
+      capacity: 120,
+      bestFor: 'Ceremony',
+      description: 'The signature oceanfront gazebo exclusive to Hyatt Zilara Cap Cana guests, with capacity for up to 120 guests. Set right on the beach with sweeping Caribbean Sea views — the most iconic ceremony spot on property. Décor and flowers available at additional cost.',
+      type: 'outdoor'
+    },
+    {
+      name: 'Waves Lawn',
+      capacity: 110,
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'An adults-only outdoor event lawn exclusive to Hyatt Zilara Cap Cana, accommodating up to 110 guests. Perfect for receptions and cocktail hours in a lush, private setting. Buffet-style dinner required for outdoor venues. Décor available at additional cost.',
+      type: 'outdoor'
+    },
+    {
+      name: 'Santiago Lawn',
+      capacity: 40,
+      bestFor: 'Ceremony · Cocktail Hour',
+      description: 'An intimate adults-only lawn exclusive to Hyatt Zilara Cap Cana, ideal for smaller celebrations of up to 40 guests. A private, garden-style setting for ceremonies or cocktail hours. Décor available at additional cost.',
+      type: 'outdoor'
+    },
+    {
+      name: 'Beach',
+      capacity: 600,
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'The sprawling beachfront at Cap Cana — available for grand celebrations of up to 600 guests. An unforgettable backdrop for both ceremony and reception. Buffet-style dinner required. Décor available at additional cost. Events conclude by 11:00 PM per local noise restrictions.',
+      type: 'outdoor'
+    },
+    {
+      name: 'Rooftop Terrace',
+      capacity: 100,
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'Located at Hyatt Ziva Cap Cana (accessible to Zilara couples). Panoramic rooftop views with up to 100 guests for ceremony or dinner, 80 guests for cocktail hour. Location fee: $1,000 (2026) / $1,500 (2027). Cannot be combined with Zilara Gazebo. Buffet-style dinner required.',
+      type: 'outdoor'
+    }
+  ],
+
+  packages: [
+    {
+      name: 'Big Day Preview',
+      price: '$600 credit',
+      highlights: '2-night stay for two with $600 credit toward your wedding. Exclusive resort tour with onsite wedding planner. Credit valid for minimum $6,000 wedding program. Must book wedding within 90 days of preview visit.',
+      featured: false
+    },
+    {
+      name: 'Just for the Two of You',
+      price: 'Complimentary* or from $709',
+      highlights: 'Complimentary with 7-night stay in Club Ocean View Jr Suite or higher (Mon–Wed AM). Otherwise from $709 (2026) / $749 (2027) Mon–Thu AM · $1,389 (2026) / $1,459 (2027) Thu PM–Sun. Additional guests $50/person (2026). Includes: bouquets/boutonnieres, oceanfront ceremony, sparkling wine toast, wedding cake, room decoration, late checkout.',
+      featured: false
+    },
+    {
+      name: 'Intimate Elegance',
+      price: 'Complimentary* or from $1,789',
+      highlights: 'Complimentary with 25+ room nights in qualifying categories (Mon–Wed AM). Otherwise from $1,789 (2026) / $1,879 (2027) Mon–Thu AM · $2,389 (2026) / $2,509 (2027) Thu PM–Sun. Up to 10 guests · Additional guests $50/person (2026). Includes: ceremony chairs & sound, 25-min couple\'s massage, romantic dinner.',
+      featured: false
+    },
+    {
+      name: 'Lavish & Opulent',
+      price: 'From $6,789',
+      highlights: 'From $6,789 (2026) Mon–Thu AM · $7,299 Thu PM–Sun. Up to 20 guests · Additional guests $135/person. Includes: hair/makeup, mani/pedi, 15% spa discount, floral centerpiece, 1-hr cocktail party, 3-hr private reception (3-course plated), 25-min massage, romantic dinner, anniversary night.',
+      featured: true
+    },
+    {
+      name: 'Luxury',
+      price: 'From $21,099',
+      highlights: 'From $21,099 (2026) Mon–Thu AM · $21,650 Thu PM–Sun. Up to 38 guests · Additional guests $150/person. Includes: photographer (50 photos), videography, solo musician, DJ & MC, bridal party florals, 3-hr reception with 3-course meal, beach dinner, honeymoon breakfast in bed, 50-min massage, 6pm late checkout, VIP status.',
+      featured: false
+    }
+  ],
 
   photos: [
     PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/gallery-2/hyatt-zilara-cap-cana-aerial-resort-3.jpg/eba86fc34c6ca24f9885a9e491a8e826',
@@ -322,6 +396,8 @@ async function runImport() {
     log('  • Adults Only · 5-Star · $$$ Luxury');
     log('  • 375 all-suite accommodations');
     log('  • 12 room categories');
+    log('  • 2 wedding venues (Oceanfront Gazebo + Beach)');
+    log('  • 5 wedding packages with 2026-2027 pricing');
     log('  • ' + (resortData.restaurants ? resortData.restaurants.length + ' restaurants' : 'Restaurants preserved from Firestore'));
     log('  • ' + RESORT_DATA.photos.length + ' gallery photos');
     log('');
