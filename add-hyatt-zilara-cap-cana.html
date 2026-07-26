@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Import — Hyatt Zilara Cap Cana</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 620px; margin: 60px auto; padding: 0 24px; background: #f9f9f9; color: #222; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  p.sub { color: #666; font-size: 14px; margin-bottom: 20px; }
+  .info { background: #f0f6ff; border: 1px solid #bdd; border-radius: 8px; padding: 14px 18px; font-size: 13px; margin-bottom: 24px; line-height: 1.7; }
+  button { background: #2a6496; color: #fff; border: none; padding: 14px 32px; font-size: 15px; border-radius: 8px; cursor: pointer; width: 100%; }
+  button:hover { background: #1e4d73; }
+  button:disabled { background: #aaa; cursor: default; }
+  #log { margin-top: 20px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; font-size: 13px; line-height: 2; white-space: pre-wrap; }
+  .ok  { color: #1a7a1a; font-weight: 600; }
+  .err { color: #cc0000; }
+</style>
+</head>
+<body>
+<h1>✨ Import: Hyatt Zilara Cap Cana</h1>
+<p class="sub">Pushes full resort profile to <code>resortProfiles/hyatt-zilara-cap-cana</code> in Firestore.</p>
+
+<div class="info">
+  <strong>What will be imported:</strong><br>
+  • Full description + tagline + highlights<br>
+  • 12 room categories with descriptions + photos (Playa CDN)<br>
+  • 6 dining venues with photos (Playa CDN)<br>
+  • Club Level amenities<br>
+  • General resort gallery photos<br>
+  • Hero photo, brand, location, highlights<br><br>
+  <strong>Note:</strong> Restaurants/venues already in Firestore will be preserved (not overwritten).<br><br>
+  <strong>Slug:</strong> <code>hyatt-zilara-cap-cana</code>
+</div>
+
+<button id="btn" onclick="runImport()">Import to Firestore</button>
+<div id="log">Ready — click button to import.</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: 'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
+  authDomain: 'wedding-crm-e5d12.firebaseapp.com',
+  projectId: 'wedding-crm-e5d12',
+  storageBucket: 'wedding-crm-e5d12.firebasestorage.app',
+  messagingSenderId: '246819649586',
+  appId: '1:246819649586:web:a74debd217ce048d26242b'
+});
+const db = firebase.firestore();
+
+const PLAYA = 'https://playa-cms-assets.s3.amazonaws.com/';
+
+const RESORT_DATA = {
+  slug: 'hyatt-zilara-cap-cana',
+  name: 'Hyatt Zilara Cap Cana',
+  resortName: 'Hyatt Zilara Cap Cana',
+  location: 'Cap Cana, Dominican Republic',
+  stars: 5,
+  agePolicy: 'Adults Only',
+  priceLevel: '$$$',
+  lgbtqFriendly: true,
+  brand: 'Hyatt',
+  tagline: 'All-Inclusive Adults Only Luxury in Cap Cana',
+
+  description: 'Hyatt Zilara Cap Cana is an all-inclusive resort exclusively for adults, set in the gated community of Cap Cana on Juanillo Beach in the Dominican Republic. The first Hyatt Zilara in the country, it sits minutes from championship golf courses, a marina, deep-sea fishing, eco-parks and adventure excursions, and just 15 minutes from Punta Cana International Airport.\n\nWith 375 all-suite accommodations, infinity pools with swim-up bars, 25 unique restaurants and bars, and a world-class fitness center, Hyatt Zilara Cap Cana delivers a truly elevated adults-only escape. Ranked #1 in its category in Tripadvisor\'s 2026 Travelers\' Choice "Best of the Best" awards, this is one of the finest all-inclusive experiences in the Caribbean.\n\nThe resort\'s "It\'s All Included" promise covers infinity pools, beach butlers, unlimited dining, 12 restaurants, 13 bars & lounges, premium top-shelf wines & liquors, oceanfront dining, 24-hour room service, poolside and oceanfront cabanas, bathrobes & slippers, free Wi-Fi, a Sky Gym, daily-stocked minibar, non-motorized watersports, water volleyball, aqua gym, cooking demos, and live entertainment.',
+
+  highlights: '5-Star Adults-Only Resort · 375 All-Suite Accommodations · 25 Restaurants & Bars · Infinity Pools with Swim-Up Bars · #1 Tripadvisor Best of the Best 2026 · Beach Butlers Included · Club Level Available · 15 Min from Punta Cana Airport',
+
+  heroPhoto: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/gallery-2/hyatt-zilara-cap-cana-aerial-resort-3.jpg/eba86fc34c6ca24f9885a9e491a8e826',
+
+  photos: [
+    PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/gallery-2/hyatt-zilara-cap-cana-aerial-resort-3.jpg/eba86fc34c6ca24f9885a9e491a8e826',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/hyatt-zilara-cap-cana-main-lobby.jpg',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/social-media-hyatt-zz-cap-cana-cpcreatives-2023-resort.jpg',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/hyatt-zilara-ziva-cap-cana-himalayan-salt-room-1.jpg',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/hyatt-zilara-ziva-cap-cana-the-refinery-fitness-center.jpg',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/hyatt-zilara-ziva-cap-cana-the-refinery-fitness-center-yoga.jpg',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/Newest/hyatt-zilara-ziva-cap-cana-the-blind-butcher-restaurant-23.jpg',
+    PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72',
+    PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837',
+    PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167',
+    PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/dining/2020/hyatt-zilara-cap-cana-brandos-couples-1.jpg/7df65ef00b5ae4265a40e293c2098c94',
+    PLAYA + 'media/Hyatt_Zilara_Cap_Cana/dining/2024/hyatt-zilara-cap-cana-the-pier-4.jpg',
+  ],
+
+  restaurants: [
+    {
+      name: "Brando's",
+      type: 'French / Polynesian',
+      description: "Get a taste of the islands with a mouth-watering blend of French cuisine prepared with a Polynesian flair, in an ornate restaurant surrounded by black-bottom pools. Dinner 6:00–10:00pm · Casual Formal dress code.",
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/dining/2020/hyatt-zilara-cap-cana-brandos-couples-1.jpg/7df65ef00b5ae4265a40e293c2098c94'
+    },
+    {
+      name: 'Journeys',
+      type: 'Indian',
+      description: 'Themed on the legendary Maharajas\' Express train — featuring its own train seating — Journeys brings the flavors of India to the Caribbean. Dinner 6:00–10:00pm · Casual Formal dress code.',
+      photo: ''
+    },
+    {
+      name: 'The Blind Butcher',
+      type: 'South American (Specialty)',
+      description: 'A specialty culinary experience where an exciting gastronomic adventure will touch your souls and hearts with authentic ingredients from the Southern Cone of America. Additional charge applies.',
+      photo: PLAYA + 'styled/blind-butcher-narrow4.jpg/e004b606193c48f79e682e8a0e69e1be'
+    },
+    {
+      name: 'The Pier',
+      type: 'International Buffet',
+      description: 'Gourmet international buffet for breakfast, lunch and dinner. Breakfast 7:00–11:00am · Lunch 12:30–4:00pm · Dinner 6:30–10:30pm · Smart Casual dress code.',
+      photo: PLAYA + 'media/Hyatt_Zilara_Cap_Cana/dining/2024/hyatt-zilara-cap-cana-the-pier-4.jpg'
+    },
+    {
+      name: 'Navigator Grill',
+      type: 'Health Food',
+      description: 'Light, health-focused fare for guests looking for a nutritious option during their stay.',
+      photo: ''
+    },
+    {
+      name: 'Presto',
+      type: 'Italian / Pizza',
+      description: 'Wood-fired pizza and Italian favorites in a casual setting.',
+      photo: ''
+    }
+  ],
+
+  roomCategories: [
+    {
+      name: 'Junior Suite (King or Double)',
+      description: 'Elegant 600 sq ft suite with resort pool or garden views and a furnished balcony. Includes separate shower, king bed or two queens, and sofa. All suites include Wi-Fi, daily-restocked minibar, flat-screen TV, bathroom amenities, in-room safe, coffee maker, air conditioning, hair dryer, iron/board, robes & slippers.',
+      details: 'King or 2 Queens · Resort/Garden View · 600 sq ft · Sleeps up to 3',
+      sqft: 600,
+      bedType: 'King or 2 Queens',
+      view: 'Resort/Garden View',
+      maxOccupancy: 3,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167']
+    },
+    {
+      name: 'Resort View Junior Suite',
+      description: 'Same elegant 600 sq ft layout as the standard Junior Suite, with resort-view balcony. Ideal for guests who prefer a lush tropical setting over direct ocean views.',
+      details: 'King or 2 Queens · Resort View · 600 sq ft',
+      sqft: 600,
+      bedType: 'King or 2 Queens',
+      view: 'Resort View',
+      maxOccupancy: 3,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167']
+    },
+    {
+      name: 'Ocean View Junior Suite',
+      description: 'A 600 sq ft suite with stunning ocean views from a private balcony. Features a separate shower and the same premium amenity package as all Zilara suites.',
+      details: 'King · Ocean View · 600 sq ft',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Ocean View',
+      maxOccupancy: 3,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167']
+    },
+    {
+      name: 'Club Ocean View Junior Suite',
+      description: 'A 600 sq ft ocean view suite with Club Level access included — featuring private check-in, exclusive Club Lounge, à la carte breakfast & lunch, premium liquors, and 10% spa discount.',
+      details: 'King · Ocean View · 600 sq ft · Club Level Included',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Ocean View',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-junior-suite-double-room-3.jpg/5988cff48461c70f3be4f5304d8ec167']
+    },
+    {
+      name: 'Junior Suite Swim-Up',
+      description: 'A 600 sq ft suite with a semi-private plunge pool right off the terrace — perfect for guests who want direct pool access from their room. All standard suite amenities included.',
+      details: 'King · Swim-Up Terrace · 600 sq ft',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Pool/Garden',
+      maxOccupancy: 3,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72']
+    },
+    {
+      name: 'Club Junior Suite Swim-Up',
+      description: 'Same swim-up layout with semi-private plunge pool, plus full Club Level access — private check-in, Club Lounge, à la carte dining, premium liquors, and spa discounts.',
+      details: 'King · Swim-Up Terrace · 600 sq ft · Club Level Included',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Pool/Garden',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72']
+    },
+    {
+      name: 'Club Oceanfront Junior Suite',
+      description: 'A 600 sq ft suite with a furnished balcony overlooking the ocean — the closest you can get to the sea at this room size. Club Level access included.',
+      details: 'King · Oceanfront · 600 sq ft · Club Level Included',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Oceanfront',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72']
+    },
+    {
+      name: 'Club One Bedroom Master Suite',
+      description: 'A spacious 1,238 sq ft one-bedroom suite with a separate living room, jetted soaking tub, king bed, and sofa. Club Level access included. Ideal for couples seeking extra space and indulgence.',
+      details: 'King · Separate Living Room · Jetted Tub · 1,238 sq ft · Club Level Included',
+      sqft: 1238,
+      bedType: 'King',
+      view: 'Ocean View',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837']
+    },
+    {
+      name: 'Club Ocean View One Bedroom Grand Master Suite',
+      description: 'The most dramatic views in the standard suite lineup — 1,345 sq ft of pure luxury with a separate living room, jetted soaking tub, and sweeping ocean panoramas. Club Level access included.',
+      details: 'King · Grand Ocean View · Living Room · Jetted Tub · 1,345 sq ft · Club Level Included',
+      sqft: 1345,
+      bedType: 'King',
+      view: 'Grand Ocean View',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837']
+    },
+    {
+      name: 'Club Oceanfront Junior Suite Swim-Up',
+      description: 'The best of both worlds — 600 sq ft beachfront suite with a swim-up plunge pool and balcony steps from the ocean. Club Level access included.',
+      details: 'King · Oceanfront Swim-Up · 600 sq ft · Club Level Included',
+      sqft: 600,
+      bedType: 'King',
+      view: 'Oceanfront',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-oceanfront-junior-suite-swim-up-king-room.jpg/77c0e847d7af75cb6fc152081b9e8e72']
+    },
+    {
+      name: 'Club One Bedroom Master Swim-Up Suite',
+      description: 'A generous 1,238 sq ft one-bedroom suite with a private plunge pool right off the terrace, separate bedroom, jetted soaking tub, and full Club Level access. The ultimate swim-up indulgence.',
+      details: 'King · Swim-Up Pool · Separate Bedroom · Jetted Tub · 1,238 sq ft · Club Level Included',
+      sqft: 1238,
+      bedType: 'King',
+      view: 'Pool/Garden',
+      maxOccupancy: 3,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837']
+    },
+    {
+      name: 'Presidential Suite',
+      description: 'The crown jewel of Hyatt Zilara Cap Cana — 1,873 sq ft with a private balcony, expansive living and dining rooms, king bed, and jetted soaking tub. Club Level access included. The most exclusive suite on property.',
+      details: 'King · Private Balcony · Living & Dining Rooms · Jetted Tub · 1,873 sq ft · Club Level Included',
+      sqft: 1873,
+      bedType: 'King',
+      view: 'Oceanfront',
+      maxOccupancy: 4,
+      clubLevel: true,
+      photo: PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837',
+      photos: [PLAYA + 'styled/Hyatt_Zilara_Cap_Cana/rooms/new20/hyatt-zilara-cap-cana-ocean-view-one-bedroom-master-swim-up-suite-room.jpg/511c8851e10d7394adda1a14afe13837']
+    }
+  ],
+
+  clubLevelBenefits: [
+    'Private check-in and check-out in an exclusive area',
+    'Personalized concierge services',
+    'Food menu available at Club Pool',
+    'Premium-brand liquors',
+    'Complimentary domestic & international calls',
+    '10% discount on spa and salon services',
+    'Exclusive Club Level Lounge',
+    'Exclusive access to breakfast & lunch à la carte for club guests',
+    'Late check-out based on availability',
+    'Private access to Club Pool'
+  ]
+};
+
+function log(msg, cls) {
+  const el = document.getElementById('log');
+  const span = document.createElement('span');
+  if (cls) span.className = cls;
+  span.textContent = msg + '\n';
+  el.appendChild(span);
+}
+
+async function runImport() {
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  document.getElementById('log').innerHTML = '';
+  log('Starting import for Hyatt Zilara Cap Cana...');
+
+  try {
+    const docRef = db.collection('resortProfiles').doc('hyatt-zilara-cap-cana');
+
+    // Read existing doc to protect manually-entered restaurants/venues
+    const existing = await docRef.get();
+    const existingData = existing.exists ? existing.data() : {};
+
+    const resortData = { ...RESORT_DATA };
+
+    if (existingData.restaurants && existingData.restaurants.length > 0) {
+      log('⚠️  Restaurants already exist in Firestore — skipping to preserve manual entries.');
+      delete resortData.restaurants;
+    }
+    if (existingData.venues && existingData.venues.length > 0) {
+      log('⚠️  Venues already exist in Firestore — skipping to preserve manual entries.');
+      delete resortData.venues;
+    }
+
+    resortData.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+    await docRef.set(resortData, { merge: true });
+    log('✅ Resort profile written to resortProfiles/hyatt-zilara-cap-cana', 'ok');
+    log('');
+    log('Summary:', 'ok');
+    log('  • Name: Hyatt Zilara Cap Cana');
+    log('  • Location: Cap Cana, Dominican Republic');
+    log('  • Adults Only · 5-Star · $$$ Luxury');
+    log('  • 375 all-suite accommodations');
+    log('  • 12 room categories');
+    log('  • ' + (resortData.restaurants ? resortData.restaurants.length + ' restaurants' : 'Restaurants preserved from Firestore'));
+    log('  • ' + RESORT_DATA.photos.length + ' gallery photos');
+    log('');
+    log('🎉 Done! Open the Resort Library and select "Hyatt Zilara Cap Cana" from the dropdown.', 'ok');
+
+  } catch (e) {
+    log('❌ Error: ' + e.message, 'err');
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
