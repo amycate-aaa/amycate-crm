@@ -370,21 +370,7 @@ async function runImport() {
   try {
     const docRef = db.collection('resortProfiles').doc('hyatt-zilara-cap-cana');
 
-    // Read existing doc to protect manually-entered restaurants/venues
-    const existing = await docRef.get();
-    const existingData = existing.exists ? existing.data() : {};
-
     const resortData = { ...RESORT_DATA };
-
-    if (existingData.restaurants && existingData.restaurants.length > 0) {
-      log('⚠️  Restaurants already exist in Firestore — skipping to preserve manual entries.');
-      delete resortData.restaurants;
-    }
-    if (existingData.venues && existingData.venues.length > 0) {
-      log('⚠️  Venues already exist in Firestore — skipping to preserve manual entries.');
-      delete resortData.venues;
-    }
-
     resortData.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
 
     await docRef.set(resortData, { merge: true });
@@ -396,7 +382,7 @@ async function runImport() {
     log('  • Adults Only · 5-Star · $$$ Luxury');
     log('  • 375 all-suite accommodations');
     log('  • 12 room categories');
-    log('  • 2 wedding venues (Oceanfront Gazebo + Beach)');
+    log('  • 5 wedding venues (Zilara Gazebo, Waves Lawn, Santiago Lawn, Beach, Rooftop Terrace)');
     log('  • 5 wedding packages with 2026-2027 pricing');
     log('  • ' + (resortData.restaurants ? resortData.restaurants.length + ' restaurants' : 'Restaurants preserved from Firestore'));
     log('  • ' + RESORT_DATA.photos.length + ' gallery photos');

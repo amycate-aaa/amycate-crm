@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Dreams Macao Beach Punta Cana — CRM Import</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f3ef; min-height: 100vh; display: flex; align-items: flex-start; justify-content: center; padding: 48px 24px; }
+  .card { background: #fff; border-radius: 20px; padding: 40px; max-width: 580px; width: 100%; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+  .resort-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; }
+  .resort-icon { width: 56px; height: 56px; border-radius: 14px; background: linear-gradient(135deg, #1a6e5a, #0d4435); display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+  .resort-name { font-size: 20px; font-weight: 700; color: #1a1a1a; line-height: 1.2; }
+  .resort-sub { font-size: 13px; color: #888; margin-top: 3px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 24px; }
+  .stat { background: #f8f6f2; border-radius: 10px; padding: 12px; text-align: center; }
+  .stat-val { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+  .stat-label { font-size: 11px; color: #888; margin-top: 2px; }
+  .section-title { font-size: 11px; font-weight: 700; color: #aaa; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .tag { background: #f0ece4; color: #5a4a3a; font-size: 12px; padding: 4px 10px; border-radius: 20px; }
+  .venues-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+  .venue { background: #f8f6f2; border-radius: 8px; padding: 10px; }
+  .venue-name { font-size: 12px; font-weight: 700; color: #1a1a1a; }
+  .venue-cap { font-size: 11px; color: #888; }
+  .pkg-list { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+  .pkg { background: #fff8f0; border: 1px solid #e8ddd0; color: #7a5a3a; font-size: 12px; padding: 4px 10px; border-radius: 6px; }
+  .real-wedding { background: #f0f6ff; border: 1px solid #cce0ff; border-radius: 10px; padding: 12px 14px; margin-bottom: 24px; font-size: 13px; color: #334; line-height: 1.5; }
+  .real-wedding strong { color: #1a3a6e; }
+  .import-btn { width: 100%; padding: 16px; border: none; border-radius: 12px; background: #1a1a1a; color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+  .import-btn:hover { background: #333; }
+  .import-btn:disabled { background: #999; cursor: not-allowed; }
+  .status { margin-top: 16px; padding: 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; display: none; }
+  .status.loading { display: block; background: #f5f3ef; color: #666; }
+  .status.success { display: block; background: #f0faf0; color: #2d7a2d; }
+  .status.error { display: block; background: #fff0f0; color: #c0392b; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="resort-header">
+    <div class="resort-icon">🌴</div>
+    <div>
+      <div class="resort-name">Dreams Macao Beach Punta Cana</div>
+      <div class="resort-sub">Punta Cana (Macao Beach), Dominican Republic &nbsp;·&nbsp; 4.5 Stars &nbsp;·&nbsp; Diamond Partner &nbsp;·&nbsp; CT #3212</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">500</div><div class="stat-label">Rooms</div></div>
+    <div class="stat"><div class="stat-val">10</div><div class="stat-label">Venues</div></div>
+    <div class="stat"><div class="stat-val">10+7</div><div class="stat-label">Rest/Bars</div></div>
+    <div class="stat"><div class="stat-val">69</div><div class="stat-label">Photos</div></div>
+  </div>
+
+  <div class="section-title">Highlights</div>
+  <div class="tags" style="margin-bottom:20px">
+    <span class="tag">⭐ 4.5 Stars</span>
+    <span class="tag">Family-Friendly</span>
+    <span class="tag">Diamond Partner</span>
+    <span class="tag">3 Weddings/Day</span>
+    <span class="tag">All-Inclusive</span>
+    <span class="tag">Waterpark</span>
+    <span class="tag">Macao Beach</span>
+  </div>
+
+  <div class="section-title">Wedding Venues (10)</div>
+  <div class="venues-grid" style="margin-bottom:20px">
+    <div class="venue"><div class="venue-name">Beach Gazebo</div><div class="venue-cap">40 guests · Ceremony, Cocktail</div></div>
+    <div class="venue"><div class="venue-name">Seaside Sky Terrace</div><div class="venue-cap">100 guests · Reception, Cocktail</div></div>
+    <div class="venue"><div class="venue-name">Himitsu Garden Terrace</div><div class="venue-cap">250 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Ballroom</div><div class="venue-cap">700 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Beach Area - Left Side</div><div class="venue-cap">200 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Beach Area - Right</div><div class="venue-cap">150 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Macao Preferred Beach</div><div class="venue-cap">350 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Macao Plaza</div><div class="venue-cap">500 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Seaside Grill &amp; Garden Terrace</div><div class="venue-cap">250 guests · Ceremony, Reception</div></div>
+    <div class="venue"><div class="venue-name">Sugar Reef Terrace</div><div class="venue-cap">120 guests · Reception, Cocktail</div></div>
+  </div>
+
+  <div class="section-title">Wedding Packages (6)</div>
+  <div class="pkg-list">
+    <span class="pkg">Infinitely Yours</span>
+    <span class="pkg">Wedding in Paradise</span>
+    <span class="pkg">Elope in Luxury</span>
+    <span class="pkg">Eternal Love</span>
+    <span class="pkg">Beyond Memorable</span>
+    <span class="pkg">Dulha &amp; Dulhan</span>
+  </div>
+
+  <div class="section-title">Real Wedding</div>
+  <div class="real-wedding">
+    💍 <strong>Kassandra &amp; Scott</strong> — Himitsu Garden / Seaside Garden Terrace · 26 guests · Specialist: Kimberlee Key<br>
+    <span style="color:#666;font-size:12px">destinationweddings.com/real-weddings/real-wedding-stories/kassandra-scott</span>
+  </div>
+
+  <button class="import-btn" id="importBtn" onclick="importResort()">Add Dreams Macao Beach to Resort Library</button>
+  <div class="status" id="statusBox"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: 'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
+  authDomain: 'wedding-crm-e5d12.firebaseapp.com',
+  projectId: 'wedding-crm-e5d12',
+  storageBucket: 'wedding-crm-e5d12.firebasestorage.app',
+  messagingSenderId: '246819649586',
+  appId: '1:246819649586:web:a74debd217ce048d26242b'
+});
+var db = firebase.firestore();
+
+var CDN = 'https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/';
+var WIDEN = 'https://alg.widen.net/content/';
+
+var photos = [
+  // Resort exterior & pools
+  WIDEN + 'ljjxs5bmn1/webp/DRMPC-EXT-Aerial1-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'xqbsjmugft/webp/DRMPC-EXT-Infinity-Pool-2-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'evdidetvnt/webp/DRMPC-EXT-Infinity-Pool-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'iegb0xwuz6/webp/DRMPC-EXT-InfinityPool-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'qqwbx5jsq4/webp/DRMPC-EXT-Lobby-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'nb4j8ekxlf/webp/DRMPC-EXT-PC-Beach-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'mevkpoupkm/webp/DRMPC-EXT-PC-POOL-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'zjevjxd3qn/webp/DRMPC-EXT-PC-SaltPool-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'tdlhshyqkv/webp/DRMPC-EXT-Relax-Pool-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'cx0mrvdukv/webp/DRMPC-EXT-WaterPark-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'njx3wczlal/webp/DRMPC-EXT-Waterpark-Lazy-River-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'irsm5xkdh5/webp/DRMPC-EXT-WaterPark-Pano-1A-CB.webp?u=itfpsm&q=80',
+  // Interior & amenities
+  WIDEN + 'nu4zjiaf2p/webp/DRMPC-INT-Lobby-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'vzjmv5x398/webp/DRMPC-INT-Showtime-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'hztnjzzddp/webp/DRMPC-INT-Theater-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'irerzq9vtu/webp/DRMPC-INT-BowlingAlley-TC.webp?u=itfpsm&q=80',
+  WIDEN + '0zvqqmx90y/webp/DRMPC-FIT-Fitness-Center-TC.webp?u=itfpsm&q=80',
+  // Spa
+  WIDEN + 't18pihbkyv/webp/DRMPC-SPA-Hydrotherapy-2-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'bchca3x51y/webp/DRMPC-SPA-MassageCabin-AP.webp?u=itfpsm&q=80',
+  // Restaurants
+  WIDEN + 'fotji8itnv/webp/DRMPC-RES-BarefootGrill-TC.webp?u=itfpsm&q=80',
+  WIDEN + '0fcgavveuk/webp/DRMPC-RES-Bordeaux-3A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'gcbgleg2ub/webp/DRMPC-RES-CocoCafe-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'kecc0tf8o8/webp/DRMPC-RES-El-Patio-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'mxoxu7dvhl/webp/DRMPC-RES-Himitsu-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'qaeswfvbso/webp/DRMPC-RES-LaCava-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'wyr8y7vr4i/webp/DRMPC-RES-Oceana-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'quy4xf31qt/webp/DRMPC-RES-Portofino-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'glrdoxwxcj/webp/DRMPC-RES-Seaside-Grill-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'pn8cghm6sb/webp/DRMPC-RES-WorldCafe-TC.webp?u=itfpsm&q=80',
+  // Bars
+  WIDEN + 'a4dtobnnoq/webp/DRMPC-BAR-Barracuda-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'ib2xwfbz9k/webp/DRMPC-BAR-Manatees-4A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'zv6tsqrczq/webp/DRMPC-BAR-Manatees-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'uzdyvacwsp/webp/DRMPC-BAR-Rendevouz-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'qviwfy0koo/webp/DRMPC-BAR-Sports-Bar-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'u762xf2jge/webp/DRMPC-BAR-SugarReef-2A-CB.webp?u=itfpsm&q=80',
+  // Kids club
+  WIDEN + 'viojlgrdhp/webp/DRMPC-EC-ExplorersClub-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'hdtzzhzx6o/webp/DRMPC-EC-ExplorersClub2-TC.webp?u=itfpsm&q=80',
+  WIDEN + '1juusb5bxi/webp/DRMPC-EC-WaterPark-1A-CB.webp?u=itfpsm&q=80',
+  // Rooms — standard
+  WIDEN + 'a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'scmwa2j7rs/webp/DRMPC-JR-TV-DBL-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'azjg0mkdhh/webp/DRMPC-JR-PV-DBL-TC.webp?u=itfpsm&q=80',
+  // Rooms — Preferred Club
+  WIDEN + '0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&q=80',
+  WIDEN + 's7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'ngwf6yt344/webp/DRMPC-PC-JR-SO-KING-TC-2.webp?u=itfpsm&q=80',
+  WIDEN + 'lnrlfqjiif/webp/DRMPC-PC-JR-TV-KING-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'ruyk4riz1z/webp/DRMPC-PC-Lounge-3A-CB.webp?u=itfpsm&q=80',
+  // Rooms — Master Suite
+  WIDEN + 'iipecaxi4j/webp/DRMPC-PC-MSTR-BATH-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + '2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'gavtiuf7ud/webp/DRMPC-PC-MSTR-SO-KING-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'upoiunwwa5/webp/DRMPC-PC-MSTR-SO-LIVING-TC-2.webp?u=itfpsm&q=80',
+  WIDEN + 'gqlkvepgoi/webp/DRMPC-PC-MSTR-SO-LIVING-TC.webp?u=itfpsm&q=80',
+  // Rooms — Presidential Suite
+  WIDEN + 'ap7bqblkc6/webp/DRMPC-PC-PRES-BATH-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + '0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + '8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'iq8swvt1cb/webp/DRMPC-PC-PRES-Rooftop-LIVING-TC.webp?u=itfpsm&q=80',
+  // Rooms — Villa
+  WIDEN + 'rwzpjstf1c/webp/DRMPC-PC-Villa-BATH-1A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'bi7fg2qnxr/webp/DRMPC-PC-Villa-DoubleBeds-3A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'dtici5oeq4/webp/DRMPC-PC-Villa-Living-2A-CB.webp?u=itfpsm&q=80',
+  WIDEN + 'ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp?u=itfpsm&q=80',
+  // Weddings
+  WIDEN + 'atqshdyqca/webp/DRMPC-WED-BeachWeddingGazebo-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'ylrqyf3ixq/webp/DRMPC-WED-Bridalsuite-TC.webp?u=itfpsm&q=80',
+  WIDEN + 'smhwj87nbv/webp/DRMPC-WED-Rooftop-Wedding-Ceremony-TC.webp?u=itfpsm&q=80'
+];
+
+function getResortData() {
+  return {
+    name: 'Dreams Macao Beach Punta Cana',
+    location: 'Punta Cana (Macao Beach), Dominican Republic',
+    tagline: 'The first and only all-inclusive resort on Macao Beach',
+    stars: 4.5,
+    rooms: 500,
+    agePolicy: 'All Ages',
+    plan: 'All-Inclusive',
+    ctHotelId: '3212',
+    highlights: ['4.5 Stars', '500 Rooms', 'Family-Friendly', 'Diamond Partner', '3 Weddings/Day', 'All-Inclusive', 'Waterpark', 'Macao Beach'],
+    description: 'Uncover serenity, adventure, and romance at the first and only all-inclusive, family-friendly resort on Macao Beach. Located on the northeastern coast of the Dominican Republic, Dreams Macao Beach Punta Cana provides the perfect backdrop for your romantic wedding celebration in paradise. Enjoy direct access to a pristine white-sand beach and the crystal-clear waters of the Caribbean Sea. With four shimmering pools, elegant rooms and suites, limitless gourmet dining at 10 restaurants, endless activities including a full waterpark, and the world-class Spa by Pevonia®, every moment of your stay will be unforgettable.',
+    photo: CDN + 'dreams-macao-beach-hero2.jpeg',
+    dwtUrl: 'https://www.destinationweddings.com/dreams-macao-beach-punta-cana',
+    bookingUrl: 'https://www.hyattinclusivecollection.com/en/resorts-hotels/dreams/dominican-republic/macao-beach-punta-cana/',
+    weddingUrl: 'https://www.destinationweddings.com/dreams-macao-beach-punta-cana',
+    weddingGuideUrl: 'https://storage.googleapis.com/dwt-documents/Dreams%20Macao%20Beach%20Wedding%20Guide%202025%20%26%202026-1736789829891.pdf',
+    weddingGuide: 'https://storage.googleapis.com/dwt-documents/Dreams%20Macao%20Beach%20Wedding%20Guide%202025%20%26%202026-1736789829891.pdf',
+    dwtPartnerLevel: 'Diamond',
+    photoSource: 'hyatt-widen-cdn',
+    clubLevelName: 'Preferred Club',
+    clubLevelPerks: [
+      // Private Club Lounge
+      'Personalized check-in and check-out',
+      'Daily continental breakfast in Preferred Club Lounge',
+      'Afternoon hot and cold hors d\'oeuvres',
+      'Exquisite desserts and premium liquors in lounge',
+      'Access to Preferred Club lounge and bar',
+      'Complimentary computer access in lounge',
+      // Preferred Status & Amenities
+      'Preferred Club suites in premium resort locations',
+      'Upgraded mini-bar',
+      'Upgraded bath amenities',
+      'Pillow menu',
+      'Complimentary in-suite newspaper daily (English or Spanish)',
+      // Exclusive Privileges
+      'Dedicated Preferred Club beach area',
+      'Exclusive bar and adults-only saltwater pool',
+      'Exclusive family pool section',
+      'Special spa and resort store discounts'
+    ],
+    kidsClubs: [
+      {
+        name: 'Explorer\'s Club for Kids',
+        ageRange: '3–12',
+        hours: 'Daily 9:30 AM – 10 PM',
+        activities: ['Video games', 'Crafts', 'Camping adventure activity'],
+        notes: 'Staff are Red Cross CPR-certified. Children must be fully potty-trained to attend.',
+        included: true
+      },
+      {
+        name: 'Core Zone Teens Club',
+        ageRange: '13–17',
+        hours: 'Daily 11 AM – 11 PM',
+        activities: ['Indoor game room', 'Cinema', 'Disco'],
+        notes: null,
+        included: true
+      }
+    ],
+    baseRoomAmenities: [
+      'Private, furnished balcony or terrace',
+      '24-hour room service',
+      '24-hour concierge service',
+      'Mini-bar refreshed daily',
+      'Wi-Fi included',
+      'Full bathroom with rain shower',
+      'Living area with sofa bed'
+    ],
+    restaurants: [
+      { name: 'World Café', cuisine: 'International', style: 'Buffet', description: 'International and local buffet. Casual elegance dress code for dinner.' },
+      { name: 'Seaside Grill', cuisine: 'Grill', style: 'À la carte', description: 'Grilled meats, fish, and burgers with show cooking.' },
+      { name: 'Portofino', cuisine: 'Italian', style: 'À la carte', description: 'À la carte gourmet Italian cuisine.' },
+      { name: 'Oceana', cuisine: 'Seafood', style: 'À la carte', description: 'À la carte fresh seafood specialties.' },
+      { name: 'Himitsu', cuisine: 'Asian', style: 'À la carte', description: 'À la carte Asian cuisine with 3 teppanyaki tables. Reservation required. Ages 12+.', note: 'Ages 12+ · Reservation required' },
+      { name: 'El Patio', cuisine: 'Mexican', style: 'À la carte', description: 'À la carte authentic Mexican cuisine.' },
+      { name: 'Bordeaux', cuisine: 'French', style: 'À la carte', description: 'Adults-only à la carte gourmet French cuisine. Casual elegance dress code.', note: 'Adults only' },
+      { name: 'Coco Café', cuisine: 'Café', style: 'Casual · 24 hours', description: '24-hour premium coffee, snacks, and ice cream. Late night soup, sandwiches, and pastries.' },
+      { name: 'Barefoot Grill', cuisine: 'American', style: 'Beachside/Poolside', description: 'Poolside burgers, hot dogs, and late-night bites.' },
+      { name: 'Macao Bites Food Truck', cuisine: 'Snacks', style: 'Quick service', description: 'Quick bites located by the water park.' }
+    ],
+    bars: [
+      { name: 'Barracuda', description: 'Beach bar with swings and ocean views.' },
+      { name: 'Desires', description: 'Adults-only sports bar by evening, nightclub later on.' },
+      { name: 'Manatees', description: 'Swim-up pool bar.' },
+      { name: 'Rendezvous', description: 'Lobby bar.' },
+      { name: 'Showtime', description: 'Theater bar.' },
+      { name: 'Sugar Reef', description: 'Pool bar.' },
+      { name: 'Preferred Club Bar', description: 'Exclusive lounge bar for Preferred Club guests.', note: 'Preferred Club only' }
+    ],
+    // 16 room categories: 4 standard + 12 Preferred Club
+    // Widen CDN room photos (no download=true param needed for display)
+    roomCategories: [
+      // STANDARD ROOMS (603 sq. ft., private balcony/terrace, rain shower, living area)
+      {
+        name: 'Junior Suite Tropical View',
+        sqft: 603,
+        beds: 'King or Two Queen',
+        view: 'Tropical View',
+        maxOccupancy: 4,
+        startingFrom: 170,
+        photo: WIDEN + 'a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Junior Suite Pool View',
+        sqft: 603,
+        beds: 'King or Two Queen',
+        view: 'Pool View',
+        maxOccupancy: 4,
+        startingFrom: 179,
+        photo: WIDEN + 'wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Junior Suite Partial Ocean View',
+        sqft: 603,
+        beds: 'King or Two Double',
+        view: 'Partial Ocean View',
+        maxOccupancy: 4,
+        startingFrom: 187,
+        photo: WIDEN + '0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Junior Suite Ocean View',
+        sqft: 603,
+        beds: 'King or Two Queen',
+        view: 'Ocean View',
+        maxOccupancy: 4,
+        startingFrom: 196,
+        photo: WIDEN + 's7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&q=80'
+      },
+      // PREFERRED CLUB ROOMS
+      {
+        name: 'Preferred Club Junior Suite Tropical View',
+        sqft: 572,
+        beds: 'King or Two Double',
+        view: 'Tropical View',
+        maxOccupancy: 4,
+        startingFrom: 213,
+        preferredClub: true,
+        perks: 'Hot tub for two, Preferred Club lounge access',
+        photo: WIDEN + 'a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Junior Suite Partial Ocean View',
+        sqft: 603,
+        beds: 'King or Two Double',
+        view: 'Partial Ocean View',
+        maxOccupancy: 4,
+        startingFrom: 221,
+        preferredClub: true,
+        perks: 'Living room, Preferred Club lounge access',
+        photo: WIDEN + '0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Junior Suite Ocean View',
+        sqft: 603,
+        beds: 'King or Two Double',
+        view: 'Ocean View',
+        maxOccupancy: 4,
+        startingFrom: 229.50,
+        preferredClub: true,
+        perks: 'Living room, Preferred Club lounge access',
+        photo: WIDEN + 's7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Junior Suite Swim Out',
+        sqft: 603,
+        beds: 'King',
+        view: 'Garden/Pool',
+        maxOccupancy: 4,
+        startingFrom: 255,
+        preferredClub: true,
+        perks: 'Direct pool access from private furnished terrace',
+        photo: WIDEN + 'mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Master Suite Ocean View',
+        sqft: 1205,
+        beds: 'King',
+        view: 'Ocean View',
+        maxOccupancy: 3,
+        startingFrom: 289,
+        preferredClub: true,
+        perks: 'Living/dining room, kitchenette, oversized bathroom, whirlpool',
+        photo: WIDEN + 'nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Master Suite Ocean Front',
+        sqft: 1205,
+        beds: 'King + Queen Sofa',
+        view: 'Ocean Front',
+        maxOccupancy: 3,
+        startingFrom: 306,
+        preferredClub: true,
+        perks: 'Prime oceanfront location, living/dining area, kitchenette, whirlpool',
+        photo: WIDEN + 'tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Master Suite Rooftop',
+        sqft: 1205,
+        beds: 'King',
+        view: 'Ocean Front',
+        maxOccupancy: 3,
+        startingFrom: 323,
+        preferredClub: true,
+        perks: 'Rooftop terrace, kitchenette, whirlpool bathtub',
+        photo: WIDEN + 'gavtiuf7ud/webp/DRMPC-PC-MSTR-SO-KING-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Master Suite Swim Out',
+        sqft: 1205,
+        beds: 'King',
+        view: 'Garden/Pool',
+        maxOccupancy: 3,
+        startingFrom: 374,
+        preferredClub: true,
+        perks: 'Ground floor, direct pool access, kitchenette, whirlpool',
+        photo: WIDEN + 'rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Master Suite Swim Out Ocean Front',
+        sqft: 1205,
+        beds: 'King',
+        view: 'Ocean Front',
+        maxOccupancy: 3,
+        startingFrom: 459,
+        preferredClub: true,
+        perks: 'Prime oceanfront, direct pool access, kitchenette, whirlpool',
+        photo: WIDEN + '2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Presidential Suite Rooftop Ocean Front',
+        sqft: 1808,
+        beds: 'King',
+        view: 'Ocean Front',
+        maxOccupancy: 3,
+        startingFrom: 680,
+        preferredClub: true,
+        perks: 'Rooftop balcony with hot tub, full kitchen, dining room',
+        photo: WIDEN + '8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Presidential Suite Swim Out Ocean Front',
+        sqft: 1808,
+        beds: 'King',
+        view: 'Ocean Front',
+        maxOccupancy: 3,
+        startingFrom: 816,
+        preferredClub: true,
+        perks: 'Terrace with hot tub and direct pool access, full kitchen, dining room',
+        photo: WIDEN + '0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp?u=itfpsm&q=80'
+      },
+      {
+        name: 'Preferred Club Two-Bedroom Villa with Pool',
+        sqft: 1808,
+        beds: 'King + Two Double',
+        view: 'Pool/Waterpark View',
+        maxOccupancy: 8,
+        startingFrom: 510,
+        preferredClub: true,
+        perks: 'Private entrance, plunge pool, two bedrooms, full kitchen — ideal for families',
+        photo: WIDEN + 'ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp?u=itfpsm&q=80'
+      }
+    ],
+    venues: [
+      {
+        name: 'Beach Gazebo',
+        capacity: 40,
+        capacityText: '40 guests',
+        bestFor: ['Ceremony', 'Cocktail Hour'],
+        description: 'A semi-private minimalistic oceanfront location made of natural materials, simply radiating elegance and serenity, ideal for a small wedding.',
+        photo: CDN + 'dreams-macao-beach-gazebo-wedding-venue.jpg'
+      },
+      {
+        name: 'Seaside Sky Terrace',
+        capacity: 100,
+        capacityText: '100 guests',
+        bestFor: ['Reception', 'Cocktail Hour'],
+        description: 'A spacious, contemporary open-air location with panoramic views of the beach, gardens, and the sparkling Caribbean Sea.',
+        photo: CDN + 'dreams-macao-seaside-sky-wedding-venue.jpg'
+      },
+      {
+        name: 'Himitsu Garden Terrace',
+        capacity: 250,
+        capacityText: 'Up to 250 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'A customizable terrace that can be transformed to reflect your wedding vision and style, with floral arrangements, lighting, and design elements.',
+        photo: CDN + 'dreams-macao-himitsu-garden-wedding-venue.jpg'
+      },
+      {
+        name: 'Ballroom',
+        capacity: 700,
+        capacityText: 'Up to 700 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'A grand, ornate wedding ballroom with a dance floor, custom decoration and complete privacy.',
+        photo: CDN + 'dreams-macao-ballroom-wedding-venue.jpg'
+      },
+      {
+        name: 'Beach Area - Left Side',
+        capacity: 200,
+        capacityText: 'Up to 200 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'A semi-private open-air location on the white sands of Punta Cana, for a memorable reception and the romantic ceremony of your dreams.',
+        photo: CDN + 'dreams-macao-beach-area-leftside.jpg'
+      },
+      {
+        name: 'Beach Area - Right',
+        capacity: 150,
+        capacityText: 'Up to 150 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'The sound of waves, the gentle ocean breeze, and the warm sunshine combine to create a serene and unforgettable ambiance for your ceremony.',
+        photo: CDN + 'dreams-macao-beach-rightside-wedding-venue.jpg'
+      },
+      {
+        name: 'Macao Preferred Beach',
+        capacity: 350,
+        capacityText: '350 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'Celebrate your love in a truly enchanting setting with soft white sand, crystal-clear turquoise waters, and swaying palm trees.',
+        photo: CDN + 'dreams-macao-preferred-beach-wedding-venue.jpg'
+      },
+      {
+        name: 'Macao Plaza',
+        capacity: 500,
+        capacityText: 'Up to 500 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'A popular venue that can be transformed to reflect your desired wedding theme and decor, perfect for accommodating larger wedding parties.',
+        photo: CDN + 'dreams-macao-macao-plaza-wedding-venue.jpeg'
+      },
+      {
+        name: 'Seaside Grill & Garden Terrace',
+        capacity: 250,
+        capacityText: 'Up to 250 guests',
+        bestFor: ['Ceremony', 'Reception'],
+        description: 'A versatile open-air setting where you can enjoy the natural beauty of the resort while celebrating with your loved ones.',
+        photo: CDN + 'dreams-macao-seasidegrill-garden-terrace-wedding-venue.jpeg'
+      },
+      {
+        name: 'Sugar Reef Terrace',
+        capacity: 120,
+        capacityText: 'Up to 120 guests',
+        bestFor: ['Reception', 'Cocktail Hour'],
+        description: 'An intimate and romantic space for your reception, surrounded by the natural beauty of the resort.',
+        photo: CDN + 'dreams-macao-beach-sugar-reef-terrace-venue.jpeg'
+      }
+    ],
+    packages: [
+      {
+        name: 'Infinitely Yours',
+        price: 'From $799',
+        highlights: 'Couple only (max 5 extra guests). Vow renewal/symbolic ceremony, corsages & boutonnieres, sparkling wine toast, romantic dinner for two, spa discount. From $799 (Mon–Wed off-peak) to $999 (Thu–Sun peak). Extra guests: $5/chair, $5/toast.',
+        featured: false
+      },
+      {
+        name: 'Wedding in Paradise',
+        price: 'From $1,499',
+        highlights: 'Up to 10 guests. Symbolic ceremony, bouquet & boutonniere, wedding cake & sparkling wine toast, newlywed package, breakfast in bed. Complimentary with 7+ nights in Preferred Master Suite Swim-Out or higher, or 5 rooms × 3 nights. From $1,499 to $1,949. Extra guests: $25/person.',
+        featured: false
+      },
+      {
+        name: 'Elope in Luxury',
+        price: 'From $1,649',
+        highlights: 'Couple only (max 5 extra guests). Symbolic ceremony, hair & makeup, room upgrade, 20 digital photos, romantic dinner, spa treatments. From $1,649 (Mon–Wed off-peak) to $2,099 (Thu–Sun peak). Mon–Thu only.',
+        featured: false
+      },
+      {
+        name: 'Eternal Love',
+        price: 'From $5,049',
+        highlights: 'Up to 20 guests. Symbolic ceremony, rehearsal dinner, hair & makeup, flowers, live music cocktail hour, private reception dinner, 50 photos + 30-min video, couples spa treatment. From $5,049 to $6,249. Extra adults: $96 + 28% tax; kids (3–12): $48.64 + 28% tax.',
+        featured: true
+      },
+      {
+        name: 'Beyond Memorable',
+        price: 'From $12,049',
+        highlights: 'Up to 79 guests (min. 75 room nights). Welcome cocktail party, rehearsal dinner, private ceremony, cocktail hour, private reception. $100 resort coupons/guest, spa perks. From $12,049 to $14,699. Extra guests: $185/adult, $92/child.',
+        featured: false
+      },
+      {
+        name: 'Dulha & Dulhan South Asian Wedding Package',
+        price: 'From $10,599',
+        highlights: 'Up to 79 guests (min. 25 rooms × 3 nights). Welcome cocktail party, Sangeet & Mehndi, Baraat, mandap ceremony, South Asian reception buffet. Certified South Asian coordinator, $100 resort coupons/guest. From $10,599 to $12,999.',
+        featured: false
+      }
+    ],
+    // Wedding services available
+    weddingServices: [
+      'Civil/Legal Wedding', 'Symbolic Wedding', 'Onsite Wedding Coordinator',
+      'Hair and Makeup', 'DJ Services', 'Bridal Suite Available',
+      'Live Music', 'Floral Arrangements/Decor', 'Photographer', 'Videographer',
+      'Wedding Attire Preparation'
+    ],
+    // Legal wedding fees (Dominican Republic)
+    weddingFees: {
+      judge: 750,
+      priest: 750,
+      outsideHairMakeup: 1000,
+      outsidePhotography: 1000,
+      djBasic: 950,
+      djFull: 1300,
+      dayPass: 150,
+      weddingPass: 80
+    },
+    // Real weddings at this resort
+    realWeddingUrl:   'https://www.destinationweddings.com/real-weddings/real-wedding-stories/kassandra-scott',
+    realWeddingNames: 'Kassandra & Scott',
+    realWeddings: [
+      {
+        couple: 'Kassandra & Scott',
+        venue: 'Himitsu Garden / Seaside Garden Terrace',
+        guests: 26,
+        specialist: 'Kimberlee Key',
+        description: 'A beautiful ceremony with lush greenery, crystalline ocean views, and vibrant flowers. Upgrades included a white dance floor, bistro lights, and illuminated initials. The resort\'s entertainment team surprised guests with a bachata and merengue performance.',
+        url: 'https://www.destinationweddings.com/real-weddings/real-wedding-stories/kassandra-scott',
+        photo: 'https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/kassandra-scott-9.jpeg'
+      }
+    ],
+    // Amenities & Activities
+    amenities: [
+      'Fitness Center', 'Spa by Pevonia® ($)', 'Babysitting/Supervision ($)',
+      'Laundry Service ($)', '24-Hour Room Service', 'Teen Club (Core Zone)',
+      'All-Inclusive Meals', 'All-Inclusive Drinks', 'Wi-Fi'
+    ],
+    activities: [
+      'Water Park', 'Explorer\'s Club for Kids', 'Core Zone Teens Club',
+      'Scuba Diving Instruction', 'Aqua Aerobics', 'Aerobics',
+      'Paintball', 'Basketball', 'Tennis', 'Volleyball', 'Golf Nearby ($)',
+      'Off-Property Tours ($)', 'Nightclub', 'Live Entertainment', 'Theme Parties'
+    ]
+  };
+}
+
+function setStatus(type, html) {
+  var el = document.getElementById('statusBox');
+  el.className = 'status ' + type;
+  el.innerHTML = html;
+}
+
+async function importResort() {
+  var btn = document.getElementById('importBtn');
+  btn.disabled = true;
+  setStatus('loading', '⏳ Adding Dreams Macao Beach Punta Cana to your resort library…');
+  try {
+    var resortData = getResortData();
+    resortData.photos = photos;
+    resortData.createdAt = new Date().toISOString();
+
+    await db.collection('resortProfiles').doc('dreams-macao').set(resortData, { merge: true });
+    setStatus('success', '✓ <strong>Dreams Macao Beach Punta Cana updated!</strong><br>All data written: rooms, restaurants, venues, packages, photos.<br><small style="color:#555">16 room categories · 69 photos</small>');
+  } catch(err) {
+    setStatus('error', '✗ Error: ' + err.message);
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
