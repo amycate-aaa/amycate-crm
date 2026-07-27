@@ -974,7 +974,7 @@ Complimentary concierge and computer access</textarea>
 
 <div class="generate-bar">
   <button class="btn-gen" id="genBtn" onclick="generate()">Generate Quote Files</button>
-  <button class="btn-gen" id="regenBtn" onclick="generate()" style="display:none;background:#2a2a2a;border:1px solid #555;">🔄 Regenerate</button>
+  <button class="btn-gen" id="regenBtn" title="Re-reads the resort library, then rebuilds the quote" onclick="refreshAndGenerate()" style="display:none;background:#2a2a2a;border:1px solid #555;">🔄 Regenerate</button>
   <label style="display:inline-flex;align-items:center;gap:7px;margin-right:18px;color:#EDE3CC;font-family:Jost,sans-serif;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;cursor:pointer;white-space:nowrap;"><input type="checkbox" id="incPromos" checked style="width:15px;height:15px;accent-color:#C9A84C;cursor:pointer;">Include offers</label><span class="gen-status" id="genStatus">Ready — fill in the form then click Generate.</span>
   <div class="dl-links" id="dlLinks"></div>
 </div>
@@ -1772,6 +1772,66 @@ async function generateFITSneak(status){
   status.textContent='✅ Ready — click to download:';
 }
 
+
+
+// ---- Keeping the builder in step with the resort library -------------------
+// Resort records are cached when the page opens. If Amy pops into the library to
+// fix a photo or a price, Regenerate has to throw that cache away or it rebuilds
+// the quote from the old copy.
+function refreshAndGenerate(){
+  try{ for(const k in resortCache) delete resortCache[k]; }catch(e){}
+  const s=document.getElementById('genStatus');
+  if(s) s.textContent='Reloading resort details…';
+  generate();
+}
+
+// Remember everything typed into the builder, so leaving for the resort library
+// and coming back doesn't mean filling the whole form in again.
+(function keepFormAlive(){
+  const KEY='quoteBuilderForm';
+  const fields=()=>[...document.querySelectorAll('input,select,textarea')]
+    .filter(el=>el.id && el.type!=='file' && el.type!=='button');
+  function save(){
+    try{
+      const d={};
+      fields().forEach(el=>{ d[el.id] = (el.type==='checkbox'||el.type==='radio') ? el.checked : el.value; });
+      localStorage.setItem(KEY, JSON.stringify({at:Date.now(), d}));
+    }catch(e){}
+  }
+  function restore(){
+    try{
+      const raw=localStorage.getItem(KEY); if(!raw) return 0;
+      const {at,d}=JSON.parse(raw);
+      // a week is plenty; after that it's a stale quote, not a work in progress
+      if(Date.now()-at > 7*24*60*60*1000){ localStorage.removeItem(KEY); return 0; }
+      let n=0;
+      Object.keys(d).forEach(id=>{
+        const el=document.getElementById(id); if(!el) return;
+        if(el.type==='checkbox'||el.type==='radio'){ el.checked=!!d[id]; }
+        else if(el.value!==d[id]){ el.value=d[id]; }
+        if(d[id]!=='' && d[id]!==false) n++;
+        el.dispatchEvent(new Event('change',{bubbles:true}));
+      });
+      return n;
+    }catch(e){ return 0; }
+  }
+  function clearSaved(){ try{ localStorage.removeItem(KEY); }catch(e){} }
+  window.clearBuilderForm=function(){
+    if(confirm('Clear this quote and start a new one?')){ clearSaved(); location.reload(); }
+  };
+  document.addEventListener('input', save, true);
+  document.addEventListener('change', save, true);
+  window.addEventListener('beforeunload', save);
+  // let the page finish drawing its dropdowns before putting values back
+  setTimeout(()=>{
+    const n=restore();
+    if(n>3){
+      const s=document.getElementById('genStatus');
+      if(s) s.innerHTML='Picked up where you left off. '+
+        '<a href="#" onclick="clearBuilderForm();return false;" style="color:#C9A84C;">Start a new quote</a>';
+    }
+  }, 1400);
+})();
 
 function promoBand(r, kind){
   if(!r) return '';
