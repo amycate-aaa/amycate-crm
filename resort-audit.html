@@ -194,7 +194,18 @@ async function load(){
     const sel=new DOMParser().parseFromString(html,'text/html').getElementById('masterResort');
     opts=[...sel.options].filter(o=>o.value&&o.value!=='other')
       .map(o=>({slug:o.value,label:o.textContent.trim()}));
-  }catch(e){ opts=Object.keys(docs).map(k=>({slug:k,label:docs[k].resortName||docs[k].name||k})); }
+  }catch(e){ opts=[]; }
+  // Union with the database, so a resort either of them creates shows up here
+  // straight away — no waiting for the library file to be pushed.
+  const listed=new Set(opts.map(o=>o.slug));
+  Object.keys(docs).forEach(k=>{
+    if(listed.has(k)) return;
+    const x=docs[k];
+    const n=['roomCategories','restaurants','venues','packages'].reduce((a,f)=>a+A(x[f]).length,0);
+    if(!n && !x.tagline && !x.description) return;   // skip empty shells
+    opts.push({slug:k,label:x.resortName||x.name||k});
+  });
+  opts.sort((a,b)=>a.label.localeCompare(b.label));
 
   ROWS=opts.map(o=>{
     const d=docs[o.slug];

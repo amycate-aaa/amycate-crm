@@ -1856,5 +1856,48 @@ window.addEventListener('scroll', function(){
   else go(20);
 })();
 </script>
+
+<script>
+// Keep the resort dropdown in step with the database.
+// The typed-in list below stays as the curated set of names, and anything either
+// Amy or Christopher creates in Firestore is added automatically — so a new
+// resort is selectable for BOTH of us without anyone pushing a file to GitHub.
+(async function syncResortDropdown(){
+  function prettify(slug){
+    return slug.split('-').map(w => w.length<=3 && /^(and|the|by|spa|inn)$/.test(w)
+      ? w : w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  }
+  try{
+    const sel = document.getElementById('masterResort');
+    if(!sel || typeof db === 'undefined') return;
+    const snap = await db.collection('resortProfiles').get();
+    const have = new Set([...sel.options].map(o => o.value));
+    let added = 0;
+    snap.docs.forEach(d => {
+      if(have.has(d.id)) return;
+      const x = d.data();
+      // skip empty shells so the list doesn't fill with blanks
+      const n = ['roomCategories','restaurants','venues','packages']
+        .reduce((a,f)=>a+((x[f]||[]).length||0),0);
+      if(!n && !x.tagline && !x.description) return;
+      const o = document.createElement('option');
+      o.value = d.id;
+      o.textContent = x.resortName || x.name || prettify(d.id);
+      sel.appendChild(o); added++;
+    });
+    // re-sort alphabetically, keeping the placeholder first and "Other" last
+    const opts = [...sel.options];
+    const first = opts.filter(o => o.value === '');
+    const last  = opts.filter(o => o.value === 'other');
+    const mid   = opts.filter(o => o.value && o.value !== 'other')
+                      .sort((a,b) => a.textContent.trim().localeCompare(b.textContent.trim()));
+    const keep = sel.value;
+    sel.innerHTML = '';
+    [...first, ...mid, ...last].forEach(o => sel.appendChild(o));
+    if(keep) sel.value = keep;
+    if(added) console.log('Resort dropdown: added '+added+' resort(s) from the database.');
+  }catch(e){ console.warn('Resort dropdown sync skipped:', e.message); }
+})();
+</script>
 </body>
 </html>
