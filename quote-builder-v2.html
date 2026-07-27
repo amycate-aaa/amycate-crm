@@ -1833,6 +1833,27 @@ function refreshAndGenerate(){
   }, 1400);
 })();
 
+
+// ---- Dining, grouped -------------------------------------------------------
+// A resort like Ocean Riviera Paradise has 25 outlets. As one run it's a wall of
+// names, so sort them into Restaurants / Bars & Lounges / Cafés & Snacks and tag
+// the first of each group so the template can print a heading.
+function sortDining(rests){
+  const kind = r => {
+    const s = ((r&&r.type)||'') + ' ' + ((r&&r.name)||'');
+    if(/coffee|caf[eé]|creperie|ice cream|provisions|bakery|patisserie|dessert/i.test(s)) return 2;
+    if(/\bbar\b|lounge|pub|cantina|swim[- ]?up|tequila|mezcal|agave|disco/i.test(s))    return 1;
+    return 0;
+  };
+  const LABEL = ['Restaurants','Bars & Lounges','Cafés & Snacks'];
+  const out=[];
+  [0,1,2].forEach(k=>{
+    const g=(rests||[]).filter(r=>kind(r)===k);
+    g.forEach((r,i)=>out.push(i===0 ? Object.assign({},r,{_group:LABEL[k]}) : r));
+  });
+  return out;
+}
+
 function promoBand(r, kind){
   if(!r) return '';
   // Amy chooses per quote whether offers appear at all.
@@ -1952,7 +1973,7 @@ function buildFITSneakFull(fsv){
     if(!rests.length) return '';
     const anyPhoto=rests.some(x=>x.photo);
     if(anyPhoto){
-      const cards=rests.map(x=>`<div class="dining-card">
+      const cards=sortDining(rests).map(x=>`<div class="dining-card">
         ${x.photo?`<img src="${escUrl(x.photo)}" alt="${esc(x.name)}" style="width:100%;height:150px;object-fit:cover;display:block;">`:
           `<div class="dining-card-no-photo">🍽</div>`}
         <div class="dining-card-body">
@@ -1969,7 +1990,7 @@ function buildFITSneakFull(fsv){
         </div>
       </div>`;
     } else {
-      const rows=rests.map(x=>`<div class="dining-list-row">
+      const rows=sortDining(rests).map(x=>`${x._group?'<div class="dining-group">'+esc(x._group)+'</div>':''}<div class="dining-list-row">
         <div class="dining-list-left">
           <div class="dining-list-name">${esc(x.name)}</div>
           ${x.type?`<div class="dining-list-type">${esc(x.type)}</div>`:''}
@@ -2147,7 +2168,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .dining-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:8px;}
 .dining-desc{font-size:12px;font-weight:300;line-height:1.7;color:var(--brown);flex:1;}
 .dining-list{margin-top:32px;}
-.dining-list-row{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--cream-3);}
+.dining-group{grid-column:1/-1;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#C9A84C;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,.28);}.dining-group:first-child{margin-top:0;}.dining-list-row{display:grid;grid-template-columns:220px 1fr;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--cream-3);}
 .dining-list-row:first-child{border-top:1px solid var(--cream-3);}
 .dining-list-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:4px;}
 .dining-list-type{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-2);}
@@ -2166,7 +2187,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
   .hi-list{grid-template-columns:1fr;}
   .rc-grid{grid-template-columns:1fr;}
   .dining-grid{grid-template-columns:repeat(2,1fr);}
-  .dining-list-row{grid-template-columns:1fr;gap:8px;}
+  .dining-group{grid-column:1/-1;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#C9A84C;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,.28);}.dining-group:first-child{margin-top:0;}.dining-list-row{grid-template-columns:1fr;gap:8px;}
   .price-band{gap:24px;}.price-band-price{margin-left:0;}
   .footer{grid-template-columns:1fr;}
 }
@@ -2672,7 +2693,7 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
 .dining-type-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--gold-2);margin-bottom:8px;}
 .dining-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:8px;}
 .dining-desc{font-size:12px;font-weight:300;line-height:1.7;color:var(--brown);flex:1;}
-.dining-list-row{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--cream-3);}
+.dining-group{grid-column:1/-1;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#C9A84C;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,.28);}.dining-group:first-child{margin-top:0;}.dining-list-row{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--cream-3);}
 .dining-list-row:first-child{border-top:1px solid var(--cream-3);}
 .dining-list-name{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-weight:400;color:var(--black);line-height:1.2;margin-bottom:4px;}
 .dining-list-type{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-2);}
@@ -2731,7 +2752,7 @@ ${(()=>{
   const anyPhoto = rests.some(rest => rest.photo);
   if (anyPhoto) {
     // Card grid — photo resorts
-    const cards = rests.map(rest => `<div class="dining-card">
+    const cards = sortDining(rests).map(rest => `<div class="dining-card">
       ${rest.photo ? `<img src="${escUrl(rest.photo)}" alt="${esc(rest.name)}" style="width:100%;height:150px;object-fit:cover;display:block;">` : `<div class="dining-card-no-photo">🍽</div>`}
       <div class="dining-card-body">
         ${rest.type?`<span class="dining-type-badge">${esc(rest.type)}</span>`:''}
@@ -2746,7 +2767,7 @@ ${(()=>{
     </section>`;
   } else {
     // Text list — no photos
-    const rows = rests.map(rest => `<div class="dining-list-row">
+    const rows = sortDining(rests).map(rest => `${rest._group?'<div class="dining-group">'+esc(rest._group)+'</div>':''}<div class="dining-list-row">
       <div class="dining-list-left">
         <div class="dining-list-name">${esc(rest.name)}</div>
         ${rest.type?`<div class="dining-list-type">${esc(rest.type)}</div>`:''}
@@ -2964,14 +2985,14 @@ function buildWeddingFull(wv){
     const rests=Array.isArray(r.restaurants)?r.restaurants:[];
     const anyRestPhoto=rests.some(x=>x.photo);
     const restaurantsHTML = !rests.length ? '' : (anyRestPhoto
-      ? `<div class="dining-grid">${rests.map(x=>`<div class="dining-card">
+      ? `<div class="dining-grid">${sortDining(rests).map(x=>`<div class="dining-card">
           ${x.photo?`<img class="dining-img" src="${escUrl(x.photo)}" alt="${esc(x.name)}">`:`<div class="dining-img dining-noimg">&#127860;</div>`}
           <div class="dining-body">
             <div class="dining-name">${esc(x.name)}</div>
             ${x.type?`<div class="dining-type">${esc(x.type)}</div>`:''}
             ${x.description?`<div class="dining-desc">${esc(x.description)}</div>`:''}
           </div></div>`).join('')}</div>`
-      : `<div class="dining-list">${rests.map(x=>`<div class="dining-row">
+      : `<div class="dining-list">${sortDining(rests).map(x=>`${x._group?'<div class="dining-group">'+esc(x._group)+'</div>':''}<div class="dining-row">
           <span class="dining-name">${esc(x.name)}</span>${x.type?`<span class="dining-type-inline">${esc(x.type)}</span>`:''}
           ${x.description?`<div class="dining-desc">${esc(x.description)}</div>`:''}
         </div>`).join('')}</div>`);
@@ -3152,7 +3173,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .dining-type-inline{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-left:10px;}
 .dining-desc{font-family:'Jost',sans-serif;font-size:13px;line-height:1.6;color:#5C5044;}
 .dining-list{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 32px;}
-.dining-row{border-bottom:1px solid #E2D9CC;padding-bottom:12px;}
+.dining-group{grid-column:1/-1;font-family:'Jost',sans-serif;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#C9A84C;margin:22px 0 8px;padding-bottom:5px;border-bottom:1px solid rgba(201,168,76,.28);}.dining-group:first-child{margin-top:0;}.dining-row{border-bottom:1px solid #E2D9CC;padding-bottom:12px;}
 .resort-club{padding:0 7vw 60px;background:var(--cream);}
 .club-inner{background:var(--black);color:#fff;padding:38px 44px;}
 .club-eyebrow{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;}
