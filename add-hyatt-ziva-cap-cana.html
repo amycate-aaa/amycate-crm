@@ -24,7 +24,7 @@
 <div class="info">
   <strong>What will be imported (all from destinationweddings.com):</strong><br>
   • Full description + tagline + highlights<br>
-  • 6 wedding venues (Ziva Beach Gazebo, Beach, Rooftop Terrace, Santo Domingo Terrace, Larimar Lawn, Santo Domingo Ballroom)<br>
+  • 6 wedding venues <strong>+ verified photos</strong> (Ziva Beach Gazebo, Beach, Rooftop Terrace, Santo Domingo Terrace, Larimar Lawn, Santo Domingo Ballroom)<br>
   • 6 wedding packages with real 2026–2027 pricing from the wedding flyer<br>
   • 21 room categories with descriptions <strong>+ verified photos</strong><br>
   • 15 restaurants, bars &amp; lounges <strong>+ verified photos</strong><br>
@@ -33,7 +33,7 @@
 </div>
 
 <div class="warn">
-  <strong>Photos:</strong> Every photo URL was tested and confirmed to load from the Playa CDN. Two items have no photo (Prontoz, Twisted Timbers) and <strong>wedding venue photos are still blank</strong> — use the 📷 picker in the Resort Library for those.
+  <strong>Photos:</strong> Every photo URL was tested and confirmed to load. <strong>All 6 wedding venues have real photos.</strong> Only two dining spots are missing a photo (Prontoz, Twisted Timbers) — use the 📷 picker in the Resort Library if you want to add those.
 </div>
 
 <button id="btn" onclick="runImport()">Import to Firestore</button>
@@ -61,6 +61,11 @@ const DZ = P + 'Hyatt_Zilara_Cap_Cana/dining/2024/';
 const NW = ZC + 'Newest/';
 
 const HERO = NW + 'hyatt-ziva-cap-cana-general-resort-view.jpg';
+
+// Wedding venue photos — Milestone CDN (destinationweddings.com), all verified to load
+const MS  = 'https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/';
+const MS1 = MS + '72826-hyatt-ziva-cap-cana/aioapi/';
+const MS2 = MS + 'hyatt-ziva-cap-cana/aioapi/';
 
 const RESORT_DATA = {
   slug: 'hyatt-ziva-cap-cana',
@@ -95,8 +100,11 @@ const RESORT_DATA = {
     NW + 'hyatt-ziva-cap-cana-family-beach-3.jpg',
     NW + 'hyatt-ziva-cap-cana-anapac-kids-club-5.jpg',
     NW + 'hyat-ziva-cap-cana-canapolis-waterpark-2.jpg',
-    NW + 'hyatt-ziva-cap-cana-fire-pits-family-4.jpg'
+    NW + 'hyatt-ziva-cap-cana-fire-pits-family-4.jpg',
+    MS1 + 'hyatt-zilara-hyatt-ziva-cap-cana-beach-weddings-couple-1.jpeg'
   ],
+
+  weddingContact: 'Mexico/Canada: 833-577-0935 · International: +1 (809) 469-7038 · Email: PUJIA-weddings@hyatt.com',
 
   heroPhoto: HERO,
   dwtUrl: 'https://www.destinationweddings.com/hyatt-ziva-cap-cana',
@@ -108,42 +116,42 @@ const RESORT_DATA = {
       capacity: 'Up to 150 Guests',
       bestFor: 'Ceremony',
       description: 'The signature oceanfront gazebo at Hyatt Ziva Cap Cana, with maximum capacity for up to 150 guests. Set on the beach with Caribbean Sea views — the iconic ceremony spot on property. Flowers and décor available at additional cost.',
-      photo: ''
+      photo: MS1 + 'hyatt-ziva-cap-cana-wedding2.jpeg'
     },
     {
       name: 'Beach',
       capacity: 'Up to 600 Guests',
       bestFor: 'Ceremony · Reception · Cocktail Hour',
       description: 'With the serene sound of waves and the captivating view of the Caribbean Sea as your backdrop, the beach at Hyatt Ziva Cap Cana creates an intimate and magical atmosphere. Buffet-style dinner is required for outdoor venues. Outdoor events must conclude by 11:00 PM due to noise restrictions. Flowers and décor available at additional cost. (Note: DWT site lists 800 guests — confirm with resort.)',
-      photo: ''
+      photo: MS1 + 'hyatt-ziva-cap-cana-beach-weddings-1.jpg'
     },
     {
       name: 'Rooftop Terrace',
       capacity: '100 Ceremony · 80 Cocktail/Reception · 100 Dinner',
       bestFor: 'Ceremony · Reception · Cocktail Hour',
       description: 'Perched on the fifth floor at Hyatt Ziva Cap Cana, this elegant elevated space offers stunning ocean views. Location fee: USD $1,000 (2026) / USD $1,500 (2027). You can have either the ceremony OR the cocktail/reception in this venue. Cannot be combined with the Zilara Gazebo. Buffet-style dinner required for outdoor venues. Flowers and décor available at additional cost. (Note: DWT site lists 200 guests — confirm with resort.)',
-      photo: ''
+      photo: MS2 + 'hyatt-ziva-cap-cana-rooftop-wedding-sunrise-setup-1.jpg'
     },
     {
       name: 'Santo Domingo Terrace',
       capacity: '100 Guests',
       bestFor: 'Reception · Cocktail Hour',
       description: 'The Santo Domingo Terrace is the perfect choice for hosting more intimate events, offering stunning views and a lovely atmosphere to enjoy on your special day.',
-      photo: ''
+      photo: MS1 + 'hyatt-ziva-cap-cana-outdoor-gardens-and-private-terraces-venue.webp'
     },
     {
       name: 'Larimar Lawn',
       capacity: '2,000 Guests',
       bestFor: 'Ceremony · Reception · Cocktail Hour',
       description: 'With its freshly manicured green grass, this charming outdoor venue sets the stage for a romantic and unforgettable wedding celebration. Buffet-style dinner required for outdoor venues. Outdoor events conclude by 11:00 PM.',
-      photo: ''
+      photo: MS2 + 'hyatt-zilara-hyatt-ziva-cap-cana-mice-larimar-lawn-reception-setup-4.jpg'
     },
     {
       name: 'Santo Domingo Ballroom',
       capacity: '2,070 Guests',
       bestFor: 'Reception · Cocktail Hour',
       description: 'Elevate your special day to the epitome of style by choosing the Santo Domingo Ballroom as the venue for your celebration. This exquisite ballroom radiates a timeless and vibrant energy, setting the stage for a remarkable wedding experience.',
-      photo: ''
+      photo: MS1 + 'hyatt-zlara-hyatt-ziva-cap-cana-mice-santo-domingo-ballroom-banquet-setup-1.jpg'
     }
   ],
 
@@ -295,8 +303,9 @@ async function runImport() {
     log('  • ' + resortData.photos.length + ' gallery photos');
     log('  • Club Level perks included');
     log('');
-    log('⚠️  Still needed: wedding venue photos + Prontoz/Twisted Timbers.', 'err');
-    log('    Use the 📷 picker in the Resort Library to add them.');
+    log('  • All 6 venues have photos ✓');
+    log('');
+    log('Only missing: photos for Prontoz & Twisted Timbers.');
   } catch (err) {
     log('❌ Error: ' + err.message, 'err');
     btn.disabled = false;
