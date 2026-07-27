@@ -2600,7 +2600,7 @@ body{background:var(--cream);font-family:'Jost',Arial,sans-serif;color:var(--bro
 .dining-list-type{font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--gold-2);}
 .dining-list-desc{font-size:13px;font-weight:300;line-height:1.75;color:var(--brown);}
 @media(max-width:800px){.about{grid-template-columns:1fr;}.rooms-grid{grid-template-columns:1fr;}.footer{grid-template-columns:1fr;}.payment-grid{grid-template-columns:1fr;}.dining-grid{grid-template-columns:repeat(2,1fr);}}
-</style></head><body>
+.like-wrap{background:var(--cream);padding:0 7vw 54px;text-align:center;}.like-btn{display:inline-block;background:var(--black);color:var(--gold);font-family:'Jost',sans-serif;font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;text-decoration:none;padding:17px 42px;}@media print{.like-wrap{display:none;}}</style></head><body>
 <section class="hero">
   <img class="hero-img" src="${escUrl(v.heroPhoto||DEFAULT_WEDDING_HERO)}" alt="">
   <div class="hero-overlay"></div>
@@ -2684,7 +2684,7 @@ ${(()=>{
 })()}
 ${v.note?`<div class="note-section"><div class="note-inner"><strong>A note from ${agentVal('first')}:</strong> ${esc(v.note)}</div></div>`:''}
 ${(v.deposit||v.finalPayment)?`<section class="payment"><p class="section-eyebrow">Easy Payments</p><h2 class="section-title" style="margin-bottom:0;">Lock In Your Spot</h2><div class="payment-grid">${v.deposit?`<div class="payment-cell"><div class="payment-cell-label">Deposit</div><div class="payment-cell-value">${esc(v.deposit)}</div></div>`:''} ${v.finalPayment?`<div class="payment-cell"><div class="payment-cell-label">Final Payment</div><div class="payment-cell-value">${esc(v.finalPayment)}</div></div>`:''}</div></section>`:''}
-<footer class="footer">
+<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, v.clientName, v.tripName||'')}">&#10084;&#65039;&nbsp;I Like This One</a></div><footer class="footer">
   <div><p class="footer-eyebrow">Questions? I'm here for you.</p><div class="footer-name">${agentVal('full')}</div><div class="footer-title">Certified Destination Wedding &amp; Group Travel Specialist</div><div class="footer-contact"><a href="mailto:${agentVal('email')}">${agentVal('email')}</a><a href="tel:${agentVal('phone').replace(/\D/g,'')}">${agentVal('phone')}</a></div></div>
   <div class="footer-disclaimer">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
 </footer>

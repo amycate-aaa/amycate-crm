@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resort Library — Audit</title>
+<style>
+  :root{--gold:#C9A84C;--espresso:#3A2E22;--cream:#FAF7F2;--line:#EAE5DC;}
+  *{box-sizing:border-box;}
+  body{font-family:-apple-system,'Segoe UI',Arial,sans-serif;margin:0;background:#fff;color:#2C2A26;line-height:1.5;}
+  .wrap{max-width:1120px;margin:0 auto;padding:30px 22px 80px;}
+  h1{font-size:26px;margin:0 0 3px;font-weight:600;}
+  h2{font-size:19px;margin:46px 0 3px;font-weight:600;padding-top:26px;border-top:1px solid var(--line);}
+  .sub{color:#6B6459;font-size:13.5px;margin:0 0 22px;}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:8px;}
+  .card{background:var(--cream);border-radius:8px;padding:14px;cursor:pointer;border:2px solid transparent;}
+  .card:hover{border-color:var(--line);}
+  .card.on{border-color:var(--gold);}
+  .card b{display:block;font-size:24px;font-weight:600;}
+  .card span{font-size:12px;color:#6B6459;}
+  .bar{display:flex;gap:10px;align-items:center;margin:20px 0 14px;flex-wrap:wrap;}
+  input[type=search]{flex:1;min-width:220px;padding:9px 12px;border:1px solid var(--line);border-radius:7px;font-size:14px;}
+  button{background:var(--espresso);color:var(--gold);border:0;border-radius:7px;padding:9px 18px;font-size:12px;
+    letter-spacing:1.5px;text-transform:uppercase;font-weight:600;cursor:pointer;}
+  button.ghost{background:#fff;color:var(--espresso);border:1px solid var(--line);}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:#8A8378;
+    padding:8px;border-bottom:2px solid var(--line);font-weight:600;}
+  td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:top;}
+  td.n{width:290px;font-weight:500;}
+  .slug{font-weight:400;color:#A09789;font-size:11px;margin-top:2px;}
+  .tag{display:inline-block;background:#F3EFE8;border-radius:4px;padding:2px 8px;margin:2px 3px 2px 0;font-size:12px;white-space:nowrap;}
+  .tag.hard{background:#FBE9E7;color:#9A3412;}
+  .tag.bug{background:#FEF3C7;color:#92400E;font-weight:600;}
+  .ok{color:#15803D;font-size:12px;}
+  .note{background:var(--cream);border-left:3px solid var(--gold);padding:13px 17px;font-size:13px;margin:22px 0;border-radius:0 6px 6px 0;}
+  .loading{padding:60px 0;text-align:center;color:#8A8378;}
+  .hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Resort Library — Audit</h1>
+  <p class="sub" id="sub">Reading Firestore…</p>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="bar">
+    <input type="search" id="q" placeholder="Filter by resort name…">
+    <button class="ghost" onclick="setFilter('all')">Show all</button>
+    <button onclick="load()">Refresh</button>
+  </div>
+
+  <div class="note" id="buglist"></div>
+
+  <div id="out"><div class="loading">Loading…</div></div>
+
+  <h2 id="orphanHead" class="hidden">Unreachable records</h2>
+  <p class="sub hidden" id="orphanSub"></p>
+  <div id="orphans"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey:'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
+  authDomain:'wedding-crm-e5d12.firebaseapp.com',
+  projectId:'wedding-crm-e5d12',
+  storageBucket:'wedding-crm-e5d12.firebasestorage.app',
+  messagingSenderId:'246819649586',
+  appId:'1:246819649586:web:a74debd217ce048d26242b'
+});
+const db=firebase.firestore();
+const A=v=>Array.isArray(v)?v:[];
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+// The dropdown list lives in resort-library.html. We read it from there so this
+// page always audits exactly what Amy can actually select.
+const LIBRARY_URL='resort-library.html';
+
+let ROWS=[], FILTER='all';
+
+// A wedding package never costs "per person per night" — that means room data
+// was imported into the packages array by mistake.
+const PER_NIGHT=/per\s*person\s*\/?\s*night|\/person\/night|per night/i;
+const ROOMISH=/\b(suite|junior|master|presidential|king|queen|double|swim[- ]?up|swim[- ]?out|ocean\s*(front|view)|garden view|pool view|resort view|penthouse|villa|casita|bungalow|deluxe|partial ocean)\b/i;
+// Text that should never reach a client.
+const LEAK=/⚠️|confirm with (the )?resort|verify current|not detailed in|not priced in|contact the resort wedding coordinator|listed on destinationweddings|DWT (site )?lists|SOURCE NOTE|pricing conflict|cancellation penalt|penalty fee|loyalty program|repeat stays|best-price guarantee/i;
+
+function gapsFor(d){
+  const g=[];
+  if(!d) return [{t:'NO RECORD AT ALL',hard:true}];
+  const n=a=>A(d[a]).length, np=a=>A(d[a]).filter(x=>x&&!x.photo).length;
+
+  // data bugs first — these produce visibly wrong quotes
+  const badPkg=A(d.packages).filter(p=>PER_NIGHT.test(p.price||'')||ROOMISH.test(p.name||''));
+  if(badPkg.length) g.push({t:'ROOMS STORED AS PACKAGES ('+badPkg.length+')',bug:true});
+
+  let leaks=0;
+  ['packages','venues','roomCategories','restaurants'].forEach(k=>A(d[k]).forEach(x=>{
+    if(LEAK.test((x.highlights||'')+' '+(x.description||'')+' '+(x.price||''))) leaks++;}));
+  if(LEAK.test(d.packageNotes||'')) leaks++;
+  if(LEAK.test((d.clubLevelPerks||'')+' '+(d.clubLevelName||''))) leaks++;
+  if(leaks) g.push({t:'CLIENT-FACING TEXT PROBLEM ('+leaks+')',bug:true});
+
+  if(!d.tagline) g.push({t:'no tagline',hard:true});
+  if(!d.description) g.push({t:'no description',hard:true});
+  if(n('roomCategories')===0) g.push({t:'NO ROOMS',hard:true});
+  else if(np('roomCategories')) g.push({t:np('roomCategories')+'/'+n('roomCategories')+' rooms need photos'});
+  if(n('restaurants')===0) g.push({t:'NO DINING',hard:true});
+  else if(np('restaurants')) g.push({t:np('restaurants')+'/'+n('restaurants')+' dining need photos'});
+  if(n('venues')===0) g.push({t:'NO VENUES',hard:true});
+  else if(np('venues')) g.push({t:np('venues')+'/'+n('venues')+' venues need photos'});
+  if(n('packages')===0) g.push({t:'NO PACKAGES',hard:true});
+  if(n('photos')===0) g.push({t:'no gallery photos'});
+  return g;
+}
+
+async function load(){
+  document.getElementById('out').innerHTML='<div class="loading">Loading…</div>';
+  const snap=await db.collection('resortProfiles').get();
+  const docs={}; snap.docs.forEach(d=>docs[d.id]=d.data());
+
+  // pull the dropdown straight out of the library page
+  let opts=[];
+  try{
+    const html=await (await fetch(LIBRARY_URL+'?cb='+Date.now())).text();
+    const doc=new DOMParser().parseFromString(html,'text/html');
+    const sel=doc.getElementById('masterResort');
+    opts=[...sel.options].filter(o=>o.value&&o.value!=='other')
+      .map(o=>({slug:o.value,label:o.textContent.trim()}));
+  }catch(e){
+    opts=Object.keys(docs).map(k=>({slug:k,label:(docs[k].name||k)}));
+  }
+
+  ROWS=opts.map(o=>({...o, d:docs[o.slug], gaps:gapsFor(docs[o.slug])}));
+
+  const done=ROWS.filter(r=>r.gaps.length===0).length;
+  const bugs=ROWS.filter(r=>r.gaps.some(g=>g.bug)).length;
+  const norec=ROWS.filter(r=>!r.d).length;
+  const emptyR=ROWS.filter(r=>r.d && A(r.d.roomCategories).length===0 && A(r.d.restaurants).length===0
+    && A(r.d.venues).length===0 && A(r.d.packages).length===0).length;
+  const partial=ROWS.length-done-norec-emptyR;
+
+  document.getElementById('sub').textContent=
+    ROWS.length+' resorts in the dropdown · refreshed '+new Date().toLocaleString();
+
+  document.getElementById('cards').innerHTML=[
+    ['bugs',bugs,'Data bugs'],['partial',partial,'Partial'],
+    ['empty',emptyR,'Empty record'],['norec',norec,'No record'],
+    ['done',done,'Complete']
+  ].map(([k,v,l])=>'<div class="card'+(FILTER===k?' on':'')+'" onclick="setFilter(\''+k+'\')"><b>'+v+'</b><span>'+l+'</span></div>').join('');
+
+  const bl=ROWS.filter(r=>r.gaps.some(g=>g.bug));
+  document.getElementById('buglist').innerHTML = bl.length
+    ? '<b>Needs attention first.</b> These produce visibly wrong quotes: '+
+      bl.map(r=>esc(r.label)).join(' · ')
+    : '<b>No data bugs.</b> Nothing in the library is currently mis-filed or leaking internal notes into client-facing text.';
+
+  renderOrphans(docs, new Set(opts.map(o=>o.slug)));
+  render();
+}
+
+// Firestore docs that no dropdown option points at. These hold real work that
+// Amy cannot see or edit — usually a second slug for a resort she already built.
+function renderOrphans(docs, inDrop){
+  const norm=s=>s.replace(/[^a-z]/g,'');
+  const drop=[...inDrop];
+  const orph=Object.keys(docs).filter(id=>!inDrop.has(id)).map(id=>{
+    const x=docs[id];
+    const n=A(x.roomCategories).length+A(x.restaurants).length+A(x.venues).length+A(x.packages).length;
+    const match=drop.filter(d=>norm(d).includes(norm(id).slice(0,14))||norm(id).includes(norm(d).slice(0,14)));
+    return {id,n,match,name:x.name||''};
+  }).filter(o=>o.n>0).sort((a,b)=>b.n-a.n);
+
+  const H=document.getElementById('orphanHead'), S=document.getElementById('orphanSub');
+  if(!orph.length){ H.className='hidden'; S.className='sub hidden'; document.getElementById('orphans').innerHTML=''; return; }
+  H.className=''; S.className='sub';
+  S.textContent=orph.length+' Firestore records hold data but no dropdown option points at them — '+
+    orph.reduce((a,b)=>a+b.n,0)+' items you built that the library cannot open. Fix by merging onto the dropdown slug, then deleting the orphan.';
+
+  document.getElementById('orphans').innerHTML='<table><tr><th>Orphan record</th><th>Items</th><th>Dropdown slug it likely belongs to</th></tr>'+
+    orph.map(o=>'<tr><td class="n">'+esc(o.name||o.id)+'<div class="slug">'+esc(o.id)+'</div></td>'+
+      '<td>'+o.n+'</td><td>'+(o.match.length
+        ? o.match.map(m=>'<span class="tag">'+esc(m)+'</span>').join(' ')
+        : '<span class="tag hard">not in dropdown at all — needs adding</span>')+'</td></tr>').join('')+'</table>';
+}
+
+function setFilter(f){ FILTER=(FILTER===f?'all':f); load(); }
+
+function render(){
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  let rows=ROWS.filter(r=>!q||r.label.toLowerCase().includes(q)||r.slug.includes(q));
+  if(FILTER==='bugs')   rows=rows.filter(r=>r.gaps.some(g=>g.bug));
+  if(FILTER==='done')   rows=rows.filter(r=>r.gaps.length===0);
+  if(FILTER==='norec')  rows=rows.filter(r=>!r.d);
+  if(FILTER==='empty')  rows=rows.filter(r=>r.d&&A(r.d.roomCategories).length===0&&A(r.d.restaurants).length===0&&A(r.d.venues).length===0&&A(r.d.packages).length===0);
+  if(FILTER==='partial')rows=rows.filter(r=>r.d&&r.gaps.length>0&&!(A(r.d.roomCategories).length===0&&A(r.d.restaurants).length===0&&A(r.d.venues).length===0&&A(r.d.packages).length===0));
+
+  const weight=r=>(r.gaps.some(g=>g.bug)?1000:0)+r.gaps.filter(g=>g.hard).length*10+r.gaps.length;
+  rows.sort((a,b)=>weight(b)-weight(a)||a.label.localeCompare(b.label));
+
+  document.getElementById('out').innerHTML= rows.length===0
+    ? '<div class="loading">Nothing matches.</div>'
+    : '<table><tr><th>Resort</th><th>What it needs</th></tr>'+rows.map(r=>
+        '<tr><td class="n">'+esc(r.label)+'<div class="slug">'+esc(r.slug)+'</div></td><td>'+
+        (r.gaps.length===0
+          ? '<span class="ok">Complete</span>'
+          : r.gaps.map(g=>'<span class="tag'+(g.bug?' bug':(g.hard?' hard':''))+'">'+esc(g.t)+'</span>').join(' '))+
+        '</td></tr>').join('')+'</table>';
+}
+
+document.getElementById('q').addEventListener('input',render);
+load();
+</script>
+</body>
+</html>
