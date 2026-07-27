@@ -26,14 +26,14 @@
   • Full description + tagline + highlights<br>
   • 6 wedding venues (Ziva Beach Gazebo, Beach, Rooftop Terrace, Santo Domingo Terrace, Larimar Lawn, Santo Domingo Ballroom)<br>
   • 6 wedding packages with real 2026–2027 pricing from the wedding flyer<br>
-  • 21 room categories with full descriptions<br>
-  • 7 restaurants + 2 bars<br>
-  • Amenities &amp; activities lists<br><br>
+  • 21 room categories with descriptions <strong>+ verified photos</strong><br>
+  • 15 restaurants, bars &amp; lounges <strong>+ verified photos</strong><br>
+  • Club Level perks · 8 gallery photos · amenities &amp; activities<br><br>
   <strong>Slug:</strong> <code>hyatt-ziva-cap-cana</code> · <strong>Overwrites everything</strong> (no guard logic)
 </div>
 
 <div class="warn">
-  <strong>Photos:</strong> Only the hero photo has a verified URL. Room and venue photos are intentionally left blank rather than guessed — use the 📷 picker in the Resort Library to attach real photos.
+  <strong>Photos:</strong> Every photo URL was tested and confirmed to load from the Playa CDN. Two items have no photo (Prontoz, Twisted Timbers) and <strong>wedding venue photos are still blank</strong> — use the 📷 picker in the Resort Library for those.
 </div>
 
 <button id="btn" onclick="runImport()">Import to Firestore</button>
@@ -52,7 +52,15 @@ firebase.initializeApp({
 });
 const db = firebase.firestore();
 
-const HERO = 'https://assets.milestoneinternet.com/destination-weddings-travel-group/72826-hyatt-ziva-cap-cana/aioapi/hyatt-ziva-cap-cana-aerial-pool-3.jpg';
+// All URLs below verified to load (HTTP 200) — Playa CDN /media/ paths
+const P = 'https://playa-cms-assets.s3.amazonaws.com/media/';
+const ZC = P + 'Hyatt_Ziva_Cap_Cana/';
+const RM = ZC + 'rooms/new20/';
+const DN = ZC + 'dining/new19/';
+const DZ = P + 'Hyatt_Zilara_Cap_Cana/dining/2024/';
+const NW = ZC + 'Newest/';
+
+const HERO = NW + 'hyatt-ziva-cap-cana-general-resort-view.jpg';
 
 const RESORT_DATA = {
   slug: 'hyatt-ziva-cap-cana',
@@ -68,11 +76,27 @@ const RESORT_DATA = {
   weddingsPerDay: 3,
   totalRooms: 375,
 
-  tagline: 'Beachfront Luxury in Cap Cana',
+  tagline: 'Unforgettable All-Inclusive for All Ages',
 
-  description: 'Hyatt Ziva Cap Cana, perched along the scenic shores of Cap Cana in the Dominican Republic, is a luxurious and enchanting all-inclusive resort that promises an unforgettable destination wedding experience. With its captivating beachfront setting, pristine white sands, crystal-clear turquoise waters, and lush tropical surroundings, Hyatt Ziva Cap Cana creates the perfect backdrop for a dreamy and romantic beach wedding celebration.',
+  description: 'Hyatt Ziva Cap Cana is an all-inclusive, all-ages resort set on Juanillo Beach in the most exclusive area of the Dominican Republic. The property sits on 40 oceanfront acres and features sprawling infinity pools, a water park with a lazy river and slides, floating swim-up suites, six restaurants, seven bars and lounges, a full-service fitness center, and beach butler service. It was ranked #1 in its category in Tripadvisor\'s 2025 Travelers\' Choice "Best of the Best" Awards. The resort is close to championship golf courses, a marina, deep-sea fishing, and eco-parks, and hosts nightly live entertainment. With its captivating beachfront setting, pristine white sands, and lush tropical surroundings, it creates the perfect backdrop for a destination wedding celebration.',
 
-  highlights: '5 Star Resort · 375 Rooms · Family-Friendly · 3 Weddings Per Day · LGBTQ+ Friendly · Sapphire Partner · Beachfront Cap Cana Location · All-Inclusive',
+  highlights: '5-Star Resort · 375 All-Suite Accommodations · 40 Oceanfront Acres on Juanillo Beach · Family-Friendly All Ages · #1 Tripadvisor Best of the Best 2025 · Water Park with Lazy River · Beach Butler Service · 3 Weddings Per Day · LGBTQ+ Friendly · Sapphire Partner · 15 Min from Punta Cana Airport',
+
+  clubLevelName: 'Club Level',
+  clubName: 'Club Level',
+  clubLevelPerks: 'Private check-in and check-out in an exclusive area\nPersonalized concierge services\nPremium-brand liquors\nComplimentary domestic & international calls\n10% discount on spa and salon services\nExclusive Club Level Lounge\nExclusive access to breakfast & lunch à la carte at The Chinola\nLate check-out based on availability\nPrivate access to the Club Pool\nButler service in Master Suites, Grand Master Suite, and Presidential Suite',
+  clubPerks: 'Private check-in and check-out in an exclusive area\nPersonalized concierge services\nPremium-brand liquors\nComplimentary domestic & international calls\n10% discount on spa and salon services\nExclusive Club Level Lounge\nExclusive access to breakfast & lunch à la carte at The Chinola\nLate check-out based on availability\nPrivate access to the Club Pool\nButler service in Master Suites, Grand Master Suite, and Presidential Suite',
+
+  photos: [
+    NW + 'hyatt-ziva-cap-cana-general-resort-view.jpg',
+    NW + 'hyatt-ziva-cap-cana-general-main-lobby-2.jpg',
+    ZC + 'gallery/hyatt-ziva-cap-cana-aerial-main-pool-2.jpg',
+    NW + 'hyatt-ziva-cap-cana-infinity-pool-11.jpg',
+    NW + 'hyatt-ziva-cap-cana-family-beach-3.jpg',
+    NW + 'hyatt-ziva-cap-cana-anapac-kids-club-5.jpg',
+    NW + 'hyat-ziva-cap-cana-canapolis-waterpark-2.jpg',
+    NW + 'hyatt-ziva-cap-cana-fire-pits-family-4.jpg'
+  ],
 
   heroPhoto: HERO,
   dwtUrl: 'https://www.destinationweddings.com/hyatt-ziva-cap-cana',
@@ -168,39 +192,45 @@ const RESORT_DATA = {
   packageNotes: 'Complimentary weddings require minimum room category Club Ocean View Jr Suite, available Mon–Wed 9AM–1PM only, and must be booked at initial booking at least 6 months prior to the wedding date. Not available for previously reserved/confirmed weddings. Package inclusions have no cash value; unused items are non-refundable and not interchangeable. Combinable with Leisure Groups Program and Big Day Preview credit only. All prices USD, new bookings only. ©2026 Playa Management USA, LLC.',
 
   roomCategories: [
-    { name: 'Junior Suite King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Junior Suite Double', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, two queen beds and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Resort View Junior Suite King', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, a king bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Resort View · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Resort View Junior Suite Double', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Resort View · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Ocean View Junior Suite King', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Ocean View Junior Suite Double', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4', photo: '' },
-    { name: 'Junior Suite Swim Up King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: '' },
-    { name: 'Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and impressive resort views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: '' },
-    { name: 'Club Junior Suite Swim Up King', description: 'Get club access and a semi-private pool with this 600-square-foot junior suite, featuring a separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
-    { name: 'Club Junior Suite Swim Up Double', description: 'These exclusive swim-up rooms include a semi-private pool right off the terrace and wonderful views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
-    { name: 'Club Ocean View Junior Suite King', description: 'Savor exclusive club dining when you stay at this 600-square-foot ocean view suite with balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Club Ocean View Junior Suite Double', description: 'These rooms feature a private balcony and promise stunning ocean views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Club Ocean Front Junior Suite King', description: 'Unpack and unwind in an oceanfront space stretching 600 square feet, featuring a furnished balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Club Ocean Front Junior Suite Double', description: 'These oceanfront rooms offer the added luxury of private balcony with panoramic ocean views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Club Ocean Front Junior Suite Swim Up King', description: 'Enjoy the stunning vistas from this unique 600 square-foot swim-up featuring one king size bed, a queen sleeper sofa and direct access to a semi-private pool overlooking unobstructed ocean views from your terrace. Guests ages 13+ only in swim-ups. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up · Ages 13+', photo: '' },
-    { name: 'Club Ocean Front Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and unforgettable ocean front views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
-    { name: 'Club One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot suite with a separate living room, a tub with Jacuzzi jets, a balcony with ocean views, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Club Ocean View One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot ocean view suite offering a king bed, deluxe amenities, a separate living room with sofa bed, and a balcony with a private hot tub.', details: '1 King bed · Ocean View · 1,238 sq ft · Club Level', photo: '' },
-    { name: 'Club One Bedroom Master Swim Up Suite', description: 'A semi-private pool awaits right off the terrace of this 1,238-square-foot swim-up suite with a separate bedroom, ocean views, a separate tub, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
-    { name: 'Club Ocean View One Bedroom Grand Master Suite', description: 'Featuring sweeping ocean views, this giant 1,345-square-foot suite boasts a separate living room, a tub with Jacuzzi jets, a balcony, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 1,345 sq ft · Sleeps 4 · Club Level', photo: '' },
-    { name: 'Presidential Suite', description: 'Reserve this 2,500-square-foot penthouse suite to get the resort’s best ocean views from a private balcony, plus living and dining rooms, a tub with Jacuzzi jets, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 2,500 sq ft · Sleeps 4', photo: '' }
+    { name: 'Junior Suite King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-double-room.jpg' },
+    { name: 'Junior Suite Double', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, two queen beds and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-double-room.jpg' },
+    { name: 'Resort View Junior Suite King', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, a king bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Resort View · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-double-room.jpg' },
+    { name: 'Resort View Junior Suite Double', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Resort View · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-double-room.jpg' },
+    { name: 'Ocean View Junior Suite King', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-club-ocean-view-junior-suite-double-roomv2.jpg' },
+    { name: 'Ocean View Junior Suite Double', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4', photo: RM + 'hyatt-ziva-cap-cana-club-ocean-view-junior-suite-double-room-2.jpg' },
+    { name: 'Junior Suite Swim Up King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-swim-up-king-room.jpg' },
+    { name: 'Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and impressive resort views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-swim-up-king-room-1.jpg' },
+    { name: 'Club Junior Suite Swim Up King', description: 'Get club access and a semi-private pool with this 600-square-foot junior suite, featuring a separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-swim-up-king-room.jpg' },
+    { name: 'Club Junior Suite Swim Up Double', description: 'These exclusive swim-up rooms include a semi-private pool right off the terrace and wonderful views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: RM + 'hyatt-ziva-cap-cana-junior-suite-swim-up-king-room-1.jpg' },
+    { name: 'Club Ocean View Junior Suite King', description: 'Savor exclusive club dining when you stay at this 600-square-foot ocean view suite with balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: RM + 'hyatt-ziva-cap-cana-club-ocean-view-junior-suite-double-roomv2.jpg' },
+    { name: 'Club Ocean View Junior Suite Double', description: 'These rooms feature a private balcony and promise stunning ocean views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: RM + 'hyatt-ziva-cap-cana-club-ocean-view-junior-suite-double-room-3.jpg' },
+    { name: 'Club Ocean Front Junior Suite King', description: 'Unpack and unwind in an oceanfront space stretching 600 square feet, featuring a furnished balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: RM + 'hyatt-ziva-oceanfront-junior-suite-king-room-2.jpg' },
+    { name: 'Club Ocean Front Junior Suite Double', description: 'These oceanfront rooms offer the added luxury of private balcony with panoramic ocean views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: RM + 'hyatt-ziva-cap-cana-oceanfront-junior-suite-double-room.jpg' },
+    { name: 'Club Ocean Front Junior Suite Swim Up King', description: 'Enjoy the stunning vistas from this unique 600 square-foot swim-up featuring one king size bed, a queen sleeper sofa and direct access to a semi-private pool overlooking unobstructed ocean views from your terrace. Guests ages 13+ only in swim-ups. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up · Ages 13+', photo: RM + 'hyatt-ziva-cap-cana-oceanfront-junior-suite-swim-up-king-room-2.jpg' },
+    { name: 'Club Ocean Front Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and unforgettable ocean front views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: RM + 'hyatt-ziva-cap-cana-oceanfront-junior-suite-swim-up-king-room-2.jpg' },
+    { name: 'Club One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot suite with a separate living room, a tub with Jacuzzi jets, a balcony with ocean views, a king bed, and a queen sleeper-sofa. Butler service included. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level · Butler', photo: RM + 'hyatt-ziva-cap-cana-ocean-view-one-bedroom-master-suite-room-1-2.jpg' },
+    { name: 'Club Ocean View One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot ocean view suite offering a king bed, deluxe amenities, a separate living room with sofa bed, and a balcony with a private hot tub. Butler service included.', details: '1 King bed · Ocean View · 1,238 sq ft · Club Level · Butler', photo: RM + 'hyatt-ziva-cap-cana-ocean-view-one-bedroom-master-suite-living-room-4.jpg' },
+    { name: 'Club One Bedroom Master Swim Up Suite', description: 'A semi-private pool awaits right off the terrace of this 1,238-square-foot swim-up suite with a separate bedroom, two bathrooms, ocean views, a separate tub, a king bed, and a queen sleeper-sofa. Butler service included.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level · Swim-Up · Butler', photo: RM + 'hyatt-ziva-cap-cana-ocean-view-one-bedroom-master-suite-room-2-1.jpg' },
+    { name: 'Club Ocean View One Bedroom Grand Master Suite', description: 'Featuring sweeping ocean views, this giant 1,345-square-foot suite boasts a separate living room, a tub with Jacuzzi jets, a balcony, a king bed, and a queen sleeper-sofa. Butler service included.', details: '1 King bed · Ocean View · 1,345 sq ft · Sleeps 4 · Club Level · Butler', photo: RM + 'hyatt-ziva-cap-cana-ocean-view-one-bedroom-grand-master-suite-bedroom-web.jpg' },
+    { name: 'Presidential Suite', description: 'Reserve this penthouse suite to get the resort’s best ocean views from a private balcony, plus living and dining rooms, a tub with Jacuzzi jets, a king bed, and a queen sleeper-sofa. Butler service included. (DWT lists 2,500 sq ft; resortsbyhyatt.com lists 1,873 sq ft — confirm with resort.)', details: '1 King + 1 Sofa bed · Ocean View · 1,873–2,500 sq ft · Sleeps 4 · Butler', photo: RM + 'hyatt-ziva-cap-cana-presidential-suite-livingroom-web.jpg' }
   ],
 
   restaurants: [
-    { name: 'Prontoz', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'Navigator Grill', type: 'Grill', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'The Chinola', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'Noodle & Thread', type: 'Asian', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'Tempest Table', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'El Mercado', type: 'Buffet / Market', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'The Blind Butcher', type: 'Steakhouse (Specialty)', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'Spiritz', type: 'Bar', description: 'On-site bar at Hyatt Ziva Cap Cana.', photo: '' },
-    { name: 'Cocoonz', type: 'Bar', description: 'On-site bar at Hyatt Ziva Cap Cana.', photo: '' }
+    { name: 'The Blind Butcher', type: 'South American (Specialty)', description: 'Bar and restaurant offering a South American gastronomic journey with authentic ingredients from the Southern Cone. Additional charge applies.', photo: P + 'blind-butcher-narrow4.jpg' },
+    { name: 'El Mercado', type: 'International Buffet', description: 'Gourmet buffet styled after a vibrant Caribbean market, serving breakfast, lunch and dinner.', photo: DZ + 'hyatt-ziva-cap-cana-mercado-buffet-restaurant-3.jpg' },
+    { name: 'Noodle and Thread', type: 'Italian', description: 'An Italian trattoria set in a charming tailor-shop-themed space, serving handmade pasta and Italian classics.', photo: DZ + 'hyatt-ziva-cap-cana-noodle-and-thread-restaurant-3.jpg' },
+    { name: 'Tempest Table', type: 'Asian / Teppanyaki', description: 'Asian cuisine centered on a Mongolian grill and interactive teppan tables — a lively, family-friendly dining experience.', photo: DN + 'hyatt-ziva-cap-cana-tempest-table-1.jpg' },
+    { name: 'The Chinola', type: 'Beachside / Fresh', description: 'Beachside restaurant serving fresh, clean fare. Breakfast and lunch are exclusive to Club Level guests; dinner is open to all guests.', photo: DZ + 'hyatt-ziva-cap-cana-chinola-restaurant-3.jpg' },
+    { name: 'Navigator Grill', type: 'Caribbean Seafood', description: 'Caribbean seafood restaurant featuring fresh catches and island flavors.', photo: DN + 'hyatt-ziva-cap-cana-navigator-grill-1.jpg' },
+    { name: 'Coffee Republic', type: 'Café / Ice Cream', description: 'Coffee shop with a gourmet ice cream and popsicle counter.', photo: DN + 'hyatt-ziva-cap-cana-coffee-republic-1.jpg' },
+    { name: 'Prontoz', type: 'Poolside Snacks', description: 'Quick poolside and beach snack spot for casual bites throughout the day.', photo: '' },
+    { name: 'La Zizi', type: 'Food Truck', description: 'Food truck at the water park serving burgers, nachos and hot dogs.', photo: DZ + 'hyatt-ziva-cap-cana-zizi-food-truck-4.jpg' },
+    { name: 'Moments', type: 'Sports Lounge', description: 'Sports lounge with a pool table — a relaxed spot to catch a game.', photo: DN + 'hyatt-ziva-cap-cana-moments-family-1.jpg' },
+    { name: 'Bosque Lounge', type: 'Lounge', description: 'A relaxed lounge setting for cocktails and conversation.', photo: DN + 'hyatt-ziva-cap-cana-bosque-lounge-2.jpg' },
+    { name: 'Grog Grotto', type: 'Rum Bar', description: 'Dedicated rum bar showcasing Caribbean and Dominican rums.', photo: DZ + 'hyatt-ziva-cap-cana-grog-grotto-rum-bar.jpg' },
+    { name: 'Twisted Timbers', type: 'Lobby Lounge', description: 'Lobby lounge for signature cocktails and drinks.', photo: '' },
+    { name: 'Spiritz', type: 'Swim-Up Bar', description: 'Swim-up pool bar serving cocktails without leaving the water.', photo: DN + 'hyatt-ziva-cap-cana-spiritz-service-shot-1.jpg' },
+    { name: 'Cocoonz', type: 'Club Swim-Up Bar', description: 'Club Level swim-up bar at the exclusive Club Pool.', photo: P + 'Hyatt_Zilara_Cap_Cana/dining/new19/cocoonz-zilaracapcana.jpg' }
   ],
 
   amenities: [
@@ -261,9 +291,12 @@ async function runImport() {
     log('  • ' + resortData.roomCategories.length + ' room categories');
     log('  • ' + resortData.venues.length + ' wedding venues');
     log('  • ' + resortData.packages.length + ' wedding packages');
-    log('  • ' + resortData.restaurants.length + ' restaurants & bars');
+    log('  • ' + resortData.restaurants.length + ' restaurants, bars & lounges');
+    log('  • ' + resortData.photos.length + ' gallery photos');
+    log('  • Club Level perks included');
     log('');
-    log('⚠️  Next step: add photos via the Resort Library 📷 picker.', 'err');
+    log('⚠️  Still needed: wedding venue photos + Prontoz/Twisted Timbers.', 'err');
+    log('    Use the 📷 picker in the Resort Library to add them.');
   } catch (err) {
     log('❌ Error: ' + err.message, 'err');
     btn.disabled = false;
