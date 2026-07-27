@@ -1772,6 +1772,17 @@ async function generateFITSneak(status){
   status.textContent='✅ Ready — click to download:';
 }
 
+
+function promoBand(r){
+  if(!r) return '';
+  const esc2=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const B='font-family:Jost,Helvetica,Arial,sans-serif;color:#C9A84C;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;display:block;margin-bottom:5px;';
+  const I='display:inline-block;margin:6px 22px;max-width:620px;font-family:Jost,Helvetica,Arial,sans-serif;color:#EDE3CC;font-size:13px;line-height:1.55;vertical-align:top;';
+  const one=(title,summary)=>(!title&&!summary)?'':
+    '<div style="'+I+'"><span style="'+B+'">'+esc2(title||'Special Offer')+'</span>'+esc2(summary||'')+'</div>';
+  const html=one(r.weddingPromoTitle,r.weddingPromoSummary)+one(r.ctPromoTitle,r.ctPromoSummary);
+  return html ? '<div class="promo-band" style="background:#1E1A14;padding:20px 7vw;text-align:center;">'+html+'</div>' : '';
+}
 function buildFITSneakEmail(fsv){
   const card=(r,idx)=>{
     const f=fsv.rf[idx]||{};
@@ -1986,7 +1997,7 @@ function buildFITSneakFull(fsv){
     ${highlightsSection(r)}
   </div>
   ${priceBand}
-  <div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, fsv.clientName, 'Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
+  ${promoBand(r)}<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, fsv.clientName, 'Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${diningSection(r)}
 </div>`;
   }).join('');
@@ -2684,7 +2695,7 @@ ${(()=>{
 })()}
 ${v.note?`<div class="note-section"><div class="note-inner"><strong>A note from ${agentVal('first')}:</strong> ${esc(v.note)}</div></div>`:''}
 ${(v.deposit||v.finalPayment)?`<section class="payment"><p class="section-eyebrow">Easy Payments</p><h2 class="section-title" style="margin-bottom:0;">Lock In Your Spot</h2><div class="payment-grid">${v.deposit?`<div class="payment-cell"><div class="payment-cell-label">Deposit</div><div class="payment-cell-value">${esc(v.deposit)}</div></div>`:''} ${v.finalPayment?`<div class="payment-cell"><div class="payment-cell-label">Final Payment</div><div class="payment-cell-value">${esc(v.finalPayment)}</div></div>`:''}</div></section>`:''}
-<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, v.clientName, v.tripName||'')}">&#10084;&#65039;&nbsp;I Like This One</a></div><footer class="footer">
+${promoBand(Object.assign({}, (typeof v!=="undefined"?v:{}), (typeof r!=="undefined"&&r?r:{})))}<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, v.clientName, v.tripName||'')}">&#10084;&#65039;&nbsp;I Like This One</a></div><footer class="footer">
   <div><p class="footer-eyebrow">Questions? I'm here for you.</p><div class="footer-name">${agentVal('full')}</div><div class="footer-title">Certified Destination Wedding &amp; Group Travel Specialist</div><div class="footer-contact"><a href="mailto:${agentVal('email')}">${agentVal('email')}</a><a href="tel:${agentVal('phone').replace(/\D/g,'')}">${agentVal('phone')}</a></div></div>
   <div class="footer-disclaimer">Prices subject to change and availability. Not a confirmed booking. All pricing in USD.<br>Destination Weddings Travel Group &nbsp;&bull;&nbsp; Celebration Travel</div>
 </footer>
@@ -2970,7 +2981,7 @@ function buildWeddingFull(wv){
   </div>
   ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${rf.offer?`<div class="pkg-cta"><a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;→</a></div>`:''}</div>`:''}
   ${priceBand}
-  <div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, wv.couple, 'Resort Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
+  ${promoBand(r)}<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, wv.couple, 'Resort Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${venues.length?`<div class="resort-venues"><div class="venues"><h3 class="venues-title">Ceremony &amp; Reception Venues</h3><div class="venues-grid">${venuesHTML}</div></div></div>`:''}
     ${rests.length?`<div class="resort-dining"><h3 class="venues-title">Dining &amp; Bars</h3>${restaurantsHTML}</div>`:''}
     ${clubPerks.length?`<div class="resort-club"><div class="club-inner">
