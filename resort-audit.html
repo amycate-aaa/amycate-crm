@@ -119,14 +119,14 @@ const CHECKS=[
     return !!(nm&&pk);}},
  {g:'Rooms',  k:'rooms',    t:'Categories',    f:d=>A(d.roomCategories).length>0},
  {g:'Rooms',  k:'rmdesc',   t:'Descriptions',  f:d=>frac(d.roomCategories,'description')},
- {g:'Rooms',  k:'rmphoto',  t:'Photos',        f:d=>frac(d.roomCategories,'photo')},
+ {g:'Rooms',  k:'rmphoto', binary:true,  t:'Photos',        f:d=>frac(d.roomCategories,'photo')},
  {g:'Venues', k:'venues',   t:'Venues',        f:d=>A(d.venues).length>0},
  {g:'Venues', k:'vndesc',   t:'Descriptions',  f:d=>frac(d.venues,'description')},
  {g:'Venues', k:'vncap',    t:'Guest count',   f:d=>frac(d.venues,'capacity')},
- {g:'Venues', k:'vnphoto',  t:'Photos',        f:d=>frac(d.venues,'photo')},
+ {g:'Venues', k:'vnphoto', binary:true,  t:'Photos',        f:d=>frac(d.venues,'photo')},
  {g:'Dining', k:'dining',   t:'Names',         f:d=>A(d.restaurants).length>0},
  {g:'Dining', k:'dndesc',   t:'Descriptions',  f:d=>frac(d.restaurants,'description')},
- {g:'Dining', k:'dnphoto',  t:'Photos',        f:d=>frac(d.restaurants,'photo')},
+ {g:'Dining', k:'dnphoto', binary:true,  t:'Photos',        f:d=>frac(d.restaurants,'photo')},
  {g:'Packages',k:'pkgs',    t:'Names',         f:d=>A(d.packages).length>0},
  {g:'Packages',k:'pkgprice',t:'Price',         f:d=>frac(d.packages,'price')},
  {g:'Packages',k:'pkgsum',  t:'Summary',       f:d=>frac(d.packages,'summary')},
@@ -140,12 +140,20 @@ function frac(arr,field){
   return [a.length-missing.length, a.length, missing];
 }
 
-function cell(v){
+function cell(v, check){
   if(v===null) return '<span class="na" title="No club level at this resort">&ndash;</span>';
   if(Array.isArray(v)){
     const [d,t,missing]=v;
     if(t===0)  return '<span class="n0">&#10007;</span>';
     if(d===t)  return '<span class="y">&#10003;</span>';
+    // Photos are pass/fail: if any are missing the section needs work, and the
+    // count doesn't change what you do about it. Hover still names them.
+    if(check && check.binary){
+      const names=(missing||[]).slice(0,12).join('\n');
+      const more=(missing||[]).length>12 ? '\n…and '+((missing.length)-12)+' more' : '';
+      return '<span class="n0" title="Missing photos:\n'+
+        esc(names+more).replace(/"/g,'&quot;')+'">&#10007;</span>';
+    }
     const names=(missing||[]).slice(0,12).join('\n');
     const more=(missing||[]).length>12 ? '\n…and '+((missing.length)-12)+' more' : '';
     return '<span class="p" title="Missing ('+(t-d)+' of '+t+'):\n'+
@@ -273,7 +281,7 @@ function render(){
         let last2=null;
         CHECKS.forEach(c=>{
           const sep=c.g!==last2?' class="grpsep"':''; last2=c.g;
-          tds+='<td'+sep+'>'+(r.d?cell(c.f(r.d)):'<span class="n0">&#10007;</span>')+'</td>';
+          tds+='<td'+sep+'>'+(r.d?cell(c.f(r.d),c):'<span class="n0">&#10007;</span>')+'</td>';
         });
         return '<tr>'+tds+'</tr>';
       }).join('')+'</table>';
