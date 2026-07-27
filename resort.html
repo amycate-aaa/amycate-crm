@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resort — Sunshine Passport Travel</title>
+<meta name="description" content="Explore this all-inclusive resort with Sunshine Passport Travel."/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blush: #F2C4B8;
+    --gold: #C9A84C;
+    --ivory: #FAF4EC;
+    --espresso: #7A4F3A;
+    --mauve: #C49A8A;
+    --teal: #6BBFBC;
+    --teal-dark: #4A9E9B;
+    --white: #FFFFFF;
+    --text-dark: #3D2B1F;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Jost', sans-serif; background: var(--ivory); color: var(--text-dark); overflow-x: hidden; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 18px 48px; background: rgba(250,244,236,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(201,168,76,0.2); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--espresso); letter-spacing: 1px; text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: var(--espresso); text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-find { background: var(--teal) !important; color: var(--white) !important; padding: 10px 24px !important; border-radius: 30px; letter-spacing: 2px !important; }
+  .nav-find:hover { background: var(--teal-dark) !important; }
+  .nav-cta { background: var(--gold); color: var(--white) !important; padding: 10px 24px !important; border-radius: 30px; letter-spacing: 2px !important; }
+  .nav-cta:hover { background: var(--espresso) !important; color: var(--white) !important; }
+  .nav-links li { position: relative; padding-bottom: 8px; margin-bottom: -8px; }
+  .dropdown-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: white; border-radius: 12px; padding: 12px 0; min-width: 220px; box-shadow: 0 20px 60px rgba(122,79,58,0.15); border: 1px solid rgba(201,168,76,0.15); z-index: 200; margin-top: 12px; }
+  .dropdown-menu::after { content: ''; position: absolute; top: -16px; left: 0; right: 0; height: 16px; }
+  .nav-links li:hover .dropdown-menu { display: block; }
+  .dropdown-menu a { display: block; padding: 10px 20px; font-size: 12px !important; letter-spacing: 1px !important; color: var(--espresso) !important; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .dropdown-menu a:hover { background: rgba(201,168,76,0.08); color: var(--gold) !important; padding-left: 26px; }
+  .dropdown-arrow { font-size: 8px; margin-left: 4px; opacity: 0.6; }
+
+  /* HERO */
+  .resort-hero { position: relative; height: 560px; overflow: hidden; margin-top: 70px; }
+  .resort-hero img { width: 100%; height: 100%; object-fit: cover; }
+  .resort-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(30,15,5,0.2) 0%, rgba(30,15,5,0.65) 100%); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 60px 40px; }
+  .resort-hero-label { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 12px; }
+  .resort-hero-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 64px); font-weight: 300; color: white; line-height: 1.1; margin-bottom: 16px; }
+  .resort-hero-badges { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .hero-badge { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.5); color: rgba(255,255,255,0.9); }
+
+  /* BREADCRUMB */
+  .breadcrumb { max-width: 1100px; margin: 0 auto; padding: 16px 24px; font-size: 12px; color: var(--mauve); letter-spacing: 1px; }
+  .breadcrumb a { color: var(--mauve); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+
+  /* MAIN LAYOUT */
+  .resort-body { max-width: 1100px; margin: 0 auto; padding: 0 24px 80px; }
+
+  /* ABOUT */
+  .section { margin-bottom: 64px; }
+  .section-label { font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: var(--mauve); margin-bottom: 10px; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--espresso); margin-bottom: 20px; }
+  .resort-location { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--mauve); margin-bottom: 20px; }
+  .resort-desc { font-size: 16px; color: var(--text-dark); line-height: 1.8; font-weight: 300; margin-bottom: 28px; }
+  .highlights-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 28px; }
+  .highlight-item { background: white; border: 1px solid rgba(201,168,76,0.2); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--espresso); }
+  .highlight-item::before { content: '✦ '; color: var(--gold); font-size: 10px; }
+
+  /* PHOTO GALLERY */
+  .gallery-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .gallery-grid img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.2s, opacity 0.2s; }
+  .gallery-grid img:hover { transform: scale(1.02); opacity: 0.92; }
+  .gallery-grid img:first-child { grid-column: span 2; grid-row: span 2; aspect-ratio: unset; height: 100%; }
+
+  /* LIGHTBOX */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 1000; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 4px; }
+  .lightbox-close { position: absolute; top: 24px; right: 32px; color: white; font-size: 32px; cursor: pointer; opacity: 0.7; line-height: 1; }
+  .lightbox-close:hover { opacity: 1; }
+  .lightbox-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); border: none; color: white; font-size: 24px; padding: 16px 20px; cursor: pointer; border-radius: 4px; }
+  .lightbox-nav:hover { background: rgba(255,255,255,0.25); }
+  .lightbox-prev { left: 24px; }
+  .lightbox-next { right: 24px; }
+
+  /* PACKAGES */
+  .packages-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .package-card { background: white; border-radius: 16px; padding: 28px; border: 1px solid rgba(201,168,76,0.2); position: relative; overflow: hidden; }
+  .package-card.featured { border-color: var(--gold); }
+  .package-card.featured::before { content: 'Most Popular'; position: absolute; top: 14px; right: -24px; background: var(--gold); color: white; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 32px; transform: rotate(45deg); }
+  .package-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--espresso); margin-bottom: 8px; }
+  .package-price { font-size: 13px; font-weight: 600; letter-spacing: 1px; color: var(--gold); margin-bottom: 16px; }
+  .package-highlights { font-size: 13px; color: var(--text-dark); line-height: 1.7; opacity: 0.85; }
+
+  /* DINING — flowing two-column list. CSS columns (not grid) so items pack
+     tightly instead of every row stretching to match its tallest item. */
+  .dining-grid { column-count: 2; column-gap: 56px; }
+  .dining-item { break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid; padding: 0 0 14px; margin-bottom: 14px; border-bottom: 1px solid rgba(201,168,76,0.16); }
+  .dining-head { margin-bottom: 3px; }
+  .dining-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 400; color: var(--espresso); line-height: 1.25; }
+  /* Type reads as a quiet caption under the name — pills wrapped awkwardly on long labels. */
+  .dining-type { display: block; font-size: 9px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; color: var(--gold); margin-top: 2px; }
+  .dining-desc { font-size: 13px; color: var(--text-dark); line-height: 1.6; opacity: 0.78; }
+  @media (max-width: 760px) { .dining-grid { column-count: 1; } }
+
+  /* VENUES */
+  .venues-list { display: flex; flex-direction: column; gap: 24px; }
+  .venue-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid rgba(201,168,76,0.15); display: grid; grid-template-columns: 260px 1fr; }
+  .venue-card img { width: 100%; height: 100%; object-fit: cover; min-height: 160px; }
+  .venue-card .venue-no-photo { background: linear-gradient(135deg, #f5ede3, #ede0d4); display: flex; align-items: center; justify-content: center; min-height: 160px; }
+  .venue-card .venue-no-photo span { font-size: 32px; opacity: 0.4; }
+  .venue-info { padding: 24px 28px; }
+  .venue-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--espresso); margin-bottom: 8px; }
+  .venue-meta { display: flex; gap: 20px; margin-bottom: 12px; flex-wrap: wrap; }
+  .venue-meta span { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--mauve); }
+  .venue-desc { font-size: 14px; color: var(--text-dark); line-height: 1.7; opacity: 0.85; }
+
+  /* ROOMS */
+  .rooms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; }
+  .room-card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid rgba(201,168,76,0.15); }
+  .room-photo-wrap { position: relative; aspect-ratio: 4/3; overflow: hidden; background: #f0e8df; }
+  .room-photo-wrap img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.15s; }
+  .room-photo-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.4); border: none; color: white; padding: 10px 14px; cursor: pointer; font-size: 16px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; }
+  .room-photo-wrap:hover .room-photo-btn { opacity: 1; }
+  .room-photo-btn.prev { left: 8px; }
+  .room-photo-btn.next { right: 8px; }
+  .room-photo-counter { position: absolute; bottom: 8px; right: 10px; font-size: 10px; color: rgba(255,255,255,0.85); background: rgba(0,0,0,0.4); padding: 2px 7px; border-radius: 10px; }
+  .room-info { padding: 14px 16px; }
+  .room-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 400; color: var(--espresso); margin-bottom: 5px; }
+  .room-desc { font-size: 12px; color: var(--text-dark); opacity: 0.75; line-height: 1.5; }
+
+  /* CTA */
+  .cta-section { background: linear-gradient(135deg, var(--espresso), #5C3320); border-radius: 24px; padding: 64px 48px; text-align: center; margin-top: 64px; }
+  .cta-section h2 { font-family: 'Cormorant Garamond', serif; font-size: 40px; font-weight: 300; color: white; margin-bottom: 16px; }
+  .cta-section p { font-size: 15px; color: rgba(255,255,255,0.75); font-weight: 300; max-width: 520px; margin: 0 auto 36px; line-height: 1.7; }
+  .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--gold); color: white; padding: 16px 36px; border-radius: 30px; font-size: 12px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
+  .btn-primary:hover { background: white; color: var(--espresso); }
+  .btn-outline { background: transparent; color: white; padding: 15px 36px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.4); font-size: 12px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.3s; }
+  .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+  /* LOADING */
+  .loading-state { text-align: center; padding: 120px 40px; }
+  .loading-spinner { width: 40px; height: 40px; border: 2px solid rgba(201,168,76,0.2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error-state { text-align: center; padding: 120px 40px; }
+  .error-state h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--espresso); margin-bottom: 12px; }
+
+  /* FOOTER */
+  footer { background: var(--espresso); color: rgba(250,244,236,0.8); text-align: center; padding: 56px 24px 40px; }
+  .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: rgba(250,244,236,0.9); margin-bottom: 8px; }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: rgba(250,244,236,0.5); margin-bottom: 32px; }
+  .footer-links { display: flex; gap: 32px; justify-content: center; list-style: none; flex-wrap: wrap; margin-bottom: 32px; }
+  .footer-links a { color: rgba(250,244,236,0.6); text-decoration: none; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+  .footer-copy { font-size: 12px; color: rgba(250,244,236,0.35); margin-top: 24px; }
+
+  /* FLOATING BUTTONS */
+  .float-btns { position: fixed; bottom: 24px; right: 24px; display: flex; flex-direction: column; gap: 10px; z-index: 50; }
+  .float-btn { display: flex; align-items: center; gap: 10px; background: white; border-radius: 30px; padding: 12px 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.12); text-decoration: none; font-size: 13px; font-weight: 500; color: var(--text-dark); transition: all 0.3s; border: 1px solid rgba(201,168,76,0.15); }
+  .float-btn:hover { box-shadow: 0 6px 28px rgba(0,0,0,0.18); transform: translateY(-1px); }
+  .float-btn svg { flex-shrink: 0; }
+
+  /* DIVIDER */
+  .section-divider { border: none; border-top: 1px solid rgba(201,168,76,0.2); margin: 0 0 64px; }
+
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .resort-hero { height: 380px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    .gallery-grid img:first-child { grid-column: span 2; }
+    .venue-card { grid-template-columns: 1fr; }
+    .cta-section { padding: 48px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Sunshine <span>Passport</span> Travel</a>
+  <ul class="nav-links">
+    <li><a href="index.html#about">About</a></li>
+    <li>
+      <a href="index.html#destinations">Destinations <span class="dropdown-arrow">▼</span></a>
+      <div class="dropdown-menu">
+        <a href="cancun.html">Cancún &amp; Riviera Maya</a>
+        <a href="los-cabos.html">Los Cabos</a>
+        <a href="puerto-vallarta.html">Puerto Vallarta</a>
+        <a href="costa-rica.html">Costa Rica</a>
+        <a href="jamaica.html">Jamaica</a>
+        <a href="dominican-republic.html">Dominican Republic</a>
+        <a href="st-lucia.html">St. Lucia</a>
+        <a href="aruba.html">Aruba</a>
+      </div>
+    </li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="testimonials.html">Testimonials</a></li>
+    <li><a href="resorts.html" class="nav-find">Find My Resort</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Plan My Trip</a></li>
+  </ul>
+</nav>
+
+<div id="page-content">
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading resort…</p>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1);event.stopPropagation()">‹</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1);event.stopPropagation()">›</button>
+</div>
+
+<footer>
+  <div class="footer-logo">Sunshine <span>Passport</span> Travel</div>
+  <div class="footer-tagline">Your Free Destination Wedding &amp; Travel Specialist</div>
+  <ul class="footer-links">
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="cancun.html">Cancún</a></li>
+    <li><a href="jamaica.html">Jamaica</a></li>
+    <li><a href="dominican-republic.html">Dominican Republic</a></li>
+    <li><a href="index.html#services">Services</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Sunshine Passport Travel · All Rights Reserved · www.sunshinepassporttravel.com</div>
+</footer>
+
+<div class="float-btns">
+  <a href="https://wa.me/17139226088" target="_blank" class="float-btn" style="color:#25D366">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    WhatsApp Me
+  </a>
+  <a href="sms:17139226088" class="float-btn" style="color:var(--teal)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6BBFBC" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+    Text Me
+  </a>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(async () => {
+  // ── INIT ──────────────────────────────────────────────────────────
+  if (!firebase.apps.length) {
+    firebase.initializeApp({ apiKey:'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js', projectId:'wedding-crm-e5d12' });
+  }
+  const db = firebase.apps[0].firestore();
+
+  // ── GET SLUG FROM URL ─────────────────────────────────────────────
+  const params = new URLSearchParams(window.location.search);
+  const slug = params.get('slug');
+
+  function showError(msg) {
+    document.getElementById('page-content').innerHTML = `
+      <div class="error-state">
+        <h2>${msg}</h2>
+        <p style="margin:12px 0 28px;color:var(--mauve);">Try heading back to find your perfect resort.</p>
+        <a href="index.html#destinations" style="color:var(--gold);font-size:13px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;">← Back to Destinations</a>
+      </div>`;
+  }
+
+  if (!slug) { showError('No resort specified.'); return; }
+
+  // ── LOAD RESORT + PHOTO LIBRARY ──────────────────────────────────
+  const [doc, photoSnap] = await Promise.all([
+    db.collection('resortProfiles').doc(slug).get(),
+    db.collection('resortPhotos').where('resortSlug', '==', slug).get()
+      .catch(() => db.collection('resortPhotos').where('resort', '==', slug).get())
+      .catch(() => ({ docs: [] }))
+  ]);
+  if (!doc.exists) { showError('Resort not found.'); return; }
+  const d = doc.data();
+
+  // Photos uploaded via Resort Photo Library (resortPhotos collection)
+  const libraryPhotoObjs = photoSnap.docs.map(p => p.data()).filter(p => p.url || p.downloadURL);
+  const libraryPhotos = libraryPhotoObjs.map(p => p.url || p.downloadURL).filter(Boolean);
+  // Map: category/room name → [photo urls] for room card matching
+  const roomPhotoMap = {};
+  for (const p of libraryPhotoObjs) {
+    const cat = p.roomCategory || p.category || '';
+    if (!cat) continue;
+    const url = p.url || p.downloadURL;
+    if (!roomPhotoMap[cat]) roomPhotoMap[cat] = [];
+    roomPhotoMap[cat].push(url);
+  }
+
+  // ── HELPERS ───────────────────────────────────────────────────────
+  const name = d.name || d.resortName || slug;
+  const loc = typeof d.location === 'string' ? d.location : (d.location?.city || '');
+  const stars = parseFloat(d.stars || 0);
+  const starsLabel = stars ? `${stars} Star` : '';
+  const price = d.priceLevel || '';
+  const ageLabel = d.agePolicy || d.agesPolicy || '';
+  const desc = d.description || d.tagline || '';
+  const highlights = (() => {
+    const raw = d.highlights ? d.highlights.split('·').map(h => h.trim()).filter(Boolean) : [];
+    // If more than 10 items it's likely scraped destination/navigation data — skip it
+    return raw.length <= 10 ? raw : [];
+  })();
+
+  // Photos: heroPhoto first, then profile arrays, then Resort Photo Library
+  const photos = (() => {
+    const arr = Array.isArray(d.photos) && d.photos.length ? [...d.photos]
+                : Array.isArray(d.resortGallery) && d.resortGallery.length ? [...d.resortGallery]
+                : d.photo ? [d.photo] : [];
+    // Merge in library photos not already in the list
+    for (const url of libraryPhotos) {
+      if (!arr.includes(url)) arr.push(url);
+    }
+    if (d.heroPhoto && !arr.includes(d.heroPhoto)) arr.unshift(d.heroPhoto);
+    return arr.filter(Boolean);
+  })();
+
+  const heroPhoto = photos[0] || '';
+
+  // Update page title
+  document.title = `${name} — Sunshine Passport Travel`;
+
+  // ── BACK LINK (figure out which destination page) ─────────────────
+  const DEST_MAP = {
+    'cancun':'cancun.html','riviera-maya':'cancun.html','playa-mujeres':'cancun.html',
+    'los-cabos':'los-cabos.html','cabo':'los-cabos.html',
+    'jamaica':'jamaica.html','rose-hall':'jamaica.html',
+    'punta-cana':'dominican-republic.html','la-romana':'dominican-republic.html','dominican':'dominican-republic.html',
+    'puerto-vallarta':'puerto-vallarta.html','vallarta':'puerto-vallarta.html',
+    'aruba':'aruba.html','curacao':'curacao.html',
+  };
+  let backLink = 'index.html#destinations';
+  for (const [key, page] of Object.entries(DEST_MAP)) {
+    if (slug.includes(key)) { backLink = page; break; }
+  }
+
+  // ── BADGES ────────────────────────────────────────────────────────
+  const badges = [starsLabel, ageLabel, price].filter(Boolean);
+
+  // ── GALLERY HTML ─────────────────────────────────────────────────
+  function galleryHTML(photos) {
+    if (!photos.length) return '';
+    const shown = photos.slice(0, 9);
+    const imgs = shown.map((url, i) =>
+      `<img src="${url}" alt="${name} photo ${i+1}" loading="${i < 3 ? 'eager' : 'lazy'}"
+            onerror="this.style.display='none'"
+            onclick="openLightbox(${i})">`
+    ).join('');
+    return `<div class="gallery-grid">${imgs}</div>`;
+  }
+
+  // ── PACKAGES HTML ─────────────────────────────────────────────────
+  function packagesHTML(pkgs) {
+    if (!pkgs?.length) return '';
+    const cards = pkgs.map(p => `
+      <div class="package-card${p.featured ? ' featured' : ''}">
+        <div class="package-name">${p.name}</div>
+        <div class="package-price">${p.price || 'Starting from deposit'}</div>
+        <div class="package-highlights">${(p.highlights || '').replace(/·/g, '<br>· ')}</div>
+      </div>`).join('');
+    return `
+      <hr class="section-divider"/>
+      <div class="section">
+        <div class="section-label">Planning Your Day</div>
+        <div class="section-title">Wedding Packages</div>
+        <div class="packages-grid">${cards}</div>
+      </div>`;
+  }
+
+  // ── DINING HTML ───────────────────────────────────────────────
+  function diningHTML(restaurants) {
+    if (!restaurants?.length) return '';
+    // Text-only list — name, cuisine type and description. No photos, so the
+    // section stays clean whether or not a restaurant has an image on file.
+    const cards = restaurants.map(r => `
+      <div class="dining-item">
+        <div class="dining-head">
+          <div class="dining-name">${r.name}</div>
+          ${r.type ? `<div class="dining-type">${r.type}</div>` : ''}
+        </div>
+        ${r.description ? `<div class="dining-desc">${r.description}</div>` : ''}
+      </div>`).join('');
+    return `
+      <hr class="section-divider"/>
+      <div class="section">
+        <div class="section-label">Restaurants &amp; Bars</div>
+        <div class="section-title">Dining at ${d.name || 'the Resort'}</div>
+        <div class="dining-grid">${cards}</div>
+      </div>`;
+  }
+
+  // ── VENUES HTML ──────────────────────────────────────────────────
+  function venuesHTML(venues, photoMap) {
+    if (!venues?.length) return '';
+    const cards = venues.map(v => {
+      const photoUrl = v.photo || (photoMap && photoMap[v.name] && photoMap[v.name][0]) || '';
+      return `
+      <div class="venue-card">
+        ${photoUrl
+          ? `<img src="${photoUrl}" alt="${v.name}" onerror="this.parentElement.innerHTML='<div class=\\'venue-no-photo\\'><span>🌺</span></div>'">`
+          : `<div class="venue-no-photo"><span>🌺</span></div>`}
+        <div class="venue-info">
+          <div class="venue-name">${v.name}</div>
+          <div class="venue-meta">
+            ${v.capacity ? `<span>Up to ${v.capacity} guests</span>` : ''}
+            ${v.bestFor ? `<span>${v.bestFor}</span>` : ''}
+          </div>
+          ${v.description ? `<div class="venue-desc">${v.description}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+    return `
+      <hr class="section-divider"/>
+      <div class="section">
+        <div class="section-label">Where You'll Say I Do</div>
+        <div class="section-title">Wedding Venues</div>
+        <div class="venues-list">${cards}</div>
+      </div>`;
+  }
+
+  // ── ROOMS HTML ────────────────────────────────────────────────────
+  function roomsHTML(rooms) {
+    if (!rooms?.length) return '';
+    const cards = rooms.map(r => {
+      // Try photos from room object first, then from Resort Photo Library by room name
+      const photos = Array.isArray(r.photos) && r.photos.length ? r.photos
+                   : r.photo ? [r.photo]
+                   : (roomPhotoMap[r.name] || roomPhotoMap[r.roomCategory] || []);
+      const hasMulti = photos.length > 1;
+      const imgHTML = photos.length
+        ? `<img src="${photos[0]}" data-photos='${JSON.stringify(photos)}' data-idx="0"
+               alt="${r.name}" loading="lazy" onerror="this.style.display='none'">
+           ${hasMulti ? `<button class="room-photo-btn prev" onclick="roomPhotoNav(this,-1)">‹</button>
+                         <button class="room-photo-btn next" onclick="roomPhotoNav(this,1)">›</button>
+                         <span class="room-photo-counter">1/${photos.length}</span>` : ''}`
+        : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#f5ede3,#ede0d4);display:flex;align-items:center;justify-content:center;font-size:28px;opacity:0.4">🛏</div>`;
+      return `
+        <div class="room-card">
+          <div class="room-photo-wrap">${imgHTML}</div>
+          <div class="room-info">
+            <div class="room-name">${r.name}</div>
+            ${r.description ? `<div class="room-desc">${r.description}</div>` : ''}
+          </div>
+        </div>`;
+    }).join('');
+    return `
+      <hr class="section-divider"/>
+      <div class="section">
+        <div class="section-label">Where You'll Rest</div>
+        <div class="section-title">Room Categories</div>
+        <div class="rooms-grid">${cards}</div>
+      </div>`;
+  }
+
+  // ── CTA HTML ──────────────────────────────────────────────────────
+  function ctaHTML() {
+    const dwtLink = d.dwtUrl || d.weddingUrl || '#';
+    const ctLink = d.ctUrl || '#';
+    return `
+      <div class="cta-section">
+        <h2>Ready to Fall in Love with ${name}?</h2>
+        <p>Planning is always free. Let me do the research, handle the logistics, and make sure every detail is perfect for your trip.</p>
+        <div class="cta-buttons">
+          <a href="index.html?resort=${encodeURIComponent(name)}#contact" class="btn-primary">Plan My Trip with Amy</a>
+          ${dwtLink !== '#' ? `<a href="${dwtLink}" target="_blank" rel="noopener" class="btn-outline">Explore Packages →</a>` : ''}
+        </div>
+      </div>`;
+  }
+
+  // ── RENDER PAGE ───────────────────────────────────────────────────
+  document.getElementById('page-content').innerHTML = `
+    <div class="resort-hero">
+      ${heroPhoto ? `<img src="${heroPhoto}" alt="${name}" onerror="this.style.display='none'">` : '<div style="height:100%;background:linear-gradient(135deg,var(--espresso),#5C3320)"></div>'}
+      <div class="resort-hero-overlay">
+        <div class="resort-hero-label">Sunshine Passport Travel</div>
+        <h1 class="resort-hero-name">${name}</h1>
+        <div class="resort-hero-badges">
+          ${badges.map(b => `<span class="hero-badge">${b}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="breadcrumb">
+      <a href="index.html">Home</a> ›
+      <a href="index.html#destinations">Destinations</a> ›
+      <a href="${backLink}">${loc || 'Resorts'}</a> ›
+      ${name}
+    </div>
+
+    <div class="resort-body">
+
+      <!-- ABOUT -->
+      <div class="section">
+        <div class="resort-location">${loc}</div>
+        ${desc ? `<p class="resort-desc">${desc}</p>` : ''}
+        ${highlights.length ? `<div class="highlights-grid">${highlights.map(h => `<div class="highlight-item">${h}</div>`).join('')}</div>` : ''}
+      </div>
+
+      <!-- GALLERY -->
+      ${photos.length > 1 ? `
+      <hr class="section-divider"/>
+      <div class="section">
+        <div class="section-label">The Experience</div>
+        <div class="section-title">Photo Gallery</div>
+        ${galleryHTML(photos)}
+      </div>` : ''}
+
+      ${diningHTML(d.restaurants)}
+      ${roomsHTML(d.rooms || d.roomCategories)}
+
+      ${ctaHTML()}
+    </div>`;
+
+  // ── LIGHTBOX ──────────────────────────────────────────────────────
+  let lbPhotos = photos;
+  let lbIdx = 0;
+  window.openLightbox = function(i) {
+    lbIdx = i;
+    document.getElementById('lightbox-img').src = lbPhotos[i];
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  };
+  window.closeLightbox = function(e) {
+    if (e && e.target !== document.getElementById('lightbox') && e.target.tagName !== 'SPAN') return;
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  window.lightboxNav = function(dir) {
+    lbIdx = (lbIdx + dir + lbPhotos.length) % lbPhotos.length;
+    document.getElementById('lightbox-img').src = lbPhotos[lbIdx];
+  };
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowRight') lightboxNav(1);
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'Escape') { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
+  });
+
+  // ── ROOM PHOTO NAV ────────────────────────────────────────────────
+  window.roomPhotoNav = function(btn, dir) {
+    const wrap = btn.closest('.room-photo-wrap');
+    const img = wrap.querySelector('img');
+    if (!img) return;
+    const rPhotos = JSON.parse(img.dataset.photos || '[]');
+    if (rPhotos.length < 2) return;
+    let idx = parseInt(img.dataset.idx || '0') + dir;
+    if (idx < 0) idx = rPhotos.length - 1;
+    if (idx >= rPhotos.length) idx = 0;
+    img.style.opacity = '0';
+    setTimeout(() => { img.src = rPhotos[idx]; img.dataset.idx = idx; img.style.opacity = '1'; }, 150);
+    const counter = wrap.querySelector('.room-photo-counter');
+    if (counter) counter.textContent = `${idx + 1}/${rPhotos.length}`;
+  };
+
+})();
+</script>
+</body>
+</html>
