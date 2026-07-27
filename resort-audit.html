@@ -29,6 +29,8 @@
   td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:top;}
   td.n{width:290px;font-weight:500;}
   .slug{font-weight:400;color:#A09789;font-size:11px;margin-top:2px;}
+  a.open{color:#2C2A26;text-decoration:none;border-bottom:1px solid transparent;}
+  a.open:hover{color:#8A6D3B;border-bottom-color:var(--gold);}
   .tag{display:inline-block;background:#F3EFE8;border-radius:4px;padding:2px 8px;margin:2px 3px 2px 0;font-size:12px;white-space:nowrap;}
   .tag.hard{background:#FBE9E7;color:#9A3412;}
   .tag.bug{background:#FEF3C7;color:#92400E;font-weight:600;}
@@ -86,6 +88,10 @@ let ROWS=[], FILTER='all';
 const PER_NIGHT=/per\s*person\s*\/?\s*night|\/person\/night|per night/i;
 const ROOMISH=/\b(suite|junior|master|presidential|king|queen|double|swim[- ]?up|swim[- ]?out|ocean\s*(front|view)|garden view|pool view|resort view|penthouse|villa|casita|bungalow|deluxe|partial ocean)\b/i;
 // Text that should never reach a client.
+// A wedding venue illustrated with a guest-room photo means the venue was
+// invented from room data. Whole-list hits are almost always fabricated.
+const ROOMPIC=/(JR[-_]?SU|MSTR|PRES(?!S)|KING|DBL|QUEEN|[-_]RM[-_]|ROOM|SUITE|BEDROOM|BATH)/i;
+// Text that should never reach a client.
 const LEAK=/⚠️|confirm with (the )?resort|verify current|not detailed in|not priced in|contact the resort wedding coordinator|listed on destinationweddings|DWT (site )?lists|SOURCE NOTE|pricing conflict|cancellation penalt|penalty fee|loyalty program|repeat stays|best-price guarantee/i;
 
 function gapsFor(d){
@@ -96,6 +102,11 @@ function gapsFor(d){
   // data bugs first — these produce visibly wrong quotes
   const badPkg=A(d.packages).filter(p=>PER_NIGHT.test(p.price||'')||ROOMISH.test(p.name||''));
   if(badPkg.length) g.push({t:'ROOMS STORED AS PACKAGES ('+badPkg.length+')',bug:true});
+
+  const roomPic=A(d.venues).filter(v=>v.photo&&ROOMPIC.test(v.photo.split('/').pop()||''));
+  if(roomPic.length) g.push({t:(roomPic.length===A(d.venues).length
+    ? 'VENUES LOOK FABRICATED — all '+roomPic.length+' use room photos'
+    : roomPic.length+' venue photos are guest-room images'),bug:true});
 
   let leaks=0;
   ['packages','venues','roomCategories','restaurants'].forEach(k=>A(d[k]).forEach(x=>{
@@ -204,7 +215,8 @@ function render(){
   document.getElementById('out').innerHTML= rows.length===0
     ? '<div class="loading">Nothing matches.</div>'
     : '<table><tr><th>Resort</th><th>What it needs</th></tr>'+rows.map(r=>
-        '<tr><td class="n">'+esc(r.label)+'<div class="slug">'+esc(r.slug)+'</div></td><td>'+
+        '<tr><td class="n"><a class="open" target="_blank" href="resort-library.html?resort='+
+        encodeURIComponent(r.slug)+'">'+esc(r.label)+'</a><div class="slug">'+esc(r.slug)+'</div></td><td>'+
         (r.gaps.length===0
           ? '<span class="ok">Complete</span>'
           : r.gaps.map(g=>'<span class="tag'+(g.bug?' bug':(g.hard?' hard':''))+'">'+esc(g.t)+'</span>').join(' '))+

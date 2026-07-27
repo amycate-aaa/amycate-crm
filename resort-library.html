@@ -345,9 +345,30 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <button onclick="loadResortProfile(document.getElementById('masterResort').value)" style="background:#1a1a1a;border:1px solid #444;color:#aaa;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;">&#8635; Reload Profile</button>
     </div>
 
+
+    <!-- SECTION JUMP NAV -->
+    <div id="sectionNav" style="position:sticky;top:0;z-index:40;background:#0d0d0d;border:1px solid #2a2a2a;
+         border-radius:8px;padding:8px 10px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px;">
+      <a href="#sec-core" onclick="jumpTo(event,'sec-core')">Core Info</a>
+      <a href="#sec-links" onclick="jumpTo(event,'sec-links')">Links</a>
+      <a href="#sec-club" onclick="jumpTo(event,'sec-club')">Club Level</a>
+      <a href="#sec-rooms" onclick="jumpTo(event,'sec-rooms')">Rooms</a>
+      <a href="#sec-venues" onclick="jumpTo(event,'sec-venues')">Venues</a>
+      <a href="#sec-dining" onclick="jumpTo(event,'sec-dining')">Dining</a>
+      <a href="#sec-packages" onclick="jumpTo(event,'sec-packages')">Packages</a>
+      <a href="#sec-photos" onclick="jumpTo(event,'sec-photos')">Photos</a>
+    </div>
+    <style>
+      #sectionNav a{color:#9a9a9a;text-decoration:none;font-size:.78rem;letter-spacing:.05em;
+        text-transform:uppercase;padding:6px 12px;border-radius:6px;border:1px solid transparent;white-space:nowrap;}
+      #sectionNav a:hover{color:#f0c958;border-color:#3a3a3a;}
+      #sectionNav a.on{color:#f0c958;background:#1c1c1c;border-color:#444;}
+      /* stop sticky nav from covering the heading you jumped to */
+      #sectionNav ~ * h3[id^="sec-"]{scroll-margin-top:70px;}
+    </style>
     <!-- SECTION 1: CORE INFO -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#127968; Core Info</h3>
+      <h3 id="sec-core" style="margin-bottom:4px;">&#127968; Core Info</h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Name, tagline and description shown in all client-facing quotes.</p>
       <div style="display:grid;grid-template-columns:1fr 120px;gap:12px;margin-bottom:12px;">
         <div class="form-group">
@@ -376,7 +397,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
     <!-- SECTION 2: LINKS -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#128279; Links</h3>
+      <h3 id="sec-links" style="margin-bottom:4px;">&#128279; Links</h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Booking, wedding and real wedding URLs used in quotes and emails.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
         <div class="form-group">
@@ -412,7 +433,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
     <!-- SECTION 3: CLUB LEVEL -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#10024; Club Level <span style="font-size:.75rem;color:#555;font-weight:400;text-transform:none;letter-spacing:0;">(if applicable)</span></h3>
+      <h3 id="sec-club" style="margin-bottom:4px;">&#10024; Club Level <span style="font-size:.75rem;color:#555;font-weight:400;text-transform:none;letter-spacing:0;">(if applicable)</span></h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Preferred Club, Elegance Club, etc. — shown as an upgrade option in quotes.</p>
       <div class="form-group" style="margin-bottom:12px;">
         <label>Club Level Name</label>
@@ -426,33 +447,33 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
     <!-- SECTION 4: ROOM CATEGORIES -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#127981; Room Categories &amp; Descriptions <span style="color:#c0392b;">*</span></h3>
+      <h3 id="sec-rooms" style="margin-bottom:4px;">&#127981; Room Categories &amp; Descriptions <span style="color:#c0392b;">*</span></h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Every room type available at this resort. Descriptions auto-fill in quotes and the gallery. Upload photos for each via the section above.</p>
-      <div id="roomcat-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <div id="roomcat-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;margin-bottom:12px;align-items:start;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addRoomCatRow()">+ Add Room Category</button>
     </div>
 
     <!-- SECTION 5: WEDDING VENUES -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#128141; Wedding Venues <span style="color:#c0392b;">*</span></h3>
+      <h3 id="sec-venues" style="margin-bottom:4px;">&#128141; Wedding Venues <span style="color:#c0392b;">*</span></h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All ceremony and reception locations. Include capacity, best use and a photo URL for each.</p>
-      <div id="venue-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <div id="venue-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;margin-bottom:12px;align-items:start;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addVenueRow()">+ Add Venue</button>
     </div>
 
     <!-- SECTION 5b: RESTAURANTS & BARS -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">🍽 Restaurants &amp; Bars</h3>
+      <h3 id="sec-dining" style="margin-bottom:4px;">🍽 Restaurants &amp; Bars</h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets — restaurants, bars, cafés, and snack spots. Shown on the resort detail page and client quotes.</p>
-      <div id="restaurant-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+      <div id="restaurant-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px;margin-bottom:12px;align-items:start;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant / Bar</button>
     </div>
 
     <!-- SECTION 6: WEDDING PACKAGES -->
     <div class="upload-section" style="margin-bottom:16px;">
-      <h3 style="margin-bottom:4px;">&#128141; Wedding Packages &amp; Pricing <span style="color:#c0392b;">*</span></h3>
+      <h3 id="sec-packages" style="margin-bottom:4px;">&#128141; Wedding Packages &amp; Pricing <span style="color:#c0392b;">*</span></h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All available packages with pricing. Mark the most popular one as featured.</p>
-      <div id="pkg-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:12px;"></div>
+      <div id="pkg-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;margin-bottom:12px;align-items:start;"></div>
       <button class="btn btn-secondary btn-sm" onclick="addPackageRow()">+ Add Package</button>
     </div>
 
@@ -472,7 +493,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
     <!-- SECTION 8: PHOTO REMINDER -->
     <div style="background:#16201a;border:1px solid #2a3a2a;border-radius:10px;padding:18px 24px;margin-bottom:16px;">
-      <h3 style="font-size:1rem;color:#5a9a5a;font-weight:600;margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;">&#128247; Photos Checklist</h3>
+      <h3 id="sec-photos" style="font-size:1rem;color:#5a9a5a;font-weight:600;margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;">&#128247; Photos Checklist</h3>
       <p style="color:#666;font-size:.85rem;margin-bottom:10px;">Upload photos using the section at the top of this page. Make sure you have photos for each category below:</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.83rem;color:#888;" id="photoCategoryChecklist">
         <div>&#9744; Aerial View</div>
@@ -921,7 +942,7 @@ function addRoomCatRow(name='', description='', photo='') {
   div.style.cssText = 'background:#111;border:1px solid #2a2a2a;border-radius:8px;overflow:hidden;position:relative;';
   div.innerHTML = `
     <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:8px;right:10px;background:none;border:none;color:#555;font-size:14px;cursor:pointer;z-index:1;" title="Remove">&#10005;</button>
-    ${photo ? `<img src="${photo}" style="width:100%;height:140px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
+    ${photo ? `<img src="${photo}" style="width:100%;height:110px;object-fit:cover;display:block;" onerror="this.style.display='none'">` : ''}
     <div style="padding:14px;">
       <div style="margin-bottom:8px;">
         <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">Room / Suite Name</label>
@@ -1654,5 +1675,48 @@ async function runAudit() {
     </div>
   </div>
 </div>
+
+<script>
+// Jump nav — click a tab, land on that section instead of hunting by scroll.
+function jumpTo(e,id){
+  if(e) e.preventDefault();
+  var el=document.getElementById(id);
+  if(!el) return;
+  el.scrollIntoView({behavior:'smooth',block:'start'});
+  markTab(id);
+}
+function markTab(id){
+  document.querySelectorAll('#sectionNav a').forEach(function(a){
+    a.classList.toggle('on', a.getAttribute('href')==='#'+id);
+  });
+}
+// keep the active tab in sync while scrolling
+window.addEventListener('scroll', function(){
+  var best=null, bestTop=1e9;
+  document.querySelectorAll('h3[id^="sec-"]').forEach(function(h){
+    var top=h.getBoundingClientRect().top-90;
+    if(top<=0 && Math.abs(top)<bestTop){ bestTop=Math.abs(top); best=h.id; }
+  });
+  if(best) markTab(best);
+}, {passive:true});
+
+// Deep link: resort-library.html?resort=<slug> opens straight to that resort,
+// so the audit page can hand off a resort that needs work.
+(function(){
+  var slug=new URLSearchParams(location.search).get('resort');
+  if(!slug) return;
+  function go(tries){
+    var sel=document.getElementById('masterResort');
+    if(!sel||!sel.options.length){ if(tries>0) return setTimeout(function(){go(tries-1);},300); return; }
+    var found=[].slice.call(sel.options).some(function(o){return o.value===slug;});
+    if(!found) return;
+    sel.value=slug;
+    sel.dispatchEvent(new Event('change',{bubbles:true}));
+    if(typeof loadResortProfile==='function') loadResortProfile(slug);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){go(20);});
+  else go(20);
+})();
+</script>
 </body>
 </html>
