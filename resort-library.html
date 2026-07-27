@@ -162,9 +162,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
     <select class="form-control" id="masterResort" onchange="localStorage.setItem('lastResort',this.value);onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
-      <option value="">Select resort...</option>
+            <option value="">Select resort...</option>
       <option value="ava-resort-cancun">Ava Resort Cancun</option>
+      <option value="breathless-cabo-san-lucas-resort-spa">Breathless Cabo San Lucas Resort &amp; Spa</option>
       <option value="breathless-punta-cana">Breathless Punta Cana Resort &amp; Spa</option>
+      <option value="breathless-riviera-cancun">Breathless Riviera Cancun Resort &amp; Spa</option>
       <option value="dreams-aventuras">Dreams Aventuras Riviera Maya</option>
       <option value="dreams-bahia-mita">Dreams Bahia Mita Surf &amp; Spa Resort</option>
       <option value="dreams-cap-cana">Dreams Cap Cana Resort &amp; Spa</option>
@@ -197,8 +199,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="garza-blanca">Garza Blanca Preserve Resort &amp; Spa</option>
       <option value="grand-palladium-costa-mujeres">Grand Palladium Costa Mujeres Resort &amp; Spa</option>
       <option value="grand-velas-riviera-maya">Grand Velas Riviera Maya</option>
-      <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
       <option value="hard-rock-punta-cana">Hard Rock Hotel &amp; Casino Punta Cana</option>
+      <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
       <option value="hard-rock-riviera-maya">Hard Rock Hotel Riviera Maya</option>
       <option value="hard-rock-vallarta">Hard Rock Hotel Vallarta</option>
       <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
@@ -213,6 +215,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="hyatt-ziva-puerto-vallarta">Hyatt Ziva Puerto Vallarta</option>
       <option value="hyatt-ziva-rose-hall">Hyatt Ziva Rose Hall</option>
       <option value="iberostar-selection-cancun">Iberostar Selection Cancun</option>
+      <option value="iberostar-waves-rose-hall-beach">Iberostar Waves Rose Hall Beach</option>
+      <option value="impression-isla-mujeres-by-secrets">Impression Isla Mujeres by Secrets</option>
       <option value="le-blanc-spa-resort-los-cabos">Le Blanc Spa Resort Los Cabos</option>
       <option value="majestic-elegance-costa-mujeres">Majestic Elegance Costa Mujeres</option>
       <option value="majestic-mirage">Majestic Mirage Costa Mujeres</option>
@@ -222,6 +226,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
       <option value="ocean-coral-spring">Ocean Coral Spring</option>
       <option value="ocean-eden-bay">Ocean Eden Bay</option>
+      <option value="princess-grand-jamaica">Princess Grand Jamaica</option>
       <option value="riu-cancun">Riu Cancun</option>
       <option value="riu-latino">Riu Latino</option>
       <option value="riu-montego-bay">Riu Montego Bay</option>
@@ -254,7 +259,9 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
       <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
       <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
+      <option value="trs-turquesa">TRS Turquesa</option>
       <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
+      <option value="valentin-imperial-riviera-maya">Valentin Imperial Riviera Maya</option>
       <option value="other">Other Resort</option>
     </select>
   </div>
