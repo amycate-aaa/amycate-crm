@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Import — Hyatt Ziva Cap Cana</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 620px; margin: 60px auto; padding: 0 24px; background: #f9f9f9; color: #222; }
+  h1 { font-size: 20px; margin-bottom: 4px; }
+  p.sub { color: #666; font-size: 14px; margin-bottom: 20px; }
+  .info { background: #f0f6ff; border: 1px solid #bdd; border-radius: 8px; padding: 14px 18px; font-size: 13px; margin-bottom: 24px; line-height: 1.7; }
+  .warn { background: #fff8e6; border: 1px solid #e6c88a; border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 24px; line-height: 1.6; }
+  button { background: #2a6496; color: #fff; border: none; padding: 14px 32px; font-size: 15px; border-radius: 8px; cursor: pointer; width: 100%; }
+  button:hover { background: #1e4d73; }
+  button:disabled { background: #aaa; cursor: default; }
+  #log { margin-top: 20px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 18px; font-size: 13px; line-height: 2; white-space: pre-wrap; }
+  .ok  { color: #1a7a1a; font-weight: 600; }
+  .err { color: #cc0000; }
+</style>
+</head>
+<body>
+<h1>✨ Import: Hyatt Ziva Cap Cana</h1>
+<p class="sub">Pushes full resort profile to <code>resortProfiles/hyatt-ziva-cap-cana</code> in Firestore.</p>
+
+<div class="info">
+  <strong>What will be imported (all from destinationweddings.com):</strong><br>
+  • Full description + tagline + highlights<br>
+  • 6 wedding venues (Ziva Beach Gazebo, Beach, Rooftop Terrace, Santo Domingo Terrace, Larimar Lawn, Santo Domingo Ballroom)<br>
+  • 6 wedding packages with real 2026–2027 pricing from the wedding flyer<br>
+  • 21 room categories with full descriptions<br>
+  • 7 restaurants + 2 bars<br>
+  • Amenities &amp; activities lists<br><br>
+  <strong>Slug:</strong> <code>hyatt-ziva-cap-cana</code> · <strong>Overwrites everything</strong> (no guard logic)
+</div>
+
+<div class="warn">
+  <strong>Photos:</strong> Only the hero photo has a verified URL. Room and venue photos are intentionally left blank rather than guessed — use the 📷 picker in the Resort Library to attach real photos.
+</div>
+
+<button id="btn" onclick="runImport()">Import to Firestore</button>
+<div id="log">Ready — click button to import.</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: 'AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js',
+  authDomain: 'wedding-crm-e5d12.firebaseapp.com',
+  projectId: 'wedding-crm-e5d12',
+  storageBucket: 'wedding-crm-e5d12.firebasestorage.app',
+  messagingSenderId: '246819649586',
+  appId: '1:246819649586:web:a74debd217ce048d26242b'
+});
+const db = firebase.firestore();
+
+const HERO = 'https://assets.milestoneinternet.com/destination-weddings-travel-group/72826-hyatt-ziva-cap-cana/aioapi/hyatt-ziva-cap-cana-aerial-pool-3.jpg';
+
+const RESORT_DATA = {
+  slug: 'hyatt-ziva-cap-cana',
+  name: 'Hyatt Ziva Cap Cana',
+  resortName: 'Hyatt Ziva Cap Cana',
+  brand: 'Hyatt Inclusive Collection',
+  location: 'Cap Cana, Dominican Republic',
+  stars: 5,
+  agePolicy: 'Family-Friendly · All Ages',
+  lgbtqFriendly: true,
+  priceLevel: '$$$',
+  partnerLevel: 'Sapphire Partner',
+  weddingsPerDay: 3,
+  totalRooms: 375,
+
+  tagline: 'Beachfront Luxury in Cap Cana',
+
+  description: 'Hyatt Ziva Cap Cana, perched along the scenic shores of Cap Cana in the Dominican Republic, is a luxurious and enchanting all-inclusive resort that promises an unforgettable destination wedding experience. With its captivating beachfront setting, pristine white sands, crystal-clear turquoise waters, and lush tropical surroundings, Hyatt Ziva Cap Cana creates the perfect backdrop for a dreamy and romantic beach wedding celebration.',
+
+  highlights: '5 Star Resort · 375 Rooms · Family-Friendly · 3 Weddings Per Day · LGBTQ+ Friendly · Sapphire Partner · Beachfront Cap Cana Location · All-Inclusive',
+
+  heroPhoto: HERO,
+  dwtUrl: 'https://www.destinationweddings.com/hyatt-ziva-cap-cana',
+  weddingUrl: 'https://www.destinationweddings.com/hyatt-ziva-cap-cana',
+
+  venues: [
+    {
+      name: 'Ziva Beach Gazebo',
+      capacity: 'Up to 150 Guests',
+      bestFor: 'Ceremony',
+      description: 'The signature oceanfront gazebo at Hyatt Ziva Cap Cana, with maximum capacity for up to 150 guests. Set on the beach with Caribbean Sea views — the iconic ceremony spot on property. Flowers and décor available at additional cost.',
+      photo: ''
+    },
+    {
+      name: 'Beach',
+      capacity: 'Up to 600 Guests',
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'With the serene sound of waves and the captivating view of the Caribbean Sea as your backdrop, the beach at Hyatt Ziva Cap Cana creates an intimate and magical atmosphere. Buffet-style dinner is required for outdoor venues. Outdoor events must conclude by 11:00 PM due to noise restrictions. Flowers and décor available at additional cost. (Note: DWT site lists 800 guests — confirm with resort.)',
+      photo: ''
+    },
+    {
+      name: 'Rooftop Terrace',
+      capacity: '100 Ceremony · 80 Cocktail/Reception · 100 Dinner',
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'Perched on the fifth floor at Hyatt Ziva Cap Cana, this elegant elevated space offers stunning ocean views. Location fee: USD $1,000 (2026) / USD $1,500 (2027). You can have either the ceremony OR the cocktail/reception in this venue. Cannot be combined with the Zilara Gazebo. Buffet-style dinner required for outdoor venues. Flowers and décor available at additional cost. (Note: DWT site lists 200 guests — confirm with resort.)',
+      photo: ''
+    },
+    {
+      name: 'Santo Domingo Terrace',
+      capacity: '100 Guests',
+      bestFor: 'Reception · Cocktail Hour',
+      description: 'The Santo Domingo Terrace is the perfect choice for hosting more intimate events, offering stunning views and a lovely atmosphere to enjoy on your special day.',
+      photo: ''
+    },
+    {
+      name: 'Larimar Lawn',
+      capacity: '2,000 Guests',
+      bestFor: 'Ceremony · Reception · Cocktail Hour',
+      description: 'With its freshly manicured green grass, this charming outdoor venue sets the stage for a romantic and unforgettable wedding celebration. Buffet-style dinner required for outdoor venues. Outdoor events conclude by 11:00 PM.',
+      photo: ''
+    },
+    {
+      name: 'Santo Domingo Ballroom',
+      capacity: '2,070 Guests',
+      bestFor: 'Reception · Cocktail Hour',
+      description: 'Elevate your special day to the epitome of style by choosing the Santo Domingo Ballroom as the venue for your celebration. This exquisite ballroom radiates a timeless and vibrant energy, setting the stage for a remarkable wedding experience.',
+      photo: ''
+    }
+  ],
+
+  // From the Hyatt Ziva & Zilara Cap Cana wedding venues PDF
+  weddingNotes: 'Private reception program: Ceremony 20–30 min · 1 hour cocktail (same venue as reception) · 3 hours reception dinner. Outdoor events can be held until 11:00 PM due to noise restrictions. Buffet-style dinner required for outdoor venues. OUTSIDE VENDORS: $1,500 USD fee per service hired for outside vendors (décor, AV, DJ, etc.) — fee covers 1 person for 1 day. Outside photography & video vendors are NOT allowed. Hotel reserves right to deny entry to any outside vendor.',
+
+  packages: [
+    {
+      name: 'Big Day Preview',
+      price: 'From $600 · $600 credit',
+      highlights: 'Preview your wedding before confirming your date. 2-night luxury getaway for two from $600 · All-inclusive accommodations with fine dining, signature cocktails and live entertainment · Best room availability at check-in · Exclusive resort tour with onsite wedding planner · $600 credit when you book your wedding. Credit valid for minimum $6,000 wedding program; contract + deposit within 90 days of visit. Offers valid through December 15, 2026.',
+      featured: false
+    },
+    {
+      name: 'Just for the Two of You',
+      price: 'Complimentary* or from $709 (2026)',
+      highlights: 'COUPLE ONLY. 2026: $709 Mon–Thu AM / $1,389 Thu PM–Sun. 2027: $749 / $1,459. Additional guest $50 (2026) / $55 (2027) · Wedding pass $215 (2026) / $220 (2027). COMPLIMENTARY with 7+ night stay in Club Ocean View Jr Suite or higher, Mon–Wed 9AM–1PM only. Includes: pre-planning + onsite wedding coordinator, bouquets/boutonnieres, oceanfront location (beach extra), symbolic ceremony & certificate with secular officiant, sparkling wine toast, wedding cake, room decoration with flower petals + wine, late check-out to 3PM, online wedding registry & website.',
+      featured: false
+    },
+    {
+      name: 'Intimate Elegance',
+      price: 'Complimentary* or from $1,789 (2026)',
+      highlights: 'COUPLE + UP TO 10 GUESTS. 2026: $1,789 Mon–Thu AM / $2,389 Thu PM–Sun. 2027: $1,879 / $2,509. Additional guest $50 (2026) / $55 (2027) · Wedding pass $215 / $220. COMPLIMENTARY with 25+ room nights (min 3 nights per room) in qualifying categories, Mon–Wed 9AM–1PM. Adds to base package: ceremony table + folding chairs, sound system & microphone, romantic dinner for the couple, 25-minute massage for the couple.',
+      featured: false
+    },
+    {
+      name: 'Lavish & Opulent',
+      price: 'From $6,789 (2026)',
+      highlights: 'COUPLE + UP TO 20 GUESTS. 2026: $6,789 Mon–Thu AM / $7,299 Thu PM–Sun. 2027: $7,129 / $7,669. Additional guest $135 (2026) / $140 (2027) · Wedding pass $300 / $305. Includes: 15% spa discount for couple + 10% for guests, mani/pedi for couple, hair-styling & makeup/grooming for couple, floral altar centerpiece, sound system, 1-hour private cocktail party with open bar & hors d\'oeuvres, 3-hour private reception with 3-course plated menu + open bar + wait staff, sparkling wine & sweet treat wedding night, 25-min massage, romantic dinner, late check-out to 3PM, 1 complimentary anniversary night with 4-night booking.',
+      featured: true
+    },
+    {
+      name: 'Luxury',
+      price: 'From $21,099 (2026)',
+      highlights: 'COUPLE + UP TO 38 GUESTS. 2026: $21,099 Mon–Thu AM / $21,650 Thu PM–Sun. 2027: $22,150 / $22,749. Additional guest $150 (2026) / $159 (2027) · Wedding pass $315 / $324. Includes everything plus: VIP status, arrival floral arrangement + sparkling wine + fruit basket, bathrobes & slippers, attire pressing, hair & makeup for one, mani/pedi for one, bilingual officiant, decorated beach or oceanfront gazebo, professional photographer (50 digital photos), video services, signature wedding cake, solo musician during cocktail hour, DJ & MC for 3 hours, personalized menu cards, 4 reception centerpieces, bridal party florals (2 mini bouquets, 3 boutonnieres, 2 corsages), honeymoon breakfast in bed, 50-min massage, private beach dinner, late checkout to 6PM.',
+      featured: false
+    },
+    {
+      name: 'South Asian Wedding',
+      price: 'Contact for pricing',
+      highlights: 'A dedicated package designed for South Asian wedding traditions and multi-day celebrations. Listed on destinationweddings.com — pricing not included in the 2026–2027 wedding flyer. Contact the resort wedding coordinator for inclusions and pricing.',
+      featured: false
+    }
+  ],
+
+  packageNotes: 'Complimentary weddings require minimum room category Club Ocean View Jr Suite, available Mon–Wed 9AM–1PM only, and must be booked at initial booking at least 6 months prior to the wedding date. Not available for previously reserved/confirmed weddings. Package inclusions have no cash value; unused items are non-refundable and not interchangeable. Combinable with Leisure Groups Program and Big Day Preview credit only. All prices USD, new bookings only. ©2026 Playa Management USA, LLC.',
+
+  roomCategories: [
+    { name: 'Junior Suite King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Junior Suite Double', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, two queen beds and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Resort View Junior Suite King', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, a king bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Resort View · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Resort View Junior Suite Double', description: 'Look out at this tropical resort from the furnished balcony of a 600-square-foot space with a separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Resort View · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Ocean View Junior Suite King', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Ocean View Junior Suite Double', description: 'Get clear ocean views from a 600-square-foot junior suite with a private balcony, separate shower, two double beds, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4', photo: '' },
+    { name: 'Junior Suite Swim Up King', description: 'Enjoy 600 square feet of space in a junior suite with a furnished balcony, a separate shower, 1 king size bed and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: '' },
+    { name: 'Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and impressive resort views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · View Varies · 600 sq ft · Sleeps 4 · Swim-Up', photo: '' },
+    { name: 'Club Junior Suite Swim Up King', description: 'Get club access and a semi-private pool with this 600-square-foot junior suite, featuring a separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
+    { name: 'Club Junior Suite Swim Up Double', description: 'These exclusive swim-up rooms include a semi-private pool right off the terrace and wonderful views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Pool View · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
+    { name: 'Club Ocean View Junior Suite King', description: 'Savor exclusive club dining when you stay at this 600-square-foot ocean view suite with balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Club Ocean View Junior Suite Double', description: 'These rooms feature a private balcony and promise stunning ocean views plus exclusive amenities. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean View · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Club Ocean Front Junior Suite King', description: 'Unpack and unwind in an oceanfront space stretching 600 square feet, featuring a furnished balcony, separate shower, king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Club Ocean Front Junior Suite Double', description: 'These oceanfront rooms offer the added luxury of private balcony with panoramic ocean views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Club Ocean Front Junior Suite Swim Up King', description: 'Enjoy the stunning vistas from this unique 600 square-foot swim-up featuring one king size bed, a queen sleeper sofa and direct access to a semi-private pool overlooking unobstructed ocean views from your terrace. Guests ages 13+ only in swim-ups. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up · Ages 13+', photo: '' },
+    { name: 'Club Ocean Front Junior Suite Swim Up Double', description: 'Lavish swim-up suites provide direct access to a semi-private pool and unforgettable ocean front views. Rooms are equipped with queen size sofa bed.', details: '2 Double beds · Ocean Front · 600 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
+    { name: 'Club One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot suite with a separate living room, a tub with Jacuzzi jets, a balcony with ocean views, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Club Ocean View One Bedroom Master Suite', description: 'Stretch out in a luxurious 1,238-square-foot ocean view suite offering a king bed, deluxe amenities, a separate living room with sofa bed, and a balcony with a private hot tub.', details: '1 King bed · Ocean View · 1,238 sq ft · Club Level', photo: '' },
+    { name: 'Club One Bedroom Master Swim Up Suite', description: 'A semi-private pool awaits right off the terrace of this 1,238-square-foot swim-up suite with a separate bedroom, ocean views, a separate tub, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 1,238 sq ft · Sleeps 4 · Club Level · Swim-Up', photo: '' },
+    { name: 'Club Ocean View One Bedroom Grand Master Suite', description: 'Featuring sweeping ocean views, this giant 1,345-square-foot suite boasts a separate living room, a tub with Jacuzzi jets, a balcony, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King bed · Ocean View · 1,345 sq ft · Sleeps 4 · Club Level', photo: '' },
+    { name: 'Presidential Suite', description: 'Reserve this 2,500-square-foot penthouse suite to get the resort’s best ocean views from a private balcony, plus living and dining rooms, a tub with Jacuzzi jets, a king bed, and a queen sleeper-sofa. Amenities include a 55" flat-screen TV, individually controlled heat and air-conditioning, hair dryer, terry bathrobe and slippers, coffee maker, minibar, iron and ironing board, in-room laptop safe.', details: '1 King + 1 Sofa bed · Ocean View · 2,500 sq ft · Sleeps 4', photo: '' }
+  ],
+
+  restaurants: [
+    { name: 'Prontoz', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'Navigator Grill', type: 'Grill', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'The Chinola', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'Noodle & Thread', type: 'Asian', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'Tempest Table', type: 'Restaurant', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'El Mercado', type: 'Buffet / Market', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'The Blind Butcher', type: 'Steakhouse (Specialty)', description: 'On-site dining at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'Spiritz', type: 'Bar', description: 'On-site bar at Hyatt Ziva Cap Cana.', photo: '' },
+    { name: 'Cocoonz', type: 'Bar', description: 'On-site bar at Hyatt Ziva Cap Cana.', photo: '' }
+  ],
+
+  amenities: [
+    'Beach & pool waiter service',
+    'Complimentary wireless internet',
+    'Mini-bar',
+    'Bathrobes',
+    'Double whirlpool tub(s)',
+    '24-hour room service',
+    'Beauty salon',
+    'Spa ($)',
+    'Fitness center',
+    'All-inclusive alcoholic beverages',
+    'All-inclusive amenities',
+    'All-inclusive meals'
+  ],
+
+  activities: [
+    'Non-motorized water sports',
+    'Pool volleyball',
+    'Scuba diving instructions/demonstration',
+    'Scuba',
+    'Aqua aerobics',
+    'Cooking classes',
+    'Shows/entertainment',
+    'Snorkeling',
+    'Golf nearby ($)',
+    'Local tours/shuttles ($)',
+    'Off-property tours ($)'
+  ]
+};
+
+function log(msg, cls) {
+  const el = document.getElementById('log');
+  el.innerHTML += (cls ? '<span class="' + cls + '">' + msg + '</span>' : msg) + '\n';
+}
+
+async function runImport() {
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  document.getElementById('log').innerHTML = '';
+  log('Starting import for Hyatt Ziva Cap Cana...');
+
+  try {
+    const docRef = db.collection('resortProfiles').doc('hyatt-ziva-cap-cana');
+    const resortData = { ...RESORT_DATA };
+    resortData.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+    await docRef.set(resortData, { merge: true });
+
+    log('✅ Resort profile written to resortProfiles/hyatt-ziva-cap-cana', 'ok');
+    log('');
+    log('Summary:', 'ok');
+    log('  • Name: Hyatt Ziva Cap Cana');
+    log('  • Location: Cap Cana, Dominican Republic');
+    log('  • Family-Friendly · 5-Star · $$$ · Sapphire Partner');
+    log('  • 375 rooms');
+    log('  • ' + resortData.roomCategories.length + ' room categories');
+    log('  • ' + resortData.venues.length + ' wedding venues');
+    log('  • ' + resortData.packages.length + ' wedding packages');
+    log('  • ' + resortData.restaurants.length + ' restaurants & bars');
+    log('');
+    log('⚠️  Next step: add photos via the Resort Library 📷 picker.', 'err');
+  } catch (err) {
+    log('❌ Error: ' + err.message, 'err');
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
