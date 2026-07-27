@@ -90,7 +90,9 @@ const ROOMISH=/\b(suite|junior|master|presidential|king|queen|double|swim[- ]?up
 // Text that should never reach a client.
 // A wedding venue illustrated with a guest-room photo means the venue was
 // invented from room data. Whole-list hits are almost always fabricated.
-const ROOMPIC=/(JR[-_]?SU|MSTR|PRES(?!S)|KING|DBL|QUEEN|[-_]RM[-_]|ROOM|SUITE|BEDROOM|BATH)/i;
+// Tokens are matched between separators so "ballroom" and "ballroom-venue" don't
+// trip the filter — a ballroom IS a venue, it just happens to contain "room".
+const ROOMPIC=/(?:^|[-_.\/ ])(JR[-_ ]?SU|MSTR|PRES|KING|DBL|QUEEN|RM|SUITE|BEDROOM)(?:$|[-_.\/ ])/i;
 // Text that should never reach a client.
 const LEAK=/⚠️|confirm with (the )?resort|verify current|not detailed in|not priced in|contact the resort wedding coordinator|listed on destinationweddings|DWT (site )?lists|SOURCE NOTE|pricing conflict|cancellation penalt|penalty fee|loyalty program|repeat stays|best-price guarantee/i;
 
