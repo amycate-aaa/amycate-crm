@@ -1151,6 +1151,8 @@ function resortMetaLine(r){
 // Auto-fill a photo field. Replaces the value when it was auto-filled before
 // (e.g. you switched resorts), but never overwrites one you picked yourself.
 const _autoFilled={};
+// Remembers the room photo WE auto-filled, so a manual change is never undone.
+const _autoRoomPhoto={};
 function setAutoPhoto(id, value, force){
   const el=document.getElementById(id);
   if(!el||!value) return;
@@ -1562,10 +1564,15 @@ function applyRoomCatSelect(n, idxStr){
   // Fill room name
   const nameEl=document.getElementById('f-r'+n+'name');
   if(nameEl) nameEl.value=cat.name;
-  // Fill photo if not already set
+  // Fill photo — but never overwrite one Amy set herself. We remember what we
+  // auto-filled; if the field no longer matches, she changed it on purpose and
+  // it stays. That is why manual room photos kept reverting.
   if(cat.photo){
     const photoEl=document.getElementById('f-r'+n+'photo');
-    if(photoEl) photoEl.value=cat.photo;
+    const key='f-r'+n+'photo';
+    if(photoEl && (!photoEl.value.trim() || photoEl.value===_autoRoomPhoto[key])){
+      photoEl.value=cat.photo; _autoRoomPhoto[key]=cat.photo;
+    }
   }
   // Fill description from CRM room data
   if(cat.description){
@@ -1666,7 +1673,10 @@ function applyFSRoomCatSelect(n, idxStr){
   // lands in the quote. That is the whole point of keeping the library.
   if(cat.photo){
     const roomPhotoEl=document.getElementById('fs-r'+n+'roomPhoto');
-    if(roomPhotoEl) roomPhotoEl.value=cat.photo;
+    const key='fs-r'+n+'roomPhoto';
+    if(roomPhotoEl && (!roomPhotoEl.value.trim() || roomPhotoEl.value===_autoRoomPhoto[key])){
+      roomPhotoEl.value=cat.photo; _autoRoomPhoto[key]=cat.photo;
+    }
   }
   // Description — same as the FIT tab. Specs get appended so the card reads
   // like a room, not a label.
@@ -3134,7 +3144,16 @@ function buildWeddingFull(wv){
       </div>
     </div>
   </div>
-  ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${rf.offer?`<div class="pkg-cta"><a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;→</a></div>`:''}</div>`:''}
+  ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${(()=>{
+      // The wedding package guide belongs here, beside the packages it explains.
+      // Prefer the resort's own record so a multi-resort quote can't pair one
+      // resort's link with another resort's name.
+      const guide = (r && (r.weddingUrl || r.weddingPackageUrl)) || rf.weddingUrl || rf.guide || '';
+      const bits = [];
+      if(guide) bits.push(`<a href="${escUrl(guide)}" class="btn-savings" target="_blank">View Wedding Package Guide &nbsp;&rarr;</a>`);
+      if(rf.offer) bits.push(`<a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;&rarr;</a>`);
+      return bits.length ? `<div class="pkg-cta">${bits.join(' ')}</div>` : '';
+    })()}</div>`:''}
   ${priceBand}
   ${promoBand(r, 'wedding')}<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, wv.couple, 'Resort Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${venues.length?`<div class="resort-venues"><div class="venues"><h3 class="venues-title">Ceremony &amp; Reception Venues</h3><div class="venues-grid">${venuesHTML}</div></div></div>`:''}
@@ -3227,7 +3246,7 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .pkg-includes{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:4px;}
 .pkg-includes li{font-size:12px;color:rgba(255,255,255,.5);line-height:1.5;padding-left:14px;position:relative;}
 .pkg-includes li::before{content:'✦';position:absolute;left:0;font-size:8px;color:var(--gold-2);top:3px;}
-.pkg-cta{padding:28px 0 0;margin-top:8px;border-top:1px solid rgba(255,255,255,.1);}
+.pkg-cta{padding:28px 0 0;margin-top:8px;border-top:1px solid rgba(255,255,255,.1);display:flex;flex-wrap:wrap;gap:12px;}
 .resort-venues{padding:0 7vw 60px;background:var(--cream);}
 .resort-dining{padding:0 7vw 60px;background:var(--cream);}
 .dining-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
