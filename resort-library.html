@@ -159,6 +159,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="page-sub">Upload &amp; manage resort photos for group sites &mdash; one upload, use everywhere</div>
   </div>
   <div style="margin-left:auto;display:flex;align-items:center;gap:10px;">
+    <button onclick="addNewResort()" style="background:#f0c958;border:none;color:#111;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:700;white-space:nowrap;">&#43; Add New Resort</button>
     <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
     <select class="form-control" id="masterResort" onchange="localStorage.setItem('lastResort',this.value);onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
@@ -1654,6 +1655,28 @@ initFilterResortDropdown();
 
 // ── RESORT AUDIT ──
 
+// The three quote modes you test a resort in before trusting it.
+const QUOTE_CHECKS = [
+  { key:'fit',     label:'FIT Quote' },
+  { key:'wedding', label:'Wedding Quote' },
+  { key:'rooms',   label:'Room Picker' }
+];
+
+// Ticking a box writes one field and nothing else, so it can never disturb
+// anything you or Christopher have open elsewhere.
+async function toggleQuoteCheck(slug, key, current){
+  try{
+    const ref = db.collection('resortProfiles').doc(slug);
+    const val = current ? firebase.firestore.FieldValue.delete() : Date.now();
+    await ref.set({ quoteChecks: { [key]: val } }, { merge:true });
+    const label = (QUOTE_CHECKS.find(q=>q.key===key)||{}).label || key;
+    toast(current ? label + ' check cleared.' : label + ' marked as tested.');
+    runAudit();
+  }catch(e){
+    toast('Could not save that: ' + e.message, 'error');
+  }
+}
+
 function toggleAudit() {
   const sec = document.getElementById('auditSection');
   if (!sec) return;
@@ -1717,6 +1740,7 @@ async function runAudit() {
     ];
 
     let completedResorts = 0;
+    let quoteVerified = 0;
 
     const rows = resorts.map(r => {
       const p = profiles[r.slug] || {};
@@ -1756,6 +1780,27 @@ async function runAudit() {
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
 
+      // ── Quote check ────────────────────────────────────────────────────
+      // You tick these yourself after running a test quote. The tick sticks
+      // until you change it — but if the resort is edited afterwards it turns
+      // amber, because the thing you tested isn't the thing that's in there now.
+      const qc = p.quoteChecks || {};
+      const editedAt = (p.updatedAt && p.updatedAt.toMillis) ? p.updatedAt.toMillis() : 0;
+      const quoteCells = QUOTE_CHECKS.map(q => {
+        const at = Number(qc[q.key] || 0);
+        const stale = at > 0 && editedAt > at + 60000;   // 1 min grace
+        const mark  = !at ? '<span style="color:#bbb;">&#9744;</span>'
+                    : stale ? '<span style="color:#c77c00;">&#9888;</span>'
+                    : '<span style="color:#1a7a3a;">&#10003;</span>';
+        const when  = at ? new Date(at).toLocaleDateString() : '';
+        const tip   = !at ? 'Not tested yet — click once you have run a ' + q.label + ' quote and it looked right'
+                    : stale ? 'Tested ' + when + ', but the resort has been edited since. Re-test and click again.'
+                    : 'Tested ' + when + '. Click to clear.';
+        return `<td onclick="toggleQuoteCheck('${r.slug}','${q.key}',${at||0})" title="${tip.replace(/"/g,'&quot;')}"
+                    style="text-align:center;padding:10px 8px;font-size:1rem;cursor:pointer;user-select:none;">${mark}</td>`;
+      });
+      if (QUOTE_CHECKS.every(q => { const at=Number(qc[q.key]||0); return at>0 && !(editedAt>at+60000); })) quoteVerified++;
+
       const allOk = checks.every(c => checkOk(c)) && photos > 0;
       if (allOk) completedResorts++;
 
@@ -1768,10 +1813,11 @@ async function runAudit() {
         </td>
         ${cells.join('')}
         ${photoCell}
+        ${quoteCells.join('')}
       </tr>`;
     });
 
-    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos'].map(h =>
+    const headers = ['Resort', ...checks.map(c=>c.label), 'Photos', ...QUOTE_CHECKS.map(q=>q.label)].map(h =>
       `<th style="padding:10px 12px;font-size:.8rem;color:#444;font-weight:700;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;text-align:${h==='Resort'?'left':'center'};background:#f5f5f5;border-bottom:2px solid #ddd;">${h}</th>`
     ).join('');
 
@@ -1779,9 +1825,10 @@ async function runAudit() {
       <thead><tr>${headers}</tr></thead>
       <tbody>${rows.join('')}</tbody>
     </table>
-    <div style="margin-top:10px;font-size:.82rem;color:#666;">Green row = fully complete &nbsp;|&nbsp; Pink row = no profile yet &nbsp;|&nbsp; <strong>${completedResorts} of ${resorts.length} resorts complete</strong></div>`;
+    <div style="margin-top:10px;font-size:.82rem;color:#666;">Green row = fully complete &nbsp;|&nbsp; Pink row = no profile yet &nbsp;|&nbsp; <strong>${completedResorts} of ${resorts.length} resorts complete</strong> &nbsp;|&nbsp; <strong>${quoteVerified} quote-verified</strong></div>
+    <div style="margin-top:6px;font-size:.8rem;color:#888;">Last three columns are yours to tick: run a test quote in that mode, and if it renders properly click the box. &#10003; = tested &nbsp; &#9888; = tested, but edited since &nbsp; &#9744; = not tested.</div>`;
 
-    if (status) status.textContent = `${completedResorts} of ${resorts.length} resorts fully complete`;
+    if (status) status.textContent = `${completedResorts} of ${resorts.length} resorts fully complete · ${quoteVerified} quote-verified`;
 
   } catch(e) {
     if (grid) grid.innerHTML = '<div style="color:#e74c3c;padding:20px 0;">Error: ' + e.message + '</div>';
@@ -1894,6 +1941,118 @@ window.addEventListener('scroll', function(){
 // The typed-in list below stays as the curated set of names, and anything either
 // Amy or Christopher creates in Firestore is added automatically — so a new
 // resort is selectable for BOTH of us without anyone pushing a file to GitHub.
+// ── Add a brand-new resort ────────────────────────────────────────────────
+// Creates the record, drops it into the dropdown in the right alphabetical
+// place, selects it, and opens the blank profile form ready to fill in.
+function slugifyResort(name){
+  return String(name)
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')   // strip accents
+    .replace(/&/g,' and ')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,'-')
+    .replace(/^-+|-+$/g,'')
+    .slice(0,80);
+}
+
+async function addNewResort(){
+  const sel = document.getElementById('masterResort');
+  if(!sel) return;
+
+  const name = (prompt('Full resort name\n\nType it exactly as you want it to appear — e.g.\nDreams Onyx Resort & Spa') || '').trim();
+  if(!name) return;
+
+  const slug = slugifyResort(name);
+  if(!slug){ toast('That name didn’t produce a usable ID. Try again.','error'); return; }
+
+  // Guard against near-duplicates. "Dreams Onyx Resort & Spa" and
+  // "Dreams Onyx Resort Spa" make different IDs but are the same hotel, and
+  // a twin record is the one mistake that's genuinely annoying to undo.
+  const bareKey = s => slugifyResort(s).replace(/-(and|the|resort|resorts|spa|hotel|hotels|all|inclusive|by|an|a)(?=-|$)/g,'').replace(/-+/g,'-');
+  const mine = bareKey(name);
+  const near = [...sel.options].find(o => o.value && o.value !== slug && bareKey(o.value) === mine);
+  if(near){
+    const go = confirm('Your library already has:\n\n  ' + near.textContent.trim() +
+      '\n\nThat looks like the same resort. Open the existing one instead?\n\n' +
+      'OK = open it   ·   Cancel = create "' + name + '" as a separate record');
+    if(go){
+      sel.value = near.value;
+      localStorage.setItem('lastResort', near.value);
+      onMasterResortChange(near.value);
+      return;
+    }
+  }
+
+  // Already in the dropdown? Just go there rather than making a twin.
+  const existingOpt = [...sel.options].find(o => o.value === slug);
+  if(existingOpt){
+    sel.value = slug;
+    localStorage.setItem('lastResort', slug);
+    onMasterResortChange(slug);
+    toast(existingOpt.textContent.trim() + ' is already in your library — opened it.','error');
+    return;
+  }
+
+  try{
+    const ref = db.collection('resortProfiles').doc(slug);
+    const snap = await ref.get();
+
+    // A record can exist in the database without being in the dropdown yet
+    // (empty shells are skipped on load). Don't overwrite it.
+    if(snap.exists){
+      const d = snap.data() || {};
+      const label = d.resortName || d.name || name;
+      const o = new Option(label, slug);
+      sel.appendChild(o);
+      resortDropdownResort();
+      sel.value = slug;
+      localStorage.setItem('lastResort', slug);
+      onMasterResortChange(slug);
+      toast('That record already existed — opened it instead of creating a new one.','error');
+      return;
+    }
+
+    await ref.set({
+      resortName: name,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge:true});
+
+    const o = new Option(name, slug);
+    sel.appendChild(o);
+    resortDropdownResort();
+    sel.value = slug;
+    localStorage.setItem('lastResort', slug);
+    onMasterResortChange(slug);
+
+    // markLoaded needs a fresh snapshot so the collision-safe save knows this
+    // record started empty and everything you type is genuinely new.
+    if(typeof markLoaded === 'function'){
+      try{ markLoaded(slug, (await ref.get()).data() || {}); }catch(e){}
+    }
+
+    const form = document.getElementById('profileForm');
+    if(form){ form.style.display=''; form.scrollIntoView({behavior:'smooth', block:'start'}); }
+
+    toast('Added ' + name + '. Fill in what you have and hit Save — you can come back for the rest.');
+  }catch(e){
+    toast('Could not create it: ' + e.message, 'error');
+  }
+}
+
+// Keep the dropdown alphabetical, placeholder first, "Other" last.
+function resortDropdownResort(){
+  const sel = document.getElementById('masterResort');
+  if(!sel) return;
+  const opts  = [...sel.options];
+  const first = opts.filter(o => o.value === '');
+  const last  = opts.filter(o => o.value === 'other');
+  const mid   = opts.filter(o => o.value && o.value !== 'other')
+                    .sort((a,b) => a.textContent.trim().localeCompare(b.textContent.trim()));
+  const keep = sel.value;
+  sel.innerHTML = '';
+  [...first, ...mid, ...last].forEach(o => sel.appendChild(o));
+  if(keep) sel.value = keep;
+}
+
 (async function syncResortDropdown(){
   function prettify(slug){
     return slug.split('-').map(w => w.length<=3 && /^(and|the|by|spa|inn)$/.test(w)
@@ -1908,10 +2067,12 @@ window.addEventListener('scroll', function(){
     snap.docs.forEach(d => {
       if(have.has(d.id)) return;
       const x = d.data();
-      // skip empty shells so the list doesn't fill with blanks
+      // Skip old empty shells so the list doesn't fill with blanks — but never
+      // skip one you created with "Add New Resort", or it would vanish from the
+      // dropdown the moment you reloaded before filling anything in.
       const n = ['roomCategories','restaurants','venues','packages']
         .reduce((a,f)=>a+((x[f]||[]).length||0),0);
-      if(!n && !x.tagline && !x.description) return;
+      if(!n && !x.tagline && !x.description && !x.createdAt) return;
       const o = document.createElement('option');
       o.value = d.id;
       o.textContent = x.resortName || x.name || prettify(d.id);
