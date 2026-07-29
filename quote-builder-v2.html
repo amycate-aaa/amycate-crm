@@ -1275,13 +1275,30 @@ function clearWeddingHero(){
 
 // ─── LOAD RESORTS ──────────────────────────────────────────
 async function loadResorts(){
-  const snap=await db.collection('resortProfiles').orderBy('name').get();
-  allResorts=snap.docs.map(d=>({slug:d.id,...d.data()}));
+  // NEVER orderBy here. Firestore drops any document missing the ordered field,
+  // and the Resort Library saves the name as `resortName`, not `name` — so
+  // orderBy('name') silently hid every resort added through the library.
+  // Read everything, work out the label, sort in JS.
+  const snap=await db.collection('resortProfiles').get();
+  const pretty=s=>String(s).split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  allResorts=snap.docs.map(d=>{
+    const x=d.data()||{};
+    return {slug:d.id, ...x, name:(x.resortName||x.name||pretty(d.id))};
+  }).filter(r=>{
+    // Skip blank shells so the list isn't padded with records holding nothing.
+    const n=['roomCategories','restaurants','venues','packages']
+      .reduce((a,f)=>a+((r[f]||[]).length||0),0);
+    return n>0 || r.tagline || r.description || r.createdAt;
+  }).sort((a,b)=>a.name.localeCompare(b.name));
+
   ['f-resort','w-r1slug','w-r2slug','w-r3slug','w-r4slug','w-r5slug','w-r6slug','fs-r1slug','fs-r2slug','fs-r3slug','fs-r4slug'].forEach(id=>{
     const el=document.getElementById(id); if(!el) return;
+    const keep=el.value;
     const blank=id==='f-resort'?'<option value="">Select a resort…</option>':'<option value="">— none —</option>';
     el.innerHTML=blank+allResorts.map(r=>`<option value="${esc(r.slug)}">${esc(r.name)}</option>`).join('');
+    if(keep) el.value=keep;
   });
+  console.log('Builder: loaded '+allResorts.length+' resorts.');
 }
 loadResorts().catch(e=>console.error('Resort load error:',e));
 
@@ -3144,6 +3161,7 @@ function buildWeddingFull(wv){
       </div>
     </div>
   </div>
+  ${priceBand}
   ${packages.length?`<div class="packages-summary"><div class="packages-summary-head"><div><p class="eyebrow" style="color:var(--gold);">Wedding Packages</p><h3 class="packages-summary-title">Package Overview</h3></div><p class="packages-note">Full details in attached brochure. Pricing varies by guest count &amp; date.</p></div><div class="pkg-rows">${pkgsHTML}</div>${(()=>{
       // The wedding package guide belongs here, beside the packages it explains.
       // Prefer the resort's own record so a multi-resort quote can't pair one
@@ -3154,7 +3172,6 @@ function buildWeddingFull(wv){
       if(rf.offer) bits.push(`<a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;&rarr;</a>`);
       return bits.length ? `<div class="pkg-cta">${bits.join(' ')}</div>` : '';
     })()}</div>`:''}
-  ${priceBand}
   ${promoBand(r, 'wedding')}<div class="like-wrap"><a class="like-btn" href="${likeThisLink(r.name, wv.couple, 'Resort Option ' + num + ' \u2014 ' + r.name)}">&#10084;&#65039; &nbsp; I Like This One</a></div>
   ${venues.length?`<div class="resort-venues"><div class="venues"><h3 class="venues-title">Ceremony &amp; Reception Venues</h3><div class="venues-grid">${venuesHTML}</div></div></div>`:''}
     ${rests.length?`<div class="resort-dining"><h3 class="venues-title">Dining &amp; Bars</h3>${restaurantsHTML}</div>`:''}
