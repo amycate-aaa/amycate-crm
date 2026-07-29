@@ -730,10 +730,31 @@ function initFilterResortDropdown() {
   filterSel.innerHTML = allOption + resortOptions;
 }
 
+// Every load gets a ticket number. If you switch resorts while a load is still
+// in flight, the older one finishes LATER and used to win — filling the form with
+// the previous resort's data while the dropdown showed the new one. Saving then
+// wrote one resort's venues, rooms and dining onto another. This guard means only
+// the most recent load is allowed to touch the form.
+let _loadTicket = 0;
+
+// Wipe every field before populating. Without this, anything the incoming resort
+// leaves blank keeps the previous resort's value.
+function clearProfileForm(){
+  ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl',
+   'profileGalleryLink','profileNotes','profileWeddingUrl','profileRealWeddingUrl',
+   'profileRealWeddingNames','profileClubName','profileClubPerks','profileWeddingGuide','profileStars',
+   'profileWeddingPromoTitle','profileWeddingPromoSummary','profileWeddingPromoLink',
+   'profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink']
+   .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
+  ['roomcat-list','restaurant-list','venue-list','pkg-list']
+   .forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=''; });
+}
+
 async function loadResortProfile(slugOverride) {
   const slug = slugOverride || document.getElementById('profileResort')?.value;
   const form = document.getElementById('profileForm');
   const loadMsg = document.getElementById('profileLoadingMsg');
+  const ticket = ++_loadTicket;
 
   if (!slug) {
     if (form) form.style.display = 'none';
@@ -748,14 +769,18 @@ async function loadResortProfile(slugOverride) {
   // HIDE form, show spinner — never show blank fields
   if (form) form.style.display = 'none';
   if (loadMsg) { loadMsg.style.display = 'block'; loadMsg.textContent = '⏳ Loading profile...'; }
+  clearProfileForm();
 
   const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
 
   try {
     const doc = await db.collection('resortProfiles').doc(slug).get();
+    if (ticket !== _loadTicket) return;   // a newer load started — this one is stale
+    let loadedData = null;
 
     if (doc.exists) {
       const d = doc.data();
+      loadedData = d;
       set('profileTagline', d.tagline);
       set('profileDescription', d.description);
       set('profileHighlights', Array.isArray(d.highlights) ? d.highlights.join(' · ') : d.highlights);
@@ -803,7 +828,8 @@ async function loadResortProfile(slugOverride) {
     // Show form ONLY after all fields are populated
     if (loadMsg) loadMsg.style.display = 'none';
     if (form) form.style.display = 'block';
-    markLoaded(slug, (typeof d !== 'undefined' ? d : null));
+    if (ticket !== _loadTicket) return;   // stale — do not claim the form
+    markLoaded(slug, loadedData);
 
   } catch(e) {
     console.error('loadResortProfile error:', e);
