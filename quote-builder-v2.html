@@ -1302,6 +1302,21 @@ async function loadResorts(){
 }
 loadResorts().catch(e=>console.error('Resort load error:',e));
 
+// The Resort Library writes the name as `resortName`; every template here reads
+// `r.name`. Without this, a library-created resort renders with a blank title.
+// Normalise once, at the single point every template gets its data from.
+function normaliseResort(slug, raw){
+  const x=raw||{};
+  const pretty=s=>String(s).split('-').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  return Object.assign({}, x, {
+    slug,
+    name: x.resortName || x.name || pretty(slug),
+    weddingUrl: x.weddingUrl || x.weddingPackageUrl || '',
+    dwtUrl: x.dwtUrl || x.dwtLink || '',
+    ctUrl: x.ctUrl || x.ctLink || ''
+  });
+}
+
 async function getResort(slug){
   if(!slug) return null;
   // Always re-read: the Resort Library may have been edited in another tab,
@@ -1309,7 +1324,7 @@ async function getResort(slug){
   try{
     const snap=await db.collection('resortProfiles').doc(slug).get();
     if(snap.exists){
-      const data={slug,...snap.data()};
+      const data=normaliseResort(slug, snap.data());
       resortCache[slug]=data;
       return data;
     }
@@ -3154,10 +3169,24 @@ function buildWeddingFull(wv){
       <div class="resort-links">
         <p class="eyebrow">Resources</p>
         <div class="gold-rule"></div>
-        ${dwtUrl?`<a href="${escUrl(dwtUrl)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Destination Weddings</div><div class="resort-link-text">View more…</div></div><span class="resort-link-arrow">↗</span></a>`:''}
-        ${rf.guide?`<a href="${escUrl(rf.guide)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Wedding Guide</div><div class="resort-link-text">View ${esc(r.name)} Wedding Guide →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
-        ${rf.realWeddings?`<a href="${escUrl(rf.realWeddings)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Real Weddings</div><div class="resort-link-text">See Real Weddings at ${esc(r.name)} →</div></div><span class="resort-link-arrow">↗</span></a>`:''}
-        ${rf.offer?`<a href="${escUrl(rf.offer)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">Exclusive Offer</div><div class="resort-link-text">${esc(offerLabel)}</div></div><span class="resort-link-arrow">↗</span></a>`:''}
+        ${(()=>{
+          // Build Resources from the RESORT RECORD first, form fields second.
+          // Previously every card except DWT needed a form field filled by hand,
+          // so most quotes showed a single lonely link.
+          const card=(label,text,url)=>url
+            ? `<a href="${escUrl(url)}" class="resort-link-card" target="_blank"><div><div class="resort-link-label">${esc(label)}</div><div class="resort-link-text">${esc(text)}</div></div><span class="resort-link-arrow">&#8599;</span></a>`
+            : '';
+          const guide = (r && (r.weddingUrl || r.weddingPackageUrl)) || rf.guide || '';
+          const out=[];
+          out.push(card('Destination Weddings','View more…', dwtUrl));
+          out.push(card('Book & View Rates','Check live availability &rarr;', (r && (r.ctUrl||r.ctLink)) || ''));
+          // Only show the guide here when the Package Overview block is absent,
+          // so the same link never appears twice in one quote.
+          if(!packages.length) out.push(card('Wedding Guide','View '+r.name+' Wedding Guide &rarr;', guide));
+          out.push(card('Real Weddings','See Real Weddings at '+r.name+' &rarr;', rf.realWeddings||''));
+          out.push(card('Exclusive Offer', offerLabel, rf.offer||''));
+          return out.filter(Boolean).join('\n        ');
+        })()}
       </div>
     </div>
   </div>
