@@ -1774,7 +1774,11 @@ async function onWResortChange(n){
   // Auto-populate Wedding Guide PDF URL — from Firestore, then localStorage, then built-in fallback
   const guideField=document.getElementById('w-r'+n+'guide');
   if(guideField&&!guideField.value){
-    const fromFirestore=r.weddingGuide||r.guideUrl||r.weddingGuideUrl||r.pdfUrl||'';
+    // The Resort Library's "Wedding Package URL" saves to weddingUrl /
+    // weddingPackageUrl. Those were missing from this chain, so a resort with
+    // the PDF on file still showed an empty Wedding Guide field.
+    const fromFirestore=r.weddingGuide||r.guideUrl||r.weddingGuideUrl||r.pdfUrl
+                       ||r.weddingUrl||r.weddingPackageUrl||'';
     const fromStorage=getSavedGuideUrl(slug);
     const fromFallback=KNOWN_WEDDING_PDFS[slug]||'';
     guideField.value=fromFirestore||fromStorage||fromFallback;
