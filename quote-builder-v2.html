@@ -3194,10 +3194,13 @@ function buildWeddingFull(wv){
                                r.guideUrl || r.weddingGuideUrl || r.pdfUrl)) || rf.guide || '';
           const out=[];
           out.push(card('Destination Weddings','View more…', dwtUrl));
-          // ALWAYS show the guide here. It was previously hidden whenever a
-          // Package Overview block existed, to avoid a duplicate link — but that
-          // meant the PDF vanished from most quotes, which is far worse.
-          out.push(card('Wedding Pricing & Details','View the '+r.name+' wedding guide \u2192', guide));
+          // Show the guide whenever there is one — but not when it is simply the
+          // DWT page again. Some records have the DWT link pasted into the wedding
+          // package field, which produced two identical cards.
+          const sameAsDwt = guide && dwtUrl &&
+            guide.replace(/\/+$/,'') === String(dwtUrl).replace(/\/+$/,'');
+          if(guide && !sameAsDwt)
+            out.push(card('Wedding Pricing & Details','View the '+r.name+' wedding guide \u2192', guide));
           out.push(card('Real Weddings','See real weddings at '+r.name+' \u2192', rf.realWeddings||''));
           out.push(card('Exclusive Offer', offerLabel, rf.offer||''));
           return out.filter(Boolean).join('\n        ');
@@ -3210,7 +3213,11 @@ function buildWeddingFull(wv){
       // The wedding package guide belongs here, beside the packages it explains.
       // Prefer the resort's own record so a multi-resort quote can't pair one
       // resort's link with another resort's name.
-      const guide = (r && (r.weddingUrl || r.weddingPackageUrl)) || rf.weddingUrl || rf.guide || '';
+      let guide = (r && (r.weddingUrl || r.weddingPackageUrl || r.weddingGuide)) || rf.weddingUrl || rf.guide || '';
+      // If the wedding-package field just repeats the DWT page, it is not a guide.
+      const dwtSame = guide && dwtUrl &&
+        guide.replace(/\/+$/,'') === String(dwtUrl).replace(/\/+$/,'');
+      if(dwtSame) guide='';
       const bits = [];
       if(guide) bits.push(`<a href="${escUrl(guide)}" class="btn-savings" target="_blank">Wedding Pricing &amp; Details &nbsp;→</a>`);
       if(rf.offer) bits.push(`<a href="${escUrl(rf.offer)}" class="btn-savings" target="_blank">View Exclusive Offers &nbsp;→</a>`);
