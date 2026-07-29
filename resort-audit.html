@@ -64,9 +64,8 @@
   <div class="note" id="buglist"></div>
 
   <p class="legend">
-    <span><b class="y">&#10003;</b> complete</span>
-    <span><b class="p">3/9</b> partial &mdash; hover to see exactly which are missing</span>
-    <span><b class="n0">&#10007;</b> missing</span>
+    <span><b class="y">&#10003;</b> complete &mdash; every entry has it</span>
+    <span><b class="n0">&#10007;</b> not done &mdash; hover to see exactly which entries are short</span>
     <span><b class="na">&ndash;</b> not applicable</span>
   </p>
 
@@ -146,18 +145,13 @@ function cell(v, check){
     const [d,t,missing]=v;
     if(t===0)  return '<span class="n0">&#10007;</span>';
     if(d===t)  return '<span class="y">&#10003;</span>';
-    // Photos are pass/fail: if any are missing the section needs work, and the
-    // count doesn't change what you do about it. Hover still names them.
-    if(check && check.binary){
-      const names=(missing||[]).slice(0,12).join('\n');
-      const more=(missing||[]).length>12 ? '\n…and '+((missing.length)-12)+' more' : '';
-      return '<span class="n0" title="Missing photos:\n'+
-        esc(names+more).replace(/"/g,'&quot;')+'">&#10007;</span>';
-    }
-    const names=(missing||[]).slice(0,12).join('\n');
-    const more=(missing||[]).length>12 ? '\n…and '+((missing.length)-12)+' more' : '';
-    return '<span class="p" title="Missing ('+(t-d)+' of '+t+'):\n'+
-      esc(names+more).replace(/"/g,'&quot;')+'">'+d+'/'+t+'</span>';
+    // Pass/fail. If ONE of five room categories is missing a photo the section
+    // is not done, so it gets an ✗ — a count wouldn't change what you do about
+    // it. Hover still names exactly which entries are short.
+    const names=(missing||[]).slice(0,20).join('\n');
+    const more=(missing||[]).length>20 ? '\n…and '+((missing.length)-20)+' more' : '';
+    return '<span class="n0" title="Missing on '+(t-d)+' of '+t+':\n'+
+      esc(names+more).replace(/"/g,'&quot;')+'">&#10007;</span>';
   }
   return v ? '<span class="y">&#10003;</span>' : '<span class="n0">&#10007;</span>';
 }
