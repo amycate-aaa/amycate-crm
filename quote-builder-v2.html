@@ -859,6 +859,14 @@ Complimentary concierge and computer access</textarea>
         <div class="field"><label>Nights</label><input id="fs-r1nights" placeholder="3"></div>
         <div class="field"><label>Price Note</label><input id="fs-r1priceNote" placeholder="per person · All Inclusive"></div>
       </div>
+      <div class="row full">
+        <div class="field"><label>Room Description <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-fills from the library</span></label>
+          <textarea id="fs-r1roomDesc" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Highlights <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; one per line</span></label>
+          <textarea id="fs-r1roomPerks" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
     </div>
   </div>
 
@@ -897,6 +905,14 @@ Complimentary concierge and computer access</textarea>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r2nights" placeholder="3"></div>
         <div class="field"><label>Price Note</label><input id="fs-r2priceNote"></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Description <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-fills from the library</span></label>
+          <textarea id="fs-r2roomDesc" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Highlights <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; one per line</span></label>
+          <textarea id="fs-r2roomPerks" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
       </div>
     </div>
   </div>
@@ -937,6 +953,14 @@ Complimentary concierge and computer access</textarea>
         <div class="field"><label>Nights</label><input id="fs-r3nights" placeholder="3"></div>
         <div class="field"><label>Price Note</label><input id="fs-r3priceNote"></div>
       </div>
+      <div class="row full">
+        <div class="field"><label>Room Description <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-fills from the library</span></label>
+          <textarea id="fs-r3roomDesc" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Highlights <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; one per line</span></label>
+          <textarea id="fs-r3roomPerks" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
     </div>
   </div>
 
@@ -975,6 +999,14 @@ Complimentary concierge and computer access</textarea>
       <div class="row">
         <div class="field"><label>Nights</label><input id="fs-r4nights" placeholder="3"></div>
         <div class="field"><label>Price Note</label><input id="fs-r4priceNote"></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Description <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; auto-fills from the library</span></label>
+          <textarea id="fs-r4roomDesc" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
+      </div>
+      <div class="row full">
+        <div class="field"><label>Room Highlights <span style="font-size:10px;color:var(--gold-2);font-weight:400;text-transform:none;letter-spacing:0;"> &mdash; one per line</span></label>
+          <textarea id="fs-r4roomPerks" rows="3" placeholder="Fills in when you choose a room category"></textarea></div>
       </div>
     </div>
   </div>
@@ -1634,10 +1666,31 @@ function applyFSRoomCatSelect(n, idxStr){
   // Fill room name
   const nameEl=document.getElementById('fs-r'+n+'roomName');
   if(nameEl) nameEl.value=cat.name||'';
-  // The room's own photo goes in the room photo field — not the resort photo
+  // The room's own photo goes in the room photo field — not the resort photo.
+  // Photos are never picked by hand here: whatever the library holds is what
+  // lands in the quote. That is the whole point of keeping the library.
   if(cat.photo){
     const roomPhotoEl=document.getElementById('fs-r'+n+'roomPhoto');
     if(roomPhotoEl) roomPhotoEl.value=cat.photo;
+  }
+  // Description — same as the FIT tab. Specs get appended so the card reads
+  // like a room, not a label.
+  const descEl=document.getElementById('fs-r'+n+'roomDesc');
+  if(descEl){
+    const specs=[cat.sqft?cat.sqft+' sq ft':null,cat.beds,cat.view,
+                 cat.sleeps?'Sleeps '+cat.sleeps:null,cat.occupancyNote]
+                .filter(Boolean).join(' · ');
+    descEl.value=[cat.description,specs].filter(Boolean).join('\n\n');
+  }
+  // Highlights — the library's features list, or built from the room's specs.
+  const perksEl=document.getElementById('fs-r'+n+'roomPerks');
+  if(perksEl){
+    const perks=(cat.features&&cat.features.length) ? cat.features.slice()
+      : [cat.beds?'Bed config: '+cat.beds:null, cat.view||null,
+         cat.sqft?cat.sqft+' sq ft':null,
+         cat.sleeps?'Sleeps up to '+cat.sleeps:null,
+         cat.occupancyNote||null].filter(Boolean);
+    perksEl.value=perks.join('\n');
   }
 }
 
@@ -1754,10 +1807,10 @@ async function generateFITSneak(status){
   ]);
   const resorts=[r1,r2,r3,r4].filter(Boolean);
   const rf=[
-    {photo:val('fs-r1photo'),roomPhoto:val('fs-r1roomPhoto'),roomName:val('fs-r1roomName'),price:val('fs-r1price'),nights:val('fs-r1nights'),priceNote:val('fs-r1priceNote')},
-    {photo:val('fs-r2photo'),roomPhoto:val('fs-r2roomPhoto'),roomName:val('fs-r2roomName'),price:val('fs-r2price'),nights:val('fs-r2nights'),priceNote:val('fs-r2priceNote')},
-    {photo:val('fs-r3photo'),roomPhoto:val('fs-r3roomPhoto'),roomName:val('fs-r3roomName'),price:val('fs-r3price'),nights:val('fs-r3nights'),priceNote:val('fs-r3priceNote')},
-    {photo:val('fs-r4photo'),roomPhoto:val('fs-r4roomPhoto'),roomName:val('fs-r4roomName'),price:val('fs-r4price'),nights:val('fs-r4nights'),priceNote:val('fs-r4priceNote')}
+    {photo:val('fs-r1photo'),roomPhoto:val('fs-r1roomPhoto'),roomName:val('fs-r1roomName'),roomDesc:val('fs-r1roomDesc'),roomPerks:val('fs-r1roomPerks').split('\n').filter(x=>x.trim()),price:val('fs-r1price'),nights:val('fs-r1nights'),priceNote:val('fs-r1priceNote')},
+    {photo:val('fs-r2photo'),roomPhoto:val('fs-r2roomPhoto'),roomName:val('fs-r2roomName'),roomDesc:val('fs-r2roomDesc'),roomPerks:val('fs-r2roomPerks').split('\n').filter(x=>x.trim()),price:val('fs-r2price'),nights:val('fs-r2nights'),priceNote:val('fs-r2priceNote')},
+    {photo:val('fs-r3photo'),roomPhoto:val('fs-r3roomPhoto'),roomName:val('fs-r3roomName'),roomDesc:val('fs-r3roomDesc'),roomPerks:val('fs-r3roomPerks').split('\n').filter(x=>x.trim()),price:val('fs-r3price'),nights:val('fs-r3nights'),priceNote:val('fs-r3priceNote')},
+    {photo:val('fs-r4photo'),roomPhoto:val('fs-r4roomPhoto'),roomName:val('fs-r4roomName'),roomDesc:val('fs-r4roomDesc'),roomPerks:val('fs-r4roomPerks').split('\n').filter(x=>x.trim()),price:val('fs-r4price'),nights:val('fs-r4nights'),priceNote:val('fs-r4priceNote')}
   ];
   const fsv={
     resorts, rf,
@@ -2133,7 +2186,10 @@ function buildFITSneakFull(fsv){
         <div class="price-band-note">${esc(rf.priceNote||(rf.nights?rf.nights+' Nights · ':'')+' All Inclusive · Per Person')}</div>
       </div>
       ${rf.price?`<div class="price-band-price">${esc(formatMoney(rf.price))}</div>`:''}
-    </div>`:'';
+    </div>${(rf.roomDesc||(rf.roomPerks&&rf.roomPerks.length))?`<div class="room-detail">
+      ${rf.roomDesc?`<div class="room-detail-desc">${esc(rf.roomDesc).replace(/\n{2,}/g,'</div><div class="room-detail-specs">').replace(/\n/g,'<br>')}</div>`:''}
+      ${(rf.roomPerks&&rf.roomPerks.length)?`<ul class="room-detail-perks">${rf.roomPerks.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}
+    </div>`:''}`:'';
     return `${idx>0?'<div class="resort-divider"><span>✦ &nbsp; ✦ &nbsp; ✦</span></div>':''}
 <div class="resort-section">
   <div class="resort-hero">
@@ -2213,6 +2269,14 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .price-band-name{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--white);margin-bottom:4px;}
 .price-band-note{font-size:11px;color:rgba(255,255,255,.45);line-height:1.6;}
 .price-band-price{font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:400;color:var(--gold);margin-left:auto;}
+.room-detail{background:var(--black-2);padding:0 7vw 36px;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:start;}
+.room-detail-desc{font-size:14px;font-weight:300;line-height:1.9;color:rgba(255,255,255,.72);}
+.room-detail-specs{font-size:11px;font-weight:500;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold-2);margin-top:12px;line-height:1.8;}
+.room-detail-perks{list-style:none;margin:0;}
+.room-detail-perks li{font-size:13px;font-weight:300;color:rgba(255,255,255,.66);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.08);line-height:1.5;}
+.room-detail-perks li:last-child{border-bottom:none;}
+.room-detail-perks li::before{content:"— ";color:var(--gold-2);}
+@media(max-width:768px){.room-detail{grid-template-columns:1fr;gap:20px;padding-bottom:28px;}}
 .sneak-rooms{background:var(--cream);padding:64px 7vw;}
 .sneak-rooms-inner{}
 .sneak-sub-title{font-family:'Cormorant Garamond',serif;font-size:clamp(26px,3vw,44px);font-weight:300;color:var(--black);line-height:1.1;margin-bottom:36px;}
