@@ -56,15 +56,6 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
 .copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--black);color:var(--gold);font-size:12px;padding:10px 20px;border-radius:4px;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
 .copy-toast.show{opacity:1;}
 
-/* PHOTO PREVIEW — shows the image sitting in any photo URL field, so you can
-   see what auto-filled instead of reading a URL and hoping. */
-.pv-wrap{display:flex;align-items:flex-start;gap:10px;margin-top:7px;}
-.pv-wrap img{width:132px;height:99px;object-fit:cover;border-radius:3px;
-  border:1px solid var(--cream-3);background:var(--cream-3);display:block;}
-.pv-note{font-size:11px;line-height:1.45;padding-top:2px;}
-.pv-ok{color:#6b6459;}
-.pv-bad{color:#b0413e;font-weight:600;}
-
 /* ROOM CATEGORY CARDS */
 .room-cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px;}
 .room-cat-card{position:relative;cursor:pointer;border-radius:3px;overflow:hidden;border:2px solid transparent;transition:.15s;aspect-ratio:4/3;background:var(--cream-3);}
@@ -1160,11 +1151,15 @@ function resortMetaLine(r){
 // Auto-fill a photo field. Replaces the value when it was auto-filled before
 // (e.g. you switched resorts), but never overwrites one you picked yourself.
 const _autoFilled={};
-function setAutoPhoto(id, value){
+function setAutoPhoto(id, value, force){
   const el=document.getElementById(id);
   if(!el||!value) return;
   const cur=(el.value||'').trim();
-  if(cur==='' || cur===_autoFilled[id]){
+  // force is used when the RESORT changes. A hero photo belongs to a resort, so
+  // carrying one over from a previous quote is never right — that is how an AVA
+  // quote ended up wearing an Ocean Riviera Paradise hero after the saved form
+  // was restored.
+  if(force || cur==='' || cur===_autoFilled[id]){
     el.value=value;
     _autoFilled[id]=value;
   }
@@ -1443,8 +1438,8 @@ async function onFITResortChange(){
   // Auto-populate hero and about
   const primary=pickResortHero(r,crm)||photos[0]||'';
   const secondary=photos[1]||'';
-  setAutoPhoto('f-heroPhoto', primary);
-  setAutoPhoto('f-aboutPhoto', secondary||primary);
+  setAutoPhoto('f-heroPhoto', primary, true);
+  setAutoPhoto('f-aboutPhoto', secondary||primary, true);
   // Auto-populate destination + experience
   if(!val('f-destination')) document.getElementById('f-destination').value=[r.city,r.country].filter(Boolean).join(', ');
   if(!val('f-experience')) document.getElementById('f-experience').value=inferExperience(r);
@@ -1849,68 +1844,6 @@ function refreshAndGenerate(){
 
 // Remember everything typed into the builder, so leaving for the resort library
 // and coming back doesn't mean filling the whole form in again.
-// ═══════════════════════════════════════════════════════════
-// PHOTO PREVIEWS
-// Every field that holds a photo URL gets a thumbnail underneath it. It
-// updates when a room category auto-fills the field, when you pick from the
-// CRM grid, and when you paste — so a broken or missing image shows up here
-// rather than in the finished quote.
-// ═══════════════════════════════════════════════════════════
-(function photoPreviews(){
-  const isPhotoField = el => el && el.tagName === 'INPUT' &&
-        /(photo|Photo)$/.test(el.id || '');
-
-  function preview(inp){
-    if(!isPhotoField(inp)) return;
-    let wrap = inp.parentNode.querySelector(':scope > .pv-wrap');
-    const url = (inp.value || '').trim();
-    if(!url){ if(wrap) wrap.remove(); return; }
-    if(!wrap){
-      wrap = document.createElement('div');
-      wrap.className = 'pv-wrap';
-      wrap.innerHTML = '<img alt=""><div class="pv-note"></div>';
-      inp.parentNode.appendChild(wrap);
-    }
-    const img  = wrap.querySelector('img');
-    const note = wrap.querySelector('.pv-note');
-    note.className = 'pv-note pv-ok';
-    note.textContent = 'Loading…';
-    img.onload = () => {
-      note.className = 'pv-note pv-ok';
-      note.textContent = img.naturalWidth + ' × ' + img.naturalHeight;
-    };
-    img.onerror = () => {
-      note.className = 'pv-note pv-bad';
-      note.textContent = "This image won't load —\nit will be blank in the quote.";
-      note.style.whiteSpace = 'pre-line';
-    };
-    if(img.src !== url) img.src = url;
-  }
-
-  function refreshAll(){
-    document.querySelectorAll('input').forEach(el => { if(isPhotoField(el)) preview(el); });
-  }
-  window.refreshPhotoPreviews = refreshAll;
-
-  // Typing or pasting.
-  document.addEventListener('input',  e => preview(e.target), true);
-  document.addEventListener('change', e => preview(e.target), true);
-
-  // Fields filled by script (room category select, CRM photo grid) fire no
-  // event, so watch the value property itself.
-  const desc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
-  Object.defineProperty(HTMLInputElement.prototype, 'value', {
-    get(){ return desc.get.call(this); },
-    set(v){ desc.set.call(this, v); if(isPhotoField(this)) preview(this); },
-    configurable: true
-  });
-
-  if(document.readyState === 'loading')
-    document.addEventListener('DOMContentLoaded', () => setTimeout(refreshAll, 300));
-  else setTimeout(refreshAll, 300);
-  setTimeout(refreshAll, 2000);   // after the saved form is restored
-})();
-
 (function keepFormAlive(){
   const KEY='quoteBuilderForm';
   const fields=()=>[...document.querySelectorAll('input,select,textarea')]
