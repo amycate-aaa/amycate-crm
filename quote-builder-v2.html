@@ -3194,9 +3194,10 @@ function buildWeddingFull(wv){
                                r.guideUrl || r.weddingGuideUrl || r.pdfUrl)) || rf.guide || '';
           const out=[];
           out.push(card('Destination Weddings','View more…', dwtUrl));
-          // Only show the guide here when there is no Package Overview block,
-          // so the same link never appears twice in one quote.
-          if(!packages.length) out.push(card('Wedding Pricing & Details','View the '+r.name+' wedding guide \u2192', guide));
+          // ALWAYS show the guide here. It was previously hidden whenever a
+          // Package Overview block existed, to avoid a duplicate link — but that
+          // meant the PDF vanished from most quotes, which is far worse.
+          out.push(card('Wedding Pricing & Details','View the '+r.name+' wedding guide \u2192', guide));
           out.push(card('Real Weddings','See real weddings at '+r.name+' \u2192', rf.realWeddings||''));
           out.push(card('Exclusive Offer', offerLabel, rf.offer||''));
           return out.filter(Boolean).join('\n        ');
@@ -3283,9 +3284,11 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .resort-link-arrow{color:var(--gold-2);font-size:18px;}
 .venues{margin-bottom:56px;}
 .venues-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--black);margin-bottom:24px;}
-.venues-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.venues-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start;}
 .venue-card{display:flex;flex-direction:column;}
-.venue-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+.venue-img{width:100%;height:230px;object-fit:cover;display:block;flex:0 0 auto;}
+@media print{.venue-img{height:170px;}}
+@media(max-width:560px){.venue-img{height:200px;}}
 .venue-info{padding:14px 0 0;}
 .venue-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;color:var(--black);margin-bottom:3px;}
 .venue-meta{font-size:11px;color:var(--gold-2);font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
@@ -3364,8 +3367,8 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .footer-contact a{display:block;font-size:14px;color:rgba(255,255,255,.6);text-decoration:none;margin-bottom:5px;}
 .btn-call{display:inline-block;background:var(--gold-2);color:var(--white);font-size:11px;font-weight:500;letter-spacing:3px;text-transform:uppercase;text-decoration:none;padding:17px 30px;white-space:nowrap;}
 .footer-bottom{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.07);padding-top:24px;font-size:11px;color:rgba(255,255,255,.2);line-height:1.7;}
-@media(max-width:860px){.intro,.resort-summary-grid,.savings-banner,.footer{grid-template-columns:1fr;gap:40px;}.venues-grid{grid-template-columns:1fr 1fr;}.packages-summary-head{flex-direction:column;gap:12px;}.packages-note{text-align:left;max-width:100%;}}
-@media(max-width:560px){.venues-grid{grid-template-columns:1fr;}.next-btns{flex-direction:column;align-items:center;}}
+@media(max-width:860px){.intro,.resort-summary-grid,.savings-banner,.footer{grid-template-columns:1fr;gap:40px;}.venues-grid{grid-template-columns:1fr 1fr;align-items:start;}.packages-summary-head{flex-direction:column;gap:12px;}.packages-note{text-align:left;max-width:100%;}}
+@media(max-width:560px){.venues-grid{grid-template-columns:1fr;align-items:start;}.next-btns{flex-direction:column;align-items:center;}}
 </style></head><body>
 
 <section class="hero">
