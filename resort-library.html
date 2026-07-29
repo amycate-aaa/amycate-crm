@@ -288,7 +288,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <button onclick="runAudit()" style="background:#f0c958;border:none;color:#111;padding:7px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-weight:600;">&#8635; Refresh</button>
       <span id="auditStatus" style="color:#555;font-size:.85rem;"></span>
     </div>
-    <p style="color:#666;font-size:.85rem;margin-bottom:16px;">Click any resort name to open and edit it. ✅ = complete &nbsp; ❌ = missing.</p>
+    <p style="color:#666;font-size:.85rem;margin-bottom:16px;">Click any resort name to open and edit it. ✅ = complete &nbsp; ❌ = not done.<br>
+    <span style="color:#888;">Desc and Photo columns are all-or-nothing: if even one venue, room category or restaurant is missing it, the column is ❌. Hover a ❌ to see exactly which ones.</span></p>
     <div id="auditGrid" style="overflow-x:auto;"></div>
   </div>
 
@@ -1691,16 +1692,28 @@ async function runAudit() {
     const masterSel = document.getElementById('masterResort');
     const resorts = masterSel ? [...masterSel.options].filter(o=>o.value).map(o=>({slug:o.value, name:o.text})) : [];
 
-    // Required fields to check
+    // Amy's checklist. Three kinds of check:
+    //   plain    — the field has text
+    //   isArr    — the section has at least one entry
+    //   every    — EVERY entry in that section has the named field.
+    //              One room category missing a photo means the whole column
+    //              is ❌. It isn't complete until it has everything.
     const checks = [
       { key:'tagline',      label:'Tagline' },
       { key:'description',  label:'Description' },
       { key:'dwtUrl',       label:'DWT Link', altKey:'bookingLink' },
       { key:'ctUrl',        label:'CT Link' },
-      { key:'weddingUrl',   label:'Wedding URL' },
-      { key:'venues',       label:'Venues',   isArr:true },
-      { key:'packages',     label:'Packages', isArr:true },
-      { key:'roomCategories', label:'Room Cats', isArr:true },
+      { key:'weddingUrl',   label:'Wedding URL', altKey:'weddingPackageUrl' },
+      { key:'venues',         label:'Venues',      isArr:true },
+      { key:'venues',         label:'Venue Desc',  every:'description' },
+      { key:'venues',         label:'Venue Photos',every:'photo' },
+      { key:'roomCategories', label:'Room Cats',   isArr:true },
+      { key:'roomCategories', label:'Room Desc',   every:'description' },
+      { key:'roomCategories', label:'Room Photos', every:'photo' },
+      { key:'restaurants',    label:'Restaurants', isArr:true },
+      { key:'restaurants',    label:'Rest. Desc',  every:'description' },
+      { key:'restaurants',    label:'Rest. Photos',every:'photo' },
+      { key:'packages',       label:'Packages',    isArr:true },
     ];
 
     let completedResorts = 0;
@@ -1711,15 +1724,34 @@ async function runAudit() {
       const catCount = photoCats[r.slug]?.size || 0;
       const hasProfile = !!profiles[r.slug];
 
+      const filled = v => !!(v && v.toString().trim());
+      // Names of the entries that are short — used for the hover tooltip.
+      const shortList = (c) => {
+        const a = Array.isArray(p[c.key]) ? p[c.key] : [];
+        return a.filter(x => !filled(x && x[c.every])).map(x => (x && x.name) || '(unnamed)');
+      };
       const checkOk = (c) => {
-        if (c.isArr) return Array.isArray(p[c.key]) && p[c.key].length > 0;
+        const a = Array.isArray(p[c.key]) ? p[c.key] : [];
+        if (c.every) return a.length > 0 && a.every(x => filled(x && x[c.every]));
+        if (c.isArr) return a.length > 0;
         const val = p[c.key] || (c.altKey ? p[c.altKey] : '');
-        return !!(val && val.toString().trim());
+        return filled(val);
       };
 
       const cells = checks.map(c => {
         const ok = checkOk(c);
-        return `<td style="text-align:center;padding:10px 8px;font-size:1rem;">${ok ? '✅' : '❌'}</td>`;
+        let tip = '';
+        if (!ok && c.every) {
+          const miss = shortList(c);
+          const a = Array.isArray(p[c.key]) ? p[c.key] : [];
+          tip = a.length === 0
+            ? ' title="Nothing in this section yet"'
+            : ' title="' + ('Missing on ' + miss.length + ' of ' + a.length + ':\n' +
+                miss.slice(0,20).join('\n') +
+                (miss.length>20 ? '\n…and ' + (miss.length-20) + ' more' : '')
+              ).replace(/"/g,'&quot;') + '"';
+        }
+        return `<td${tip} style="text-align:center;padding:10px 8px;font-size:1rem;${!ok&&c.every?'cursor:help;':''}">${ok ? '✅' : '❌'}</td>`;
       });
 
       const photoCell = `<td style="text-align:center;padding:10px 8px;font-size:.9rem;color:${photos>0?'#1a7a3a':'#c0392b'};font-weight:600;">${photos}<br><span style="font-size:.72rem;color:#888;font-weight:400;">${catCount} cats</span></td>`;
