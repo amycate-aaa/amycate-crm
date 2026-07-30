@@ -1686,9 +1686,9 @@ function applyWRoomCatSelect(n, idxStr){
       photoEl.value=cat.photo; _autoRoomPhoto[key]=cat.photo;
     }
   }
-  // Description + highlights, same as the other tabs.
-  const dEl=document.getElementById('w-r'+n+'desc');
-  if(dEl && !dEl.value.trim() && cat.description) dEl.value=cat.description;
+  // NOTE: do NOT touch w-rNdesc here. That field is the RESORT description
+  // override, not a room description — writing the room's text into it made the
+  // quote's "About the Resort" section describe a bedroom.
 }
 
 function applyFSRoomCatSelect(n, idxStr){
