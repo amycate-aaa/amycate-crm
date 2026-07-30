@@ -42,6 +42,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
 
 /* PHOTO PICKER */
 .photo-picker{background:var(--cream-2);border:1px solid var(--cream-3);border-radius:3px;padding:16px;margin-top:12px;}
+#f-r1-mini-picker,#f-r2-mini-picker,#f-r3-mini-picker,#f-r4-mini-picker{display:none!important;}
 .photo-picker-head{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--brown-lt);margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
 .photo-picker-head span{font-size:10px;color:var(--gold-2);font-weight:600;}
 .photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -1487,10 +1488,13 @@ async function onFITResortChange(){
   buildPhotoPicker(photos,'f-photo-grid',targets);
   attachPickerToggle('f-photo-picker','Change hero / about photo');
   // Build room mini-pickers
-  buildPhotoPicker(photos,'f-r1-photo-grid',[{label:'Use for Room 1',fieldId:'f-r1photo'}]);
-  buildPhotoPicker(photos,'f-r2-photo-grid',[{label:'Use for Room 2',fieldId:'f-r2photo'}]);
-  buildPhotoPicker(photos,'f-r3-photo-grid',[{label:'Use for Room 3',fieldId:'f-r3photo'}]);
-  buildPhotoPicker(photos,'f-r4-photo-grid',[{label:'Use for Room 4',fieldId:'f-r4photo'}]);
+  // No per-room CRM Photos grid. The room photo is set by the room category you
+  // choose — that is what the library is for. Hunting through thumbnails to pick
+  // a room picture was slower and produced mismatches.
+  [1,2,3,4].forEach(n=>{
+    const p=document.getElementById('f-r'+n+'-mini-picker');
+    if(p){ p.classList.add('hidden'); p.style.display='none'; }
+  });
   document.getElementById('f-r1-mini-picker').classList.remove('hidden');
   document.getElementById('f-r2-mini-picker').classList.remove('hidden');
   document.getElementById('f-r3-mini-picker').classList.remove('hidden');
