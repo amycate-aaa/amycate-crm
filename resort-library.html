@@ -1746,14 +1746,20 @@ async function runAudit() {
     //   every    — EVERY entry in that section has the named field.
     //              One room category missing a photo means the whole column
     //              is ❌. It isn't complete until it has everything.
+    // Same checklist as the standalone audit page, so the two never disagree.
+    // Package summaries are deliberately NOT checked — Amy fills those in when
+    // she has them, and flagging them as gaps made the report noisy.
     const checks = [
       { key:'tagline',      label:'Tagline' },
       { key:'description',  label:'Description' },
+      { key:'highlights',   label:'Highlights' },
       { key:'dwtUrl',       label:'DWT Link', altKey:'bookingLink' },
       { key:'ctUrl',        label:'CT Link' },
       { key:'weddingUrl',   label:'Wedding URL', altKey:'weddingPackageUrl' },
+      { key:'clubLevelName',label:'Club Info',  altKey:'clubName', naIfBlank:true },
       { key:'venues',         label:'Venues',      isArr:true },
       { key:'venues',         label:'Venue Desc',  every:'description' },
+      { key:'venues',         label:'Guest Count', every:'capacity' },
       { key:'venues',         label:'Venue Photos',every:'photo' },
       { key:'roomCategories', label:'Room Cats',   isArr:true },
       { key:'roomCategories', label:'Room Desc',   every:'description' },
@@ -1762,6 +1768,7 @@ async function runAudit() {
       { key:'restaurants',    label:'Rest. Desc',  every:'description' },
       { key:'restaurants',    label:'Rest. Photos',every:'photo' },
       { key:'packages',       label:'Packages',    isArr:true },
+      { key:'packages',       label:'Pkg Price',   every:'price' },
     ];
 
     let completedResorts = 0;
@@ -1784,11 +1791,14 @@ async function runAudit() {
         if (c.every) return a.length > 0 && a.every(x => filled(x && x[c.every]));
         if (c.isArr) return a.length > 0;
         const val = p[c.key] || (c.altKey ? p[c.altKey] : '');
+        // Club Info: no club level at this resort is not a gap.
+        if (c.naIfBlank && !filled(val) && !filled(p.clubLevelPerks) && !filled(p.clubPerks)) return 'na';
         return filled(val);
       };
 
       const cells = checks.map(c => {
         const ok = checkOk(c);
+        if (ok === 'na') return '<td style="text-align:center;padding:10px 8px;font-size:1rem;color:#ccc;" title="No club level at this resort">&ndash;</td>';
         let tip = '';
         if (!ok && c.every) {
           const miss = shortList(c);
@@ -1826,7 +1836,7 @@ async function runAudit() {
       });
       if (QUOTE_CHECKS.every(q => { const at=Number(qc[q.key]||0); return at>0 && !(editedAt>at+60000); })) quoteVerified++;
 
-      const allOk = checks.every(c => checkOk(c)) && photos > 0;
+      const allOk = checks.every(c => { const r=checkOk(c); return r===true||r==='na'; }) && photos > 0;
       if (allOk) completedResorts++;
 
       const rowBg = !hasProfile ? '#fff0f0' : allOk ? '#f0fff4' : '#fff';

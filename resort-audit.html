@@ -128,7 +128,6 @@ const CHECKS=[
  {g:'Dining', k:'dnphoto', binary:true,  t:'Photos',        f:d=>frac(d.restaurants,'photo')},
  {g:'Packages',k:'pkgs',    t:'Names',         f:d=>A(d.packages).length>0},
  {g:'Packages',k:'pkgprice',t:'Price',         f:d=>frac(d.packages,'price')},
- {g:'Packages',k:'pkgsum',  t:'Summary',       f:d=>frac(d.packages,'summary')},
  // An aerial can live in the uploads collection tagged 'aerial', OR simply
  // be a photo on the profile whose filename says so — which is how most of
  // the AMR and RIU shots arrive. Check both, or a resort that HAS one still
@@ -138,6 +137,13 @@ const CHECKS=[
     /aerial|drone/i.test(String(d.aerialPhoto||''))},
  {g:'Photos', k:'gallery',  t:'Resort photos', f:d=>A(d.photos).length>0 || d._uploaded>0}
 ];
+// Like frac(), but a value in ANY of the named fields counts as present.
+function fracAny(arr,fields){
+  const a=A(arr); if(!a.length) return [0,0,[]];
+  const missing=a.filter(x=>!fields.some(f=>x&&String(x[f]||'').trim()))
+                 .map(x=>(x&&x.name)||'(unnamed)');
+  return [a.length-missing.length, a.length, missing];
+}
 function frac(arr,field){
   const a=A(arr); if(!a.length) return [0,0,[]];
   const missing=a.filter(x=>!(x&&String(x[field]||'').trim()))
