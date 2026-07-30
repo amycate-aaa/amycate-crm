@@ -2358,6 +2358,10 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 .pick-name{font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:300;color:var(--white);}
 .pick-acts{display:flex;gap:10px;flex-wrap:wrap;}
 .pick-btn-yes{background:var(--gold-2)!important;color:var(--white)!important;border-color:var(--gold-2)!important;}
+.ii-block .pick-grid{max-width:none;gap:10px;}
+.ii-block .pick-row{flex-direction:column;align-items:stretch;gap:12px;padding:14px 16px;}
+.ii-block .pick-name{font-size:19px;}
+.ii-block .pick-btn{padding:12px 16px;font-size:11px;text-align:center;flex:1;}
 .pick-btn{display:inline-block;background:transparent;border:1px solid var(--gold-2);color:var(--gold);font-family:'Jost',sans-serif;font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;text-decoration:none;padding:17px 28px;transition:.15s;}
 .pick-btn:hover{background:var(--gold-2);color:var(--white);}
 @media print{.pick-wrap{display:none;}}
@@ -2413,7 +2417,7 @@ ${(function(){
       </div>
     </div>`).join('');
   return `<section class="pick-wrap">
-    <p class="eyebrow" style="color:var(--gold);">Over To You</p>
+    <p class="eyebrow" style="color:var(--gold);">Next Step</p>
     <h2 class="pick-title">${list.length===1?'Shall we?':'Which one is yours?'}</h2>
     <p class="pick-note">${list.length===1
       ? 'Let me know either way and it lands in my inbox.'
@@ -3546,7 +3550,7 @@ ${resortBlocks}
       </ul>
       <p class="ii-note">Cost typically ranges from <strong style="color:var(--gold);">$70–$130 per adult</strong>. Once you've selected your resort I can provide exact pricing.</p>
     </div>
-    <div class="ii-block ii-block-wide">
+    <div class="ii-block">
       <div class="ii-icon">📋</div>
       <h3 class="ii-title">Next Steps</h3>
       <div class="ii-steps">
@@ -3554,6 +3558,27 @@ ${resortBlocks}
         <div class="ii-step"><span class="ii-step-num">02</span><div><strong style="color:var(--white);">Secure the Date</strong><p class="ii-body" style="margin-top:6px;">A deposit will be required to lock in your date and time with the resort.</p></div></div>
         <div class="ii-step"><span class="ii-step-num">03</span><div><strong style="color:var(--white);">Room Block &amp; Personal Room</strong><p class="ii-body" style="margin-top:6px;">I'll secure your group room block and your personal room — giving you peace of mind that the big decisions are handled.</p></div></div>
       </div>
+    </div>
+    <div class="ii-block">
+      <div class="ii-icon">&#10084;&#65039;</div>
+      <h3 class="ii-title">So &mdash; Which One Is It?</h3>
+      ${(function(){
+        // One row per resort in this quote. "This is the one" and "Tell me more"
+        // both open an email to Amy with the resort named in the subject, so she
+        // gets a clear answer rather than "we liked a few".
+        const list=(wv.resorts||[]);
+        if(!list.length) return '';
+        return `<p class="ii-body" style="margin-bottom:18px;">${list.length===1
+          ? 'Let me know either way and it lands straight in my inbox.'
+          : 'Tap the one you keep coming back to — or ask for more on any of them. Either way it comes straight to me.'}</p>
+        <div class="pick-grid">${list.map(x=>`<div class="pick-row">
+          <div class="pick-name">${esc(x.name)}</div>
+          <div class="pick-acts">
+            <a class="pick-btn pick-btn-yes" href="${likeThisLink(x.name, wv.couple, '')}">This is the one</a>
+            <a class="pick-btn" href="${moreInfoLink(x.name, wv.couple, '')}">Tell me more</a>
+          </div>
+        </div>`).join('')}</div>`;
+      })()}
     </div>
   </div>
 </section>
@@ -3567,28 +3592,6 @@ ${resortBlocks}
   </div>
 </section>
 
-${(function(){
-  // NEXT STEP — one button per resort in this quote. The client taps the one
-  // they want and it opens an email to Amy naming that resort, so she gets a
-  // clear answer instead of "we liked a few of them".
-  const list=(wv.resorts||[]);
-  if(!list.length) return '';
-  const btns=list.map(x=>`<div class="pick-row">
-      <div class="pick-name">${esc(x.name)}</div>
-      <div class="pick-acts">
-        <a class="pick-btn pick-btn-yes" href="${likeThisLink(x.name, wv.couple, '')}">This is the one</a>
-        <a class="pick-btn" href="${moreInfoLink(x.name, wv.couple, '')}">Tell me more</a>
-      </div>
-    </div>`).join('');
-  return `<section class="pick-wrap">
-    <p class="eyebrow" style="color:var(--gold);">Over To You</p>
-    <h2 class="pick-title">${list.length===1?'Shall we?':'Which one is yours?'}</h2>
-    <p class="pick-note">${list.length===1
-      ? 'Let me know either way and it lands in my inbox.'
-      : 'Pick the one you love, or ask for more on any of them. Either way it lands in my inbox.'}</p>
-    <div class="pick-grid">${btns}</div>
-  </section>`;
-})()}
 <footer class="footer">
   <div>
     <p class="footer-eyebrow">Your Wedding Specialist</p>
