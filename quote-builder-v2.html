@@ -1768,7 +1768,10 @@ async function onWResortChange(n){
   // Auto-populate the resort's section photo field — only if not already set
   const primary=pickResortHero(r,crm)||photos[0]||'';
   const resortPhotoField=document.getElementById('w-r'+n+'heroPhoto');
-  setAutoPhoto('w-r'+n+'heroPhoto', primary);
+  // force: a hero belongs to a resort, so changing the resort must replace it.
+  // Without this the wedding tab kept the PREVIOUS resort's hero — which is how
+  // Dreams Cap Cana ended up showing Dreams Bahia Mita's photo.
+  setAutoPhoto('w-r'+n+'heroPhoto', primary, true);
   // Auto-populate Real Weddings URL from Firestore if stored
   const rwField=document.getElementById('w-r'+n+'realWeddings');
   if(rwField&&!rwField.value&&(r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl)){
@@ -1826,7 +1829,7 @@ async function onFSSResortChange(n){
   const crm=await getCrmPhotos(slug);
   const photos=[...new Set([...orderCrmPhotos(crm),...getPhotos(r)])];
   // Auto-fill hero photo field if empty
-  setAutoPhoto('fs-r'+n+'photo', pickResortHero(r,crm)||photos[0]||'');
+  setAutoPhoto('fs-r'+n+'photo', pickResortHero(r,crm)||photos[0]||'', true);
   // Load room categories for this resort options slot
   const fsCats=r.roomCategories||[];
   _fsRoomCats[n]=fsCats;
