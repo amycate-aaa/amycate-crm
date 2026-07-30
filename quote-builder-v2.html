@@ -119,7 +119,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
         <div class="field"><label>Resort</label>
           <select id="f-resort" onchange="onFITResortChange()"><option value="">Loading resorts…</option></select>
         </div>
-        <div class="field"><label>Brand / Booking Link</label>
+        <div class="field"><label>Brand / Booking Link <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--gold-2);">— applies to the whole quote, all three tabs</span></label>
           <div style="display:flex;border:1px solid #d0ccc6;border-radius:3px;overflow:hidden;">
             <label id="brand-ct-label" style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 12px;cursor:pointer;font-size:13px;font-weight:600;background:var(--black);color:var(--gold-2);transition:.15s;">
               <input type="radio" name="f-brand" id="brand-ct" value="ct" checked onchange="onBrandChange()" style="accent-color:var(--gold-2);"> CT
@@ -128,7 +128,7 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
               <input type="radio" name="f-brand" id="brand-dwt" value="dwt" onchange="onBrandChange()" style="accent-color:var(--gold-2);"> DWT
             </label>
           </div>
-          <span class="hint" id="brand-link-hint" style="margin-top:4px;">CT = Celebration Travel booking link · DWT = Destination Weddings link</span>
+          <span class="hint" id="brand-link-hint" style="margin-top:4px;">Applies to every resort in this quote, on all three tabs. CT = Celebration Travel · DWT = Destination Weddings</span>
         </div>
       </div>
       <div id="f-photo-picker" class="photo-picker hidden">
@@ -1154,6 +1154,8 @@ function resortMetaLine(r){
 const _autoFilled={};
 // Remembers the room photo WE auto-filled, so a manual change is never undone.
 const _autoRoomPhoto={};
+// Remembers text Amy typed herself, so clearing a stale override never eats her words.
+const _typedDesc={};
 function setAutoPhoto(id, value, force){
   const el=document.getElementById(id);
   if(!el||!value) return;
@@ -1503,8 +1505,23 @@ async function onFITResortChange(){
   populateRoomCatGrids(r.roomCategories||[]);
 }
 
+// One brand per quote. The FIT tab's toggle is the single source of truth, and
+// the Wedding and Resort Options templates read it through this helper so all
+// three tabs agree without needing their own controls.
+function currentBrand(){
+  return document.querySelector('input[name="f-brand"]:checked')?.value||'ct';
+}
+// The right booking link for a resort under the chosen brand, with a sensible
+// fall back so a missing link never leaves a dead button.
+function brandLinkFor(r){
+  if(!r) return '';
+  const b=currentBrand();
+  return b==='dwt'
+    ? (r.dwtUrl||r.dwtLink||r.ctUrl||r.ctLink||r.bookingLink||'')
+    : (r.ctUrl||r.ctLink||r.dwtUrl||r.dwtLink||r.bookingLink||'');
+}
 function _fillBrandLink(r){
-  const brand=document.querySelector('input[name="f-brand"]:checked')?.value||'ct';
+  const brand=currentBrand();
   const link=brand==='dwt'?(r.dwtUrl||r.bookingLink||''):(r.ctUrl||'');
   document.getElementById('f-bookingLink').value=link;
   // Update toggle visual
@@ -1776,6 +1793,17 @@ async function onWResortChange(n){
   // Without this the wedding tab kept the PREVIOUS resort's hero — which is how
   // Dreams Cap Cana ended up showing Dreams Bahia Mita's photo.
   setAutoPhoto('w-r'+n+'heroPhoto', primary, true);
+
+  // The resort-description override is per-resort. Carrying it across a resort
+  // change is always wrong, and a stale value here silently replaces the
+  // library's About text. Clear it so blank = "use the library", which is what
+  // the placeholder promises. Anything Amy types after this is hers and stays.
+  const descEl=document.getElementById('w-r'+n+'desc');
+  if(descEl && descEl.value.trim() && descEl.value!==_typedDesc['w-r'+n+'desc']) descEl.value='';
+  if(descEl && !descEl.dataset.watched){
+    descEl.dataset.watched='1';
+    descEl.addEventListener('input',()=>{ _typedDesc['w-r'+n+'desc']=descEl.value; });
+  }
   // Auto-populate Real Weddings URL from Firestore if stored
   const rwField=document.getElementById('w-r'+n+'realWeddings');
   if(rwField&&!rwField.value&&(r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl)){
@@ -3203,7 +3231,12 @@ function buildWeddingFull(wv){
           const guide = (r && (r.weddingUrl || r.weddingPackageUrl || r.weddingGuide ||
                                r.guideUrl || r.weddingGuideUrl || r.pdfUrl)) || rf.guide || '';
           const out=[];
-          out.push(card('Destination Weddings','View more…', dwtUrl));
+          // Follow the quote's brand choice rather than always saying DWT.
+          const b=currentBrand();
+          const brandUrl=brandLinkFor(r)||dwtUrl;
+          out.push(b==='dwt'
+            ? card('Destination Weddings','View more…', brandUrl)
+            : card('Celebration Travel','View rates & availability \u2192', brandUrl));
           // Show the guide whenever there is one — but not when it is simply the
           // DWT page again. Some records have the DWT link pasted into the wedding
           // package field, which produced two identical cards.
