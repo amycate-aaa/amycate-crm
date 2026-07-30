@@ -183,7 +183,11 @@ body{font-family:system-ui,sans-serif;background:#f5f2ed;color:#2a2218;min-heigh
       </div>
       <div class="row">
         <div class="field"><label>Final Payment Date</label><input id="f-finalPayment" placeholder="February 1, 2027"></div>
-        <div class="field"><label>Booking Link</label><input id="f-bookingLink" placeholder="https://event.celebrationtravel.com/…"></div>
+        <!-- Booking Link is hidden on purpose. The CT/DWT toggle fills it from the
+             resort's own record, so there is nothing to type. When a resort has no
+             link, the "Book This Room" buttons simply don't render — which is the
+             right outcome, and better than an empty field asking to be filled. -->
+        <div class="field" style="display:none;"><label>Booking Link</label><input id="f-bookingLink" placeholder="https://event.celebrationtravel.com/…"></div>
       </div>
       <div class="row full" style="margin-top:4px;">
         <div class="field"><label>Hero Photo URL</label>
@@ -2409,7 +2413,7 @@ ${(function(){
       </div>
     </div>`).join('');
   return `<section class="pick-wrap">
-    <p class="eyebrow" style="color:var(--gold);">Next Step</p>
+    <p class="eyebrow" style="color:var(--gold);">Over To You</p>
     <h2 class="pick-title">${list.length===1?'Shall we?':'Which one is yours?'}</h2>
     <p class="pick-note">${list.length===1
       ? 'Let me know either way and it lands in my inbox.'
@@ -3512,28 +3516,6 @@ body{background:var(--cream);font-family:'Jost',sans-serif;font-weight:300;color
 </div>
 
 ${resortBlocks}
-${(function(){
-  // NEXT STEP — one button per resort in this quote. The client taps the one
-  // they want and it opens an email to Amy naming that resort, so she gets a
-  // clear answer instead of "we liked a few of them".
-  const list=(wv.resorts||[]);
-  if(!list.length) return '';
-  const btns=list.map(x=>`<div class="pick-row">
-      <div class="pick-name">${esc(x.name)}</div>
-      <div class="pick-acts">
-        <a class="pick-btn pick-btn-yes" href="${likeThisLink(x.name, wv.couple, '')}">This is the one</a>
-        <a class="pick-btn" href="${moreInfoLink(x.name, wv.couple, '')}">Tell me more</a>
-      </div>
-    </div>`).join('');
-  return `<section class="pick-wrap">
-    <p class="eyebrow" style="color:var(--gold);">Next Step</p>
-    <h2 class="pick-title">${list.length===1?'Shall we?':'Which one is yours?'}</h2>
-    <p class="pick-note">${list.length===1
-      ? 'Let me know either way and it lands in my inbox.'
-      : 'Pick the one you love, or ask for more on any of them. Either way it lands in my inbox.'}</p>
-    <div class="pick-grid">${btns}</div>
-  </section>`;
-})()}
 
 
 <section class="important-info">
@@ -3585,6 +3567,28 @@ ${(function(){
   </div>
 </section>
 
+${(function(){
+  // NEXT STEP — one button per resort in this quote. The client taps the one
+  // they want and it opens an email to Amy naming that resort, so she gets a
+  // clear answer instead of "we liked a few of them".
+  const list=(wv.resorts||[]);
+  if(!list.length) return '';
+  const btns=list.map(x=>`<div class="pick-row">
+      <div class="pick-name">${esc(x.name)}</div>
+      <div class="pick-acts">
+        <a class="pick-btn pick-btn-yes" href="${likeThisLink(x.name, wv.couple, '')}">This is the one</a>
+        <a class="pick-btn" href="${moreInfoLink(x.name, wv.couple, '')}">Tell me more</a>
+      </div>
+    </div>`).join('');
+  return `<section class="pick-wrap">
+    <p class="eyebrow" style="color:var(--gold);">Over To You</p>
+    <h2 class="pick-title">${list.length===1?'Shall we?':'Which one is yours?'}</h2>
+    <p class="pick-note">${list.length===1
+      ? 'Let me know either way and it lands in my inbox.'
+      : 'Pick the one you love, or ask for more on any of them. Either way it lands in my inbox.'}</p>
+    <div class="pick-grid">${btns}</div>
+  </section>`;
+})()}
 <footer class="footer">
   <div>
     <p class="footer-eyebrow">Your Wedding Specialist</p>
