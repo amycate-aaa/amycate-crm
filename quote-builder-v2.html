@@ -3282,12 +3282,12 @@ function buildWeddingFull(wv){
           const guide = (r && (r.weddingUrl || r.weddingPackageUrl || r.weddingGuide ||
                                r.guideUrl || r.weddingGuideUrl || r.pdfUrl)) || rf.guide || '';
           const out=[];
-          // Follow the quote's brand choice rather than always saying DWT.
-          const b=currentBrand();
-          const brandUrl=brandLinkFor(r)||dwtUrl;
-          out.push(b==='dwt'
-            ? card('Destination Weddings','View more…', brandUrl)
-            : card('Celebration Travel','View rates & availability \u2192', brandUrl));
+          // Always the DWT resort page. This is an INFORMATION card — "view more"
+          // must open something a client can read about the resort. Pointing it at
+          // the CT booking engine dropped them into a checkout instead, so the
+          // brand toggle deliberately does not apply here. It only drives the
+          // "Book This Room" buttons.
+          out.push(card('Destination Weddings','View more…', dwtUrl));
           // Show the guide whenever there is one — but not when it is simply the
           // DWT page again. Some records have the DWT link pasted into the wedding
           // package field, which produced two identical cards.
