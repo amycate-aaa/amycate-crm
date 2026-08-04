@@ -1292,13 +1292,16 @@ const calcFinancials = (g, w) => {
   const total = rc+ic, hasIns = g.insurance==='Yes';
   const isTwoPayment = w && (w.payStructure==='2') && w.pay1 && w.pay2;
   const isOnePayment = !isTwoPayment;
-  // Schedule: 2-payment + insurance = 50/50 split; everything else = full balance on pay1
-  const sched1 = (isTwoPayment && hasIns) ? total*0.5 : total;
-  const sched2 = (isTwoPayment && hasIns) ? total*0.5 : 0;
+  // Remaining balance after deposit
+  const remaining = Math.max(0, total - dep);
+  // Schedule: 2-payment + insurance = 50/50 split of REMAINING balance; everything else = full remaining on pay1
+  const sched1 = (isTwoPayment && hasIns) ? remaining*0.5 : remaining;
+  const sched2 = (isTwoPayment && hasIns) ? remaining*0.5 : 0;
   const totalPaid = dep+p1+p2;
-  // Payments reduce sched1 first, overage reduces sched2
-  const applied1 = Math.min(totalPaid, sched1);
-  const applied2 = Math.max(0, totalPaid - applied1);
+  // Payments (p1+p2 only, not deposit) reduce sched1 first, overage reduces sched2
+  const paidAfterDep = p1+p2;
+  const applied1 = Math.min(paidAfterDep, sched1);
+  const applied2 = Math.max(0, paidAfterDep - applied1);
   const bal1 = Math.max(0, sched1 - applied1);
   const bal2 = (isTwoPayment && hasIns) ? Math.max(0, sched2 - applied2) : null;
   return {rc,ic,dep,p1,p2,total,hasIns,isTwoPayment,isOnePayment,sched1,sched2,totalPaid,bal1,bal2};
