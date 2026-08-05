@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leads Importer — Amy Cate CRM</title>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#f4f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:#1a1a1a}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 80px}
+  h1{font-family:Georgia,serif;font-size:26px;color:#1B2B4B;margin:0 0 4px}
+  .sub{color:#666;font-size:14px;margin:0 0 22px}
+  .card{background:#fff;border:1px solid #e2e2e6;border-radius:10px;padding:20px;margin-bottom:18px}
+  .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+  button{font:inherit;font-size:14px;font-weight:600;border:0;border-radius:7px;padding:11px 20px;cursor:pointer}
+  .primary{background:#B8973A;color:#fff}
+  .primary:disabled{background:#ccc;cursor:not-allowed}
+  .ghost{background:#ececed;color:#333}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th{background:#1B2B4B;color:#fff;text-align:left;padding:9px 8px;font-size:11px;letter-spacing:.5px;text-transform:uppercase}
+  td{padding:9px 8px;border-bottom:1px solid #eee;vertical-align:top}
+  tr.dupe td{background:#fff8e6;color:#8a6d1f}
+  .tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+  .t-new{background:#e3f2e6;color:#1f6b32}
+  .t-dupe{background:#fdecc8;color:#8a6d1f}
+  .t-done{background:#d6e4f5;color:#20457a}
+  #log{font-family:ui-monospace,Menlo,monospace;font-size:12px;background:#12161f;color:#c8e6c9;padding:14px;border-radius:8px;max-height:260px;overflow:auto;white-space:pre-wrap;display:none}
+  .warn{background:#fff8e6;border:1px solid #e8d9a8;border-radius:8px;padding:12px 14px;font-size:13px;color:#6b5518;margin-bottom:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Leads Importer</h1>
+  <p class="sub">Adds the 13 tracked leads into the CRM <strong>leads</strong> collection.</p>
+
+  <div class="warn">
+    Nothing is written until you press <strong>Import Selected</strong>. Anything already in your Leads tab with a matching name is flagged and unticked automatically, so running this twice will not create duplicates.
+  </div>
+
+  <div class="card">
+    <div class="bar">
+      <button class="ghost" onclick="check()">1 · Check Against CRM</button>
+      <button class="primary" id="go" onclick="importSel()" disabled>2 · Import Selected</button>
+      <button class="ghost" onclick="toggleAll(true)">Tick All</button>
+      <button class="ghost" onclick="toggleAll(false)">Untick All</button>
+      <span id="count" style="font-size:13px;color:#666"></span>
+    </div>
+    <table>
+      <thead><tr>
+        <th style="width:34px"></th><th>Name</th><th>Type</th><th>Status</th><th>Op</th>
+        <th>Event Date</th><th>Guests</th><th>Destination</th><th>Contact</th><th>Email</th><th>State</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div id="log"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  authDomain: "wedding-crm-e5d12.firebaseapp.com",
+  projectId: "wedding-crm-e5d12",
+  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+  messagingSenderId: "246819649586",
+  appId: "1:246819649586:web:a74debd217ce048d26242b"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// type: Wedding | Anniversary | Birthday | Corporate | Family Reunion | Other
+// status: No Contact | Received Info | Sent Quotes | Pending Contract | Signed Contract
+// operator: DWT | CT
+const LEADS = [
+ {names:"Levertius Johnson & Leslie Jumper",type:"Wedding",status:"No Contact",operator:"DWT",
+  eventDate:"2027-11-01",guestCount:"2",destination:"Open to all locations",
+  contact:"Levertius Johnson",email:"Vertis7@icloud.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"Elopement — 2 travellers. Profile created 5/24/2026. Never personally contacted; DWT auto-drip only. Elopement intro email drafted 8/4/2026."},
+
+ {names:"Chad & Elisa Tie The Knot",type:"Wedding",status:"No Contact",operator:"CT",
+  eventDate:"2027-09-04",guestCount:"35",destination:"Costa Rica",
+  contact:"Moe Campo",email:"moecampo67@gmail.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"Profile created 5/24/2026. CT-branded intro sent 6/21/2026 from the DWT address. No reply — 45 days cold. Needs follow-up #2."},
+
+ {names:"The Noir Affair",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2027-11-01",guestCount:"75",destination:"",
+  contact:"Andrelle Bowdre",email:"Andrellebowdre@gmail.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"A Celebration of Love, Luxury & Legacy. Profile created 6/3/2026. Intro sent 6/21/2026, no reply — 45 days cold. DESTINATIONS NEVER CAPTURED — ask on next touch. Largest cold lead at 75 guests."},
+
+ {names:"Williams",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2027-08-01",guestCount:"35",destination:"Aruba, Mexico Caribbean",
+  contact:"Antionette Pabon",email:"antionette.pabon@yahoo.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"Profile created 6/12/2026. Intro sent 6/21/2026, no reply — 45 days cold. Needs follow-up #2."},
+
+ {names:"Mis Cincuenta",type:"Birthday",status:"Sent Quotes",operator:"CT",
+  eventDate:"2027-08-01",guestCount:"35",destination:"",
+  contact:"",email:"",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"50th celebration. Profile created 6/13/2026. Intro sent AND quotes sent 7/28/2026 (Royalton). Furthest-along lead — quote is out with no follow-up. Destinations not captured."},
+
+ {names:"50th Bash",type:"Birthday",status:"No Contact",operator:"CT",
+  eventDate:"2028-05-01",guestCount:"12",destination:"",
+  contact:"",email:"",phone:"",budget:"",followUp:"2026-08-11",
+  notes:"Profile created 7/5/2026. Intro sent 7/28/2026. Awaiting reply. Destinations not captured."},
+
+ {names:"Nikki's Bachelorette",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2027-08-01",guestCount:"12",destination:"",
+  contact:"Nikki",email:"",phone:"",budget:"",followUp:"2026-08-11",
+  notes:"Profile created 7/5/2026. Intro sent 7/28/2026. Awaiting reply. Destinations not captured."},
+
+ {names:"SRB — Jonathan Buchanan",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2028-07-13",guestCount:"75",destination:"Aruba, St. Lucia, Costa Rica, Dominican Republic, Mexico",
+  contact:"Jonathan Buchanan",email:"jbuc7@yahoo.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"Assigned 7/11/2026, 50-99 guests per the assignment email. Never contacted — assignment notice only. Intro email drafted 8/4/2026. Largest never-contacted lead."},
+
+ {names:"Bell's Retreat",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2027-06-19",guestCount:"12",destination:"",
+  contact:"",email:"",phone:"",budget:"",followUp:"2026-08-11",
+  notes:"Profile created 7/11/2026. Intro sent by text 7/28/2026. Awaiting reply. Destinations not captured."},
+
+ {names:"Irene De La Torre & Steven Sanchez",type:"Wedding",status:"No Contact",operator:"DWT",
+  eventDate:"2027-11-01",guestCount:"75",destination:"",
+  contact:"Irene De La Torre",email:"",phone:"",budget:"",followUp:"2026-08-11",
+  notes:"Profile created 7/12/2026. Intro sent 7/28/2026. Awaiting reply. 75 guests. Destinations not captured."},
+
+ {names:"Erin Schwartz",type:"Other",status:"No Contact",operator:"CT",
+  eventDate:"2027-11-06",guestCount:"35",destination:"Caribbean, Hawaii, Turks & Caicos",
+  contact:"Erin Schwartz",email:"erinschwartz6@gmail.com",phone:"",budget:"",followUp:"2026-08-05",
+  notes:"Assigned 7/12/2026, 25-49 guests per the assignment email. Introductory call action open since 7/12 and flagged to reschedule. Never contacted. Intro email drafted 8/4/2026."},
+
+ {names:"James Woody & Rasheeda Woody",type:"Wedding",status:"No Contact",operator:"DWT",
+  eventDate:"2028-08-02",guestCount:"12",destination:"",
+  contact:"James Woody",email:"",phone:"",budget:"",followUp:"2026-08-18",
+  notes:"Profile created 8/3/2026. Auto SMS and auto email both fired 8/4/2026. Let the sequence run before a personal touch."},
+
+ {names:"Abby Moore & Jesse Mai",type:"Wedding",status:"Received Info",operator:"DWT",
+  eventDate:"",guestCount:"",destination:"Cancun, Riviera Maya, Puerto Vallarta, Cabo San Lucas, Aruba, Costa Rica, Dominican Republic",
+  contact:"Abby Moore",email:"abigailmoore4417@gmail.com",phone:"",budget:"",followUp:"2026-08-07",
+  notes:"Fall 2027, no firm date yet. Went quiet after signup then re-engaged on her own and asked to talk. Intake-questions email drafted 8/4/2026 — timeframe, guest count, nightly budget, adults-only vs under-18, destination front-runner."}
+];
+
+let existing = [];
+const norm = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+
+function render(){
+  const tb=document.getElementById('rows'); tb.innerHTML='';
+  LEADS.forEach((l,i)=>{
+    const dupe = l._state==='dupe', done = l._state==='done';
+    const tr=document.createElement('tr');
+    if(dupe) tr.className='dupe';
+    const tag = done ? '<span class="tag t-done">Imported</span>'
+              : dupe ? '<span class="tag t-dupe">Already in CRM</span>'
+              : l._state==='new' ? '<span class="tag t-new">New</span>' : '—';
+    tr.innerHTML=`<td><input type="checkbox" id="c${i}" ${l._checked?'checked':''} ${done?'disabled':''} onchange="LEADS[${i}]._checked=this.checked;count()"></td>
+      <td><strong>${l.names}</strong></td><td>${l.type}</td><td>${l.status}</td><td>${l.operator}</td>
+      <td>${l.eventDate||'—'}</td><td>${l.guestCount||'—'}</td><td>${l.destination||'<em style="color:#b58900">not captured</em>'}</td>
+      <td>${l.contact||'—'}</td><td>${l.email||'—'}</td><td>${tag}</td>`;
+    tb.appendChild(tr);
+  });
+  count();
+}
+function count(){
+  const n=LEADS.filter(l=>l._checked && l._state!=='done').length;
+  document.getElementById('count').textContent = n+' selected';
+  document.getElementById('go').disabled = n===0;
+}
+function toggleAll(v){ LEADS.forEach(l=>{ if(l._state!=='done' && !(v && l._state==='dupe')) l._checked=v; }); render(); }
+
+function log(m,c){ const el=document.getElementById('log'); el.style.display='block';
+  el.innerHTML += `<div style="color:${c||'#c8e6c9'}">${m}</div>`; el.scrollTop=el.scrollHeight; }
+
+async function check(){
+  log('Reading existing leads…','#9ecbff');
+  try{
+    const snap = await db.collection('leads').get();
+    existing = snap.docs.map(d=>({id:d.id, ...d.data()}));
+    log(`Found ${existing.length} existing lead(s) in the CRM.`);
+    const names = new Set(existing.map(e=>norm(e.names)));
+    const emails = new Set(existing.map(e=>norm(e.email)).filter(Boolean));
+    let dupes=0;
+    LEADS.forEach(l=>{
+      const hit = names.has(norm(l.names)) || (l.email && emails.has(norm(l.email)));
+      l._state = hit ? 'dupe' : 'new';
+      l._checked = !hit;
+      if(hit) dupes++;
+    });
+    log(`${LEADS.length-dupes} new · ${dupes} already present (unticked).`, dupes?'#ffd580':'#c8e6c9');
+    render();
+  }catch(e){ log('ERROR reading leads: '+e.message,'#ff9e9e'); }
+}
+
+async function importSel(){
+  const sel = LEADS.filter(l=>l._checked && l._state!=='done');
+  if(!sel.length) return;
+  if(!confirm(`Add ${sel.length} lead(s) to your CRM Leads tab?`)) return;
+  document.getElementById('go').disabled=true;
+  for(const l of sel){
+    const data = {
+      names:l.names, type:l.type, status:l.status, eventDate:l.eventDate||'',
+      followUp:l.followUp||'', destination:l.destination||'', guestCount:l.guestCount||'',
+      budget:l.budget||'', operator:l.operator||'DWT', contact:l.contact||'',
+      email:l.email||'', phone:l.phone||'', source:'', notes:l.notes||'',
+      createdAt:new Date().toISOString()
+    };
+    try{
+      const ref = await db.collection('leads').add(data);
+      l._state='done'; l._checked=false;
+      log(`✓ ${l.names}  →  ${ref.id}`);
+    }catch(e){ log(`✗ ${l.names} — ${e.message}`,'#ff9e9e'); }
+  }
+  render();
+  log('Done. Open the CRM Leads tab and refresh.','#9ecbff');
+}
+
+LEADS.forEach(l=>{ l._state=null; l._checked=false; });
+render();
+</script>
+</body>
+</html>
