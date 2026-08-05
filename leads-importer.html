@@ -76,8 +76,8 @@ const db = firebase.firestore();
 const LEADS = [
  {names:"Levertius Johnson & Leslie Jumper",type:"Wedding",status:"No Contact",operator:"DWT",
   eventDate:"2027-11-01",guestCount:"2",destination:"Open to all locations",
-  contact:"Levertius Johnson",email:"Vertis7@icloud.com",phone:"",budget:"",followUp:"2026-08-05",
-  notes:"Elopement — 2 travellers. Profile created 5/24/2026. Never personally contacted; DWT auto-drip only. Elopement intro email drafted 8/4/2026."},
+  contact:"Levertius Johnson",email:"Vertis7@icloud.com",phone:"",budget:"",followUp:"2026-08-18",
+  notes:"Elopement — 2 travellers, so 0 guests is correct. Profile created 5/24/2026. Elopement intro email SENT 8/4/2026 — first personal contact after 72 days of auto-drip only. Asked: timeframe, legal vs symbolic ceremony, secluded vs lively, length of stay."},
 
  {names:"Chad & Elisa Tie The Knot",type:"Wedding",status:"No Contact",operator:"CT",
   eventDate:"2027-09-04",guestCount:"35",destination:"Costa Rica",
@@ -85,9 +85,9 @@ const LEADS = [
   notes:"Profile created 5/24/2026. CT-branded intro sent 6/21/2026 from the DWT address. No reply — 45 days cold. Needs follow-up #2."},
 
  {names:"The Noir Affair",type:"Other",status:"No Contact",operator:"CT",
-  eventDate:"2027-11-01",guestCount:"75",destination:"",
+  eventDate:"2027-11-01",guestCount:"75",destination:"Aruba, Costa Rica, Dominican Republic, Mexico",
   contact:"Andrelle Bowdre",email:"Andrellebowdre@gmail.com",phone:"",budget:"",followUp:"2026-08-05",
-  notes:"A Celebration of Love, Luxury & Legacy. Profile created 6/3/2026. Intro sent 6/21/2026, no reply — 45 days cold. DESTINATIONS NEVER CAPTURED — ask on next touch. Largest cold lead at 75 guests."},
+  notes:"A Celebration of Love, Luxury \u0026 Legacy. Profile created 6/3/2026. Intro sent 6/21/2026, no reply — 45 days cold. Needs follow-up #2. Largest cold lead at 75 guests. Wants DR, which overlaps the Punta Cana quote already built for Mis Cincuenta."},
 
  {names:"Williams",type:"Other",status:"No Contact",operator:"CT",
   eventDate:"2027-08-01",guestCount:"35",destination:"Aruba, Mexico Caribbean",
@@ -95,9 +95,9 @@ const LEADS = [
   notes:"Profile created 6/12/2026. Intro sent 6/21/2026, no reply — 45 days cold. Needs follow-up #2."},
 
  {names:"Mis Cincuenta",type:"Birthday",status:"Sent Quotes",operator:"CT",
-  eventDate:"2027-08-01",guestCount:"35",destination:"",
+  eventDate:"2027-08-01",guestCount:"35",destination:"Dominican Republic",
   contact:"",email:"",phone:"",budget:"",followUp:"2026-08-05",
-  notes:"50th celebration. Profile created 6/13/2026. Intro sent AND quotes sent 7/28/2026 (Royalton). Furthest-along lead — quote is out with no follow-up. Destinations not captured."},
+  notes:"50th celebration. Profile created 6/13/2026. Intro sent and quotes sent 7/28/2026 for Royalton Bavaro (Autograph Collection All-Inclusive Resort \u0026 Casino), Dreams Royal Beach Punta Cana and Riu Palace Punta Cana — all Punta Cana, DR. Furthest-along lead; quote out with no follow-up yet."},
 
  {names:"50th Bash",type:"Birthday",status:"No Contact",operator:"CT",
   eventDate:"2028-05-01",guestCount:"12",destination:"",
@@ -111,8 +111,8 @@ const LEADS = [
 
  {names:"SRB — Jonathan Buchanan",type:"Other",status:"No Contact",operator:"CT",
   eventDate:"2028-07-13",guestCount:"75",destination:"Aruba, St. Lucia, Costa Rica, Dominican Republic, Mexico",
-  contact:"Jonathan Buchanan",email:"jbuc7@yahoo.com",phone:"",budget:"",followUp:"2026-08-05",
-  notes:"Assigned 7/11/2026, 50-99 guests per the assignment email. Never contacted — assignment notice only. Intro email drafted 8/4/2026. Largest never-contacted lead."},
+  contact:"Jonathan Buchanan",email:"jbuc7@yahoo.com",phone:"",budget:"",followUp:"2026-08-18",
+  notes:"Assigned 7/11/2026, 50-99 guests per the assignment email. Intro email SENT 8/4/2026 — first personal contact. Largest lead on the board by headcount."},
 
  {names:"Bell's Retreat",type:"Other",status:"No Contact",operator:"CT",
   eventDate:"2027-06-19",guestCount:"12",destination:"",
@@ -126,8 +126,8 @@ const LEADS = [
 
  {names:"Erin Schwartz",type:"Other",status:"No Contact",operator:"CT",
   eventDate:"2027-11-06",guestCount:"35",destination:"Caribbean, Hawaii, Turks & Caicos",
-  contact:"Erin Schwartz",email:"erinschwartz6@gmail.com",phone:"",budget:"",followUp:"2026-08-05",
-  notes:"Assigned 7/12/2026, 25-49 guests per the assignment email. Introductory call action open since 7/12 and flagged to reschedule. Never contacted. Intro email drafted 8/4/2026."},
+  contact:"Erin Schwartz",email:"erinschwartz6@gmail.com",phone:"",budget:"",followUp:"2026-08-18",
+  notes:"Assigned 7/12/2026, 25-49 guests per the assignment email. Intro email SENT 8/4/2026 — closes the intro-call action that had been open and flagged for reschedule since 7/12."},
 
  {names:"James Woody & Rasheeda Woody",type:"Wedding",status:"No Contact",operator:"DWT",
   eventDate:"2028-08-02",guestCount:"12",destination:"",
