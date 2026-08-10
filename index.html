@@ -276,7 +276,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <table>
           <thead><tr>
             <th style="cursor:pointer;user-select:none" onclick="leadsSortClick('names')">Names ↕</th><th>Type</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('eventDate')">Event Date ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('destination')">Destination ↕</th>
-            <th>Guests</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('budget')">Budget ↕</th><th>Source</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('status')">Status ↕</th>
+            <th>Guests</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('budget')">Budget ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('status')">Status ↕</th>
             <th style="cursor:pointer;user-select:none" onclick="leadsSortClick('followUp')">Follow-Up ↕</th><th>Notes</th><th class="sticky-col"></th>
           </tr></thead>
           <tbody id="leadTableBody"><tr><td colspan="11"><div class="empty-state"><div class="icon">⭐</div><p>No events yet</p></div></td></tr></tbody>
@@ -2287,7 +2287,7 @@ function toggleLeadMenu(id, btn) {
   if (!menu) return;
   const r = btn.getBoundingClientRect();
   menu.style.top = (r.bottom + 4) + 'px';
-  menu.style.left = Math.min(r.left, window.innerWidth - 160) + 'px';
+  menu.style.left = Math.min(r.left, window.innerWidth - 220) + 'px';
   menu.style.display = 'block';
 }
 function closeAllRowMenus() {
@@ -4242,14 +4242,12 @@ function renderLeads(){
   if(!filtered.length){tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><div class="icon">⭐</div><p>No events found</p></div></td></tr>';return;}
   // Apply sort
   const ls = sortState.leads;
-  const acFirst=(a,b)=>((b.activeConversation===true)-(a.activeConversation===true));
   const sortedLeads = ls.col ? [...filtered].sort((a,b)=>{
-    const ac=acFirst(a,b); if(ac) return ac;
     let av=a[ls.col]??'', bv=b[ls.col]??'';
     const an=parseFloat(av),bn=parseFloat(bv);
     if(!isNaN(an)&&!isNaN(bn)) return (an-bn)*ls.dir;
     return String(av).localeCompare(String(bv))*ls.dir;
-  }) : [...filtered].sort(acFirst);
+  }) : filtered;
   tbody.innerHTML=sortedLeads.map(l=>{
     const fuDate=l.followUp?new Date(l.followUp+'T12:00:00'):null;
     const fuDays=fuDate?Math.ceil((fuDate-today)/86400000):null;
@@ -4262,19 +4260,18 @@ function renderLeads(){
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
       <td style="text-align:center">${l.guestCount||'—'}</td>
       <td style="font-size:.95rem">${esc(l.budget)||'—'}</td>
-      <td style="color:var(--muted);font-size:.92rem">${esc(l.source)||'—'}</td>
       <td><span class="badge ${sb[l.status]||'badge-muted'}">${l.status}</span></td>
       <td style="color:${fuColor};font-size:.95rem">${l.followUp?fmtDate(l.followUp):'—'}${fuDays!==null&&fuDays>=0&&fuDays<=7?`<br><span style="font-size:.85rem">${fuDays===0?'TODAY':fuDays+'d'}</span>`:''}</td>
       <td style="color:var(--muted);font-size:.92rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.notes)}</td>
       <td class="sticky-col">
         <button onclick="event.stopPropagation();toggleLeadMenu('${l.id}',this)" style="background:#1a1a1a;border:1px solid #444;color:white;font-size:.85rem;font-weight:700;padding:5px 12px;border-radius:6px;cursor:pointer">⋯</button>
-        <div id="leadMenu_${l.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;min-width:150px;padding:4px 0">
-          <div onclick="openActivityModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">\u{1F553} Activity Log</div>
-          <div onclick="editLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
-          <div onclick="openIntakeModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#2a5a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📋 Send Intake</div>
-          <div onclick="viewResponses('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#7a3a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">👁 View Responses</div>
-          <div onclick="moveLeadToActive('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">🎉 Activate</div>
-          <div onclick="deleteLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">✕ Delete</div>
+        <div id="leadMenu_${l.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;width:210px;padding:4px 0;overflow:hidden">
+          <div onclick="openActivityModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">\u{1F553} Activity Log</div>
+          <div onclick="editLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
+          <div onclick="openIntakeModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#2a5a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📋 Send Intake</div>
+          <div onclick="viewResponses('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#7a3a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">👁 View Responses</div>
+          <div onclick="moveLeadToActive('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">🎉 Activate</div>
+          <div onclick="deleteLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">✕ Delete</div>
         </div>
       </td>
     </tr>`;
@@ -4473,14 +4470,14 @@ function renderDetailGuests(){
     <div style="position:relative;display:inline-block">
       <button onclick="toggleRowMenu('${g.id}', event)" style="background:#1a1a1a;border:none;color:white;font-size:1.2rem;width:32px;height:32px;border-radius:6px;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center">⋮</button>
       <div id="rowMenu_${g.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;min-width:130px;padding:4px 0">
-        <div onclick="editGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
-        <div onclick="openFlightModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✈️ Flight</div>
-        <div onclick="openGuestPayModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">💰 Pay</div>
-        ${g.email?`<div onclick="sendGuestFlightEmail('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📧 Email</div>`:''}
+        <div onclick="editGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
+        <div onclick="openFlightModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✈️ Flight</div>
+        <div onclick="openGuestPayModal('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">💰 Pay</div>
+        ${g.email?`<div onclick="sendGuestFlightEmail('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📧 Email</div>`:''}
         <div style="border-top:1px solid #eee;margin:4px 0"></div>
         ${g.status!=='Cancelled'
-          ?`<div onclick="cancelGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">🚫 Cancel</div>`
-          :`<div onclick="reinstateGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f0fff0'" onmouseout="this.style.background='white'">↩ Restore</div>`}
+          ?`<div onclick="cancelGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">🚫 Cancel</div>`
+          :`<div onclick="reinstateGuest('${g.id}');closeAllRowMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f0fff0'" onmouseout="this.style.background='white'">↩ Restore</div>`}
       </div>
     </div>
   </td>`;
