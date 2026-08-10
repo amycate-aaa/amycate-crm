@@ -4208,6 +4208,13 @@ function renderTimeline(){
   }).join('');
 }
 
+async function toggleActiveConversation(id){
+  const lead=leads.find(x=>x.id===id); if(!lead) return;
+  const next=!(lead.activeConversation===true);
+  lead.activeConversation=next; renderLeads();
+  try{ await db.collection('leads').doc(id).update({activeConversation:next}); }
+  catch(e){ lead.activeConversation=!next; renderLeads(); alert('Could not save: '+e.message); }
+}
 function renderLeads(){
   const tbody=document.getElementById('leadTableBody'); if(!tbody) return;
   const search=(gv('leadSearch')).toLowerCase();
@@ -4234,7 +4241,7 @@ function renderLeads(){
     const fuColor=fuDays!==null?(fuDays<0?'var(--red)':fuDays<=3?'var(--yellow)':'var(--text)'):'var(--muted)';
     const ac=l.activeConversation===true;
     return `<tr style="${ac?'background:rgba(201,168,76,.13);box-shadow:inset 3px 0 0 var(--gold,#C9A84C);':''}">
-      <td><strong>${ac?'<span title="Active conversation" style="color:var(--gold,#C9A84C);margin-right:5px">\u25CF</span>':''}${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}</td>
+      <td><strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them — click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;color:${ac?'var(--gold,#C9A84C)':'rgba(255,255,255,.22)'}">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}</td>
       <td><span class="badge badge-muted">${esc(l.type||'Wedding')}</span></td>
       <td style="font-size:.95rem">${l.eventDate?fmtDate(l.eventDate):'—'}</td>
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
