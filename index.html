@@ -879,6 +879,26 @@ tr:hover .sticky-col{background:var(--surface2);}
 
 <!-- MODALS -->
 
+<!-- Activity Log Modal -->
+<div class="modal-overlay" id="activityModal">
+  <div class="modal">
+    <h3 id="activityModalTitle">Activity Log</h3>
+    <div class="form-grid">
+      <div class="form-group"><label>Date</label><input type="date" id="a-date"></div>
+      <div class="form-group"><label>What did you do?</label>
+        <select id="a-type">
+          <option>Text</option><option>Email</option><option>Phone Call</option>
+          <option>Voicemail</option><option>Quote Sent</option><option>Meeting</option><option>Note</option>
+        </select>
+      </div>
+      <div class="form-group full"><label>Notes</label><textarea id="a-note" rows="3" placeholder="Sent a welcome text, asked about dates and guest count"></textarea></div>
+    </div>
+    <div style="margin:4px 0 14px 0"><button class="btn btn-primary" onclick="addActivityEntry()">+ Add Entry</button></div>
+    <div id="activityList" style="max-height:340px;overflow:auto;border-top:1px solid var(--border);padding-top:12px"></div>
+    <div class="modal-actions"><button class="btn" onclick="closeModal('activityModal')">Close</button></div>
+  </div>
+</div>
+
 <!-- Lead Modal -->
 <div class="modal-overlay" id="leadModal">
   <div class="modal">
@@ -4208,13 +4228,6 @@ function renderTimeline(){
   }).join('');
 }
 
-async function toggleActiveConversation(id){
-  const lead=leads.find(x=>x.id===id); if(!lead) return;
-  const next=!(lead.activeConversation===true);
-  lead.activeConversation=next; renderLeads();
-  try{ await db.collection('leads').doc(id).update({activeConversation:next}); }
-  catch(e){ lead.activeConversation=!next; renderLeads(); alert('Could not save: '+e.message); }
-}
 function renderLeads(){
   const tbody=document.getElementById('leadTableBody'); if(!tbody) return;
   const search=(gv('leadSearch')).toLowerCase();
@@ -4241,7 +4254,7 @@ function renderLeads(){
     const fuColor=fuDays!==null?(fuDays<0?'var(--red)':fuDays<=3?'var(--yellow)':'var(--text)'):'var(--muted)';
     const ac=l.activeConversation===true;
     return `<tr style="${ac?'background:rgba(201,168,76,.13);box-shadow:inset 3px 0 0 var(--gold,#C9A84C);':''}">
-      <td><strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them — click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;color:${ac?'var(--gold,#C9A84C)':'#B9BDC4'};font-size:1.05em;line-height:1">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}</td>
+      <td><strong>${ac?'<span title="Active conversation" style="color:var(--gold,#C9A84C);margin-right:5px">\u25CF</span>':''}${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}${(()=>{const a=(l.activity||[]);if(!a.length)return '';const last=a[a.length-1];return `<br><span style="color:#8a6a2a;font-size:.85rem">${esc(last.type)} \u00b7 ${fmtDate(last.date)}</span>`;})()}</td>
       <td><span class="badge badge-muted">${esc(l.type||'Wedding')}</span></td>
       <td style="font-size:.95rem">${l.eventDate?fmtDate(l.eventDate):'—'}</td>
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
@@ -4254,6 +4267,7 @@ function renderLeads(){
       <td class="sticky-col">
         <button onclick="event.stopPropagation();toggleLeadMenu('${l.id}',this)" style="background:#1a1a1a;border:1px solid #444;color:white;font-size:.85rem;font-weight:700;padding:5px 12px;border-radius:6px;cursor:pointer">⋯</button>
         <div id="leadMenu_${l.id}" style="display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:9999;min-width:150px;padding:4px 0">
+          <div onclick="openActivityModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">\u{1F553} Activity Log</div>
           <div onclick="editLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">✏️ Edit</div>
           <div onclick="openIntakeModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#2a5a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📋 Send Intake</div>
           <div onclick="viewResponses('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#7a3a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">👁 View Responses</div>
@@ -4271,6 +4285,53 @@ function openLeadModal(){
   ['l-names','l-eventDate','l-followUp','l-destination','l-guestCount','l-budget','l-contact','l-email','l-phone','l-notes'].forEach(id=>sv(id,''));
   sv('l-type','Wedding'); sv('l-status','No Contact'); sv('l-source',''); sv('l-operator','DWT');
   openModal('leadModal');
+}
+let activityLeadId=null;
+function openActivityModal(id){
+  const l=leads.find(x=>x.id===id); if(!l) return;
+  activityLeadId=id;
+  document.getElementById('activityModalTitle').textContent='Activity Log \u2014 '+(l.names||'');
+  document.getElementById('a-date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('a-note').value='';
+  renderActivityList();
+  openModal('activityModal');
+}
+function renderActivityList(){
+  const l=leads.find(x=>x.id===activityLeadId);
+  const box=document.getElementById('activityList');
+  const a=(l&&l.activity)?l.activity.slice().sort((x,y)=>(y.date||'').localeCompare(x.date||'')):[];
+  if(!a.length){ box.innerHTML='<p style="color:var(--muted);font-size:.92rem;margin:6px 0">Nothing logged yet.</p>'; return; }
+  box.innerHTML=a.map(e=>`<div style="padding:9px 0;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start">
+      <div style="min-width:96px;color:var(--muted);font-size:.88rem">${fmtDate(e.date)}</div>
+      <div style="flex:1">
+        <div style="font-weight:700;font-size:.9rem;color:#8a6a2a">${esc(e.type)}</div>
+        ${e.note?`<div style="font-size:.92rem;margin-top:2px;white-space:pre-wrap">${esc(e.note)}</div>`:''}
+      </div>
+      <button onclick="deleteActivityEntry('${e.ts}')" title="Delete" style="background:none;border:0;color:var(--muted);cursor:pointer;font-size:1rem">&times;</button>
+    </div>`).join('');
+}
+async function addActivityEntry(){
+  const l=leads.find(x=>x.id===activityLeadId); if(!l) return;
+  const date=document.getElementById('a-date').value;
+  const type=document.getElementById('a-type').value;
+  const note=document.getElementById('a-note').value.trim();
+  if(!date){ alert('Pick a date.'); return; }
+  const entry={ts:Date.now()+'', date, type, note};
+  const next=(l.activity||[]).concat([entry]).sort((x,y)=>(x.date||'').localeCompare(y.date||''));
+  l.activity=next;
+  document.getElementById('a-note').value='';
+  renderActivityList(); renderLeads();
+  try{ await db.collection('leads').doc(l.id).update({activity:next}); }
+  catch(e){ alert('Could not save: '+e.message); }
+}
+async function deleteActivityEntry(ts){
+  const l=leads.find(x=>x.id===activityLeadId); if(!l) return;
+  if(!confirm('Delete this entry?')) return;
+  const next=(l.activity||[]).filter(e=>e.ts!==ts);
+  l.activity=next;
+  renderActivityList(); renderLeads();
+  try{ await db.collection('leads').doc(l.id).update({activity:next}); }
+  catch(e){ alert('Could not save: '+e.message); }
 }
 function editLead(id){
   const l=leads.find(x=>x.id===id); if(!l) return;
