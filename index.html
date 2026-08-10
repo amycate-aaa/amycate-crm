@@ -918,6 +918,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         </select>
       </div>
       <div class="form-group"><label>Event Date</label><input type="date" id="l-eventDate"></div>
+      <div class="form-group"><label>Signed Up (DWT profile created)</label><input type="date" id="l-profileCreated"></div>
       <div class="form-group"><label>Follow-Up Date</label><input type="date" id="l-followUp"></div>
       <div class="form-group"><label>Destination</label><input type="text" id="l-destination"></div>
       <div class="form-group"><label>Est. # of Guests</label><input type="number" id="l-guestCount"></div>
@@ -4257,7 +4258,7 @@ function renderLeads(){
     const fuColor=fuDays!==null?(fuDays<0?'var(--red)':fuDays<=3?'var(--yellow)':'var(--text)'):'var(--muted)';
     const ac=l.activeConversation===true;
     return `<tr style="${ac?'background:rgba(201,168,76,.13);box-shadow:inset 3px 0 0 var(--gold,#C9A84C);':''}">
-      <td>${fuDays!==null&&fuDays<=3?`<span title="Follow-up" style="display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:20px;margin-bottom:4px;background:${fuDays<0?'var(--red)':'var(--yellow)'};color:#fff">${fuDays<0?'OVERDUE':(fuDays===0?'DUE TODAY':'DUE '+fuDays+'d')}</span><br>`:''}<strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them \u2014 click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;font-size:1.05em;line-height:1;color:${ac?'var(--gold,#C9A84C)':'#B9BDC4'}">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}${(()=>{const a=(l.activity||[]);if(!a.length)return '';const last=a[a.length-1];return `<br><span style="color:#8a6a2a;font-size:.85rem">${esc(last.type)} \u00b7 ${fmtDate(last.date)}</span>`;})()}</td>
+      <td>${fuDays!==null&&fuDays<=3?`<span title="Follow-up" style="display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.4px;padding:2px 7px;border-radius:20px;margin-bottom:4px;background:${fuDays<0?'var(--red)':'var(--yellow)'};color:#fff">${fuDays<0?'OVERDUE':(fuDays===0?'DUE TODAY':'DUE '+fuDays+'d')}</span><br>`:''}<strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them \u2014 click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;font-size:1.05em;line-height:1;color:${ac?'var(--gold,#C9A84C)':'#B9BDC4'}">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}${(()=>{const a=(l.activity||[]);if(!a.length)return '';const last=a[a.length-1];return `<br><span style="color:#8a6a2a;font-size:.85rem">${esc(last.type)} \u00b7 ${fmtDate(last.date)}</span>`;})()}${l.profileCreated?`<br><span style="color:var(--muted);font-size:.82rem">Signed up ${fmtDate(l.profileCreated)} \u00b7 ${Math.floor((today-new Date(l.profileCreated+'T12:00:00'))/86400000)}d ago</span>`:''}</td>
       <td><span class="badge badge-muted">${esc(l.type||'Wedding')}</span></td>
       <td style="font-size:.95rem">${l.eventDate?fmtDate(l.eventDate):'—'}</td>
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
@@ -4350,11 +4351,11 @@ function editLead(id){
   sv('l-destination',l.destination); sv('l-guestCount',l.guestCount);
   sv('l-budget',l.budget); sv('l-contact',l.contact);
   sv('l-email',l.email); sv('l-phone',l.phone);
-  sv('l-source',l.source||''); sv('l-operator',l.operator||'DWT'); sv('l-notes',l.notes);
+  sv('l-source',l.source||''); sv('l-profileCreated',l.profileCreated||''); sv('l-operator',l.operator||'DWT'); sv('l-notes',l.notes);
   openModal('leadModal');
 }
 async function saveLead(){
-  const data={names:gv('l-names'),type:gv('l-type'),status:gv('l-status'),eventDate:gv('l-eventDate'),followUp:gv('l-followUp'),destination:gv('l-destination'),guestCount:gv('l-guestCount'),budget:gv('l-budget'),operator:gv('l-operator')||'DWT',contact:gv('l-contact'),email:gv('l-email'),phone:gv('l-phone'),source:gv('l-source'),notes:gv('l-notes')};
+  const data={names:gv('l-names'),type:gv('l-type'),status:gv('l-status'),eventDate:gv('l-eventDate'),followUp:gv('l-followUp'),destination:gv('l-destination'),guestCount:gv('l-guestCount'),budget:gv('l-budget'),operator:gv('l-operator')||'DWT',contact:gv('l-contact'),email:gv('l-email'),phone:gv('l-phone'),source:gv('l-source'),profileCreated:gv('l-profileCreated'),notes:gv('l-notes')};
   if(!data.names){alert('Name required.');return;}
   try{
     if(editLeadId) await db.collection('leads').doc(editLeadId).update(data);
