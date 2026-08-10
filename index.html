@@ -277,7 +277,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <table>
           <thead><tr>
             <th style="cursor:pointer;user-select:none" onclick="leadsSortClick('names')">Names ↕</th><th>Type</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('eventDate')">Event Date ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('destination')">Destination ↕</th>
-            <th>Guests</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('budget')">Budget ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('status')">Status ↕</th>
+            <th>Guests</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('status')">Status ↕</th>
             <th>Notes</th><th class="sticky-col"></th>
           </tr></thead>
           <tbody id="leadTableBody"><tr><td colspan="11"><div class="empty-state"><div class="icon">⭐</div><p>No events yet</p></div></td></tr></tbody>
@@ -4264,7 +4264,6 @@ function renderLeads(){
       <td style="font-size:.95rem">${l.eventDate?fmtDate(l.eventDate):'—'}</td>
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
       <td style="text-align:center">${l.guestCount||'—'}</td>
-      <td style="font-size:.95rem">${esc(l.budget)||'—'}</td>
       <td><span class="badge ${sb[l.status]||'badge-muted'}">${l.status}</span></td>
       <td style="color:var(--muted);font-size:.92rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.notes)}</td>
       <td class="sticky-col">
