@@ -1173,6 +1173,7 @@ const _autoFilled={};
 const _autoRoomPhoto={};
 // Remembers text Amy typed herself, so clearing a stale override never eats her words.
 const _typedDesc={};
+const _typedRW={};
 function setAutoPhoto(id, value, force){
   const el=document.getElementById(id);
   if(!el||!value) return;
@@ -1821,10 +1822,19 @@ async function onWResortChange(n){
     descEl.dataset.watched='1';
     descEl.addEventListener('input',()=>{ _typedDesc['w-r'+n+'desc']=descEl.value; });
   }
-  // Auto-populate Real Weddings URL from Firestore if stored
+  // Real Weddings URL is per-resort. A value left over from a previously selected
+  // resort gets stamped onto the new one, which is how Puerto Vallarta resorts ended
+  // up linking to Cancun weddings. So: set it from the library when the library has
+  // one, and CLEAR it when the library does not. Anything typed by hand is preserved.
   const rwField=document.getElementById('w-r'+n+'realWeddings');
-  if(rwField&&!rwField.value&&(r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl)){
-    rwField.value=r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl;
+  const rwStored=r.realWeddingsUrl||r.realWeddings||r.realWeddingUrl||'';
+  if(rwField){
+    if(rwStored){ if(!rwField.value || rwField.value!==_typedRW['w-r'+n+'realWeddings']) rwField.value=rwStored; }
+    else if(rwField.value && rwField.value!==_typedRW['w-r'+n+'realWeddings']) rwField.value='';
+    if(!rwField.dataset.watched){
+      rwField.dataset.watched='1';
+      rwField.addEventListener('input',()=>{ _typedRW['w-r'+n+'realWeddings']=rwField.value; });
+    }
   }
   // Auto-populate Wedding Page URL
   const wuField=document.getElementById('w-r'+n+'weddingUrl');
@@ -3298,7 +3308,11 @@ function buildWeddingFull(wv){
             guide.replace(/\/+$/,'') === String(dwtUrl).replace(/\/+$/,'');
           if(guide && !sameAsDwt)
             out.push(card('Wedding Pricing & Details','View the '+r.name+' wedding guide \u2192', guide));
-          out.push(card('Real Weddings','See real weddings at '+r.name+' \u2192', rf.realWeddings||''));
+          // Only emit this card for a URL that actually points at a real-wedding story.
+          // A malformed or unrelated link here is worse than no card at all.
+          const rwUrl=String(rf.realWeddings||'').trim();
+          out.push(card('Real Weddings','See real weddings at '+r.name+' \u2192',
+            /destinationweddings\.com\/real-weddings\/real-wedding-stories\//i.test(rwUrl) ? rwUrl : ''));
           out.push(card('Exclusive Offer', offerLabel, rf.offer||''));
           return out.filter(Boolean).join('\n        ');
         })()}
