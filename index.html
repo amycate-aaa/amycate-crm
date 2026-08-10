@@ -266,6 +266,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <select class="filter-select" id="leadStatusFilter" onchange="renderLeads()">
           <option value="">All Statuses</option>
           <option value="No Contact">No Contact</option>
+            <option value="Contacted — Awaiting Reply">Contacted — Awaiting Reply</option>
           <option value="Received Info">Received Info</option>
           <option value="Sent Quotes">Sent Quotes</option>
           <option value="Pending Contract">Pending Contract</option>
@@ -913,7 +914,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       </div>
       <div class="form-group"><label>Status</label>
         <select id="l-status">
-<option>No Contact</option><option>Received Info</option><option>Sent Quotes</option><option>Pending Contract</option><option>Signed Contract</option>
+<option>No Contact</option><option>Contacted — Awaiting Reply</option><option>Received Info</option><option>Sent Quotes</option><option>Pending Contract</option><option>Signed Contract</option>
         </select>
       </div>
       <div class="form-group"><label>Event Date</label><input type="date" id="l-eventDate"></div>
@@ -4233,7 +4234,7 @@ function renderLeads(){
   const search=(gv('leadSearch')).toLowerCase();
   const statusF=gv('leadStatusFilter');
   const today=new Date(); today.setHours(0,0,0,0);
-  const sb={'No Contact':'badge-muted','Received Info':'badge-yellow','Sent Quotes':'badge-yellow','Pending Contract':'badge-gold','Signed Contract':'badge-green'};
+  const sb={'No Contact':'badge-muted','Contacted — Awaiting Reply':'badge-red','Received Info':'badge-yellow','Sent Quotes':'badge-yellow','Pending Contract':'badge-gold','Signed Contract':'badge-green'};
   const filtered=leads.filter(l=>{
     const ms=!search||(l.names||'').toLowerCase().includes(search)||(l.destination||'').toLowerCase().includes(search)||(l.contact||'').toLowerCase().includes(search);
     const mst=!statusF||l.status===statusF;
