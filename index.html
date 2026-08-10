@@ -4245,7 +4245,8 @@ function renderLeads(){
   if(!filtered.length){tbody.innerHTML='<tr><td colspan="11"><div class="empty-state"><div class="icon">⭐</div><p>No events found</p></div></td></tr>';return;}
   // Apply sort
   const ls = sortState.leads;
-  const acFirst=(a,b)=>((b.activeConversation===true)-(a.activeConversation===true));
+  const rank=l=>(l.archivedLead===true?2:(l.activeConversation===true?0:1));
+  const acFirst=(a,b)=>(rank(a)-rank(b));
   const sortedLeads = ls.col ? [...filtered].sort((a,b)=>{
     const acx=acFirst(a,b); if(acx) return acx;
     let av=a[ls.col]??'', bv=b[ls.col]??'';
@@ -4258,8 +4259,9 @@ function renderLeads(){
     const fuDays=fuDate?Math.ceil((fuDate-today)/86400000):null;
     const fuColor=fuDays!==null?(fuDays<0?'var(--red)':fuDays<=3?'var(--yellow)':'var(--text)'):'var(--muted)';
     const ac=l.activeConversation===true;
-    return `<tr style="${ac?'background:rgba(201,168,76,.13);box-shadow:inset 3px 0 0 var(--gold,#C9A84C);':''}">
-      <td><strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them \u2014 click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;font-size:1.05em;line-height:1;color:${ac?'var(--gold,#C9A84C)':'#B9BDC4'}">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}${(()=>{const a=(l.activity||[]);if(!a.length)return '';const last=a[a.length-1];return `<br><span style="color:#8a6a2a;font-size:.85rem">${esc(last.type)} \u00b7 ${fmtDate(last.date)}</span>`;})()}${l.profileCreated?`<br><span style="color:var(--muted);font-size:.82rem">Signed up ${fmtDate(l.profileCreated)} \u00b7 ${Math.floor((today-new Date(l.profileCreated+'T12:00:00'))/86400000)}d ago</span>`:''}</td>
+    const arch=l.archivedLead===true;
+    return `<tr style="${arch?'opacity:.5;background:#f4f4f6;':(ac?'background:rgba(201,168,76,.13);box-shadow:inset 3px 0 0 var(--gold,#C9A84C);':'')}">
+      <td>${arch?'<span style="display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.5px;padding:2px 7px;border-radius:20px;margin-bottom:4px;background:#9aa0a6;color:#fff">ARCHIVED</span><br>':''}<strong><span onclick="event.stopPropagation();toggleActiveConversation('${l.id}')" title="${ac?'Talked with them \u2014 click to unmark':'Click to mark: we have talked'}" style="cursor:pointer;margin-right:6px;font-size:1.05em;line-height:1;color:${ac?'var(--gold,#C9A84C)':'#B9BDC4'}">${ac?'\u25CF':'\u25CB'}</span>${esc(l.names)}</strong>${l.contact?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.contact)}</span>`:''}${l.email?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.email)}</span>`:''}${l.phone?`<br><span style="color:var(--muted);font-size:.9rem">${esc(l.phone)}</span>`:''}${(()=>{const a=(l.activity||[]);if(!a.length)return '';const last=a[a.length-1];return `<br><span style="color:#8a6a2a;font-size:.85rem">${esc(last.type)} \u00b7 ${fmtDate(last.date)}</span>`;})()}${l.profileCreated?`<br><span style="color:var(--muted);font-size:.82rem">Signed up ${fmtDate(l.profileCreated)} \u00b7 ${Math.floor((today-new Date(l.profileCreated+'T12:00:00'))/86400000)}d ago</span>`:''}</td>
       <td><span class="badge badge-muted">${esc(l.type||'Wedding')}</span></td>
       <td style="font-size:.95rem">${l.eventDate?fmtDate(l.eventDate):'—'}</td>
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
@@ -4274,6 +4276,7 @@ function renderLeads(){
           <div onclick="openIntakeModal('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#2a5a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">📋 Send Intake</div>
           <div onclick="viewResponses('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#7a3a8a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">👁 View Responses</div>
           <div onclick="moveLeadToActive('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#1a5a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">🎉 Activate</div>
+          <div onclick="toggleArchiveLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#5a5a5a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">${arch?'\u21A9 Unarchive':'\u{1F5C4} Archive'}</div>
           <div onclick="deleteLead('${l.id}');closeAllLeadMenus()" style="padding:9px 16px;cursor:pointer;color:#8a1a1a;font-size:.92rem;font-weight:600;display:flex;align-items:center;gap:8px;white-space:nowrap" onmouseover="this.style.background='#fff0f0'" onmouseout="this.style.background='white'">✕ Delete</div>
         </div>
       </td>
@@ -4334,6 +4337,14 @@ async function deleteActivityEntry(ts){
   renderActivityList(); renderLeads();
   try{ await db.collection('leads').doc(l.id).update({activity:next}); }
   catch(e){ alert('Could not save: '+e.message); }
+}
+async function toggleArchiveLead(id){
+  const lead=leads.find(x=>x.id===id); if(!lead) return;
+  const next=!(lead.archivedLead===true);
+  if(next && !confirm('Archive '+(lead.names||'this lead')+'? It stays in your list, greyed out at the bottom.')) return;
+  lead.archivedLead=next; renderLeads();
+  try{ await db.collection('leads').doc(id).update({archivedLead:next}); }
+  catch(e){ lead.archivedLead=!next; renderLeads(); alert('Could not save: '+e.message); }
 }
 async function toggleActiveConversation(id){
   const lead=leads.find(x=>x.id===id); if(!lead) return;
