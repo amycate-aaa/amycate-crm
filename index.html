@@ -2014,7 +2014,7 @@ sv('g-pay1',g.pay1); sv('g-pay2',g.pay2);
   sv('g-transport',g.transport||''); sv('g-transportNote',g.transportNote||'');
   sv('g-commission',g.commission||''); document.getElementById('g-commissionReceived').checked = g.commissionReceived||false;
   calcGuestPayments();
-  const existingPaid = (parseFloat(g.pay1)||0)+(parseFloat(g.pay2)||0);
+  const existingPaid = (parseFloat(g.deposit)||0)+(parseFloat(g.pay1)||0)+(parseFloat(g.pay2)||0);
   if(existingPaid>0){ sv('g-totalpaid',existingPaid.toFixed(2)); calcPaymentSplit(); }
   openModal('guestModal');
 }
@@ -3977,12 +3977,13 @@ function generateGroupReport(filter) {
     const rc = parseFloat(g.roomcost) || 0;
     const ic = parseFloat(g.inscost) || 0;
     const total = rc + ic;
-    const paid = (parseFloat(g.pay1) || 0) + (parseFloat(g.pay2) || 0);
+    const paid = (parseFloat(g.deposit) || 0) + (parseFloat(g.pay1) || 0) + (parseFloat(g.pay2) || 0);
     const bal = total - paid;
     const comm = parseFloat(g.commission) || 0;
-    totalRoom += rc; totalIns += ic; totalPaid += paid; totalBal += bal; totalComm += comm;
     const bg = idx % 2 === 0 ? '#ffffff' : '#f9f9f9';
     const cancelled = g.status === 'Cancelled';
+    // Cancelled rooms are shown for reference but excluded from group totals
+    if (!cancelled) { totalRoom += rc; totalIns += ic; totalPaid += paid; totalBal += bal; totalComm += comm; }
     rows += `<tr style="background:${bg};${cancelled ? 'opacity:.5;' : ''}">
       <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.ti || '—'}</td>
       <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;">${g.names || '—'}</td>
