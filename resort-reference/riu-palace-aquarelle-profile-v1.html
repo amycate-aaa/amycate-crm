@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Riu Palace Aquarelle — Resort Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--black:#1E1A14;--gold:#B8975A;--gold-deep:#95763E;--cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--black);font-family:'Jost',sans-serif;font-weight:300;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 32px}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;line-height:1.15}
+.eyebrow{font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:14px}
+.hero{position:relative;height:78vh;min-height:520px;background:#2a241c center/cover no-repeat;display:flex;align-items:flex-end}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(30,26,20,.15),rgba(30,26,20,.20) 45%,rgba(30,26,20,.78))}
+.hero-inner{position:relative;z-index:2;width:100%;padding-bottom:52px;color:#fff}
+.hero .eyebrow{color:#E8D9B8}
+.hero h1{font-size:clamp(44px,7vw,86px);letter-spacing:-.01em}
+.hero .sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.2vw,24px);color:#F0E7D6;margin-top:10px;max-width:760px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.chip{font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;border:1px solid rgba(255,255,255,.42);color:#fff;padding:7px 14px;border-radius:2px}
+section{padding:76px 0}
+section+section{border-top:1px solid var(--line)}
+.sec-head{margin-bottom:38px;max-width:760px}
+.sec-head h2{font-size:clamp(32px,4.4vw,48px)}
+.sec-head p{margin-top:14px;color:#5A5045;font-size:16.5px}
+.alt{background:var(--cream-2)}
+.ov{display:grid;grid-template-columns:1.55fr 1fr;gap:56px;align-items:start}
+.ov p{margin-bottom:18px;font-size:17px;color:#3D362D}
+.facts{background:#fff;border:1px solid var(--line);padding:30px 30px 24px}
+.facts h3{font-size:22px;margin-bottom:18px}
+.facts dl{display:grid;grid-template-columns:auto 1fr}
+.facts dt{font-size:10.5px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);padding:11px 18px 11px 0;border-top:1px solid var(--line);white-space:nowrap}
+.facts dd{font-size:15px;padding:11px 0;border-top:1px solid var(--line);text-align:right;color:#3D362D}
+.facts dt:first-of-type,.facts dd:first-of-type{border-top:none}
+.tier{margin-bottom:52px}.tier:last-child{margin-bottom:0}
+.tier-label{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-deep);padding-bottom:12px;margin-bottom:26px;border-bottom:1px solid var(--line)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.card{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+.card .imgbox{height:200px;overflow:hidden;background:var(--cream-2);flex:0 0 auto}
+.card .imgbox img{width:100%;height:100%;object-fit:cover;display:block}
+.card .body{padding:20px 22px 24px;flex:1 1 auto}
+.card h4{font-size:22px;line-height:1.2;margin-bottom:8px}
+.card .meta{font-size:10.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:11px}
+.card p{font-size:14.5px;color:#5A5045;line-height:1.65}
+.dine{column-count:2;column-gap:56px}
+.dine .item{break-inside:avoid;padding:16px 0;border-bottom:1px solid var(--line)}
+.dine .item h4{font-size:21px;margin-bottom:2px}
+.dine .item .cuisine{font-size:10.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:7px}
+.dine .item p{font-size:14.5px;color:#5A5045;line-height:1.6}
+.dine-group{font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-deep);margin:0 0 6px;padding-top:6px;break-after:avoid}
+.venue-solo{display:grid;grid-template-columns:1.1fr 1fr;gap:0;background:#fff;border:1px solid var(--line)}
+.venue-solo img{width:100%;height:100%;min-height:340px;object-fit:cover;display:block}
+.venue-solo .body{padding:38px 40px}
+.venue-solo h4{font-size:32px;margin-bottom:12px}
+.cap{font-size:10.5px;font-weight:500;letter-spacing:.13em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:5px}
+.bestfor{font-size:12px;letter-spacing:.06em;color:#8A7C68;margin-bottom:16px}
+.venue-solo p{font-size:15px;color:#5A5045;line-height:1.7}
+.pkg-table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line)}
+.pkg-table th{text-align:left;font-family:'Jost',sans-serif;font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);padding:15px 20px;border-bottom:1px solid var(--line);white-space:nowrap}
+.pkg-table td{padding:19px 20px;border-bottom:1px solid var(--line);vertical-align:top;font-size:14.5px;color:#5A5045}
+.pkg-table tr:last-child td{border-bottom:none}
+.pkg-name{font-family:'Cormorant Garamond',serif;font-size:23px;color:var(--black);white-space:nowrap}
+.footnote{margin-top:14px;font-size:13px;color:#8A7C68;font-style:italic}
+.plan{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.panel{background:#fff;border:1px solid var(--line);padding:28px 30px}
+.panel h3{font-size:24px;margin-bottom:16px}
+.panel ul{list-style:none}
+.panel li{padding:10px 0 10px 24px;border-bottom:1px solid var(--line);font-size:15px;color:#3D362D;position:relative}
+.panel li:last-child{border-bottom:none}
+.panel li::before{content:'\2726';position:absolute;left:0;top:10px;color:var(--gold);font-size:11px}
+.internal{background:#F6F1E7;border:1px dashed var(--gold)}
+.internal .tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-deep);border:1px solid var(--gold);padding:4px 10px;margin-bottom:16px}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.gal figure{margin:0}
+.gal img{width:100%;height:190px;object-fit:cover;display:block;border:1px solid var(--line)}
+.gal figcaption{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:#8A7C68;padding-top:8px}
+.gal .tall{grid-row:span 2}.gal .tall img{height:394px}
+footer{background:var(--black);color:#CFC4B2;padding:52px 0 44px;text-align:center}
+footer .eyebrow{color:var(--gold)}
+footer .name{font-family:'Cormorant Garamond',serif;font-size:30px;color:#fff;margin-bottom:6px}
+footer p{font-size:14px;line-height:1.9}
+footer .rule{width:52px;height:1px;background:var(--gold);margin:22px auto}
+@media(max-width:940px){.ov,.plan,.venue-solo{grid-template-columns:1fr;gap:36px}.grid-3{grid-template-columns:repeat(2,1fr)}.gal{grid-template-columns:repeat(2,1fr)}.venue-solo{gap:0}}
+@media(max-width:620px){.wrap{padding:0 20px}.grid-3{grid-template-columns:1fr}.dine{column-count:1}.gal .tall{grid-row:span 1}.gal .tall img{height:190px}}
+</style>
+</head>
+<body>
+
+<header class="hero" style="background-image:url('https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/1-aerial.jpg?width=1920&height=1080')">
+  <div class="hero-inner"><div class="wrap">
+    <div class="eyebrow">White Bay Beach &middot; Falmouth, Jamaica</div>
+    <h1>Riu Palace<br>Aquarelle</h1>
+    <p class="sub">A brand-new, big, all-ages beachfront resort on the quiet stretch between Montego Bay and Ocho Rios &mdash; with a water park, 753 rooms, and one very good beach.</p>
+    <div class="chips">
+      <span class="chip">All Ages</span>
+      <span class="chip">753 Rooms</span>
+      <span class="chip">All-Inclusive 24h</span>
+      <span class="chip">4 Pools + Water Park</span>
+      <span class="chip">7 Restaurants</span>
+      <span class="chip">1 Wedding Venue</span>
+      <span class="chip">2 Weddings / Day</span>
+    </div>
+  </div></div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">The Property</div>
+      <h2>Big, new, and built for families</h2>
+    </div>
+    <div class="ov">
+      <div>
+        <p>Riu Palace Aquarelle sits on White Bay Beach in Falmouth, the historic Georgian port town roughly midway between Montego Bay and Ocho Rios. It is a large, recently built all-inclusive &mdash; 753 rooms across a sprawling site &mdash; and it leans hard into the family market: four outdoor pools, a separate children&rsquo;s pool, the Splash Water World water park with slides, and the RiuLand kids&rsquo; club.</p>
+        <p>The Riu formula is consistent and easy to explain to guests: everything included, 24 hours a day, no reservation system for most restaurants, liquor dispensers and a restocked mini-bar in every room. Seven restaurants and five bars, with reservations needed only at the Steakhouse, Kyoto and Napoli. Service runs around the clock, which matters more than it sounds for a group arriving on a late flight.</p>
+        <p>What makes it easy to sell is the beach and the price point. What makes it a narrower fit than it first appears is the wedding programme &mdash; there is exactly one venue, and it caps at 100. Read the planning notes before you promise anything larger.</p>
+        <p>Guests also hold exchange privileges with Riu Montego Bay next door, which is adults-only 18+. That gives the adults in a group somewhere quieter to go for a day without changing hotels.</p>
+      </div>
+      <aside class="facts">
+        <h3>At a glance</h3>
+        <dl>
+          <dt>Rooms</dt><dd>753</dd>
+          <dt>Guests</dt><dd>All ages</dd>
+          <dt>Rating</dt><dd>4.5 star</dd>
+          <dt>Beach</dt><dd>White Bay</dd>
+          <dt>Town</dt><dd>Falmouth</dd>
+          <dt>Pools</dt><dd>4 + kids&rsquo; pool</dd>
+          <dt>Water park</dt><dd>Splash Water World</dd>
+          <dt>Kids&rsquo; club</dt><dd>RiuLand</dd>
+          <dt>Dining</dt><dd>7 restaurants &middot; 5 bars</dd>
+          <dt>Wedding venues</dt><dd>1</dd>
+          <dt>Weddings / day</dt><dd>2</dd>
+          <dt>Exchange</dt><dd>Riu Montego Bay (18+)</dd>
+          <dt>Plan</dt><dd>All-Inclusive 24h</dd>
+        </dl>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Accommodation</div>
+      <h2>Eleven room categories</h2>
+      <p>The family inventory is unusually deep &mdash; several two-bedroom layouts sleeping four to six. Note that the two swim-up categories are <strong>18+ only</strong>, which rules them out for anyone travelling with children.</p>
+    </div>
+
+    <div class="tier">
+      <div class="tier-label">Junior Suites</div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/23-standard-junior-suite.jpg?width=1920&height=1080" alt="Junior Suite Partial Ocean View"></div>
+          <div class="body">
+            <h4>Junior Suite Partial Ocean View</h4>
+            <div class="meta">377 sq ft &middot; King or 2 Doubles &middot; Sleeps 4</div>
+            <p>Lateral sea view with balcony or terrace, mini-bar, liquor dispenser and coffee maker. Takes 2 adults + 2 children, or 3 adults + 1 child.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/24-junior-suite-ocean-view.jpg?width=1920&height=1080" alt="Junior Suite Ocean View"></div>
+          <div class="body">
+            <h4>Junior Suite Ocean View</h4>
+            <div class="meta">377 sq ft &middot; King or 2 Doubles &middot; Sleeps 4</div>
+            <p>The same layout with a fuller sea view. Same occupancy flexibility &mdash; the workhorse category for a family group.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/26-suite-ocean-view.jpg?width=1920&height=1080" alt="Junior Suite Ocean Front"></div>
+          <div class="body">
+            <h4>Junior Suite Ocean Front</h4>
+            <div class="meta">377 sq ft &middot; King &middot; Sleeps 2</div>
+            <p>Front sea view with private balcony or terrace. Two adults only &mdash; a good couples pick within the standard tier.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-label">Suites</div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/26-suite-ocean-view.jpg?width=1920&height=1080" alt="Suite Ocean View"></div>
+          <div class="body">
+            <h4>Suite Ocean View</h4>
+            <div class="meta">King &middot; Sleeps 2</div>
+            <p>Integrated lounge area with sofa, bathtub and separate shower, double sink. Balcony or terrace with ocean view.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/26-suite-ocean-view.jpg?width=1920&height=1080" alt="Suite Ocean Front"></div>
+          <div class="body">
+            <h4>Suite Ocean Front</h4>
+            <div class="meta">King &middot; Sleeps 2</div>
+            <p>The top standard category &mdash; same specification, positioned directly facing the water. The one to reach for on a honeymoon booking.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-label">Family &amp; Two-Bedroom</div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/25-2-bedroom-swim-up-family-room.jpg?width=1920&height=1080" alt="Two-bedroom family accommodation"></div>
+          <div class="body">
+            <h4>2 Bedroom Junior Suite &mdash; Partial Ocean View</h4>
+            <div class="meta">King + 2 Doubles &middot; Sleeps 4</div>
+            <p>Two rooms connected by a private hallway with an exterior door &mdash; genuine separation rather than a divider. Each room fully equipped.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/24-junior-suite-ocean-view.jpg?width=1920&height=1080" alt="2 Bedroom Junior Suite Ocean View"></div>
+          <div class="body">
+            <h4>2 Bedroom Junior Suite &mdash; Ocean View</h4>
+            <div class="meta">King + 2 Doubles &middot; Sleeps 4</div>
+            <p>The same two-room arrangement with a full ocean view from the balcony or terrace.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/25-2-bedroom-swim-up-family-room.jpg?width=1920&height=1080" alt="Two Bedroom Family Room Ocean View"></div>
+          <div class="body">
+            <h4>Two Bedroom Family Room &mdash; Ocean View</h4>
+            <div class="meta">King + 2 Doubles &middot; Sleeps 5</div>
+            <p>One bedroom with a king, a second with two doubles, plus a sitting area with sofa. Takes 4 adults + 1 child.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/25-2-bedroom-swim-up-family-room.jpg?width=1920&height=1080" alt="Two Bedroom Family Room Superior Ocean View"></div>
+          <div class="body">
+            <h4>Two Bedroom Family Room Superior &mdash; Ocean View</h4>
+            <div class="meta">King + 2 Doubles + Sofa Bed &middot; Sleeps 6</div>
+            <p>The largest family layout, and the only one with <strong>two bathrooms</strong>. Sofa bed in the sitting area takes the sixth guest.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-label">Swim-Up &mdash; Adults 18+ Only</div>
+      <div class="grid-3">
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/28-swim-up-suites.jpg?width=1920&height=1080" alt="Swim Up Junior Suite"></div>
+          <div class="body">
+            <h4>Swim Up Junior Suite</h4>
+            <div class="meta">377 sq ft &middot; King &middot; Sleeps 2 &middot; 18+</div>
+            <p>Private pool on the terrace, super king bed, sitting area with sofa. Adults only &mdash; not available to a party travelling with children.</p>
+          </div>
+        </article>
+        <article class="card">
+          <div class="imgbox"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/27-swim-up-junior-suite-ocean-view.jpg?width=1920&height=1080" alt="Swim Up Junior Suite Ocean View"></div>
+          <div class="body">
+            <h4>Swim Up Junior Suite Ocean View</h4>
+            <div class="meta">377 sq ft &middot; King &middot; Sleeps 2 &middot; 18+</div>
+            <p>The same private terrace pool with an ocean view. The best room on property for a couple, and the natural upgrade for the wedding couple.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Dining &amp; Drinks</div>
+      <h2>Seven restaurants, five bars</h2>
+      <p>Reservations required at the Steakhouse, Kyoto and Napoli. Everything else is walk-in, and service runs 24 hours.</p>
+    </div>
+    <div class="dine">
+      <div class="dine-group">Restaurants</div>
+      <div class="item"><h4>White Bay</h4><div class="cuisine">Main Restaurant &middot; Buffet</div><p>The main resort restaurant with a terrace &mdash; breakfast, lunch and dinner, and the default for a large group that wants to sit together without a booking.</p></div>
+      <div class="item"><h4>Steakhouse</h4><div class="cuisine">Steak &middot; Reservation Required</div><p>Riu bills it as the best steak and service in the area. Book it early in the stay.</p></div>
+      <div class="item"><h4>Kyoto</h4><div class="cuisine">Asian &middot; Reservation Required</div><p>Asian cuisine in a dedicated room.</p></div>
+      <div class="item"><h4>Napoli</h4><div class="cuisine">Italian &middot; Reservation Required</div><p>Italian &agrave; la carte.</p></div>
+      <div class="item"><h4>Krystal</h4><div class="cuisine">Fusion &middot; Reservation Required</div><p>The fusion restaurant &mdash; the more adventurous of the &agrave; la carte options.</p></div>
+      <div class="item"><h4>Pepe&rsquo;s Food</h4><div class="cuisine">Jerk Grill</div><p>Jerk grill &mdash; the most authentically Jamaican thing on the property, and casual.</p></div>
+      <div class="item"><h4>Capuchino</h4><div class="cuisine">P&acirc;tisserie &amp; Ice Cream</div><p>Cosy p&acirc;tisserie and ice cream parlour. A reliable win with kids in the afternoon.</p></div>
+
+      <div class="dine-group">Bars</div>
+      <div class="item"><h4>Kingston</h4><div class="cuisine">Swim-Up</div><p>Swim-up pool bar.</p></div>
+      <div class="item"><h4>Marley</h4><div class="cuisine">Swim-Up</div><p>Second swim-up pool bar.</p></div>
+      <div class="item"><h4>Daiquiri</h4><div class="cuisine">Lobby</div><p>Lobby bar with a terrace.</p></div>
+      <div class="item"><h4>Ska</h4><div class="cuisine">Lounge</div><p>Lounge bar with a plaza bar and stage &mdash; where the nightly entertainment lands.</p></div>
+      <div class="item"><h4>Sports Bar</h4><div class="cuisine">Sports</div><p>Screens, drinks and a crowd. Useful for a group with a game they refuse to miss.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Weddings</div>
+      <h2>One venue &mdash; the beach</h2>
+      <p>This is the whole wedding programme. There is no garden gazebo, no terrace, no ballroom option published. Everything happens on White Bay Beach, and it caps at 100.</p>
+    </div>
+    <div class="venue-solo">
+      <img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/1-aerial.jpg?width=1920&height=1080" alt="White Bay Beach from the air">
+      <div class="body">
+        <h4>Beach</h4>
+        <div class="cap">Up to 100 guests</div>
+        <div class="bestfor">Ceremony &middot; Cocktail Hour &middot; Reception</div>
+        <p>Whether the couple wants an intimate sunset ceremony or a full daytime affair, White Bay Beach carries all three parts of the day &mdash; vows, cocktails and dinner &mdash; in one setting. Toes in the sand, ocean directly behind, and a choice of d&eacute;cor treatments from classic to modern.</p>
+        <p style="margin-top:14px">Because it is the only venue, the weather plan and the guest count are the two conversations to have first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Wedding Collections</div>
+      <h2>Riu&rsquo;s five tiers</h2>
+      <p>Riu runs named Collections rather than per-item packages, layering romantic extras, receptions, cocktail celebrations and wellness experiences as you move up.</p>
+    </div>
+    <table class="pkg-table">
+      <thead><tr><th>Collection</th><th>What it adds</th></tr></thead>
+      <tbody>
+        <tr><td class="pkg-name">Free</td><td>The complimentary tier &mdash; the ceremony essentials with a qualifying booking. The starting point for a couple watching budget.</td></tr>
+        <tr><td class="pkg-name">Classic</td><td>The first paid step up, adding décor and romantic extras to the ceremony.</td></tr>
+        <tr><td class="pkg-name">Royal</td><td>Mid-tier, bringing in reception and cocktail elements.</td></tr>
+        <tr><td class="pkg-name">Caprice</td><td>Fuller celebration with expanded reception and wellness inclusions.</td></tr>
+        <tr><td class="pkg-name">Indulgence</td><td>The top Collection &mdash; the full programme of extras, reception and celebration elements.</td></tr>
+      </tbody>
+    </table>
+    <p class="footnote">Collection pricing and exact inclusions vary by season and booking terms &mdash; pull current terms per group rather than reusing a prior quote.</p>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Planning</div>
+      <h2>What to raise on the call</h2>
+    </div>
+    <div class="plan">
+      <div class="panel">
+        <h3>Selling points</h3>
+        <ul>
+          <li>Genuinely strong family inventory &mdash; two-bedroom layouts sleeping four to six, and one Superior with two bathrooms</li>
+          <li>Splash Water World and RiuLand make it an easy sell to guests bringing kids</li>
+          <li>All-inclusive runs 24 hours, and most restaurants take walk-ins &mdash; simple to explain to a large guest list</li>
+          <li>Brand-new build, so rooms and public areas show well in photos</li>
+          <li>Exchange privileges with adults-only Riu Montego Bay give the grown-ups a quieter day out</li>
+          <li>Falmouth is a real town &mdash; Georgian architecture, markets, rum tastings &mdash; for guests who want off-property</li>
+          <li>Swim-up ocean-view junior suite is a strong, affordable upgrade for the couple</li>
+        </ul>
+      </div>
+      <div class="panel">
+        <h3>Watch-outs</h3>
+        <ul>
+          <li><strong>One venue, 100 guests.</strong> A larger group has no published alternative here &mdash; qualify the headcount before anything else</li>
+          <li>No indoor or covered venue is published, so the rain plan is an open question worth asking about early</li>
+          <li>Both swim-up categories are 18+ &mdash; do not put a family with children in one</li>
+          <li>Ocean Front and Suite categories sleep 2 only; families need the Junior Suite or Family Room tiers</li>
+          <li>2 weddings a day, so date and time slot want locking early</li>
+          <li>It is a large resort &mdash; guests wanting intimate and quiet may be happier elsewhere</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel internal" style="margin-top:26px">
+      <span class="tag">Internal &mdash; not for client materials</span>
+      <div class="plan" style="gap:26px">
+        <ul>
+          <li>DWT lists this as a <strong>Sapphire</strong> partner &mdash; lower tier than the Platinum properties, so check what group concessions actually apply</li>
+          <li>Location naming is inconsistent across sources: the resort is in <strong>Falmouth, Trelawny</strong>, but DWT files it under Montego Bay and Destify has a page calling it Cancun. Use Falmouth with clients and set expectations on transfer time from MBJ</li>
+          <li>Star rating conflict: DWT says 4.5, Riu&rsquo;s own materials and several resellers say 5. Neither is authoritative &mdash; avoid leading with a number</li>
+          <li>Room count conflict: DWT highlights say 753, the body copy says &ldquo;over 700&rdquo;. Using 753</li>
+        </ul>
+        <ul>
+          <li>DWT publishes <strong>no property-specific venue photograph</strong> for this resort &mdash; the venues page falls back to generic Riu brand images. The beach shot on this page is the resort aerial, which does show White Bay. Do not lift the DWT venue image into a client quote thinking it is this property</li>
+          <li>Riu&rsquo;s photo set includes a &ldquo;2 bedroom swim-up family room&rdquo; that does not appear in DWT&rsquo;s room list &mdash; possibly an unpublished category. Worth asking about for a family that wants swim-up but has children</li>
+          <li>No square footage published for the Suite, 2 Bedroom and Family Room categories &mdash; only the 377 sq ft junior suites are documented</li>
+          <li>Wedding Collection pricing is not published by DWT. Confirm current pricing and the free-wedding qualifying terms before quoting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="eyebrow">Gallery</div>
+      <h2>Around the resort</h2>
+    </div>
+    <div class="gal">
+      <figure class="tall"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/29-splash-water-world.jpg?width=1920&height=1080" alt="Splash Water World"><figcaption>Splash Water World</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/4-swim-up-bar.jpg?width=1920&height=1080" alt="Swim-up bar"><figcaption>Swim-up bar</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/3-children-s-pool-with-slides.jpg?width=1920&height=1080" alt="Children's pool with slides"><figcaption>Children&rsquo;s pool</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/8-lobby-reception.jpg?width=1920&height=1080" alt="Lobby reception"><figcaption>Lobby</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/14-main-restaurant.jpg?width=1920&height=1080" alt="Main restaurant"><figcaption>White Bay restaurant</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/18-steak-house.jpg?width=1920&height=1080" alt="Steakhouse"><figcaption>Steakhouse</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/17-asian-restaurant.jpg?width=1920&height=1080" alt="Kyoto Asian restaurant"><figcaption>Kyoto</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/16-italian-restaurant.jpg?width=1920&height=1080" alt="Napoli Italian restaurant"><figcaption>Napoli</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/11-capuchino.jpg?width=1920&height=1080" alt="Capuchino patisserie"><figcaption>Capuchino</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/9-lobby-bar-daiquiri.jpg?width=1920&height=1080" alt="Daiquiri lobby bar"><figcaption>Daiquiri bar</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/22-spa.jpg?width=1920&height=1080" alt="Spa"><figcaption>Spa</figcaption></figure>
+      <figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/75260-riu-palace-aquarelle/aioapi/21-riuland.jpg?width=1920&height=1080" alt="RiuLand kids club"><figcaption>RiuLand kids&rsquo; club</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="eyebrow">Prepared for</div>
+    <div class="name">Amy M. Cate</div>
+    <div class="rule"></div>
+    <p>Certified Destination Wedding &amp; Group Travel Specialist<br>
+    (832) 773-8664 &middot; amy.cate@destinationweddings.com</p>
+  </div>
+</footer>
+
+</body>
+</html>
