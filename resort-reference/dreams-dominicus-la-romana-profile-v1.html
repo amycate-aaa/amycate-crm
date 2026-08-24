@@ -1,0 +1,258 @@
+<title>Dreams Dominicus La Romana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana-resort-spa/aioapi/dreams-dominicus-la-romana-hero.jpeg?cropY=376&cropW=5120&cropH=2880" alt="Dreams Dominicus La Romana">
+  <div class="wrap">
+    <p class="eyebrow light">Bayahibe, La Romana</p>
+    <h1>Dreams Dominicus La Romana</h1>
+    <p class="tag">Italian-inspired luxury on Bayahibe Beach — a family reunion and a wedding under one roof.</p>
+    <ul class="chips"><li>488 rooms &amp; suites</li><li>4 pools</li><li>18 dining venues</li><li>Max 2 weddings a day</li><li>20 min from LRM</li><li>AAA Four Diamond</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A Mediterranean village on a Caribbean beach</h2><p class="lede">Ochre facades, arched walkways and lantern-lit plazas — it reads more like a seaside town than a megaresort.</p></div>
+  <div class="prose">
+    <p>Dreams Dominicus sits directly on Bayahibe Beach, a sheltered crescent of powder sand on the south-eastern coast, twenty minutes from La Romana International Airport.</p>
+    <p>The Italian-inspired architecture — ochre walls, arched walkways, a maze of garden paths and hidden nooks — gives it the feel of a Mediterranean village rather than a conventional Caribbean resort. Its 488 rooms run an unusually deep ladder, from a 538 sq ft Deluxe to a 2,744 sq ft Presidential, with swim-up categories, a honeymoon suite with a private hot tub and hammock, and connecting family suites that sleep up to eleven.</p>
+    <p>Nearly twenty restaurants and bars run reservation-free, alongside four pools, an 18,000 sq ft spa, and supervised programmes for both children and teens.</p>
+    <p><strong>It takes a maximum of two weddings a day</strong> — a real point of difference against the high-volume Punta Cana properties, and worth saying out loud to a couple who worry about sharing the beach.</p>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Twelve categories, 538 to 2,744 sq ft</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">An unusually deep ladder. Preferred Club here is family-inclusive, with its own dedicated Family Section — not an adults-only tier.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/h9xksuwced/webp/DREDL-DLX-DoubleBeds-GardenView-2B-CB.webp?u=itfpsm&download=true&q=80" alt="Deluxe"></div>
+        <div class="cbody"><h3>Deluxe</h3><p class="meta">538 sq ft · Sleeps 4 · Resort view</p><p>A generous entry room with a full bathroom and a private furnished balcony or terrace. The best value for a couple or small family.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/qkuc2mcivo/webp/DREDL-DLX-TV-TER-AP.webp?u=itfpsm&download=true&q=80" alt="Deluxe Suite Tropical View"></div>
+        <div class="cbody"><h3>Deluxe Suite Tropical View</h3><p class="meta">850 sq ft · Sleeps 4 · Garden</p><p>A true suite with a separate bedroom, a living area with sofa bed, and an expansive marble bathroom.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/n5bw81qmio/webp/DREDL-PC-DLX-PVTV-DBL-1-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Deluxe"></div>
+        <div class="cbody"><h3>Preferred Club Deluxe</h3><p class="meta">581 sq ft · Sleeps 4 · Garden or pool</p><p>Front-row garden or pool views from the balcony, plus the full club amenity set. The most affordable way in.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/7v3m74qfow/webp/DREDL-PC-DLX-SU-KING-2A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Deluxe Swim-Up"></div>
+        <div class="cbody"><h3>Preferred Club Deluxe Swim-Up</h3><p class="meta">850 sq ft · Sleeps 4</p><p>Step from a furnished terrace straight into your own plunge pool, with tropical garden views beyond. A guest favourite.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/zkst44corm/webp/DREDL-PC-Suite-SU-2A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Suite Swim-Up"></div>
+        <div class="cbody"><h3>Preferred Club Suite Swim-Up</h3><p class="meta">861 sq ft · Sleeps 4</p><p>A separate living area, sofa bed and direct plunge-pool access. This is the category that unlocks the complimentary wedding package on a seven-night stay.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/dt9fqejfhn/webp/DREDL-PC-HON-1A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Honeymoon Suite"></div>
+        <div class="cbody"><h3>Preferred Club Honeymoon Suite</h3><p class="meta">807 sq ft · Sleeps 2 · Partial ocean</p><p>Designed for two, with a private furnished terrace featuring a hot tub and a hammock. The obvious pick for the couple.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/36pb3vagaf/webp/DREDL-PC-MSTR-BED-1A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Master Suite"></div>
+        <div class="cbody"><h3>Preferred Club Master Suite</h3><p class="meta">1,076 sq ft · Sleeps 2 · Garden</p><p>Over a thousand square feet with a double shower and a private garden-view terrace. Genuinely residential.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/intxvix6qp/webp/DREDL-PRES-Bed-1B-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club One Bedroom Presidential"></div>
+        <div class="cbody"><h3>Preferred Club One Bedroom Presidential</h3><p class="meta">1,593 sq ft · Sleeps 3 · Partial ocean</p><p>A spacious living and dining area and a private balcony with its own plunge pool.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/yz1dveygfa/webp/DREDL-PC-2BED-FAM-Living-2A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Two Bedroom Family Suite"></div>
+        <div class="cbody"><h3>Preferred Club Two Bedroom Family Suite</h3><p class="meta">1,431 sq ft · Sleeps 7</p><p>A king master, a second bedroom with two doubles, two full bathrooms and a living area with pull-out couch.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/xj3q3swjmw/webp/DREDL-PC-3BED-FAM-TV-King-2A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Three Bedroom Family Suite"></div>
+        <div class="cbody"><h3>Preferred Club Three Bedroom Family Suite</h3><p class="meta">2,012 sq ft · Sleeps 11</p><p>Three bedrooms and three full bathrooms — the natural choice for the couple's immediate family.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/6l8wkhdcnh/webp/DREDL-PC-1BED-PRES-TER-Family-3A-CB.webp?u=itfpsm&download=true&q=80" alt="Preferred Club Presidential Suite"></div>
+        <div class="cbody"><h3>Preferred Club Presidential Suite</h3><p class="meta">2,744 sq ft · Sleeps 4–5 · Partial ocean</p><p>The flagship: two full bathrooms, a second bedroom, a large living area and a balcony with a hot tub.</p></div>
+      </article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2><p class="lede">A private lounge, a dedicated pool and beach, two exclusive dining venues — and a Family Section, so children are welcome.</p></div>
+  <div class="prose"><p>Worth knowing: unlike adults-only club tiers at other brands, Preferred Club here has a dedicated Family Section. Parents, couple and children can all have club access together.</p>
+    <ul class="perks">
+      <li>Personalised check-in and check-out</li>
+      <li>Daily continental breakfast</li>
+      <li>Afternoon hot and cold hors d'oeuvres</li>
+      <li>Exquisite desserts and premium liquors</li>
+      <li>Preferred Club lounge and bar, 7am–11pm</li>
+      <li>Private Preferred Club beach area</li>
+      <li>Private Preferred Club pool</li>
+      <li>Flying Fish buffet and the Pizzeria, club-only</li>
+      <li>Marlin pool bar and the club beach bar</li>
+      <li>Suites in premium locations</li>
+      <li>Upgraded minibar and bath amenities</li>
+      <li>Personal concierge service</li>
+    </ul>
+    
+  </div></div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Ten restaurants, eight bars</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">No reservations required anywhere. Two venues are exclusive to Preferred Club guests, and Bordeaux is adults only.</p>
+  <div class="dining">
+      <div class="dish"><h4>Bordeaux</h4><p class="cuisine">French · adults only</p><p>Romantic, Moulin Rouge–inspired à la carte French dining.</p></div>
+      <div class="dish"><h4>Portofino</h4><p class="cuisine">Italian</p><p>Authentically Italian à la carte against warm Tuscan décor.</p></div>
+      <div class="dish"><h4>Himitsu</h4><p class="cuisine">Pan-Asian</p><p>Asian fusion à la carte alongside interactive teppanyaki tables.</p></div>
+      <div class="dish"><h4>Seaside Grill</h4><p class="cuisine">Grill</p><p>À la carte grilled fare served poolside with ocean breezes.</p></div>
+      <div class="dish"><h4>World Café</h4><p class="cuisine">International buffet</p><p>A farmers-market-style buffet with open displays.</p></div>
+      <div class="dish"><h4>Flying Fish</h4><p class="cuisine">Preferred Club buffet</p><p>A club-only buffet in an ocean and seaside setting.</p></div>
+      <div class="dish"><h4>La Trattoria</h4><p class="cuisine">Italian pizza</p><p>Authentic pizza and à la carte plates in a Tuscan room.</p></div>
+      <div class="dish"><h4>Pizzeria</h4><p class="cuisine">Preferred Club pizza</p><p>A club-only pizzeria for easy poolside lunches.</p></div>
+      <div class="dish"><h4>Barefoot Grill</h4><p class="cuisine">Casual lunch</p><p>Relaxed outdoor lunch steps from the sand.</p></div>
+      <div class="dish"><h4>Coco Café</h4><p class="cuisine">Café</p><p>Morning coffee through late-night bites, open 24 hours.</p></div>
+      <div class="dish"><h4>Rendezvous</h4><p class="cuisine">Lobby bar</p><p>Chic lobby setting with custom cocktails, 7am–1am.</p></div>
+      <div class="dish"><h4>Desires</h4><p class="cuisine">Music lounge</p><p>DJ, dance floor and an outdoor fire pit. The natural after-party.</p></div>
+      <div class="dish"><h4>Manatees</h4><p class="cuisine">Swim-up bar</p><p>Cocktails crafted to stretch out a pool day.</p></div>
+      <div class="dish"><h4>Sugar Reef</h4><p class="cuisine">Beach bar</p><p>Tropical cocktails in a relaxed beach setting.</p></div>
+      <div class="dish"><h4>Barracuda</h4><p class="cuisine">Pool &amp; beach bar</p><p>Signature cocktails between pool and sand.</p></div>
+      <div class="dish"><h4>Marlin</h4><p class="cuisine">Preferred Club pool bar</p><p>Club-only, 8am–11pm.</p></div>
+      <div class="dish"><h4>Preferred Club Beach Bar</h4><p class="cuisine">Club beach bar</p><p>Exclusive beachfront bar for club guests.</p></div>
+      <div class="dish"><h4>Showtime</h4><p class="cuisine">Theatre bar</p><p>A cocktail during the nightly entertainment.</p></div>
+  </div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Five venues, two weddings a day</h2>
+  <p class="subhead">Ceremony &amp; reception venues</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana-resort-spa/aioapi/dreams-dominicus-la-romana-main-plaza-venue.png?width=800&height=600" alt="Main Plaza"></div>
+        <div class="cbody"><h3>Main Plaza</h3><p class="meta">Ceremony 300 · Cocktail 250 · Reception 200</p><p>An open-air garden venue surrounded by flowers, and the largest space on the property.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana-resort-spa/aioapi/dreams-dominicus-la-romana-beach-gazebo-wedding-venue.png?width=800&height=600" alt="The Beach"></div>
+        <div class="cbody"><h3>The Beach</h3><p class="meta">Reception 250 · Cocktail 250</p><p>Open beachfront on Bayahibe sand for a picturesque celebration.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-wedding-gazebo-2a.jpg?width=1920&height=1080" alt="Beach Gazebo"></div>
+        <div class="cbody"><h3>Beach Gazebo</h3><p class="meta">Ceremony 120</p><p>Powder-white sand and oceanfront views, the gazebo dressed with tropical flowers.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana-resort-spa/aioapi/dreams-dominicus-la-romana-pier-wedding-venue.png?width=800&height=600" alt="The Pier"></div>
+        <div class="cbody"><h3>The Pier</h3><p class="meta">Ceremony 120 · Reception 50</p><p>A pier reaching out over the water — the signature setting here, and the photograph people remember.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana-resort-spa/aioapi/dreams-dominicus-la-romana-poolside-wedding-venue.png?width=800&height=600" alt="Poolside"></div>
+        <div class="cbody"><h3>Poolside</h3><p class="meta">Reception 100</p><p>Framed by tropical gardens and palms, with the pool adding a note of serenity.</p></div>
+      </article>
+  </div>
+  <p class="subhead">Wedding packages</p>
+  <div class="tablewrap"><table>
+    <caption>Prices from Hyatt Inclusive Collection — the resort's own published figures.</caption>
+    <thead><tr><th scope="col">Package</th><th scope="col">From</th><th scope="col">Guests included</th></tr></thead>
+    <tbody>
+        <tr><th scope="row">Wedding in Paradise</th><td class="num">$1,349 or complimentary</td><td>Couple + up to 10 guests</td></tr>
+        <tr><th scope="row">Elope in Luxury</th><td class="num">$1,499</td><td>The two of you</td></tr>
+        <tr><th scope="row">Eternal Love</th><td class="num">$4,599</td><td>Couple + up to 20 guests</td></tr>
+        <tr><th scope="row">Beyond Memorable</th><td class="num">$10,949</td><td>Up to 79 guests</td></tr>
+        <tr><th scope="row">Dulha &amp; Dulhan</th><td class="num">$10,099</td><td>Up to 79 guests — South Asian</td></tr>
+    </tbody>
+  </table></div>
+  <p class="subhead">Planning notes</p>
+  <ul class="perks">
+          <li>Ceremony types: civil/legal, symbolic, multicultural and same-sex</li>
+          <li>Wedding in Paradise is complimentary with 7 nights in a Preferred Club Suite Swim-Up or higher, <em>or</em> 5 rooms in any category for 3 nights — an easy threshold for most groups</li>
+          <li>Maximum two weddings a day, so the property never feels like a conveyor belt</li>
+          <li>Beyond Memorable needs 79 guests and 75 cumulative paid room nights, booked a year ahead</li>
+          <li>All weddings must be booked at least 30 days in advance</li>
+          <li>La Romana airport (LRM) is 20 minutes; Punta Cana (PUJ) is 1.5–2 hours</li>
+  </ul>
+  <div class="note"><p><strong>The Pier is the trap.</strong> It seats 120 for a ceremony but only 50 for a reception. A couple who falls for the pier photograph with 80 guests can marry there but must move the dinner. Raise it early.</p><p><strong>Check the airport routing before selling this one.</strong> It is twenty minutes from LRM but up to two hours from PUJ, and LRM has far thinner US service — that difference can reshape a guest's travel day.</p></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-aerial-2a.jpg?width=1920&height=1080" alt="The resort from the air"><figcaption>The resort from the air</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-mainpool-2a.jpg?width=1920&height=1080" alt="The main pool"><figcaption>The main pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-relaxpool-1a.jpg?width=1920&height=1080" alt="Relax pool"><figcaption>Relax pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-familypool3-2b.jpg?width=1920&height=1080" alt="Family pool"><figcaption>Family pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-family-beach-1a.jpg?width=1920&height=1080" alt="Bayahibe beach"><figcaption>Bayahibe beach</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-preferredclub-lounge-1a.jpg?width=1920&height=1080" alt="Preferred Club lounge"><figcaption>Preferred Club lounge</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-bordeaux-1a.jpg?width=1920&height=1080" alt="Bordeaux"><figcaption>Bordeaux</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-himitsu-2a.jpg?width=1920&height=1080" alt="Himitsu"><figcaption>Himitsu</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-worldcafe-1a.jpg?width=1920&height=1080" alt="World Café"><figcaption>World Café</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-rendezvous-1a.jpg?width=1920&height=1080" alt="Rendezvous lobby bar"><figcaption>Rendezvous lobby bar</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-spa-cabin-1a.jpg?width=1920&height=1080" alt="Dreams Spa"><figcaption>Dreams Spa</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72635-dreams-dominicus-la-romana/aioapi/dredl-wedding-beach-3a.jpg?width=1920&height=1080" alt="A beach wedding here"><figcaption>A beach wedding here</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Resort reference · Dreams Dominicus La Romana, Bayahibe, La Romana.<br>
+  Compiled for Amy Cate · Destination Weddings Travel Group. Photography © the resort.<br>
+  Third-party sites quote higher package prices than the resort does; these are the resort's own figures. Per-additional-guest costs are not published — confirm with the coordinator.</p>
+</div></footer>
