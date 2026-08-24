@@ -1,0 +1,256 @@
+<title>Dreams Onyx Resort &amp; Spa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-brerc-aerial1-1a.jpg?width=1920&height=1080" alt="Dreams Onyx Resort &amp; Spa">
+  <div class="wrap">
+    <p class="eyebrow light">Uvero Alto, Punta Cana</p>
+    <h1>Dreams Onyx Resort &amp; Spa</h1>
+    <p class="tag">A secluded Uvero Alto beach, a jungle waterpark, and a hot tub on every terrace.</p>
+    <ul class="chips"><li>806 suites</li><li>Hot tub in every suite</li><li>6 pools</li><li>Jungle Waterpark</li><li>Up to 4 weddings a day</li><li>~45 min from PUJ</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Big, secluded, and built for a mixed-age group</h2><p class="lede">AAA Four Diamond, Unlimited-Luxury®, and far enough up the coast to feel genuinely private.</p></div>
+  <div class="prose">
+    <p>Dreams Onyx sits on a remote, palm-studded stretch of Uvero Alto beach on the north-east coast, about forty-five minutes from Punta Cana International — far enough from the Bávaro strip to feel private, close enough for an easy transfer.</p>
+    <p>It has 806 suites, and every single one has a private furnished balcony or terrace with its own hot tub, which is unusual at this price. The resort splits into three moods: a 304-suite family wing around the Jungle Waterpark with four slides and a lazy river; a Preferred Club with its own lounge, restaurant, bars and two pools; and an adults-only Preferred Club section with plunge-pool suites and an oceanfront master.</p>
+    <p>Six pools, a spa with a hydrotherapy circuit, a casino, a theatre and two dozen restaurants and bars keep a mixed group busy. Adults 18+ also get full exchange privileges next door at Breathless Punta Cana, which effectively doubles the dining and nightlife.</p>
+    <p>This was <strong>Now Onyx Punta Cana</strong> before the rebrand — older reviews may still use that name.</p>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Thirteen suite categories</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every suite is 603 sq ft unless noted, all with a furnished terrace or balcony and an outdoor hot tub, daily-refreshed minibar and 24-hour room service.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-deluxe-jrsuite-double-2.jpg?width=1920&height=1080" alt="Junior Suite"></div>
+        <div class="cbody"><h3>Junior Suite</h3><p class="meta">603 sq ft · Sleeps 4 · Garden</p><p>The entry suite, and still 603 square feet of it, with a king or two doubles and a private terrace with a hot tub.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Junior Suite Swim-Up</h3><p class="meta">603 sq ft · Sleeps 4 · Pool</p><p>A furnished terrace with a hot tub that steps straight into the swim-up pool. Ideal for couples who want the water at the door.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-prem-jr-tv-king-tc.jpg?width=1920&height=1080" alt="Premium Junior Suite Tropical View"></div>
+        <div class="cbody"><h3>Premium Junior Suite Tropical View</h3><p class="meta">645 sq ft · Sleeps 4 · Waterpark wing</p><p>A living area, sofa and a terrace with a hot tub over the greenery, well placed for families who want the slides in easy reach.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-prem-jr-tv-ter-tc.jpg?width=1920&height=1080" alt="Premium Junior Suite Pool View"></div>
+        <div class="cbody"><h3>Premium Junior Suite Pool View</h3><p class="meta">645 sq ft · Sleeps 5 · Pool</p><p>The waterpark-wing suite looking over the pool, and the most flexible standard category at up to five guests.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Two Bedroom Family Suite</h3><p class="meta">1,935 sq ft · Sleeps 10</p><p>Three connected units giving a king bedroom, a second with two queens, a living room and two full bathrooms. Each has its own hot-tub terrace.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Junior Suite Pool View</h3><p class="meta">603 sq ft · Sleeps 4 · Club</p><p>The most affordable way into the lounge, the club pools and the private bars.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Junior Suite Partial Ocean View</h3><p class="meta">603 sq ft · Sleeps 4 · Club</p><p>A living area and full terrace angled toward the Caribbean. This is the category that unlocks the complimentary wedding package on a seven-night stay.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Junior Suite Private Pool</h3><p class="meta">603 sq ft · Sleeps 2 · Adults only</p><p>A private terrace with a hot tub and its own plunge pool, in the adults-only section. Quietly the best-value romantic room here.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Master Suite Ocean Front</h3><p class="meta">1,140 sq ft · Sleeps 2 · Adults only</p><p>Separate master bedroom, two bathrooms, oversized bath and a large ocean-front terrace. Connects to a Junior Suite, which makes it a natural bridal suite.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Presidential Suite</h3><p class="meta">1,722 sq ft · Oceanfront</p><p>The largest suite, with a full kitchen and dining room and a sweeping oceanfront terrace. Not in the adults-only section, so a family can take the whole block.</p></div>
+      </article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2><p class="lede">Two club pools — one for families, one adults-only — plus a lounge, a club-only breakfast restaurant and three private bars.</p></div>
+  <div class="prose"><p>Unusually complete for a Dreams property: the club here has its own restaurant for breakfast and three of its own bars, including a swim-up.</p>
+    <ul class="perks">
+      <li>Personalised check-in and check-out with concierge</li>
+      <li>Daily continental breakfast in the lounge</li>
+      <li>Afternoon hot and cold hors d'oeuvres</li>
+      <li>Exquisite desserts and premium liquors</li>
+      <li>Two Preferred Club pools — one family, one adults-only</li>
+      <li>Pool concierge and bar service</li>
+      <li>Preferred Club restaurant for breakfast</li>
+      <li>Club-only bars including a swim-up bar</li>
+      <li>Suites in prime locations</li>
+      <li>Upgraded minibar, bath amenities and room-service menu</li>
+    </ul>
+    <div class="note"><p><strong>Worth checking at booking:</strong> the adults-only boundary is not absolute. Not every Preferred Club Ocean View and Master Suite Ocean Front sits inside the adults-only section, so if a couple is buying that atmosphere it needs to be requested and confirmed rather than assumed.</p></div>
+  </div></div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Thirteen restaurants, eleven bars</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">No reservations required anywhere. Not every venue opens every night. Adults 18+ also have exchange privileges at Breathless Punta Cana next door.</p>
+  <div class="dining">
+      <div class="dish"><h4>Carnival International Café</h4><p class="cuisine">Buffet</p><p>The main buffet across breakfast, lunch and dinner. Casual elegance at dinner.</p></div>
+      <div class="dish"><h4>Bluewater Grill</h4><p class="cuisine">Steakhouse</p><p>North American steakhouse, dinner nightly.</p></div>
+      <div class="dish"><h4>Mercure</h4><p class="cuisine">French</p><p>French brasserie dining in an elegant room — the romantic pick.</p></div>
+      <div class="dish"><h4>Spice</h4><p class="cuisine">Asian &amp; teppanyaki</p><p>Teppanyaki tables and Chinese wok specialities.</p></div>
+      <div class="dish"><h4>Cin Cin</h4><p class="cuisine">Mediterranean</p><p>À la carte Mediterranean cooking.</p></div>
+      <div class="dish"><h4>Capers</h4><p class="cuisine">Italian</p><p>À la carte Italian specialities.</p></div>
+      <div class="dish"><h4>Tamarindo</h4><p class="cuisine">Mexican</p><p>Modern Mexican à la carte. Lunch is Preferred Club only.</p></div>
+      <div class="dish"><h4>Faire</h4><p class="cuisine">American</p><p>Burgers, salads and nachos in a casual room.</p></div>
+      <div class="dish"><h4>Barefoot Grill</h4><p class="cuisine">Beach grill</p><p>Burgers and hot dogs beachside through the day.</p></div>
+      <div class="dish"><h4>On A Roll</h4><p class="cuisine">Burger bar</p><p>Burgers for late appetites, open to midnight.</p></div>
+      <div class="dish"><h4>Coco Café</h4><p class="cuisine">Café</p><p>Premium coffee and light bites, open 24 hours.</p></div>
+      <div class="dish"><h4>Sundaez</h4><p class="cuisine">Ice cream</p><p>Ice cream parlour, midday to midnight.</p></div>
+      <div class="dish"><h4>Moments</h4><p class="cuisine">Lobby bar</p><p>The main lobby bar, 10am–11pm.</p></div>
+      <div class="dish"><h4>The Reef &amp; Splash</h4><p class="cuisine">Pool bars</p><p>Poolside and swim-up service at the main pool.</p></div>
+      <div class="dish"><h4>The Mix</h4><p class="cuisine">Waterpark bar</p><p>Bar and swim-up bar inside the Jungle Waterpark.</p></div>
+      <div class="dish"><h4>SandBar</h4><p class="cuisine">Beach bar</p><p>Drinks with your feet in the sand.</p></div>
+      <div class="dish"><h4>Scores</h4><p class="cuisine">Sports bar</p><p>Games and drinks to midnight. Under-18s not admitted after 9pm.</p></div>
+      <div class="dish"><h4>Preferred Club Bars</h4><p class="cuisine">Club bars</p><p>A club bar, pool bar and swim-up bar, Preferred Club guests only.</p></div>
+  </div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Seven venues, up to four weddings a day</h2>
+  <p class="subhead">Ceremony &amp; reception venues</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-spa/aioapi/dreams-onyx-preferredbeach-wedding-venue.png?width=800&height=600" alt="Preferred Beach"></div>
+        <div class="cbody"><h3>Preferred Beach</h3><p class="meta">Ceremony 250 · Cocktail 250 · Reception 250</p><p>Crystal-white sand, string lights and swaying palms. The largest venue and the only one that takes a full 250-guest reception. Music to 11pm.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-spa/aioapi/dreams-onyx-fountain-gazebo-wedding-venue.png?width=800&height=600" alt="Fountain Gazebo"></div>
+        <div class="cbody"><h3>Fountain Gazebo</h3><p class="meta">Ceremony 120</p><p>Set in the middle of the resort by the fountain and gardens, fully customisable. Music to 10pm.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/dreams-onyx-garden-area-wedding-venue.jpg?width=800&height=600" alt="Gardens"></div>
+        <div class="cbody"><h3>Gardens</h3><p class="meta">Ceremony 100</p><p>A mid-size, semi-private open-air space for a refined classic ceremony. Music to 10pm.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-spa/aioapi/dreams-onyx-pool-area-wedding-venue.png?width=800&height=600" alt="Pool Area"></div>
+        <div class="cbody"><h3>Pool Area</h3><p class="meta">Cocktail 200 · Reception 200</p><p>Hard-surfaced and ringed by the main pools — festive and warm for a big reception. Music to 10pm.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-spa/aioapi/dreams-onyx-ballroom-wedding-venue.png?width=800&height=600" alt="Ballroom"></div>
+        <div class="cbody"><h3>Ballroom</h3><p class="meta">Ceremony 70 · Cocktail 70 · Reception 70</p><p>An ornate indoor room with complete privacy, and the weather backup. Music to midnight.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-spa/aioapi/dreams-onyx-stone-beach-wedding-venue.png?width=800&height=600" alt="Stone Beach"></div>
+        <div class="cbody"><h3>Stone Beach</h3><p class="meta">Ceremony 60</p><p>A sandy setting under a minimalist arch with natural ornaments. Venue fee applies. Music to 10pm.</p></div>
+      </article>
+  </div>
+  <p class="subhead">Wedding packages</p>
+  <div class="tablewrap"><table>
+    <caption>Prices from Hyatt Inclusive Collection. Third-party sites quote $250–$550 higher — confirm before quoting.</caption>
+    <thead><tr><th scope="col">Package</th><th scope="col">From</th><th scope="col">Guests included</th></tr></thead>
+    <tbody>
+        <tr><th scope="row">Wedding in Paradise</th><td class="num">$1,349 or complimentary</td><td>Couple + up to 10 guests</td></tr>
+        <tr><th scope="row">Elope in Luxury</th><td class="num">$1,499</td><td>The two of you</td></tr>
+        <tr><th scope="row">Eternal Love</th><td class="num">$4,599</td><td>Couple + up to 20 guests</td></tr>
+        <tr><th scope="row">Beyond Memorable</th><td class="num">$10,949</td><td>50–79 guests</td></tr>
+        <tr><th scope="row">Dulha &amp; Dulhan</th><td class="num">$8,649</td><td>Up to 79 guests — South Asian</td></tr>
+    </tbody>
+  </table></div>
+  <p class="subhead">Planning notes</p>
+  <ul class="perks">
+          <li>Ceremony types: Catholic, civil/legal, Hindu, Sikh, symbolic, renewal, same-sex civil and symbolic</li>
+          <li>Wedding in Paradise is complimentary with 7 nights in a Preferred Club Junior Suite Partial Ocean View or higher, <em>or</em> 5 rooms in any category for 3 nights</li>
+          <li>Beyond Memorable needs 75 cumulative paid room nights and booking a year ahead</li>
+          <li>Music to 11pm on Preferred Beach and midnight in the Ballroom; 10pm everywhere else</li>
+          <li>Stone Beach and the Preferred Adults Pool carry a venue fee</li>
+          <li>All weddings must be booked at least 30 days out; officiant fees are extra</li>
+  </ul>
+  <div class="note"><p><strong>The indoor rain plan is small.</strong> The Ballroom holds only 70, so a large wedding has no full-size indoor fallback. Worth raising for hurricane-season dates.</p></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-mainpool-2a.jpg?width=1920&height=1080" alt="The main pool"><figcaption>The main pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/dropc-ext-jungle-water-park2-tc.jpg?width=1920&height=1080" alt="Jungle Waterpark"><figcaption>Jungle Waterpark</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/dropc-ext-pc-adults-pool1-2a-cb.jpg?width=1920&height=1080" alt="Preferred Club adults-only pool"><figcaption>Preferred Club adults-only pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-pc-poolbar-3.jpg?width=1920&height=1080" alt="Preferred Club pool bar"><figcaption>Preferred Club pool bar</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-carnival-buffet-1a.jpg?width=1920&height=1080" alt="Carnival buffet"><figcaption>Carnival buffet</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-res-bluewatergrill2-tc.jpg?width=1920&height=1080" alt="Bluewater Grill"><figcaption>Bluewater Grill</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-res-capers-tc.jpg?width=1920&height=1080" alt="Capers"><figcaption>Capers</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-res-cin-cin-1a.jpg?width=1920&height=1080" alt="Cin Cin"><figcaption>Cin Cin</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/dropc-bar-thereef-2a-cb.jpg?width=1920&height=1080" alt="The Reef"><figcaption>The Reef</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-sundaez-1a.jpg?width=1920&height=1080" alt="Sundaez"><figcaption>Sundaez</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/noopc-spa-mom-daughters-2.jpg?width=1920&height=1080" alt="Relax Spa"><figcaption>Relax Spa</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72644-dreams-onyx-resort-and-spa/aioapi/dropc-ec-explorers-club-tc.jpg?width=1920&height=1080" alt="Explorer's Club"><figcaption>Explorer's Club</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Resort reference · Dreams Onyx Resort &amp; Spa, Uvero Alto, Punta Cana.<br>
+  Compiled for Amy Cate · Destination Weddings Travel Group. Photography © the resort.<br>
+  Package pricing from Hyatt Inclusive Collection; third-party sites disagree by $250–$550. Confirm against the current brochure before quoting.</p>
+</div></footer>
