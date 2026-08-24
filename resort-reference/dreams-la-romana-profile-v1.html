@@ -1,0 +1,270 @@
+<title>Dreams La Romana Resort &amp; Spa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="hero">
+  <img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/0956/DRELR-P0031-Aerial-Beach.jpg/DRELR-P0031-Aerial-Beach.16x9.jpg?imwidth=2560" alt="Dreams La Romana Resort &amp; Spa">
+  <div class="wrap">
+    <p class="eyebrow light">Playa Bayahibe, La Romana</p>
+    <h1>Dreams La Romana Resort &amp; Spa</h1>
+    <p class="tag">Back on the Dreams brand, with 2019-new hardware and a waterpark.</p>
+    <ul class="chips"><li>418 rooms</li><li>Water park</li><li>15 dining venues</li><li>10 wedding venues</li><li>25 min from LRM</li><li>~45 min from PUJ</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Renovated under Hilton, returned to Dreams</h2><p class="lede">The rare DR resort where the buildings are recent and the wedding venues are newer still.</p></div>
+  <div class="prose">
+    <p>Dreams La Romana sits on a secluded white-sand stretch of Playa Bayahibe on the southern coast, framed by tropical forest with a coral reef just offshore. It is Unlimited-Luxury®, built for families and couples together — a sprawling water park with tube slides and a lazy river, Kids and Teens Clubs, a casino, a full spa with hydrotherapy, and live nightly entertainment.</p>
+    <p><strong>Its history matters.</strong> The resort left the Dreams brand in November 2018 to become Hilton La Romana, was fully renovated across 2019, and split into two separate hotels. It returned to Dreams in June 2025 when Hyatt completed its acquisition of Playa. The adults-only half is now Secrets La Romana next door.</p>
+    <p>So the hardware dates from 2019 rather than the 1990s, and the wedding spaces are newer again — the Las Palmas ballroom and Foyer assets are dated early 2026. Any source quoting 756 rooms is describing the pre-split property and is wrong.</p>
+    <p>For weddings it is unusually versatile: ten venues running from a 35-guest seaside garden to an 11,000 sq ft ballroom seating 930, plus a private pier for ceremonies over the water.</p>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Nineteen categories, mostly 411 sq ft</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every room is 411 sq ft except the four 828 sq ft suites. Note that the swim-out categories and three of the four suites are adults-only or 13-plus.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0084-Deluxe-Garden-View-King.jpg/DRELR-P0084-Deluxe-Garden-View-King.16x9.jpg?imwidth=2560" alt="Deluxe Garden View"></div>
+        <div class="cbody"><h3>Deluxe Garden View</h3><p class="meta">411 sq ft · King or two queens · Garden</p><p>The entry room, with a private furnished balcony or terrace and an inviting sitting area looking over the grounds.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/23/0933/DRELR-P0085-Deluxe-Garden-View-Queen.jpg/DRELR-P0085-Deluxe-Garden-View-Queen.16x9.jpg?imwidth=2560" alt="Deluxe Garden View — Two Queens"></div>
+        <div class="cbody"><h3>Deluxe Garden View — Two Queens</h3><p class="meta">411 sq ft · Garden</p><p>Two queen beds, a sitting area and a private furnished balcony with garden views.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0076-Partial-Ocean-View-King-Room.jpg/DRELR-P0076-Partial-Ocean-View-King-Room.16x9.jpg?imwidth=2560" alt="Deluxe Partial Ocean View"></div>
+        <div class="cbody"><h3>Deluxe Partial Ocean View</h3><p class="meta">411 sq ft · King or two queens</p><p>A sitting area with sleeper sofa and a private furnished balcony with partial ocean views.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0079-Premium-Garden-View-King.jpg/DRELR-P0079-Premium-Garden-View-King.16x9.jpg?imwidth=2560" alt="Premium Garden View"></div>
+        <div class="cbody"><h3>Premium Garden View</h3><p class="meta">411 sq ft · King or two queens</p><p>Marble flooring, an inviting sitting area and a spacious bathroom, with garden views from the balcony.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0078-Premium-Partial-Ocean-View-King.jpg/DRELR-P0078-Premium-Partial-Ocean-View-King.16x9.jpg?imwidth=2560" alt="Premium Partial Ocean View"></div>
+        <div class="cbody"><h3>Premium Partial Ocean View</h3><p class="meta">411 sq ft · King</p><p>The premium finish with partial ocean views from the private furnished balcony.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0069-Garden-View-King-Bed.jpg/DRELR-P0069-Garden-View-King-Bed.16x9.jpg?imwidth=2560" alt="Preferred Club Garden View"></div>
+        <div class="cbody"><h3>Preferred Club Garden View</h3><p class="meta">411 sq ft · Sleeps 4 · Club</p><p>A plush king or two queens, marble flooring and an inviting sitting area, with club privileges throughout.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0012-Ocean-Front-King.jpg/DRELR-P0012-Ocean-Front-King.16x9.jpg?imwidth=2560" alt="Preferred Club Oceanfront"></div>
+        <div class="cbody"><h3>Preferred Club Oceanfront</h3><p class="meta">411 sq ft · Sleeps 4 · Club</p><p>Magnificent ocean views from the private furnished balcony, with marble flooring and a sitting area.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0081-Swim-Out-King-Balcony-Area.jpg/DRELR-P0081-Swim-Out-King-Balcony-Area.16x9.jpg?imwidth=2560" alt="Preferred Club Swim-Out"></div>
+        <div class="cbody"><h3>Preferred Club Swim-Out</h3><p class="meta">411 sq ft · Sleeps 2 · No guests under 13</p><p>Swim out to the pool directly from the terrace, with a walk-in rain shower and garden views.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0080-Suite-Garden-View-King-Living.jpg/DRELR-P0080-Suite-Garden-View-King-Living.16x9.jpg?imwidth=2560" alt="Preferred Club Suite Garden View"></div>
+        <div class="cbody"><h3>Preferred Club Suite Garden View</h3><p class="meta">828 sq ft · Adults only</p><p>A king bedroom with a jetted-tub bathroom, a separate living room and a powder room, with garden views.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Preferred Club Family Suite</h3><p class="meta">828 sq ft · Sleeps 4 · Max 2 adults</p><p>The only 828 sq ft suite that takes children — king bedroom, powder room and a separate living room with sleeper sofa.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/23/0933/DRELR-P0086-Suite-Oceanfront-King.jpg/DRELR-P0086-Suite-Oceanfront-King.16x9.jpg?imwidth=2560" alt="Preferred Club Suite Oceanfront"></div>
+        <div class="cbody"><h3>Preferred Club Suite Oceanfront</h3><p class="meta">828 sq ft · Sleeps 2 · No guests under 13</p><p>Ocean views from the private terrace, with a separate living room and a jetted-tub bathroom.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0015-Master-Suite-Ocean-Front.jpg/DRELR-P0015-Master-Suite-Ocean-Front.16x9.jpg?imwidth=2560" alt="Preferred Club Master Suite Oceanfront"></div>
+        <div class="cbody"><h3>Preferred Club Master Suite Oceanfront</h3><p class="meta">828 sq ft · Sleeps 2 · No guests under 13</p><p>A private plunge pool on the terrace, a four-poster king, a large jetted-tub bathroom and a separate living room.</p></div>
+      </article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2><p class="lede">A private lounge, a dedicated pool and a private beach area — and it takes families.</p></div>
+  <div class="prose"><p>Family-inclusive rather than adults-only: Preferred Club rooms sleeping two adults and two children exist, so the whole party can share club access. Only the specific swim-out and suite categories carry age limits.</p>
+    <ul class="perks">
+      <li>Personalised check-in and check-out</li>
+      <li>Daily continental breakfast</li>
+      <li>Afternoon hot and cold hors d'oeuvres</li>
+      <li>Exquisite desserts and premium liquors</li>
+      <li>Preferred Club lounge and bar, 7am–10pm</li>
+      <li>Private Preferred Club beach area</li>
+      <li>Exclusive Preferred Club pool</li>
+      <li>Suites in premium locations</li>
+      <li>Upgraded minibar and bath amenities</li>
+      <li>Pillow menu and nightly turndown</li>
+      <li>Personal concierge service</li>
+      <li>Beach bag</li>
+    </ul>
+    
+  </div></div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Nine restaurants, six bars</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">No reservations required anywhere, and 24-hour room service is included.</p>
+  <div class="dining">
+      <div class="dish"><h4>Maravento</h4><p class="cuisine">Southern Italian</p><p>A slice of Capri, where Southern Italian tradition meets cuisine built around heritage and friendship.</p></div>
+      <div class="dish"><h4>Coastal Grill</h4><p class="cuisine">Grill &amp; seafood</p><p>Smoky charcoal-grilled meats and warm Caribbean sea breezes as you dine.</p></div>
+      <div class="dish"><h4>Ausangate</h4><p class="cuisine">South American</p><p>Bright, lively and beloved for its South American staples.</p></div>
+      <div class="dish"><h4>El Camino</h4><p class="cuisine">American Southwest</p><p>Southwestern cuisine infused with Hispanic soul.</p></div>
+      <div class="dish"><h4>Spices Market</h4><p class="cuisine">International buffet</p><p>Buffet dining for breakfast, lunch and dinner, with theme nights.</p></div>
+      <div class="dish"><h4>Pizzeria</h4><p class="cuisine">Pizza</p><p>A slice between swims, right by the pools.</p></div>
+      <div class="dish"><h4>Tres Hermanas</h4><p class="cuisine">Café</p><p>Premium coffee, pastries and snacks in a relaxed room.</p></div>
+      <div class="dish"><h4>Catch the Wave</h4><p class="cuisine">Food truck</p><p>Snacks, soft drinks and mocktails for a meal on the go.</p></div>
+      <div class="dish"><h4>Scores</h4><p class="cuisine">Sports bar</p><p>Sport on the screens and satisfying quick bites.</p></div>
+      <div class="dish"><h4>One for the Road</h4><p class="cuisine">Lobby bar</p><p>The lobby bar, and the first cocktail of the trip.</p></div>
+      <div class="dish"><h4>On the Rocks</h4><p class="cuisine">Seaside bar</p><p>Sit back and take in the Caribbean with something chilled.</p></div>
+      <div class="dish"><h4>Coral Reef</h4><p class="cuisine">Beach bar</p><p>No shoes is no problem — top-shelf spirits on the sand.</p></div>
+      <div class="dish"><h4>Las Palmas</h4><p class="cuisine">Swim-up bar</p><p>A refreshing cocktail without leaving the pool.</p></div>
+      <div class="dish"><h4>Preferred Club Lounge</h4><p class="cuisine">Club lounge</p><p>A private lounge with covered patio seating, 7am–10pm.</p></div>
+      <div class="dish"><h4>Preferred Club Pool Bar</h4><p class="cuisine">Club pool bar</p><p>Top-shelf drinks and Caribbean views, club guests only.</p></div>
+  </div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Ten venues, from 35 guests to 930</h2>
+  <p class="subhead">Ceremony &amp; reception venues</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2026/02/10/1612/DRELR-P0115-Meeting-Room-Las-Palmas-Grand-Ballroom-Rounds.jpg/DRELR-P0115-Meeting-Room-Las-Palmas-Grand-Ballroom-Rounds.16x9.jpg?imwidth=2560" alt="Las Palmas Grand Salon"></div>
+        <div class="cbody"><h3>Las Palmas Grand Salon</h3><p class="meta">930 guests · 11,000 sq ft</p><p>An elegant, versatile ballroom for grand weddings and gala dinners — and by some distance the largest indoor space on this list. Music to midnight.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1459/DRELR-P0106-Beach-Wedding-Reception.jpg/DRELR-P0106-Beach-Wedding-Reception.16x9.jpg?imwidth=2560" alt="Central Beach"></div>
+        <div class="cbody"><h3>Central Beach</h3><p class="meta">300 guests</p><p>An expansive beachfront area with breathtaking ocean views and plenty of space for a larger wedding.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2026/02/10/1612/DRELR-P0117-Foyer-Lounge.jpg/DRELR-P0117-Foyer-Lounge.16x9.jpg?imwidth=2560" alt="Foyer"></div>
+        <div class="cbody"><h3>Foyer</h3><p class="meta">250 guests · 3,548 sq ft</p><p>Bright and stylish, for welcome cocktails or pre-reception gatherings, flowing into the main ballroom.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1459/DRELR-P0095-Wedding-Gazebo-Couple-Aisle.jpg/DRELR-P0095-Wedding-Gazebo-Couple-Aisle.16x9.jpg?imwidth=2560" alt="Garden Gazebo"></div>
+        <div class="cbody"><h3>Garden Gazebo</h3><p class="meta">200 guests</p><p>A lush tropical garden surrounds this gazebo — romantic and private, for nature-loving couples.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1459/DRELR-P0105-Garden-Wedding.jpg/DRELR-P0105-Garden-Wedding.16x9.jpg?imwidth=2560" alt="Sunset East Garden"></div>
+        <div class="cbody"><h3>Sunset East Garden</h3><p class="meta">200 guests</p><p>Nestled among tropical flora and built for golden hour — dreamy for afternoon ceremonies.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1439/DRELR-P0092-Beach-Wedding-Gazebo-Arch-Set-Up.jpg/DRELR-P0092-Beach-Wedding-Gazebo-Arch-Set-Up.16x9.jpg?imwidth=2560" alt="Private Beach Gazebo"></div>
+        <div class="cbody"><h3>Private Beach Gazebo</h3><p class="meta">Ceremony 100 · Reception 35</p><p>Toes in the sand under an elegant gazebo framed by the sea. Note the small reception number.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1439/DRELR-P0090-Pier-Wedding-Set-Up-Aisle-Arch.jpg/DRELR-P0090-Pier-Wedding-Set-Up-Aisle-Arch.16x9.jpg?imwidth=2560" alt="The Pier"></div>
+        <div class="cbody"><h3>The Pier</h3><p class="meta">Ceremony 50 · Reception 12</p><p>Vows over the water on a private pier with panoramic sea views. Dramatic, and genuinely intimate. Music to 10pm.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1459/DRELR-P0099-Outdoor-Eventspace-Oceanview-Zoomed-Out.jpg/DRELR-P0099-Outdoor-Eventspace-Oceanview-Zoomed-Out.16x9.jpg?imwidth=2560" alt="Seaside Garden"></div>
+        <div class="cbody"><h3>Seaside Garden</h3><p class="meta">35 guests</p><p>Garden elegance meets ocean breeze — the smallest and most private of the outdoor spaces.</p></div>
+      </article>
+      <article class="card"><div class="shot"><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2026/02/10/1613/DRELR-P0121-Garden-Wedding-Details-Table.jpg/DRELR-P0121-Garden-Wedding-Details-Table.16x9.jpg?imwidth=2560" alt="Coco Garden"></div>
+        <div class="cbody"><h3>Coco Garden</h3><p class="meta">1,000 sq ft</p><p>Lush tropical palms and vibrant foliage — an open-air venue for receptions and celebrations under the stars.</p></div>
+      </article>
+      <article class="card">
+        <div class="cbody"><h3>Sunset West Garden</h3><p class="meta">400 guests</p><p>Peaceful and romantic, a secluded green setting paired with vibrant sunset skies. Venue fee applies.</p></div>
+      </article>
+  </div>
+  <p class="subhead">Wedding packages</p>
+  <div class="tablewrap"><table>
+    <caption>Prices from Paradise Weddings — the resort and Hyatt publish package names but no pricing. Confirm before quoting.</caption>
+    <thead><tr><th scope="col">Package</th><th scope="col">From</th><th scope="col">Guests included</th></tr></thead>
+    <tbody>
+        <tr><th scope="row">Big Day Preview</th><td class="num">$500</td><td>Couple only — a preview visit, credited back</td></tr>
+        <tr><th scope="row">Just For The Two of You</th><td class="num">$679</td><td>The two of you</td></tr>
+        <tr><th scope="row">Intimate Elegance</th><td class="num">$1,719</td><td>Couple + up to 10 guests</td></tr>
+        <tr><th scope="row">Lavish &amp; Opulent</th><td class="num">$6,339</td><td>Couple + up to 20 guests</td></tr>
+        <tr><th scope="row">Deluxe La Romana Bliss</th><td class="num">$18,100</td><td>Couple + up to 38 guests</td></tr>
+        <tr><th scope="row">South Asian Wedding</th><td class="num">Quoted individually</td><td>Multi-event</td></tr>
+    </tbody>
+  </table></div>
+  <p class="subhead">Planning notes</p>
+  <ul class="perks">
+          <li>Ceremony types: civil/legal, symbolic, vow renewal, Hindu, same-sex symbolic</li>
+          <li>Wedding specialists here are certified by the South Asian Wedding Institute</li>
+          <li>Music to 11pm outdoors, midnight in the ballroom, and 10pm on the Pier</li>
+          <li>Sunset Garden West carries a venue fee on top of the package</li>
+          <li>Big Day Preview costs $500 and converts to a $500 credit when the wedding is booked</li>
+          <li>25 minutes from La Romana (LRM), roughly 45 minutes from Punta Cana (PUJ)</li>
+  </ul>
+  <div class="note"><p><strong>Ceremony and reception numbers diverge sharply here.</strong> The Private Beach Gazebo seats 100 for a ceremony but only 35 for dinner; the Pier is 50 and 12. Always check the reception figure — it is the binding one.</p><p><strong>Two things to confirm with the resort:</strong> the pool count and the weddings-per-day cap are not published anywhere, and El Camino's marketing photograph is a rendering, so check it has actually opened before selling it.</p></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/07/15/1459/DRELR-P0094-Aerial-Beach-Resort-Overview.jpg/DRELR-P0094-Aerial-Beach-Resort-Overview.16x9.jpg?imwidth=2560" alt="The resort from the air"><figcaption>The resort from the air</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0002-Aerial-Pool-Beach-Pergolas.jpg/DRELR-P0002-Aerial-Pool-Beach-Pergolas.16x9.jpg?imwidth=2560" alt="Pools and beach pergolas"><figcaption>Pools and beach pergolas</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0063-Waterpark-Family-Arrival.jpg/DRELR-P0063-Waterpark-Family-Arrival.16x9.jpg?imwidth=2560" alt="The water park"><figcaption>The water park</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/21/1543/DRELR-P0041-Club-Pool.jpg/DRELR-P0041-Club-Pool.16x9.jpg?imwidth=2560" alt="Preferred Club pool"><figcaption>Preferred Club pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0010-Kids-Club.jpg/DRELR-P0010-Kids-Club.16x9.jpg?imwidth=2560" alt="Kids Club"><figcaption>Kids Club</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0018-Pier-Aerial.jpg/DRELR-P0018-Pier-Aerial.16x9.jpg?imwidth=2560" alt="The pier from above"><figcaption>The pier from above</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/15/0505/DRELR-P0025-Spa-Hydrotherapy-Pool.jpg/DRELR-P0025-Spa-Hydrotherapy-Pool.16x9.jpg?imwidth=2560" alt="Spa hydrotherapy pool"><figcaption>Spa hydrotherapy pool</figcaption></figure>
+      <figure><img loading="lazy" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/10/29/1100/DRELR-P0108-Beach-Wedding-Gazebo-Set-Up-Arch.jpg/DRELR-P0108-Beach-Wedding-Gazebo-Set-Up-Arch.16x9.jpg?imwidth=2560" alt="Beach gazebo set for a ceremony"><figcaption>Beach gazebo set for a ceremony</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Resort reference · Dreams La Romana Resort &amp; Spa, Playa Bayahibe, La Romana.<br>
+  Compiled for Amy Cate · Destination Weddings Travel Group. Photography © the resort.<br>
+  Brand status: left Dreams for Hilton in Nov 2018, renovated 2019, returned to Dreams June 2025. Package pricing is third-party only — the resort publishes names but not prices.</p>
+</div></footer>
