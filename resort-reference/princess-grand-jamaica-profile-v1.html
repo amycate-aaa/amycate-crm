@@ -1,0 +1,331 @@
+<title>Princess Grand Jamaica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+</style>
+
+<header class="hero">
+  <img src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/1-location-gallery-a.jpg" alt="Princess Grand Jamaica from the air">
+  <div class="wrap">
+    <p class="eyebrow light">Green Island, Hanover &mdash; between Montego Bay and Negril</p>
+    <h1>Princess Grand Jamaica</h1>
+    <p class="tag">590 ocean-view suites, a private island, and a wedding capacity nothing else in Jamaica matches.</p>
+    <ul class="chips"><li>590 suites</li><li>6 wedding venues</li><li>Up to 800 guests</li><li>9 restaurants &middot; 9 bars</li><li>Private island</li><li>55 km from MBJ</li><li>All ages</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>The biggest wedding canvas in Jamaica &mdash; on a property that has been open barely a year</h2><p class="lede">Every suite is ocean-view. Every suite is at least 560 sq ft. And a 1,088-guest private island sits offshore.</p></div>
+  <div class="prose">
+    <p>Princess Grand Jamaica opened in December 2024 on a peninsula in Green Island, Hanover, roughly midway between Montego Bay and Negril. It is part of a US$400 million, two-resort campus &mdash; the family-friendly Grand alongside the adults-only Princess Senses The Mangrove &mdash; built across more than 100 acres of mangrove and beachfront.</p>
+    <p><strong>The scale is the story.</strong> 590 suites, none smaller than 560 sq ft, all ocean-view, all with a balcony or terrace. Nine restaurants, nine bars, three pools and an aquatic park with slides. And <strong>Dream Island</strong> &mdash; a private island offshore that seats 1,088 &mdash; alongside a 1,185-guest ballroom complex. Very little in the Caribbean can host a wedding this large without going off-property.</p>
+    <p><strong>Two things to raise before you quote a date.</strong> The resort closed after Hurricane Melissa in late October 2025 and <strong>reopened on 1 March 2026</strong>; Princess Senses reopened a month earlier. The brand has not published a venue-by-venue operational list since, so confirm the specific ceremony and reception spaces are back in service for the couple&rsquo;s date.</p>
+    <p><strong>And the casino is not open.</strong> Jamaica issued its first casino licence for this property in July 2026, with the operator targeting the last quarter of 2026 and a regulatory deadline of March 2027. It is a real draw once it lands &mdash; but it cannot be sold as available today.</p>
+    <ul class="facts">
+      <li><b>590</b>ocean-view suites</li>
+      <li><b>4.5</b>star rating</li>
+      <li><b>800</b>max private event</li>
+      <li><b>1,088</b>Dream Island capacity</li>
+      <li><b>9</b>restaurants</li>
+      <li><b>9</b>bars</li>
+      <li><b>55 km</b>from Montego Bay</li>
+      <li><b>Dec 2024</b>opened</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Eleven suite categories, no standard rooms</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every category is a suite of at least 560 sq ft with a furnished balcony or terrace. Six categories have a swim-out with semi-private pool access; five include Platinum Club and butler service.</p>
+
+  <p class="subhead">Princess suites</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55467.jpg" alt="Princess Junior Suite"></div>
+      <div class="cbody"><h3>Princess Junior Suite</h3><p class="meta">560 sq ft + 130 sq ft balcony &middot; Up to 4 &middot; Caribbean Sea</p><p>One king for two guests, or two queens for up to three adults; select suites take two adults and two children on a sofa bed. Separate bath and shower, free minibar and safe.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55468.jpg" alt="Swim Out Princess Junior Suite"></div>
+      <div class="cbody"><h3>Swim Out Princess Junior Suite</h3><p class="meta">560 sq ft + 173 sq ft terrace &middot; Up to 4 &middot; Pool / garden</p><p>The same suite with a larger terrace opening directly onto a semi-private pool.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55469.jpg" alt="Princess Luxury Junior Suite with Hydromassage"></div>
+      <div class="cbody"><h3>Princess Luxury Junior Suite with Hydromassage</h3><p class="meta">722 sq ft + 259 sq ft balcony &middot; 2 guests &middot; Caribbean Sea</p><p>The largest of the junior suites, with a designer hydromassage tub in the room and the biggest balcony on the property short of a Master. King bed, two guests only.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55470.jpg" alt="Swim Out Princess Luxury Junior Suite with Hydromassage"></div>
+      <div class="cbody"><h3>Swim Out Princess Luxury Junior Suite with Hydromassage</h3><p class="meta">560 sq ft + 173 sq ft terrace &middot; 2 guests &middot; Pool / garden</p><p>Hydromassage tub and direct semi-private pool access in one suite. King bed, two guests only &mdash; the honeymoon pick outside Platinum.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Family suites</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55471.jpg" alt="Princess Family Junior Suite with Bunk Beds"></div>
+      <div class="cbody"><h3>Princess Family Junior Suite with Bunk Beds</h3><p class="meta">560 sq ft + 130 sq ft balcony &middot; 2 adults + 2 children &middot; Garden</p><p>A king bed for the adults and boat-shaped bunk beds for the children, in a dedicated family layout.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55472.jpg" alt="Swim Out Princess Family Junior Suite with Bunk Beds"></div>
+      <div class="cbody"><h3>Swim Out Princess Family Junior Suite with Bunk Beds</h3><p class="meta">560 sq ft + 173 sq ft terrace &middot; 2 adults + 2 children &middot; Pool</p><p>The same family layout with a terrace onto a semi-private pool &mdash; the single strongest room on the property for a family in the wedding party.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Platinum Club &mdash; butler service included</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55473.jpg" alt="Platinum Junior Suite"></div>
+      <div class="cbody"><h3>Platinum Junior Suite</h3><p class="meta">560 sq ft + 130 sq ft balcony &middot; Up to 4 &middot; Garden / sea</p><p>A hydromassage hot tub, a separate seating area, butler service and full Platinum Club access. One king for two, or two queens for up to three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55474.jpg" alt="Swim Out Platinum Junior Suite"></div>
+      <div class="cbody"><h3>Swim Out Platinum Junior Suite</h3><p class="meta">560 sq ft + 173 sq ft terrace &middot; Up to 4 &middot; Pool</p><p>Hot tub on the terrace plus direct semi-private pool access, with butler service and Platinum Club.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Master suites &mdash; Platinum Club included</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55475.jpg" alt="Imperial One Bedroom Master Suite"></div>
+      <div class="cbody"><h3>Imperial One Bedroom Master Suite</h3><p class="meta">905 sq ft + 248 sq ft balcony &middot; Up to 4 &middot; Sunset / sea</p><p>A separate bedroom and living room, a sofa bed, and a private hot tub on a balcony facing the sunset. Up to three adults, or two adults and two children.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55476.jpg" alt="Swim Out Imperial One Bedroom Master Suite"></div>
+      <div class="cbody"><h3>Swim Out Imperial One Bedroom Master Suite</h3><p class="meta">905 sq ft + 323 sq ft terrace &middot; Up to 4 &middot; Pool / sea</p><p>The same suite at pool level, with the largest terrace on the property and direct semi-private pool access.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://images.mirai.com/HOST/500255/room-55486.jpg" alt="2 Bedroom Master Suite"></div>
+      <div class="cbody"><h3>2 Bedroom Master Suite</h3><p class="meta">1,465 sq ft &middot; Up to 6 &middot; Sea</p><p>A master bedroom with a king, a second bedroom with two queens, a living area with a sofa bed and a hydromassage tub. Butler service, Platinum Club and personalised children&rsquo;s bathrobes.</p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Platinum Club</h2><p class="lede">Butler service, a private beach club and a members-only restaurant &mdash; open to families, not adults-only.</p></div>
+  <div>
+    <ul class="perks">
+      <li>Private check-in</li>
+      <li>Butler service (select suites)</li>
+      <li>Platinum Restaurant &mdash; exclusive &agrave; la carte</li>
+      <li>Platinum Club Bar</li>
+      <li>Platinum Beach Club with waiter service</li>
+      <li>Private pool with waiter service</li>
+      <li>Premium national and international drinks</li>
+      <li>24-hour room service</li>
+      <li>Personalised concierge</li>
+      <li>Enhanced in-room amenities</li>
+      <li>Free Wi-Fi and in-suite safe</li>
+    </ul>
+    <div class="note">
+      <p><strong>Five categories carry it:</strong> Platinum Junior Suite, Swim Out Platinum Junior Suite, Imperial One Bedroom Master Suite, Swim Out Imperial One Bedroom Master Suite and the 2 Bedroom Master Suite.</p>
+      <p><strong>Vintage liquors and champagne are excluded</strong> from the premium drinks list &mdash; worth saying out loud before a toast gets planned around it.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Nine restaurants, nine bars, no reservations</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">None of the &agrave; la carte restaurants take bookings &mdash; guests walk up. One restaurant and one bar are Platinum-only.</p>
+  <div class="dining">
+    <div class="dish"><h4>Jamrock</h4><p class="cuisine">Jamaican &middot; Caribbean</p><p>&Agrave; la carte island cooking in authentic decor. Dinner 5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>Fusion 360</h4><p class="cuisine">Asian fusion</p><p>&Agrave; la carte, in the most dramatic room on the property. Dinner 5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>Il Palazzo</h4><p class="cuisine">Italian</p><p>&Agrave; la carte Italian. Dinner 5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>El Delirio</h4><p class="cuisine">Mexican</p><p>&Agrave; la carte traditional Mexican. Dinner 5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>Platinum Restaurant</h4><p class="cuisine">Varied &agrave; la carte &middot; Platinum only</p><p>Breakfast 7:30&ndash;10:30 a.m., lunch 12:30&ndash;3 p.m., dinner 6&ndash;9 p.m.</p></div>
+    <div class="dish"><h4>Food Market Restaurant</h4><p class="cuisine">International buffet</p><p>The main buffet. Breakfast 7:30&ndash;11 a.m., lunch 12:30&ndash;3:30 p.m., dinner 6&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>The Reef</h4><p class="cuisine">Buffet on the beach</p><p>Laid-back beachfront lunch, noon&ndash;3:30 p.m. Also books as a 140-guest reception venue.</p></div>
+    <div class="dish"><h4>Food Truck</h4><p class="cuisine">Beach &amp; pool snacks</p><p>Poolside and beach service, 12:30&ndash;5 p.m.</p></div>
+    <div class="dish"><h4>MVP Sport Bar</h4><p class="cuisine">Sports bar &middot; Food</p><p>Multiple screens and a full menu. All ages noon&ndash;9 p.m.; adults 18+ from 9 p.m.&ndash;4 a.m.</p></div>
+    <div class="dish"><h4>Blue Mountain Coffee Shop</h4><p class="cuisine">Caf&eacute; &middot; 24 hours</p><p>Jamaican coffee and snacks, around the clock.</p></div>
+    <div class="dish"><h4>Lobby Bar</h4><p class="cuisine">Bar</p><p>1&ndash;9 p.m.</p></div>
+    <div class="dish"><h4>Oasis Beach Bar</h4><p class="cuisine">Beach bar</p><p>11 a.m.&ndash;6:30 p.m.</p></div>
+    <div class="dish"><h4>Aqua Snack Bar</h4><p class="cuisine">Pool bar</p><p>10 a.m.&ndash;6:30 p.m.</p></div>
+    <div class="dish"><h4>Moonlight Bar</h4><p class="cuisine">Bar</p><p>10 a.m.&ndash;6:30 p.m., then 8:45 p.m.&ndash;midnight.</p></div>
+    <div class="dish"><h4>Divino Bar</h4><p class="cuisine">Bar</p><p>5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>Green Bar</h4><p class="cuisine">Bar</p><p>5:30&ndash;9:30 p.m.</p></div>
+    <div class="dish"><h4>Platinum Club Bar</h4><p class="cuisine">Lounge bar &middot; Platinum only</p><p>11 a.m.&ndash;11 p.m.</p></div>
+  </div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Six venues, up to 800 guests at a private event</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">The spread here runs from an 80-guest beach setup to a 1,185-guest ballroom complex. For a large or multi-day wedding &mdash; South Asian celebrations especially &mdash; this is among the few Caribbean properties that can absorb the whole thing.</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-ocean-oasis-beach-view.jpeg" alt="Ocean Oasis Beach View"></div>
+      <div class="cbody"><h3>Ocean Oasis Beach View</h3><p class="meta">Up to 80 guests</p><p>A beach ceremony at the shoreline with a tented reception beside it under the stars.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-dream-island.jpg" alt="Dream Island"></div>
+      <div class="cbody"><h3>Dream Island</h3><p class="meta">Up to 1,088 guests</p><p>A private island offshore, reached by its own causeway. Vows by the water, then a beach reception under fairy lights. The single most distinctive venue in the portfolio.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-sky-terrace.jpeg" alt="Sky Terraces"></div>
+      <div class="cbody"><h3>Sky Terraces &mdash; Main, Bridal &amp; Presidential</h3><p class="meta">Up to 540 guests</p><p>Three elevated open-air terraces with ocean panoramas. Take one, or run ceremony, cocktails and reception across all three.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-ballroom.jpeg" alt="Ballroom"></div>
+      <div class="cbody"><h3>Ballroom &mdash; Grand, Amber, Topaz &amp; Larimar</h3><p class="meta">Up to 1,185 guests</p><p>Four indoor ballrooms that can be taken separately or combined &mdash; and the property&rsquo;s weather plan for a large group.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-garden-gazebo-area.jpeg" alt="Garden Gazebo Area"></div>
+      <div class="cbody"><h3>Garden Gazebo Area</h3><p class="meta">Up to 136 guests</p><p>Manicured pathways leading to a gazebo set within landscaped gardens &mdash; intimate and secluded.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/princess-grand-jamaica/princess-grand-jamaica-the-reef-restaurant.jpg" alt="Reef Restaurant"></div>
+      <div class="cbody"><h3>Reef Restaurant</h3><p class="meta">Up to 140 guests</p><p>An open, airy restaurant with minimal decor of its own, so the couple&rsquo;s design carries the room.</p></div></article>
+  </div>
+
+  <h2 class="tiergap" style="margin-top:2.8rem">Wedding packages</h2>
+  <div>
+    <div class="pkg"><div><h3>One Love</h3><p class="lead">Couple only</p></div><div class="price">$1,000</div>
+      <p class="det">Symbolic ceremony, tropical bouquet and boutonniere, one-tier cake, sparkling toast and a private three-course dinner for two with wine. Complimentary with qualifying stays.</p></div>
+    <div class="pkg"><div><h3>Infinity Wedding</h3><p class="lead">Couple + up to 10 guests</p></div><div class="price">$1,500</div>
+      <p class="det">Symbolic ceremony, tropical bouquet and boutonniere, one-tier cake or ten cupcakes, and a semi-private group dinner on the wedding day.</p></div>
+    <div class="pkg"><div><h3>Princess Wedding</h3><p class="lead">Couple + up to 20 guests</p></div><div class="price">$2,100</div>
+      <p class="det">Symbolic ceremony with a selected aisle arrangement, one-tier cake or twenty cupcakes, and a semi-private dinner.</p></div>
+    <div class="pkg"><div><h3>Magical Wedding</h3><p class="lead">Couple + up to 20 guests</p></div><div class="price">$2,800</div>
+      <p class="det">Symbolic ceremony, a private cocktail hour with canap&eacute;s and two signature drinks, one-tier cake or twenty cupcakes, and a semi-private dinner.</p></div>
+    <div class="pkg"><div><h3>Xamayaca Love</h3><p class="lead">Couple + up to 50 guests</p></div><div class="price">$3,300</div>
+      <p class="det">Symbolic ceremony, a private cocktail party with domestic bar, a two-tier cake or fifty cupcakes, and a semi-private dinner.</p></div>
+    <div class="pkg"><div><h3>Royalty Wedding</h3><p class="lead">Couple + up to 50 guests</p></div><div class="price">$12,000</div>
+      <p class="det">Rehearsal dinner, decorated arch and vow space, white Phoenix chairs, a solo musician, and a full reception with open bar and dinner.</p></div>
+    <div class="pkg"><div><h3>Dream Wedding</h3><p class="lead">Couple + up to 80 guests</p></div><div class="price">$16,500</div>
+      <p class="det">A premium location &mdash; Sky Terrace or Dream Island &mdash; rehearsal dinner, decorated arch, DJ, live cocktail band and a champagne pour.</p></div>
+    <div class="pkg"><div><h3>Pure Elegance</h3><p class="lead">Couple + up to 100 guests</p></div><div class="price">$24,500</div>
+      <p class="det">A two-hour welcome event, a premium location (Sky Terrace, Amber Ballroom or Dream Island), solo musician, ten digital photographs, cocktail hour and reception.</p></div>
+    <div class="pkg"><div><h3>Vivah Luxe</h3><p class="lead">South Asian group package &middot; 300+ guests</p></div><div class="price">Custom</div>
+      <p class="det">Tiered inclusions scaled to rooms booked &mdash; 10&ndash;24, 25&ndash;50, 51&ndash;99 and 100+ &mdash; covering cocktail parties, venues, open bars and multi-day events.</p></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap split">
+  <div><p class="eyebrow">Planning notes</p><h2>Requirements, timing and what to confirm</h2><p class="lede">A newer property with a hurricane closure behind it &mdash; more than usual needs checking against the couple&rsquo;s actual date.</p></div>
+  <div>
+    <p class="subhead">Booking &amp; legal</p>
+    <ul class="perks">
+      <li>Book at least six months in advance</li>
+      <li>Non-refundable deposit of $300 to hold a date</li>
+      <li>Couple must arrive at least 48 business hours before the ceremony</li>
+      <li>Ceremony runs 20&ndash;30 minutes</li>
+      <li>Judge, minister, Pandit and legal application fees may apply on top of the package</li>
+    </ul>
+    <p class="subhead">Ceremony types offered</p>
+    <ul class="perks">
+      <li>Civil</li>
+      <li>Catholic</li>
+      <li>Christian</li>
+      <li>Hindu</li>
+      <li>Sikh</li>
+      <li>Muslim</li>
+      <li>Jewish</li>
+      <li>Symbolic</li>
+    </ul>
+    <p class="subhead">Families in the group</p>
+    <ul class="perks">
+      <li>Kids Club, ages 3&ndash;12</li>
+      <li>Teen Game Zone, ages 13+</li>
+      <li>Aquatic park with slides</li>
+      <li>Three pools</li>
+      <li>Tennis, pickleball, volleyball, basketball</li>
+      <li>Gym, yoga, water sports and snorkelling</li>
+    </ul>
+    <div class="note">
+      <p><strong>Confirm venue-by-venue availability.</strong> The resort closed after Hurricane Melissa in October 2025 and reopened 1 March 2026. Princess has not published a facility-level operational list since, so check the specific ceremony and reception spaces for the couple&rsquo;s date rather than assuming the full inventory is back.</p>
+      <p><strong>The casino is not open.</strong> Jamaica&rsquo;s first casino licence was issued for this property in July 2026; the operator is targeting the last quarter of 2026, with a regulatory deadline of March 2027. Do not sell it as an amenity yet.</p>
+      <p><strong>Cross-resort access is not symmetric.</strong> Guests of the adults-only Princess Senses The Mangrove next door get full access to both properties; Grand guests get access tailored to age group and room category. If the party is split across both resorts, confirm exactly who can go where before anyone books.</p>
+      <p><strong>The transfer is about 55 km</strong> from Sangster International in Montego Bay &mdash; longer than the Montego Bay strip resorts, shorter than most of Negril.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/1-location-gallery-a.jpg" alt="Aerial view of the resort"><figcaption>The peninsula from the air</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/3-location-gallery-a.jpg" alt="Dream Island and the bay"><figcaption>Dream Island and the bay</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/4-location-gallery-a.jpg" alt="Beachfront"><figcaption>Beachfront</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/2-locattion-gallery-a.jpg" alt="Pool complex from above"><figcaption>Pool complex from above</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-home/pgj-beach-n.jpg" alt="The beach"><figcaption>The beach</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-home/PGJ_Pool-2_edit.jpg" alt="Main pool"><figcaption>Main pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-home/n2-galeria-playa-piscina.jpg" alt="Beach and pool"><figcaption>Beach and pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/74348-princess-grand-jamaica/aioapi/princess-grand-jamaica-amenities.jpeg" alt="Infinity pool"><figcaption>Infinity pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/74348-princess-grand-jamaica/aioapi/princess-grand-jamaica-activities.jpeg" alt="Aquatic park"><figcaption>Aquatic park</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/1-familias-galeria.jpg" alt="Waterslides"><figcaption>Waterslides</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/pgj-families-gallery-05.jpg" alt="Kids Club"><figcaption>Kids Club</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/pgj-families-gallery-06.jpg" alt="Lazy river and slides"><figcaption>Lazy river and slides</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-home/2n-fusion.jpg" alt="Fusion 360"><figcaption>Fusion 360</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/1n-gastronomia-galeria.jpg" alt="Restaurant interior"><figcaption>Il Palazzo</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/2n-gastronomia-galeria.jpg" alt="Restaurant interior"><figcaption>El Delirio</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/4c-gastronomia-galeria.jpg" alt="Restaurant interior"><figcaption>Dining room</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/5c-gastronomia-galeria.jpg" alt="Restaurant interior"><figcaption>Dining room</figcaption></figure>
+    <figure><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/74348-princess-grand-jamaica/aioapi/princess-grand-jamaica-onsite-dining-drinks.jpeg" alt="Bar"><figcaption>Bar</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/platinum-01-gallery-pgj.jpg" alt="Platinum dining"><figcaption>Platinum dining</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/platinum-004-gallery-pgj.jpg" alt="Platinum pool service"><figcaption>Platinum pool service</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/1b-platinum-galeria.jpg" alt="Platinum pool"><figcaption>Platinum pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://www.princess-hotels.com/wp-content/uploads/sites/1738/nggallery/princess-grand-jamaica-galeria-nueva-general/2-servicios-galeria.jpg" alt="Resort services"><figcaption>Sports courts</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
+  <p>Internal reference sheet. Package pricing and post-hurricane venue availability change &mdash; confirm against the current wedding brochure and the resort coordinator before quoting a client.</p>
+</div></footer>

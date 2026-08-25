@@ -1,0 +1,361 @@
+<title>Dreams Macao Beach Punta Cana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+</style>
+
+<header class="hero">
+  <img src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp" alt="Dreams Macao Beach Punta Cana from the beach">
+  <div class="wrap">
+    <p class="eyebrow light">Macao Beach, Punta Cana</p>
+    <h1>Dreams Macao Beach Punta Cana</h1>
+    <p class="tag">The only all-inclusive on Macao Beach — and from 2026, half of a two-resort campus.</p>
+    <ul class="chips"><li>500 rooms</li><li>10 wedding venues</li><li>9 restaurants &middot; 7 bars</li><li>Up to 3 weddings a day</li><li>45 min from PUJ</li><li>Waterpark &amp; lazy river</li><li>All ages</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A new-build on a UNESCO beach, with a second resort arriving next door</h2><p class="lede">Modern, compact and genuinely family-friendly — the strongest waterpark property in Punta Cana for a wedding with children in the group.</p></div>
+  <div class="prose">
+    <p>Dreams Macao Beach is the first and only all-inclusive resort on Macao Beach, on the northeastern coast of the Dominican Republic. It is a modern build rather than a refurbished older property, and it shows: 500 rooms and suites in calm neutrals with teal accents, connected infinity pools, a full waterpark with a lazy river, and the Spa by Pevonia&reg;.</p>
+    <p><strong>Where it wins is families.</strong> Every standard category is a 603 sq ft Junior Suite sleeping four, the waterpark and Explorer&rsquo;s Club are included, and the layout is walkable rather than sprawling. For a wedding party travelling with children, that combination is hard to beat on this coast.</p>
+    <p><strong>What to raise on the call.</strong> Macao Beach is beautiful and gets noticeably less seaweed than the Bavaro strip, but the surf is real &mdash; waves run strong from December through March and it is not a beach for toddlers to swim off. The pools carry that load. The transfer is also about 45 minutes from Punta Cana International, against roughly 20 for the Bavaro resorts.</p>
+    <p><strong>The 2026 change.</strong> Hyatt is opening the adults-only Secrets Macao Beach Punta Cana &mdash; 406 rooms &mdash; directly adjacent, with free-flow access between the two resorts for guests of either. For a wedding party split between couples and families, that is a real advantage. It also means construction next door until it opens.</p>
+    <ul class="facts">
+      <li><b>500</b>rooms &amp; suites</li>
+      <li><b>4.5</b>star rating</li>
+      <li><b>10</b>wedding venues</li>
+      <li><b>3</b>weddings per day</li>
+      <li><b>9</b>restaurants</li>
+      <li><b>7</b>bars</li>
+      <li><b>45 min</b>from PUJ (40 km)</li>
+      <li><b>All ages</b>family-friendly</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Sixteen categories &mdash; four resort-view, twelve Preferred Club</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every standard room is a Junior Suite; there is no smaller entry category. Preferred Club here is family-inclusive, though the Master and Presidential Suites cap at two or three adults and take no children.</p>
+
+  <p class="subhead">Resort view &mdash; 603 sq ft Junior Suites</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp" alt="Junior Suite Tropical View"></div>
+      <div class="cbody"><h3>Junior Suite Tropical View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Tropical</p><p>One king or two queen beds, a living area and a full bathroom with rain shower, opening onto a private balcony or terrace. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp" alt="Junior Suite Pool View"></div>
+      <div class="cbody"><h3>Junior Suite Pool View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Pool</p><p>The same layout overlooking the pool complex &mdash; the pick for families who want eyes on the water. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp" alt="Junior Suite Partial Ocean View"></div>
+      <div class="cbody"><h3>Junior Suite Partial Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Partial ocean</p><p>One king or two double beds, living area and balcony or terrace with a partial view of the Caribbean. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp" alt="Junior Suite Ocean View"></div>
+      <div class="cbody"><h3>Junior Suite Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Ocean</p><p>The best of the resort-view categories, with a full ocean outlook from the balcony or terrace. Maximum three adults.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Preferred Club &mdash; Junior Suites</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/lnrlfqjiif/webp/DRMPC-PC-JR-TV-KING-TC.webp" alt="Preferred Club Junior Suite Tropical View"></div>
+      <div class="cbody"><h3>Preferred Club Junior Suite Tropical View</h3><p class="meta">572 sq ft &middot; Sleeps 4 &middot; Tropical</p><p>One king or two double beds and a full bathroom with a hot tub for two, plus every Preferred Club privilege. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp" alt="Preferred Club Junior Suite Partial Ocean View"></div>
+      <div class="cbody"><h3>Preferred Club Junior Suite Partial Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Partial ocean</p><p>One king or two queens, a separate living room and a rain shower, on a private balcony or terrace. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp" alt="Preferred Club Junior Suite Ocean View"></div>
+      <div class="cbody"><h3>Preferred Club Junior Suite Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Ocean</p><p>The same suite with a full ocean view &mdash; the sweet spot for a bridal party that wants Club access without the adults-only cap. Maximum three adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp" alt="Preferred Club Junior Suite Swim Out"></div>
+      <div class="cbody"><h3>Preferred Club Junior Suite Swim Out</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Garden / pool</p><p>A furnished terrace with direct access into the pool, straight from the suite. Maximum three adults.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Preferred Club &mdash; Master Suites &middot; 1,205 sq ft with living room, dining room and kitchenette</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp" alt="Preferred Club Master Suite Ocean View"></div>
+      <div class="cbody"><h3>Preferred Club Master Suite Ocean View</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Ocean</p><p>A king bed, full living and dining rooms and a kitchenette, on a private balcony or terrace. Two adult guests only &mdash; no children.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp" alt="Preferred Club Master Suite Ocean Front"></div>
+      <div class="cbody"><h3>Preferred Club Master Suite Ocean Front</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Oceanfront</p><p>King bed and a queen sofa bed, directly facing the water. Two adult guests only &mdash; no children.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/gqlkvepgoi/webp/DRMPC-PC-MSTR-SO-LIVING-TC.webp" alt="Preferred Club Master Suite living room"></div>
+      <div class="cbody"><h3>Preferred Club Master Suite Rooftop</h3><p class="meta">1,205 sq ft &middot; Sleeps 3 &middot; Oceanfront</p><p>A rooftop oceanfront suite with a king bed and queen sofa bed. The only Master Suite that takes a child &mdash; up to three guests, maximum two adults.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp" alt="Preferred Club Master Suite Swim Out"></div>
+      <div class="cbody"><h3>Preferred Club Master Suite Swim Out</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Garden / pool</p><p>A king bed and a terrace with direct swim-out access. Two adult guests only &mdash; no children.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp" alt="Preferred Club Master Suite Swim Out Ocean Front"></div>
+      <div class="cbody"><h3>Preferred Club Master Suite Swim Out Ocean Front</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Oceanfront</p><p>Swim-out access and an oceanfront outlook in one suite &mdash; the strongest honeymoon room short of a Presidential. Two adult guests only.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Preferred Club &mdash; Presidential Suites &amp; Villa &middot; 1,808 sq ft</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp" alt="Preferred Club Presidential Suite Rooftop Ocean Front"></div>
+      <div class="cbody"><h3>Preferred Club Presidential Suite Rooftop Ocean Front</h3><p class="meta">1,808 sq ft &middot; 3 adults &middot; Oceanfront</p><p>King bed, living and dining rooms, kitchenette, and a private balcony with its own hot tub above the water. Three adult guests.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp" alt="Preferred Club Presidential Suite Swim Out Ocean Front"></div>
+      <div class="cbody"><h3>Preferred Club Presidential Suite Swim Out Ocean Front</h3><p class="meta">1,808 sq ft &middot; Sleeps 3 &middot; Oceanfront</p><p>The same footprint at ground level, with a terrace that has both a hot tub and direct pool access.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp" alt="Preferred Club Two-Bedroom Villa with Pool"></div>
+      <div class="cbody"><h3>Preferred Club Two-Bedroom Villa with Pool</h3><p class="meta">1,808 sq ft &middot; Sleeps 8 &middot; Pool / waterpark</p><p>Two bedrooms &mdash; one king, two queens &mdash; a large living and dining area, kitchenette, private ground-floor entrance and a terrace onto its own plunge pool. Steps from the waterpark. Up to eight guests, maximum six adults.</p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2><p class="lede">A private lounge, an adults-only saltwater pool and a dedicated stretch of beach &mdash; open to families, with a separate family pool section of its own.</p></div>
+  <div>
+    <ul class="perks">
+      <li>Personalized check-in and check-out</li>
+      <li>Access to the Preferred Club lounge and bar</li>
+      <li>Daily continental breakfast in the lounge</li>
+      <li>Afternoon hot and cold hors d&rsquo;oeuvres</li>
+      <li>Exquisite desserts and premium liquors</li>
+      <li>Dedicated Preferred Club beach area</li>
+      <li>Exclusive adults-only saltwater pool</li>
+      <li>Exclusive family pool section</li>
+      <li>Suites in premium resort locations</li>
+      <li>Upgraded mini-bar and bath amenities</li>
+      <li>Pillow menu</li>
+      <li>Daily in-suite newspaper</li>
+      <li>Complimentary computer access in the lounge</li>
+      <li>Spa and resort store discounts</li>
+    </ul>
+    <div class="note">
+      <p><strong>Preferred Club also unlocks two meals.</strong> Breakfast at Oceana (7&ndash;11 a.m.) and lunch there (12&ndash;4 p.m.) are Preferred Club only, as is breakfast at the Macao Bites food truck.</p>
+      <p><strong>Watch the adult caps.</strong> Every Master and Presidential Suite takes two or three adults and no children. Families upgrading to Club need a Junior Suite, the Rooftop Master, or the Two-Bedroom Villa.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Nine restaurants, seven bars, no reservations required</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">Six &agrave; la carte restaurants, a buffet, a caf&eacute; and a beach grill, plus a food truck by the waterpark. Himitsu&rsquo;s teppanyaki tables are the one place that does take a booking.</p>
+  <div class="dining">
+    <div class="dish"><h4>Bordeaux</h4><p class="cuisine">French &middot; Adults only</p><p>&Agrave; la carte gourmet French cuisine, casual elegance dress code. Dinner 6&ndash;10:30 p.m.</p></div>
+    <div class="dish"><h4>Portofino</h4><p class="cuisine">Italian</p><p>&Agrave; la carte gourmet Italian. Dinner 6&ndash;10:30 p.m.</p></div>
+    <div class="dish"><h4>Oceana</h4><p class="cuisine">Seafood</p><p>&Agrave; la carte seafood specialties. Dinner 6&ndash;10:30 p.m. Breakfast and lunch here are Preferred Club only.</p></div>
+    <div class="dish"><h4>Himitsu</h4><p class="cuisine">Asian &middot; Teppanyaki</p><p>&Agrave; la carte Asian cuisine. Three teppanyaki tables, ages 12 and up, reservation required. Dinner 6&ndash;11 p.m.</p></div>
+    <div class="dish"><h4>El Patio</h4><p class="cuisine">Mexican</p><p>&Agrave; la carte authentic Mexican. Dinner 6&ndash;11 p.m.</p></div>
+    <div class="dish"><h4>Seaside Grill</h4><p class="cuisine">Grill &middot; Show cooking</p><p>&Agrave; la carte grilled meats, fish and burgers with show cooking. Dinner 6&ndash;10:30 p.m.</p></div>
+    <div class="dish"><h4>World Caf&eacute;</h4><p class="cuisine">International buffet</p><p>International and local specialties across breakfast, lunch and dinner. Casual elegance dress code at dinner.</p></div>
+    <div class="dish"><h4>Coco Caf&eacute;</h4><p class="cuisine">Caf&eacute; &middot; 24 hours</p><p>Premium coffee, snacks and an ice cream booth, open around the clock.</p></div>
+    <div class="dish"><h4>Barefoot Grill</h4><p class="cuisine">Casual &middot; Poolside</p><p>Burgers and hot dogs poolside 11 a.m.&ndash;6 p.m., late-night bites 11 p.m.&ndash;3 a.m.</p></div>
+    <div class="dish"><h4>Macao Bites Food Truck</h4><p class="cuisine">Casual &middot; Waterpark</p><p>Bites served by the waterpark, noon&ndash;6 p.m. Breakfast 8&ndash;10 a.m. for Preferred Club guests.</p></div>
+    <div class="dish"><h4>Barracuda</h4><p class="cuisine">Beach bar</p><p>Beach bar with swings and ocean views, 10 a.m.&ndash;6 p.m.</p></div>
+    <div class="dish"><h4>Manatees</h4><p class="cuisine">Swim-up bar</p><p>In-pool swim-up bar, 10 a.m.&ndash;6 p.m.</p></div>
+    <div class="dish"><h4>Sugar Reef</h4><p class="cuisine">Pool bar</p><p>Pool bar, 10 a.m.&ndash;10 p.m.</p></div>
+    <div class="dish"><h4>Rendezvous</h4><p class="cuisine">Lobby bar</p><p>Lobby bar, 10 a.m.&ndash;1 a.m.</p></div>
+    <div class="dish"><h4>Desires</h4><p class="cuisine">Sports bar &middot; Adults only</p><p>Sports bar 6&ndash;10 p.m., night club 10 p.m.&ndash;2 a.m.</p></div>
+    <div class="dish"><h4>Showtime</h4><p class="cuisine">Theater bar</p><p>Theater bar, 8&ndash;10:30 p.m.</p></div>
+    <div class="dish"><h4>Preferred Club Bar</h4><p class="cuisine">Lounge bar &middot; Club only</p><p>Inside the Preferred Club lounge, 10 a.m.&ndash;11 p.m.</p></div>
+  </div>
+  <div class="note"><p><strong>Sip, Savor &amp; See</strong> is included &mdash; dinner, drinks and entertainment at a nearby participating resort, arranged with the concierge by 3 p.m.</p></div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Ten venues, up to three weddings a day</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">Capacities run from a 40-guest beach gazebo to a 700-guest ballroom &mdash; the widest span of any Dreams property in Punta Cana. Both a beach ceremony and an indoor rain plan are available on the same property.</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-gazebo-wedding-venue.jpg" alt="Beach Gazebo"></div>
+      <div class="cbody"><h3>Beach Gazebo</h3><p class="meta">Up to 40 guests</p><p>A semi-private, minimalist oceanfront gazebo in natural materials &mdash; elegant and serene, and the right scale for a small wedding.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-preferred-beach-wedding-venue.jpg" alt="Macao Preferred Beach"></div>
+      <div class="cbody"><h3>Macao Preferred Beach</h3><p class="meta">Up to 350 guests</p><p>Soft white sand, turquoise water and swaying palms &mdash; the classic Punta Cana beach ceremony, on the Preferred stretch.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-area-leftside.jpg" alt="Beach Area, left side"></div>
+      <div class="cbody"><h3>Beach Area &mdash; Left Side</h3><p class="meta">Up to 200 guests</p><p>A semi-private open-air stretch of white sand, used for both ceremonies and receptions.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-rightside-wedding-venue.jpg" alt="Beach Area, right side"></div>
+      <div class="cbody"><h3>Beach Area &mdash; Right Side</h3><p class="meta">Up to 150 guests</p><p>Waves, ocean breeze and warm sun &mdash; a serene setting for the ceremony itself.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seaside-sky-wedding-venue.jpg" alt="Seaside Sky Terrace"></div>
+      <div class="cbody"><h3>Seaside Sky Terrace</h3><p class="meta">Up to 100 guests</p><p>A contemporary open-air terrace with panoramic views over the beach, the gardens and the Caribbean.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-himitsu-garden-wedding-venue.jpg" alt="Himitsu Garden Terrace"></div>
+      <div class="cbody"><h3>Himitsu Garden Terrace</h3><p class="meta">Up to 250 guests</p><p>A blank-canvas terrace built to take florals, lighting and design &mdash; the venue to pitch when a couple has a strong look in mind.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seasidegrill-garden-terrace-wedding-venue.jpeg" alt="Seaside Grill &amp; Garden Terrace"></div>
+      <div class="cbody"><h3>Seaside Grill &amp; Garden Terrace</h3><p class="meta">Up to 250 guests</p><p>A versatile open-air setting with the resort&rsquo;s planting around it, good for a reception that stays outdoors.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-sugar-reef-terrace-venue.jpeg" alt="Sugar Reef Terrace"></div>
+      <div class="cbody"><h3>Sugar Reef Terrace</h3><p class="meta">Up to 120 guests</p><p>An intimate, romantic reception space surrounded by the resort&rsquo;s gardens and pool.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-macao-plaza-wedding-venue.jpeg" alt="Macao Plaza"></div>
+      <div class="cbody"><h3>Macao Plaza</h3><p class="meta">Up to 500 guests</p><p>A large open plaza that takes almost any theme and decor &mdash; the choice for a big wedding party outdoors.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-ballroom-wedding-venue.jpg" alt="Ballroom"></div>
+      <div class="cbody"><h3>Ballroom</h3><p class="meta">Up to 700 guests</p><p>A grand, ornate ballroom with a dance floor, custom decoration and complete privacy &mdash; and the property&rsquo;s answer to weather.</p></div></article>
+  </div>
+
+  <h2 class="tiergap" style="margin-top:2.8rem">Wedding packages</h2>
+  <div>
+    <div class="pkg"><div><h3>Infinitely Yours</h3><p class="lead">Couple only &middot; up to 5 extra guests</p></div><div class="price">From $799</div>
+      <p class="det">Vow renewal or symbolic ceremony, corsages and boutonnieres, sparkling wine toast, romantic dinner for two and a spa discount. Extra guests $5 per chair and $5 per toast.</p></div>
+    <div class="pkg"><div><h3>Wedding in Paradise</h3><p class="lead">Couple + up to 10 guests</p></div><div class="price">From $1,499</div>
+      <p class="det">Symbolic ceremony, bouquet and boutonniere, wedding cake and sparkling wine toast, newlywed package and breakfast in bed. Complimentary with seven nights in a Preferred Club Master Suite Swim Out or higher, or five rooms for three nights. Extra guests $25 each.</p></div>
+    <div class="pkg"><div><h3>Elope in Luxury</h3><p class="lead">Couple only &middot; up to 5 extra guests</p></div><div class="price">From $1,649</div>
+      <p class="det">Symbolic ceremony, hair and makeup, room upgrade, 20 digital photographs, romantic dinner and spa treatments. Monday to Thursday only.</p></div>
+    <div class="pkg"><div><h3>Eternal Love</h3><p class="lead">Couple + up to 20 guests</p></div><div class="price">From $5,049</div>
+      <p class="det">Symbolic ceremony, rehearsal dinner, hair and makeup, flowers, live music at the cocktail hour, private reception dinner, 50 photographs with a 30-minute video and a couples spa treatment. Extra adults $96 plus tax; children 3&ndash;12 $48.64 plus tax.</p></div>
+    <div class="pkg"><div><h3>Beyond Memorable</h3><p class="lead">Couple + up to 79 guests &middot; minimum 75 room nights</p></div><div class="price">From $12,049</div>
+      <p class="det">Welcome cocktail party, rehearsal dinner, private ceremony, cocktail hour and private reception, with $100 in resort coupons per guest and spa perks. Extra guests $185 per adult, $92 per child.</p></div>
+    <div class="pkg"><div><h3>Dulha &amp; Dulhan South Asian Wedding</h3><p class="lead">Couple + up to 79 guests &middot; minimum 25 rooms for 3 nights</p></div><div class="price">From $10,599</div>
+      <p class="det">Welcome cocktail party, Sangeet and Mehndi, Baraat, mandap ceremony and a South Asian reception buffet, with a certified South Asian coordinator and $100 in resort coupons per guest.</p></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap split">
+  <div><p class="eyebrow">Planning notes</p><h2>Fees, vendors and the fine print</h2><p class="lede">The numbers that decide whether a package works before you price the rooms.</p></div>
+  <div>
+    <div class="tablewrap">
+      <table>
+        <caption>Known wedding fees, in US dollars. Confirm against the current brochure before quoting.</caption>
+        <thead><tr><th>Item</th><th>Fee</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Civil ceremony &mdash; judge</th><td class="num">$750</td></tr>
+          <tr><th scope="row">Religious ceremony &mdash; priest</th><td class="num">$750</td></tr>
+          <tr><th scope="row">DJ &mdash; basic</th><td class="num">$950</td></tr>
+          <tr><th scope="row">DJ &mdash; full</th><td class="num">$1,300</td></tr>
+          <tr><th scope="row">Outside photography</th><td class="num">$1,000</td></tr>
+          <tr><th scope="row">Outside hair &amp; makeup</th><td class="num">$1,000</td></tr>
+          <tr><th scope="row">Day pass, non-staying guest</th><td class="num">$150</td></tr>
+          <tr><th scope="row">Wedding pass</th><td class="num">$80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="subhead">On-site services</p>
+    <ul class="perks">
+      <li>Civil / legal wedding</li>
+      <li>Symbolic wedding</li>
+      <li>On-site wedding coordinator</li>
+      <li>Hair and makeup</li>
+      <li>DJ services</li>
+      <li>Live music</li>
+      <li>Bridal suite available</li>
+      <li>Floral arrangements and decor</li>
+      <li>Photographer</li>
+      <li>Videographer</li>
+      <li>Wedding attire preparation</li>
+    </ul>
+    <p class="subhead">Families in the group</p>
+    <ul class="perks">
+      <li>Explorer&rsquo;s Club for Kids, ages 3&ndash;12, daily 9:30 a.m.&ndash;10 p.m.</li>
+      <li>Children must be fully potty-trained for the Kids Club</li>
+      <li>Core Zone Teens Club</li>
+      <li>Waterpark with seven slides and a lazy river</li>
+      <li>Babysitting available at extra cost</li>
+      <li>Waterpark closes at 6 p.m.</li>
+    </ul>
+    <div class="note">
+      <p><strong>Bring up the surf.</strong> Macao Beach is a UNESCO-recognised beach with noticeably less seaweed than the Bavaro strip, but the waves run strong from December through March. Fine for a ceremony backdrop; not a beach where small children swim.</p>
+      <p><strong>Transfer is 40 km, about 45 minutes</strong> from Punta Cana International &mdash; roughly double the Bavaro resorts. Worth setting expectations with an older wedding party.</p>
+      <p><strong>Secrets Macao Beach opens next door in 2026</strong> with 406 adults-only rooms and free-flow access between the two resorts. A genuine advantage for a mixed group &mdash; and construction next door until it opens.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+    <figure><img loading="lazy" src="https://alg.widen.net/content/ljjxs5bmn1/webp/DRMPC-EXT-Aerial1-1A-CB.webp" alt="Aerial view"><figcaption>Aerial over the resort</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp" alt="Macao Beach"><figcaption>Macao Beach</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/iegb0xwuz6/webp/DRMPC-EXT-InfinityPool-2A-CB.webp" alt="Infinity pool"><figcaption>Infinity pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/evdidetvnt/webp/DRMPC-EXT-Infinity-Pool-TC.webp" alt="Pool deck"><figcaption>Pool deck</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/nb4j8ekxlf/webp/DRMPC-EXT-PC-Beach-2A-CB.webp" alt="Preferred Club beach"><figcaption>Preferred Club beach</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/zjevjxd3qn/webp/DRMPC-EXT-PC-SaltPool-TC.webp" alt="Preferred Club saltwater pool"><figcaption>Preferred Club saltwater pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/mevkpoupkm/webp/DRMPC-EXT-PC-POOL-2A-CB.webp" alt="Preferred Club pool"><figcaption>Preferred Club pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/ruyk4riz1z/webp/DRMPC-PC-Lounge-3A-CB.webp" alt="Preferred Club lounge"><figcaption>Preferred Club lounge</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/irsm5xkdh5/webp/DRMPC-EXT-WaterPark-Pano-1A-CB.webp" alt="Waterpark"><figcaption>Waterpark</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/njx3wczlal/webp/DRMPC-EXT-Waterpark-Lazy-River-TC.webp" alt="Lazy river"><figcaption>Lazy river</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/viojlgrdhp/webp/DRMPC-EC-ExplorersClub-TC.webp" alt="Explorer's Club for Kids"><figcaption>Explorer&rsquo;s Club for Kids</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/tdlhshyqkv/webp/DRMPC-EXT-Relax-Pool-TC.webp" alt="Relaxation pool"><figcaption>Relaxation pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/nu4zjiaf2p/webp/DRMPC-INT-Lobby-TC.webp" alt="Lobby"><figcaption>Lobby</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/0fcgavveuk/webp/DRMPC-RES-Bordeaux-3A-CB.webp" alt="Bordeaux"><figcaption>Bordeaux</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp" alt="Oceana"><figcaption>Oceana</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/quy4xf31qt/webp/DRMPC-RES-Portofino-TC.webp" alt="Portofino"><figcaption>Portofino</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/kecc0tf8o8/webp/DRMPC-RES-El-Patio-TC.webp" alt="El Patio"><figcaption>El Patio</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/glrdoxwxcj/webp/DRMPC-RES-Seaside-Grill-1A-CB.webp" alt="Seaside Grill"><figcaption>Seaside Grill</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/ib2xwfbz9k/webp/DRMPC-BAR-Manatees-4A-CB.webp" alt="Manatees swim-up bar"><figcaption>Manatees swim-up bar</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/u762xf2jge/webp/DRMPC-BAR-SugarReef-2A-CB.webp" alt="Sugar Reef pool bar"><figcaption>Sugar Reef pool bar</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/t18pihbkyv/webp/DRMPC-SPA-Hydrotherapy-2-TC.webp" alt="Spa hydrotherapy"><figcaption>Spa by Pevonia hydrotherapy</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/0zvqqmx90y/webp/DRMPC-FIT-Fitness-Center-TC.webp" alt="Fitness centre"><figcaption>Fitness centre</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/atqshdyqca/webp/DRMPC-WED-BeachWeddingGazebo-TC.webp" alt="Beach wedding gazebo"><figcaption>Beach wedding gazebo</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/smhwj87nbv/webp/DRMPC-WED-Rooftop-Wedding-Ceremony-TC.webp" alt="Rooftop ceremony"><figcaption>Rooftop ceremony</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/ylrqyf3ixq/webp/DRMPC-WED-Bridalsuite-TC.webp" alt="Bridal suite"><figcaption>Bridal suite</figcaption></figure>
+    <figure><img loading="lazy" src="https://alg.widen.net/content/irerzq9vtu/webp/DRMPC-INT-BowlingAlley-TC.webp" alt="Bowling alley"><figcaption>Bowling alley</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
+  <p>Internal reference sheet. Room rates, package pricing and wedding fees change &mdash; confirm against the current resort brochure before quoting a client.</p>
+</div></footer>

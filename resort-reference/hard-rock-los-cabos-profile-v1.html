@@ -1,0 +1,329 @@
+<title>Hard Rock Hotel Los Cabos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+</style>
+
+<header class="hero">
+  <img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLosCabos_Lifestyle_Pool_Beach.jpg" alt="Hard Rock Hotel Los Cabos pools and beach">
+  <div class="wrap">
+    <p class="eyebrow light">Fraccionamiento Diamante, Cabo San Lucas</p>
+    <h1>Hard Rock Hotel Los Cabos</h1>
+    <p class="tag">639 suites, six pools and a 1,500-guest ballroom &mdash; on a Pacific beach nobody swims from.</p>
+    <ul class="chips"><li>639 rooms &amp; suites</li><li>8 wedding venues</li><li>Up to 1,500 guests</li><li>8 restaurants &middot; 11 bars</li><li>6 pools</li><li>No ocean swimming</li><li>All ages</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A big, loud, well-run party resort &mdash; and one hard limitation to name up front</h2><p class="lede">Everything here is scaled for a crowd. The one thing it cannot give a couple is a swimmable ocean.</p></div>
+  <div class="prose">
+    <p>Hard Rock Hotel Los Cabos opened in 2018 as the brand&rsquo;s first purpose-built all-inclusive in Mexico &mdash; 639 rooms and suites in the Diamante development at the southern tip of Baja. Every room is at least 522 sq ft with a terrace and a hydro spa tub. Six pools, a music-themed everything, a bowling alley in the Moonlight lounge, and 60,000 sq ft of event space including a ballroom that seats 1,500.</p>
+    <p><strong>Name the beach issue in the first five minutes of the call.</strong> This property sits on the <strong>Pacific side</strong>, not the Sea of Cortez. The resort itself warns that currents are dangerous even for strong swimmers and asks guests to keep away from the shoreline. A beach ceremony on the sand is lovely and completely normal here &mdash; but nobody swims in that ocean, and a couple picturing a snorkelling week will be disappointed. The six pools carry all of the water time.</p>
+    <p><strong>Where it wins.</strong> Group capacity and entertainment. The Muse Terrace and Harmony Ballroom can absorb weddings that most Cabo properties would have to split, the Rock Suites come with a personal assistant, and the resort&rsquo;s own energy does a lot of the work for a couple who want a loud, late celebration rather than a quiet one.</p>
+    <p><strong>Transfer runs long.</strong> Roughly 51&ndash;55 km from Los Cabos International, 45 to 75 minutes depending on traffic, because it is past Cabo San Lucas rather than on the corridor. Build that into arrival-day planning.</p>
+    <ul class="facts">
+      <li><b>639</b>rooms &amp; suites</li>
+      <li><b>4.5</b>star rating</li>
+      <li><b>8</b>wedding venues</li>
+      <li><b>1,500</b>largest venue</li>
+      <li><b>8</b>restaurants</li>
+      <li><b>11</b>bars &amp; lounges</li>
+      <li><b>6</b>pools</li>
+      <li><b>2018</b>opened</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Eleven categories, nothing under 522 square feet</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every room and suite has a terrace with a hydro spa tub. Most categories work out to three adults, or two adults plus one teenager (13&ndash;17), or two adults plus two children (4&ndash;12); an infant in a crib does not count against the maximum. All Rock Suites include a personal assistant and Rock Royalty amenities.</p>
+
+  <p class="subhead">Deluxe rooms &mdash; 522 sq ft</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/22872601_ImageLargeWidth.JPG" alt="Deluxe Gold"></div>
+      <div class="cbody"><h3>Deluxe Gold</h3><p class="meta">522 sq ft &middot; Sleeps 3 &middot; Resort view</p><p>The entry category. One king with a full-size sofa bed, or two queens. Terrace with hydro spa tub, double-sink vanity and the full in-room amenity set.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889198_ImageLargeWidth.jpg" alt="Deluxe Partial Ocean View"></div>
+      <div class="cbody"><h3>Deluxe Partial Ocean View</h3><p class="meta">522 sq ft &middot; Sleeps 3&ndash;4 &middot; Partial ocean</p><p>Same footprint with a partial ocean outlook. King sleeps three; the two-queen configuration sleeps four. An accessible king is available.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889168_ImageLargeWidth.jpg" alt="Deluxe Swim-Up"></div>
+      <div class="cbody"><h3>Deluxe Swim-Up</h3><p class="meta">522 sq ft &middot; Sleeps 4 &middot; Garden</p><p>Ground floor with a terrace opening straight into a swim-up pool. King bed, two lounge chairs on the terrace.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889180_ImageLargeWidth.jpg" alt="Rock Royalty Ocean View"></div>
+      <div class="cbody"><h3>Rock Royalty Ocean View</h3><p class="meta">522 sq ft &middot; Sleeps 3 &middot; Ocean</p><p>The concierge tier at room level &mdash; full ocean views plus every Rock Royalty perk, including the complimentary couples massage. King or two queens.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Suites</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889213_ImageLargeWidth.jpg" alt="Junior Suite"></div>
+      <div class="cbody"><h3>Junior Suite</h3><p class="meta">814 sq ft &middot; Sleeps 3 &middot; Partial ocean or garden</p><p>A king bed plus a living area with a full-size sofa bed, and a hydro spa tub on the terrace. The cheapest way into real space.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/14039358_ImageLargeWidth.jpg" alt="Deluxe Family"></div>
+      <div class="cbody"><h3>Deluxe Family</h3><p class="meta">1,044 sq ft &middot; Sleeps 7 &middot; View varies</p><p>Two bedrooms &mdash; a king and two queens &mdash; with two full bathrooms, children&rsquo;s bathrobes and bath amenities, beach toys, and an Xbox One S. The strongest family room on the property.</p></div></article>
+  </div>
+
+  <p class="subhead tiergap">Rock Suites &mdash; personal assistant and Rock Royalty included</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889368_ImageLargeWidth.jpg" alt="Rock Suite Ocean View"></div>
+      <div class="cbody"><h3>Rock Suite Ocean View</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>King bed with dining and living areas, or two bedrooms adding two queens. Hydro spa tub on the terrace.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889266_ImageLargeWidth.jpg" alt="Rock Suite Ocean Front"></div>
+      <div class="cbody"><h3>Rock Suite Ocean Front</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>Directly facing the water. One bedroom with a king and a sofa bed, or two bedrooms with a king and two queens.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889281_ImageLargeWidth.jpg" alt="Rock Suite Rooftop Terrace"></div>
+      <div class="cbody"><h3>Rock Suite Rooftop Terrace</h3><p class="meta">1,240 / 1,762 sq ft + 987 sq ft terrace &middot; Sleeps 4&ndash;7</p><p>A fully furnished private rooftop terrace of nearly a thousand square feet, over ocean or ocean-front views. The obvious room for the couple, and for photographs.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889400_ImageLargeWidth.jpg" alt="Rock Suite Swim-Up Ocean Front"></div>
+      <div class="cbody"><h3>Rock Suite Swim-Up Ocean Front</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>Ocean-front views and a private plunge pool on the terrace. One or two bedrooms.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/15755299_ImageLargeWidth.jpg" alt="Rock Star Suite"></div>
+      <div class="cbody"><h3>Rock Star Suite</h3><p class="meta">4,000 sq ft (2BR) &middot; 4,522 sq ft (3BR) &middot; Large groups</p><p>Up to three bedrooms &mdash; one king and two rooms with two queens each &mdash; plus a living room with its own full bathroom and a wet bar. Built for an entourage.</p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Rock Royalty</h2><p class="lede">A concierge tier rather than a lounge-and-lounge-bar club &mdash; the perks are service and spa, not a private restaurant.</p></div>
+  <div>
+    <ul class="perks">
+      <li>Dedicated telephone concierge, 7 a.m.&ndash;11 p.m.</li>
+      <li>Complimentary 25-minute couples massage at Rock Spa&reg;</li>
+      <li>Priority reservations for the Picks&reg;, Tracks&reg; and Wax&reg; programmes</li>
+      <li>Priority reservations for Balinese beds (extra cost)</li>
+      <li>Upgraded full-size Rock Spa&reg; bath products</li>
+      <li>Aromatherapy and pillow menus</li>
+      <li>Welcome petit fours and snacks</li>
+      <li>Loofah and sleeping mask</li>
+      <li>Complimentary beach bag</li>
+      <li>Late checkout to 3 p.m., subject to availability</li>
+    </ul>
+    <div class="note">
+      <p><strong>Set expectations against Preferred Club or Platinum.</strong> Rock Royalty has no private lounge, no exclusive restaurant and no dedicated beach the way the AMR and Princess club tiers do. It buys service, spa and priority &mdash; which suits some couples and disappoints others who have stayed at a Dreams or a Princess.</p>
+      <p><strong>Rock Suites include it,</strong> along with a personal assistant, on top of the Rock Royalty Ocean View room category itself.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Eight restaurants, eleven bars, walk-in everywhere</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">No reservations required anywhere except ZEN&rsquo;s teppanyaki tables. UMO is the only smart-casual dress code; everything else is casual.</p>
+  <div class="dining">
+    <div class="dish"><h4>TORO</h4><p class="cuisine">Steakhouse</p><p>Premium cuts and lavish &agrave; la carte dishes. Dinner 5:30&ndash;10 p.m.</p></div>
+    <div class="dish"><h4>ZEN</h4><p class="cuisine">Asian &middot; Teppanyaki &middot; Sushi</p><p>&Agrave; la carte 5:30&ndash;10 p.m.; teppanyaki seatings at 5, 6, 7, 8 and 9 p.m. Teppanyaki takes reservations, maximum twelve guests.</p></div>
+    <div class="dish"><h4>UMO</h4><p class="cuisine">Yucatecan &middot; Smart casual</p><p>Local, seasonal cooking over smoke and fire, with handmade tortillas and guacamole. Dinner 5:30&ndash;10 p.m. No bathing suits.</p></div>
+    <div class="dish"><h4>CIAO</h4><p class="cuisine">Italian</p><p>The fine-dining Italian, and an international breakfast buffet in the mornings. Breakfast 8 a.m.&ndash;noon, dinner 5:30&ndash;10 p.m.</p></div>
+    <div class="dish"><h4>LOS GALLOS</h4><p class="cuisine">Mexican</p><p>Hacienda-style, with margaritas and tequila. Breakfast, lunch and dinner.</p></div>
+    <div class="dish"><h4>THE MARKET</h4><p class="cuisine">International buffet</p><p>Breakfast 7&ndash;11 a.m., lunch noon&ndash;5 p.m., dinner 6&ndash;10 p.m.</p></div>
+    <div class="dish"><h4>PIZZETO</h4><p class="cuisine">Pizza &middot; Mediterranean</p><p>Brick-oven artisanal pizzas, 11 a.m.&ndash;6 p.m.</p></div>
+    <div class="dish"><h4>CAFETTO</h4><p class="cuisine">Caf&eacute;</p><p>Continental breakfast, coffee, tea and snacks, 6 a.m.&ndash;1 a.m.</p></div>
+    <div class="dish"><h4>Awaken Your Senses</h4><p class="cuisine">Immersive dining &middot; Extra cost</p><p>A ticketed multi-sensory dinner, not part of the all-inclusive.</p></div>
+    <div class="dish"><h4>In-room dining</h4><p class="cuisine">24 hours</p><p>Full room-service menu, around the clock.</p></div>
+    <div class="dish"><h4>Moonlight Bar, Lounge &amp; Bowling Alley</h4><p class="cuisine">Lounge &middot; Bowling</p><p>Sun&ndash;Wed 5 p.m.&ndash;1 a.m., Thu&ndash;Sat to 2 a.m. Children are allowed in the bowling area only.</p></div>
+    <div class="dish"><h4>Sunlight Bar</h4><p class="cuisine">Bar &amp; lounge</p><p>10 a.m.&ndash;midnight.</p></div>
+    <div class="dish"><h4>Pulse Swim-Up Bar</h4><p class="cuisine">Swim-up</p><p>10 a.m.&ndash;6 p.m.</p></div>
+    <div class="dish"><h4>Legendary Bar &amp; Grill</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11 a.m.&ndash;6 p.m. Legendary Wet Bar alongside.</p></div>
+    <div class="dish"><h4>Lyric Bar &amp; Grill</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11:30 a.m.&ndash;6 p.m. Lyric Wet Bar alongside.</p></div>
+    <div class="dish"><h4>Eden Bar, Grill &amp; Wet Bar</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11 a.m.&ndash;6 p.m.</p></div>
+    <div class="dish"><h4>Rhythm Wet Bar</h4><p class="cuisine">Adults-only pool bar</p><p>10 a.m.&ndash;6 p.m., at the adults-only Rhythm Pool.</p></div>
+    <div class="dish"><h4>Holding Bar</h4><p class="cuisine">Bar</p><p>5&ndash;10 p.m.</p></div>
+  </div>
+  <div class="note"><p><strong>See The Show Bar is closed until further notice</strong> &mdash; still listed on the resort&rsquo;s own dining page as unavailable.</p></div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools</p><h2>Six pools, and only one of them adults-only</h2>
+  <div class="dining">
+    <div class="dish"><h4>Lyric Pool</h4><p class="cuisine">Family &middot; Largest</p><p>The main pool, with a separated children&rsquo;s area, the water slides, live music and foam parties.</p></div>
+    <div class="dish"><h4>Rhythm Pool</h4><p class="cuisine">Adults only</p><p>Mid-pool sunbeds and sunset views, designed to echo the ocean beyond.</p></div>
+    <div class="dish"><h4>Red Pool</h4><p class="cuisine">Family &middot; Party</p><p>Red floor and a central DJ booth &mdash; this is where the pool parties happen.</p></div>
+    <div class="dish"><h4>Eden Pool</h4><p class="cuisine">Family &middot; Quiet</p><p>The calm one, with a wet bar and snack bar. Works for couples and families both.</p></div>
+    <div class="dish"><h4>Pulse Pool</h4><p class="cuisine">Family</p><p>Beside the main pool, closest to Pizzeto and the slides.</p></div>
+    <div class="dish"><h4>Legendary Pool</h4><p class="cuisine">Reserved tier</p><p>Thirteen cabanas and fire pits with premium cocktails at the Legendary Wet Bar.</p></div>
+  </div>
+  <div class="note"><p><strong>Slide rules:</strong> minimum height 43 inches, no children under 8, adult supervision required. Worth checking against the ages in the wedding party before anyone sells the waterslides.</p></div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Eight venues, from a 112-seat chapel to a 1,500-guest ballroom</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">One of very few Cabo properties with a real indoor rain plan at scale, and one of fewer still with an actual chapel on site.</p>
+  <div class="grid">
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-beach-venue.png" alt="Beach"></div>
+      <div class="cbody"><h3>Beach</h3><p class="meta">Up to 1,400 guests &middot; Ceremony, cocktails, reception</p><p>Vows on the sand with the Pacific behind. Ceremonies here are routine; swimming is not &mdash; see the planning notes.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-chapel-venue.jpg" alt="Chapel"></div>
+      <div class="cbody"><h3>Chapel</h3><p class="meta">Up to 112 guests &middot; Ceremony</p><p>A real on-site chapel with pews and a glazed wall to the ocean &mdash; contemporary architecture, traditional feel. Rare in Los Cabos.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-muse-terrace-venue.jpg" alt="Muse Terrace"></div>
+      <div class="cbody"><h3>Muse Terrace</h3><p class="meta">Up to 1,100 guests &middot; Reception, cocktails</p><p>The big outdoor reception space, elevated with ocean views and room for a very large seated dinner.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-harmony-ballroom-venue.jpg" alt="Harmony Ballroom"></div>
+      <div class="cbody"><h3>Harmony Ballroom</h3><p class="meta">Up to 1,500 guests &middot; Reception, cocktails</p><p>17,440 sq ft, divisible into six sections. The largest venue on the property and the weather plan for any group that cannot move indoors elsewhere.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-serenade-terrace-venue.jpg" alt="Serenade Terrace"></div>
+      <div class="cbody"><h3>Serenade Terrace</h3><p class="meta">Up to 650 guests &middot; Reception, cocktails</p><p>8,447 sq ft of open terrace with panoramic views over the resort &mdash; the middle-size reception option.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-los-gallos-terrace-wedding-venue.jpeg" alt="Los Gallos Terrace"></div>
+      <div class="cbody"><h3>Los Gallos Terrace</h3><p class="meta">Up to 250 guests &middot; Reception, cocktails</p><p>An intimate outdoor terrace off the Mexican restaurant, good for a cocktail-style gathering or dinner under the stars.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-coda-garden-wedding-venue.jpeg" alt="Coda Garden"></div>
+      <div class="cbody"><h3>Coda Garden</h3><p class="meta">Up to 200 guests &middot; Ceremony, cocktails, reception</p><p>A lawn venue that takes a full ceremony-to-reception run without moving guests off the grass.</p></div></article>
+    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-beat-patio-venue.jpg" alt="Beat Patio"></div>
+      <div class="cbody"><h3>Beat Patio</h3><p class="meta">Up to 200 guests &middot; Ceremony, reception</p><p>A covered contemporary patio attached to the Beat event space &mdash; 4,756 sq ft, divisible into ten sections.</p></div></article>
+  </div>
+
+  <h2 class="tiergap" style="margin-top:2.8rem">Wedding packages</h2>
+  <p style="max-width:66ch;color:var(--soft);margin:0 0 .6rem">All five packages are built around ceremony seating for 32. Anything larger is a custom quote through the coordinator.</p>
+  <div>
+    <div class="pkg"><div><h3>Classic Arrangement</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">Complimentary</div>
+      <p class="det">Included with a qualifying stay and wedding deposit. Brown ceremony structure with white roses, Avant Garde chairs, bouquet and boutonniere, one-tier cake, minister, sparkling wine, audio system, coordinator and the honeymoon package.</p></div>
+    <div class="pkg"><div><h3>Free Spirit</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$3,500</div>
+      <p class="det">Triangular wooden arch with greenery, roses and pampas, wooden column and gold pedestal, pampas lining the aisle, natural wooden runner, mixed rose bouquet, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
+    <div class="pkg"><div><h3>Tropical Paradise</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$4,000</div>
+      <p class="det">Tropical greenery structure with anthuriums at the base, tropical leaf arrangements down the aisle, burlap or white wooden runner, tropical bouquet, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
+    <div class="pkg"><div><h3>Modern Enchantment</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$4,500</div>
+      <p class="det">White circular structure with sparkling crystal curtains, white floral bouquet and boutonniere, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
+    <div class="pkg"><div><h3>Lavish Daydream</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$5,000</div>
+      <p class="det">Floral top covering with a chandelier and permanent botanical arrangements, 32 gold chairs with white cushions, gold urns at the aisle entrance, white petalled runner, white and blush rose bouquet, two-tier cake, minister, soloist, 16 rose petal cones for the send-off, sparkling wine, coordinator and honeymoon package.</p></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap split">
+  <div><p class="eyebrow">Planning notes</p><h2>What to raise before the deposit</h2><p class="lede">Most of this property is straightforward. Three things are not.</p></div>
+  <div>
+    <p class="subhead">On-site services</p>
+    <ul class="perks">
+      <li>Civil / legal wedding</li>
+      <li>Symbolic wedding</li>
+      <li>Religious wedding</li>
+      <li>On-site wedding coordinator, included</li>
+      <li>Bouquets and boutonnieres</li>
+      <li>Hair and makeup</li>
+      <li>DJ services</li>
+      <li>Live music</li>
+      <li>Floral arrangements and decor</li>
+      <li>Photographer</li>
+      <li>Bridal suite available</li>
+    </ul>
+    <p class="subhead">Families in the group</p>
+    <ul class="perks">
+      <li>Hard Rock Roxity Kids Club&trade;</li>
+      <li>Teen club</li>
+      <li>Music Lab</li>
+      <li>Water slides &mdash; 43&Prime; minimum, no under-8s</li>
+      <li>Bowling alley at Moonlight</li>
+      <li>Deluxe Family suites sleep seven</li>
+    </ul>
+    <div class="note">
+      <p><strong>The ocean is not swimmable.</strong> The resort is on the Pacific side at Diamante, not the Sea of Cortez, and warns that currents are dangerous even for experienced swimmers. Ceremonies on the sand are fine; ocean swimming, snorkelling and most water sports are not available here. Say it early &mdash; it is the most common source of disappointment on this property.</p>
+      <p><strong>Rock Royalty is a service tier, not a club.</strong> No private lounge, restaurant or beach. Couples coming from a Dreams or a Princess will expect more than it delivers.</p>
+      <p><strong>Every package caps ceremony seating at 32.</strong> Above that, pricing is custom &mdash; so a 60-guest wedding cannot simply be quoted from the published list.</p>
+      <p><strong>Transfer is 45&ndash;75 minutes</strong> over roughly 51&ndash;55 km from Los Cabos International, because the resort sits past Cabo San Lucas rather than on the corridor.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="gal">
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLosCabos_Lifestyle_Pool_Beach.jpg" alt="Pools and beach"><figcaption>Pools and beach</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_LYRIC_POOL_SLIDES.jpg" alt="Lyric Pool slides"><figcaption>Lyric Pool and slides</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Rhythm-Pool-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Rhythm Pool"><figcaption>Rhythm Pool, adults only</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_RED_POOL.jpg" alt="Red Pool"><figcaption>Red Pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_EDEN_POOL.jpg" alt="Eden Pool"><figcaption>Eden Pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-ocean-front-pool.jpg" alt="Ocean front pool"><figcaption>Ocean-front pool</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-pulse-swim-up-bar.jpg" alt="Pulse swim-up bar"><figcaption>Pulse swim-up bar</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Bar and Grill"><figcaption>Legendary Bar &amp; Grill</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Toro-hard-rock-hotel-los-cabos.jpg" alt="Toro"><figcaption>Toro</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_ZEN_RESTAURANT_2.jpg" alt="Zen"><figcaption>Zen</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CIAO_RESTAURANT_TERRACE.jpg" alt="Ciao terrace"><figcaption>Ciao terrace</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_MARKET_RESTAURANT.jpg" alt="The Market"><figcaption>The Market</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CAFETTO_RESTAURANT.jpg" alt="Cafetto"><figcaption>Cafetto</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/moonlight-bar-lounge.jpg" alt="Moonlight bar and lounge"><figcaption>Moonlight bar &amp; lounge</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/sunlight-bar-terrace.jpg" alt="Sunlight bar terrace"><figcaption>Sunlight bar terrace</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Sunset-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Sunset terrace"><figcaption>Sunset terrace</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Los-Gallos-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Los Gallos terrace"><figcaption>Los Gallos terrace</figcaption></figure>
+    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Romantic-Sunset-Dinner-Hard-Rock-Los-Cabos.jpg" alt="Romantic sunset dinner"><figcaption>Private sunset dinner</figcaption></figure>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
+  <p>Internal reference sheet. Package pricing and venue capacities change &mdash; confirm against the current wedding sales guide before quoting a client.</p>
+</div></footer>
