@@ -191,10 +191,10 @@ tr:hover .sticky-col{background:var(--surface2);}
 .progress-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .3s;}
 
 /* WEDDING GRID */
-.wedding-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
-.wedding-square{background:var(--surface);border:1.5px solid #ccc;border-radius:12px;padding:20px;cursor:pointer;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,.08);min-width:220px;}
-.wedding-square:hover{border-color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.15);}
-.wedding-square.selected{border-color:var(--text);background:var(--surface2);}
+.wedding-grid{display:flex;flex-direction:column;gap:0;}
+.wedding-square{cursor:pointer;transition:all .15s;}
+.wedding-square:hover{}
+.wedding-square.selected{}
 
 /* DUE DATES PANEL */
 .due-dates-panel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
@@ -1758,46 +1758,36 @@ function renderWeddingGrid(){
     });
     const card=document.createElement('div');
     card.className='wedding-square'+(isSelected?' selected':'');
-    const opColor = w.operator==='CT' ? '#1a3a5c' : w.operator==='Other' ? '#2a1a3a' : '#1a1a1a';
-    const opBorder = w.operator==='CT' ? '#2a6aac' : w.operator==='Other' ? '#6a2a9a' : '#e0e0e0';
-    const opBg = w.operator==='CT' ? '#dde8f5' : w.operator==='Other' ? '#e8ddf5' : 'white';
-    card.style.cssText='padding:20px;cursor:pointer;text-align:center;';
-    card.style.background = opBg;
-    card.onclick=()=>openWeddingDetail(w.id);
     const opBadge = w.operator==='CT'
-      ? `<span style="background:#1a3a5c;color:#6aacef;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px">CT</span>`
+      ? `<span style="background:#2a4a6a;color:#aaccee;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">CT</span>`
       : w.operator==='Other'
-      ? `<span style="background:#2a1a3a;color:#9a6aef;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px">OTHER</span>`
-      : `<span style="background:#1a1a1a;color:#c9a96e;font-size:.7rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:6px">DWT</span>`;
-    card.style.borderTop = `3px solid ${opBorder}`;
+      ? `<span style="background:#3a2a4a;color:#aa88ee;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">OTHER</span>`
+      : `<span style="background:#3a3a3a;color:#cccccc;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">DWT</span>`;
+    card.style.cssText='cursor:pointer;';
+    card.onclick=()=>openWeddingDetail(w.id);
     card.innerHTML=`
-      <div style="font-size:.82rem;color:#999;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between">${fmtDate(w.weddingDate)}${opBadge}</div>
-      ${w.resort?`<div style="font-size:.82rem;color:#888;margin-bottom:8px">${esc(w.resort)}</div>`:'<div style="margin-bottom:8px"></div>'}
-      <div style="font-size:1.25rem;font-weight:700;color:#1a1a1a;margin-bottom:4px;line-height:1.3">${esc(w.names)}</div>
-      ${w.destination?`<div style="font-size:.82rem;color:#aaa;margin-bottom:6px">${esc(w.destination)}</div>`:'<div style="margin-bottom:6px"></div>'}
-      <div style="margin-bottom:8px;min-height:18px">${w.portalProvided?'<span style="background:#f0f8f2;border:1px solid #a8cca8;color:#1a5c2a;font-size:.72rem;font-weight:700;padding:2px 8px;border-radius:10px">&#10003; Portal Sent</span>':''}</div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:14px;border-top:1px solid #eee;padding-top:12px">
-        <div style="text-align:center">
-          <div style="font-size:1.3rem;font-weight:700;color:#1a1a1a">${rooms}</div>
-          <div style="font-size:.72rem;color:#888;text-transform:uppercase;margin-top:2px">Rooms</div>
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#535353;border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='#5a5a5a'" onmouseout="this.style.background='#535353'">
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
+            <span style="font-size:.95rem;font-weight:700;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
+            ${opBadge}
+            ${w.portalProvided?'<span style="background:#1a3a1a;color:#4ade80;font-size:.62rem;font-weight:700;padding:1px 5px;border-radius:3px">✓ Portal</span>':''}
+          </div>
+          <div style="font-size:.78rem;color:#888;">${fmtDate(w.weddingDate)}${w.resort?' · '+esc(w.resort):''}${w.destination?' · '+esc(w.destination):''}</div>
         </div>
-        <div style="text-align:center">
-          <div style="font-size:1.3rem;font-weight:700;color:#1a1a1a">${guestCount}</div>
-          <div style="font-size:.72rem;color:#888;text-transform:uppercase;margin-top:2px">Guests</div>
+        <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
+          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Rooms</div><div style="font-size:.88rem;font-weight:600;color:#f0f0f0">${rooms}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Guests</div><div style="font-size:.88rem;font-weight:600;color:#f0f0f0">${guestCount}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Paid</div><div style="font-size:.88rem;font-weight:600;color:#4ade80">$${fmt(paid)}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Owed</div><div style="font-size:.88rem;font-weight:600;color:${outstanding>0?'#f87171':'#4ade80'}">$${fmt(outstanding)}</div></div>
+          <div style="display:flex;gap:4px;" onclick="event.stopPropagation()">
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="openCouplePortal('${w.id}')">View</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="copyCoupleLink('${w.id}')">Link</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="editWedding('${w.id}')">Edit</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#3a2a2a;border:1px solid #5a3a3a;color:#f87171;cursor:pointer" onclick="archiveWedding('${w.id}')">✕</button>
+          </div>
         </div>
-        <div style="text-align:center">
-          <div style="font-size:1.1rem;font-weight:700;color:#2a7a4a">$${fmt(paid)}</div>
-          <div style="font-size:.72rem;color:#888;text-transform:uppercase;margin-top:2px">Paid</div>
-        </div>
-        <div style="text-align:center">
-          <div style="font-size:1.1rem;font-weight:700;color:${outstanding>0?'#8a1a1a':'#2a7a4a'}">$${fmt(outstanding)}</div>
-          <div style="font-size:.72rem;color:#888;text-transform:uppercase;margin-top:2px">Owed</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:6px;justify-content:center" onclick="event.stopPropagation()">
-        <button type="button" class="btn btn-sm btn-outline" style="font-size:.8rem;padding:5px 12px" onclick="openCouplePortal('${w.id}')">👁 View</button>
-        <button type="button" class="btn btn-sm btn-outline" style="font-size:.8rem;padding:5px 12px" onclick="copyCoupleLink('${w.id}')">🔗 Link</button>
-        <button type="button" class="btn btn-sm btn-outline" style="font-size:.8rem;padding:5px 12px" onclick="editWedding('${w.id}')">✏️ Edit</button>
+      </div>`;
         ${w.archived
           ? `<button type="button" class="btn btn-sm btn-outline" style="font-size:.8rem;padding:5px 12px;color:#2a7a4a;border-color:#2a7a4a" onclick="restoreWedding('${w.id}','${w.names.replace(/[']/, "&#39;")}')">↩ Restore</button>`
           : ''
