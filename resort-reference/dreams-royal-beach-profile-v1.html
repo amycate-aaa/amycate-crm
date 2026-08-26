@@ -1,0 +1,307 @@
+<title>Dreams Royal Beach Punta Cana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+</style>
+
+<header class="hero">
+  <img src="https://alg.widen.net/img/alg/wgyjidjah2/1600px@1x/DRRPC-EXT-Aerial-1A-CB.webp" alt="Dreams Royal Beach Punta Cana from above">
+  <div class="wrap">
+    <p class="eyebrow light">Bávaro Beach, Punta Cana</p>
+    <h1>Dreams Royal Beach Punta Cana</h1>
+    <p class="tag">Half of a two-resort campus with adults-only Secrets next door — and the only Punta Cana resort with its own mangrove.</p>
+    <ul class="chips"><li>486 rooms</li><li>14 categories</li><li>13 restaurants &middot; 12 bars</li><li>Preferred Club</li><li>23 min from PUJ</li><li>Water park &middot; 7 slides</li><li>All ages</li><li>AAA Four Diamond</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A family resort sharing its grounds with an adults-only sister</h2>
+  <p class="lede">Strong for mixed-age groups: water park and teens club on one side, nightclub, casino and spa a short walk away at Secrets.</p></div>
+  <div class="prose">
+    <p>486 rooms and suites on Bávaro Beach, 23 minutes from PUJ. All-ages, AAA Four Diamond, and part of World of Hyatt. The Preferred Club section functions as a resort-within-a-resort with its own motor lobby, lounge, pools, restaurants and hydromassage area.</p>
+    <p>The thing to hold in your head when selling this property: <b>the spa, the nightclub, the casino and Oceana restaurant are all on the Secrets side.</b> Dreams has its own theatre at the Main Plaza, its own pools and its own dining. Guests move freely between the two, but a client expecting a spa on their own side will be surprised.</p>
+    <p>No resort shuttle — guests arrange their own transfers unless booked as a group. Group discounts and VIP benefits start at 10 rooms, with a dedicated groups coordinator.</p>
+    <ul class="facts">
+      <li><b>486</b>rooms &amp; suites</li><li><b>14</b>room categories</li><li><b>23 min</b>from PUJ</li>
+      <li><b>10+</b>rooms for group rates</li><li><b>5–6</b>pools (sources conflict)</li><li><b>9,040</b>sq ft ballroom</li>
+    </ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Fourteen categories, nothing under 532 sq ft</h2>
+  <p class="lede">Five Deluxe, nine Preferred Club. Every room has a balcony or terrace, hot tub and daily-restocked mini-bar.</p>
+  <p class="subhead">All categories</p>
+  <div class="grid">
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/dhxujegygh/1600px@1x/DRRPC-DLX-DBL-1A-CB.webp" alt="Deluxe Room"></div><div class="cbody"><p class="meta">570 sq ft · Resort View</p><h3>Deluxe Room</h3><p>King or two doubles. Private furnished balcony, hot tub. Max 4 guests (3 adults) with doubles; 3 guests (2 adults) with king.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/frlhjwe1yp/1600px@1x/DRRPC-DLX-TV-King-AT.webp" alt="Deluxe Tropical View"></div><div class="cbody"><p class="meta">570 sq ft · Tropical View</p><h3>Deluxe Tropical View</h3><p>Same footprint, garden outlook. Balcony, hot tub. Doubles alternative: pb8btfg5in.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/hvpo3fvihb/1600px@1x/DRRPC-DLX-PV-King-AT.webp" alt="Deluxe Pool View"></div><div class="cbody"><p class="meta">570 sq ft · Pool View</p><h3>Deluxe Pool View</h3><p>Balcony over the pool deck. ⚠ This asset is published inside the Preferred Club Partial Ocean View tile — paired on filename and alt text, not tile position.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/enm9jiqdqa/1600px@1x/DRRPC-DLX-PV-TER-King-AT.webp" alt="Deluxe Pool Terrace"></div><div class="cbody"><p class="meta">570 sq ft · Pool View</p><h3>Deluxe Pool Terrace</h3><p>Ground floor, furnished terrace rather than balcony. Terrace shot: a4btcvd5y1. Doubles: g6hspdf97f.</p></div></article>
+<article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.82rem;color:var(--mute);font-style:italic">No category photo<br>published</span></div><div class="cbody"><p class="meta">1,140 sq ft · Tropical View</p><h3>Deluxe Family Room Tropical View</h3><p>One king AND two doubles. Full bathroom with hot tub for two. Max 6 guests (4 adults). ⚠ NO CATEGORY PHOTO PUBLISHED — the only image in its tile is a standard Deluxe Tropical View double.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/bsarioeboy/1600px@1x/DRRPC-PC-DLX-PV-DBL-2-CB.webp" alt="Preferred Club Deluxe Pool View"></div><div class="cbody"><p class="meta">570 sq ft · Pool View</p><h3>Preferred Club Deluxe Pool View</h3><p>Entry Preferred Club category. Balcony, hot tub, upgraded amenities.</p></div></article>
+<article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.82rem;color:var(--mute);font-style:italic">No category photo<br>published</span></div><div class="cbody"><p class="meta">570 sq ft · Partial Ocean</p><h3>Preferred Club Deluxe Partial Ocean View</h3><p>Balcony, hot tub, upgraded amenities. ⚠ NO CATEGORY PHOTO PUBLISHED — its tile contains a plain Deluxe Pool View image instead.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/wxkynbxf05/1600px@1x/DRRPC-DLX-SO-2A-CB.webp" alt="Preferred Club Deluxe Swim Up"></div><div class="cbody"><p class="meta">570 sq ft · Tropical/Pool</p><h3>Preferred Club Deluxe Swim Up</h3><p>Terrace onto the swim-up pool. Terrace: y1tzo4duvn. Doubles: ttpe96nl5h.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/ylc9slxqug/1600px@1x/DRRPC-PC-JR-PV-TER-KING-02-CP.webp" alt="Preferred Club Junior Suite Pool Terrace"></div><div class="cbody"><p class="meta">532.8 sq ft · Pool View</p><h3>Preferred Club Junior Suite Pool Terrace</h3><p>Newer suite block, lighter finish. Max 3 guests (2 adults). Terrace: jhig5uqztv.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/kjwxdjeymj/1600px@1x/DRRPC-PC-PRE-GV-KING-CP.webp" alt="Preferred Club Premium Suite Garden View"></div><div class="cbody"><p class="meta">758.86 sq ft · Tropical View</p><h3>Preferred Club Premium Suite Garden View</h3><p>Living room with sofa bed and dining area. Max 4 guests (3 adults). Living room: o9dgohsfak.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/gc8wgdplvl/1600px@1x/DRRPC-PC-JR-FAM-PV-Adjoining-Rooms-CP.webp" alt="Preferred Club Family Junior Suite Pool Terrace"></div><div class="cbody"><p class="meta">1,065.63 sq ft · Pool View</p><h3>Preferred Club Family Junior Suite Pool Terrace</h3><p>Two connecting Junior Suites with pool access. King + two doubles. Max 6 guests (4 adults).</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/8bdofhgrqb/1600px@1x/DRRPC-PC-JR-SO-KING-CP.webp" alt="Preferred Club Junior Suite Swim Out"></div><div class="cbody"><p class="meta">532.8 sq ft · Pool View</p><h3>Preferred Club Junior Suite Swim Out</h3><p>Direct pool access, private Bali bed. Max 3 guests (2 adults). ★ This is the comp threshold category for Wedding in Paradise. Terrace: sxe7ukkvdx.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/hk47bvjsks/1600px@1x/DRRPC-PC-MSRT-OF-Balcony-AT.webp" alt="Preferred Club Master Suite Ocean Front"></div><div class="cbody"><p class="meta">1,270 sq ft · Oceanfront</p><h3>Preferred Club Master Suite Ocean Front</h3><p>Largest category, only true oceanfront. Living room, dining area. Max 2 adults. Bedroom: 8uxvlzmc1f. Living: 7cqysh8te8. Bath: 6bdmzayv7k.</p></div></article>
+<article class="card"><div class="shot"><img src="https://alg.widen.net/img/alg/cz0kglztrx/1600px@1x/DRRPC-PC-MSTR-SO-TER-CP.webp" alt="Preferred Club Master Suite Private Pool"></div><div class="cbody"><p class="meta">1,065.63 sq ft · Pool View</p><h3>Preferred Club Master Suite Private Pool</h3><p>Separate bedroom, living area, guest bathroom, terrace with private pool. Max 3 guests (2 adults). Bedroom: cvo9l7wyxv.</p></div></article>
+  </div>
+  <div class="note">
+    <p><b>Photo pairing warning.</b> This resort has no per-room detail pages — each category is a tile with an embedded gallery, and several galleries carry images belonging to other categories. Deluxe Room and Deluxe Tropical View share one identical set. Every image above was paired on filename code plus alt text, never on tile position.</p>
+    <p><b>Room size conflict.</b> Hyatt lists every Deluxe at 570 sq ft; destinationweddings.com lists Deluxe Tropical View and Deluxe Pool View at 495 sq ft. Hyatt's figure used here. Worth settling before a client sees a size comparison, since DWT is where they land.</p>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2>
+  <p class="lede">Family-usable — no separate adults-only tier, and one Preferred Club category sleeps six.</p></div>
+  <div class="prose">
+    <ul class="perks">
+      <li>Private lounge, open 24 hours</li><li>Separate Preferred Club motor lobby</li>
+      <li>Personalised check-in and check-out</li><li>Daily continental breakfast service</li>
+      <li>Afternoon hot and cold hors d'oeuvres</li><li>Desserts and premium liquors</li>
+      <li>Complimentary tablet access</li><li>Upgraded room amenities and mini-bar</li>
+      <li>Preferred Club pool with swim-up bar</li><li>Preferred Club kids' pool</li>
+      <li>Hydromassage area</li><li>Reserved section of the main pool</li>
+    </ul>
+    <p style="margin-top:1.4rem"><b>Preferred Club–only venues:</b> Dolce (24h), Market Café (breakfast), Preferred Club Lounge Bar, Splash, The Reef, Portofino, and Seaside Grill for breakfast and lunch.</p>
+    <p><b>Qualifying categories (9):</b> Deluxe Pool View · Deluxe Partial Ocean View · Deluxe Swim Up · Junior Suite Pool Terrace · Premium Suite Garden View · Family Junior Suite Pool Terrace · Junior Suite Swim Out · Master Suite Ocean Front · Master Suite Private Pool.</p>
+    <div class="note"><p>The club page has an "Exclusive Privileges" tab that renders an empty panel on the live site. Whatever it was meant to hold is not visible.</p></div>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Thirteen restaurants, twelve bars</h2>
+  <p class="lede">No reservations are addressed anywhere on the dining page. Standing caveat: not all outlets open every night.</p>
+  <p class="subhead">Restaurants</p>
+  <div class="dining">
+<div class="dish"><h4>Mercure</h4><p class="cuisine">French · Formal · Adults only</p><p>À la carte French. The only adults-only restaurant. ⚠ No usable photo — widen asset is a Hyatt 'coming soon' placeholder.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Dinner 5:45–10pm</p></div>
+<div class="dish"><h4>Fusion</h4><p class="cuisine">Asian · Casual elegance</p><p>Teppanyaki tables. Good for a group of 8 at one table.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">5:45–10pm</p></div>
+<div class="dish"><h4>Portofino</h4><p class="cuisine">Italian · Casual elegance · Preferred Club</p><p>Listed on the dining page under 'Preferred Club Only'. Shares location #72 with Market Café.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Dinner 6–11pm</p></div>
+<div class="dish"><h4>Tres Colores</h4><p class="cuisine">Mexican · Casual elegance</p><p>À la carte Mexican. Covered terrace seating.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Dinner 5:45–10pm</p></div>
+<div class="dish"><h4>Seaside Grill</h4><p class="cuisine">Grill · Casual elegance</p><p>Beachside. Breakfast and lunch Preferred Club only; dinner open to all.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Bkfst 7–10:30 · Lunch 12:30–3:30 · Dinner 6–10pm</p></div>
+<div class="dish"><h4>World Café</h4><p class="cuisine">International buffet</p><p>Casual elegance required for dinner. Late-night bites.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Bkfst 7–10:30 · Lunch 12:30–3 · Dinner 6–10pm</p></div>
+<div class="dish"><h4>Pizzeria</h4><p class="cuisine">Pizza & grill</p><p>Site prints '11:00 p.m.' for the lunch start — evidently a typo.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Lunch 11am–6pm</p></div>
+<div class="dish"><h4>Tides Pool Side Grill</h4><p class="cuisine">Beach grill</p><p>Burgers and hot dogs.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">Lunch 11am–6pm</p></div>
+<div class="dish"><h4>That's A Wrap</h4><p class="cuisine">Salads, paninis · Pool casual</p><p>Located inside the water park.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">11am–5pm</p></div>
+<div class="dish"><h4>Sundaez</h4><p class="cuisine">Ice cream parlour</p><p>Slushies, pastries, sweets.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">12–11pm</p></div>
+<div class="dish"><h4>Coco Café</h4><p class="cuisine">Coffee & snacks</p><p>Premium coffee, casual.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">7am–11pm</p></div>
+<div class="dish"><h4>Dolce</h4><p class="cuisine">Coffee + ice cream · Preferred Club</p><p>Preferred Club guests only.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">24 hours</p></div>
+<div class="dish"><h4>Market Café</h4><p class="cuisine">Breakfast buffet · Preferred Club</p><p>Preferred Club only. ⚠ No usable photo — widen asset is Secrets Cap Cana's buffet.</p><p style="color:var(--mute);font-size:.8rem;margin-top:.25rem">7–11am</p></div>
+  </div>
+  <p class="subhead">Bars</p>
+  <div class="dining">
+<div class="dish"><h4>Blue Dorado</h4><p class="cuisine">Swim-up, newest pool</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>Sea Legs</h4><p class="cuisine">Swim-up</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>Hideaway</h4><p class="cuisine">Beach bar</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>The Grotto</h4><p class="cuisine">Beach bar</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>Interlude</h4><p class="cuisine">Main plaza</p><p style="color:var(--mute);font-size:.8rem">10am–12am</p></div>
+<div class="dish"><h4>Veranda</h4><p class="cuisine">Restaurant plaza</p><p style="color:var(--mute);font-size:.8rem">10am–11pm</p></div>
+<div class="dish"><h4>Halftime Bar</h4><p class="cuisine">Sports bar · 18+, ID may be checked</p><p style="color:var(--mute);font-size:.8rem">4pm–12am</p></div>
+<div class="dish"><h4>Eclipse Night Club</h4><p class="cuisine">AT SECRETS · 18+</p><p style="color:var(--mute);font-size:.8rem">10:30pm–1:30am</p></div>
+<div class="dish"><h4>Preferred Club Lounge Bar</h4><p class="cuisine">Preferred Club</p><p style="color:var(--mute);font-size:.8rem">10am–12am</p></div>
+<div class="dish"><h4>Splash</h4><p class="cuisine">Preferred Club</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>The Reef</h4><p class="cuisine">Preferred Club, by swim-up bar</p><p style="color:var(--mute);font-size:.8rem">10am–6pm</p></div>
+<div class="dish"><h4>Core Zone Teens Bar</h4><p class="cuisine">Non-alcoholic, teens</p><p style="color:var(--mute);font-size:.8rem">2pm–12am</p></div>
+  </div>
+  <div class="note">
+    <p><b>Outlet count conflict.</b> Homepage says eighteen restaurants and bars. The dining page lists 25. Homepage FAQ and Hyatt's Resorts At A Glance both say 14 restaurants; the dining page's own filter returns 13. Bars agree at 12. Used the page enumeration.</p>
+    <p><b>No group seating data.</b> No capacities, table configurations or group rules published for any outlet.</p>
+  </div>
+</div></section>
+
+<section id="weddings"><div class="wrap">
+  <p class="eyebrow">Weddings</p><h2>Four published packages, five claimed venues</h2>
+  <p class="lede">Prices here run materially below Dreams Macao — Wedding in Paradise is $150 cheaper and Beyond Memorable is $1,100 cheaper.</p>
+
+  <p class="subhead">Packages — official Hyatt page, Aug 2026</p>
+  <div class="pkg"><div><h3>Wedding in Paradise</h3><p class="lead">Inclusive of 10 guests</p></div><p class="price">$1,349</p>
+    <p class="det">Or <b>complimentary</b> when booking at least 7 nights in a <b>Preferred Club Junior Suite Swim Out or higher</b>, or 5 rooms any category for at least 3 nights. Symbolic ceremony, coordinator, bouquet/boutonniere, cake and sparkling wine for 10, comp room night before, 15% off spa. Cancellation penalty $250.</p></div>
+  <div class="pkg"><div><h3>Eternal Love</h3><p class="lead">Inclusive of 20 guests</p></div><p class="price">from $4,599</p>
+    <p class="det">Judge or minister, ceremony décor for 20, 50 photos + album, edited video, semi-private rehearsal dinner for 10, private cocktail hour and dinner reception (Gold menu, 20), live music trio, couples spa treatment. Cancellation penalty $500.</p></div>
+  <div class="pkg"><div><h3>Beyond Memorable</h3><p class="lead">Up to 79 guests · 75 paid room nights</p></div><p class="price">from $10,949</p>
+    <p class="det">Must book a minimum of one year in advance (resort discretion below that). Private ceremony, 1-hour welcome cocktail party, 2-hour rehearsal dinner, 3-hour reception, all with private bar. 20% spa discount and comp hydrotherapy access for couple and parents (6). $100 resort coupons per guest. Combinable with Social Stays That Pay. Cancellation penalty $750.</p></div>
+  <div class="pkg"><div><h3>Elope in Luxury</h3><p class="lead">Two guests</p></div><p class="price">$1,499</p>
+    <p class="det">Symbolic ceremony, hair/make-up choice, 20 digital photos, comp upgrade, breakfast in bed, romantic dinner, comp hydrotherapy circuit for the couple. Cancellation penalty $250.</p></div>
+
+  <div class="note">
+    <p><b>The fifth package.</b> The page text says "five wedding packages" but displays four. The library also carries Infinitely Yours Vow Renewal and Dulha &amp; Dulhan South Asian for this resort — neither is priced on the official page. Same gap as Dreams Macao.</p>
+    <p><b>All weddings must be booked a minimum of 30 days out.</b> Additional fees apply for a judge or minister, and vary by resort.</p>
+    <p><b>Coordinator on file:</b> francina.rodriguez1@secretsresorts.com (shared wedding office with Secrets).</p>
+  </div>
+
+  <p class="subhead">Venues</p>
+  <div class="tablewrap"><table>
+    <caption>Resort claims "five stunning ceremony and reception options" and names none. Four below are from destinationweddings.com; the mangrove is confirmed separately as an on-site feature.</caption>
+    <thead><tr><th>Venue</th><th>Where</th><th>Stated capacity</th><th>Seated or standing?</th></tr></thead>
+    <tbody>
+      <tr><th>Beach</th><td>Beachfront</td><td class="num">200</td><td>Not stated</td></tr>
+      <tr><th>Ballroom</th><td>Convention centre</td><td class="num">200</td><td>Not stated — sits between the capacity sheet's banquet 320 and cocktail 500</td></tr>
+      <tr><th>Royal Wedding Gazebo</th><td>Elevated beachfront (map #56)</td><td class="num">60</td><td>Not stated</td></tr>
+      <tr><th>Garden View Pool</th><td>Poolside, tropical gardens</td><td class="num">60</td><td>Not stated</td></tr>
+      <tr><th>Mangrove lawn</th><td>On-site mangrove boardwalk</td><td>Not published</td><td>Resort has group setup photos — dance floor, round tables, DJ</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:1rem;color:var(--soft);font-size:.9rem"><b>Wedding services listed:</b> civil/legal and symbolic ceremonies · onsite coordinator · hair and makeup · bridal suite · DJ · live music · florals · photographer · videographer · attire preparation. Music curfews, venue fees and room-night comps are not published.</p>
+</div></section>
+
+<section id="events"><div class="wrap">
+  <p class="eyebrow">Private events</p><h2>Convention centre — ten salons</h2>
+  <p class="lede">The only capacities on this property with an explicit seated/standing split. Ceiling height 16.6 ft throughout.</p>
+  <div class="tablewrap"><table>
+    <caption>From the resort's own Meeting Room Layout &amp; Capacity sheet. Cocktail = standing/reception; Banquet = seated at tables.</caption>
+    <thead><tr><th>Space</th><th>Sq ft</th><th>Cocktail (standing)</th><th>Banquet (seated)</th><th>Theater</th><th>Classroom</th></tr></thead>
+    <tbody>
+      <tr><th>Salon 1–10 (whole)</th><td class="num">9,040</td><td class="num">500</td><td class="num">320</td><td class="num">500</td><td class="num">300</td></tr>
+      <tr><th>Coralillo–Palmas (5/6)</th><td class="num">4,800</td><td class="num">450</td><td class="num">200</td><td class="num">350</td><td class="num">250</td></tr>
+      <tr><th>Salons 7–10</th><td class="num">2,358</td><td class="num">80</td><td class="num">80</td><td class="num">90</td><td class="num">60</td></tr>
+      <tr><th>Salons 1–4</th><td class="num">2,262</td><td class="num">80</td><td class="num">80</td><td class="num">90</td><td class="num">60</td></tr>
+      <tr><th>Single salon</th><td class="num">754–786</td><td class="num">30</td><td class="num">20</td><td class="num">20</td><td class="num">16</td></tr>
+      <tr><th>Foyer</th><td class="num">5,403</td><td class="num">200</td><td>Not offered</td><td>—</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><p><b>Conflict between two official Hyatt documents.</b> The capacity sheet gives the largest single space as Salon 1–10, 9,040 sq ft, banquet 320. Resorts At A Glance lists largest meeting space 4,464 sq ft and max banquet 400. The 9,040 total agrees; the rest does not, and 4,464 sq ft matches no room on the floor plan.</p></div>
+</div></section>
+
+<section id="grounds"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; nightlife</p><h2>Five pools, a water park and a nightclub next door</h2>
+  <div class="prose">
+    <p><b>Pools.</b> Main pool with swim-up bar and reserved Preferred Club section · Preferred Club pool with swim-up bar · pool by the plaza · kids' pool · Preferred Club kids' pool · hot tub. <b>No adults-only pool</b> — the split is family vs Preferred Club.</p>
+    <p><b>Water park.</b> Seven slides plus a splash park, 10am–6pm, height minimums on some slides. That's A Wrap is inside it.</p>
+    <p><b>Beach.</b> Bávaro — palm-studded white sand. Beach volleyball, two beachfront bars, Seaside Grill serving on the sand. <b>The resort publishes nothing about water entry, currents or sargassum.</b> A third-party wedding site describes it as calm and swimmable, but that is not the resort's own claim.</p>
+    <p><b>Nightlife.</b> On property: theatre and nightly shows at the Main Plaza, beach parties, theme nights, Halftime Sports Bar (18+), Core Zone teens bar. At Secrets: Eclipse Night Club (18+, 10:30pm–1:30am) and the casino (7pm–2am, slots from 3pm, adult-only, additional cost).</p>
+  </div>
+  <div class="note"><p><b>Pool count conflict.</b> Activities page says six pools; homepage FAQ says five and itemises five. Both are resort copy.</p>
+  <p><b>Casino location conflict.</b> The activities page places the casino at Secrets. The official resort map lists it as #78 under the <i>Dreams</i> legend. Unresolved.</p></div>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <p class="eyebrow">Activities &amp; spa</p><h2>What fills the days</h2>
+  <div class="prose">
+    <p><b>Land.</b> Beach volleyball, tennis courts and clinics*, pickleball, basketball, discounted green fees at Punta Cana courses*.</p>
+    <p><b>Water.</b> Kayaks, snorkelling, non-motorised water sports, intro scuba in the pool. Fishing and full scuba extra*.</p>
+    <p><b>Kids &amp; teens.</b> Explorer's Club ages 3–12, 9am–10pm, includes a beach camping night; children must be fully potty-trained. Core Zone ages 13–17, 2pm–12am. Babysitting $15/hr one child, $25/hr two, via concierge.</p>
+    <p><b>Fitness.</b> Treadmills, ellipticals, free weights, yoga, dance, aqua aerobics. Full access 18+; 16–17 with an adult.</p>
+    <p><b>Spa — at Secrets, not on this property.</b> 17,000+ sq ft. Hydrotherapy circuit, sauna, steam room, salon, outdoor yoga area, hydro-tub and waterfall pool. <b>Whether the hydrotherapy circuit is included or charged is not stated anywhere</b> — destinationweddings marks "Spa ($)". Note both Beyond Memorable and Elope in Luxury include comp hydrotherapy access, which implies it is normally chargeable.</p>
+    <p><b>Excursions.</b> Nothing published. Booked through the concierge and the Hyatt Experiences portal; Amstar is the DMC.</p>
+    <p style="font-size:.82rem;color:var(--mute)">*Additional cost.</p>
+  </div>
+</div></section>
+
+<section id="flags"><div class="wrap">
+  <p class="eyebrow">Before you quote</p><h2>Open questions</h2>
+  <div class="prose">
+    <ul class="perks">
+      <li>Year built / renovated — not published anywhere</li>
+      <li>Restaurant reservations — the word does not appear on the dining page</li>
+      <li>Large-group seating in restaurants — no data</li>
+      <li>Beach swimmability, currents, sargassum — no resort statement</li>
+      <li>Seated vs standing for the four outdoor wedding venues</li>
+      <li>The fifth wedding venue, and the fifth wedding package</li>
+      <li>Hydrotherapy circuit — included or charged</li>
+      <li>Casino — Dreams or Secrets (map and activities page disagree)</li>
+      <li>Pool count — five or six</li>
+      <li>Deluxe room size — 570 or 495 sq ft</li>
+      <li>Mercure and Market Café — no usable photography exists</li>
+    </ul>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
+  <p>Internal reference sheet. Room rates, package pricing and wedding fees change &mdash; confirm against the current resort brochure before quoting a client.</p>
+</div></footer>
