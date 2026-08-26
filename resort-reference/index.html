@@ -32,6 +32,22 @@ header.top{padding:76px 0 44px;border-bottom:1px solid var(--line)}
 header.top h1{font-size:clamp(38px,6vw,64px)}
 header.top p{margin-top:14px;color:#5A5045;max-width:640px;font-size:16.5px}
 
+
+.audbar{
+  display:flex;gap:0;margin-top:26px;border-bottom:1px solid var(--line);
+}
+.audbtn{
+  appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:'Jost',sans-serif;font-size:11px;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:#8A7C68;padding:12px 22px 10px;cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.audbtn:hover{color:var(--black)}
+.audbtn[aria-selected="true"]{color:var(--gold-deep);border-bottom-color:var(--gold)}
+.audhint{
+  margin-top:14px;font-size:14.5px;color:#7A6E60;min-height:1.4em;
+}
+@media(max-width:560px){.audbtn{padding:11px 14px 9px;letter-spacing:.14em}}
 .count{
   margin-top:24px;font-size:11px;font-weight:500;
   letter-spacing:.2em;text-transform:uppercase;color:#8A7C68;
@@ -82,6 +98,11 @@ footer strong{font-weight:500;color:#5A5045}
     <h1>Resort Reference</h1>
     <p>One page per resort &mdash; rooms, dining, club level, wedding venues with capacities, packages and planning notes. Built to read before a client call.</p>
     <div class="count">10 resorts</div>
+    <div class="audbar" role="tablist" aria-label="Audience">
+      <button class="audbtn" id="aud-dwt" role="tab" aria-selected="true">Weddings</button>
+      <button class="audbtn" id="aud-ct" role="tab" aria-selected="false">Groups &amp; Celebrations</button>
+    </div>
+    <p class="audhint" id="audhint">Ceremony and reception venues, packages and what each one includes.</p>
   </div>
 </header>
 
@@ -230,5 +251,28 @@ footer strong{font-weight:500;color:#5A5045}
   </div>
 </footer>
 
+
+<script>
+(function(){
+  var btns=[].slice.call(document.querySelectorAll('.audbtn'));
+  var cards=[].slice.call(document.querySelectorAll('a.card'));
+  var hint=document.getElementById('audhint');
+  var TEXT={
+    'aud-dwt':'Ceremony and reception venues, packages and what each one includes.',
+    'aud-ct':'Group booking, private event spaces, and what there is for kids and teens.'
+  };
+  cards.forEach(function(c){ c.dataset.base=c.getAttribute('href').split('#')[0]; });
+  function sel(id){
+    btns.forEach(function(b){ b.setAttribute('aria-selected', b.id===id?'true':'false'); });
+    var grp=(id==='aud-ct');
+    cards.forEach(function(c){ c.setAttribute('href', c.dataset.base + (grp?'#groups':'')); });
+    hint.textContent=TEXT[id];
+    try{ localStorage.setItem('acAudience', id); }catch(e){}
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ sel(b.id); }); });
+  var saved; try{ saved=localStorage.getItem('acAudience'); }catch(e){}
+  if(saved==='aud-ct'){ sel('aud-ct'); }
+})();
+</script>
 </body>
 </html>
