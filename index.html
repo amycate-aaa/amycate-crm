@@ -34,19 +34,82 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
 #pinError{color:var(--red);font-size:.92rem;height:20px;}
 
 /* APP */
-#app{display:block;}
-header{background:#0D1B2A;border-bottom:3px solid #B8973A;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky!important;top:0!important;z-index:1000;flex-wrap:wrap;gap:8px;}
-.logo{color:#fff;font-size:1rem;font-weight:700;letter-spacing:.04em;}
-.logo span{color:rgba(255,255,255,0.5);font-weight:400;font-size:.9rem;margin-left:8px;}
-nav{display:flex;gap:3px;flex-wrap:wrap;}
-.nav-btn{background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.05rem;padding:8px 16px;border-radius:20px;cursor:pointer;transition:all .15s;}
-.nav-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
-.nav-btn.active{background:#B8973A;color:#0D1B2A;font-weight:700;border-radius:20px;}
+#app{display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+#sidebar{
+  width:200px;
+  min-width:200px;
+  background:#0D1B2A;
+  border-right:1px solid #1B2B4B;
+  display:flex;
+  flex-direction:column;
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  z-index:1000;
+  flex-shrink:0;
+}
+.sidebar-logo{
+  padding:16px 16px 14px;
+  color:#C9A84C;
+  font-size:.95rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  border-bottom:1px solid #1B2B4B;
+}
+.sidebar-stats{
+  padding:12px 14px;
+  border-bottom:1px solid #1B2B4B;
+}
+.sidebar-stat{margin-bottom:8px;}
+.sidebar-stat:last-child{margin-bottom:0;}
+.sidebar-stat-label{font-size:.65rem;color:#4a5a70;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+.sidebar-stat-val{font-size:1.15rem;font-weight:700;color:#e8e0d0;}
+.sidebar-stat-sub{font-size:.7rem;color:#8a9bb5;margin-top:1px;}
+.sidebar-stat-val.green{color:#4ADE80;}
+.sidebar-stat-val.red{color:#FF6B6B;}
+.sidebar-section{font-size:.62rem;color:#3a4a60;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
+.nav-btn{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  width:100%;
+  background:none;
+  border:none;
+  border-left:2px solid transparent;
+  color:#8a9bb5;
+  font-size:.82rem;
+  padding:7px 14px;
+  cursor:pointer;
+  transition:all .15s;
+  text-align:left;
+  text-decoration:none;
+}
+.nav-btn:hover{background:#1B2B4B;color:#e8e0d0;}
+.nav-btn.active{background:#1B2B4B;color:#e8e0d0;border-left-color:#C9A84C;font-weight:600;}
+.nav-badge{font-size:.62rem;background:#243550;color:#8a9bb5;padding:1px 5px;border-radius:3px;}
+.sidebar-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid #1B2B4B;display:flex;flex-direction:column;gap:6px;}
+
+/* MAIN AREA */
+#main-area{flex:1;display:flex;flex-direction:column;min-width:0;background:#0D1B2A;}
+#main-topbar{
+  background:#0D1B2A;
+  border-bottom:1px solid #1B2B4B;
+  padding:10px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:999;
+  flex-wrap:wrap;
+  gap:8px;
+}
+#main-topbar-title{font-size:.9rem;font-weight:600;color:#e8e0d0;}
 .header-right{display:flex;align-items:center;gap:8px;}
-.wedding-selector{background:#2a2a2a;border:1px solid #444;color:white;padding:7px 10px;border-radius:6px;font-size:.92rem;}
-.lock-btn{background:none;border:1px solid #444;color:#aaa;padding:6px 10px;border-radius:6px;font-size:.9rem;cursor:pointer;}
-.lock-btn:hover{color:white;}
-main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 60px);color:white;}
+main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);color:white;}
 
 /* TABS */
 .tab-panel{display:none;}
@@ -224,36 +287,72 @@ tr:hover .sticky-col{background:var(--surface2);}
 
 <!-- LOCK SCREEN -->
 <div id="app">
-  <header autocomplete="off">
-    <div class="logo"> Amy Cate CRM <span id="weddingLabel" style="display:none;font-size:.82rem;font-weight:400;color:#aaa"></span></div>
-    <nav style="display:flex;flex-direction:column;align-items:center;gap:2px">
-      <div style="display:flex;align-items:center;gap:4px">
-        <button type="button" autocomplete="off" name="nav_weddings" class="nav-btn active" onclick="showTab('setup')" style="" data-noautofill="1">Active Events</button>
-        <div style="width:1px;height:24px;background:#444"></div>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('leads')" style="">⭐ Leads</button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('inbox')" style="position:relative">📥 Inbox<span id="inboxBadge" style="display:none;position:absolute;top:-4px;right:-4px;background:#e05555;color:white;font-size:.65rem;font-weight:700;border-radius:10px;padding:1px 5px;min-width:16px;text-align:center"></span></button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('quotes')" style="">📄 Quotes</button>
-        <div style="width:1px;height:24px;background:#444"></div>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('timeline')" style="">📅 Timeline</button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('reports')" style="">📊 Reports</button>
-        <a href="resort-library.html" class="nav-btn" style="text-decoration:none;display:inline-flex;align-items:center">🏨 Resort Library</a>
+
+  <!-- LEFT SIDEBAR -->
+  <div id="sidebar">
+    <div class="sidebar-logo">✦ Amy Cate CRM</div>
+
+    <!-- SIDEBAR STATS -->
+    <div class="sidebar-stats" id="sidebar-stats">
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-label">Active Events</div>
+        <div class="sidebar-stat-val" id="sb-active">—</div>
+        <div class="sidebar-stat-sub" id="sb-active-sub"></div>
       </div>
-      <div style="display:flex;gap:2px">
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')" style="font-size:.72rem;padding:1px 8px;color:#aaa">All Guests</button>
-        <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('events')" style="font-size:.72rem;padding:1px 8px;color:#aaa">All Events</button>
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-label">Total Guests</div>
+        <div class="sidebar-stat-val" id="sb-guests">—</div>
+        <div class="sidebar-stat-sub" id="sb-rooms-sub"></div>
       </div>
-    </nav>
-    <div class="header-right">
-      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)">
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-label">Collected</div>
+        <div class="sidebar-stat-val green" id="sb-collected">—</div>
+        <div class="sidebar-stat-sub" id="sb-collected-sub"></div>
+      </div>
+      <div class="sidebar-stat">
+        <div class="sidebar-stat-label">Outstanding</div>
+        <div class="sidebar-stat-val red" id="sb-outstanding">—</div>
+        <div class="sidebar-stat-sub" id="sb-outstanding-sub"></div>
+      </div>
+    </div>
+
+    <!-- NAV LINKS -->
+    <button type="button" autocomplete="off" name="nav_weddings" class="nav-btn active" onclick="showTab('setup')" data-noautofill="1">Active Events</button>
+
+    <div class="sidebar-section">Pipeline</div>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('leads')">⭐ Leads</button>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('inbox')" style="position:relative">📥 Inbox<span id="inboxBadge" class="nav-badge" style="display:none"></span></button>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('quotes')">📄 Quotes</button>
+
+    <div class="sidebar-section">Overview</div>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('timeline')">📅 Timeline</button>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('reports')">📊 Reports</button>
+    <a href="resort-library.html" class="nav-btn" style="text-decoration:none">🏨 Resort Library</a>
+
+    <div class="sidebar-section">All</div>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')">👥 All Guests</button>
+    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('events')">📋 All Events</button>
+
+    <!-- SIDEBAR BOTTOM -->
+    <div class="sidebar-bottom">
+      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)" style="background:#1B2B4B;border:1px solid #2d4a6e;color:#e8e0d0;padding:6px 8px;border-radius:6px;font-size:.75rem;width:100%">
         <option value="">— Choose Wedding —</option>
       </select>
-      <button class="lock-btn" onclick="backupToDrive()" title="Download backup of all CRM data" style="background:#1a3a1a;border-color:#2a6a2a;color:#6fcf6f;font-size:.85rem;padding:6px 12px;white-space:nowrap">
+      <button class="lock-btn" onclick="backupToDrive()" title="Download backup" style="background:#0a2a0a;border:1px solid #2a6a2a;color:#4ADE80;font-size:.75rem;padding:5px 10px;border-radius:6px;cursor:pointer;width:100%">
         💾 Backup
       </button>
     </div>
-  </header>
+  </div>
 
-  <main>
+  <!-- MAIN AREA -->
+  <div id="main-area">
+    <div id="main-topbar">
+      <div id="main-topbar-title">Active Events</div>
+      <div class="header-right">
+        <span id="weddingLabel" style="display:none;font-size:.82rem;font-weight:400;color:#aaa"></span>
+      </div>
+    </div>
+    <main>
 
     <!-- EVENTS/LEADS TAB -->
     <div id="tab-leads" class="tab-panel">
@@ -876,7 +975,8 @@ tr:hover .sticky-col{background:var(--surface2);}
     </div>
 
   </main>
-</div>
+  </div><!-- end main-area -->
+</div><!-- end app -->
 
 <!-- MODALS -->
 
@@ -1429,7 +1529,7 @@ function autoSetFlights(){
 
 // ── PIN ──
 const PIN='2580';
-function unlock(){ document.getElementById('lockScreen').style.display='none'; document.getElementById('app').style.display='block'; init(); }
+function unlock(){ document.getElementById('lockScreen').style.display='none'; document.getElementById('app').style.display='flex'; init(); }
 function lockApp(){ pe=''; pinClear(); document.getElementById('lockScreen').style.display='flex';  }
 
 let pe='';
@@ -1441,7 +1541,7 @@ function pp(n){
     setTimeout(()=>{
       if(pe===PIN){
         document.getElementById('lockScreen').style.display='none';
-        document.getElementById('app').style.display='block';
+        document.getElementById('app').style.display='flex';
         init();
       } else {
         document.getElementById('pinError').textContent='Incorrect PIN — try again';
@@ -1463,6 +1563,10 @@ function showTab(name){
   const panel = document.getElementById('tab-'+name);
   if(panel) panel.classList.add('active');
   document.querySelectorAll('.nav-btn').forEach(b=>{ const oc = b.getAttribute('onclick')||''; if(b.textContent.trim().toLowerCase().includes(name)||oc.includes("'"+name+"'")) b.classList.add('active'); });
+  // Update top bar title
+  const tabTitles = {setup:'Active Events',leads:'Leads',inbox:'Inbox',quotes:'Quotes',timeline:'Timeline',reports:'Reports',events:'All Events',guests:'All Guests',financials:'Financials',payments:'Payments',flights:'Flights',docs:'Documents'};
+  const titleEl = document.getElementById('main-topbar-title');
+  if(titleEl && tabTitles[name]) titleEl.textContent = tabTitles[name];
   // Hide wedding name in header when on top-level tabs
   const topLevelTabs = ['setup','leads','timeline','reports','events'];
   if(topLevelTabs.includes(name)){
@@ -1605,6 +1709,24 @@ function renderMasterDueDates(){
       </div>
     </div>
   `;
+
+  // Update sidebar stats
+  const sbActive = document.getElementById('sb-active');
+  const sbActiveSub = document.getElementById('sb-active-sub');
+  const sbGuests = document.getElementById('sb-guests');
+  const sbRoomsSub = document.getElementById('sb-rooms-sub');
+  const sbCollected = document.getElementById('sb-collected');
+  const sbCollectedSub = document.getElementById('sb-collected-sub');
+  const sbOutstanding = document.getElementById('sb-outstanding');
+  const sbOutstandingSub = document.getElementById('sb-outstanding-sub');
+  if(sbActive) sbActive.textContent = activeWeddings.length;
+  if(sbActiveSub) sbActiveSub.textContent = weddings.length + ' total';
+  if(sbGuests) sbGuests.textContent = totPeople;
+  if(sbRoomsSub) sbRoomsSub.textContent = totRooms + ' rooms';
+  if(sbCollected) sbCollected.textContent = '$' + fmt(totPaid);
+  if(sbCollectedSub) sbCollectedSub.textContent = totRevenue>0?Math.round(totPaid/totRevenue*100)+'% of total':'';
+  if(sbOutstanding) sbOutstanding.textContent = '$' + fmt(Math.max(0,totRevenue-totPaid));
+  if(sbOutstandingSub) sbOutstandingSub.textContent = 'of $' + fmt(totRevenue) + ' total';
 }
 
 function renderWeddingGrid(){
@@ -6405,7 +6527,7 @@ function submitLock() {
   if (val === CRM_PASSWORD) {
     sessionStorage.setItem('crm_unlocked','1');
     document.getElementById('crm-lock-screen').remove();
-    document.getElementById('app').style.display = 'block';
+    document.getElementById('app').style.display = 'flex';
     init().then(() => { showTab('setup'); setTimeout(() => { showTab('setup'); loadInbox(); }, 500); });
   } else {
     document.getElementById('crm-pw-error').textContent = 'Incorrect password.';
