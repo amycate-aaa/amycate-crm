@@ -1,0 +1,270 @@
+<title>Dreams Royal Beach Punta Cana — Resort Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+</style>
+
+<header class="hero">
+  <img src="https://media-nizuc.moonpalacecancun.com/imagen_slider_1900x1267_01_4f8cc5da2d.webp" alt="Moon Palace Nizuc — Cancún">
+  <div class="wrap">
+    <p class="eyebrow light">Cancún, Mexico</p>
+    <h1>Moon Palace Nizuc — Cancún</h1>
+    <p class="tag">Ten minutes from the airport, inside the Moon Palace complex — with the biggest family room in Cancún.</p>
+    <ul class="chips"><li>713 rooms</li><li>10 categories</li><li>All ages</li><li>10 min from CUN</li><li>Water slide &amp;amp; splash zone</li><li>Kids 17 &amp;amp; under free</li><li>AAA Four Diamond</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A family resort with a two-bedroom suite that actually sleeps seven</h2>
+  <p class="lede">713 rooms inside the wider Moon Palace complex, with free access to the sister resort next door.</p></div>
+  <div class="prose"><p>Nizuc sits inside the Moon Palace complex, which means your family has its own quieter resort to come back to and a much larger one to explore. Guests have full access to Moon Palace Cancún&rsquo;s restaurants and bars as well as their own.</p>
+ <p>It is ten minutes from the airport &mdash; the shortest transfer of any resort in this comparison, which matters more than it sounds with small children and car seats.</p>
+ <p>Every room has a double whirlpool tub, a balcony, a premium liquor dispenser and a minibar restocked daily. Kids and teens seventeen and under stay free with one paying adult in the room.</p>
+    <ul class="facts"><li><b>713</b>rooms &amp;amp; suites</li><li><b>10</b>room categories</li><li><b>10 min</b>from CUN</li><li><b>Free</b>kids 17 &amp;amp; under</li><li><b>4</b>accessible rooms</li><li><b>27</b>holes of golf</li></ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Ten categories, and one built for a whole family</h2>
+  <p class="lede">The Superior Family Deluxe is the reason to look here: 968 sq ft across two connecting bedrooms, with its own kid-friendly minibar.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/family_deluxe_room_bedroom_moon_palace_cancun_b4d544185a_926b7e3ba5.webp" alt="Superior Family Deluxe" loading="lazy"></div><div class="cbody"><p class="meta">968 sq ft · Garden View · Sleeps 7</p><h3>Superior Family Deluxe</h3><p><b>Two connecting bedrooms</b> — a king in one, two doubles in the other. Double whirlpool tub in each. An adults&rsquo; minibar and premium liquor dispenser on one side; a kid-friendly minibar with milkshakes and soda on the other. Kids&rsquo; bath toys, shampoo and slippers come with this category only.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/bedroom_governor_suite_moon_palace_cancun_0bb0b8c1a4_8b20e07d28.webp" alt="Superior Governor Suite" loading="lazy"></div><div class="cbody"><p class="meta">968 sq ft · Ocean or Terrace · Sleeps 5</p><h3>Superior Governor Suite</h3><p>King with a sofa bed, a living room and dining room, and a breakfast table for two. Either ocean views or access to a shared terrace with three hot tubs.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/superior_oceanfront_room_moon_palace_cancun_389ab62de6_a5523f1134.webp" alt="Superior Deluxe Oceanfront" loading="lazy"></div><div class="cbody"><p class="meta">484 sq ft · Ocean Front · Sleeps 5</p><h3>Superior Deluxe Oceanfront</h3><p>King or two doubles, with the sea straight ahead from the balcony.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/mobile_bedroom_view_superior_deluxe_ocean_view_king_moon_palace_nizuc_1bcddefeb2.webp" alt="Superior Deluxe Ocean View" loading="lazy"></div><div class="cbody"><p class="meta">484 sq ft · Ocean View · Sleeps 5</p><h3>Superior Deluxe Ocean View</h3><p>King or two doubles. The resort pitches this one for families and couples alike.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/deluxe_garden_view_moon_palace_cancun_2caa843510_f8656b610c.webp" alt="Superior Deluxe Garden View" loading="lazy"></div><div class="cbody"><p class="meta">484 sq ft · Garden View · Sleeps 5</p><h3>Superior Deluxe Garden View</h3><p>King or two doubles, looking over the gardens. Accessible room options in this category.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/premier_honeymoon_suite_moon_palace_cancun_f7fbf4bd3d_4e2c38177f.webp" alt="Superior Honeymoon Suite" loading="lazy"></div><div class="cbody"><p class="meta">484 sq ft · Ocean View · Two adults</p><h3>Superior Honeymoon Suite</h3><p>Private check-in, an exclusive beach area, upgraded liquor and one extra bottle of premium spirits. Adults only — no children in this category.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/two_bedrooms_suite_golf_course_moon_palace_cancun_e73c220429_8e544a202c.webp" alt="Superior Two Bedroom Suite Golf Course View" loading="lazy"></div><div class="cbody"><p class="meta">Golf Course View · Sleeps 6</p><h3>Superior Two Bedroom Suite Golf Course View</h3><p>Two bedrooms — a king and two doubles — with a personal golf cart included.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/room_view_junior_suite_golf_moon_palace_cancun_566ee22750_10b6e7dd85.webp" alt="Superior Junior Suite Golf Course View" loading="lazy"></div><div class="cbody"><p class="meta">Golf Course View · Two guests</p><h3>Superior Junior Suite Golf Course View</h3><p>A king by the golf course, with a personal golf cart included.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/imagen_slider_1900x1267_01_4f8cc5da2d.webp" alt="Superior Three Bedroom Villa" loading="lazy"></div><div class="cbody"><p class="meta">Three bedrooms · Sleeps 8</p><h3>Superior Three Bedroom Villa</h3><p>Two kings and two doubles across three bedrooms, each with its own bathroom and seating area. Living, kitchen and dining space, and a private terrace.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-nizuc.moonpalacecancun.com/mps_Room_3_Bedrm_Golf_Villa_Bedrm_04_40ea408efc.webp" alt="Superior Golf Course Villa" loading="lazy"></div><div class="cbody"><p class="meta">Three bedrooms · Sleeps 8</p><h3>Superior Golf Course Villa</h3><p>Two kings and two doubles, three bathrooms, a double whirlpool tub, a private terrace and a balcony.</p></div></article>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Six restaurants here, and everything at Moon Palace Cancún too</h2>
+  <p class="subhead">Restaurants</p>
+  <div class="dining">
+      <div class="dish"><h4>Los Caporales</h4><p class="cuisine">Mexican · à la carte breakfast &amp;amp; dinner</p></div>
+      <div class="dish"><h4>Carvão</h4><p class="cuisine">Brazilian rodizio · Certified Angus Beef</p></div>
+      <div class="dish"><h4>El Manglar</h4><p class="cuisine">International buffet · all three meals</p></div>
+      <div class="dish"><h4>Palapa Pelicanos</h4><p class="cuisine">Mediterranean, and Indian Thursday to Saturday</p></div>
+      <div class="dish"><h4>La Burguería</h4><p class="cuisine">Gourmet Angus burgers</p></div>
+      <div class="dish"><h4>Palapa Delfines</h4><p class="cuisine">Poolside bites and grill</p></div>
+      <div class="dish"><h4>Sweet &amp;amp; Coffee</h4><p class="cuisine">Coffee, cake, ice cream, artisanal chocolate</p></div>
+      <div class="dish"><h4>Smoked</h4><p class="cuisine">Poolside Texan-style barbecue</p></div>
+      <div class="dish"><h4>Riviera Maya</h4><p class="cuisine">Yucatán and regional Mexican</p></div>
+      <div class="dish"><h4>Trattoria</h4><p class="cuisine">Italian · smart casual</p></div>
+      <div class="dish"><h4>Agra</h4><p class="cuisine">Indian</p></div>
+      <div class="dish"><h4>Momo</h4><p class="cuisine">Pan-Asian, hibachi and teppanyaki</p></div>
+      <div class="dish"><h4>Góndola</h4><p class="cuisine">Italian fine dining</p></div>
+      <div class="dish"><h4>Bugambilias</h4><p class="cuisine">Mexican buffet</p></div>
+      <div class="dish"><h4>Palapa Asadero</h4><p class="cuisine">International grill</p></div>
+      <div class="dish"><h4>Pier 8</h4><p class="cuisine">Caribbean lunch, seafood and grill at dinner</p></div>
+      <div class="dish"><h4>24-Hour Room Service</h4><p class="cuisine">Ordered through the app</p></div>
+      <div class="dish"><h4>Signature Baby Purée Menu</h4><p class="cuisine">Freshly made, delivered to the room, included</p></div>
+  </div>
+  <p class="subhead">Bars &amp; lounges</p>
+  <div class="dining">
+      <div class="dish"><h4>The Pub Brew House</h4><p class="cuisine">9am – 1am</p></div>
+      <div class="dish"><h4>Lobby Bar</h4><p class="cuisine">9am – 1am</p></div>
+      <div class="dish"><h4>19th Hole Bar</h4><p class="cuisine">At the golf course</p></div>
+      <div class="dish"><h4>Noir Night Club</h4><p class="cuisine">Moon Palace Cancún</p></div>
+      <div class="dish"><h4>Skybar</h4><p class="cuisine">Moon Palace Cancún</p></div>
+      <div class="dish"><h4>Bar Flowrider</h4><p class="cuisine">By the surf simulator</p></div>
+      <div class="dish"><h4>Los Columpios</h4><p class="cuisine">Swings overlooking the sea</p></div>
+      <div class="dish"><h4>Unique Nightclub</h4><p class="cuisine">Moon Palace The Grand — free with a disco pass</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Winding pools, a water slide and a splash zone</h2>
+  <div class="prose"><p><b>Pools.</b> Expansive winding pools, including a family-friendly section with a water slide, plus a splash zone for younger children and a handicap-accessible pool.</p>
+ <p><b>The FlowRider® double wave simulator</b> runs 9am to 5pm at Moon Palace Cancún, a short walk or ride away, and is included. Private slots for up to eight can be arranged at extra cost.</p>
+ <p><b>The beach</b> is white sand on the Caribbean. The marina closes every Monday for reef conservation.</p></div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed"><p class="lede">Five wedding packages, from a complimentary ceremony up to Luxe.</p>
+ <div class="prose">
+ <p>Nizuc runs symbolic, civil and religious ceremonies with an on-site coordinator, and the wider Moon Palace complex opens up some of the largest ceremony and reception spaces in Cancún — beach locations, terraces and ballrooms.</p>
+ <p><b>Wedding groups earn as they grow.</b> Ten to nineteen rooms earns a one-hour private cocktail reception; twenty-five rooms earns nine hours of private events; fifty-one and above earns fifteen. Every room in the block needs a minimum three-night stay.</p>
+ <p>A wedding group with thirty-one paid room nights earns a complimentary room and an upgrade — the first of each reserved for the couple. Wedding credit of $20 per paid room night goes toward florals, décor, cake, photography and entertainment, and the whole group gets 15% off the spa and 40% off tee times.</p>
+ <p>Package pricing is confirmed directly with Palace before it goes in your quote.</p>
+ </div></div>
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden><p class="lede">Two tiers, and the second one is where it gets good.</p>
+ <div class="prose">
+ <p><b>From 30 combined room nights:</b> kids and teens seventeen and under stay free, roundtrip airport transfers are included on a four-night minimum, and each room earns $250 in resort credit. You also get a discounted group rate and a reservation for the whole group to dine together.</p>
+ <p><b>From 10 rooms at three nights each:</b> everything above, plus one complimentary room and one complimentary upgrade — to the next category, up to the Honeymoon Suite — and free event hours on the terrace or the beach.</p>
+ <p><b>Two things to budget for.</b> A 16% service fee applies to anything paid with resort credit, and complimentary rooms still carry $25 per person per night for taxes and gratuities.</p>
+ <p><b>Kids and teens.</b> The Playroom kids&rsquo; club is included, with food and drinks, for ages four to twelve — under-fours are welcome with an adult. There is a scaled-down supermarket, a handicrafts area and video gaming here, and a much larger Playroom at Moon Palace Cancún with a mini cinema, dollhouse, fashion catwalk and arcade. The Dreamery runs kids&rsquo; programming at both.</p>
+ <p>Group rates are arranged through the Palace call centre rather than online.</p>
+ </div></div>
+  </div>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <p class="eyebrow">Days</p><h2>What there is to do</h2>
+  <div class="prose"><p><b>Golf.</b> The Moon Palace Golf Club is a 27-hole Jack Nicklaus course, effectively steps from your room, with a second Nicklaus course at Club Riviera Cancún and a golf academy on site.</p>
+ <p><b>In the water.</b> Kayaking, paddleboarding, snorkelling and catamaran sailing are included — at least one adult is required to operate the equipment.</p>
+ <p><b>O Spa.</b> Thirty-five treatment rooms, a hydrotherapy circuit and a Golden Suite. O Princess offers kid-friendly spa treatments for girls aged four to twelve, at additional cost.</p>
+ <p><b>Evenings.</b> Nightly shows and live music, with headline concerts at Moon Palace. Nizuc guests get complimentary access to Unique Nightclub with a disco pass from either lobby.</p></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/imagen_slider_1900x1267_01_4f8cc5da2d.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/family_deluxe_room_bedroom_moon_palace_cancun_b4d544185a_926b7e3ba5.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/bedroom_governor_suite_moon_palace_cancun_0bb0b8c1a4_8b20e07d28.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/superior_oceanfront_room_moon_palace_cancun_389ab62de6_a5523f1134.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/mobile_bedroom_view_superior_deluxe_ocean_view_king_moon_palace_nizuc_1bcddefeb2.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/deluxe_garden_view_moon_palace_cancun_2caa843510_f8656b610c.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/premier_honeymoon_suite_moon_palace_cancun_f7fbf4bd3d_4e2c38177f.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/two_bedrooms_suite_golf_course_moon_palace_cancun_e73c220429_8e544a202c.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/room_view_junior_suite_golf_moon_palace_cancun_566ee22750_10b6e7dd85.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-nizuc.moonpalacecancun.com/mps_Room_3_Bedrm_Golf_Villa_Bedrm_04_40ea408efc.webp" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){
+  var b=[].slice.call(document.querySelectorAll('.tabbtn'));
+  function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute('aria-selected',on?'true':'false');document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  b.forEach(function(x){x.addEventListener('click',function(){sel(x.id);});});
+  if(location.hash==='#groups'){sel('tab-grp');}
+})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information, August 2026, and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+</body>
+</html>

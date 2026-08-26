@@ -1,0 +1,266 @@
+<title>Dreams Royal Beach Punta Cana — Resort Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
+<style>
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+</style>
+<style>
+.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
+.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
+.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
+.tiergap{margin-top:2.2rem}
+.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
+@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
+.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
+.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
+.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+</style>
+
+<header class="hero">
+  <img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-family-junior-suite.jpg/a6c96a8477211c2cccbe8f4ff7593c71" alt="Sunscape Cancún Resort &amp; Spa">
+  <div class="wrap">
+    <p class="eyebrow light">Hotel Zone, Cancún</p>
+    <h1>Sunscape Cancún Resort &amp; Spa</h1>
+    <p class="tag">All-ages beachfront in the middle of the Hotel Zone, thirty minutes from the airport.</p>
+    <ul class="chips"><li>458 rooms</li><li>12 categories</li><li>All ages</li><li>30 min from CUN</li><li>7 waterslides</li><li>Explorer&amp;rsquo;s Club 4–12</li><li>Core Zone 13–17</li><li>Sun Club</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>A family resort with a proper teen club</h2>
+  <p class="lede">458 rooms and suites on the Caribbean side of the Hotel Zone, smoke-free and all ages.</p></div>
+  <div class="prose"><p>Sunscape sits in the middle of Cancún&rsquo;s Hotel Zone, on the Caribbean side, thirty minutes from the airport. It is an all-ages, smoke-free resort with a pirate-themed splash park, seven waterslides and two splash zones.</p>
+ <p>What sets it apart from most of the family resorts in Cancún is <b>Core Zone</b> — a genuine teen club for thirteen to seventeens with published hours, arcade games, consoles, air hockey and billiards. Younger children have the Explorer&rsquo;s Club with Red Cross certified staff.</p>
+ <p>The upgraded tier here is Sun Club, and unusually it is family-usable rather than adults-only.</p>
+    <ul class="facts"><li><b>458</b>rooms &amp;amp; suites</li><li><b>12</b>room categories</li><li><b>30 min</b>from CUN</li><li><b>7</b>waterslides</li><li><b>13</b>dining venues</li><li><b>2</b>accessible suites</li></ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Twelve categories, all suites</h2>
+  <p class="lede">Every room has a private balcony, a mini-bar and room service. The Family Junior Suite is the one built for a family of five.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-family-junior-suite.jpg/a6c96a8477211c2cccbe8f4ff7593c71" alt="Family Junior Suite" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Sleeps 5</p><h3>Family Junior Suite</h3><p>One king, one twin bunk and one trundle bed — comfortably sleeps two adults and three children. A furnished balcony with a hammock, and easy access to the Explorer&rsquo;s Club.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite.jpg/61e3d62ac4c827bd427d1220c6087798" alt="Standard" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Garden · Sleeps 4</p><h3>Standard</h3><p>King or double, plush bedding, a sitting area with table and chairs, a stocked minibar and room service.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite.jpg/61e3d62ac4c827bd427d1220c6087798" alt="Junior Suite" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Lagoon or Garden · Sleeps 4</p><h3>Junior Suite</h3><p>A furnished private balcony with views over the lagoon or the gardens. ADA accessible rooms available in this category.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-ocean-view.jpg/ebae491cf94ea82ccfb38c879474dfd3" alt="Junior Suite Ocean View" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Partial Ocean · Sleeps 4</p><h3>Junior Suite Ocean View</h3><p>A furnished balcony with a hammock and partial ocean views.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/gallery/hyatt-resorts-cancun-junior-suite-oceanfront.jpg/281cfaa277fe282ff11f3d884a92dfed" alt="Junior Suite Ocean Front" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Ocean · Sleeps 4</p><h3>Junior Suite Ocean Front</h3><p>A balcony with a hammock and oceanfront views straight ahead.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-premium-junior-suite.jpg/53108fc1f612f174e5a63bcaed984b0c" alt="Deluxe Junior Suite" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Lagoon or Ocean · Sleeps 4</p><h3>Deluxe Junior Suite</h3><p>Views of the lagoon or the ocean, a stocked minibar and an inviting sitting area.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-beachfront-walk-out.jpg/9ed26ed14aaa7f601a949c7489b64e9f" alt="Beachfront Junior Suite" loading="lazy"></div><div class="cbody"><p class="meta">Ocean · Direct beach access</p><h3>Beachfront Junior Suite</h3><p>A terrace with a hammock and direct access to the beach, plus an exclusive beach cabana.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite.jpg/fada2744948b4c229aba89fd20ef4f26" alt="Master Suite" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Sun Club · Sleeps 4</p><h3>Master Suite</h3><p>A VIP retreat with a separate bedroom and sitting area, one king and a sofa, and access to the Sun Club Lounge.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite-ocean-view.jpg/e605d39d8def7ea53baab4305095c1d0" alt="Ocean View Master Suite" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Sun Club</p><h3>Ocean View Master Suite</h3><p>Partial ocean views from a private balcony with a hot tub and hammock, plus a spacious living room.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite-oceanfront-bedroom.jpg/07aa633e20bc04af0d65179cfe6cab66" alt="Oceanfront Master Suite" loading="lazy"></div><div class="cbody"><p class="meta">645 sq ft · Sun Club</p><h3>Oceanfront Master Suite</h3><p>Ocean views from a private balcony, and complimentary room service without a service fee.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-beachfront-infinity-swim-up.jpg/4e76e7124cfcc8408a22b8ed4f4aede4" alt="Junior Suite Beachfront Infinity Swim-Up" loading="lazy"></div><div class="cbody"><p class="meta">387 sq ft · Adults only · Sun Club</p><h3>Junior Suite Beachfront Infinity Swim-Up</h3><p>A semi-private pool right outside the balcony with ocean views. Adults only — not available to a family with children in the room.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-presidential-suite-bedroom.jpg/08fa2efa34da81d3018d318912d65973" alt="Presidential Suite" loading="lazy"></div><div class="cbody"><p class="meta">1,366 sq ft · Sun Club</p><h3>Presidential Suite</h3><p>Two private balconies, a large living and dining area, a separate bedroom, two double hot tubs and an exclusive pool cabana.</p></div></article>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Nine restaurants and four bars, none of them adults-only</h2>
+  <p class="subhead">Restaurants</p>
+  <div class="dining">
+      <div class="dish"><h4>Azul</h4><p class="cuisine">Buffet by day, à la carte Asian at night · beachfront</p></div>
+      <div class="dish"><h4>Ventanas</h4><p class="cuisine">International buffet · sea views</p></div>
+      <div class="dish"><h4>Casa de Rosa</h4><p class="cuisine">Mexican · hacienda décor</p></div>
+      <div class="dish"><h4>Viaggio</h4><p class="cuisine">Italian seaside — pasta, seafood and meats</p></div>
+      <div class="dish"><h4>At Sunset</h4><p class="cuisine">Open-air, overlooking the lagoon</p></div>
+      <div class="dish"><h4>Brasas Grill</h4><p class="cuisine">Poolside grill · Sun Club breakfast</p></div>
+      <div class="dish"><h4>The Dog House</h4><p class="cuisine">Hot dogs and cold drinks at the Clover Pool</p></div>
+      <div class="dish"><h4>Café México</h4><p class="cuisine">Coffee, pastries and sandwiches · open 24 hours</p></div>
+      <div class="dish"><h4>Cravings</h4><p class="cuisine">Pastries, sweets and desserts</p></div>
+  </div>
+  <p class="subhead">Bars &amp; lounges</p>
+  <div class="dining">
+      <div class="dish"><h4>Agave Bar</h4><p class="cuisine">Poolside</p></div>
+      <div class="dish"><h4>Las Olas Bar</h4><p class="cuisine">Beachside, with an ocean view</p></div>
+      <div class="dish"><h4>Kaa Bar &amp;amp; Lounge</h4><p class="cuisine">Lobby bar with live music</p></div>
+      <div class="dish"><h4>Sun Club Lounge</h4><p class="cuisine">Sixth floor · hors d&amp;rsquo;oeuvres and a DIY open bar</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools, a pirate splash park and seven waterslides</h2>
+  <div class="prose"><p><b>Pools.</b> An activity pool, a family pool, two splash pools with slides and a hot tub. Pool waiter service throughout, and certified lifeguards in both pool and beach areas.</p>
+ <p><b>The splash park</b> comes complete with a pirate ship and a medieval castle, seven waterslides and two splash zones.</p>
+ <p><b>The beach</b> is a private stretch of powdery white sand on the Caribbean, with cabanas, waiter service, oceanfront yoga and live entertainment.</p>
+ <p>Kids&rsquo; menus are available at every restaurant, and no dining venue is adults-only.</p></div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed"><p class="lede">Seven venues, from a 60-guest gazebo to a 300-guest ballroom.</p>
+ <div class="tablewrap"><table>
+ <caption>Capacities as published by the resort, by function.</caption>
+ <thead><tr><th>Venue</th><th>Ceremony</th><th>Reception</th><th>Cocktail</th></tr></thead>
+ <tbody>
+ <tr><th>Main Ballroom</th><td class="num">300</td><td class="num">150</td><td class="num">200</td></tr>
+ <tr><th>Our Lady of Guadalupe Chapel</th><td class="num">150</td><td>—</td><td>—</td></tr>
+ <tr><th>Villas Terrace Oceanfront</th><td class="num">120</td><td class="num">70</td><td class="num">90</td></tr>
+ <tr><th>Yalku-Xcaret</th><td class="num">120</td><td class="num">70</td><td class="num">90</td></tr>
+ <tr><th>The Beach</th><td class="num">100</td><td class="num">80</td><td class="num">100</td></tr>
+ <tr><th>Ventanas Ocean View Terrace</th><td class="num">80</td><td class="num">80</td><td class="num">80</td></tr>
+ <tr><th>Oceanfront Wedding Gazebo</th><td class="num">60</td><td class="num">20</td><td class="num">30</td></tr>
+ </tbody></table></div>
+ <div class="prose"><p>Wedding packages run from a couple-only ceremony up to seventy-nine guests, with symbolic, civil and Catholic options and a South Asian package. Wedding specialists here are certified by the South Asian Wedding Institute.</p></div></div>
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden><p class="lede">Free nights, a welcome amenity and a complimentary upgrade.</p>
+ <div class="prose">
+ <p>Booking a group here earns free nights, a signature welcome drink, a special welcome amenity for one designated room, and one complimentary upgrade to the next room category subject to availability. Group check-in for common arrivals is arranged from fifteen rooms.</p>
+ <p><b>Kids and teens.</b> The Explorer&rsquo;s Club covers ages four to twelve, 9am to 6pm, with a pirate splash park, seven waterslides, two splash zones and a family pool, plus arts and crafts, movie nights and beach games. Staff are certified by the Red Cross. Core Zone covers thirteen to seventeen, 1pm to 9pm, with arcade games, consoles, air hockey and billiards. Both are included in the all-inclusive plan.</p>
+ <p>Babysitting is available after hours for ages four to twelve at additional cost.</p>
+ <p><b>Worth budgeting for.</b> An environmental tax of 79 Mexican pesos per room per night is collected on arrival. There is no resort fee.</p>
+ </div></div>
+  </div>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <p class="eyebrow">Days</p><h2>What there is to do</h2>
+  <div class="prose"><p><b>Included.</b> Wine and tequila tastings with an on-site sommelier, beach volleyball and soccer, yoga including oceanfront sessions, aqua aerobics, spinning, a guacamole-making class and daily pool parties.</p>
+ <p><b>In the water.</b> Non-motorised water sports are part of the all-inclusive plan, and there is an introduction to scuba diving.</p>
+ <p><b>Aura Spa.</b> Body rituals, massages, a hydrotherapy circuit with steam bath, outdoor tub and sauna, and a beauty salon — including options designed for teens and children. Spa and salon services are an additional charge.</p>
+ <p><b>Evenings.</b> Live music, mariachi bands, theme parties, nightly shows and performances at the lobby bar.</p></div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))">
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-family-junior-suite.jpg/a6c96a8477211c2cccbe8f4ff7593c71" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite.jpg/61e3d62ac4c827bd427d1220c6087798" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-ocean-view.jpg/ebae491cf94ea82ccfb38c879474dfd3" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-premium-junior-suite.jpg/53108fc1f612f174e5a63bcaed984b0c" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-beachfront-walk-out.jpg/9ed26ed14aaa7f601a949c7489b64e9f" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite.jpg/fada2744948b4c229aba89fd20ef4f26" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite-ocean-view.jpg/e605d39d8def7ea53baab4305095c1d0" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-master-one-bedroom-suite-oceanfront-bedroom.jpg/07aa633e20bc04af0d65179cfe6cab66" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-junior-suite-beachfront-infinity-swim-up.jpg/4e76e7124cfcc8408a22b8ed4f4aede4" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://playa-cms-assets.s3.amazonaws.com/styled/hyatt_cancun/hyatt_cancun_rooms/hyatt-resorts-cancun-presidential-suite-bedroom.jpg/08fa2efa34da81d3018d318912d65973" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){
+  var b=[].slice.call(document.querySelectorAll('.tabbtn'));
+  function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute('aria-selected',on?'true':'false');document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  b.forEach(function(x){x.addEventListener('click',function(){sel(x.id);});});
+  if(location.hash==='#groups'){sel('tab-grp');}
+})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information, August 2026, and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+</body>
+</html>
