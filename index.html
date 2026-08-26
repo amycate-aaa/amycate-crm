@@ -10,15 +10,15 @@
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
 :root {
-  --bg:#f4f4f4; --surface:#ffffff; --surface2:#f0f0f0; --border:#cccccc;
-  --accent:#1B2B4B; --accent2:#2d4a6e; --text:#1a1a1a;--muted:#666666;
-  --green:#1a6a1a; --green-bg:#f0f7f0; --green-border:#a8cca8;
-  --red:#c0392b; --red-bg:#fdf0f0; --red-border:#ddaaaa;
-  --yellow:#5a4a00; --yellow-bg:#fdf8e0; --yellow-border:#d4c060;
+  --bg:#555555; --surface:#4a4a4a; --surface2:#444444; --border:#666666;
+  --accent:#f0f0f0; --accent2:#cccccc; --text:#f0f0f0;--muted:#999999;
+  --green:#4ade80; --green-bg:#1a2a1a; --green-border:#2a5a2a;
+  --red:#f87171; --red-bg:#2a1a1a; --red-border:#5a2a2a;
+  --yellow:#fbbf24; --yellow-bg:#2a2010; --yellow-border:#6a5010;
   --radius:10px; --font:'Segoe UI',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px;min-height:100vh;}
+body{background:#555555;color:var(--text);font-family:var(--font);font-size:18px;min-height:100vh;}
 
 /* LOCK */
 
@@ -40,8 +40,8 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
 #sidebar{
   width:200px;
   min-width:200px;
-  background:#0D1B2A;
-  border-right:1px solid #1B2B4B;
+  background:#333333;
+  border-right:1px solid #444444;
   display:flex;
   flex-direction:column;
   position:sticky;
@@ -53,24 +53,24 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
 }
 .sidebar-logo{
   padding:16px 16px 14px;
-  color:#C9A84C;
+  color:#f0f0f0;
   font-size:.95rem;
   font-weight:700;
   letter-spacing:.04em;
-  border-bottom:1px solid #1B2B4B;
+  border-bottom:1px solid #444444;
 }
 .sidebar-stats{
   padding:12px 14px;
-  border-bottom:1px solid #1B2B4B;
+  border-bottom:1px solid #444444;
 }
 .sidebar-stat{margin-bottom:8px;}
 .sidebar-stat:last-child{margin-bottom:0;}
-.sidebar-stat-label{font-size:.65rem;color:#4a5a70;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
-.sidebar-stat-val{font-size:1.15rem;font-weight:700;color:#e8e0d0;}
-.sidebar-stat-sub{font-size:.7rem;color:#8a9bb5;margin-top:1px;}
+.sidebar-stat-label{font-size:.65rem;color:#777777;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+.sidebar-stat-val{font-size:1.15rem;font-weight:700;color:#f0f0f0;}
+.sidebar-stat-sub{font-size:.7rem;color:#999999;margin-top:1px;}
 .sidebar-stat-val.green{color:#4ADE80;}
 .sidebar-stat-val.red{color:#FF6B6B;}
-.sidebar-section{font-size:.62rem;color:#3a4a60;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
+.sidebar-section{font-size:.62rem;color:#666666;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
 .nav-btn{
   display:flex;
   align-items:center;
@@ -79,7 +79,7 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
   background:none;
   border:none;
   border-left:2px solid transparent;
-  color:#8a9bb5;
+  color:#999999;
   font-size:.82rem;
   padding:7px 14px;
   cursor:pointer;
@@ -87,16 +87,16 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
   text-align:left;
   text-decoration:none;
 }
-.nav-btn:hover{background:#1B2B4B;color:#e8e0d0;}
-.nav-btn.active{background:#1B2B4B;color:#e8e0d0;border-left-color:#C9A84C;font-weight:600;}
-.nav-badge{font-size:.62rem;background:#243550;color:#8a9bb5;padding:1px 5px;border-radius:3px;}
+.nav-btn:hover{background:#444444;color:#f0f0f0;}
+.nav-btn.active{background:#444444;color:#f0f0f0;border-left-color:#f0f0f0;font-weight:600;}
+.nav-badge{font-size:.62rem;background:#555555;color:#999999;padding:1px 5px;border-radius:3px;}
 .sidebar-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid #1B2B4B;display:flex;flex-direction:column;gap:6px;}
 
 /* MAIN AREA */
-#main-area{flex:1;display:flex;flex-direction:column;min-width:0;background:#0D1B2A;}
+#main-area{flex:1;display:flex;flex-direction:column;min-width:0;background:#333333;}
 #main-topbar{
-  background:#0D1B2A;
-  border-bottom:1px solid #1B2B4B;
+  background:#333333;
+  border-bottom:1px solid #444444;
   padding:10px 20px;
   display:flex;
   align-items:center;
@@ -107,7 +107,7 @@ body{background:#f4f4f4;color:var(--text);font-family:var(--font);font-size:18px
   flex-wrap:wrap;
   gap:8px;
 }
-#main-topbar-title{font-size:.9rem;font-weight:600;color:#e8e0d0;}
+#main-topbar-title{font-size:.9rem;font-weight:600;color:#f0f0f0;}
 .header-right{display:flex;align-items:center;gap:8px;}
 main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);color:white;}
 
@@ -335,10 +335,10 @@ tr:hover .sticky-col{background:var(--surface2);}
 
     <!-- SIDEBAR BOTTOM -->
     <div class="sidebar-bottom">
-      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)" style="background:#1B2B4B;border:1px solid #2d4a6e;color:#e8e0d0;padding:6px 8px;border-radius:6px;font-size:.75rem;width:100%">
+      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)" style="background:#444444;border:1px solid #2d4a6e;color:#f0f0f0;padding:6px 8px;border-radius:6px;font-size:.75rem;width:100%">
         <option value="">— Choose Wedding —</option>
       </select>
-      <button class="lock-btn" onclick="backupToDrive()" title="Download backup" style="background:#0a2a0a;border:1px solid #2a6a2a;color:#4ADE80;font-size:.75rem;padding:5px 10px;border-radius:6px;cursor:pointer;width:100%">
+      <button class="lock-btn" onclick="backupToDrive()" title="Download backup" style="background:#3a3a3a;border:1px solid #555555;color:#f0f0f0;font-size:.75rem;padding:5px 10px;border-radius:6px;cursor:pointer;width:100%">
         💾 Backup
       </button>
     </div>
@@ -4076,7 +4076,7 @@ function openGroupReportModal() {
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;">
       <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 18px;border:1px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;">Cancel</button>
-      <button onclick="dispatchGroupReport()" style="padding:10px 18px;background:#1B2B4B;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;">Generate Report</button>
+      <button onclick="dispatchGroupReport()" style="padding:10px 18px;background:#444444;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:700;">Generate Report</button>
     </div>
   </div>`;
   document.body.appendChild(overlay);
@@ -4124,7 +4124,7 @@ function generateGroupReport(filter) {
 
   const reportHtml = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Group Report — ${w.names}</title>
     <style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:var(--text);background:var(--surface);padding:28px;}
-    .header{background:#1B2B4B;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}
+    .header{background:#444444;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}
     .header h1{font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}
     .meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;}
     .meta span{font-size:.82rem;color:#ddd;}
@@ -4134,7 +4134,7 @@ function generateGroupReport(filter) {
     .stat .val{font-size:1rem;font-weight:700;color:var(--text);}
     .stat .val.green{color:#2a7a2a;} .stat .val.red{color:#c0392b;} .stat .val.gold{color:#b8973a;}
     table{width:100%;border-collapse:collapse;}
-    thead tr{background:#1B2B4B;}
+    thead tr{background:#444444;}
     thead th{padding:10px 8px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.05em;color:#c9a96e;}
     thead th:nth-child(n+6){text-align:right;}
     .footer{margin-top:20px;font-size:.75rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:10px;}
@@ -4212,13 +4212,13 @@ function generateRoomListingReport(filter){
 
   const reportHtml = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Room Listing — '+w.names+'</title>'
     + '<style>*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial,sans-serif;color:var(--text);background:var(--surface);padding:28px;}'
-    + '.header{background:#1B2B4B;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}'
+    + '.header{background:#444444;color:white;padding:18px 22px;border-radius:10px;margin-bottom:18px;}'
     + '.header h1{font-size:1.1rem;font-weight:700;color:#c9a96e;margin-bottom:4px;}'
     + '.header .sub{font-size:.85rem;color:#ccc;}'
     + '.meta{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:6px;}'
     + '.meta span{font-size:.82rem;color:#ddd;}'
     + 'table{width:100%;border-collapse:collapse;font-size:.82rem;}'
-    + 'thead tr{background:#1B2B4B;}'
+    + 'thead tr{background:#444444;}'
     + 'thead th{padding:10px 8px;text-align:left;font-size:.72rem;font-weight:700;letter-spacing:.05em;color:#c9a96e;}'
     + '.footer{margin-top:20px;font-size:.75rem;color:#aaa;text-align:center;border-top:1px solid #eee;padding-top:10px;}'
     + '@media print{body{padding:12px;}}</style></head><body>'
