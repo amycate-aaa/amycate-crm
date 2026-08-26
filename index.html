@@ -864,6 +864,20 @@ tr:hover .sticky-col{background:var(--surface2);}
           <button class="btn btn-primary" onclick="openGuestModal()">+ Add Guest</button>
           <button class="btn btn-outline" onclick="openGroupReportModal()" style="margin-left:6px">📄 Group Report</button>
         </div>
+
+        <!-- BOOKING REQUEST PARSER -->
+        <div style="background:var(--surface2);border:1px solid #666666;border-radius:10px;padding:16px 18px;margin-bottom:18px">
+          <div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:8px">📋 Paste Booking Request</div>
+          <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px">Paste a room booking request email and it will pre-fill the guest form automatically.</p>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <textarea id="bookingPasteBox" rows="3" style="flex:1;background:var(--surface);border:1px solid #666666;color:var(--text);padding:9px 11px;border-radius:6px;font-size:.88rem;resize:vertical;font-family:inherit" placeholder="Paste booking request here…"></textarea>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <button class="btn btn-primary" onclick="parseBookingRequest()">Parse &amp; Open Form</button>
+              <button class="btn btn-outline" onclick="document.getElementById('bookingPasteBox').value='';document.getElementById('bookingParseResult').textContent=''">Clear</button>
+            </div>
+          </div>
+          <div id="bookingParseResult" style="font-size:.85rem;color:var(--muted);margin-top:8px"></div>
+        </div>
         <div class="stat-row">
           <div class="stat-card"><div class="label">Guest Count</div><div class="value" style="color:#1a1a1a" id="ds-total">—</div></div>
           <div class="stat-card"><div class="label">Room Count</div><div class="value gold" id="ds-rooms">—</div></div>
@@ -4979,6 +4993,77 @@ async function saveGuestPayment(){
     renderDetailGuests();
     renderDetailPayments();
   }catch(e){ alert('Error: '+e.message); }
+}
+
+// ════════════════════════════════════
+// BOOKING REQUEST PARSER
+// ════════════════════════════════════
+function parseBookingRequest(){
+  const text = document.getElementById('bookingPasteBox').value.trim();
+  const result = document.getElementById('bookingParseResult');
+  if(!text){ result.style.color='var(--red)'; result.textContent='Paste a booking request first.'; return; }
+
+  function extract(label, text){
+    const re = new RegExp(label+'[:\\s]+(.+)', 'i');
+    const m = text.match(re);
+    return m ? m[1].trim() : '';
+  }
+
+  // Extract all fields
+  const legalName = extract('Legal name', text);
+  const email = extract('Email', text);
+  const phone = extract('Day phone', text) || extract('Mobile phone', text);
+  const hotel = extract('Hotel', text);
+  const roomCat = extract('Room Category', text);
+  const bedding = extract('Bedding Type', text);
+  const arrivalRaw = extract('Arrival date', text);
+  const nights = extract('Number of nights', text);
+  const roomType = extract('Room type', text);
+  const totalRaw = extract('Total', text);
+
+  // Parse passengers for additional guests
+  const passengerMatches = [...text.matchAll(/Passenger:\s*(.+?)\s*-\s*DOB:/gi)];
+  const passengers = passengerMatches.map(m => m[1].trim());
+  const primaryName = legalName || (passengers[0] || '');
+  const additional = passengers.slice(1).join(', ');
+
+  // Parse arrival date to yyyy-mm-dd
+  let arrivalFormatted = '';
+  if(arrivalRaw){
+    const d = new Date(arrivalRaw);
+    if(!isNaN(d)) arrivalFormatted = d.toISOString().split('T')[0];
+  }
+
+  // Parse total
+  const totalMatch = totalRaw.match(/[\d,]+\.?\d*/);
+  const totalAmt = totalMatch ? parseFloat(totalMatch[0].replace(',','')) : 0;
+
+  // Build room category string
+  const roomCatClean = roomCat.replace(/\s*\(Please note.*\)/i,'').trim();
+
+  // Open guest modal and pre-fill
+  openGuestModal();
+
+  setTimeout(()=>{
+    if(primaryName) { const el=document.getElementById('g-names'); if(el) el.value=primaryName; }
+    if(additional) { const el=document.getElementById('g-additional'); if(el) el.value=additional; }
+    if(email) { const el=document.getElementById('g-email'); if(el) el.value=email; }
+    if(phone) { const el=document.getElementById('g-phone'); if(el) el.value=phone; }
+    if(roomCatClean || roomType) { const el=document.getElementById('g-roomtype'); if(el) el.value=roomCatClean || roomType; }
+    if(arrivalFormatted) { const el=document.getElementById('g-depart'); if(el){ el.value=arrivalFormatted; el.dispatchEvent(new Event('input')); } }
+    if(nights) { const el=document.getElementById('g-nights'); if(el){ el.value=parseInt(nights); el.dispatchEvent(new Event('input')); } }
+    if(totalAmt) { const el=document.getElementById('g-roomcost'); if(el){ el.value=totalAmt; el.dispatchEvent(new Event('input')); } }
+    // Add hotel/notes
+    const notesEl=document.getElementById('g-notes');
+    if(notesEl){
+      let notes=[];
+      if(hotel) notes.push('Hotel: '+hotel);
+      if(bedding) notes.push('Bedding: '+bedding);
+      if(notes.length) notesEl.value=notes.join('\n');
+    }
+    result.style.color='var(--green)';
+    result.textContent='✓ Form pre-filled — review and save.';
+  }, 300);
 }
 
 // ════════════════════════════════════
