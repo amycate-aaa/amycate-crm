@@ -808,16 +808,16 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div id="masterDueDates" style="display:none"></div>
 
       <!-- PASTE PARSER ON HOME PAGE -->
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.08)">
-        <div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text);font-weight:700;margin-bottom:8px">📋 Paste Payment Confirmation</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap">
-          <textarea id="homePaymentPasteBox" rows="3" style="flex:1;min-width:260px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:.9rem;resize:vertical;font-family:inherit" placeholder="Paste payment email from Destination Weddings here…"></textarea>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <button class="btn btn-primary" onclick="parseHomePaste()" style="white-space:nowrap">Parse &amp; Record</button>
-            <button class="btn btn-outline btn-sm" onclick="document.getElementById('homePaymentPasteBox').value='';document.getElementById('homeParseResult').textContent=''">Clear</button>
-          </div>
+      <div style="background:#535353;border-radius:8px;padding:14px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:#999;font-weight:600;margin-bottom:6px;">📋 Paste Payment Confirmation</div>
+          <textarea id="homePaymentPasteBox" rows="2" style="width:100%;background:#444;border:1px solid #606060;color:#f0f0f0;padding:8px 10px;border-radius:6px;font-size:.85rem;resize:vertical;font-family:inherit" placeholder="Paste payment email from Destination Weddings here…"></textarea>
+          <div id="homeParseResult" style="font-size:.82rem;margin-top:5px;min-height:16px;color:#999"></div>
         </div>
-        <div id="homeParseResult" style="font-size:.9rem;margin-top:8px;min-height:20px"></div>
+        <div style="display:flex;flex-direction:column;gap:5px;padding-top:20px;">
+          <button onclick="parseHomePaste()" style="font-size:.78rem;padding:6px 12px;border-radius:5px;background:#f0f0f0;color:#111;border:none;cursor:pointer;font-weight:600;white-space:nowrap">Parse &amp; Record</button>
+          <button onclick="document.getElementById('homePaymentPasteBox').value='';document.getElementById('homeParseResult').textContent=''" style="font-size:.78rem;padding:5px 12px;border-radius:5px;background:#444;color:#aaa;border:1px solid #555;cursor:pointer">Clear</button>
+        </div>
       </div>
 
       <div id="weddingGrid" class="wedding-grid"><div class="loading">Loading…</div></div>
