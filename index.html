@@ -18,7 +18,7 @@
   --radius:10px; --font:'Segoe UI',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#555555;color:var(--text);font-family:var(--font);font-size:18px;min-height:100vh;}
+body{background:#555555;color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;}
 
 /* LOCK */
 
@@ -38,8 +38,8 @@ body{background:#555555;color:var(--text);font-family:var(--font);font-size:18px
 
 /* SIDEBAR */
 #sidebar{
-  width:200px;
-  min-width:200px;
+  width:220px;
+  min-width:220px;
   background:#333333;
   border-right:1px solid #444444;
   display:flex;
@@ -65,12 +65,12 @@ body{background:#555555;color:var(--text);font-family:var(--font);font-size:18px
 }
 .sidebar-stat{margin-bottom:8px;}
 .sidebar-stat:last-child{margin-bottom:0;}
-.sidebar-stat-label{font-size:.65rem;color:#777777;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
-.sidebar-stat-val{font-size:1.15rem;font-weight:700;color:#f0f0f0;}
-.sidebar-stat-sub{font-size:.7rem;color:#999999;margin-top:1px;}
+.sidebar-stat-label{font-size:.72rem;color:#777777;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+.sidebar-stat-val{font-size:1.25rem;font-weight:700;color:#f0f0f0;}
+.sidebar-stat-sub{font-size:.75rem;color:#999999;margin-top:1px;}
 .sidebar-stat-val.green{color:#4ADE80;}
 .sidebar-stat-val.red{color:#FF6B6B;}
-.sidebar-section{font-size:.62rem;color:#666666;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
+.sidebar-section{font-size:.7rem;color:#666666;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
 .nav-btn{
   display:flex;
   align-items:center;
@@ -80,8 +80,8 @@ body{background:#555555;color:var(--text);font-family:var(--font);font-size:18px
   border:none;
   border-left:2px solid transparent;
   color:#999999;
-  font-size:.82rem;
-  padding:7px 14px;
+  font-size:.9rem;
+  padding:8px 16px;
   cursor:pointer;
   transition:all .15s;
   text-align:left;
@@ -805,7 +805,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       </div>
 
       <!-- MASTER DUE DATES DASHBOARD -->
-      <div id="masterDueDates" style="margin-bottom:24px"></div>
+      <div id="masterDueDates" style="display:none"></div>
 
       <!-- PASTE PARSER ON HOME PAGE -->
       <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin-bottom:24px;box-shadow:0 1px 3px rgba(0,0,0,.08)">
