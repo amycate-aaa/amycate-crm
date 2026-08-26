@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live Aqua Cancún — Adults Only</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="https://image-tc.galaxy.tf/wijpeg-ds5k7om4sl79bwmv09i4mrvnc/presidential-suite-8-result_standard.jpg" alt="Live Aqua Cancún">
+  <div class="wrap">
+    <p class="eyebrow light">Zona Hotelera Km 12.5 · Cancún</p>
+    <h1>Live Aqua Canc&uacute;n</h1>
+    <p class="tag">Adults only, all inclusive, and built for couples rather than crowds.</p>
+    <ul class="chips"><li>371 rooms</li><li>19 categories</li><li>Adults only 18+</li><li>8 restaurants</li><li>Blue Flag beach</li><li>Aqua Club</li><li>One wedding a day</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>An adults-only landmark in the middle of the Hotel Zone</h2>
+  <p class="lede">371 rooms on a Blue Flag beach, eighteen and over throughout.</p></div>
+  <div class="prose">
+    <p>Live Aqua sits at Km 12.5 on Boulevard Kukulcán, in the heart of Cancún&rsquo;s Hotel Zone. It is adults only &mdash; genuinely so, not a tower or a section &mdash; which makes it a different proposition from almost everything around it.</p>
+    <p>The resort leans into sensory design: aromatherapy in the corridors, a pillow menu, chromotherapy jacuzzis in the suites, and a spa built around a water circuit rather than a treatment list. It has been recognised with Blue Flag certification for the beach and sits consistently in Tripadvisor&rsquo;s top ten for the region.</p>
+    <p>Nineteen room categories, nine of which carry Aqua Club access. Every suite on the property is a club room.</p>
+    <ul class="facts"><li><b>371</b>rooms</li><li><b>19</b>categories</li><li><b>18+</b>throughout</li><li><b>8</b>restaurants</li><li><b>4</b>pools</li><li><b>1</b>wedding a day</li></ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Nineteen categories, ten of them suites</h2>
+  <p class="lede">Everything has a balcony or a terrace. The suites add a jacuzzi, and all of them include Aqua Club.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-8da0omoqnh4pupk0f35kslt60/2099552-premium-garden-view-king-4126x5500-original_standard.jpg" alt="Premium Garden View, 1 King" loading="lazy"></div><div class="cbody"><p class="meta">353 sq ft · Garden · 2 guests</p><h3>Premium Garden View, 1 King</h3><p>A king with a private balcony over the gardens. The entry category, and still a generous room.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-5bfx477n98tbiz6yte3q8rsxq/premium-garden-view-double-result_standard.jpg" alt="Premium Garden View, 2 Double" loading="lazy"></div><div class="cbody"><p class="meta">364 sq ft · Garden · 3 guests</p><h3>Premium Garden View, 2 Double</h3><p>Two doubles and a balcony. The two-double categories take a third guest where the king rooms do not.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-3whycba5jtoccj8ilpokpn0ln/2099579-aqcu-finales-alta-posadas-estudiordlc-0-48-3619x5429-original_standard.jpg" alt="Premium Partial Ocean View, 1 King" loading="lazy"></div><div class="cbody"><p class="meta">353 sq ft · Partial sea view · 2 guests</p><h3>Premium Partial Ocean View, 1 King</h3><p>A king with a slice of Caribbean from the balcony.</p></div></article>
+      <article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.8rem;color:var(--mute);font-style:italic">Photography on request</span></div><div class="cbody"><p class="meta">364 sq ft · Partial sea view</p><h3>Premium Partial Ocean View, 2 Double</h3><p>Two doubles with a partial sea view from the balcony. Ask me for current photography of this category before you decide on it.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-7ghzejjwqwpv4jgsgyqkbf8nl/premium-ocean-view-king-result_standard.jpg" alt="Premium Ocean View, 1 King" loading="lazy"></div><div class="cbody"><p class="meta">364 sq ft · Sea view · 2 guests</p><h3>Premium Ocean View, 1 King</h3><p>A full sea view from a private balcony, and a king bed.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-8gm3x2q0hv5o07ezyl26ba1rm/2099555-premium-ocean-view-double-3882x5500-original_standard.jpg" alt="Premium Ocean View, 2 Double" loading="lazy"></div><div class="cbody"><p class="meta">353 sq ft · Sea view · 3 guests</p><h3>Premium Ocean View, 2 Double</h3><p>Two doubles facing the water.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-6vz66lxoiaukoe74nrkej7fw/2099680-premium-aqua-club-king-4126x5500-original_standard.jpg" alt="Premium Ocean Front, 1 King" loading="lazy"></div><div class="cbody"><p class="meta">364 sq ft · Ocean front · 2 guests</p><h3>Premium Ocean Front, 1 King</h3><p>The sea straight ahead rather than at an angle. A king and a private balcony.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-bwfw772om7a8tcttu5v9qrsyi/2099577-aqcu-finales-alta-posadas-estudiordlc-0-37-3601x5401-original_standard.jpg" alt="Premium Ocean Front, 2 Double" loading="lazy"></div><div class="cbody"><p class="meta">353 sq ft · Ocean front · 3 guests</p><h3>Premium Ocean Front, 2 Double</h3><p>Two doubles, oceanfront, with a balcony.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-aoxng4uel2u4c0odpmdmqg0gc/2099568-aqcu-finales-alta-posadas-estudiordlc-0-39-3609x5413-original_standard.jpg" alt="Premium Ocean Front with Terrace, 1 King" loading="lazy"></div><div class="cbody"><p class="meta">461 sq ft · Ocean front · 2 guests</p><h3>Premium Ocean Front with Terrace, 1 King</h3><p>A hundred square feet larger than the standard oceanfront, with a terrace instead of a balcony.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-8z33il942kurkgfeikk8o2s61/2099573-aqcu-finales-alta-posadas-estudiordlc-0-46-3639x5458-original_standard.jpg" alt="Premium Ocean Front with Terrace, 2 Double" loading="lazy"></div><div class="cbody"><p class="meta">471 sq ft · Ocean front · 3 guests</p><h3>Premium Ocean Front with Terrace, 2 Double</h3><p>The largest of the Premium rooms — two doubles and a full terrace.</p></div></article>
+      <article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.8rem;color:var(--mute);font-style:italic">Photography on request</span></div><div class="cbody"><p class="meta">364 sq ft · Ocean front · <b>Aqua Club</b></p><h3>Premium Aqua Club Ocean Front, 1 King</h3><p>Physically the same room as the Premium Ocean Front King, with Aqua Club access added — the lounge, butler service, premium drinks and a bottle of wine on arrival. One of only two non-suite ways into the club.</p></div></article>
+      <article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.8rem;color:var(--mute);font-style:italic">Photography on request</span></div><div class="cbody"><p class="meta">364 sq ft · Ocean front · <b>Aqua Club</b></p><h3>Premium Aqua Club Ocean Front, 2 Double</h3><p>The two-double version, taking three guests, with the same club access.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-ef9lfe29ofyywk9a6qgucjumw/2099565-aqcu-finales-alta-posadas-estudiordlc-0-55-3648x5472-original-1_standard.jpg" alt="Viento Suite" loading="lazy"></div><div class="cbody"><p class="meta">650 sq ft · Terrace &amp; jacuzzi · <b>Aqua Club</b></p><h3>Viento Suite</h3><p>The entry suite. A terrace with a jacuzzi, Moët and chocolate-covered strawberries on arrival, and unlimited spa water circuit.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-15qpn8axas12667knyreo4k5z/2099571-aqcu-finales-alta-posadas-estudiordlc-0-25-3615x5422-original-1_standard.jpg" alt="Tierra Suite" loading="lazy"></div><div class="cbody"><p class="meta">753 sq ft · Terrace &amp; jacuzzi · <b>Aqua Club</b></p><h3>Tierra Suite</h3><p>A hundred square feet larger than the Viento, and the only suite that adds a special breakfast in the Aqua Club Lounge.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-bl328vdtpf4shrwrpatj9shc4/2099566-aqcu-finales-alta-posadas-estudiordlc-0-16-3639x5458-original_standard.jpg" alt="Aqua Suite" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Terrace &amp; jacuzzi · <b>Aqua Club</b></p><h3>Aqua Suite</h3><p>Sea view, terrace and jacuzzi, with the full suite perk list including a daily cabana and foot massage.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-43kpsxg1kxhx1bdga8acw2x14/aqcu-finales-alta-posadas-estudiordlc-0-15-min_standard.jpg" alt="Wellness Aqua Suite" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Terrace &amp; jacuzzi · <b>Aqua Club</b></p><h3>Wellness Aqua Suite</h3><p>The one built around sleep and recovery — a True Dream bed, pillow menu, aroma collection, lighting and music control, a bath drawn with Molton Brown salts, and a thirty-minute spa treatment each stay.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-97ttmijjlql3vla6q5rvv6jwg/honey2_standard.jpg" alt="Honeymoon Suite" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Chromotherapy jacuzzi · <b>Aqua Club</b></p><h3>Honeymoon Suite</h3><p>A chromotherapy jacuzzi, a romantic dinner, a wine-paired dinner at MB, and a couples massage on stays of four nights or more.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-ekulrvuk8tzoh4ekha2bqv1uu/fuego-suite-3-result_standard.jpg" alt="Fuego Suite" loading="lazy"></div><div class="cbody"><p class="meta">792 sq ft · Terrace &amp; jacuzzi · <b>Aqua Club</b></p><h3>Fuego Suite</h3><p>The largest of the one-bedroom suites, with the full club perk list.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://image-tc.galaxy.tf/wijpeg-ds5k7om4sl79bwmv09i4mrvnc/presidential-suite-8-result_standard.jpg" alt="Suite Presidencial Sol y Luna" loading="lazy"></div><div class="cbody"><p class="meta">3,552 sq ft · Two bedrooms · 4 guests · <b>Aqua Club</b></p><h3>Suite Presidencial Sol y Luna</h3><p>The only two-bedroom on the property and the only room that sleeps four. A master with a king, jacuzzi, separate shower and walk-in closet; a second bedroom with two queens and its own full bathroom. Lagoon and sea views, a private terrace, and a 20% spa discount — the highest on the property.</p></div></article>
+  </div>
+  <div class="note">
+    <p><b>On occupancy.</b> Most categories take two guests; the two-double rooms take three. The Presidential Suite is the only room that sleeps four, and the only one with two bedrooms. If you need more than that, this is not the right property &mdash; tell me and I will find one that is.</p>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Aqua Club</h2>
+  <p class="lede">Nine of the nineteen categories, and every suite on the property.</p></div>
+  <div class="prose">
+    <p>The two Premium Aqua Club Ocean Front rooms are the only way into the club without booking a suite. Everything above them &mdash; Viento, Tierra, Aqua, Wellness Aqua, Honeymoon, Fuego and the Presidential &mdash; includes it as standard.</p>
+    <ul class="perks">
+      <li>Access to the Aqua Club Lounge</li><li>Butler service</li>
+      <li>Premium drinks</li><li>Bottle of wine on arrival</li>
+      <li>Personalised assistance by phone or WhatsApp</li><li>Premium in-room amenities</li>
+    </ul>
+    <p style="margin-top:1.4rem"><b>Suites add considerably more:</b> a 375ml bottle of Moët with chocolate-covered strawberries, unlimited access to the spa water circuit, sauna, hot tub and pools, a complimentary cabana each day with a foot massage, a 15% spa discount, an aromatherapy menu, and $50 of resort credit at Carnivore per stay.</p>
+    <p>The Tierra Suite adds a special breakfast in the lounge. The Presidential lifts the spa discount to 20%.</p>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Eight restaurants and six bars</h2>
+  <p class="lede">All included, and no reservations policy published &mdash; I confirm what needs booking before you travel.</p>
+  <p class="subhead">Restaurants</p>
+  <div class="dining">
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-f0y2h9j5j6d58hvxb3tnt26e4/1_standard.jpg" alt="Siete" loading="lazy"><h4>Siete</h4><p class="cuisine">Mexican · Casual</p><p>Breakfast and dinner. 7am–12pm, then 5–10pm.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-6oc6kcrt4wgrkoshbewkh5b1n/azur-restaurant-3-result_standard.jpg" alt="Azur" loading="lazy"><h4>Azur</h4><p class="cuisine">Mediterranean · Casual</p><p>All three meals — 7–11am, 12–5pm, 6–11pm.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-3i9yf39poycfzf16szyuqqdik/mb-restaurant-3-result_standard.jpg" alt="MB" loading="lazy"><h4>MB</h4><p class="cuisine">Author&rsquo;s cooking · Resort chic</p><p>The signature restaurant, and the dress-up dinner. 6–11pm.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-9w9yyr6rp8fmsxwumo5nl6jf0/hidden-garden-4-result_standard.jpg" alt="Hidden Garden" loading="lazy"><h4>Hidden Garden</h4><p class="cuisine">Asian · Business casual</p><p>6–11pm.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-4zfg0qaf7m116g1j5glupkox2/varena-restaurant-5-result_standard.jpg" alt="Varenna" loading="lazy"><h4>Varenna</h4><p class="cuisine">Italian · Casual</p><p>Lunch 12–5pm, dinner 6–11pm.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-edjb9dx2o6htij66lzho7uxux/sea-corner-3-result_standard.jpg" alt="Sea Corner" loading="lazy"><h4>Sea Corner</h4><p class="cuisine">Seafood · Casual</p><p>Right on the sand, with the water beside you.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-8tt3c8a0pcauodqormad6757e/61764241-sushi-station-5429x3620-min_standard.jpg" alt="Sushi Station" loading="lazy"><h4>Sushi Station</h4><p class="cuisine">Sushi · Casual</p><p>5–10pm, subject to availability.</p></div>
+      <div class="dish"><img src="https://image-tc.galaxy.tf/wijpeg-9uo1iv49z3wqq6ts20n0t5bus/1_standard.jpg" alt="Carnivore" loading="lazy"><h4>Carnivore</h4><p class="cuisine">Grill &amp; barbecue</p><p>Tuesday to Sunday, 6–11pm. Additional charges apply — though most suite categories include a $50 resort credit here.</p></div>
+  </div>
+  <p class="subhead">Bars &amp; lounges</p>
+  <div class="dining bars">
+      <div class="dish"><h4>Aka Bar</h4><p class="cuisine">Pub · 10am–11pm</p></div>
+      <div class="dish"><h4>Egos Bar</h4><p class="cuisine">Drinks · 7pm–1am</p></div>
+      <div class="dish"><h4>Caf&eacute; Deli Boutique</h4><p class="cuisine">Coffee · 6am–10pm</p></div>
+      <div class="dish"><h4>Pool Club</h4><p class="cuisine">Pool bar by day</p></div>
+      <div class="dish"><h4>Shore Club</h4><p class="cuisine">Beach bar</p></div>
+      <div class="dish"><h4>Azur Cocktail Lounge</h4><p class="cuisine">Cocktails</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Four pools and a Blue Flag beach</h2>
+  <div class="prose">
+    <p><b>Pools.</b> The Main Pool, the Aqua Pool, the Azur Pool and the Pool Club, which has its own bar open through the day and becomes a private space at night. Every one is adults-only by definition. Pools open 8am to 8pm, and one of them is heated.</p>
+    <p><b>The beach.</b> Blue Flag certified, with complimentary loungers and Balinese beds. Bali beds are included with suite categories; otherwise they can be taken for the day, which includes a twenty-minute foot massage.</p>
+    <p><b>The spa water circuit</b> is separate from the pools and worth knowing about: twelve indoor treatment areas and four outdoor, steam baths, saunas and a jacuzzi. Suite guests get unlimited access.</p>
+    <p>I will confirm current sea conditions for your dates before you travel — that is worth asking about anywhere on this coast, and it is not something the resort publishes.</p>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
+      <p class="lede">One wedding a day, so the team is yours from beginning to end.</p>
+      <div class="prose">
+        <p>Ceremonies here are symbolic, performed by a non-denominational minister. The resort holds Equality Institute certification for inclusive weddings and works in multicultural traditions.</p>
+      </div>
+      <p class="subhead">In every package</p>
+      <div class="prose">
+        <p>A dedicated on-site wedding specialist, the ceremony itself, an altar or gazebo dressed with draping and floral accents, avant-garde white chairs and a ceremony table, bouquet and boutonniere, sound system, cake and a sparkling wine toast.</p>
+        <p>For the two of you: a complimentary room for one of you on the wedding day, refreshments while you get ready, a room upgrade and late check-out subject to availability, romantic turndown that night, breakfast in bed the morning after, 15% off the spa, and a two-night certificate for your first anniversary.</p>
+      </div>
+      <p class="subhead">The four packages</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Package</th><th>Guests</th><th>What it adds</th></tr></thead>
+        <tbody>
+          <tr><th>Serenata</th><td>Just the two of you</td><td>Dinner on the beach, a wine tasting, a 50-minute couples massage and a private cabana for a day</td></tr>
+          <tr><th>Beso</th><td>Up to 20</td><td>A rehearsal dinner and a semi-private wedding dinner in one of the restaurants, plus the massage and cabana</td></tr>
+          <tr><th>Abrazo</th><td>Up to 30</td><td>Menu tasting, aisle runner, a one-hour cocktail reception with canap&eacute;s and open bar, 45 minutes of live music, and a three-hour private reception with dinner</td></tr>
+          <tr><th>Coraz&oacute;n</th><td>Up to 50 or 100</td><td>As Abrazo, at the larger headcounts</td></tr>
+        </tbody>
+      </table></div>
+      <p class="subhead">Venues</p>
+      <div class="tablewrap"><table>
+        <caption>Cocktail is standing; banquet is seated at tables.</caption>
+        <thead><tr><th>Venue</th><th>Cocktail</th><th>Banquet</th></tr></thead>
+        <tbody>
+          <tr><th>The beach</th><td>—</td><td class="num">600</td></tr>
+          <tr><th>Azur Pool</th><td class="num">250</td><td class="num">180</td></tr>
+          <tr><th>Egos Terrace</th><td class="num">80</td><td>—</td></tr>
+          <tr><th>Pool Club</th><td class="num">70</td><td class="num">60</td></tr>
+          <tr><th>Presidential Suite Terrace</th><td class="num">40</td><td>—</td></tr>
+          <tr><th>Grand Aqua Ballroom</th><td class="num">800</td><td class="num">600</td></tr>
+        </tbody>
+      </table></div>
+      <p class="tabnote">Package pricing is quoted for your date and headcount rather than published — send me both and I will get you real numbers.</p>
+    </div>
+
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
+      <p class="lede">A convention centre for up to a thousand, and a resort that stays adult all week.</p>
+      <div class="prose">
+        <p>For a milestone birthday, a reunion or an anniversary trip, the appeal here is simple: nobody&rsquo;s children are running through your dinner, and the whole property is pitched at the same kind of evening.</p>
+        <p><b>The spaces.</b> The Grand Aqua Ballroom takes 800 standing or 600 seated and divides down; the beach seats 600; the Azur Pool takes 250 standing. Smaller groups do well on the Presidential Suite Terrace or at the Pool Club, which becomes private at night.</p>
+        <p><b>Day passes</b> are worth knowing about if some of your party stays elsewhere. A day pass runs 9am to 6pm, a night pass 6pm to 11pm, and a full day pass covers both and includes an hour of hospitality room. All include restaurants, bars, pools, beach, loungers, towels and the gym.</p>
+      </div>
+      <div class="note">
+        <p><b>One thing to plan around.</b> Day passes are not sold when the hotel is more than 95% full, or over holidays. A large group that fills the resort can accidentally lock out its own day guests &mdash; so if part of your party is staying off-site, tell me early and I will check it.</p>
+      </div>
+      <div class="prose">
+        <p><b>Getting there.</b> Airport transfers can be arranged one-way or return, and a four-night stay booked direct includes complimentary transport to the airport. Early check-in and late check-out are both available.</p>
+        <p>Group rates, room blocks and contract terms are quoted directly &mdash; tell me your dates and rough numbers and I will put it together.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <p class="eyebrow">Days</p><h2>What there is to do</h2>
+  <div class="prose">
+    <p><b>Feel Harmony Spa</b>, a Natura Biss&eacute; Prestige Partner. Twelve indoor treatment areas and four outdoors, steam baths, saunas, a jacuzzi, two boutiques and a salon.</p>
+    <p><b>Fitness.</b> A gym with Life Fitness and Kinesis equipment, open 6am to 9pm, plus yoga and aquaerobics in the main pool.</p>
+    <p><b>Tennis.</b> One court, 7am to 9pm, complimentary for guests.</p>
+    <p><b>Evenings.</b> Nightly entertainment, Egos Bar until 1am Monday to Saturday, and the Aka Bar through the day.</p>
+    <p><b>Practical.</b> 24-hour room service, doctor on call, boutique and convenience store, valet and self parking with an EV charger, multilingual staff. The resort is smoke-free, and dog friendly at extra cost.</p>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){
+  var b=[].slice.call(document.querySelectorAll('.tabbtn'));
+  function sel(id){b.forEach(function(x){var on=x.id===id;
+    x.setAttribute('aria-selected',on?'true':'false');
+    document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  b.forEach(function(x){x.addEventListener('click',function(){sel(x.id);});});
+  if(location.hash==='#groups'){sel('tab-grp');}
+})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information, August 2026, and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+
+</body>
+</html>
