@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moon Palace Jamaica — Ocho Rios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="https://media-jamaica.moonpalace.com/main_pool_moon_palace_jamaica_10d4ed8e79.webp" alt="Moon Palace Jamaica">
+  <div class="wrap">
+    <p class="eyebrow light">Ocho Rios &middot; Jamaica</p>
+    <h1>Moon Palace Jamaica</h1>
+    <p class="tag">Endless island fun &mdash; the largest Palace property in Jamaica, and a beach that seats nine hundred.</p>
+    <ul class="chips"><li>680 rooms</li><li>10 categories</li><li>All ages</li><li>FlowRider&reg;</li><li>Lazy river</li><li>6 venues</li><li>Up to 900 guests</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Big enough for every generation of the guest list</h2>
+  <p class="lede">680 rooms in Ocho Rios, and the largest Palace property in Jamaica.</p></div>
+  <div class="prose">
+    <p>Moon Palace Jamaica is a sprawling all-inclusive on the north coast, built for groups that span three generations. A FlowRider&reg; surf simulator, a lazy river, several pools and a splash park keep the younger half occupied; the spa, the steakhouse and the sunset stretch of beach handle everyone else.</p>
+    <p>For weddings it is one of the few properties in Jamaica that can genuinely take a large party &mdash; <b>South Beach seats up to 900</b>, which is among the biggest outdoor settings on the island, and Starlight Terrace takes 600.</p>
+    <p>The Palace wedding programme runs from a complimentary tier up to fully custom, including three Mahal collections for South Asian celebrations.</p>
+    <ul class="facts"><li><b>680</b>rooms</li><li><b>10</b>categories</li><li><b>900</b>max wedding guests</li><li><b>6</b>venues</li><li><b>7</b>max room occupancy</li><li><b>All ages</b>welcome</li></ul>
+  </div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>Ten categories, and two that sleep seven</h2>
+  <p class="lede">The Family Deluxe and the Presidential are the two-room layouts. Everything else runs from three to five guests, with a rollaway covering the fifth.</p>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/resort_view_room_king_moon_palace_jamaica_3cb43900ee.webp" alt="Deluxe Resort View" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 3 · French balcony</p><h3>Deluxe Resort View</h3><p>The entry category, and still comfortable. A French balcony over the resort grounds, 24-hour room service, minibar, coffee maker, CHI bath products, a smart TV with Chromecast, welcome wine and nightly turndown.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/resort_view_room_bedroom_moon_palace_jamaica_c5836fcec9.webp" alt="Resort View with Balcony" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 5 · Private balcony</p><h3>Resort View with Balcony</h3><p>The same room with a proper private balcony, table and two chairs. A rollaway takes a fifth guest, which makes this the cheapest room here that a family of five fits into.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/room_deluxe_ocean_view_king_moon_palace_jamaica_73a990e0c7.webp" alt="Deluxe Ocean View" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 3 · French balcony</p><h3>Deluxe Ocean View</h3><p>Same layout, turned to face the Caribbean. French balcony, 24-hour service, minibar, coffee maker, CHI amenities and a smart TV.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/beds_room_ocean_view_moon_palace_jamaica_9773e82ea0.webp" alt="Deluxe Ocean View with Balcony" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 5 · Private balcony</p><h3>Deluxe Ocean View with Balcony</h3><p>Ocean-facing with a full balcony and seating, plus a top-shelf in-room liquor dispenser. Rollaway for a fifth guest.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/honeymoon_suite_room_moon_palace_jamaica_5636aca829.webp" alt="Superior Honeymoon Deluxe" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 2 · Adults only</p><h3>Superior Honeymoon Deluxe</h3><p>For couples, and genuinely so — exclusive access to a private beach area with its own waiter service. Aromatherapy and pillow menus, nightly petit fours, in-room snacks and a premium liquor dispenser.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/walk_out_suite_room_moon_palace_jamaica_aa19b8df50.webp" alt="Superior Walk Out Suite" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 5 · Terrace &amp; hammock</p><h3>Superior Walk Out Suite</h3><p>Ground floor, with a private terrace and hammock stepping straight out onto the grounds. Double whirlpool tub, aromatherapy and pillow menus, in-room snacks.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/junior_suite_ocean_view_room_moon_palace_jamaica_3ea4c64305.webp" alt="Superior Junior Suite Ocean View" loading="lazy"></div><div class="cbody"><p class="meta">501 sq ft · Sleeps 5</p><h3>Superior Junior Suite Ocean View</h3><p>Noticeably larger at 501 sq ft, with a balcony, a double whirlpool tub and L&rsquo;Occitane bath amenities. The first category that feels like a suite rather than a room.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/governor_suite_room_moon_palace_jamaica_16bee9d32a.webp" alt="Superior Governor Suite" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 5 · Separate living &amp; dining</p><h3>Superior Governor Suite</h3><p>A separate living and dining area, double whirlpool tub, and a balcony with table and chairs. Room to have people in rather than just sleep.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/family_deluxe_double_kids_amenities_moon_palace_jamaica_c072c2bf8b.webp" alt="Superior Family Deluxe" loading="lazy"></div><div class="cbody"><p class="meta">646 sq ft · Sleeps 7 · Two connecting rooms</p><h3>Superior Family Deluxe</h3><p><b>Two connecting rooms</b> — a king room joined to a kids&rsquo; room with two double beds. Kid-sized robes and slippers, L&rsquo;Or&eacute;al Kids bath products and their own amenities. The reason most families book here.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://media-jamaica.moonpalace.com/presidential_room_ocean_view_moon_palace_jamaica_227729c4c8.webp" alt="Superior Two Bedrooms Presidential Suite" loading="lazy"></div><div class="cbody"><p class="meta">Sleeps 7 · Two bedrooms</p><h3>Superior Two Bedrooms Presidential Suite</h3><p>The top of the property. Two bedrooms, two whirlpool tubs on a private balcony, a separate living room and a dining and bar area, two full bathrooms plus a half bath.</p></div></article>
+  </div>
+  <div class="note">
+    <p><b>One thing worth knowing.</b> Resort View with Balcony and Deluxe Ocean View with Balcony are photographed with the same image on the resort&rsquo;s own site &mdash; the rooms differ only in which way they face. Ask me and I will describe the difference properly.</p>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Room tiers</p><h2>Superior categories</h2>
+  <p class="lede">There is no separate club lounge here. The step up is in the room itself.</p></div>
+  <div class="prose">
+    <p>Everything from the Honeymoon Deluxe upward is a Superior category, and they add the things that actually change a stay: a double whirlpool tub, aromatherapy and pillow menus, in-room snacks, nightly petit fours, a premium liquor dispenser and L&rsquo;Occitane bath amenities.</p>
+    <ul class="perks">
+      <li>Double whirlpool tub</li><li>Aromatherapy menu</li>
+      <li>Pillow menu</li><li>Premium liquor dispenser</li>
+      <li>In-room snacks</li><li>Nightly petit fours</li>
+      <li>L&rsquo;Occitane bath amenities</li><li>Private terrace or balcony</li>
+    </ul>
+    <p style="margin-top:1.4rem">The Honeymoon Deluxe adds a private beach area with dedicated waiter service, and is adults only.</p>
+  </div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants</h2>
+  <p class="lede">All included, and room service runs around the clock.</p>
+  <div class="dining">
+      <div class="dish"><h4>Buccaneers Reef</h4><p class="cuisine">Seafood &amp; grill</p></div>
+      <div class="dish"><h4>Pier 8</h4><p class="cuisine">Waterside dining</p></div>
+      <div class="dish"><h4>La Gondola</h4><p class="cuisine">Italian</p></div>
+      <div class="dish"><h4>Momo</h4><p class="cuisine">Pan-Asian</p></div>
+      <div class="dish"><h4>Boulangerie</h4><p class="cuisine">Bakery, coffee &amp; sweets</p></div>
+      <div class="dish"><h4>Piano Bar</h4><p class="cuisine">Drinks &amp; live music</p></div>
+      <div class="dish"><h4>24-Hour Room Service</h4><p class="cuisine">Any hour</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>A lazy river, a FlowRider and a splash park</h2>
+  <div class="prose">
+    <p><b>The water is the draw here.</b> A FlowRider&reg; double wave simulator, a lazy river winding through the grounds, multiple pools with swim-up bars, and a dedicated splash park for younger children.</p>
+    <p><b>The beach</b> runs along the Ocho Rios coast, with paddleboarding and space enough that a 900-guest event fits on it.</p>
+    <p>I confirm current sea conditions for your dates before you travel &mdash; worth asking anywhere on this coast, and not something the resort publishes.</p>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
+      <p class="lede">Six venues, from a forty-guest gazebo to a beach that seats nine hundred.</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Venue</th><th class="num">Guests</th></tr></thead>
+        <tbody>
+          <tr><th>South Beach</th><td class="num">900</td></tr>
+          <tr><th>Starlight Terrace</th><td class="num">600</td></tr>
+          <tr><th>North Deck</th><td class="num">140</td></tr>
+          <tr><th>North Gazebo</th><td class="num">100</td></tr>
+          <tr><th>South Deck</th><td class="num">50</td></tr>
+          <tr><th>South Gazebo</th><td class="num">40</td></tr>
+        </tbody>
+      </table></div>
+      <p class="subhead">The collections</p>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Collection</th><th>From</th></tr></thead>
+        <tbody>
+          <tr><th>Complimentary</th><td>Complimentary with a qualifying booking</td></tr>
+          <tr><th>Petite</th><td>from $2,000</td></tr>
+          <tr><th>Classic</th><td>from $3,700</td></tr>
+          <tr><th>Prestige</th><td>Quoted for your date</td></tr>
+          <tr><th>Luxe</th><td>Quoted for your date</td></tr>
+          <tr><th>Mahal Ruby &middot; Sapphire &middot; Diamond</th><td>Custom &mdash; South Asian celebrations</td></tr>
+        </tbody>
+      </table></div>
+      <p class="tabnote">Three Mahal collections are built specifically for South Asian weddings. Pricing on the upper tiers is quoted per date and headcount rather than published.</p>
+    </div>
+
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
+      <p class="lede">Room for a very large group, and enough to do that nobody is bored.</p>
+      <div class="prose">
+        <p>The same six spaces work for a milestone birthday, a reunion or a corporate incentive. South Beach at 900 and Starlight Terrace at 600 are the two that make a genuinely large celebration possible; the gazebos and decks suit forty to a hundred and forty.</p>
+        <p><b>What keeps a mixed group happy.</b> The FlowRider&reg; and the lazy river handle teenagers, the splash park handles small children, and the spa and steakhouse handle the adults. Room service runs 24 hours, which matters when a group lands late.</p>
+        <p><b>Rooms for families.</b> Two categories sleep seven &mdash; the Superior Family Deluxe, which is two connecting rooms with its own kids&rsquo; amenities, and the Two Bedrooms Presidential. Several categories take a fifth guest on a rollaway.</p>
+        <p>Group rates, room blocks and comp-room ratios are quoted directly. Send me your dates and rough numbers and I will put it together.</p>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section id="activities"><div class="wrap">
+  <p class="eyebrow">Days</p><h2>What there is to do</h2>
+  <div class="prose">
+    <p><b>In the water.</b> FlowRider&reg; double wave simulator, lazy river, pools with swim-up bars, splash park, paddleboarding off the beach.</p>
+    <p><b>The spa.</b> A full spa on property, with treatment rooms and a hydrotherapy area.</p>
+    <p><b>Evenings.</b> International shows and live entertainment, the Piano Bar, and a steakhouse for a dressed-up dinner.</p>
+    <p><b>Off property.</b> Ocho Rios puts the river falls, Dunn&rsquo;s River and the north coast within easy reach. Excursions are booked through the concierge.</p>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/main_pool_moon_palace_jamaica_10d4ed8e79.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/group_at_pool_bar_moon_palace_jamaica_ed4a24db7b.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/pool_family_fun_moon_palace_jamaica_a32a45ec9a.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/man_experience_flowrider_moon_palace_jamaica_2a552dc480.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/flowrider_experience_moon_palace_jamaica_8c4ddf1c1a_800237b6af.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/kids_waterpark_moon_palace_jamaica_9c231bc899_cd36fb46f0.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/boy_at_waterpark_moon_palace_jamaica_4fdfd6aa3d_7b25e7e1fc.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/woman_beach_moon_palace_jamaica_eac4d05631_e946f1ad8d.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/couple_walking_beach_moon_palace_jamaica_080e17ce66.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/family_beach_moon_palace_jamaica_6e204fe5d5_3b4b5f447b.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/beach_paddleboard_moon_palace_jamaica_811bb13035_b12844934d.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/wedding_chapel_moon_palace_jamaica_e57633f7d5_9f1ed73f21.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/wedding_at_the_beach_moon_palace_jamaica_34ed660eef.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/weddings_aisle_bouquet_moon_palace_jamaica_81df408647.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/wedding_quantum_event_moon_palace_jamaica_3b309a0c36_582e0cc93e.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/bride_photo_sunset_weddings_moon_palace_jamaica_6c914c6a29_b87d2cd1ba.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/couple_at_sunset_moon_palace_jamaica_7f077deacb_0620ae64fe.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/sunset_walking_couple_moon_palace_jamaica_8172861ad4_6f67dfe5b3.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/international_shows_moon_palace_jamaica_6cc7d7533d_438eae0f60.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/momo_restaurant_design_moon_palace_jamaica_d49f518f2d_0edd1a0ca6.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/fuego_momo_restaurant_moon_palace_jamaica_f6dfc3e0ac.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/exclusive_steakhouse_moon_palace_jamaica_133720aa8c.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/deluxe_all_inclusive_restaurants_moon_palace_jamaica_90f4800faa.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/luxurious_spa_moon_palace_jamaica_1f861c02ff.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://media-jamaica.moonpalace.com/river_falls_activity_moon_palace_jamaica_f0a763c04d_728c561040.webp" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){
+  var b=[].slice.call(document.querySelectorAll('.tabbtn'));
+  function sel(id){b.forEach(function(x){var on=x.id===id;
+    x.setAttribute('aria-selected',on?'true':'false');
+    document.getElementById(x.getAttribute('aria-controls')).hidden=!on;});}
+  b.forEach(function(x){x.addEventListener('click',function(){sel(x.id);});});
+  if(location.hash==='#groups'){sel('tab-grp');}
+})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information, August 2026, and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+
+</body>
+</html>
