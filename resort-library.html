@@ -2292,9 +2292,18 @@ body{padding-left:210px !important;padding-bottom:56px !important}
     var rp={};ph.forEach(function(x){var c=(x.data().roomCategory||'').trim();if(c)rp[c]=1;});
     var rpn=Object.keys(rp).length, rooms=n(a.roomCategories), bars=n(a.bars), rest=n(a.restaurants);
     set('Rooms',rpn+'/'+rooms, rpn>=Math.max(6,rooms-3)?'ok':(rpn>0?'warn':'no'));
-    set('Dining',String(rest),rest>=6?'ok':(rest>0?'warn':'no'));
-    set('Pools',String(n(a.pools)),n(a.pools)>=2?'ok':(n(a.pools)>0?'warn':'no'));
-    set('Venues',String(n(a.venues)),n(a.venues)>=3?'ok':(n(a.venues)>0?'warn':'no'));
+    var dl=a.restaurants||[];
+    var dPh=dl.filter(function(x){return x&&typeof x==='object'&&(x.photo||'').trim();}).length;
+    set('Dining',dl.length+' \u00b7 '+dPh+' photos',
+        (dl.length>=6&&dPh>0)?'ok':(dl.length>0?'warn':'no'));
+    var pl=a.pools||[];
+    var pPh=pl.filter(function(x){return x&&typeof x==='object'&&(x.photo||'').trim();}).length;
+    set('Pools',pl.length+' \u00b7 '+pPh+' photos',
+        (pl.length>=2&&pPh>0)?'ok':(pl.length>0?'warn':'no'));
+    var vl=a.venues||[];
+    var vPh=vl.filter(function(x){return x&&typeof x==='object'&&(x.photo||'').trim();}).length;
+    set('Venues',vl.length+' \u00b7 '+vPh+' photos',
+        (vl.length>=3&&vPh>0)?'ok':(vl.length>0?'warn':'no'));
     set('Packages',String(n(a.packages)),n(a.packages)>=2?'ok':(n(a.packages)>0?'warn':'no'));
     set('Photos',String(n(a.photos)),n(a.photos)>=15?'ok':(n(a.photos)>0?'warn':'no'));
     var dl=(a.description||'').length;
@@ -2592,6 +2601,253 @@ body{padding-left:186px !important}
 }
 #restaurant-list,#venue-list,#package-list,#roomcat-list,#pool-list{gap:18px !important}
 </style>
+
+<script id="acGuideBuilder">
+(function(){
+ var GCSS = `
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+`;
+
+ function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+ function nm(o){return typeof o==='string'?o:(o&&(o.name||o.title))||'';}
+ function d(o){return typeof o==='string'?'':(o&&o.description)||'';}
+ function ph(o){return typeof o==='string'?'':(o&&o.photo)||'';}
+ function ty(o){return typeof o==='string'?'':(o&&(o.type||o.capacity))||'';}
+ function toList(v){
+  if(!v)return [];
+  if(Array.isArray(v))return v;
+  if(typeof v==='string')return v.split(/\r?\n|\u00b7|;|\u2022/).map(function(s){return s.trim();}).filter(Boolean);
+  if(typeof v==='object')return Object.values(v);
+  return [];
+ }
+
+ function build(a, roomPhotos, gallery){
+  var name=a.name||a.resortName||'Resort';
+  var rooms=toList(a.roomCategories).map(function(r){
+   var n=nm(r), p=roomPhotos[n]||ph(r);
+   var meta=[r.sqft||r.size,r.view,r.beds,(r.sleeps||r.occupancy)?('Sleeps '+(r.sleeps||r.occupancy)):''].filter(Boolean).join(' &middot; ');
+   var shot=p?'<div class="shot"><img src="'+esc(p)+'" alt="'+esc(n)+'" loading="lazy"></div>'
+    :'<div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.8rem;color:var(--mute);font-style:italic">Photography on request</span></div>';
+   return '      <article class="card">'+shot+'<div class="cbody"><p class="meta">'+esc(meta)+'</p><h3>'+esc(n)+'</h3><p>'+esc(d(r))+'</p></div></article>';
+  }).join('\n');
+
+  function dishes(list){
+   return toList(list).map(function(x){
+    var p=ph(x);
+    return '      <div class="dish">'+(p?'<img src="'+esc(p)+'" alt="'+esc(nm(x))+'" loading="lazy">':'')
+     +'<h4>'+esc(nm(x))+'</h4>'+(ty(x)?'<p class="cuisine">'+esc(ty(x))+'</p>':'')
+     +(d(x)?'<p>'+esc(d(x))+'</p>':'')+'</div>';
+   }).join('\n');
+  }
+
+  function rows(list,cols){
+   return toList(list).map(function(x){
+    return '          <tr><th>'+esc(nm(x))+'</th><td>'+esc(ty(x)||d(x))+'</td></tr>';
+   }).join('\n');
+  }
+
+  var gal=toList(gallery).map(function(u){
+   return '      <figure class="gal"><img src="'+esc(u)+'" alt="" loading="lazy"></figure>';
+  }).join('\n');
+
+  var hero=(gallery&&gallery[0])||Object.values(roomPhotos)[0]||'';
+  var chips=[(a.rooms||a.totalRooms)?((a.rooms||a.totalRooms)+' rooms'):'',
+   toList(a.roomCategories).length+' categories',
+   toList(a.restaurants).length?(toList(a.restaurants).length+' restaurants'):'',
+   a.adultsOnly?'Adults only 18+':'All ages',
+   a.clubName||''].filter(Boolean)
+   .map(function(c){return '<li>'+esc(c)+'</li>';}).join('');
+
+  return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+  +'<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+  +'<title>'+esc(name)+'</title>\n'
+  +'<link rel="preconnect" href="https://fonts.googleapis.com">\n'
+  +'<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+  +'<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">\n'
+  +'<style>'+GCSS+'</style>\n</head>\n<body>\n\n'
+  +'<header class="hero">\n  <img src="'+esc(hero)+'" alt="'+esc(name)+'">\n  <div class="wrap">\n'
+  +'    <p class="eyebrow light">'+esc(a.destination||a.location||'')+'</p>\n'
+  +'    <h1>'+esc(name)+'</h1>\n'
+  +'    <p class="tag">'+esc(a.tagline||'')+'</p>\n'
+  +'    <ul class="chips">'+chips+'</ul>\n  </div>\n</header>\n\n<main>\n'
+  +'<section id="overview"><div class="wrap split">\n  <div><p class="eyebrow">The resort</p><h2>'+esc(name)+'</h2></div>\n'
+  +'  <div class="prose"><p>'+esc(a.description||'')+'</p></div>\n</div></section>\n\n'
+  +'<section id="rooms"><div class="wrap">\n  <p class="eyebrow">Accommodation</p><h2>'+toList(a.roomCategories).length+' room categories</h2>\n  <div class="grid">\n'+rooms+'\n  </div>\n</div></section>\n\n'
+  +(a.clubName?'<section id="club"><div class="wrap split">\n  <div><p class="eyebrow">Club level</p><h2>'+esc(a.clubName)+'</h2></div>\n  <div class="prose"><ul class="perks">'+(toList(a.clubPerks||a.clubLevelPerks).map(function(p){return '<li>'+esc(nm(p)||p)+'</li>';}).join(''))+'</ul></div>\n</div></section>\n\n':'')
+  +'<section id="dining"><div class="wrap">\n  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>\n  <div class="dining">\n'+dishes(a.restaurants)+'\n  </div>\n</div></section>\n\n'
+  +(toList(a.pools).length?'<section id="pools"><div class="wrap">\n  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>\n  <div class="dining">\n'+dishes(a.pools)+'\n  </div>\n</div></section>\n\n':'')
+  +'<section id="planning"><div class="wrap">\n  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>\n'
+  +'  <div class="tabwrap">\n    <div class="tabbar" role="tablist" aria-label="Event type">\n'
+  +'      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>\n'
+  +'      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>\n    </div>\n'
+  +'    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">\n'
+  +((a.weddingPromoTitle?'      <div class="note"><h4>'+esc(a.weddingPromoTitle)+'</h4><p>'+esc(a.weddingPromoSummary||'')+'</p></div>\n':''))
+  +(toList(a.venues).length?'      <p class="subhead">Venues</p>\n      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>\n'+rows(a.venues)+'\n      </tbody></table></div>\n':'')
+  +(toList(a.packages).length?'      <p class="subhead">Packages</p>\n      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>\n'+(toList(a.packages).map(function(p){return '          <tr><th>'+esc(nm(p))+'</th><td>'+esc(p.price||p.guests||'')+'</td></tr>';}).join('\n'))+'\n      </tbody></table></div>\n':'')
+  +'    </div>\n'
+  +'    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>\n'
+  +'      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>\n'
+  +'    </div>\n  </div>\n</div></section>\n\n'
+  +(gal?'<section id="gallery"><div class="wrap">\n  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>\n  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">\n'+gal+'\n  </div>\n</div></section>\n':'')
+  +'</main>\n\n<script>\n(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));'
+  +'function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");'
+  +'document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}'
+  +'b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});'
+  +'if(location.hash==="#groups"){sel("tab-grp");}})();\n<\/script>\n\n'
+  +'<footer><div class="wrap">\n  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>\n'
+  +'  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>\n</div></footer>\n\n</body>\n</html>\n';
+ }
+
+ function card(slug,a){
+  var tags=[a.adultsOnly?'Adults Only 18+':'All Ages',
+   toList(a.roomCategories).length+' Categories',
+   toList(a.venues).length?(toList(a.venues).length+' Venues'):'',
+   a.clubName||''].filter(Boolean)
+   .map(function(t){return '          <span class="tag">'+esc(t)+'</span>';}).join('\n');
+  return '<a class="card" href="'+slug+'-profile-v1.html">\n'
+   +'        <div class="region">'+esc(a.destination||a.location||'')+'</div>\n'
+   +'        <h2>'+esc(a.name||a.resortName||slug)+'</h2>\n'
+   +'        <p>'+esc(a.tagline||'')+'</p>\n'
+   +'        <div class="tags">\n'+tags+'\n        </div>\n'
+   +'        <div class="open">Open reference &rarr;</div>\n      </a>';
+ }
+
+ function addBtn(){
+  if(document.getElementById('acBuildGuide'))return;
+  var bar=document.getElementById('acSaveBar'); if(!bar)return;
+  var b=document.createElement('button');
+  b.id='acBuildGuide'; b.type='button'; b.textContent='\uD83D\uDCC4 Build guide page';
+  b.style.cssText='background:none;border:1px solid #B08D57;color:#8A6A2F;padding:9px 18px;'
+   +'border-radius:5px;font-weight:600;font-size:.86rem;cursor:pointer;margin-right:10px';
+  b.onclick=async function(){
+   var sel=document.getElementById('masterResort');
+   var slug=sel&&sel.value;
+   if(!slug){alert('Pick a resort first.');return;}
+   b.textContent='Building\u2026'; b.disabled=true;
+   try{
+    var db=firebase.firestore();
+    var a=(await db.collection('resortProfiles').doc(slug).get()).data()||{};
+    var snap=await db.collection('resortPhotos').where('resortSlug','==',slug).get();
+    var rp={},gal=[];
+    snap.forEach(function(dd){var x=dd.data();var c=(x.roomCategory||'').trim();
+     if(c){if(!rp[c])rp[c]=x.url;}else gal.push(x.url);});
+    toList(a.photos).forEach(function(u){if(gal.indexOf(u)<0)gal.push(u);});
+    var html=build(a,rp,gal);
+    var blob=new Blob([html],{type:'text/html'});
+    var link=document.createElement('a');
+    link.href=URL.createObjectURL(blob);
+    link.download=slug+'-profile-v1.html';
+    document.body.appendChild(link); link.click(); link.remove();
+    var mk=card(slug,a);
+    try{await navigator.clipboard.writeText(mk);}catch(e){}
+    var w=window.open('','_blank','width=760,height=520');
+    if(w){w.document.write('<title>Index card</title><body style="font:13px ui-monospace,monospace;padding:20px;background:#F4F1EA;color:#2A241C">'
+     +'<p style="font:600 14px system-ui">Paste this into resort-reference/index.html, then bump the resort count.</p>'
+     +'<p style="font:13px system-ui;color:#6B6153">Copied to your clipboard already.</p>'
+     +'<pre style="white-space:pre-wrap;background:#FFFDF8;border:1px solid #DCD2BF;padding:14px;border-radius:6px">'
+     +mk.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre></body>');}
+   }catch(e){alert('Could not build: '+e.message);}
+   b.textContent='\uD83D\uDCC4 Build guide page'; b.disabled=false;
+  };
+  bar.insertBefore(b, bar.querySelector('button'));
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(addBtn,1300);});
+ else setTimeout(addBtn,1300);
+})();
+</script>
 
 </body>
 </html>
