@@ -3025,14 +3025,15 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 
 
 <style id="acBucketCss">
-.acBucket{background:#FFFDF8;border:1px solid #E0D7C4;border-radius:10px;margin-bottom:12px;overflow:hidden}
+.acBucket{background:#FFFDF8;border:1px solid #E0D7C4;border-radius:10px;margin-bottom:10px;
+ overflow:hidden;grid-column:1/-1}
 .acBucketHead{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none}
 .acBucketHead:hover{background:#F6F1E7}
-.acBucketHead .cv{color:#B08D57;font-size:.85rem;transition:transform .15s;display:inline-block;width:13px}
+.acBucketHead .cv{color:#B08D57;font-size:.85rem;width:13px;display:inline-block;transition:transform .15s}
 .acBucket.open .acBucketHead .cv{transform:rotate(90deg)}
 .acBucketHead .nm{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.18rem;color:#2A241C}
 .acBucketHead .ct{font-size:.74rem;color:#8A7C67;margin-left:auto}
-.acBucketBody{padding:0 16px 14px;border-top:1px solid #E0D7C4}
+.acBucketBody{padding:0 16px 12px;border-top:1px solid #E0D7C4}
 .acBucket:not(.open) .acBucketBody{display:none}
 .acBucketBody .room-group{background:transparent !important;border:0 !important;
  border-bottom:1px solid #EDE7DA !important;border-radius:0 !important;
@@ -3041,47 +3042,33 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 </style>
 <script id="acBuckets">
 (function(){
- var ORDER=['Rooms & Suites','Dining','Pools & Beach','Wedding Venues','Resort & Property','Other'];
- function bucketFor(cat){
-  var c=(cat||'').toLowerCase();
-  if(/room|suite/.test(c))return 'Rooms & Suites';
-  if(/dining|restaurant|bar|caf/.test(c))return 'Dining';
-  if(/pool|beach|water/.test(c))return 'Pools & Beach';
-  if(/venue|wedding|ceremon|reception/.test(c))return 'Wedding Venues';
-  if(/resort|property|aerial|lobby|exterior|spa|activit/.test(c))return 'Resort & Property';
-  return 'Other';
- }
- var MAP={};   // group title -> bucket
- function loadMap(cb){
-  var sel=document.getElementById('masterResort');
-  if(!sel||!sel.value||typeof firebase==='undefined'){cb();return;}
-  firebase.firestore().collection('resortPhotos')
-   .where('resortSlug','==',sel.value).get().then(function(s){
-    MAP={};
-    s.forEach(function(d){
-     var x=d.data();
-     var key=(x.roomCategory||'').trim()||(x.category||'').trim();
-     if(key)MAP[key]=bucketFor(x.roomCategory?'room':x.category);
-    });
-    cb();
-   }).catch(cb);
+ var ORDER=['Rooms & Suites','Dining','Pools & Beach','Wedding Venues','Resort & Property'];
+ function bucketOf(title){
+  var t=(title||'').toLowerCase();
+  if(/suite|room|villa|junior|deluxe|standard|casita|bungalow/.test(t))return 'Rooms & Suites';
+  if(/restaurant|dining|bar|caf|grill|buffet|lounge|steak|sushi/.test(t))return 'Dining';
+  if(/pool|beach|water|splash|lazy/.test(t))return 'Pools & Beach';
+  if(/venue|gazebo|terrace|ballroom|chapel|deck|garden|wedding/.test(t))return 'Wedding Venues';
+  return 'Resort & Property';
  }
  function group(){
   var groups=[].slice.call(document.querySelectorAll('.room-group'));
   if(!groups.length)return;
-  if(groups[0].closest('.acBucketBody'))return;   // already bucketed
+  if(groups[0].closest('.acBucketBody'))return;      // already bucketed
   var host=groups[0].parentElement;
   var buckets={};
   groups.forEach(function(g){
    var t=g.querySelector('.room-group-title');
    var name=t?t.textContent.replace(/\s*\d+\s*photos?\s*$/,'').replace('\u25B8','').trim():'';
-   var b=MAP[name]||'Other';
-   (buckets[b]=buckets[b]||[]).push(g);
+   var b=bucketOf(name);
+   if(!buckets[b])buckets[b]=[];
+   buckets[b].push(g);
   });
   var frag=document.createDocumentFragment();
   ORDER.forEach(function(bn){
    var list=buckets[bn]; if(!list||!list.length)return;
-   var n=0; list.forEach(function(g){
+   var n=0;
+   list.forEach(function(g){
     var m=(g.textContent.match(/(\d+)\s*photos?/)||[])[1];
     n+= m?parseInt(m,10):0;
    });
@@ -3097,12 +3084,29 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   });
   host.appendChild(frag);
  }
- function run(){ loadMap(group); }
- setInterval(run,2000);
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(run,1400);});
- else setTimeout(run,1400);
+ setInterval(group,2000);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(group,1400);});
+ else setTimeout(group,1400);
 })();
 </script>
+
+
+<style id="acWideGallery">
+/* photo area: full width, headers on one line, photos in a proper grid */
+.gallery-grid{display:block !important}
+.acBucket{width:100% !important;display:block !important}
+.acBucketBody{display:block !important;width:100% !important}
+.acBucketBody .room-group{width:100% !important;display:block !important}
+.room-group-header{display:flex !important;align-items:center !important;
+ gap:14px !important;flex-wrap:nowrap !important;width:100% !important}
+.room-group-header > div:first-child{flex:1 1 auto;min-width:0}
+.room-group-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+ font-size:1rem !important;display:flex;align-items:center;gap:6px}
+.photo-resort{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.room-group-actions{flex:0 0 auto;display:flex;gap:8px;white-space:nowrap}
+.room-group-photos{display:grid !important;
+ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:12px !important}
+</style>
 
 </body>
 </html>
