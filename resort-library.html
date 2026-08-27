@@ -2835,13 +2835,33 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
     link.download=slug+'-profile-v1.html';
     document.body.appendChild(link); link.click(); link.remove();
     var mk=card(slug,a);
-    try{await navigator.clipboard.writeText(mk);}catch(e){}
-    var w=window.open('','_blank','width=760,height=520');
-    if(w){w.document.write('<title>Index card</title><body style="font:13px ui-monospace,monospace;padding:20px;background:#F4F1EA;color:#2A241C">'
-     +'<p style="font:600 14px system-ui">Paste this into resort-reference/index.html, then bump the resort count.</p>'
-     +'<p style="font:13px system-ui;color:#6B6153">Copied to your clipboard already.</p>'
-     +'<pre style="white-space:pre-wrap;background:#FFFDF8;border:1px solid #DCD2BF;padding:14px;border-radius:6px">'
-     +mk.replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</pre></body>');}
+    try{
+     var IDX='https://raw.githubusercontent.com/amycate-aaa/amycate-crm/main/resort-reference/index.html';
+     var res=await fetch(IDX+'?t='+Date.now());
+     var idx=await res.text();
+     if(idx.indexOf(slug+'-profile-v1.html')>-1){
+      alert('Guide page downloaded.\n\nThis resort already has a card on the index, so index.html was left alone.');
+     } else {
+      var re=new RegExp('<a class="card"[\\\\s\\\\S]*?<\\/a>','g');
+      var m,last=null;
+      while((m=re.exec(idx))!==null){ last=m; }
+      if(last){
+       var at=last.index+last[0].length;
+       idx = idx.slice(0,at) + '\n\n      ' + mk + idx.slice(at);
+       var n=(idx.match(/<a class="card"/g)||[]).length;
+       idx = idx.replace(/>\d+ resorts</, '>'+n+' resorts<');
+       var b2=new Blob([idx],{type:'text/html'});
+       var l2=document.createElement('a');
+       l2.href=URL.createObjectURL(b2);
+       l2.download='index.html';
+       document.body.appendChild(l2); l2.click(); l2.remove();
+       alert('Two files downloaded:\n\n  '+slug+'-profile-v1.html\n  index.html  ('+n+' resorts)\n\nUpload BOTH to the resort-reference folder.');
+      }
+     }
+    }catch(e2){
+     try{await navigator.clipboard.writeText(mk);}catch(e3){}
+     alert('Guide page downloaded.\n\nCould not fetch the index, so the card is on your clipboard. Paste it into resort-reference/index.html and bump the count.');
+    }
    }catch(e){alert('Could not build: '+e.message);}
    b.textContent='\uD83D\uDCC4 Build guide page'; b.disabled=false;
   };
