@@ -813,10 +813,13 @@ async function loadResortProfile(slugOverride) {
       set('profileCtPromoLink',         d.ctPromoLink);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo || '')); }
+      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => { if (typeof r === 'string') r = {name:r}; addRoomCatRow(r.name, r.description, r.photo || '')); }); }
       // Load restaurants
       const restList = document.getElementById('restaurant-list');
-      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => addRestaurantRow(r.name, r.type, r.description, r.photo || '')); }
+      if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(r => {
+        if (typeof r === 'string') { addRestaurantRow(r, '', '', ''); }
+        else { addRestaurantRow(r.name||'', r.type||'', r.description||'', r.photo || ''); }
+      }); }
       // Load pools & beach
       const poolList = document.getElementById('pool-list');
       if (poolList) { poolList.innerHTML = ''; (d.pools || []).forEach(p => addPoolRow(
@@ -826,10 +829,10 @@ async function loadResortProfile(slugOverride) {
         (typeof p==='string'? '' : (p.photo||'')))); }
       // Load wedding venues
       const venueList = document.getElementById('venue-list');
-      if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
+      if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => { if (typeof v === 'string') v = {name:v}; addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }); }
       // Load wedding packages
       const pkgList = document.getElementById('pkg-list');
-      if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
+      if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => { if (typeof p === 'string') p = {name:p}; addPackageRow(p.name, p.highlights, p.price, p.featured)); }); }
     } else {
       // No profile yet — clear everything
       ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
