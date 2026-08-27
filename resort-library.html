@@ -2860,7 +2860,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 .photo-resort{color:#8A7C67 !important;font-size:.66rem !important;letter-spacing:.12em !important}
 .room-group-title{color:#2A241C !important;font-size:1.02rem !important}
 .room-group-count{color:#8A7C67 !important;font-weight:400 !important}
-.room-group-photos{display:grid !important;
+.room-group.acOpen .room-group-photos{display:grid !important;
  grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:12px !important}
 .photo-card{background:#F3EEE3 !important;border:1px solid #D8CBB2 !important;
  border-radius:7px !important;overflow:hidden}
@@ -3095,7 +3095,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 /* photo area: full width, headers on one line, photos in a proper grid */
 .gallery-grid{display:block !important}
 .acBucket{width:100% !important;display:block !important}
-.acBucketBody{display:block !important;width:100% !important}
+.acBucket.open .acBucketBody{display:block !important;width:100% !important}
+.acBucket:not(.open) .acBucketBody{display:none !important}
 .acBucketBody .room-group{width:100% !important;display:block !important}
 .room-group-header{display:flex !important;align-items:center !important;
  gap:14px !important;flex-wrap:nowrap !important;width:100% !important}
@@ -3104,7 +3105,61 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
  font-size:1rem !important;display:flex;align-items:center;gap:6px}
 .photo-resort{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .room-group-actions{flex:0 0 auto;display:flex;gap:8px;white-space:nowrap}
-.room-group-photos{display:grid !important;
+.room-group.acOpen .room-group.acOpen .room-group-photos{display:grid !important;
+ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:12px !important}
+.room-group:not(.acOpen) .room-group-photos{display:none !important}
+</style>
+
+
+<style id="acTidy">
+/* inside a bucket the resort name repeats on every row — drop it */
+.acBucketBody .photo-resort{display:none !important}
+.acBucketBody .room-group{padding:7px 0 !important}
+.acBucketBody .room-group-header{padding:0 !important;margin:0 !important;
+ border:0 !important;gap:10px !important}
+.acBucketBody .room-group-title{font-size:.92rem !important;font-weight:500 !important;color:#2A241C !important}
+.acBucketBody .room-group-count{font-size:.72rem !important;margin-left:6px}
+.acBucketBody .btn-gallery,.acBucketBody .btn-gallery-open{
+ font-size:.68rem !important;padding:4px 9px !important;border-radius:4px !important}
+.acBucketBody .room-group-actions{gap:5px !important}
+</style>
+
+
+<style id="acRowToggle">
+.acBucketBody .room-group-header{cursor:pointer}
+.acBucketBody .acCaret{display:inline-block;width:12px;color:#B08D57;font-size:.75rem;
+ transition:transform .15s;margin-right:5px}
+.acBucketBody .room-group.acOpen .acCaret{transform:rotate(90deg)}
+#acPhotoBar{display:none !important}
+</style>
+<script id="acRowToggleJs">
+(function(){
+ function wire(){
+  document.querySelectorAll('.room-group').forEach(function(g){
+   var t=g.querySelector('.room-group-title');
+   if(t && !t.querySelector('.acCaret')){
+    var c=document.createElement('span'); c.className='acCaret'; c.textContent='\u25B8';
+    t.insertBefore(c,t.firstChild);
+   }
+   if(g.__acRowWired)return; g.__acRowWired=1;
+   var h=g.querySelector('.room-group-header');
+   if(!h)return;
+   h.addEventListener('click',function(e){
+    if(e.target.closest('button,a'))return;
+    g.classList.toggle('acOpen');
+   });
+  });
+ }
+ setInterval(wire,1200);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,1500);});
+ else setTimeout(wire,1500);
+})();
+</script>
+
+
+<style id="acCollapseWins">
+.room-group:not(.acOpen) .room-group-photos{display:none !important}
+.room-group.acOpen .room-group-photos{display:grid !important;
  grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:12px !important}
 </style>
 
