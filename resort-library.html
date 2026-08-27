@@ -3163,5 +3163,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
  grid-template-columns:repeat(auto-fill,minmax(150px,1fr)) !important;gap:12px !important}
 </style>
 
+
+<script id="acDelegate">
+(function(){
+ // one document-level handler — survives rows being moved into buckets
+ document.addEventListener('click',function(e){
+  if(e.target.closest('.acBucketHead'))return;
+  if(e.target.closest('button,a'))return;
+  var h=e.target.closest('.room-group-header');
+  if(!h)return;
+  var g=h.closest('.room-group');
+  if(g)g.classList.toggle('acOpen');
+ },true);
+})();
+</script>
+
 </body>
 </html>
