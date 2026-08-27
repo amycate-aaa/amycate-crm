@@ -2908,5 +2908,201 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 })();
 </script>
 
+
+<style id="acCollapseCss">
+.room-group-header{cursor:pointer;user-select:none;position:relative}
+.room-group-header:hover .room-group-title{color:#8A6A2F !important}
+.acCaret{display:inline-block;width:14px;color:#B08D57;font-size:.8rem;
+ transition:transform .15s;margin-right:4px}
+.room-group.acOpen .acCaret{transform:rotate(90deg)}
+.room-group:not(.acOpen) .room-group-photos{display:none !important}
+.room-group:not(.acOpen){padding-bottom:10px !important;margin-bottom:8px !important}
+.room-group:not(.acOpen) .room-group-header{border-bottom:0 !important;
+ padding-bottom:0 !important;margin-bottom:0 !important}
+#acPhotoBar{display:flex;gap:8px;align-items:center;margin:0 0 14px}
+#acPhotoBar button{background:#EDE7DA;border:1px solid #DCD2BF;color:#5C5347;
+ font-size:.76rem;padding:6px 13px;border-radius:5px;cursor:pointer;font-family:system-ui}
+#acPhotoBar button:hover{background:#E2D9C6}
+#acPhotoBar .cnt{font-size:.76rem;color:#8A7C67;margin-left:auto}
+</style>
+<script id="acCollapse">
+(function(){
+ function wire(){
+  var groups=[].slice.call(document.querySelectorAll('.room-group'));
+  if(!groups.length)return;
+  groups.forEach(function(g){
+   if(g.__acWired)return; g.__acWired=1;
+   var h=g.querySelector('.room-group-header');
+   var t=g.querySelector('.room-group-title');
+   if(!h||!t)return;
+   if(!t.querySelector('.acCaret')){
+    var c=document.createElement('span'); c.className='acCaret'; c.textContent='\u25B8';
+    t.insertBefore(c,t.firstChild);
+   }
+   h.addEventListener('click',function(e){
+    if(e.target.closest('button,a'))return;   // don't toggle when using the buttons
+    g.classList.toggle('acOpen');
+   });
+  });
+  // toolbar
+  var host=groups[0].parentElement;
+  if(host && !document.getElementById('acPhotoBar')){
+   var bar=document.createElement('div'); bar.id='acPhotoBar';
+   var open=document.createElement('button'); open.textContent='Expand all';
+   var shut=document.createElement('button'); shut.textContent='Collapse all';
+   var cnt=document.createElement('span'); cnt.className='cnt';
+   open.onclick=function(){[].slice.call(document.querySelectorAll('.room-group')).forEach(function(x){x.classList.add('acOpen');});};
+   shut.onclick=function(){[].slice.call(document.querySelectorAll('.room-group')).forEach(function(x){x.classList.remove('acOpen');});};
+   bar.appendChild(open); bar.appendChild(shut); bar.appendChild(cnt);
+   host.insertBefore(bar,host.firstChild);
+  }
+  var n=document.querySelectorAll('.room-group').length;
+  var c=document.getElementById('acPhotoBar');
+  if(c) c.querySelector('.cnt').textContent=n+' photo group'+(n===1?'':'s');
+ }
+ setInterval(wire,1500);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(wire,1000);});
+ else setTimeout(wire,1000);
+})();
+</script>
+
+
+<style id="acHintCss">
+.acHint{font-size:.68rem;color:#A2957F;font-style:italic;margin:3px 0 0 2px;
+ font-family:system-ui,sans-serif;display:block;line-height:1.35}
+.acHint.hide{display:none}
+</style>
+<script id="acHints">
+(function(){
+ var HINT={
+  'rest-name':'e.g. Gran Caribe',
+  'rest-type':'e.g. International buffet \u00b7 casual elegance \u00b7 dinner only',
+  'rest-desc':'One or two lines a client would read \u2014 what it serves, hours, whether it needs booking',
+  'rest-photo':'Paste a URL, or use the camera to pick an uploaded photo',
+  'pool-name':'e.g. Main pool',
+  'pool-type':'Family or adults-only \u00b7 swim-up bar \u00b7 heated',
+  'pool-desc':'Hours, depth, kids\u2019 section, any age or height limit',
+  'pool-photo':'Paste a URL, or use the camera to pick an uploaded photo',
+  'venue-name':'e.g. South Beach',
+  'venue-capacity':'State whether it is seated or standing \u2014 e.g. 120 seated / 200 standing',
+  'venue-bestfor':'e.g. Ceremony \u00b7 reception \u00b7 welcome party',
+  'venue-desc':'What the space is like and when it works best',
+  'venue-photo':'Paste a URL, or use the camera to pick an uploaded photo',
+  'pkg-name':'e.g. Eternal Love',
+  'pkg-price':'e.g. from $4,599 \u2014 include the guest count it covers',
+  'pkg-highlights':'What is included \u2014 ceremony, d\u00e9cor, dinner, photography',
+  'roomcat-name':'Exact category name as the resort publishes it',
+  'roomcat-desc':'Size, beds, view, max occupancy, and what makes it worth booking',
+  'roomcat-photo':'Paste a URL, or use the camera to pick an uploaded photo'
+ };
+ function sync(el,hint){
+  var next=el.nextElementSibling;
+  var has=next&&next.className&&next.className.indexOf('acHint')>-1;
+  if(!has){
+   var s=document.createElement('span');
+   s.className='acHint'; s.textContent=hint;
+   el.parentElement.insertBefore(s, el.nextSibling);
+   next=s;
+  }
+  next.classList.toggle('hide', (el.value||'').trim()!=='');
+ }
+ function run(){
+  Object.keys(HINT).forEach(function(cls){
+   document.querySelectorAll('.'+cls).forEach(function(el){
+    sync(el,HINT[cls]);
+    if(!el.__acHint){
+     el.__acHint=1;
+     el.addEventListener('input',function(){sync(el,HINT[cls]);});
+    }
+   });
+  });
+ }
+ setInterval(run,1500);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(run,1100);});
+ else setTimeout(run,1100);
+})();
+</script>
+
+
+<style id="acBucketCss">
+.acBucket{background:#FFFDF8;border:1px solid #E0D7C4;border-radius:10px;margin-bottom:12px;overflow:hidden}
+.acBucketHead{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none}
+.acBucketHead:hover{background:#F6F1E7}
+.acBucketHead .cv{color:#B08D57;font-size:.85rem;transition:transform .15s;display:inline-block;width:13px}
+.acBucket.open .acBucketHead .cv{transform:rotate(90deg)}
+.acBucketHead .nm{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.18rem;color:#2A241C}
+.acBucketHead .ct{font-size:.74rem;color:#8A7C67;margin-left:auto}
+.acBucketBody{padding:0 16px 14px;border-top:1px solid #E0D7C4}
+.acBucket:not(.open) .acBucketBody{display:none}
+.acBucketBody .room-group{background:transparent !important;border:0 !important;
+ border-bottom:1px solid #EDE7DA !important;border-radius:0 !important;
+ padding:12px 0 !important;margin:0 !important}
+.acBucketBody .room-group:last-child{border-bottom:0 !important}
+</style>
+<script id="acBuckets">
+(function(){
+ var ORDER=['Rooms & Suites','Dining','Pools & Beach','Wedding Venues','Resort & Property','Other'];
+ function bucketFor(cat){
+  var c=(cat||'').toLowerCase();
+  if(/room|suite/.test(c))return 'Rooms & Suites';
+  if(/dining|restaurant|bar|caf/.test(c))return 'Dining';
+  if(/pool|beach|water/.test(c))return 'Pools & Beach';
+  if(/venue|wedding|ceremon|reception/.test(c))return 'Wedding Venues';
+  if(/resort|property|aerial|lobby|exterior|spa|activit/.test(c))return 'Resort & Property';
+  return 'Other';
+ }
+ var MAP={};   // group title -> bucket
+ function loadMap(cb){
+  var sel=document.getElementById('masterResort');
+  if(!sel||!sel.value||typeof firebase==='undefined'){cb();return;}
+  firebase.firestore().collection('resortPhotos')
+   .where('resortSlug','==',sel.value).get().then(function(s){
+    MAP={};
+    s.forEach(function(d){
+     var x=d.data();
+     var key=(x.roomCategory||'').trim()||(x.category||'').trim();
+     if(key)MAP[key]=bucketFor(x.roomCategory?'room':x.category);
+    });
+    cb();
+   }).catch(cb);
+ }
+ function group(){
+  var groups=[].slice.call(document.querySelectorAll('.room-group'));
+  if(!groups.length)return;
+  if(groups[0].closest('.acBucketBody'))return;   // already bucketed
+  var host=groups[0].parentElement;
+  var buckets={};
+  groups.forEach(function(g){
+   var t=g.querySelector('.room-group-title');
+   var name=t?t.textContent.replace(/\s*\d+\s*photos?\s*$/,'').replace('\u25B8','').trim():'';
+   var b=MAP[name]||'Other';
+   (buckets[b]=buckets[b]||[]).push(g);
+  });
+  var frag=document.createDocumentFragment();
+  ORDER.forEach(function(bn){
+   var list=buckets[bn]; if(!list||!list.length)return;
+   var n=0; list.forEach(function(g){
+    var m=(g.textContent.match(/(\d+)\s*photos?/)||[])[1];
+    n+= m?parseInt(m,10):0;
+   });
+   var box=document.createElement('div'); box.className='acBucket';
+   var head=document.createElement('div'); head.className='acBucketHead';
+   head.innerHTML='<span class="cv">\u25B8</span><span class="nm">'+bn+'</span>'
+    +'<span class="ct">'+list.length+' categor'+(list.length===1?'y':'ies')
+    +' \u00b7 '+n+' photo'+(n===1?'':'s')+'</span>';
+   var body=document.createElement('div'); body.className='acBucketBody';
+   list.forEach(function(g){body.appendChild(g);});
+   head.addEventListener('click',function(){box.classList.toggle('open');});
+   box.appendChild(head); box.appendChild(body); frag.appendChild(box);
+  });
+  host.appendChild(frag);
+ }
+ function run(){ loadMap(group); }
+ setInterval(run,2000);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(run,1400);});
+ else setTimeout(run,1400);
+})();
+</script>
+
 </body>
 </html>
