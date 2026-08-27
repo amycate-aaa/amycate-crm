@@ -2875,5 +2875,38 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 .btn-gallery-open{background:#EDE7DA !important;color:#5C5347 !important;border:1px solid #DCD2BF !important}
 </style>
 
+
+<style id="acFieldLabelsCss">
+.acFL{font-size:.6rem;letter-spacing:.13em;text-transform:uppercase;color:#8A7C67;
+ margin:0 0 3px 2px;font-family:system-ui,sans-serif;display:block}
+#restaurant-list textarea,#pool-list textarea,#venue-list textarea{min-height:52px !important}
+</style>
+<script id="acFieldLabels">
+(function(){
+ var MAP={
+  'rest-name':'Name','rest-type':'Cuisine / type','rest-desc':'Description (shown to clients)','rest-photo':'Photo URL',
+  'pool-name':'Name','pool-type':'Family / adults-only','pool-desc':'Description','pool-photo':'Photo URL',
+  'venue-name':'Venue name','venue-capacity':'Capacity','venue-bestfor':'Best for',
+  'venue-desc':'Description','venue-photo':'Photo URL',
+  'pkg-name':'Package name','pkg-price':'Price','pkg-highlights':'What it includes',
+  'roomcat-name':'Room category','roomcat-desc':'Description','roomcat-photo':'Photo URL'
+ };
+ function label(){
+  Object.keys(MAP).forEach(function(cls){
+   document.querySelectorAll('.'+cls).forEach(function(el){
+    var p=el.previousElementSibling;
+    if(p&&p.className==='acFL')return;
+    var l=document.createElement('span');
+    l.className='acFL'; l.textContent=MAP[cls];
+    el.parentElement.insertBefore(l,el);
+   });
+  });
+ }
+ setInterval(label,1500);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(label,900);});
+ else setTimeout(label,900);
+})();
+</script>
+
 </body>
 </html>
