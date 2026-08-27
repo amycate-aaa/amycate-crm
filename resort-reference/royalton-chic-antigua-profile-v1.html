@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Royalton CHIC Antigua</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-2-resized-6654c4466d6ba.jpg" alt="Royalton CHIC Antigua">
+  <div class="wrap">
+    <p class="eyebrow light">Antigua</p>
+    <h1>Royalton CHIC Antigua</h1>
+    <p class="tag">Adults-Only 18+ · Autograph Collection All-Inclusive · Dickenson Bay, Antigua · Diamond Club™ · Overwater bungalows</p>
+    <ul class="chips"><li>235 rooms</li><li>13 categories</li><li>8 restaurants</li><li>Adults only 18+</li><li>Diamond Club™</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Royalton CHIC Antigua</h2></div>
+  <div class="prose"><p>Royalton CHIC Antigua is the party-leaning end of the Royalton family — adults only, eighteen and over, 235 rooms and suites on Dickenson Bay, about fifteen minutes from V.C. Bird International. It is loud by design: foam pool parties, a resident DJ on the beachfront infinity pool, weekly themed nights and a pop-up "unexpected happening" somewhere on the property most evenings. What sets it apart from every other CHIC is the water. Pescari is the only overwater restaurant on Antigua, and the resort has three overwater bungalow categories on the sunset side — plunge pools, over-water hammocks and glass floor panels — topped by a two-bedroom Chairman bungalow at just over 3,000 square feet. Diamond Club is the upgrade that changes the stay here rather than decorating it: butler service, a private pool, a reserved beach area with waiter service, and breakfast in a separate restaurant. It suits couples who want a wedding with a nightlife attached, friend groups, milestone birthdays and vow renewals. It is not the resort for anyone travelling with children, and it is not the resort for a quiet week.</p></div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>13 room categories</h2>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-garden-view-room-6654cdd049667.jpg" alt="Luxury Garden View Room" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Garden View Room</h3><p>Garden View · 323 sq ft · Sleeps 3 · 1 King or 2 Queen. The entry room, with the signature DreamBed, a rain shower, a daily-restocked minibar and a balcony or terrace over the gardens.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-pool-view-room-6654cdcee2dd1.jpg" alt="Luxury Pool View Room" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Pool View Room</h3><p>Pool View · 323 sq ft · Sleeps 3 · 1 King or 2 Queen. The same layout as the Garden View, turned to face the pool deck. Good if you want to be in the middle of the day.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-ocean-view-room-dc-3-6679b060bc76b.jpg" alt="Luxury Ocean View Room" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Ocean View Room</h3><p>Ocean View · 420 sq ft · Sleeps 3 · 1 King or 2 Queen. Nearly a hundred square feet more than the entry rooms, with a balcony or terrace looking out over the water.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-ocean-view-room-dc-4-1-resized-6679b06212c5c.jpg" alt="Luxury Garden View Room Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Garden View Room Diamond Club</h3><p>Garden View · 420 sq ft · Sleeps 3 · 1 King or 2 Queen with a seating area · Diamond Club. The cheapest way into butler service, the Diamond Club lounge, the private pool and the reserved beach area.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-junior-suite-beach-front-dc-2-queen-beds-6654cfe9f3ff5.jpg" alt="Luxury Beach Front Room Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Beach Front Room Diamond Club</h3><p>Beach Front · 420 sq ft · Sleeps 3 · 1 King or 2 Queen with a seating area · Diamond Club. Balcony or terrace facing the sea, with every Diamond Club privilege included.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-junior-suite-beach-front-dc-2-queen-beds-6654cfe9f3ff5.jpg" alt="Luxury Junior Suite Beach Front Swim Out Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Junior Suite Beach Front Swim Out Diamond Club</h3><p>Beach Front · 475 sq ft · Sleeps 3 · 1 King or 2 Queen with a seating area · Swim-out · Diamond Club. Step straight from the terrace into a semi-private pool. The two-queen layout is the one to ask for when three people are sharing.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-one-bedroom-suite-dc-6654cecfdc8bc.jpg" alt="Luxury Presidential Beach Front One Bedroom Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Presidential Beach Front One Bedroom Suite Diamond Club</h3><p>Beach Front · 752 sq ft · Sleeps 3 · 1 King · Diamond Club. A separate bedroom behind sliding doors, a sitting area and an in-room liquor dispenser. The first category with a real door between the bed and the sofa.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-ocean-front-one-bedroom-suite-dc-6654cf0219801.jpg" alt="Luxury Presidential Ocean Front One Bedroom Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Presidential Ocean Front One Bedroom Suite Diamond Club</h3><p>Ocean Front · 807 sq ft · Sleeps 3 · 1 King · Diamond Club. One bedroom, a living and dining area and an in-suite bar, with the water directly in front of you.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-walkout-one-bedroom-suite-dc-3-6679b0db8a18a.jpg" alt="Luxury Presidential Beach Front Walkout One Bedroom Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Presidential Beach Front Walkout One Bedroom Suite Diamond Club</h3><p>Beach Front Walkout · 858 sq ft · Sleeps 3 · 1 King · Diamond Club. Ground level with a walkout terrace, a dining table, a bar and a separate bedroom.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-swim-out-one-bedroom-dc-suite-6654cf551d82d.jpg" alt="Luxury Presidential Beach Front Swim Out One Bedroom Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Presidential Beach Front Swim Out One Bedroom Suite Diamond Club</h3><p>Beach Front · 882 sq ft · Sleeps 3 · 1 King · Swim-out · Diamond Club. The largest of the land suites, with a semi-private pool off the terrace.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/edit-bungalow-insd-12-resized-6785464224945.jpg" alt="Luxury Junior Sunset Overwater Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Junior Sunset Overwater Suite Diamond Club</h3><p>Overwater · 1,138 sq ft · Sleeps 2 · 1 King · Diamond Club. Built out over the water on the sunset side, with a swim-out infinity plunge pool, an over-water hammock and glass floor panels. Two people only.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/aerial-morning-view-4-resized-6785465d4c1b0.jpg" alt="Luxury Presidential Sunset Overwater Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Luxury Presidential Sunset Overwater Suite Diamond Club</h3><p>Overwater · 1,912 sq ft · Sleeps 2 · 1 King · Diamond Club. The larger overwater bungalow, adding an expansive seating area and a dining room to the plunge pool, hammock and glass floors. Two people only.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/edit-bungalow-insd-4-resized-678546393e702.jpg" alt="Chairman Sunset Overwater Bungalow Two Bedroom Suite Diamond Club" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Chairman Sunset Overwater Bungalow Two Bedroom Suite Diamond Club</h3><p>Overwater · 3,049 sq ft · Sleeps 4 · 2 King · 2 bathrooms · Diamond Club. The only two-bedroom on the property and the only category that sleeps four. Sprawling terrace, plunge pool, over-water hammock and glass floors.</p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Diamond Club™</h2></div>
+  <div class="prose"><ul class="perks"><li>Butler service including beach butler from sunrise to sunset</li><li>Preferred room locations</li><li>Private Diamond Club pool</li><li>Exclusive beach area with dedicated bar and waiter service to the lounger</li><li>Diamond Club Lounge with premium spirits, continental breakfast, afternoon snacks and evening hors d’oeuvres</li><li>Private à la carte breakfast at Olympus</li><li>Priority restaurant reservations</li><li>Personalised check-in and check-out at the lounge</li><li>Early check-in and late check-out subject to availability</li><li>Nightly turndown</li><li>Distinctive wrist bracelet</li><li>Welcome bottle of sparkling wine uncorked by your butler</li><li>In-suite bottle of wine and fruit basket on arrival</li><li>In-suite selection of fine liquors (minimum stay may apply)</li><li>Enhanced minibar restocked daily</li><li>In-suite coffee machine with specialty pods</li><li>Upgraded bathroom amenities, robes and slippers</li><li>Pillow menu from The Royal Spa</li><li>In-suite aromatherapy</li><li>Upgraded 24/7 room service menu with priority delivery</li><li>Beach bag and slippers to take home</li><li>One hour of hydrotherapy per stay</li><li>20% off spa services</li></ul></div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/insomnia-3-6679b25422e09.jpg" alt="Insomnia" loading="lazy"><h4>Insomnia</h4><p class="cuisine">Restaurant · Patisserie &amp; café</p><p>Oven-baked breads, pastries, cakes and ice cream, plus cappuccino and espresso. Open 7:00 AM – 10:00 PM. Resort casual.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/elements-buffet-1-resized-6654c5802e3b8.jpg" alt="Elements" loading="lazy"><h4>Elements</h4><p class="cuisine">Restaurant · International buffet</p><p>The main buffet, open for all three meals. Breakfast 7:00–10:30 AM, lunch 12:30–3:00 PM, dinner 6:00–10:00 PM. Resort casual.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/hunters-2-resized-6654c59a3f10b.jpg" alt="Hunter Steakhouse" loading="lazy"><h4>Hunter Steakhouse</h4><p class="cuisine">Restaurant · Steakhouse</p><p>Premium cuts in a rustic, trend-led room. Dinner 6:00–10:00 PM. Evening casual.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescari-3-resized-6654c79bc1966.jpg" alt="Pescari" loading="lazy"><h4>Pescari</h4><p class="cuisine">Restaurant · Overwater seafood</p><p>The only overwater restaurant on the island, and the reason a lot of people book. Contemporary seafood with live CHIC Angels performances through the evening. Dinner 6:00–10:00 PM, adults 18+, reservations on 268-736-9350. Carries an additional charge and a dressier code than the rest of the resort.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/olympus-resized-6654c5cee72ec.jpg" alt="Olympus" loading="lazy"><h4>Olympus</h4><p class="cuisine">Restaurant · Mediterranean</p><p>Mediterranean and local cooking in an airy room. Dinner 6:00–10:00 PM, resort casual. Breakfast here is à la carte, 7:00–10:30 AM, and is for Diamond Club guests only.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/vespa-1-resized-6654c8dc0262b.jpg" alt="Vespa" loading="lazy"><h4>Vespa</h4><p class="cuisine">Restaurant · Italian trattoria</p><p>Pizza, handmade pasta and Italian desserts in an intimate room. Dinner 6:00–10:00 PM. Evening casual. Also the room the resort offers for private group dinners of up to 50.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/excite-3-resized-66a3db8c8bc67.jpg" alt="Excite" loading="lazy"><h4>Excite</h4><p class="cuisine">Restaurant · Sports bar and lounge</p><p>Big screens, casual food and a late licence — service runs 3:00 PM to 2:00 AM, the latest kitchen on the property. Evening casual.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/haven-grill-terrace-2-resized-6679b2b49890a.jpg" alt="Haven Grill" loading="lazy"><h4>Haven Grill</h4><p class="cuisine">Restaurant · Caribbean grill</p><p>Catch of the day, shrimp and grilled Caribbean plates on an open terrace. Lunch 12:30–3:00 PM, dinner 6:00–10:00 PM. Resort casual.</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-1-6654c44535259.jpg" alt="Beachfront infinity pool" loading="lazy"><h4>Beachfront infinity pool</h4><p class="cuisine">Pool · All guests</p><p>The signature pool, set on the beachfront with panoramic ocean views and a resident DJ through the afternoon.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/sublime-pool-bar--2-resized-6654c8bc9e731.jpg" alt="Activity pool with the Sublime Swim Up Bar" loading="lazy"><h4>Activity pool with the Sublime Swim Up Bar</h4><p class="cuisine">Pool · All guests · Swim-up bar</p><p>The loud one. Foam parties, live music and entertainers, with the swim-up bar open 10:00 AM – 6:00 PM.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/relax-pool-resized-6654c7b179514.jpg" alt="Relaxation pool" loading="lazy"><h4>Relaxation pool</h4><p class="cuisine">Pool · All guests</p><p>A quieter beachfront pool for the days you want the sun and not the sound system.</p></div>
+      <div class="dish"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-3-resized-6654c447c0d39.jpg" alt="Diamond Club™ pool" loading="lazy"><h4>Diamond Club™ pool</h4><p class="cuisine">Pool · Diamond Club only</p><p>Private to Diamond Club guests, with its own walk-up and swim-up bar and waiter service to the loungers.</p></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
+      <div class="note"><h4>"Say 'I Do' at Royalton Hotels &amp; Resorts</h4><p></p></div>
+      <p class="subhead">Venues</p>
+      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>
+          <tr><th>The beach</th><td>Capacity quoted by the resort</td></tr>
+          <tr><th>Pescari, the overwater restaurant</th><td>Capacity quoted by the resort</td></tr>
+          <tr><th>Vespa</th><td>Up to 50 guests</td></tr>
+      </tbody></table></div>
+      <p class="subhead">Packages</p>
+      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>
+          <tr><th>Luxury Honeymoon Package</th><td>From complimentary</td></tr>
+          <tr><th>Tailored wedding packages</th><td>Quoted per wedding</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
+      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-2-resized-6654c4466d6ba.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/elements-buffet-1-resized-6654c5802e3b8.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-2-9-6679b4ccb3033.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-2-4-resized-6679b3393790c.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescai-4-6654c68a139c4.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescai-5-resized-6679af7b8e83b.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-1-6654c44535259.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/dc-lounge-1-6654c4596daa7.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-3-resized-6679b4ce13a94.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/royalton-fit-3-6679b3d879020.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/dc-lounge-2-6654c45a7a1e3.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/insomnia-3-6679b25422e09.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescai-1-6654c68652346.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/diamond-club-pool-bar-2-resized-6679b1da4e7a0.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/vespa-3-6654c8dd76e40.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/hunters-1-resized-6654c59833223.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-2-resized-6654c86fe6690.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/taboo-2-6654c8cb6a531.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-ocean-view-room-dc-6654c95ca70af.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/aerial-3-resized-6679b4c95e793.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/oasis-beach-bar-resized-6679b17dd39bf.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/main-theater-2-resized-6654c427b622b.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/relax-pool-resized-6654c7b179514.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/taboo-1-6654c8ca2fd06.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/olympus2-2-resized-6654c5d12d708.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescari-3-resized-6654c79bc1966.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/haven-grill-terrace-2-resized-6679b2b49890a.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/dc-lounge-4-6654c45cb2713.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/aerials-2-resized-6654c2d9b99e6.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/hunters2-1-resized-6654c59c55377.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/dc-lounge-3-6654c45b91370.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/vespa-1-resized-6654c8dc0262b.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/royalton-fit-2-6679b412908f9.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/entertainment-plaza-1-resized-6654c424f378f.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/olympus-resized-6654c5cee72ec.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-2-7-6679b4cb0cfe9.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/sublime-pool-bar--1-resized-6654c8ba1767e.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-4-resized-6654c4491a017.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/elements-buffet-2-resized-6654c5826dfa4.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/beach-area-6679a7d9081e3.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/sublime-pool-bar--2-resized-6654c8bc9e731.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/hunters-2-resized-6654c59a3f10b.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/elements-1-6650e9534293f.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/pescari-1-resized-6654c79967760.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/royalton-fit-1-6679b39ae57d9.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/entertainment-plaza-4-resized-6654c426802c2.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/chef2go-pool-3-resized-6654c447c0d39.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/the-royal-spa-2-11-6679b4d0ec2c7.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-garden-view-room-6654cdd049667.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-pool-view-room-6654cdcee2dd1.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-junior-suite-beach-front-dc-2-queen-beds-6654cfe9f3ff5.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-one-bedroom-suite-dc-6654cecfdc8bc.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-ocean-front-one-bedroom-suite-dc-6654cf0219801.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-walkout-one-bedroom-suite-dc-3-6679b0db8a18a.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/luxury-presidential-beach-front-swim-out-one-bedroom-dc-suite-6654cf551d82d.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/edit-bungalow-insd-12-resized-6785464224945.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://marriott.cdn.tambourine.com/royalton-resorts/media/edit-bungalow-insd-4-resized-678546393e702.jpg" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});if(location.hash==="#groups"){sel("tab-grp");}})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+
+</body>
+</html>
