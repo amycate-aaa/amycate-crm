@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resort Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",
+  authDomain: "wedding-crm-e5d12.firebaseapp.com",
+  projectId: "wedding-crm-e5d12",
+  storageBucket: "wedding-crm-e5d12.firebasestorage.app",
+  messagingSenderId: "246819649586",
+  appId: "1:246819649586:web:a74debd217ce048d26242b"
+});
+const db = firebase.firestore();
+</script>
+
+<style>
+:root{
+  --black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+  --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F
+}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+  --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+  font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+
+/* LOADING / ERROR */
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;
+  flex-direction:column;gap:16px;color:var(--mute)}
+#loading .spinner{width:36px;height:36px;border:2px solid var(--line);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;
+  flex-direction:column;gap:12px;text-align:center;padding:40px}
+#error h2{font-family:"Cormorant Garamond",serif;font-size:2rem;color:var(--gold)}
+#error p{color:var(--soft);max-width:40ch}
+#resort-picker{display:none;align-items:center;justify-content:center;min-height:100vh;
+  flex-direction:column;gap:20px;padding:40px;text-align:center}
+#resort-picker h1{font-family:"Cormorant Garamond",serif;font-size:2.4rem;color:var(--black)}
+#resort-picker p{color:var(--soft);max-width:36ch}
+#resort-picker select{padding:10px 16px;border:1px solid var(--line);border-radius:2px;
+  background:var(--white);color:var(--black);font-family:"Jost",sans-serif;font-size:1rem;
+  min-width:320px;cursor:pointer}
+#resort-picker button{padding:10px 28px;background:var(--gold);color:var(--white);
+  border:none;font-family:"Jost",sans-serif;font-size:.9rem;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;border-radius:1px}
+
+/* MAIN PAGE */
+#page{display:none}
+
+/* HERO */
+.hero{position:relative;min-height:min(74vh,620px);display:grid;align-items:end;
+  background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(12,11,9,.1),rgba(12,11,9,.28) 46%,rgba(12,11,9,.82))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero h1{font-family:"Cormorant Garamond",serif;font-weight:400;
+  font-size:clamp(2.4rem,6.4vw,4.2rem);line-height:1.03;margin:.16em 0 .12em;
+  color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",serif;font-style:italic;color:#EDE2CE;
+  font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;
+  border:1px solid rgba(223,196,139,.45);border-radius:999px;padding:.26rem .68rem}
+
+/* NAV */
+.page-nav{background:var(--white);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:100}
+.page-nav .wrap{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.page-nav a{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+  text-decoration:none;padding:.85rem 1.1rem;white-space:nowrap;border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s}
+.page-nav a:hover,.page-nav a.active{color:var(--gold-deep);border-bottom-color:var(--gold)}
+
+/* SECTIONS */
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",serif;font-weight:400;
+  font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+  line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--sea);margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+
+/* CARDS */
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem;flex:1;display:flex;flex-direction:column}
+.cbody h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0 0 auto;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--gold-deep)!important;margin-bottom:.5rem!important}
+.pill{display:inline-block;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;
+  border:1px solid var(--line);border-radius:999px;padding:.2rem .6rem;color:var(--mute);margin-top:.6rem}
+
+/* TABLE */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{font-weight:500;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--mute);padding:.65rem 1rem;border-bottom:1px solid var(--line);text-align:left;
+  background:var(--cream-2);white-space:nowrap}
+td{padding:.7rem 1rem;border-bottom:1px solid var(--line);color:var(--soft);vertical-align:top}
+tr:last-child td{border-bottom:none}
+
+/* TABS */
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:clamp(24px,4vw,40px)}
+.tabbtn{background:none;border:none;border-bottom:2px solid transparent;
+  font-family:"Jost",sans-serif;font-weight:400;font-size:.8rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--mute);padding:.75rem 1.4rem;cursor:pointer;
+  transition:color .15s,border-color .15s;margin-bottom:-1px}
+.tabbtn[aria-selected="true"]{color:var(--gold-deep);border-bottom-color:var(--gold)}
+
+/* PKG CARDS */
+.pkggrid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.pkg{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:1.4rem 1.5rem}
+.pkg h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:1.3rem;margin:0 0 .2rem}
+.pkg .price{font-size:1.1rem;color:var(--gold-deep);font-weight:500;margin-bottom:.6rem}
+.pkg .summary{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--mute);margin-bottom:.8rem}
+.pkg .hi{font-size:.88rem;color:var(--soft);line-height:1.7}
+
+/* GALLERY */
+.galwrap{display:grid;gap:clamp(6px,1vw,10px);
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
+.gal{margin:0;overflow:hidden;border-radius:2px;aspect-ratio:16/10;background:var(--cream-2)}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.gal:hover img{transform:scale(1.04)}
+
+/* CLUB BAND */
+.club-band{background:var(--cream-2);border:1px solid var(--line);border-radius:2px;
+  padding:clamp(24px,4vw,40px);margin-top:2rem}
+.club-band h3{font-family:"Cormorant Garamond",serif;font-size:1.6rem;margin:0 0 .5rem}
+.club-band p{color:var(--soft);max-width:60ch;font-size:.95rem}
+
+/* VENUE CARDS */
+.vgrid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.vcard{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.vcard .vshot{height:180px;background:var(--cream-2);overflow:hidden}
+.vcard .vshot img{width:100%;height:180px;object-fit:cover}
+.vcard .vbody{padding:1rem 1.1rem 1.2rem}
+.vcard h3{font-family:"Cormorant Garamond",serif;font-size:1.2rem;margin:0 0 .3rem}
+.vcard .vcap{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold-deep);margin-bottom:.4rem}
+.vcard p{font-size:.88rem;color:var(--soft)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--line);padding:clamp(28px,5vw,48px) 0;margin-top:0}
+footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
+
+/* EMPTY STATE */
+.empty{color:var(--mute);font-size:.9rem;font-style:italic;padding:1rem 0}
+
+/* CHANGE RESORT LINK */
+.change-resort{position:fixed;bottom:20px;right:20px;background:var(--gold);color:var(--white);
+  border:none;font-family:"Jost",sans-serif;font-size:.72rem;letter-spacing:.1em;
+  text-transform:uppercase;padding:.6rem 1rem;border-radius:999px;cursor:pointer;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);z-index:200}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="spinner"></div>
+  <p>Loading resort data…</p>
+</div>
+
+<!-- ERROR -->
+<div id="error">
+  <h2>Resort not found</h2>
+  <p id="error-msg">No resort found with that slug. Check the URL and try again.</p>
+  <br>
+  <a href="?" style="color:var(--gold-deep)">← Browse all resorts</a>
+</div>
+
+<!-- RESORT PICKER (no slug in URL) -->
+<div id="resort-picker">
+  <h1>Resort Reference</h1>
+  <p>Choose a resort to view the full guide.</p>
+  <select id="picker-select"><option value="">Select a resort…</option></select>
+  <button onclick="goToResort()">Open Guide →</button>
+</div>
+
+<!-- MAIN PAGE -->
+<div id="page">
+  <button class="change-resort" onclick="showPicker()">↩ Change Resort</button>
+
+  <!-- HERO -->
+  <div class="hero" id="hero">
+    <img id="hero-img" src="" alt="">
+    <div class="wrap">
+      <p class="eyebrow light" id="hero-eyebrow"></p>
+      <h1 id="hero-title"></h1>
+      <p class="tag" id="hero-tag"></p>
+      <ul class="chips" id="hero-chips"></ul>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="page-nav">
+    <div class="wrap">
+      <a href="#overview">Overview</a>
+      <a href="#rooms">Rooms</a>
+      <a href="#club">Club Level</a>
+      <a href="#dining">Dining</a>
+      <a href="#pools">Pools</a>
+      <a href="#planning">Planning</a>
+      <a href="#activities">Activities</a>
+      <a href="#gallery">Gallery</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- OVERVIEW -->
+    <section id="overview"><div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 id="ov-title"></h2>
+          <p class="lede" id="ov-lede"></p>
+        </div>
+        <div class="prose" id="ov-prose"></div>
+      </div>
+    </div></section>
+
+    <!-- ROOMS -->
+    <section id="rooms"><div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2>Rooms &amp; Suites</h2>
+      <div class="grid" id="rooms-grid"></div>
+    </div></section>
+
+    <!-- CLUB -->
+    <section id="club"><div class="wrap">
+      <p class="eyebrow">Club Level</p>
+      <h2 id="club-title">Exclusive Access</h2>
+      <div id="club-body"></div>
+    </div></section>
+
+    <!-- DINING -->
+    <section id="dining"><div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2>Dining</h2>
+      <div class="subhead">Restaurants</div>
+      <div class="tablewrap"><table id="rest-table">
+        <thead><tr><th>Restaurant</th><th>Cuisine</th><th>Hours</th><th>Notes</th></tr></thead>
+        <tbody id="rest-body"></tbody>
+      </table></div>
+      <div class="subhead">Bars</div>
+      <div class="tablewrap"><table id="bars-table">
+        <thead><tr><th>Bar</th><th>Style</th><th>Hours</th><th>Notes</th></tr></thead>
+        <tbody id="bars-body"></tbody>
+      </table></div>
+    </div></section>
+
+    <!-- POOLS -->
+    <section id="pools"><div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2>Pools &amp; Beach</h2>
+      <div id="pools-body"></div>
+    </div></section>
+
+    <!-- PLANNING (TABS) -->
+    <section id="planning"><div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2>Planning</h2>
+      <div class="tabbar">
+        <button class="tabbtn" id="tab-wed" aria-selected="true" aria-controls="panel-wed" onclick="selTab('tab-wed')">Weddings</button>
+        <button class="tabbtn" id="tab-grp" aria-selected="false" aria-controls="panel-grp" onclick="selTab('tab-grp')">Groups &amp; Celebrations</button>
+      </div>
+
+      <!-- WEDDINGS PANEL -->
+      <div id="panel-wed">
+        <div class="subhead">Venues</div>
+        <div class="vgrid" id="venues-grid"></div>
+        <div class="subhead" style="margin-top:2.5rem">Wedding Packages</div>
+        <div class="pkggrid" id="pkg-grid"></div>
+      </div>
+
+      <!-- GROUPS PANEL -->
+      <div id="panel-grp" hidden>
+        <div id="groups-body"></div>
+      </div>
+    </div></section>
+
+    <!-- ACTIVITIES -->
+    <section id="activities"><div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2>Activities &amp; Spa</h2>
+      <div id="activities-body"></div>
+    </div></section>
+
+    <!-- GALLERY -->
+    <section id="gallery"><div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2>Gallery</h2>
+      <div class="galwrap" id="gallery-grid"></div>
+    </div></section>
+
+  </main>
+
+  <footer><div class="wrap">
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel · amy.cate@destinationweddings.com</p>
+    <p>Details drawn from the resort's published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+  </div></footer>
+</div>
+
+<script>
+// ── TAB LOGIC ──
+function selTab(id){
+  ['tab-wed','tab-grp'].forEach(t=>{
+    const btn=document.getElementById(t);
+    const on=t===id;
+    btn.setAttribute('aria-selected',on);
+    document.getElementById(btn.getAttribute('aria-controls')).hidden=!on;
+  });
+}
+if(location.hash==='#groups') selTab('tab-grp');
+
+// ── HELPERS ──
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function $(id){return document.getElementById(id);}
+function show(id){$(id).style.display='flex';}
+function hide(id){$(id).style.display='none';}
+
+// ── PICKER ──
+async function loadPicker(){
+  hide('loading');
+  show('resort-picker');
+  const snap=await db.collection('resortProfiles').orderBy('name').get();
+  const sel=$('picker-select');
+  snap.forEach(d=>{
+    const o=document.createElement('option');
+    o.value=d.id;
+    o.textContent=d.data().name||d.id;
+    sel.appendChild(o);
+  });
+}
+function goToResort(){
+  const v=$('picker-select').value;
+  if(v) location.href='?r='+v+(location.hash||'');
+}
+function showPicker(){location.href='?';}
+
+// ── MAIN LOAD ──
+async function loadResort(slug){
+  try{
+    // Load profile and photos in parallel
+    const [profSnap,photosSnap]=await Promise.all([
+      db.collection('resortProfiles').doc(slug).get(),
+      db.collection('resortPhotos').where('resortSlug','==',slug).get()
+    ]);
+
+    if(!profSnap.exists){
+      $('error-msg').textContent=`No resort found with slug "${slug}".`;
+      hide('loading');show('error');return;
+    }
+
+    const p=profSnap.data();
+    const photos=photosSnap.docs.map(d=>d.data());
+
+    // Build photo map by roomCategory
+    const photoMap={};
+    photos.forEach(ph=>{
+      const k=(ph.roomCategory||ph.category||'').toLowerCase();
+      if(!photoMap[k])photoMap[k]=ph.url||ph.downloadURL||'';
+    });
+
+    // Gallery photos (non-room)
+    const galleryPhotos=photos.filter(ph=>{
+      const cat=(ph.category||'').toLowerCase();
+      return cat!=='rooms & suites'&&cat!=='room';
+    });
+
+    // ── SET PAGE TITLE ──
+    document.title=p.resortName||p.name||'Resort Reference';
+
+    // ── HERO ──
+    const heroUrl=p.heroPhoto||Object.values(photoMap)[0]||'';
+    $('hero-img').src=heroUrl;
+    $('hero-img').alt=p.name||'';
+    $('hero-eyebrow').textContent='Amy Cate · Resort Reference';
+    $('hero-title').textContent=p.resortName||p.name||'';
+    $('hero-tag').textContent=p.tagline||'';
+    const chips=[
+      p.agePolicy||null,
+      p.destination||p.tagline||null,
+      p.stars?p.stars+' Stars':null,
+      p.clubName||null
+    ].filter(Boolean);
+    $('hero-chips').innerHTML=chips.map(c=>`<li>${esc(c)}</li>`).join('');
+
+    // ── OVERVIEW ──
+    $('ov-title').textContent=p.name||'';
+    $('ov-lede').textContent=p.description?p.description.split('.')[0]+'.':'';
+    $('ov-prose').innerHTML=p.overview
+      ?p.overview.split('\n\n').map(para=>`<p>${esc(para)}</p>`).join('')
+      :p.description?`<p>${esc(p.description)}</p>`:'';
+
+    // ── ROOMS ──
+    const roomsGrid=$('rooms-grid');
+    const categories=p.roomCategories||[];
+    if(categories.length){
+      roomsGrid.innerHTML=categories.map(r=>{
+        const key=(r.name||'').toLowerCase();
+        const img=photoMap[key]||'';
+        return`<div class="card">
+          ${img?`<div class="shot"><img src="${esc(img)}" alt="${esc(r.name)}" loading="lazy"></div>`:'<div class="shot" style="display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:.8rem">Photo on request</div>'}
+          <div class="cbody">
+            <p class="meta">${esc(r.sqft?r.sqft+' sq ft':'')}</p>
+            <h3>${esc(r.name)}</h3>
+            <p>${esc(r.description||r.view||'')}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.6rem">
+              ${r.maxOccupancy?`<span class="pill">Up to ${esc(r.maxOccupancy)} guests</span>`:''}
+              ${r.swimOut?'<span class="pill">Swim-out</span>':''}
+              ${r.clubLevel?`<span class="pill">${esc(r.clubLevel)}</span>`:''}
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      // Fall back to resortPhotos room photos
+      const roomPhotos=photos.filter(ph=>(ph.category||'').toLowerCase()==='rooms & suites');
+      if(roomPhotos.length){
+        roomsGrid.innerHTML=roomPhotos.map(ph=>`<div class="card">
+          <div class="shot"><img src="${esc(ph.url||ph.downloadURL)}" alt="${esc(ph.roomCategory)}" loading="lazy"></div>
+          <div class="cbody"><h3>${esc(ph.roomCategory||ph.caption||'Room')}</h3>
+            ${ph.caption?`<p>${esc(ph.caption)}</p>`:''}</div>
+        </div>`).join('');
+      } else {
+        roomsGrid.innerHTML='<p class="empty">Room details coming soon.</p>';
+      }
+    }
+
+    // ── CLUB ──
+    if(p.clubName||p.clubLevelName||p.clubPerks){
+      $('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
+      $('club-body').innerHTML=`<div class="club-band">
+        <h3>${esc(p.clubName||p.clubLevelName||'Club Level')}</h3>
+        ${p.clubPerks?`<p>${esc(p.clubPerks)}</p>`:''}
+      </div>`;
+    } else {
+      $('club-body').innerHTML='<p class="empty">This resort does not have a dedicated club tier.</p>';
+    }
+
+    // ── DINING — Restaurants ──
+    const restBody=$('rest-body');
+    const rests=p.restaurants||[];
+    if(rests.length){
+      restBody.innerHTML=rests.map(r=>`<tr>
+        <td><strong>${esc(r.name)}</strong></td>
+        <td>${esc(r.cuisine||'')}</td>
+        <td>${esc(r.hours||'')}</td>
+        <td>${[r.reservations?'Reservations required':null,r.adultsOnly?'Adults only':null,r.kidsMenu?'Kids menu':null].filter(Boolean).join(' · ')}</td>
+      </tr>`).join('');
+    } else {
+      restBody.innerHTML='<tr><td colspan="4" class="empty">Restaurant details coming soon.</td></tr>';
+    }
+
+    // ── DINING — Bars ──
+    const barsBody=$('bars-body');
+    const bars=p.bars||[];
+    if(bars.length){
+      barsBody.innerHTML=bars.map(b=>`<tr>
+        <td><strong>${esc(b.name)}</strong></td>
+        <td>${esc(b.style||b.cuisine||'')}</td>
+        <td>${esc(b.hours||'')}</td>
+        <td>${esc(b.description||b.notes||'')}</td>
+      </tr>`).join('');
+    } else {
+      barsBody.innerHTML='<tr><td colspan="4" class="empty">Bar details coming soon.</td></tr>';
+    }
+
+    // ── POOLS ──
+    const poolsBody=$('pools-body');
+    const pools=p.pools||[];
+    if(pools.length){
+      poolsBody.innerHTML=`<div class="tablewrap"><table>
+        <thead><tr><th>Pool</th><th>Type</th><th>Features</th></tr></thead>
+        <tbody>${pools.map(pl=>`<tr>
+          <td><strong>${esc(pl.name)}</strong></td>
+          <td>${esc(pl.type||pl.adultsOnly?'Adults Only':'All Ages')}</td>
+          <td>${esc(pl.features||pl.description||'')}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>`;
+    } else if(p.description&&p.description.toLowerCase().includes('pool')){
+      poolsBody.innerHTML='<p class="empty">Pool details coming soon.</p>';
+    } else {
+      poolsBody.innerHTML='<p class="empty">Pool details coming soon.</p>';
+    }
+
+    // ── VENUES ──
+    const venuesGrid=$('venues-grid');
+    const venues=p.venues||[];
+    if(venues.length){
+      venuesGrid.innerHTML=venues.map(v=>`<div class="vcard">
+        ${v.photo?`<div class="vshot"><img src="${esc(v.photo)}" alt="${esc(v.name)}" loading="lazy"></div>`:''}
+        <div class="vbody">
+          <p class="vcap">${esc(v.bestFor||v.type||'')}</p>
+          <h3>${esc(v.name)}</h3>
+          ${v.capacity?`<p><strong>Capacity:</strong> ${esc(v.capacity)}</p>`:''}
+          ${v.description?`<p>${esc(v.description)}</p>`:''}
+        </div>
+      </div>`).join('');
+    } else {
+      venuesGrid.innerHTML='<p class="empty">Venue details coming soon.</p>';
+    }
+
+    // ── PACKAGES ──
+    const pkgGrid=$('pkg-grid');
+    const pkgs=p.packages||[];
+    if(pkgs.length){
+      pkgGrid.innerHTML=pkgs.map(pk=>`<div class="pkg">
+        <h3>${esc(pk.name)}</h3>
+        ${pk.price?`<div class="price">${esc(pk.price)}</div>`:''}
+        ${pk.summary?`<div class="summary">${esc(pk.summary)}</div>`:''}
+        ${pk.highlights?`<div class="hi">${esc(pk.highlights).replace(/ · /g,'<br>· ')}</div>`:''}
+      </div>`).join('');
+    } else {
+      pkgGrid.innerHTML='<p class="empty">Package details coming soon.</p>';
+    }
+
+    // ── GROUPS ──
+    $('groups-body').innerHTML=p.groupNotes
+      ?`<div class="prose"><p>${esc(p.groupNotes)}</p></div>`
+      :'<p class="empty">Contact Amy for group rates, room minimums and private event spaces.</p>';
+
+    // ── ACTIVITIES ──
+    $('activities-body').innerHTML=p.activities
+      ?`<div class="prose">${Array.isArray(p.activities)
+          ?'<ul style="padding-left:1.4rem;color:var(--soft)">'+p.activities.map(a=>`<li>${esc(a)}</li>`).join('')+'</ul>'
+          :`<p>${esc(p.activities)}</p>`
+        }</div>`
+      :'<p class="empty">Activities details coming soon.</p>';
+
+    // ── GALLERY ──
+    const galGrid=$('gallery-grid');
+    const galPhotos=galleryPhotos.length?galleryPhotos:photos.slice(0,40);
+    if(galPhotos.length){
+      galGrid.innerHTML=galPhotos.map(ph=>`<figure class="gal">
+        <img src="${esc(ph.url||ph.downloadURL)}" alt="" loading="lazy">
+      </figure>`).join('');
+    } else if(p.photos&&p.photos.length){
+      galGrid.innerHTML=p.photos.map(url=>`<figure class="gal">
+        <img src="${esc(url)}" alt="" loading="lazy">
+      </figure>`).join('');
+    } else {
+      galGrid.innerHTML='<p class="empty">Gallery coming soon.</p>';
+    }
+
+    // ── SHOW PAGE ──
+    hide('loading');
+    $('page').style.display='block';
+
+  } catch(e){
+    console.error(e);
+    $('error-msg').textContent='Error loading resort: '+e.message;
+    hide('loading');show('error');
+  }
+}
+
+// ── BOOT ──
+const slug=new URLSearchParams(location.search).get('r');
+if(slug){
+  loadResort(slug);
+} else {
+  loadPicker();
+}
+</script>
+</body>
+</html>
