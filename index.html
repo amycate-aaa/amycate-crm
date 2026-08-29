@@ -124,7 +124,7 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);c
 .btn{padding:8px 14px;border-radius:6px;font-size:.92rem;cursor:pointer;border:none;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
 .btn-primary{background:#1a1a1a !important;color:white !important;}
 .btn-primary:hover{background:#333 !important;}
-.btn-outline{background:var(--surface) !important;border:1px solid #999 !important;color:#111111 !important;}
+.btn-outline{background:var(--surface) !important;border:1px solid #999 !important;color:var(--text) !important;}
 .btn-outline:hover{border-color:#1a1a1a !important;color:#1a1a1a !important;background:var(--surface2) !important;}
 .btn-danger{background:#fff0f0 !important;border:1px solid #cc8888 !important;color:#8a1a1a !important;}
 .btn-danger:hover{background:#fdf0f0 !important;}
@@ -162,7 +162,7 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);c
 table{width:100%;border-collapse:collapse;font-size:1rem;}
 thead{background:#1a1a1a;position:sticky;top:0;z-index:10;}
 th{padding:11px 13px;text-align:left;color:#ffffff;font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
-td{padding:9px 10px;border-top:1px solid #e0e0e0;vertical-align:middle;color:#111111 !important;font-size:.9rem;}
+td{padding:9px 10px;border-top:1px solid #e0e0e0;vertical-align:middle;color:var(--text) !important;font-size:.9rem;}
 tr:hover td{background:var(--surface2);}
 .sticky-col{position:sticky;right:0;background:var(--surface);box-shadow:-3px 0 8px rgba(0,0,0,.1);z-index:10;min-width:90px;width:90px;}
 thead .sticky-col{background:#1a1a1a;min-width:90px;width:90px;}
@@ -818,7 +818,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div id="homeParseResult" style="font-size:.82rem;margin-top:5px;min-height:16px;color:#999"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;padding-top:20px;">
-          <button onclick="parseHomePaste()" style="font-size:.78rem;padding:6px 12px;border-radius:5px;background:#f0f0f0;color:#111;border:none;cursor:pointer;font-weight:600;white-space:nowrap">Parse &amp; Record</button>
+          <button onclick="parseHomePaste()" style="font-size:.78rem;padding:6px 12px;border-radius:5px;background:#f0f0f0;color:var(--text);border:none;cursor:pointer;font-weight:600;white-space:nowrap">Parse &amp; Record</button>
           <button onclick="document.getElementById('homePaymentPasteBox').value='';document.getElementById('homeParseResult').textContent=''" style="font-size:.78rem;padding:5px 12px;border-radius:5px;background:#444;color:#aaa;border:1px solid #555;cursor:pointer">Clear</button>
         </div>
       </div>
