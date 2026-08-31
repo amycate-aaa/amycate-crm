@@ -573,6 +573,8 @@ async function loadResort(slug){
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
     const pools=p.pools||[];
+    (function(){const pb=[(p.sectionPhotos||{}).pools].find(photoOk)||photosByCat(/pool|beach/i)[0]||'';
+      if(pb)$id('pools-grid').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(pb)+'" alt="" loading="lazy" style="margin-bottom:30px;">');})();
     $id('pools-grid').innerHTML=pools.length?pools.map(pl=>{const pi=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
       return'<div class="pool-card">'+(pi?'<img src="'+esc(pi)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+'<h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>';}).join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
     const cats=p.roomCategories||[];
@@ -742,7 +744,7 @@ function renderQuote(){
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   if(q.prices.length){
     const cats=P.roomCategories||[];
-    S.push(sec('',head('Your Guests','Accommodations & Pricing')+
+    S.push(sec('',head('Your Guests','Accommodations & Pricing')+bandImg('rooms')+
       '<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement.</p>'+
       '<div class="price-grid">'+q.prices.map(r=>{
         const c=cats.find(x=>x.name===r.name)||{};
@@ -762,7 +764,7 @@ function renderQuote(){
   /* 5 — PACKAGES */
   const pkgs=(P.packages||[]).filter(p=>p&&p.name);
   if(pkgs.length){
-    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+docBtns('packages')+
+    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
         const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
         return'<div class="pkgrow'+(lines.length?'':' solo')+'">'+
@@ -780,7 +782,7 @@ function renderQuote(){
   /* 6 — VENUES */
   const vens=(P.venues||[]).filter(v=>v&&v.name);
   if(vens.length){
-    S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+docBtns('venues')+
+    S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+bandImg('venues',/venue|ceremony/i)+docBtns('venues')+
       '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
         const img=[v.photo,v.photoUrl].find(photoOk)||'';
         return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(v.name)+'" loading="lazy">':'<div style="height:190px;background:var(--sand);"></div>')+
@@ -794,7 +796,7 @@ function renderQuote(){
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
   if(q.opts.dining&&rests.length){
-    S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+
+    S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+bandImg('dining',/dining|restaurant/i)+
       '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
         (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
         (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+'</div>').join('')+'</div>'+
@@ -809,9 +811,9 @@ function renderQuote(){
   /* 8 — POOLS */
   const pools=(P.pools||[]).filter(p=>p&&p.name);
   if(q.opts.pools&&pools.length){
-    const poolBand=photosByCat(/pool|beach/i).filter(u=>!pools.some(pl=>matchPhoto(pl.name)===u))[0]||photosByCat(/pool|beach/i)[0]||'';
+    const poolBand=sectionPhoto('pools',/pool|beach/i);
     S.push(sec('',head('In The Water','Pools & Beach')+
-      (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="Pools and beach" loading="lazy">':'')+
+      (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="" loading="lazy">':'')+
       '<div class="price-grid" style="margin-top:34px;">'+pools.map(pl=>{
         const img=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
         return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+
@@ -829,7 +831,7 @@ function renderQuote(){
   /* 10 — ACTIVITIES */
   if(q.opts.activities){
     const a=splitActs();
-    if(a.incl.length||a.extra.length)S.push(sec('',head('Between The Events','Activities')+
+    if(a.incl.length||a.extra.length)S.push(sec('',head('Between The Events','Activities')+bandImg('activities')+
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:44px;margin-top:34px;">'+
       (a.incl.length?'<div><p class="eyebrow">Included</p>'+a.incl.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
       (a.extra.length?'<div><p class="eyebrow">Additional Charge</p>'+a.extra.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;color:#5A544C;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
@@ -911,6 +913,15 @@ function matchPhoto(name){
   let hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().trim()===nm||String(ph.roomCategory||'').toLowerCase().trim()===nm));
   if(!hit)hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().includes(nm)||String(ph.roomCategory||'').toLowerCase().includes(nm)));
   return hit?(hit.url||hit.downloadURL):'';
+}
+function bandImg(key,re){
+  const u=sectionPhoto(key,re);
+  return u?'<img class="bandimg" src="'+esc(u)+'" alt="" loading="lazy">':'';
+}
+function sectionPhoto(key,re){
+  const sp=(P.sectionPhotos||{})[key];
+  if(photoOk(sp))return sp;
+  return re?(photosByCat(re)[0]||''):'';
 }
 function photosByCat(re){
   return PHOTOS.filter(ph=>photoOk(ph.url||ph.downloadURL)&&re.test(String(ph.category||'')+' '+String(ph.caption||'')))
