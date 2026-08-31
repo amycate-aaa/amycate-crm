@@ -389,17 +389,35 @@ async function loadResort(slug){
     const p=profSnap.data();
     const photos=photosSnap.docs.map(d=>d.data());
 
-    // Build photo map by roomCategory
+    // Build photo map by roomCategory — try exact match first, then fuzzy
     const photoMap={};
+    const photoList=[];
     photos.forEach(ph=>{
-      const k=(ph.roomCategory||ph.category||'').toLowerCase();
-      if(!photoMap[k])photoMap[k]=ph.url||ph.downloadURL||'';
+      const k=(ph.roomCategory||ph.category||'').toLowerCase().trim();
+      if(k&&k!=='rooms & suites'&&k!=='room'){
+        if(!photoMap[k]) photoMap[k]=ph.url||ph.downloadURL||'';
+        photoList.push({key:k, url:ph.url||ph.downloadURL||''});
+      }
     });
+
+    // Fuzzy photo lookup — finds best match for a room name
+    function findPhoto(name){
+      const n=name.toLowerCase().trim();
+      if(photoMap[n]) return photoMap[n];
+      // Try partial match
+      const match=photoList.find(p=>p.key.includes(n)||n.includes(p.key));
+      if(match) return match.url;
+      // Try word-level overlap
+      const words=n.split(/\s+/).filter(w=>w.length>3);
+      const best=photoList.find(p=>words.some(w=>p.key.includes(w)));
+      return best?best.url:'';
+    }
 
     // Gallery photos (non-room)
     const galleryPhotos=photos.filter(ph=>{
       const cat=(ph.category||'').toLowerCase();
-      return cat!=='rooms & suites'&&cat!=='room';
+      const rcat=(ph.roomCategory||'').toLowerCase();
+      return cat!=='rooms & suites'&&cat!=='room'&&!rcat;
     });
 
     // ── SET PAGE TITLE ──
@@ -432,8 +450,7 @@ async function loadResort(slug){
     const categories=p.roomCategories||[];
     if(categories.length){
       roomsGrid.innerHTML=categories.map(r=>{
-        const key=(r.name||'').toLowerCase();
-        const img=photoMap[key]||'';
+        const img=findPhoto(r.name||'');
         return`<div class="card">
           ${img?`<div class="shot"><img src="${esc(img)}" alt="${esc(r.name)}" loading="lazy"></div>`:'<div class="shot" style="display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:.8rem">Photo on request</div>'}
           <div class="cbody">
