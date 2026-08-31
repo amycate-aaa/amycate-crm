@@ -646,7 +646,7 @@ async function loadResort(slug){
     const venues=p.venues||[];
     $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
-    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').map(clean).filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+([pk.photo,pk.photoUrl].find(photoOk)?'<img class="pkgpic" src="'+esc([pk.photo,pk.photoUrl].find(photoOk))+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
+    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const hl=hiList(pk.highlights);const sn=pk.summary||hl.slice(0,2).join(' · ');const lines=hl.map(clean).filter(Boolean);return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+([pk.photo,pk.photoUrl].find(photoOk)?'<img class="pkgpic" src="'+esc([pk.photo,pk.photoUrl].find(photoOk))+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
     $id('doc-packages').innerHTML=docBtns('packages');
     $id('doc-venues').innerHTML=docBtns('venues');
     (function(){const t=cmpTable(p.packageComparison);
@@ -998,7 +998,7 @@ function renderQuote(){
   if(pkgs.length){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
-        const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
+        const lines=q.opts.inclusions?hiList(pk.highlights).map(clean).filter(Boolean):[];
         const pkImg=[pk.photo,pk.photoUrl].find(photoOk)||'';
         return'<div class="pkgrow'+(lines.length?'':' solo')+(pkImg?' haspic':'')+'">'+
           (pkImg?'<img class="pic" src="'+esc(pkImg)+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+
@@ -1198,6 +1198,11 @@ function bandImg(key){
 function sectionPhoto(key){
   const sp=(P.sectionPhotos||{})[key];
   return photoOk(sp)?sp:'';
+}
+function hiList(v){
+  if(!v)return[];
+  if(Array.isArray(v))return v.map(x=>String(x||'').trim()).filter(Boolean);
+  return String(v).split(' \u00b7 ').map(x=>x.trim()).filter(Boolean);
 }
 function photosByCat(re){
   return PHOTOS.filter(ph=>photoOk(ph.url||ph.downloadURL)&&re.test(String(ph.category||'')+' '+String(ph.caption||'')))
