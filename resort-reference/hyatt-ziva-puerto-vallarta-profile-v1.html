@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hyatt Ziva Puerto Vallarta &mdash; Resort Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#1E1A14; --gold:#B8975A; --gold-deep:#95763E;
+  --cream:#FAF7F2; --cream-2:#F3EDE3; --line:#E4DACA;
+  --body:#4A423A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:'Jost',system-ui,sans-serif;font-weight:300;line-height:1.75;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+h1,h2,h3,h4{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;margin:0}
+p{margin:0 0 1em;color:var(--body)}
+a{color:var(--gold-deep)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 28px}
+
+/* hero */
+.hero{position:relative;min-height:70vh;display:flex;align-items:flex-end;background:#1E1A14 center/cover no-repeat}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,26,20,.15) 0%,rgba(30,26,20,.72) 100%)}
+.hero .wrap{position:relative;z-index:2;padding-bottom:52px;padding-top:120px;width:100%}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.hero h1{color:#fff;font-size:clamp(38px,6vw,70px);line-height:1.05;letter-spacing:.01em}
+.hero .sub{color:rgba(255,255,255,.85);font-size:17px;max-width:640px;margin-top:14px}
+
+/* nav */
+.snav{position:sticky;top:0;z-index:20;background:rgba(250,247,242,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+.snav .wrap{display:flex;gap:26px;overflow-x:auto;padding-top:14px;padding-bottom:14px}
+.snav a{color:var(--body);text-decoration:none;font-size:12px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+.snav a:hover{color:var(--gold-deep)}
+
+section{padding:78px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:0}
+.shead{margin-bottom:38px;max-width:760px}
+.shead h2{font-size:clamp(30px,4vw,44px);line-height:1.15}
+.rule{width:44px;height:1px;background:var(--gold);margin:18px 0 20px}
+.lede{font-size:18px}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);margin-top:34px}
+.facts div{background:var(--cream);padding:20px 22px}
+.facts dt,.facts .k{font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:7px}
+.facts .v{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;line-height:1.3}
+
+/* room cards */
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px}
+.rcard{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+.rimg{height:210px;overflow:hidden;background:var(--cream-2)}
+.rimg img{width:100%;height:100%;object-fit:cover}
+.rbody{padding:22px 24px 24px}
+.rbody h3{font-size:25px;line-height:1.2;margin-bottom:8px}
+.rmeta{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:5px}
+.rbody p{font-size:15px;margin-top:12px;margin-bottom:0}
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.tag{font-size:10px;letter-spacing:.16em;text-transform:uppercase;border:1px solid var(--line);padding:5px 10px;color:var(--body)}
+
+/* dining */
+.cols{column-count:2;column-gap:52px}
+@media(max-width:760px){.cols{column-count:1}}
+.dine,.pool{break-inside:avoid;padding-bottom:22px;margin-bottom:22px;border-bottom:1px solid var(--line)}
+.dine h3,.pool h3{font-size:24px}
+.cuisine{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:5px 0 9px}
+.dine p,.pool p{font-size:15px;margin:0}
+.subhead{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-deep);margin:46px 0 22px}
+
+/* tabs */
+.tabbar{display:flex;gap:0;border:1px solid var(--line);margin-bottom:40px;max-width:520px}
+.tabbar button{flex:1;background:transparent;border:0;padding:15px 18px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--body);cursor:pointer}
+.tabbar button[aria-selected="true"]{background:var(--black);color:#fff}
+.panel[hidden]{display:none}
+
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:28px}
+.vcard{background:#fff;border:1px solid var(--line);display:flex;flex-direction:column}
+.vimg{height:210px;overflow:hidden;background:var(--cream-2)}
+.vimg img{width:100%;height:100%;object-fit:cover}
+.vbody{padding:22px 24px 24px}
+.vbody h3{font-size:25px;margin-bottom:8px}
+.vbody p{font-size:15px;margin:12px 0 0}
+
+.pkg{border:1px solid var(--line);background:#fff;padding:28px 30px;margin-bottom:22px}
+.pkghead{border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:16px}
+.pkg h3{font-size:29px}
+.pkg .lead{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px}
+.pkg .price{font-family:'Cormorant Garamond',Georgia,serif;font-size:21px;color:var(--black)}
+.pkg ul{margin:0;padding-left:19px;columns:2;column-gap:44px}
+@media(max-width:760px){.pkg ul{columns:1}}
+.pkg li{font-size:14.5px;color:var(--body);margin-bottom:7px;break-inside:avoid}
+
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:22px 26px;margin:30px 0}
+.note p:last-child{margin-bottom:0}
+.note h4{font-size:20px;margin-bottom:8px}
+
+.split{display:grid;grid-template-columns:1fr 1fr;gap:52px}
+@media(max-width:820px){.split{grid-template-columns:1fr;gap:0}}
+.list{list-style:none;margin:0;padding:0}
+.list li{font-size:15px;color:var(--body);padding:9px 0;border-bottom:1px solid var(--line)}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.gal figure{margin:0;aspect-ratio:16/10;overflow:hidden;background:var(--cream-2)}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.gal figure:hover img{transform:scale(1.04)}
+
+footer{background:var(--black);color:rgba(255,255,255,.78);padding:66px 0 56px}
+footer h3{color:#fff;font-size:30px;margin-bottom:10px}
+footer .eyebrow{color:var(--gold)}
+footer p{color:rgba(255,255,255,.72);font-size:14.5px;max-width:660px}
+footer a{color:var(--gold)}
+.fine{font-size:12.5px;color:rgba(255,255,255,.5);margin-top:26px;border-top:1px solid rgba(255,255,255,.14);padding-top:20px}
+</style>
+</head>
+<body>
+
+<header class="hero" style="background-image:url('https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0656-Aerial-Resort-Mountains-Beach.jpg/PVRIF-P0656-Aerial-Resort-Mountains-Beach.16x9.jpg')">
+  <div class="wrap">
+    <div class="eyebrow">Puerto Vallarta, Mexico</div>
+    <h1>Hyatt Ziva Puerto Vallarta</h1>
+    <p class="sub">All-inclusive family luxury on a private Pacific cove, ten minutes from Old Town. Ocean from almost every window, four infinity pools, and weddings that scale from two people to six hundred.</p>
+  </div>
+</header>
+
+<nav class="snav">
+  <div class="wrap">
+    <a href="#overview">Overview</a>
+    <a href="#rooms">Rooms</a>
+    <a href="#club">Club</a>
+    <a href="#dining">Dining</a>
+    <a href="#pools">Pools &amp; Beach</a>
+    <a href="#planning">Planning</a>
+    <a href="#activities">Activities</a>
+    <a href="#gallery">Gallery</a>
+  </div>
+</nav>
+
+<main>
+
+<section id="overview">
+  <div class="wrap">
+    <div class="shead">
+      <h2>What this resort is</h2>
+      <div class="rule"></div>
+      <p class="lede">Hyatt Ziva Puerto Vallarta sits on its own private cove on Las Estacas Beach, about thirty minutes from the airport and five from downtown. It is all-ages and all-inclusive, 335 suites across two towers, and it is smaller and more intimate than most resorts of its class.</p>
+    </div>
+    <p>The property divides cleanly. The Main Tower holds the 473 sq ft rooms &mdash; garden, ocean view, oceanfront, and a swim-up row on the ground floor. The Club Tower holds the 704 sq ft suites, every one with a private furnished balcony, plus the lounge, the plunge pool suite on the top floor and the two-storey Presidential penthouse. Almost every room looks at the Pacific.</p>
+    <p>Dining is stronger than the size suggests: teppanyaki and sushi, a firewood-oven Italian kitchen, an authentic Jalisco hacienda, a seaside grill and an international buffet, plus a rooftop bar over the bay. Four infinity pools, an adults-only pool with its own bar, a children's pool and an oversized infinity hot tub. VitaMar Spa looks straight out to sea.</p>
+    <p>For a wedding it is unusually flexible. The oceanfront gazebo takes forty, the beach takes two hundred, the ballroom takes six hundred, and the wedding for two is complimentary with a seven-night stay in a Club Ocean View Suite or higher. For a group it is a genuine meetings property, with a divisible ballroom, five breakout rooms and outdoor space for seven hundred standing.</p>
+
+    <div class="facts">
+      <div><div class="k">Location</div><div class="v">Puerto Vallarta, Jalisco</div></div>
+      <div><div class="k">Airport</div><div class="v">PVR, about 30 minutes</div></div>
+      <div><div class="k">Suites</div><div class="v">335</div></div>
+      <div><div class="k">Who it is for</div><div class="v">All ages</div></div>
+      <div><div class="k">Check in / out</div><div class="v">3:00 PM / 12:00 PM</div></div>
+      <div><div class="k">Restaurants &amp; bars</div><div class="v">7 restaurants, 5 bars</div></div>
+      <div><div class="k">Pools</div><div class="v">4 infinity, plus children's</div></div>
+      <div><div class="k">Event spaces</div><div class="v">9, indoor and outdoor</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="rooms">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Rooms and suites</h2>
+      <div class="rule"></div>
+      <p class="lede">Eighteen categories. Every room has a flat-screen TV, individual climate control, a rainfall shower, robes and slippers, a coffee maker, an in-room safe and a minibar restocked daily with beer, soft drinks and snacks. Sockets are standard North American.</p>
+    </div>
+
+    <div class="note">
+      <h4>Three things worth knowing before you choose</h4>
+      <p><strong>Connecting rooms are not available.</strong> Families who want to be next door should be booked as adjacent rooms on the same floor, requested at booking and confirmed on arrival.</p>
+      <p><strong>Only two rooms sleep five</strong> &mdash; Club Ocean View Suite Double and Club Oceanfront Hot Tub Double. Nothing sleeps six, and there is no two-bedroom category on the property.</p>
+      <p><strong>The swim-up rooms have age rules.</strong> Main Tower swim-ups are 18 and over. Club Tower swim-up suites are 13 and over. Oceanfront means an unobstructed panoramic view; ocean view may be partial.</p>
+    </div>
+
+    <div class="rgrid">
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2024/12/20/1624/PVRIF-P0501-Ocean-View-King-Guestroom.jpg/PVRIF-P0501-Ocean-View-King-Guestroom.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>King</h3>
+          <div class="rmeta">473 sq ft &middot; Garden view &middot; One king bed</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 3 (up to 2 children)</div>
+          <p>The entry room, and a genuinely good one. A king bed, a proper desk and a juliette balcony looking into the gardens.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0538-Double-Bed-Guest-Room.jpg/PVRIF-P0538-Double-Bed-Guest-Room.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Double</h3>
+          <div class="rmeta">473 sq ft &middot; Garden view &middot; Two double beds</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 4 (up to 3 children)</div>
+          <p>The same room in a two-bed layout, with a generous workspace. The best-value option for a family of four.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Ocean View King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2023/12/11/1443/PVRIF-P0487-Ocean-View-King-Guestroom.jpg/PVRIF-P0487-Ocean-View-King-Guestroom.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Ocean View King</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; One king bed</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 3 (up to 2 children)</div>
+          <p>A king bed with a view of the Pacific. Ocean view means a partial view, which the resort states plainly.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Ocean View Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2024/12/20/1624/PVRIF-P0500-Ocean-View-Double-Beds-Guestroom.jpg/PVRIF-P0500-Ocean-View-Double-Beds-Guestroom.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Ocean View Double</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; Two double beds</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 4 (up to 3 children)</div>
+          <p>Two double beds and a partial view of the Pacific. The obvious family room if you want water in the window.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Oceanfront King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0530-Ocean-Front-King-Room.jpg/PVRIF-P0530-Ocean-Front-King-Room.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Oceanfront King</h3>
+          <div class="rmeta">473 sq ft &middot; Oceanfront &middot; One king bed</div>
+          <div class="rmeta">Main Tower, floors 4 to 10 &middot; Sleeps 3 (up to 2 children)</div>
+          <p>Oceanfront here means unobstructed and panoramic, and these sit high in the Main Tower. Room views may vary.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Oceanfront Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0539-Ocean-Front-Double-Bedroom.jpg/PVRIF-P0539-Ocean-Front-Double-Bedroom.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Oceanfront Double</h3>
+          <div class="rmeta">473 sq ft &middot; Oceanfront &middot; Two double beds</div>
+          <div class="rmeta">Main Tower, floors 4 to 10 &middot; Sleeps 4 (up to 3 children)</div>
+          <p>The two-bed version of the same high-floor oceanfront position. This is the category the booking engine holds open longest for four people.</p>
+          
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Ocean Front Balcony King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2024/12/10/1138/PVRIF-P0492-Balcony-King-Ocean-View.jpg/PVRIF-P0492-Balcony-King-Ocean-View.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Ocean Front Balcony King</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; One king bed</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 3 (up to 2 children)</div>
+          <p>Main Tower rooms have juliette balconies. This category is the exception: a spacious furnished balcony you can actually sit on. Worth the step up if mornings outside matter to you.</p>
+          <div class="tags"><span class="tag">Furnished balcony</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Ocean Front Balcony Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2026/06/12/1328/PVRIF-P0661-Ocean-Front-Balcony-Double.jpg/PVRIF-P0661-Ocean-Front-Balcony-Double.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Ocean Front Balcony Double</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; Two double beds</div>
+          <div class="rmeta">Main Tower &middot; Sleeps 4 (up to 3 children)</div>
+          <p>Two double beds with the same furnished balcony. Room, bed and decor configurations may differ.</p>
+          <div class="tags"><span class="tag">Furnished balcony</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Swim-Up King (Adults Only)" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0513-Swim-Up-King-Side-View.jpg/PVRIF-P0513-Swim-Up-King-Side-View.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Swim-Up King (Adults Only)</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; One king bed</div>
+          <div class="rmeta">Main Tower, ground floor</div>
+          <p>Step off your terrace straight into a semi-private pool, with lounge chairs on the deck. Available only to guests aged 18 and over.</p>
+          <div class="tags"><span class="tag">Swim-out</span><span class="tag">Adults only 18+</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Swim-Up Double (Adults Only)" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0514-Swim-Up-Double-Beds.jpg/PVRIF-P0514-Swim-Up-Double-Beds.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Swim-Up Double (Adults Only)</h3>
+          <div class="rmeta">473 sq ft &middot; Ocean view &middot; Two double beds</div>
+          <div class="rmeta">Main Tower, ground floor &middot; Sleeps 4 (up to 3 children)</div>
+          <p>The two-bed swim-up. Note the age rule still applies, so this one suits two couples travelling together rather than a family.</p>
+          <div class="tags"><span class="tag">Swim-out</span><span class="tag">Adults only 18+</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Ocean View Suite King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1007/Hyatt-Ziva-Puerto-Vallarta-P221-Club-Ocean-View-King-Suite.jpg/Hyatt-Ziva-Puerto-Vallarta-P221-Club-Ocean-View-King-Suite.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Ocean View Suite King</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; One king bed plus sleeper sofa</div>
+          <div class="rmeta">Club Tower &middot; Sleeps 4 (up to 2 children)</div>
+          <p>The entry Club suite, and the category that unlocks the complimentary wedding. A king bed, a sleeper sofa, a sitting area and a private furnished balcony.</p>
+          <div class="tags"><span class="tag">Club Access</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Ocean View Suite Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1007/Hyatt-Ziva-Puerto-Vallarta-P219-Club-Ocean-View-Double-Suite.jpg/Hyatt-Ziva-Puerto-Vallarta-P219-Club-Ocean-View-Double-Suite.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Ocean View Suite Double</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; Two double beds plus sleeper sofa</div>
+          <div class="rmeta">Club Tower &middot; Sleeps 5 (up to 4 children)</div>
+          <p>One of only two rooms on the property that sleeps five. Two double beds, a sleeper sofa, a sitting area and a private balcony.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Sleeps 5</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Oceanfront Hot Tub King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1007/Hyatt-Ziva-Puerto-Vallarta-P216-Club-Ocean-Front-Hot-Tub-King.jpg/Hyatt-Ziva-Puerto-Vallarta-P216-Club-Ocean-Front-Hot-Tub-King.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Oceanfront Hot Tub King</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; One king bed plus sleeper sofa</div>
+          <div class="rmeta">Club Tower &middot; Sleeps 4 (up to 2 children)</div>
+          <p>A private hot tub on the balcony, an upgraded minibar and your own in-suite refreshment centre. The quiet honeymoon choice.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Private hot tub</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Oceanfront Hot Tub Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1007/Hyatt-Ziva-Puerto-Vallarta-P211-Club-Ocean-Front-Hot-Tub-Double-Bed.jpg/Hyatt-Ziva-Puerto-Vallarta-P211-Club-Ocean-Front-Hot-Tub-Double-Bed.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Oceanfront Hot Tub Double</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; Two double beds plus sleeper sofa</div>
+          <div class="rmeta">Club Tower &middot; Sleeps 5 (up to 4 children)</div>
+          <p>The other room that sleeps five, and the only one that does it with a hot tub on the balcony. Families of five should be pointed here early.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Private hot tub</span><span class="tag">Sleeps 5</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Ocean View Swim-Up Suite King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2019/06/10/1405/Hyatt-Ziva-Puerto-Vallarta-P282-Club-Ocean-View-Swim-Up-Suite-Living-Area.jpg/Hyatt-Ziva-Puerto-Vallarta-P282-Club-Ocean-View-Swim-Up-Suite-Living-Area.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Ocean View Swim-Up Suite King</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; One king bed plus sleeper sofa</div>
+          <div class="rmeta">Club Tower, ground floor</div>
+          <p>Club amenities with a swim-up terrace and a separate sitting area. Guests must be 13 or older to stay in this suite.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Swim-out</span><span class="tag">Guests 13+</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Club Ocean View Swim-Up Suite Double" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2019/06/10/1405/Hyatt-Ziva-Puerto-Vallarta-P278-Club-Swim-Up-Double.jpg/Hyatt-Ziva-Puerto-Vallarta-P278-Club-Swim-Up-Double.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Club Ocean View Swim-Up Suite Double</h3>
+          <div class="rmeta">704 sq ft &middot; Ocean view &middot; Two double beds plus sleeper sofa</div>
+          <div class="rmeta">Club Tower, ground floor</div>
+          <p>The two-bed swim-up in the Club Tower. The 13+ rule makes this one work for families with teenagers rather than small children.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Swim-out</span><span class="tag">Guests 13+</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="One Bedroom Plunge Pool Suite King" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1008/Hyatt-Ziva-Puerto-Vallarta-P224-One-Bed-King-Plunge-Pool-Suite-Club-Tower.jpg/Hyatt-Ziva-Puerto-Vallarta-P224-One-Bed-King-Plunge-Pool-Suite-Club-Tower.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>One Bedroom Plunge Pool Suite King</h3>
+          <div class="rmeta">1,250 sq ft &middot; Oceanfront &middot; One king bed</div>
+          <div class="rmeta">Club Tower, top floor &middot; Sleeps 3 (up to 2 children)</div>
+          <p>Top floor, two storeys, and a private plunge pool on the terrace looking over Las Estacas Beach. A separate sitting area and a large bathroom.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Private plunge pool</span></div>
+        </div>
+      </article>
+      <article class="rcard">
+        <div class="rimg"><img loading="lazy" alt="Presidential Suite" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2018/06/28/1009/Hyatt-Ziva-Puerto-Vallarta-P238-Presidential-Suite-Bed.jpg/Hyatt-Ziva-Puerto-Vallarta-P238-Presidential-Suite-Bed.16x9.jpg"></div>
+        <div class="rbody">
+          <h3>Presidential Suite</h3>
+          <div class="rmeta">1,500 sq ft &middot; Oceanfront &middot; One king bed</div>
+          <div class="rmeta">Two-storey penthouse &middot; Sleeps 4 (up to 2 children)</div>
+          <p>The largest suite on the property. Two storeys, a private swim-up pool, separate living and dining rooms, and a terrace over the bay. Club Lounge access included.</p>
+          <div class="tags"><span class="tag">Club Access</span><span class="tag">Private swim-up pool</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="club">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Club level</h2>
+      <div class="rule"></div>
+      <p class="lede">The Club Tower is the upgrade, and at this resort it is a real one rather than a badge. Six suite categories sit under Club Access, and two more &mdash; the One Bedroom Plunge Pool Suite and the Presidential Suite &mdash; carry lounge access as well.</p>
+    </div>
+    <div class="split">
+      <div>
+        <div class="subhead">What it includes</div>
+        <ul class="list">
+          <li>Private check-in and check-out in an exclusive area</li>
+          <li>Access to the Hyatt Club Level Lounge</li>
+          <li>Personalised concierge service</li>
+          <li>Upgraded minibar with snacks and beverages restocked daily</li>
+          <li>Cocktails made with top-rated spirits in the lounge</li>
+          <li>An in-suite VIP refreshment centre in the Oceanfront Hot Tub suites</li>
+          <li>Premium spirits in the lounge for the Presidential Suite</li>
+          <li>A private furnished balcony on every Club Tower room</li>
+        </ul>
+      </div>
+      <div>
+        <div class="subhead">Which rooms qualify</div>
+        <ul class="list">
+          <li>Club Ocean View Suite King</li>
+          <li>Club Ocean View Suite Double</li>
+          <li>Club Oceanfront Hot Tub King</li>
+          <li>Club Oceanfront Hot Tub Double</li>
+          <li>Club Ocean View Swim-Up Suite King</li>
+          <li>Club Ocean View Swim-Up Suite Double</li>
+          <li>One Bedroom Plunge Pool Suite King</li>
+          <li>Presidential Suite</li>
+        </ul>
+        <p style="font-size:15px;margin-top:18px">One practical note: the Club Ocean View Suite is the minimum category for the complimentary wedding, so if a wedding is the reason for the trip, that is where the couple's own room starts.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="dining">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Dining and drinks</h2>
+      <div class="rule"></div>
+      <p class="lede">Seven restaurants and five bars, all included, plus 24-hour in-suite dining. Reservations are recommended for the specialty restaurants and required for the teppanyaki tables at Tamari, booked through the Culinary Concierge. Children's menus are available at every restaurant, and restaurants close at 10:30 or 11:00 in the evening.</p>
+    </div>
+    <div class="subhead">Restaurants</div>
+    <div class="cols">
+      <div class="dine">
+        <h3>Casa Grande</h3>
+        <div class="cuisine">Authentic Mexican</div>
+        <p>Terrazzo floors, colourful walls and the feel of an antique hacienda. Two menus in one, traditional Jalisco cooking alongside a more contemporary selection, with cocktails built on tequila and mezcal. Reservations recommended.</p>
+      </div>
+      <div class="dine">
+        <h3>MelanZane</h3>
+        <div class="cuisine">Italian</div>
+        <p>Two experiences in one room. A casual antipasto bar with light bites and good wines by day, elegant fine dining in the evening, with the brigade working in an open kitchen. Ask for the firewood-oven lasagna. Reservations recommended.</p>
+      </div>
+      <div class="dine">
+        <h3>Tamari</h3>
+        <div class="cuisine">Asian</div>
+        <p>Bold Asian flavours in a lounge setting, with teppanyaki tables, a sushi counter and its own bar. Reservations are required for the teppanyaki tables and are made through the Culinary Concierge.</p>
+      </div>
+      <div class="dine">
+        <h3>BlaZe</h3>
+        <div class="cuisine">Seaside grill</div>
+        <p>Latin American flavours off the grill, under a palapa or out on the deck, for breakfast, lunch and dinner. Watch for dolphins and whales while you eat. Reservations recommended.</p>
+      </div>
+      <div class="dine">
+        <h3>VivaZ Buffet</h3>
+        <div class="cuisine">International buffet</div>
+        <p>Breakfast, lunch and dinner, and the room most families settle into. Traditional Mexican and American breakfasts, eggs cooked to order and handmade tortillas.</p>
+      </div>
+      <div class="dine">
+        <h3>Fresco</h3>
+        <div class="cuisine">Healthy, grab and go</div>
+        <p>By the activities pool. Vegan ceviche, wraps and poke bowls, eaten with the Pacific in front of you. The place to go when nobody wants to change out of a swimsuit.</p>
+      </div>
+      <div class="dine">
+        <h3>Deli</h3>
+        <div class="cuisine">Coffee shop</div>
+        <p>Cappuccino, sandwiches made fresh daily on artisanal bread, fruit salads and milkshakes. Air-conditioned, quiet, at the lobby across from the gift shop.</p>
+      </div>
+    </div>
+    <div class="subhead">Bars and lounges</div>
+    <div class="cols">
+      <div class="dine">
+        <h3>Pool Bar</h3>
+        <div class="cuisine">Pool and beachside</div>
+        <p>A walk-up bar and swim-up seating in the pool itself, with blue water running out to the ocean. Beach and poolside waiters bring drinks to your chair.</p>
+      </div>
+      <div class="dine">
+        <h3>Bar Tortugas</h3>
+        <div class="cuisine">Poolside</div>
+        <p>A few steps from the adults-only pool, with views over the water. Waiter service reaches the beach, so you do not have to move.</p>
+      </div>
+      <div class="dine">
+        <h3>Playa Bar</h3>
+        <div class="cuisine">Beach bar</div>
+        <p>Open air, right on the sand. Ask the bartender for the drink of the day.</p>
+      </div>
+      <div class="dine">
+        <h3>HyghlightZ Sports Bar</h3>
+        <div class="cuisine">Sports bar</div>
+        <p>Beachside, with classic bar food and a wide selection of cold beers on tap. After 10pm it is open to adults only.</p>
+      </div>
+      <div class="dine">
+        <h3>The Terrace</h3>
+        <div class="cuisine">Rooftop</div>
+        <p>Above everything, looking at the Sierra Madre on one side and Puerto Vallarta Bay on the other. Mixology, live entertainment and themed nights, and bookable for private celebrations.</p>
+      </div>
+    </div>
+    <div class="note">
+      <p>The resort publishes three dress codes &mdash; Resort Casual, Smart Casual and Resort Formal. Across all of them: shoes, shorts and tops must be worn, nobody barefoot, and no wet clothes in any restaurant. Ask me which venue sits at which level before you pack, because it changes what the men in the party need to bring.</p>
+      <p>Gluten-free and vegetarian options are available throughout, and the kitchen will work around other dietary needs if you let them know in advance. Groups of more than nine dine privately, arranged ahead through the Groups Desk. A tequila tasting and a private beachside dinner can both be arranged, each at an additional charge.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pools">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Pools and the beach</h2>
+      <div class="rule"></div>
+      <p class="lede">Four infinity pools, a children's pool and an oversized infinity hot tub, all with the ocean in front of them. Every pool is heated to roughly 28&deg;C / 83&deg;F through the winter, and certified lifeguards cover the pool and beach areas.</p>
+    </div>
+    <div class="cols">
+      <div class="pool">
+        <h3>Adults-only pool</h3>
+        <div class="cuisine">Adults only</div>
+        <p>A quiet ocean-view infinity pool with its own swim-up bar over Banderas Bay, and Bar Tortugas a few steps away.</p>
+      </div>
+      <div class="pool">
+        <h3>Main infinity pool</h3>
+        <div class="cuisine">All ages</div>
+        <p>The largest of the four, with Pool Bar serving both a walk-up counter and swim-up seating in the water.</p>
+      </div>
+      <div class="pool">
+        <h3>Palmas Terrace pool</h3>
+        <div class="cuisine">All ages</div>
+        <p>Set on the terrace among the gardens, with sweeping ocean views. The terrace doubles as a cocktail and reception space.</p>
+      </div>
+      <div class="pool">
+        <h3>Activities pool</h3>
+        <div class="cuisine">All ages</div>
+        <p>Beside Fresco, and the centre of the daytime programme, water aerobics included.</p>
+      </div>
+      <div class="pool">
+        <h3>Children's pool</h3>
+        <div class="cuisine">Children</div>
+        <p>A separate shallow pool for the youngest guests.</p>
+      </div>
+      <div class="pool">
+        <h3>Infinity hot tub</h3>
+        <div class="cuisine">All ages</div>
+        <p>An oversized infinity-edge hot tub looking straight out to sea.</p>
+      </div>
+    </div>
+    <div class="note">
+      <p>The beach is Las Estacas, in the resort's own private cove, with palapas on a first-come basis and cabanas available to rent through the concierge. Non-motorised watersports are included, kayak tours and boogie boarding among them. Jet skis, paddle boarding and catamarans are arranged off-property at an additional cost. There is seasonal whale watching and there are sea turtle excursions. Local regulations mean topless sunbathing is not permitted on the beach.</p>
+    </div>
+  </div>
+</section>
+
+<section id="planning">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Planning your event</h2>
+      <div class="rule"></div>
+      <p class="lede">Nine spaces, indoor and outdoor, from a gazebo for forty to a beach for seven hundred standing. Capacities below are what the resort publishes, with seated and standing shown separately so you can size a room honestly.</p>
+    </div>
+
+    <div class="tabbar" role="tablist" aria-label="Audience">
+      <button role="tab" id="tab-weddings" aria-controls="panel-weddings" aria-selected="true">Weddings</button>
+      <button role="tab" id="tab-groups" aria-controls="panel-groups" aria-selected="false">Groups &amp; Celebrations</button>
+    </div>
+
+    <div class="panel" id="panel-weddings" role="tabpanel" aria-labelledby="tab-weddings">
+      <div class="note">
+        <h4>The complimentary wedding, exactly as it works</h4>
+        <p>The <strong>Just for the Two of You</strong> package is complimentary if the couple stays <strong>seven nights or more</strong> in a <strong>Club Ocean View Suite King or Double, or higher</strong>. It is available <strong>Monday to Wednesday between 9:00 AM and 1:00 PM</strong> only, and must be requested at least <strong>six months</strong> before the wedding date.</p>
+        <p><strong>Intimate Elegance</strong> is complimentary on a different test: <strong>25 room nights or more</strong> combined across the group, with a minimum of three nights per room, in qualifying categories. Same Monday to Wednesday morning window, same six-month notice.</p>
+        <p>Outside those windows the packages are simply purchased, and can be held between 9:00 AM and 4:00 PM.</p>
+      </div>
+
+      <div class="subhead">Ceremony and reception venues</div>
+      <div class="vgrid">
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Pureza Beach" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2247/PVRIF-P0430-Pureza-Beach-Weddings.jpg/PVRIF-P0430-Pureza-Beach-Weddings.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Pureza Beach</h3>
+            <div class="rmeta">Up to 200 for a ceremony · 150 seated for dinner · 300 standing &middot; 4,000 sq ft</div>
+            <p>The main beach wedding site, and the one most couples picture. Sand underfoot, open Pacific behind you.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Gazebo" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/03/02/1447/Hyatt-Ziva-Puerto-Vallarta-P042-Wedding-Gazebo.jpg/Hyatt-Ziva-Puerto-Vallarta-P042-Wedding-Gazebo.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Gazebo</h3>
+            <div class="rmeta">Up to 40 for a ceremony</div>
+            <p>An oceanfront gazebo on a beachside terrace, palms all around it. This is the ceremony location written into the Just for the Two of You and Intimate Elegance packages.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Rios Ballroom" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/10/19/1040/Hyatt-Ziva-Puerto-Vallarta-P128-Small-Ballroom-Wedding-Reception.jpg/Hyatt-Ziva-Puerto-Vallarta-P128-Small-Ballroom-Wedding-Reception.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Rios Ballroom</h3>
+            <div class="rmeta">Up to 600 for a ceremony · 400 seated for dinner · 600 standing &middot; 6,837 sq ft</div>
+            <p>The indoor option, straight off the main lobby, in a Mexican decor style. Divides into three separate rooms if you want the ceremony and the reception in different spaces. Your weather insurance, and large enough that you never have to trim the list.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Central Beach" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0657-Aerial-Pool-Beach.jpg/PVRIF-P0657-Aerial-Pool-Beach.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Central Beach</h3>
+            <div class="rmeta">500 seated for dinner · 700 standing &middot; 7,000 sq ft</div>
+            <p>The largest outdoor space on the property, and the one to ask about for a big closing party under the sunset.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="The Terrace" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/10/13/1355/PVRIF-P0660-The-Terrace-Rooftop.jpg/PVRIF-P0660-The-Terrace-Rooftop.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>The Terrace</h3>
+            <div class="rmeta">150 seated for dinner · 220 standing &middot; 6,200 sq ft</div>
+            <p>The rooftop, booked privately. Mountains behind, bay in front, and the best light on the property at the end of the day.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Palmas Terrace" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2242/PVRIF-P0425-Palmas-Terrace-Weddings.jpg/PVRIF-P0425-Palmas-Terrace-Weddings.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Palmas Terrace</h3>
+            <div class="rmeta">Up to 70 for a ceremony · 70 seated for dinner · 100 standing &middot; 2,595 sq ft</div>
+            <p>An open-air terrace with its own pool, gardens around it and the beach below. Good for a cocktail hour that does not want to be on sand.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Sky Penthouse Terrace" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2020/06/25/1500/Hyatt-Ziva-Puerto-Vallarta-P417-Sky-Penthouse-Terrace-Wedding-Reception-Sunset-View.jpg/Hyatt-Ziva-Puerto-Vallarta-P417-Sky-Penthouse-Terrace-Wedding-Reception-Sunset-View.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Sky Penthouse Terrace</h3>
+            <div class="rmeta">Up to 100 for a ceremony · 80 seated for dinner · 100 standing &middot; 1,140 sq ft</div>
+            <p>An intimate rooftop terrace over the ocean and the mountains. The choice for a smaller group that wants height and privacy.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Blaze Beach" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2020/06/25/1431/Hyatt-Ziva-Puerto-Vallarta-P367-Playa-Blaze-Setup.jpg/Hyatt-Ziva-Puerto-Vallarta-P367-Playa-Blaze-Setup.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Blaze Beach</h3>
+            <div class="rmeta">Up to 200 for a ceremony · 100 seated for dinner · 200 standing &middot; 3,000 sq ft</div>
+            <p>The second beach site, beside the grill. A shorter walk from the rooms than Pureza, which matters with older guests.</p>
+          </div>
+        </article>
+        <article class="vcard">
+          <div class="vimg"><img loading="lazy" alt="Sports Bar Terrace" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2020/06/25/1403/Hyatt-Ziva-Puerto-Vallarta-P325-Hyghlightz-Sports-Bar-Terrace-Wedding-Ceremony.jpg/Hyatt-Ziva-Puerto-Vallarta-P325-Hyghlightz-Sports-Bar-Terrace-Wedding-Ceremony.16x9.jpg"></div>
+          <div class="vbody">
+            <h3>Sports Bar Terrace</h3>
+            <div class="rmeta">Up to 50 · 20 for a ceremony</div>
+            <p>A small, quiet terrace with ocean views, for a ceremony of twenty or a reception of fifty.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="subhead">Wedding packages</div>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Big Day Preview</h3>
+            <div class="lead">You and one guest</div>
+            <div class="price">$500</div>
+          </div>
+          <ul><li>Two-night luxury getaway for two</li><li>All-inclusive accommodation, fine dining, signature cocktails and live entertainment</li><li>Best room availability at check-in</li><li>A $500 credit toward your wedding when you book</li><li>Exclusive resort tour, with optional food tastings alongside the onsite wedding planner</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Just for the Two of You</h3>
+            <div class="lead">The couple</div>
+            <div class="price">From $679 midweek · from $1,349 Thursday afternoon to Sunday</div>
+          </div>
+          <ul><li>Symbolic marriage certificate and ceremony performed by a bilingual secular officiant</li><li>Bouquets and boutonnieres for the couple</li><li>Ceremony in the oceanfront gazebo</li><li>Sparkling wine toast after the ceremony</li><li>Wedding cake after the ceremony</li><li>Room decoration with flower petals and complimentary wine</li><li>Late checkout for the couple up to 3:00 PM, subject to availability</li><li>Pre-planning and onsite services of a professional wedding concierge</li><li>Complimentary online wedding registry and wedding website</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Intimate Elegance</h3>
+            <div class="lead">The couple and up to 10 guests</div>
+            <div class="price">From $1,719 midweek · from $2,329 Thursday afternoon to Sunday · additional adult from $55, child aged 3 to 12 from $29</div>
+          </div>
+          <ul><li>Everything in Just for the Two of You</li><li>Ceremony table with white linen and folding wedding chairs for your guests</li><li>Sound system for the ceremony</li><li>Couple's massage for the newlyweds</li><li>Romantic dinner for the couple</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Lavish &amp; Opulent</h3>
+            <div class="lead">The couple and up to 20 guests</div>
+            <div class="price">From $6,339 midweek · from $6,939 Thursday afternoon to Sunday · additional adult from $130, child aged 3 to 12 from $70</div>
+          </div>
+          <ul><li>Everything in Intimate Elegance</li><li>Private one-hour cocktail party after the ceremony with standard setup, open bar and hors d'oeuvres</li><li>Private three-hour reception with a three-course plated menu, tables, chairs, white linens, white place settings, open bar and banquet staff</li><li>Natural floral centrepiece for the altar</li><li>Sparkling wine and a sweet treat delivered to your room on the wedding night</li><li>Hair-styling, makeup and grooming for the couple</li><li>Manicure and pedicure for the couple at the resort spa</li><li>15% off spa services for the couple and 10% off for your guests</li><li>One complimentary room night on your first anniversary at the same resort, with four nights booked</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Luxury</h3>
+            <div class="lead">The couple and up to 38 guests</div>
+            <div class="price">From $14,095 midweek · from $14,790 Thursday afternoon to Sunday · additional adult from $130, child aged 3 to 12 from $70</div>
+          </div>
+          <ul><li>Symbolic marriage certificate and ceremony performed by a bilingual secular officiant</li><li>Bouquets and boutonnieres made of local flowers</li><li>Beach location or oceanfront gazebo</li><li>Sparkling wine toast and wedding cake after the ceremony</li><li>Room decoration with flower petals, sparkling wine and chocolate-dipped strawberries on the wedding night</li><li>Late checkout for the couple up to 3:00 PM, subject to availability</li><li>Pre-planning and onsite services of a professional wedding concierge</li><li>Complimentary online wedding registry and wedding website</li><li>Ceremony table with white linen, folding chairs and a special aisle runner</li><li>Professional photographer during the ceremony, including 25 colour digital photos</li><li>Video of the ceremony on a digital link, with 15 to 30 minutes of editing</li><li>Honeymoon breakfast in bed the morning after</li><li>50-minute couple's massage for the newlyweds</li><li>Private dinner on the beach for the couple</li><li>One-hour cocktail party with appetisers after the ceremony</li><li>Live Mexican trio for the cocktail party</li><li>Private three-hour reception with a three-course plated menu</li><li>Natural floral centrepiece for the altar</li><li>Tropical floral arrangement, sparkling wine and a fruit basket in your suite on arrival</li><li>Hairstyling, makeup and grooming at the resort spa</li><li>Manicure and pedicure for the couple at the resort spa</li><li>15% off spa services for the couple and 10% off for your guests</li><li>Pressing of the couple's gowns and suits</li><li>Wedding beach bag for the couple</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>South Asian Weddings</h3>
+            <div class="lead">Multi-event</div>
+            <div class="price">Quoted to your programme</div>
+          </div>
+          <ul><li>Wedding specialists certified by the South Asian Wedding Institute</li><li>Planning support across a multi-event wedding at the resort</li></ul>
+        </article>
+        <article class="pkg">
+          <div class="pkghead">
+            <h3>Honeymoons &amp; Anniversaries</h3>
+            <div class="lead">Two</div>
+            <div class="price">Quoted to your stay</div>
+          </div>
+          <ul><li>Romantic amenities arranged through the resort's romance concierge</li><li>Suited to a honeymoon, a vow renewal or a milestone anniversary</li></ul>
+        </article>
+
+      <div class="note">
+        <p>A few things that catch people out. Judge services and legal documentation for a civil ceremony are charged separately from every package. Coloured linens, extra flowers and additional decoration are extras. Guests not staying at the resort need a wedding pass to attend. An additional charge applies beyond forty extra guests. If the weather turns, the resort moves you to a backup space rather than cancelling.</p>
+        <p>Wedding specialists are on site, and there is a team certified by the South Asian Wedding Institute for multi-event weddings. Talk to me before you book anything directly &mdash; the packages combine with the group programme, and getting the order right is worth money.</p>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-groups" role="tabpanel" aria-labelledby="tab-groups" hidden>
+      <div class="split">
+        <div>
+          <div class="subhead">What a group gets</div>
+          <ul class="list">
+            <li>A private one-hour cocktail reception</li>
+            <li>A private three-hour reception dinner with open bar, buffet or plated</li>
+            <li>Private group check-in with signature cocktails</li>
+            <li>Meeting room rental for the general session, breakouts and event spaces</li>
+            <li>VIP amenities</li>
+            <li>Complimentary rooms based on group size</li>
+            <li>Complimentary upgrades</li>
+            <li>Discounts on spa services</li>
+            <li>Special rates for staff rooms</li>
+            <li>No food and beverage minimums</li>
+            <li>No out-of-pocket expense for attendees on the all-inclusive package</li>
+          </ul>
+        </div>
+        <div>
+          <div class="subhead">The spaces</div>
+          <ul class="list">
+            <li><strong>Rios Ballroom</strong> &mdash; 6,837 sq ft, 400 seated for dinner, 600 standing, 600 theatre style, divisible into three</li>
+            <li><strong>Central Beach</strong> &mdash; 7,000 sq ft, 500 seated for dinner, 700 standing</li>
+            <li><strong>The Terrace</strong> &mdash; 6,200 sq ft rooftop, 150 seated, 220 standing</li>
+            <li><strong>Palmas Terrace</strong> &mdash; 2,595 sq ft, 70 seated, 100 standing, with its own pool</li>
+            <li><strong>Blaze Beach</strong> &mdash; 3,000 sq ft, 100 seated, 200 standing</li>
+            <li><strong>Pureza Beach</strong> &mdash; 4,000 sq ft, 150 seated, 300 standing</li>
+            <li><strong>Sky Penthouse Terrace</strong> &mdash; 1,140 sq ft, 80 seated, 100 standing</li>
+            <li><strong>Five breakout rooms</strong> &mdash; Parota, Higuera Blanca, Ceibas, Jacarandas and Tabachin, off the Arboledas Foyer</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note">
+        <h4>Rooming a group here</h4>
+        <p>Two things shape every group block at this resort. <strong>Connecting rooms are not available</strong>, so families who expect to be joined through a door need adjacent rooms requested instead. And <strong>only two categories sleep five</strong> &mdash; Club Ocean View Suite Double and Club Oceanfront Hot Tub Double &mdash; with nothing sleeping six. If your group has larger families in it, those two categories need holding early, before the block fills with couples.</p>
+        <p>Group rates, complimentary room ratios and the payment schedule come with the contract rather than from the resort's published material. Tell me your rough room count and I will get you real numbers.</p>
+      </div>
+
+      <div class="subhead">Children and teenagers</div>
+      <div class="split">
+        <div>
+          <ul class="list">
+            <li><strong>KidZ Club</strong> &mdash; open 10:00 AM to 5:00 PM for children aged 4 to 12, supervised by a childcare specialist. Included. Only children stay in the club</li>
+            <li>Arts and crafts, games, swimming and nature activities</li>
+            <li>Recreational areas for teenagers are part of the all-inclusive plan</li>
+            <li>Children's menus at every restaurant</li>
+          </ul>
+        </div>
+        <div>
+          <ul class="list">
+            <li>Private babysitting is not offered at this resort</li>
+            <li>Minimum age for check-in is 18</li>
+            <li>Bars are 18 and over; HyghlightZ is adults-only after 10:00 PM</li>
+            <li>Main Tower swim-up rooms are 18+, Club swim-up suites are 13+</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="activities">
+  <div class="wrap">
+    <div class="shead">
+      <h2>Days here</h2>
+      <div class="rule"></div>
+      <p class="lede">A full daily programme, live entertainment every night, and a spa that looks straight out at the Pacific.</p>
+    </div>
+    <div class="split">
+      <div>
+        <div class="subhead">Included in your rate</div>
+        <ul class="list">
+          <li>Four infinity pools, a children's pool and the infinity hot tub, heated in winter</li>
+          <li>Fitness centre, 6:00 AM to 10:00 PM, with personal screens on the equipment</li>
+          <li>Daily fitness classes &mdash; strength and interval training, Zumba, paddle yoga, jump-fit, aqua-cycle and more</li>
+          <li>Beach volleyball, soccer, tennis and basketball</li>
+          <li>Non-motorised watersports, kayak tours, aqua aerobics and boogie boarding</li>
+          <li>Cooking classes, dance classes, piñata making and beach bonfires</li>
+          <li>Live entertainment nightly, and a tequila tasting</li>
+          <li>KidZ Club for ages 4 to 12</li>
+          <li>Seasonal whale watching and sea turtle excursions</li>
+        </ul>
+      </div>
+      <div>
+        <div class="subhead">At an additional charge</div>
+        <ul class="list">
+          <li>VitaMar Spa treatments and salon services, bookable before you travel</li>
+          <li>Beach and pool cabanas &mdash; palapas are first come, first served</li>
+          <li>Off-site excursions, jet skis, paddle boarding and catamarans</li>
+          <li>Photography, arranged through a third party</li>
+          <li>Airport transfers, taxis and car rental</li>
+          <li>Certain specialty wines and spirits, certain premium cuts and lobster</li>
+          <li>Laundry and dry cleaning</li>
+          <li>Private group events and romantic dinners</li>
+          <li>A doctor on site, 8:00 AM to 8:00 PM</li>
+        </ul>
+        <p style="font-size:15px;margin-top:18px">Self-parking is free. Tips and gratuities are included throughout. The resort does not accept pets other than service animals.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="shead">
+      <h2>The property</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="gal">
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0656-Aerial-Resort-Mountains-Beach.jpg/PVRIF-P0656-Aerial-Resort-Mountains-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2023/09/28/1524/PVRIF-P0482-Aerial-View.jpg/PVRIF-P0482-Aerial-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0654-View-Of-Resort-From-Ocean.jpg/PVRIF-P0654-View-Of-Resort-From-Ocean.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0657-Aerial-Pool-Beach.jpg/PVRIF-P0657-Aerial-Pool-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0609-Main-Entrance-With-Signage.jpg/PVRIF-P0609-Main-Entrance-With-Signage.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0619-Lobby-Reception-Area.jpg/PVRIF-P0619-Lobby-Reception-Area.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0617-Couple-Walking-Through-Lobby.jpg/PVRIF-P0617-Couple-Walking-Through-Lobby.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0588-Preferred-Lounge.jpg/PVRIF-P0588-Preferred-Lounge.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0586-Palmas-Terrace-Pool-Aerial-View.jpg/PVRIF-P0586-Palmas-Terrace-Pool-Aerial-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0594-Palmas-Terrace-Pool.jpg/PVRIF-P0594-Palmas-Terrace-Pool.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0603-Guest-Standing-In-Main-Pool-Outdoors.jpg/PVRIF-P0603-Guest-Standing-In-Main-Pool-Outdoors.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0600-Top-View-Of-Guests-In-Pool.jpg/PVRIF-P0600-Top-View-Of-Guests-In-Pool.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0607-Family-By-Pool-Side-Facing-Ocean.jpg/PVRIF-P0607-Family-By-Pool-Side-Facing-Ocean.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0591-Palmas-Terrace-Pool-Family-Splashing.jpg/PVRIF-P0591-Palmas-Terrace-Pool-Family-Splashing.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0564-Couple-At-Wet-Bar-Pool.jpg/PVRIF-P0564-Couple-At-Wet-Bar-Pool.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0565-Couple-Having-Drinks-At-The-Pool-Bar.jpg/PVRIF-P0565-Couple-Having-Drinks-At-The-Pool-Bar.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0605-Couple-Relaxing-In-Cabana.jpg/PVRIF-P0605-Couple-Relaxing-In-Cabana.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0622-Family-Enjoying-In-The-Cabana.jpg/PVRIF-P0622-Family-Enjoying-In-The-Cabana.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0653-Guest-Sitting-In-Cabana-With-Drinks-By-The-Beach.jpg/PVRIF-P0653-Guest-Sitting-In-Cabana-With-Drinks-By-The-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1727/PVRIF-P0470-Palapas-Couple.jpg/PVRIF-P0470-Palapas-Couple.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0625-Family-Playing-On-Beach-During-Sunset.jpg/PVRIF-P0625-Family-Playing-On-Beach-During-Sunset.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0629-Mother-And-Daughter-Strolling-On-The-Beach.jpg/PVRIF-P0629-Mother-And-Daughter-Strolling-On-The-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0635-Family-Time-On-Beach.jpg/PVRIF-P0635-Family-Time-On-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0633-Couple-Holding-Hands-In-The-Waves.jpg/PVRIF-P0633-Couple-Holding-Hands-In-The-Waves.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0649-Couple-Dancing-On-Beach-With-Live-Mariachi-Band.jpg/PVRIF-P0649-Couple-Dancing-On-Beach-With-Live-Mariachi-Band.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0651-Couple-And-Band-By-The-Ocean.jpg/PVRIF-P0651-Couple-And-Band-By-The-Ocean.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0562-Romantic-Dinner-On-The-Beach.jpg/PVRIF-P0562-Romantic-Dinner-On-The-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0563-Couple-Having-Romantic-Dinner-On-The-Beach.jpg/PVRIF-P0563-Couple-Having-Romantic-Dinner-On-The-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1723/PVRIF-P0466-Meditation-Beach.jpg/PVRIF-P0466-Meditation-Beach.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0585-Blaze-Restaurant-Ocean-View.jpg/PVRIF-P0585-Blaze-Restaurant-Ocean-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0582-Blaze-Table-Setting-Ocean-View.jpg/PVRIF-P0582-Blaze-Table-Setting-Ocean-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0547-Tamari-Restaurant.jpg/PVRIF-P0547-Tamari-Restaurant.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0544-Tamari-Restaurant-Teppanyaki-Dinning.jpg/PVRIF-P0544-Tamari-Restaurant-Teppanyaki-Dinning.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0581-Deli-Corner-View.jpg/PVRIF-P0581-Deli-Corner-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2247/PVRIF-P0429-Pureza-Seating.jpg/PVRIF-P0429-Pureza-Seating.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2236/PVRIF-P0423-Casa-Grande-Mexican-Fiesta.jpg/PVRIF-P0423-Casa-Grande-Mexican-Fiesta.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2249/PVRIF-P0435-Blaze-Tomahawk.jpg/PVRIF-P0435-Blaze-Tomahawk.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0560-Bartender-Making-Cocktail-Drinks.jpg/PVRIF-P0560-Bartender-Making-Cocktail-Drinks.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1731/PVRIF-P0478-Tequilla-Tasting-Girls.jpg/PVRIF-P0478-Tequilla-Tasting-Girls.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0568-Family-Making-Pizza-In-Cooking-Class.jpg/PVRIF-P0568-Family-Making-Pizza-In-Cooking-Class.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0587-Family-Making-Pinatas.jpg/PVRIF-P0587-Family-Making-Pinatas.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0621-Kids-Having-Fun-In-Activity-Area.jpg/PVRIF-P0621-Kids-Having-Fun-In-Activity-Area.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0645-Family-Roasting-Marshmallows-By-The-Bonfire.jpg/PVRIF-P0645-Family-Roasting-Marshmallows-By-The-Bonfire.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0596-Palmas-Terrace-Mariachi-Band-Family.jpg/PVRIF-P0596-Palmas-Terrace-Mariachi-Band-Family.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1426/PVRIF-P0440-Beach-Yoga-Lifestyle.jpg/PVRIF-P0440-Beach-Yoga-Lifestyle.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0506-Couples-Massage-During-Sunset.jpg/PVRIF-P0506-Couples-Massage-During-Sunset.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0508-Spa-Cabin-With-Ocean-View.jpg/PVRIF-P0508-Spa-Cabin-With-Ocean-View.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1731/PVRIF-P0480-Vitamar-Spa-Hydrotherapy-Couple.jpg/PVRIF-P0480-Vitamar-Spa-Hydrotherapy-Couple.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0504-Fitness-Center.jpg/PVRIF-P0504-Fitness-Center.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1715/PVRIF-P0456-Lgbtq-Weddings-Beach-Swing.jpg/PVRIF-P0456-Lgbtq-Weddings-Beach-Swing.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2247/PVRIF-P0433-Pureza-Wedding-Setup.jpg/PVRIF-P0433-Pureza-Wedding-Setup.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2021/11/18/2249/PVRIF-P0438-Sky-Penthouse-Terrace-Reception.jpg/PVRIF-P0438-Sky-Penthouse-Terrace-Reception.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2022/02/22/1723/PVRIF-P0463-Lgbtq-Weddings-Palmas-Terrace.jpg/PVRIF-P0463-Lgbtq-Weddings-Palmas-Terrace.16x9.jpg"></figure>
+      <figure><img loading="lazy" alt="Hyatt Ziva Puerto Vallarta" src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2025/05/09/1647/PVRIF-P0572-Family-Having-Ice-Cream.jpg/PVRIF-P0572-Family-Having-Ice-Cream.16x9.jpg"></figure>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="eyebrow">Your travel advisor</div>
+    <h3>Amy Cate</h3>
+    <p>Destination Weddings Travel Group &middot; Sunshine Passport Travel</p>
+    <p><a href="mailto:amy.cate@destinationweddings.com">amy.cate@destinationweddings.com</a></p>
+    <div class="fine">Details on this page are drawn from the resort's published information and are confirmed at the time of booking.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs=[document.getElementById('tab-weddings'),document.getElementById('tab-groups')];
+  var panels=[document.getElementById('panel-weddings'),document.getElementById('panel-groups')];
+  function show(i){
+    tabs.forEach(function(t,n){t.setAttribute('aria-selected',n===i?'true':'false');});
+    panels.forEach(function(p,n){p.hidden=(n!==i);});
+  }
+  tabs.forEach(function(t,i){t.addEventListener('click',function(){
+    show(i);
+    if(history.replaceState){history.replaceState(null,'',i===1?'#groups':'#planning');}
+  });});
+  function fromHash(){
+    if(location.hash==='#groups'){show(1);
+      var el=document.getElementById('planning');
+      if(el){el.scrollIntoView();}
+    }
+  }
+  fromHash();
+  window.addEventListener('hashchange',fromHash);
+})();
+</script>
+
+</body>
+</html>
