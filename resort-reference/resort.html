@@ -355,9 +355,9 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
 .amybtn:hover{background:transparent;color:var(--espresso);}
 .pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
-.pkgrow.haspic{grid-template-columns:300px 300px 1fr;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
 .pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
-@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+@media(max-width:1000px){@media(max-width:900px){.pkgrow.haspic{grid-template-columns:1fr;}}.pkgrow .pic{min-height:220px;}}
 .pkgrow.solo{grid-template-columns:1fr;}
 .pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
 .pkgrow.solo .l{border-right:0;}
@@ -1304,8 +1304,17 @@ function sectionPhoto(key){
 }
 function hiList(v){
   if(!v)return[];
-  if(Array.isArray(v))return v.map(x=>String(x||'').trim()).filter(Boolean);
-  return String(v).split(' \u00b7 ').map(x=>x.trim()).filter(Boolean);
+  // one entry that is itself a comma-run splits on ", Capital" but leaves
+  // ordinary commas inside a phrase alone
+  const burst=x=>{
+    const t=String(x||'').trim();
+    if(!t)return[];
+    if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);
+    const parts=t.split(/,(?=\s?[A-Z0-9])/).map(y=>y.trim()).filter(Boolean);
+    return parts.length>1?parts:[t];
+  };
+  const arr=Array.isArray(v)?v:[v];
+  return arr.reduce((a,x)=>a.concat(burst(x)),[]).filter(Boolean);
 }
 function photosByCat(re){
   return PHOTOS.filter(ph=>photoOk(ph.url||ph.downloadURL)&&re.test(String(ph.category||'')+' '+String(ph.caption||'')))
