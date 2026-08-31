@@ -253,6 +253,10 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
 .cmp thead th:first-child{border-left:0;}
 .cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
 .cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
 .cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
 .cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
@@ -1015,7 +1019,18 @@ function cmpTable(pc){
     if(!v)return'<td></td>';
     return'<td class="v">'+esc(v)+'</td>';
   };
-  const head=pc.packages.map(p=>'<th><span class="pn">'+esc(p.name)+'</span>'+
+  // match each column to its package photo on the resort record
+  const pkPic=nm=>{
+    const key=String(nm||'').toLowerCase().trim();
+    const m=(P.packages||[]).find(x=>String(x&&x.name||'').toLowerCase().trim()===key)||{};
+    return [m.photo,m.photoUrl].find(photoOk)||'';
+  };
+  const pics=pc.packages.map(p=>photoOk(p.photo)?p.photo:pkPic(p.name));
+  const anyPic=pics.some(Boolean);
+  const head=pc.packages.map((p,i)=>'<th'+(anyPic?' class="withpic"':'')+'>'+
+    (anyPic?(pics[i]?'<img class="cmppic" src="'+esc(pics[i])+'" alt="'+esc(p.name)+'" loading="lazy">'
+                   :'<span class="cmppic" style="background:var(--sand);"></span>'):'')+
+    '<span class="pn">'+esc(p.name)+'</span>'+
     (p.cap?'<span class="pc">'+esc(p.cap)+'</span>':'')+'</th>').join('');
   const body=pc.groups.map(g=>
     '<tr class="grp"><td colspan="'+(pc.packages.length+1)+'">'+esc(g.title)+'</td></tr>'+
