@@ -591,10 +591,9 @@ async function loadResort(slug){
     const pools=p.pools||[];
     if(pools.length){
       poolsBody.innerHTML=`<div class="tablewrap"><table>
-        <thead><tr><th>Pool</th><th>Type</th><th>Features</th></tr></thead>
+        <thead><tr><th>Pool</th><th>Features</th></tr></thead>
         <tbody>${pools.map(pl=>`<tr>
           <td><strong>${esc(pl.name)}</strong></td>
-          <td>${esc(pl.type||pl.adultsOnly?'Adults Only':'All Ages')}</td>
           <td>${esc(pl.features||pl.description||'')}</td>
         </tr>`).join('')}</tbody>
       </table></div>`;
