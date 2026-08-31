@@ -259,6 +259,10 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
 .pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
 .pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
 .pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
 .notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
 .mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
@@ -1038,10 +1042,19 @@ function renderQuote(){
               '</div>';}).join('')+'</div>')+
       ((priced&&q.opts.example&&!q.needAir)?stayTotals(q):'')+
       ((q.needAir&&clean(q.pkgPrice))
-        ?'<div class="pkgprice"><p class="big">'+esc(money(q.pkgPrice))+'</p>'+
+        ?(function(){
+            const legs=(q.air||[]).filter(r=>r.from&&r.to)
+              .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
+            const when=clean(q.travel);
+            return '<div class="pkgprice">'+
+              (when?'<p class="when">'+esc(when)+'</p>':'')+
+              (legs?'<p class="legs">'+legs+'</p>':'')+
+              ((when||legs)?'<hr class="hr">':'')+
+              '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
          '<p class="who">Per person</p>'+
          '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
-         '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>'
+         '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
+          })()
         :'')+
       (!priced?'':'<div class="note-box"><p><strong>Think of these as a shape, not a price list.</strong> Nothing is held yet. They are close enough to plan around \u2014 and once we put a group agreement in place, your real rates get written in and locked against any increase between now and your date.</p>'+
       (q.needAir
