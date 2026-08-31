@@ -450,7 +450,8 @@ async function loadResort(slug){
     const categories=p.roomCategories||[];
     if(categories.length){
       roomsGrid.innerHTML=categories.map(r=>{
-        const img=findPhoto(r.name||'');
+        // Use photo stored directly in roomCategory first, then fall back to resortPhotos
+        const img=r.photo||r.photoUrl||r.imageUrl||findPhoto(r.name||'');
         return`<div class="card">
           ${img?`<div class="shot"><img src="${esc(img)}" alt="${esc(r.name)}" loading="lazy"></div>`:'<div class="shot" style="display:flex;align-items:center;justify-content:center;color:var(--mute);font-size:.8rem">Photo on request</div>'}
           <div class="cbody">
