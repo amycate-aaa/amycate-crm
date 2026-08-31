@@ -195,7 +195,9 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 /* quote output */
 .flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
 /* the flights table is short — it does not need a full section's worth of air beneath it */
-#quote-page section.flightsec{padding-bottom:clamp(26px,3vw,40px);}
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
 .flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
 .flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
 .flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
