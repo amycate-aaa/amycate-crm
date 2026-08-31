@@ -832,7 +832,7 @@ async function loadResortProfile(slugOverride) {
       if (venueList) { venueList.innerHTML = ''; (d.venues || []).forEach(v => addVenueRow(v.name, v.capacity, v.bestFor, v.description, v.photo)); }
       // Load wedding packages
       const pkgList = document.getElementById('pkg-list');
-      if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured)); }
+      if (pkgList) { pkgList.innerHTML = ''; (d.packages || []).forEach(p => addPackageRow(p.name, p.highlights, p.price, p.featured, p.photo)); }
     } else {
       // No profile yet — clear everything
       ['profileTagline','profileDescription','profileHighlights','profileBookingLink','profileCtUrl','profileGalleryLink',
@@ -1041,7 +1041,7 @@ function getVenues() {
   })).filter(v => v.name);
 }
 
-function addPackageRow(name='', highlights='', price='', isFeatured=false) {
+function addPackageRow(name='', highlights='', price='', isFeatured=false, photo='') {
   const list = document.getElementById('pkg-list');
   if (!list) return;
   const idx = list.children.length;
@@ -1054,6 +1054,11 @@ function addPackageRow(name='', highlights='', price='', isFeatured=false) {
       <input class="form-control pkg-price" placeholder="From $X" value="${price}">
     </div>
     <textarea class="form-control pkg-highlights" rows="2" placeholder="Key highlights &mdash; e.g. Minister Â· Semi-private rehearsal dinner Â· Cocktail hour Â· Private reception Â· Up to 20 guests">${highlights}</textarea>
+    <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+      <img class="pkg-photo-preview" src="${(photo||'').replace(/"/g,'&quot;')}" style="width:60px;height:44px;object-fit:cover;border-radius:4px;border:1px solid #ddd;display:${photo?'block':'none'};">
+      <input class="form-control pkg-photo" placeholder="Photo URL (optional) — décor or setup shot for this package" value="${(photo||'').replace(/"/g,'&quot;')}" style="flex:1;font-size:.8rem;" oninput="this.previousElementSibling.src=this.value;this.previousElementSibling.style.display=this.value?'block':'none';">
+      <button type="button" title="Pick from uploaded photos" onclick="openVenuePhotoPicker(this.previousElementSibling)" style="background:#2a2a2a;border:1px solid #444;border-radius:6px;color:#f0c958;cursor:pointer;padding:6px 10px;font-size:14px;white-space:nowrap;">📷</button>
+    </div>
     <label style="display:flex;align-items:center;gap:6px;margin-top:6px;font-size:.78rem;color:#555;cursor:pointer;">
       <input type="checkbox" class="pkg-featured" ${isFeatured?'checked':''}> Highlight this package (shown in gold)
     </label>`;
@@ -1065,6 +1070,7 @@ function getPackages() {
     name:       div.querySelector('.pkg-name')?.value?.trim() || '',
     highlights: div.querySelector('.pkg-highlights')?.value?.trim() || '',
     price:      div.querySelector('.pkg-price')?.value?.trim() || '',
+    photo:      div.querySelector('.pkg-photo')?.value?.trim() || '',
     featured:   div.querySelector('.pkg-featured')?.checked || false
   })).filter(p => p.name);
 }
