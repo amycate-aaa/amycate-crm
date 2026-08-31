@@ -365,6 +365,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <a href="#sec-links" onclick="jumpTo(event,'sec-links')">Links</a>
       <a href="#acDocs" onclick="jumpTo(event,'acDocs')">Documents</a>
       <a href="#sec-goodtoknow" onclick="jumpTo(event,'sec-goodtoknow')">Good to know</a>
+      <a href="#sec-activities" onclick="jumpTo(event,'sec-activities')">Activities</a>
       <a href="#sec-venues" onclick="jumpTo(event,'sec-venues')">Venues</a>
       <a href="#sec-packages" onclick="jumpTo(event,'sec-packages')">Packages</a>
       <a href="#sec-dining" onclick="jumpTo(event,'sec-dining')">Dining</a>
@@ -546,6 +547,26 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div class="form-group">
         <label>Club Level Perks <span style="color:#555;font-size:.75rem;">(one per line)</span></label>
         <textarea class="form-control" id="profileClubPerks" rows="4" placeholder="Butler service&#10;Private beach area&#10;Premium minibar stocked daily&#10;Room upgrades subject to availability&#10;Private check-in"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 2d: ACTIVITIES -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 id="sec-activities" style="margin-bottom:4px;">&#127939; Activities</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">What guests can actually do. Renders as a two-column section on client quotes. Separate each item with &nbsp;&middot;&nbsp; (a space, a middle dot, a space).</p>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Included in the rate</label>
+        <textarea class="form-control" id="profileActivitiesIncluded" rows="3"></textarea>
+        <span style="font-size:.74rem;color:#8A7C67;">Non-motorised watersports &middot; Daily fitness classes &middot; Kayaking &middot; Snorkelling gear &middot; Tennis &middot; Nightly entertainment</span>
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>Costs extra</label>
+        <textarea class="form-control" id="profileActivitiesExtra" rows="3"></textarea>
+        <span style="font-size:.74rem;color:#8A7C67;">Scuba certification &middot; Motorised watersports &middot; Spa treatments &middot; Golf green fees &middot; Catamaran charter</span>
+      </div>
+      <div class="form-group">
+        <label>Excursions <span style="color:#888;font-size:.75rem;">(on-site or resort-arranged only)</span></label>
+        <textarea class="form-control" id="profileExcursions" rows="2"></textarea>
       </div>
     </div>
 
@@ -872,6 +893,9 @@ async function loadResortProfile(slugOverride) {
       set('profileAirportDistance', d.airportDistance);
       set('profileYearBuilt', d.yearBuilt);
       set('profileDressCodes', d.dressCodes);
+      set('profileActivitiesIncluded', d.activitiesIncluded || d.activities);
+      set('profileActivitiesExtra', d.activitiesExtra || d.activitiesAdditional);
+      set('profileExcursions', d.excursions || d.excursionNotes);
       set('profileFacilityNotes', d.facilityNotes);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
@@ -1196,7 +1220,8 @@ const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','c
   'clubLevelName','clubName','clubLevelPerks','clubPerks','weddingGuide',
   'weddingPromoTitle','weddingPromoSummary','weddingPromoLink','ctPromoTitle','ctPromoSummary','ctPromoLink',
   'agePolicy','totalRooms','checkIn','checkOut','resortFee','airportDistance','yearBuilt',
-  'dressCodes','facilityNotes','clubLevelNA'];
+  'dressCodes','facilityNotes','clubLevelNA',
+  'activitiesIncluded','activitiesExtra','excursions'];
 let LOADED = { slug:null, form:{}, remote:{} };
 
 function currentSections() {
@@ -1298,6 +1323,9 @@ async function saveResortProfile() {
     airportDistance: document.getElementById('profileAirportDistance')?.value?.trim() || '',
     yearBuilt: document.getElementById('profileYearBuilt')?.value?.trim() || '',
     dressCodes:   document.getElementById('profileDressCodes')?.value?.trim() || '',
+    activitiesIncluded: document.getElementById('profileActivitiesIncluded')?.value?.trim() || '',
+    activitiesExtra:    document.getElementById('profileActivitiesExtra')?.value?.trim() || '',
+    excursions:         document.getElementById('profileExcursions')?.value?.trim() || '',
     facilityNotes: document.getElementById('profileFacilityNotes')?.value?.trim() || '',
     restaurants:  getRestaurants(),
     pools:        getPools(),
@@ -2384,6 +2412,7 @@ body{padding-left:210px !important;padding-bottom:56px !important}
   ['\ud83d\udd17 Links','Links'],
   ['\ud83d\udcce Document Links','Documents'],
   ['\u24d8 Good To Know','Good to know'],
+  ['\ud83c\udfc3 Activities','Activities'],
   ['\ud83d\udc8d Wedding Venues *','Venues'],
   ['\ud83d\udc8d Wedding Packages & Pricing *','Packages'],
   ['\ud83c\udf7d Restaurants & Bars','Dining'],
@@ -3643,7 +3672,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
    the underlying save is not per-section — but having it where you finish typing
    means you don't scroll away and lose the edit. */
 (function(){
-  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-venues','sec-packages',
+  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-activities','sec-venues','sec-packages',
             'sec-dining','sec-pools','sec-rooms','sec-club','sec-promos'];
   function mainSaveBtn(){
     return [].slice.call(document.querySelectorAll('button')).filter(function(b){
@@ -3714,7 +3743,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
     ['Total rooms',      function(x){ return t(x.totalRooms); }, 'Good to know'],
     ['Check-in / out',   function(x){ return t(x.checkIn)&&t(x.checkOut); }, 'Good to know'],
     ['Airport',          function(x){ return t(x.airportDistance); }, 'Good to know'],
-    ['Activities',       function(x){ return t(x.activitiesIncluded)||t(x.activities); }, 'Core Info'],
+    ['Activities',       function(x){ return t(x.activitiesIncluded)||t(x.activities); }, 'Activities'],
     ['Club level',       function(x){ return t(x.clubName)||x.clubLevelNA===true; }, 'Club Level'],
     ['Section photos',   function(x){ return Object.keys(x.sectionPhotos||{}).length>=3; }, 'Photos'],
     ['Real wedding',     function(x){ return t(x.realWeddingUrl); }, 'Links']
