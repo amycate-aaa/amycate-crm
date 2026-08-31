@@ -1555,6 +1555,7 @@ async function openEditPhoto(id) {
   document.getElementById('editPhotoId').value = id;
   document.getElementById('editPhotoResort').value = slug;
   document.getElementById('editPhotoPreview').src = p.url || p.downloadURL || '';
+  try { renderSectionBtns(); } catch(e) { console.warn('section btns', e); }
   document.getElementById('editPhotoCaption').value = p.caption || '';
   document.getElementById('editPhotoCategory').value = currentCat;
   document.getElementById('editPhotoCategoryCustom').style.display = 'none';
@@ -1687,6 +1688,62 @@ async function saveEditPhoto() {
   }
 }
 
+
+var SECTION_SLOTS=[['pools','Pools & Beach'],['dining','Dining'],['venues','Venues'],
+                   ['packages','Wedding Packages'],['rooms','Rooms'],['activities','Activities'],
+                   ['club','Club Level'],['groups','Groups']];
+
+async function canonicalSlug(p, slug){
+  var target=slug;
+  var nm=p.resortName||'';
+  if(nm){ var snap=await db.collection('resortProfiles').where('name','==',nm).limit(1).get();
+          if(!snap.empty) target=snap.docs[0].id; }
+  return target;
+}
+
+async function renderSectionBtns(){
+  var box=document.getElementById('secPhotoBtns'); if(!box) return;
+  var id=document.getElementById('editPhotoId').value;
+  var slug=document.getElementById('editPhotoResort').value;
+  var p=(allPhotos||[]).find(function(x){return x.id===id;}); if(!p) return;
+  var url=p.url||p.downloadURL||'';
+  var cur={};
+  try{ var t=await canonicalSlug(p,slug);
+       var d=await db.collection('resortProfiles').doc(t).get();
+       cur=(d.exists&&(d.data().sectionPhotos||{}))||{}; }catch(e){}
+  box.innerHTML=SECTION_SLOTS.map(function(o){
+    var on=cur[o[0]]&&cur[o[0]]===url;
+    return '<button type="button" data-k="'+o[0]+'" style="background:'+(on?'#f0c958':'none')+
+      ';border:1px solid '+(on?'#f0c958':'#444')+';color:'+(on?'#111':'#ccc')+
+      ';padding:7px 13px;border-radius:5px;cursor:pointer;font-size:.79rem;font-weight:'+(on?'600':'400')+';">'+
+      (on?'\u2713 ':'')+o[1]+'</button>';
+  }).join('');
+  box.querySelectorAll('button').forEach(function(b){
+    b.onclick=function(){ setSectionPhoto(b.dataset.k); };
+  });
+}
+
+async function setSectionPhoto(key){
+  var id=document.getElementById('editPhotoId').value;
+  var slug=document.getElementById('editPhotoResort').value;
+  if(!slug){ toast('No resort linked to this photo.','error'); return; }
+  var p=(allPhotos||[]).find(function(x){return x.id===id;}); if(!p) return;
+  var url=p.url||p.downloadURL;
+  if(!url){ toast('No URL found on this photo.','error'); return; }
+  try{
+    var target=await canonicalSlug(p,slug);
+    var ref=db.collection('resortProfiles').doc(target);
+    var d=await ref.get();
+    var sp=(d.exists&&(d.data().sectionPhotos||{}))||{};
+    var label=(SECTION_SLOTS.find(function(o){return o[0]===key;})||[key,key])[1];
+    if(sp[key]===url){ delete sp[key]; await ref.set({sectionPhotos:sp},{merge:true});
+      await ref.update({sectionPhotos:sp});
+      toast('Cleared the '+label+' photo.','success'); }
+    else { sp[key]=url; await ref.set({sectionPhotos:sp},{merge:true});
+      toast(label+' photo set.','success'); }
+    renderSectionBtns();
+  }catch(e){ toast('Error: '+e.message,'error'); }
+}
 
 async function setAsHeroPhoto() {
   const id = document.getElementById("editPhotoId").value;
@@ -1975,6 +2032,11 @@ async function runAudit() {
         &#9733; Set as Hero Photo for This Resort
       </button>
       <p style="margin:8px 0 0;font-size:.7rem;color:#888;text-align:center;">Sets the main preview photo shown to visitors on the public site</p>
+    </div>
+    <div style="margin-top:14px;border-top:1px solid #333;padding-top:12px;">
+      <p style="margin:0 0 9px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#f0c958;">Use as the section photo for&hellip;</p>
+      <div id="secPhotoBtns" style="display:flex;flex-wrap:wrap;gap:7px;"></div>
+      <p style="margin:9px 0 0;font-size:.7rem;color:#888;">One banner photo at the top of that section, on the guide and in quotes. Click again to clear it.</p>
     </div>
   </div>
 </div>
