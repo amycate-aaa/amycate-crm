@@ -1042,9 +1042,12 @@ function addPoolRow(name='', type='', description='', photo='') {
   div.innerHTML = `
     <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">&#10005;</button>
     <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:6px;">
-      <input class="form-control pool-name" value="${name}" style="font-weight:600;">
-      <input class="form-control pool-type" value="${type}">
+      <div><label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Pool name <span style="color:#c0392b;">* required</span></label>
+        <input class="form-control pool-name" value="${name}" style="font-weight:600;"></div>
+      <div><label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Type</label>
+        <input class="form-control pool-type" value="${type}"></div>
     </div>
+    <label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Description</label>
     <textarea class="form-control pool-desc" rows="2">${description}</textarea>
     <div style="display:flex;align-items:center;gap:8px;margin-top:6px;">
       <img class="rest-photo-preview" src="${safePhoto}" style="width:60px;height:44px;object-fit:cover;border-radius:4px;border:1px solid #ddd;display:${photo?'block':'none'};">
@@ -1055,12 +1058,19 @@ function addPoolRow(name='', type='', description='', photo='') {
 }
 
 function getPools() {
-  return [...document.querySelectorAll('#pool-list > div')].map(div => ({
+  const all = [...document.querySelectorAll('#pool-list > div')].map(div => ({
     name:        div.querySelector('.pool-name')?.value?.trim() || '',
     type:        div.querySelector('.pool-type')?.value?.trim() || '',
     description: div.querySelector('.pool-desc')?.value?.trim() || '',
     photo:       div.querySelector('.pool-photo')?.value?.trim() || ''
-  })).filter(p => p.name);
+  }));
+  // A row with no name used to be thrown away in silence. Say so instead.
+  const dropped = all.filter(p => !p.name && (p.description || p.type || p.photo));
+  if (dropped.length && typeof toast === 'function') {
+    toast(dropped.length + ' pool row' + (dropped.length===1?'':'s') +
+          ' had no name and were not saved — add a pool name.', 'error');
+  }
+  return all.filter(p => p.name);
 }
 
 function addVenueRow(name='', capacity='', bestFor='', description='', photo='') {
