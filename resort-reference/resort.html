@@ -273,12 +273,12 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
       <h2>Dining</h2>
       <div class="subhead">Restaurants</div>
       <div class="tablewrap"><table id="rest-table">
-        <thead><tr><th>Restaurant</th><th>Cuisine</th><th>Hours</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Restaurant</th><th>Cuisine</th><th>Description</th></tr></thead>
         <tbody id="rest-body"></tbody>
       </table></div>
       <div class="subhead">Bars</div>
       <div class="tablewrap"><table id="bars-table">
-        <thead><tr><th>Bar</th><th>Style</th><th>Hours</th><th>Notes</th></tr></thead>
+        <thead><tr><th>Bar</th><th>Style</th><th>Description</th></tr></thead>
         <tbody id="bars-body"></tbody>
       </table></div>
     </div></section>
@@ -495,28 +495,36 @@ async function loadResort(slug){
     const restBody=$('rest-body');
     const rests=p.restaurants||[];
     if(rests.length){
-      restBody.innerHTML=rests.map(r=>`<tr>
-        <td><strong>${esc(r.name)}</strong></td>
-        <td>${esc(r.cuisine||'')}</td>
-        <td>${esc(r.hours||'')}</td>
-        <td>${[r.reservations?'Reservations required':null,r.adultsOnly?'Adults only':null,r.kidsMenu?'Kids menu':null].filter(Boolean).join(' · ')}</td>
-      </tr>`).join('');
+      restBody.innerHTML=rests.map(r=>{
+        const name=typeof r==='string'?r:r.name||'';
+        const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';
+        const desc=typeof r==='string'?'':r.description||'';
+        return`<tr>
+          <td><strong>${esc(name)}</strong></td>
+          <td>${esc(cuisine)}</td>
+          <td>${esc(desc)}</td>
+        </tr>`;
+      }).join('');
     } else {
-      restBody.innerHTML='<tr><td colspan="4" class="empty">Restaurant details coming soon.</td></tr>';
+      restBody.innerHTML='<tr><td colspan="3" class="empty">Restaurant details coming soon.</td></tr>';
     }
 
     // ── DINING — Bars ──
     const barsBody=$('bars-body');
     const bars=p.bars||[];
     if(bars.length){
-      barsBody.innerHTML=bars.map(b=>`<tr>
-        <td><strong>${esc(b.name)}</strong></td>
-        <td>${esc(b.style||b.cuisine||'')}</td>
-        <td>${esc(b.hours||'')}</td>
-        <td>${esc(b.description||b.notes||'')}</td>
-      </tr>`).join('');
+      barsBody.innerHTML=bars.map(b=>{
+        const name=typeof b==='string'?b:b.name||'';
+        const style=typeof b==='string'?'':b.style||b.type||b.cuisine||'';
+        const desc=typeof b==='string'?'':b.description||b.notes||'';
+        return`<tr>
+          <td><strong>${esc(name)}</strong></td>
+          <td>${esc(style)}</td>
+          <td>${esc(desc)}</td>
+        </tr>`;
+      }).join('');
     } else {
-      barsBody.innerHTML='<tr><td colspan="4" class="empty">Bar details coming soon.</td></tr>';
+      barsBody.innerHTML='<tr><td colspan="3" class="empty">Bar details coming soon.</td></tr>';
     }
 
     // ── POOLS ──
