@@ -757,11 +757,12 @@ function renderQuote(){
     '<a class="amybtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></div>');
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
+  let ROOMS='';
   const allCats=(P.roomCategories||[]).filter(c=>c&&c.name);
   const rows=q.prices.length?q.prices:allCats.map(c=>({name:c.name,ppn:''}));
   if(rows.length){
     const cats=allCats;
-    S.push(sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+bandImg('rooms')+
+    ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+bandImg('rooms')+
       (priced
         ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement.</p>'
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every suite has a private balcony or terrace. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 I\u2019ll price whichever categories you want once we know your dates.</p>')+
@@ -786,7 +787,7 @@ function renderQuote(){
       ((priced&&q.opts.example)?stayTotals(q):'')+
       (!priced?'':'<div class="note-box"><p><strong>Think of these as a shape, not a price list.</strong> Nothing is held yet. They are close enough to plan around \u2014 and once we put a group agreement in place, your real rates get written in and locked against any increase between now and your date.</p>'+
       '<p>What you are seeing is two people sharing. Someone travelling alone pays a bit more, three sharing a bit less, and children 3\u201312 come in around a third \u2014 under two, they travel free. I price all of that out properly the moment the agreement rates land.</p>'+
-      '<p>And your guests are not locked to your dates. Three nights, five, ten \u2014 they book what suits them and only ever see the rate for their own room and their own stay.</p></div>')));
+      '<p>And your guests are not locked to your dates. Three nights, five, ten \u2014 they book what suits them and only ever see the rate for their own room and their own stay.</p></div>'));
   }
 
   /* 5 — PACKAGES */
@@ -891,6 +892,9 @@ function renderQuote(){
     if(g.length)S.push(sec('sand-band',head('The Place Itself','Gallery')+
       '<div class="gallery" style="margin-top:34px;">'+g.map(u=>'<figure><img src="'+esc(u)+'" alt="'+esc(R)+'" loading="lazy"></figure>').join('')+'</div>'));
   }
+
+  /* 13b — ROOMS (moved to the end) */
+  if(ROOMS)S.push(ROOMS);
 
   /* 14 — GROUP AGREEMENT */
   if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
