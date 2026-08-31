@@ -636,17 +636,23 @@ async function loadResort(slug){
     const pkgGrid=$('pkg-grid');
     const pkgs=p.packages||[];
     if(pkgs.length){
-      pkgGrid.innerHTML=pkgs.map((pk,i)=>`<div class="pkgitem">
-        <button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)">
-          <span class="pname">${esc(pk.name)}</span>
-          <span class="pprice">${esc(pk.price||'')}</span>
-          <span class="parrow">▼</span>
-        </button>
-        <div class="pkgbody">
-          ${pk.summary?`<div class="pkgsummary">${esc(pk.summary)}</div>`:''}
-          ${pk.highlights?`<div class="pkghi">${esc(pk.highlights).split(' · ').map(h=>`· ${h}`).join('<br>')}</div>`:''}
-        </div>
-      </div>`).join('');
+      pkgGrid.innerHTML=pkgs.map((pk,i)=>{
+        // Show just the first price point, not the full string
+        const fullPrice=pk.price||'';
+        const shortPrice=fullPrice.split('·')[0].trim();
+        return`<div class="pkgitem">
+          <button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)">
+            <span class="pname">${esc(pk.name)}</span>
+            <span class="pprice">${esc(shortPrice)}</span>
+            <span class="parrow">▼</span>
+          </button>
+          <div class="pkgbody">
+            ${fullPrice!==shortPrice?`<div class="pkgsummary">${esc(fullPrice)}</div>`:''}
+            ${pk.summary?`<div class="pkgsummary">${esc(pk.summary)}</div>`:''}
+            ${pk.highlights?`<div class="pkghi">${esc(pk.highlights).split(' · ').map(h=>`· ${h}`).join('<br>')}</div>`:''}
+          </div>
+        </div>`;
+      }).join('');
     } else {
       pkgGrid.innerHTML='<p class="empty">Package details coming soon.</p>';
     }
