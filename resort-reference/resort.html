@@ -139,10 +139,21 @@ tr:last-child td{border-bottom:none}
   transition:color .15s,border-color .15s;margin-bottom:-1px}
 .tabbtn[aria-selected="true"]{color:var(--gold-deep);border-bottom-color:var(--gold)}
 
-/* PKG CARDS */
-.pkggrid{display:grid;gap:20px;grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
-.pkg{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:1.4rem 1.5rem}
-.pkg h3{font-family:"Cormorant Garamond",serif;font-weight:500;font-size:1.3rem;margin:0 0 .2rem}
+/* PKG ACCORDION */
+.pkglist{border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--white)}
+.pkgitem{border-bottom:1px solid var(--line)}
+.pkgitem:last-child{border-bottom:none}
+.pkgtrigger{width:100%;background:none;border:none;padding:1.1rem 1.4rem;display:flex;
+  align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:12px}
+.pkgtrigger:hover{background:var(--cream-2)}
+.pkgtrigger .pname{font-family:"Cormorant Garamond",serif;font-size:1.15rem;font-weight:500;color:var(--black)}
+.pkgtrigger .pprice{font-size:.95rem;color:var(--gold-deep);font-weight:500;white-space:nowrap}
+.pkgtrigger .parrow{color:var(--muted);font-size:.8rem;transition:transform .2s;flex-shrink:0}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg)}
+.pkgbody{display:none;padding:0 1.4rem 1.2rem;border-top:1px solid var(--line)}
+.pkgbody.open{display:block}
+.pkgsummary{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:.8rem 0 .5rem}
+.pkghi{font-size:.9rem;color:var(--soft);line-height:1.8}
 .pkg .price{font-size:1.1rem;color:var(--gold-deep);font-weight:500;margin-bottom:.6rem}
 .pkg .summary{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
   color:var(--mute);margin-bottom:.8rem}
@@ -304,7 +315,7 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
         <div class="subhead">Venues</div>
         <div class="vgrid" id="venues-grid"></div>
         <div class="subhead" style="margin-top:2.5rem">Wedding Packages</div>
-        <div class="pkggrid" id="pkg-grid"></div>
+        <div class="pkglist" id="pkg-grid"></div>
       </div>
 
       <!-- GROUPS PANEL -->
@@ -337,6 +348,11 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
 
 <script>
 // ── TAB LOGIC ──
+function togglePkg(btn){
+  const expanded=btn.getAttribute('aria-expanded')==='true';
+  btn.setAttribute('aria-expanded',!expanded);
+  btn.nextElementSibling.classList.toggle('open',!expanded);
+}
 function selTab(id){
   ['tab-wed','tab-grp'].forEach(t=>{
     const btn=document.getElementById(t);
@@ -571,11 +587,16 @@ async function loadResort(slug){
     const pkgGrid=$('pkg-grid');
     const pkgs=p.packages||[];
     if(pkgs.length){
-      pkgGrid.innerHTML=pkgs.map(pk=>`<div class="pkg">
-        <h3>${esc(pk.name)}</h3>
-        ${pk.price?`<div class="price">${esc(pk.price)}</div>`:''}
-        ${pk.summary?`<div class="summary">${esc(pk.summary)}</div>`:''}
-        ${pk.highlights?`<div class="hi">${esc(pk.highlights).replace(/ · /g,'<br>· ')}</div>`:''}
+      pkgGrid.innerHTML=pkgs.map((pk,i)=>`<div class="pkgitem">
+        <button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)">
+          <span class="pname">${esc(pk.name)}</span>
+          <span class="pprice">${esc(pk.price||'')}</span>
+          <span class="parrow">▼</span>
+        </button>
+        <div class="pkgbody">
+          ${pk.summary?`<div class="pkgsummary">${esc(pk.summary)}</div>`:''}
+          ${pk.highlights?`<div class="pkghi">${esc(pk.highlights).split(' · ').map(h=>`· ${h}`).join('<br>')}</div>`:''}
+        </div>
       </div>`).join('');
     } else {
       pkgGrid.innerHTML='<p class="empty">Package details coming soon.</p>';
