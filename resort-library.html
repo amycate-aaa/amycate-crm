@@ -470,10 +470,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <input type="text" class="form-control" id="profileCheckOut" placeholder="11:00 AM">
       </div>
       <div class="form-group" style="flex:1 1 210px;">
-        <label>Resort Fee</label>
-        <input type="text" class="form-control" id="profileResortFee" placeholder="None, or $25 per room per night">
-      </div>
-      <div class="form-group" style="flex:1 1 210px;">
         <label>Airport</label>
         <input type="text" class="form-control" id="profileAirportDistance" placeholder="ONE figure — e.g. 35 minutes from SJD">
       </div>
@@ -481,10 +477,6 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
         <label>Opened / Renovated</label>
         <input type="text" class="form-control" id="profileYearBuilt" placeholder="e.g. 2019">
       </div>
-      </div>
-      <div class="form-group" style="margin-top:12px;">
-        <label>Dress Codes</label>
-        <textarea class="form-control" id="profileDressCodes" rows="2" placeholder="Resort casual by day &middot; Long trousers and closed shoes for men at &agrave; la carte dinner &middot; No swimwear in restaurants"></textarea>
       </div>
       <div class="form-group">
         <label>Resort Notes <span style="color:#888;font-size:.75rem;">(client-facing caveats)</span></label>
@@ -826,7 +818,7 @@ function clearProfileForm(){
    'profileRealWeddingNames','profileClubName','profileClubPerks','profileWeddingGuide','profileStars',
    'profileWeddingPromoTitle','profileWeddingPromoSummary','profileWeddingPromoLink',
    'profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink',
-   'profileAgePolicy','profileTotalRooms','profileCheckIn','profileCheckOut','profileResortFee','profileAirportDistance','profileYearBuilt','profileDressCodes','profileFacilityNotes']
+   'profileAgePolicy','profileTotalRooms','profileCheckIn','profileCheckOut','profileAirportDistance','profileYearBuilt','profileFacilityNotes']
    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   ['roomcat-list','restaurant-list','venue-list','pkg-list']
    .forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=''; });
@@ -889,10 +881,8 @@ async function loadResortProfile(slugOverride) {
       set('profileTotalRooms', d.totalRooms);
       set('profileCheckIn', d.checkIn || '3:00 PM');
       set('profileCheckOut', d.checkOut || '11:00 AM');
-      set('profileResortFee', d.resortFee);
       set('profileAirportDistance', d.airportDistance);
       set('profileYearBuilt', d.yearBuilt);
-      set('profileDressCodes', d.dressCodes);
       set('profileActivitiesIncluded', d.activitiesIncluded || d.activities);
       set('profileActivitiesExtra', d.activitiesExtra || d.activitiesAdditional);
       set('profileExcursions', d.excursions || d.excursionNotes);
@@ -1219,8 +1209,8 @@ const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','c
   'galleryLink','notes','weddingUrl','realWeddingUrl','realWeddingNames',
   'clubLevelName','clubName','clubLevelPerks','clubPerks','weddingGuide',
   'weddingPromoTitle','weddingPromoSummary','weddingPromoLink','ctPromoTitle','ctPromoSummary','ctPromoLink',
-  'agePolicy','totalRooms','checkIn','checkOut','resortFee','airportDistance','yearBuilt',
-  'dressCodes','facilityNotes','clubLevelNA',
+  'agePolicy','totalRooms','checkIn','checkOut','airportDistance','yearBuilt',
+  'facilityNotes','clubLevelNA',
   'activitiesIncluded','activitiesExtra','excursions'];
 let LOADED = { slug:null, form:{}, remote:{} };
 
@@ -1319,10 +1309,8 @@ async function saveResortProfile() {
     totalRooms: document.getElementById('profileTotalRooms')?.value?.trim() || '',
     checkIn: document.getElementById('profileCheckIn')?.value?.trim() || '',
     checkOut: document.getElementById('profileCheckOut')?.value?.trim() || '',
-    resortFee: document.getElementById('profileResortFee')?.value?.trim() || '',
     airportDistance: document.getElementById('profileAirportDistance')?.value?.trim() || '',
     yearBuilt: document.getElementById('profileYearBuilt')?.value?.trim() || '',
-    dressCodes:   document.getElementById('profileDressCodes')?.value?.trim() || '',
     activitiesIncluded: document.getElementById('profileActivitiesIncluded')?.value?.trim() || '',
     activitiesExtra:    document.getElementById('profileActivitiesExtra')?.value?.trim() || '',
     excursions:         document.getElementById('profileExcursions')?.value?.trim() || '',
