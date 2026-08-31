@@ -1022,7 +1022,7 @@ function renderQuote(){
       (priced
         ?(q.needAir
         ?'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
-        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement. Other categories are available too; tell me which ones interest you and I will price them.</p>')
+        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 rates are confirmed when you book, and held against increases if your group reaches ten rooms. Other categories are available too; tell me which ones interest you and I will price them.</p>')
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
         ? '<div class="price-grid">'+rows.map(r=>{
@@ -1058,7 +1058,7 @@ function renderQuote(){
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
         :'')+
-      (!priced?'':'<div class="note-box"><p><strong>Think of these as a shape, not a price list.</strong> Nothing is held yet. They are close enough to plan around \u2014 and once we put a group agreement in place, your real rates get written in and locked against any increase between now and your date.</p>'+
+      (!priced?'':'<div class="note-box"><p><strong>Think of these as a shape, not a price list.</strong> Nothing is held yet, but they are close enough to plan around. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
       (q.needAir
         ?'<p>Flight prices move daily and are only held once ticketed. If your group reaches ten rooms I can hold the room rates against any increase; below that everyone books individually and I look after each reservation the same way. Either way I tell you straight away if anything shifts.</p>'
         :'<p>What you are seeing is two people sharing. Someone travelling alone pays a bit more, three sharing a bit less, and children 3\u201312 come in around a third \u2014 under two, they travel free. I price all of that out properly the moment the agreement rates land.</p>')+
@@ -1380,7 +1380,7 @@ function stayTotals(q){
     '<p>'+esc(r.name)+' at <strong>'+money(r.ppn)+'</strong> per person, per night:</p>'+
     '<ul class="stay">'+nights.map(nn=>'<li><span class="n">'+nn+' nights</span><span class="v">'+f(v*nn)+'</span></li>').join('')+'</ul>'+
     '<p style="font-size:15.5px;color:#6E665C;margin-top:16px;">Per person \u2014 so the two of you sharing a room doubles those figures.</p>'+
-    '<p class="notquote">This is an idea, not a quote. Nothing is held and nothing is booked. Real rates come from the resort in your group agreement, and I will put the actual numbers in front of you before you decide anything.</p>'+
+    '<p class="notquote">This is an idea, not a quote. Nothing is held and nothing is booked. Real rates are confirmed by the resort before anything is booked, and I will put the actual numbers in front of you before you decide anything.</p>'+
     '</div>';
 }
 
