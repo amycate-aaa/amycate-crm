@@ -784,7 +784,6 @@ function renderQuote(){
     const f=t.split(/[.\u00b7]/)[0].trim();
     return f.length>40?f.slice(0,40).replace(/\s+\S*$/,'')+'\u2026':f;};
   const facts=[
-    q.date?['When',q.date]:null,
     P.destination?['Where',P.destination]:null,
     clean(P.agePolicy)?['Who it suits',shortAge(clean(P.agePolicy))]:null,
     clean(P.totalRooms)?['Suites',String(clean(P.totalRooms))]:null,
