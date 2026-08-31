@@ -818,7 +818,7 @@ async function loadResortProfile(slugOverride) {
       const restList = document.getElementById('restaurant-list');
       if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(function(r){
         if (typeof r === 'string') { addRestaurantRow(r, '', '', ''); }
-        else { addRestaurantRow(r.name||'', r.type||'', r.description||'', r.photo||''); }
+        else { addRestaurantRow(r.name||'', r.type||'', r.description||'', r.photo||'', r.menuUrl||r.menu||''); }
       }); }
       // Load pools & beach
       const poolList = document.getElementById('pool-list');
@@ -944,7 +944,7 @@ function selectRoomCatPhoto(url) {
   document.getElementById('venuePhotoPickerModal').style.display = 'none';
 }
 
-function addRestaurantRow(name='', type='', description='', photo='') {
+function addRestaurantRow(name='', type='', description='', photo='', menuUrl='') {
   const list = document.getElementById('restaurant-list');
   if (!list) return;
   const div = document.createElement('div');
@@ -961,7 +961,8 @@ function addRestaurantRow(name='', type='', description='', photo='') {
       <img class="rest-photo-preview" src="${safePhoto}" style="width:60px;height:44px;object-fit:cover;border-radius:4px;border:1px solid #ddd;display:${photo?'block':'none'};">
       <input class="form-control rest-photo" placeholder="Photo URL (optional)" value="${safePhoto}" style="flex:1;font-size:.8rem;" oninput="this.previousElementSibling.src=this.value;this.previousElementSibling.style.display=this.value?'block':'none';">
       <button type="button" title="Pick from uploaded photos" onclick="openVenuePhotoPicker(this.previousElementSibling)" style="background:#2a2a2a;border:1px solid #444;border-radius:6px;color:#f0c958;cursor:pointer;padding:6px 10px;font-size:14px;white-space:nowrap;">📷</button>
-    </div>`;
+    </div>
+    <input class="form-control rest-menu" placeholder="Menu link (optional) — shows as a Menu button on the guide and in quotes" value="${(menuUrl||'').replace(/"/g,'&quot;')}" style="margin-top:6px;font-size:.8rem;">`;
   list.appendChild(div);
 }
 
@@ -970,7 +971,8 @@ function getRestaurants() {
     name:        div.querySelector('.rest-name')?.value?.trim() || '',
     type:        div.querySelector('.rest-type')?.value?.trim() || '',
     description: div.querySelector('.rest-desc')?.value?.trim() || '',
-    photo:       div.querySelector('.rest-photo')?.value?.trim() || ''
+    photo:       div.querySelector('.rest-photo')?.value?.trim() || '',
+    menuUrl:     div.querySelector('.rest-menu')?.value?.trim() || ''
   })).filter(r => r.name);
 }
 
