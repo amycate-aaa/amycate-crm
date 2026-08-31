@@ -804,6 +804,7 @@ function renderQuote(){
       '<p>What you are seeing is two people sharing. Someone travelling alone pays a bit more, three sharing a bit less, and children 3\u201312 come in around a third \u2014 under two, they travel free. I price all of that out properly the moment the agreement rates land.</p>'+
       '<p>And your guests are not locked to your dates. Three nights, five, ten \u2014 they book what suits them and only ever see the rate for their own room and their own stay.</p></div>'));
   }
+  if(priced&&ROOMS){S.push(ROOMS);ROOMS='';}   // priced: show it here, near the top
 
   /* 5 — PACKAGES */
   const pkgs=(P.packages||[]).filter(p=>p&&p.name);
