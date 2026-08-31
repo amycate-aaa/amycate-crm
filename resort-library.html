@@ -2942,93 +2942,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   +'b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});'
   +'if(location.hash==="#groups"){sel("tab-grp");}})();\n<\/script>\n\n'
   +'<footer><div class="wrap">\n  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>\n'
-  +'  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>\n</div></footer>\n\n
-<script id="acUploadJump">
-/* Big Upload Photos button pinned to the bottom of the sidebar. Scrolls to the
-   drop zone and opens the file picker, so uploading never means hunting. */
-(function(){
-  function add(){
-    var nav=document.getElementById('acSideNav');
-    if(!nav||document.getElementById('acUploadBtn'))return;
-    var st=document.createElement('style');
-    st.textContent=
-      '#acUploadBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
-      +'background:#B08D57;color:#fff;border:0;border-top:1px solid #9C7B48;'
-      +'padding:15px 14px;font-family:system-ui,sans-serif;font-size:.86rem;font-weight:600;'
-      +'letter-spacing:.03em;cursor:pointer;text-align:center;z-index:9998;}'
-      +'#acUploadBtn:hover{background:#9C7B48;}'
-      +'#acUploadBtn small{display:block;font-weight:400;font-size:.68rem;opacity:.85;margin-top:2px;}'
-      +'@media(max-width:900px){#acUploadBtn{display:none;}}';
-    document.head.appendChild(st);
-    var b=document.createElement('button');
-    b.id='acUploadBtn'; b.type='button';
-    b.innerHTML='\uD83D\uDCF7 Upload Photos<small>drop or browse</small>';
-    b.onclick=function(){
-      var dz=document.getElementById('dropZone');
-      if(!dz){return;}
-      dz.scrollIntoView({behavior:'smooth',block:'center'});
-      dz.style.transition='box-shadow .3s';
-      dz.style.boxShadow='0 0 0 3px #B08D57';
-      setTimeout(function(){dz.style.boxShadow='';},1600);
-      setTimeout(function(){var f=document.getElementById('fileInput'); if(f)f.click();},650);
-    };
-    document.body.appendChild(b);
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1200);});
-  else setTimeout(add,1200);
-})();
-</script>
-
-<script id="acSectionSave">
-/* A Save button at the foot of every section. Each one saves the whole profile —
-   the underlying save is not per-section — but having it where you finish typing
-   means you don't scroll away and lose the edit. */
-(function(){
-  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-venues','sec-packages',
-            'sec-dining','sec-pools','sec-rooms','sec-club','sec-promos'];
-  function mainSaveBtn(){
-    return [].slice.call(document.querySelectorAll('button')).filter(function(b){
-      return /Save Profile/i.test(b.textContent) && b.id!=='acSaveBarBtn'
-             && !b.classList.contains('acSecSave');
-    })[0];
-  }
-  function add(){
-    if(!document.getElementById('acSecSaveCss')){
-      var st=document.createElement('style'); st.id='acSecSaveCss';
-      st.textContent=
-        '.acSecSaveRow{display:flex;justify-content:flex-end;align-items:center;gap:12px;'
-        +'margin-top:18px;padding-top:14px;border-top:1px solid #E0D7C4;}'
-        +'.acSecSaveRow .hint{font-size:.74rem;color:#8A7C67;}'
-        +'.acSecSave{background:#B08D57;color:#fff;border:0;border-radius:6px;'
-        +'padding:9px 20px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;}'
-        +'.acSecSave:hover{background:#9C7B48;}'
-        +'.acSecSave.done{background:#2F6B4F;}';
-      document.head.appendChild(st);
-    }
-    SECS.forEach(function(id){
-      var h=document.getElementById(id); if(!h)return;
-      var sec=h.closest('.upload-section'); if(!sec)return;
-      if(sec.querySelector('.acSecSaveRow'))return;
-      var row=document.createElement('div'); row.className='acSecSaveRow';
-      var hint=document.createElement('span'); hint.className='hint';
-      hint.textContent='Saves the whole profile';
-      var b=document.createElement('button');
-      b.type='button'; b.className='acSecSave'; b.textContent='\uD83D\uDCBE Save';
-      b.onclick=function(){
-        var m=mainSaveBtn(); if(!m){return;}
-        m.click();
-        b.textContent='\u2713 Saved'; b.classList.add('done');
-        setTimeout(function(){b.textContent='\uD83D\uDCBE Save'; b.classList.remove('done');},2200);
-      };
-      row.appendChild(hint); row.appendChild(b);
-      sec.appendChild(row);
-    });
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1300);});
-  else setTimeout(add,1300);
-})();
-</script>
-</body>\n</html>\n';
+  +'  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>\n</div></footer>\n\n</body>\n</html>\n';
  }
 
  function card(slug,a){
@@ -3645,5 +3559,111 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 })();
 </script>
 
+
+<script id="acUploadJump">
+/* Big Upload Photos button pinned to the bottom of the sidebar. Scrolls to the
+   drop zone and opens the file picker, so uploading never means hunting. */
+(function(){
+  function add(){
+    var nav=document.getElementById('acSideNav');
+    if(!nav||document.getElementById('acUploadBtn'))return;
+    var st=document.createElement('style');
+    st.textContent=
+      '#acPhotosBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
+      +'background:#3F3A32;color:#F2EDE4;border:0;border-top:1px solid #2C2822;'
+      +'padding:13px 14px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;'
+      +'cursor:pointer;text-align:center;z-index:9998;}'
+      +'#acPhotosBtn:hover{background:#2C2822;}'
+      +'#acPhotosBtn small{display:block;font-weight:400;font-size:.66rem;opacity:.75;margin-top:2px;}'
+      +'@media(max-width:900px){#acPhotosBtn{display:none;}}'
+      +'#acUploadBtn{position:fixed;left:0;bottom:110px;width:186px;display:block;'
+      +'background:#B08D57;color:#fff;border:0;border-top:1px solid #9C7B48;'
+      +'padding:15px 14px;font-family:system-ui,sans-serif;font-size:.86rem;font-weight:600;'
+      +'letter-spacing:.03em;cursor:pointer;text-align:center;z-index:9998;}'
+      +'#acUploadBtn:hover{background:#9C7B48;}'
+      +'#acUploadBtn small{display:block;font-weight:400;font-size:.68rem;opacity:.85;margin-top:2px;}'
+      +'@media(max-width:900px){#acUploadBtn{display:none;}}';
+    document.head.appendChild(st);
+    // jump to the photo library grid, above the upload button
+    var pj=document.createElement('button');
+    pj.id='acPhotosBtn'; pj.type='button';
+    pj.innerHTML='\uD83D\uDDBC Photo Library<small>browse what is loaded</small>';
+    pj.onclick=function(){
+      var sel=document.getElementById('filterCategory');
+      if(sel) sel=sel.closest('div')||sel;
+      if(!sel){ var dz=document.getElementById('dropZone');
+                if(dz) dz.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+      sel.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    document.body.appendChild(pj);
+
+    var b=document.createElement('button');
+    b.id='acUploadBtn'; b.type='button';
+    b.innerHTML='\uD83D\uDCF7 Upload Photos<small>drop or browse</small>';
+    b.onclick=function(){
+      var dz=document.getElementById('dropZone');
+      if(!dz){return;}
+      dz.scrollIntoView({behavior:'smooth',block:'center'});
+      dz.style.transition='box-shadow .3s';
+      dz.style.boxShadow='0 0 0 3px #B08D57';
+      setTimeout(function(){dz.style.boxShadow='';},1600);
+      setTimeout(function(){var f=document.getElementById('fileInput'); if(f)f.click();},650);
+    };
+    document.body.appendChild(b);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1200);});
+  else setTimeout(add,1200);
+})();
+</script>
+
+<script id="acSectionSave">
+/* A Save button at the foot of every section. Each one saves the whole profile —
+   the underlying save is not per-section — but having it where you finish typing
+   means you don't scroll away and lose the edit. */
+(function(){
+  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-venues','sec-packages',
+            'sec-dining','sec-pools','sec-rooms','sec-club','sec-promos'];
+  function mainSaveBtn(){
+    return [].slice.call(document.querySelectorAll('button')).filter(function(b){
+      return /Save Profile/i.test(b.textContent) && b.id!=='acSaveBarBtn'
+             && !b.classList.contains('acSecSave');
+    })[0];
+  }
+  function add(){
+    if(!document.getElementById('acSecSaveCss')){
+      var st=document.createElement('style'); st.id='acSecSaveCss';
+      st.textContent=
+        '.acSecSaveRow{display:flex;justify-content:flex-end;align-items:center;gap:12px;'
+        +'margin-top:18px;padding-top:14px;border-top:1px solid #E0D7C4;}'
+        +'.acSecSaveRow .hint{font-size:.74rem;color:#8A7C67;}'
+        +'.acSecSave{background:#B08D57;color:#fff;border:0;border-radius:6px;'
+        +'padding:9px 20px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;}'
+        +'.acSecSave:hover{background:#9C7B48;}'
+        +'.acSecSave.done{background:#2F6B4F;}';
+      document.head.appendChild(st);
+    }
+    SECS.forEach(function(id){
+      var h=document.getElementById(id); if(!h)return;
+      var sec=h.closest('.upload-section'); if(!sec)return;
+      if(sec.querySelector('.acSecSaveRow'))return;
+      var row=document.createElement('div'); row.className='acSecSaveRow';
+      var hint=document.createElement('span'); hint.className='hint';
+      hint.textContent='Saves the whole profile';
+      var b=document.createElement('button');
+      b.type='button'; b.className='acSecSave'; b.textContent='\uD83D\uDCBE Save';
+      b.onclick=function(){
+        var m=mainSaveBtn(); if(!m){return;}
+        m.click();
+        b.textContent='\u2713 Saved'; b.classList.add('done');
+        setTimeout(function(){b.textContent='\uD83D\uDCBE Save'; b.classList.remove('done');},2200);
+      };
+      row.appendChild(hint); row.appendChild(b);
+      sec.appendChild(row);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1300);});
+  else setTimeout(add,1300);
+})();
+</script>
 </body>
 </html>
