@@ -3587,7 +3587,10 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
     var st=document.createElement('style');
     st.textContent=
       // the nav must scroll clear of the two pinned buttons + the save bar
-      '#acSideNav{overflow-y:auto;overflow-x:hidden;padding-bottom:176px;}'
+      // height:100vh plus padding made it taller than the screen, so the last
+      // items sat below the fold with no way to scroll to them
+      '#acSideNav{box-sizing:border-box !important;height:100vh !important;'
+      +'overflow-y:auto !important;overflow-x:hidden !important;padding-bottom:180px !important;}'
       +'#acPhotosBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
       +'background:#3F3A32;color:#F2EDE4;border:0;border-top:1px solid #2C2822;'
       +'padding:13px 14px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;'
