@@ -238,6 +238,20 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
 .dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
 .amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
 .amybar .eyebrow{margin-bottom:14px;}
 .amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
@@ -540,6 +554,8 @@ async function loadResort(slug){
     $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
     $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').map(clean).filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
+    (function(){const t=cmpTable(p.packageComparison);
+      if(t)$id('pkg-grid').insertAdjacentHTML('afterend','<details class="tuck" style="margin-top:30px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>');})();
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
     $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
     const rests=p.restaurants||[];
@@ -749,7 +765,9 @@ function renderQuote(){
           '</div>'+
           (lines.length?'<div class="r"><p class="lbl">Included</p><div class="incl">'+
             lines.map(h=>'<p>&#10022;&nbsp;&nbsp;'+esc(h)+'</p>').join('')+'</div></div>':'')+
-          '</div>';}).join('')+'</div>'));
+          '</div>';}).join('')+'</div>'+
+      (function(){const t=cmpTable(P.packageComparison);
+        return t?'<details class="tuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>':'';})()));
   }
 
   /* 6 — VENUES */
@@ -872,6 +890,24 @@ function renderQuote(){
     b.style.cssText='position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:14px 26px;font-family:var(--serif);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;';
     b.onclick=backToBuilder;document.body.appendChild(b);}
   qbChrome(false);
+}
+
+function cmpTable(pc){
+  if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
+  const cell=v=>{
+    if(v==='Y')return'<td><span class="tk">\u2713</span></td>';
+    if(v==='-')return'<td><span class="dh">\u2014</span></td>';
+    if(!v)return'<td></td>';
+    return'<td class="v">'+esc(v)+'</td>';
+  };
+  const head=pc.packages.map(p=>'<th><span class="pn">'+esc(p.name)+'</span>'+
+    (p.cap?'<span class="pc">'+esc(p.cap)+'</span>':'')+'</th>').join('');
+  const body=pc.groups.map(g=>
+    '<tr class="grp"><td colspan="'+(pc.packages.length+1)+'">'+esc(g.title)+'</td></tr>'+
+    (g.rows||[]).filter(r=>isClean(r.label)).map(r=>'<tr><th scope="row">'+esc(r.label)+'</th>'+
+      (r.values||[]).map(cell).join('')+'</tr>').join('')).join('');
+  return'<div class="cmpwrap"><table class="cmp"><thead><tr><th></th>'+head+'</tr></thead><tbody>'+body+'</tbody></table></div>'+
+    '<div class="cmpkey"><span><b>\u2713</b> included</span><span><b>\u2014</b> not included</span><span>text = what differs between packages</span></div>';
 }
 
 function stayTotals(q){
