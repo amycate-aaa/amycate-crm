@@ -434,8 +434,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
   </section>
   <section class="sand-band" id="downloads" style="display:none;">
     <div class="wrap">
-      <p class="eyebrow">Take It With You</p>
-      <h2 class="display">Downloads &amp; Resources</h2>
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
       <hr class="rule">
       <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
     </div>
@@ -500,7 +500,7 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
       <label><input type="checkbox" id="o-activities" checked> Activities</label>
       <label><input type="checkbox" id="o-essentials" checked> Good to know</label>
       <label><input type="checkbox" id="o-gallery" checked> Photo gallery</label>
-      <label><input type="checkbox" id="o-docs" checked> Downloads &amp; resources</label>
+      <label><input type="checkbox" id="o-docs" checked> More info</label>
       <label><input type="checkbox" id="o-group" checked> What a group gets you</label>
       <label><input type="checkbox" id="o-steps" checked> Next steps</label>
     </div>
@@ -626,15 +626,10 @@ const AGENT=(function(){var host=function(){return /(^|\.)amy-cate\.com$/i.test(
 /* ══════════════════ DOWNLOADS & RESOURCES ══════════════════
    resortProfiles.documents = [{label, url, public:true|false}] */
 function renderDownloads(){
-  const docs=(P.documents||P.docLinks||[])
-    .filter(d=>!String(d&&d.section||'').trim())
-    .filter(d=>d&&d.url&&/^https?:\/\//.test(String(d.url).trim()))
-    .filter(d=>(d.public===true||d.public==='true'||d.isPublic===true))
-    .filter(d=>isClean(d.label));
-  if(!docs.length)return[];
-  $id('dl-list').innerHTML=docs.map(d=>'<a href="'+esc(d.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span><span class="lb">'+esc(d.label)+'</span></a>').join('');
+  const html=docBtns('');
+  if(!html)return;
+  $id('dl-list').innerHTML=html;
   $id('downloads').style.display='block';
-  return docs;
 }
 
 /* ══════════════════ QUOTE STATE ══════════════════ */
@@ -844,9 +839,9 @@ function renderQuote(){
 
   /* 12 — DOWNLOADS */
   if(q.opts.docs){
-    const docs=(P.documents||P.docLinks||[]).filter(d=>!String(d&&d.section||'').trim()).filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim())&&(d.public===true||d.public==='true'||d.isPublic===true)&&isClean(d.label));
-    if(docs.length)S.push(sec('',head('Take It With You','Downloads & Resources')+
-      '<div class="dl-list" style="margin-top:34px;">'+docs.map(d=>'<a href="'+esc(d.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span><span class="lb">'+esc(d.label)+'</span></a>').join('')+'</div>'));
+    const html=docBtns('');
+    if(html)S.push(sec('',head('Everything Else','More Info')+
+      '<p class="small" style="max-width:60ch;margin:0 0 28px;">A few things worth having in hand.</p>'+html));
   }
 
   /* 13 — GALLERY */
