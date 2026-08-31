@@ -258,6 +258,13 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .stay li:last-child{border-bottom:0;}
 .stay .n{font-size:16px;color:#5A544C;}
 .stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
 .pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
 .pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
 .pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
@@ -1025,7 +1032,7 @@ function renderQuote(){
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. This is where the pricing <em>starts</em> \u2014 the entry category, so you can see the shape of it. Every resort has several room types, and once you have settled on where you are going I lay out all of them side by side so your guests can pick what suits them and what they want to spend. Rates are confirmed when you book, and held against increases if your group reaches ten rooms.</p>')
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
-        ? '<div class="price-grid">'+rows.map(r=>{
+        ? '<div class="price-grid'+((rows.length===1&&!q.needAir)?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
             // with air, the package band carries the visual — a room photo competes with it
             const img=q.needAir?'':([c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'');
