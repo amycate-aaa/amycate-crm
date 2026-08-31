@@ -139,21 +139,20 @@ tr:last-child td{border-bottom:none}
   transition:color .15s,border-color .15s;margin-bottom:-1px}
 .tabbtn[aria-selected="true"]{color:var(--gold-deep);border-bottom-color:var(--gold)}
 
-/* PKG ACCORDION */
 .pkglist{border:1px solid var(--line);border-radius:2px;overflow:hidden;background:var(--white)}
 .pkgitem{border-bottom:1px solid var(--line)}
 .pkgitem:last-child{border-bottom:none}
-.pkgtrigger{width:100%;background:none;border:none;padding:1.1rem 1.4rem;display:flex;
-  align-items:center;justify-content:space-between;cursor:pointer;text-align:left;gap:12px}
+.pkgtrigger{width:100%;background:none;border:none;padding:1rem 1.4rem;display:grid;
+  grid-template-columns:1fr auto auto;align-items:center;cursor:pointer;text-align:left;gap:16px}
 .pkgtrigger:hover{background:var(--cream-2)}
-.pkgtrigger .pname{font-family:"Cormorant Garamond",serif;font-size:1.15rem;font-weight:500;color:var(--black)}
-.pkgtrigger .pprice{font-size:.95rem;color:var(--gold-deep);font-weight:500;white-space:nowrap}
-.pkgtrigger .parrow{color:var(--muted);font-size:.8rem;transition:transform .2s;flex-shrink:0}
+.pkgtrigger .pname{font-family:"Cormorant Garamond",serif;font-size:1.1rem;font-weight:500;color:var(--black);line-height:1.2}
+.pkgtrigger .pprice{font-size:.82rem;color:var(--gold-deep);font-weight:500;text-align:right;max-width:200px;line-height:1.3}
+.pkgtrigger .parrow{color:var(--muted);font-size:.7rem;transition:transform .2s;flex-shrink:0}
 .pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg)}
-.pkgbody{display:none;padding:0 1.4rem 1.2rem;border-top:1px solid var(--line)}
+.pkgbody{display:none;padding:1rem 1.4rem 1.2rem;border-top:1px solid var(--line);background:var(--cream-2)}
 .pkgbody.open{display:block}
-.pkgsummary{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:.8rem 0 .5rem}
-.pkghi{font-size:.9rem;color:var(--soft);line-height:1.8}
+.pkgsummary{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem}
+.pkghi{font-size:.88rem;color:var(--soft);line-height:1.8}
 .pkg .price{font-size:1.1rem;color:var(--gold-deep);font-weight:500;margin-bottom:.6rem}
 .pkg .summary{font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;
   color:var(--mute);margin-bottom:.8rem}
