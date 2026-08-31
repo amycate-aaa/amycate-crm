@@ -267,6 +267,9 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
 .amybtn:hover{background:transparent;color:var(--espresso);}
 .pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px 300px 1fr;}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
 .pkgrow.solo{grid-template-columns:1fr;}
 .pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
 .pkgrow.solo .l{border-right:0;}
@@ -800,7 +803,9 @@ function renderQuote(){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
         const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
-        return'<div class="pkgrow'+(lines.length?'':' solo')+'">'+
+        const pkImg=[pk.photo,pk.photoUrl].find(photoOk)||'';
+        return'<div class="pkgrow'+(lines.length?'':' solo')+(pkImg?' haspic':'')+'">'+
+          (pkImg?'<img class="pic" src="'+esc(pkImg)+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+
           '<div class="l"><h4>'+esc(pk.name)+'</h4>'+
           (clean(pk.price)?'<p class="price">'+esc(clean(pk.price))+'</p>':'')+
           (clean(pk.summary)?'<p class="sum">'+esc(clean(pk.summary))+'</p>':'')+
