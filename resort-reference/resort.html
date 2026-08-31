@@ -581,8 +581,9 @@ async function loadResort(slug){
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
     $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
     const rests=p.restaurants||[];
+    const gMenus=allHaveMenus(rests);
     $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':r.photo||r.photoUrl||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(clean(desc)?'<p>'+esc(clean(desc))+'</p>':'')+
-      ((typeof r!=='string'&&photoOk(r.menuUrl||r.menu))?'<a class="menulink" href="'+esc(r.menuUrl||r.menu)+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+      ((gMenus&&photoOk(menuUrlOf(r)))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
       '</div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">Restaurant details coming soon.</p>';
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
@@ -828,12 +829,13 @@ function renderQuote(){
 
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
+  const showMenus=allHaveMenus(rests);
   if(q.opts.dining&&rests.length){
     S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+bandImg('dining',/dining|restaurant/i)+
       '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
         (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
         (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+
-        (photoOk(r.menuUrl||r.menu)?'<a class="menulink" href="'+esc(r.menuUrl||r.menu)+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+        ((showMenus&&photoOk(menuUrlOf(r)))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
         '</div>').join('')+'</div>'+
       (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
         return bars.length?'<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist">'+
@@ -948,6 +950,13 @@ function renderQuote(){
   qbChrome(false);
 }
 
+// Menu links are all-or-nothing. A handful of links among many restaurants
+// reads as an oversight, so they only appear once every outlet has one.
+function menuUrlOf(r){ return (r && typeof r!=='string') ? (r.menuUrl||r.menu||'') : ''; }
+function allHaveMenus(list){
+  const a=(list||[]).filter(Boolean);
+  return a.length>0 && a.every(r=>photoOk(menuUrlOf(r)));
+}
 function matchPhoto(name){
   const nm=String(name||'').toLowerCase().trim(); if(!nm)return'';
   const ok=ph=>photoOk(ph.url||ph.downloadURL);
