@@ -557,7 +557,7 @@ function num(v){const n=parseFloat(String(v==null?'':v).replace(/[^0-9.]/g,''));
 
 /* ══════════════════ SHARED STATE ══════════════════ */
 let P=null,PHOTOS=[],RESORTWIDE=[],PHOTOMAP={},SLUG='';
-const AGENT=(function(){try{const q=new URLSearchParams(location.search);if(q.get('agent')==='1'){localStorage.setItem('ac_agent','1');return true;}if(q.get('agent')==='0'){localStorage.removeItem('ac_agent');return false;}return localStorage.getItem('ac_agent')==='1';}catch(e){return false;}})();
+const AGENT=(function(){var host=function(){return /(^|\.)amy-cate\.com$/i.test(location.hostname)||location.hostname==='localhost'||location.hostname==='127.0.0.1';};try{var q=new URLSearchParams(location.search);if(q.get('agent')==='0'){localStorage.removeItem('ac_agent');return false;}if(q.get('agent')==='1'){localStorage.setItem('ac_agent','1');return true;}if(localStorage.getItem('ac_agent')==='1')return true;return host();}catch(e){return host();}})();
 
 /* ══════════════════ DOWNLOADS & RESOURCES ══════════════════
    resortProfiles.documents = [{label, url, public:true|false}] */
