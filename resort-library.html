@@ -3198,5 +3198,152 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 })();
 </script>
 
+<script>
+/* ══════════════════════════════════════════════════════════════
+   DOCUMENT LINKS  —  resortProfiles.documents[]
+   [{label:"2027 Wedding Brochure", url:"https://…", public:true}]
+   Saves on its own write (merge:true) so it never collides with
+   the main profile save or the buildSafePayload guard.
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var DOCS=[], DSLUG='';
+
+  function slugNow(){
+    return (document.getElementById('profileResort')||{}).value
+        || (document.getElementById('masterResort')||{}).value || '';
+  }
+
+  function css(){
+    if(document.getElementById('acDocCss'))return;
+    var st=document.createElement('style'); st.id='acDocCss';
+    st.textContent=[
+    '#acDocs{background:#151515;border:1px solid #333;border-radius:10px;padding:20px 22px;margin:22px 0;}',
+    '#acDocs h3{margin:0 0 4px;color:#f0c958;font-size:1.05rem;}',
+    '#acDocs .hint{color:#888;font-size:.82rem;margin:0 0 16px;line-height:1.5;}',
+    '#acDocs table{width:100%;border-collapse:collapse;}',
+    '#acDocs th{text-align:left;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#f0c958;padding:0 8px 8px 0;font-weight:600;}',
+    '#acDocs td{padding:5px 8px 5px 0;border-top:1px solid #262626;vertical-align:middle;}',
+    '#acDocs input[type=text]{width:100%;background:#0d0d0d;border:1px solid #3a3a3a;color:#e6e6e6;padding:8px 10px;border-radius:5px;font-size:.88rem;}',
+    '#acDocs input[type=text]:focus{outline:none;border-color:#f0c958;}',
+    '#acDocs .pub{display:flex;align-items:center;gap:7px;color:#bbb;font-size:.8rem;white-space:nowrap;cursor:pointer;}',
+    '#acDocs .pub input{accent-color:#27ae60;width:16px;height:16px;}',
+    '#acDocs .tagP{color:#27ae60;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;}',
+    '#acDocs .tagI{color:#e08a3c;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;}',
+    '#acDocs .x{background:none;border:1px solid #444;color:#c0392b;border-radius:5px;cursor:pointer;padding:5px 10px;font-size:.8rem;}',
+    '#acDocs .x:hover{border-color:#c0392b;}',
+    '#acDocs .bar{display:flex;gap:10px;align-items:center;margin-top:16px;flex-wrap:wrap;}',
+    '#acDocs .btn{background:#1f1f1f;border:1px solid #444;color:#ddd;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;}',
+    '#acDocs .btn.go{background:#f0c958;border-color:#f0c958;color:#111;font-weight:600;}',
+    '#acDocs .btn:hover{border-color:#f0c958;}',
+    '#acDocs .msg{font-size:.83rem;color:#27ae60;}',
+    '#acDocs .warn{color:#e08a3c;font-size:.8rem;}'
+    ].join('');
+    document.head.appendChild(st);
+  }
+
+  function mount(){
+    if(document.getElementById('acDocs'))return document.getElementById('acDocs');
+    css();
+    var d=document.createElement('div'); d.id='acDocs';
+    d.innerHTML=
+      '<h3>&#128206; Document Links</h3>'+
+      '<p class="hint">Live links from your email &mdash; when the resort updates the file, the link stays the same. '+
+      'Tick <strong>Public</strong> and it appears in &ldquo;Downloads &amp; Resources&rdquo; on the client guide and in quotes. '+
+      'Leave it unticked and it stays internal, visible only here.</p>'+
+      '<table><thead><tr><th style="width:34%">Label</th><th>URL</th><th style="width:110px">Show client?</th><th style="width:52px"></th></tr></thead>'+
+      '<tbody id="acDocRows"></tbody></table>'+
+      '<div class="bar">'+
+        '<button type="button" class="btn" id="acDocAdd">+ Add link</button>'+
+        '<button type="button" class="btn go" id="acDocSave">Save Document Links</button>'+
+        '<span class="msg" id="acDocMsg"></span>'+
+      '</div>';
+    var anchor=document.getElementById('profileSaveMsg');
+    var host=anchor?anchor.parentNode:null;
+    if(host&&host.parentNode){host.parentNode.insertBefore(d,host);}
+    else{(document.querySelector('.container')||document.body).appendChild(d);}
+    document.getElementById('acDocAdd').onclick=function(){DOCS.push({label:'',url:'',public:false});draw();};
+    document.getElementById('acDocSave').onclick=save;
+    return d;
+  }
+
+  function draw(){
+    var tb=document.getElementById('acDocRows'); if(!tb)return;
+    if(!DOCS.length){tb.innerHTML='<tr><td colspan="4" style="color:#666;font-size:.85rem;padding:14px 0;">No document links yet.</td></tr>';return;}
+    tb.innerHTML=DOCS.map(function(d,i){
+      return '<tr>'+
+        '<td><input type="text" data-i="'+i+'" data-k="label" value="'+String(d.label||'').replace(/"/g,'&quot;')+'" placeholder="2027 Wedding Brochure"></td>'+
+        '<td><input type="text" data-i="'+i+'" data-k="url" value="'+String(d.url||'').replace(/"/g,'&quot;')+'" placeholder="https://…"></td>'+
+        '<td><label class="pub"><input type="checkbox" data-i="'+i+'" data-k="public"'+(d.public?' checked':'')+'>'+
+          '<span class="'+(d.public?'tagP':'tagI')+'">'+(d.public?'Public':'Internal')+'</span></label></td>'+
+        '<td><button type="button" class="x" data-del="'+i+'">&times;</button></td></tr>';
+    }).join('');
+    tb.querySelectorAll('input').forEach(function(el){
+      el.oninput=el.onchange=function(){
+        var i=+el.dataset.i,k=el.dataset.k;
+        DOCS[i][k]= k==='public' ? el.checked : el.value;
+        if(k==='public')draw();
+      };
+    });
+    tb.querySelectorAll('[data-del]').forEach(function(b){
+      b.onclick=function(){DOCS.splice(+b.dataset.del,1);draw();};
+    });
+  }
+
+  function load(slug){
+    if(!slug)return;
+    DSLUG=slug; mount();
+    firebase.firestore().collection('resortProfiles').doc(slug).get().then(function(s){
+      var d=s.exists?(s.data()||{}):{};
+      DOCS=(d.documents||d.docLinks||[]).map(function(x){
+        return {label:String(x.label||x.name||''),url:String(x.url||x.link||''),public:x.public===true||x.public==='true'||x.isPublic===true};
+      });
+      draw();
+      var m=document.getElementById('acDocMsg');
+      if(m){m.textContent=DOCS.length?DOCS.length+' link'+(DOCS.length===1?'':'s')+' loaded':'';}
+    }).catch(function(e){console.warn('docs load',e);});
+  }
+
+  function save(){
+    var slug=slugNow()||DSLUG;
+    var m=document.getElementById('acDocMsg');
+    if(!slug){if(m){m.style.color='#c0392b';m.textContent='Pick a resort first.';}return;}
+    var out=[],bad=[];
+    DOCS.forEach(function(d){
+      var lbl=(d.label||'').trim(), url=(d.url||'').trim();
+      if(!lbl&&!url)return;
+      if(!/^https?:\/\//i.test(url)){bad.push(lbl||url);return;}
+      if(!lbl){bad.push(url);return;}
+      out.push({label:lbl,url:url,public:!!d.public});
+    });
+    if(bad.length){if(m){m.style.color='#e08a3c';m.textContent='Skipped (needs a label and an http link): '+bad.join(', ');}}
+    firebase.firestore().collection('resortProfiles').doc(slug).set({documents:out},{merge:true}).then(function(){
+      DOCS=out.slice(); draw();
+      if(m&&!bad.length){m.style.color='#27ae60';m.textContent='\u2713 Saved '+out.length+' link'+(out.length===1?'':'s')+' to '+slug;
+        setTimeout(function(){m.textContent='';},4000);}
+      if(typeof toast==='function')toast('Document links saved.','success');
+    }).catch(function(e){
+      if(m){m.style.color='#c0392b';m.textContent='Error: '+e.message;}
+      if(typeof toast==='function')toast('Error saving links: '+e.message,'error');
+    });
+  }
+
+  /* hook the existing loaders without replacing them */
+  function hook(name){
+    var orig=window[name];
+    if(typeof orig!=='function')return;
+    window[name]=function(){var r=orig.apply(this,arguments);
+      try{load(arguments[0]||slugNow());}catch(e){console.warn(e);}
+      return r;};
+  }
+  function boot(){
+    hook('loadResortProfile'); hook('onMasterResortChange');
+    mount(); draw();
+    var s=slugNow(); if(s)load(s);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,400);});
+  else setTimeout(boot,400);
+})();
+</script>
+
 </body>
 </html>
