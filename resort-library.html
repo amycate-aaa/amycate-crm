@@ -3687,5 +3687,109 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   else setTimeout(add,1300);
 })();
 </script>
+
+<script id="acGaps">
+/* "What's missing" panel — same checks as the quote actually renders.
+   Sits at the top of the profile, refreshes when you switch resort or save. */
+(function(){
+  var n = function(v){ return Array.isArray(v) ? v.length : 0; };
+  var t = function(v){ return String(v==null?'':v).trim() !== ''; };
+
+  var CHECKS = [
+    ['Description',      function(x){ return t(x.description)||t(x.overview); }, 'Core Info'],
+    ['Destination',      function(x){ return t(x.destination); }, 'Core Info'],
+    ['Hero photo',       function(x){ return t(x.heroPhoto); }, 'Photos'],
+    ['Rooms',            function(x){ return n(x.roomCategories)>=3; }, 'Rooms'],
+    ['Photo on every room', function(x){ return n(x.roomCategories)>0 &&
+        x.roomCategories.filter(function(r){return t(r.photo);}).length===n(x.roomCategories); }, 'Rooms'],
+    ['Dining',           function(x){ return n(x.restaurants)>=3; }, 'Dining'],
+    ['Bars',             function(x){ return n(x.bars)>=1; }, 'Dining'],
+    ['Pools',            function(x){ return n(x.pools)>=1; }, 'Pools'],
+    ['Venues',           function(x){ return n(x.venues)>=2; }, 'Venues'],
+    ['Packages',         function(x){ return n(x.packages)>=2; }, 'Packages'],
+    ['Inclusions on every package', function(x){ return n(x.packages)>0 &&
+        x.packages.filter(function(p){return t(p.highlights);}).length===n(x.packages); }, 'Packages'],
+    ['Comparison table', function(x){ return !!x.packageComparison; }, 'Packages'],
+    ['Age policy',       function(x){ return t(x.agePolicy); }, 'Good to know'],
+    ['Total rooms',      function(x){ return t(x.totalRooms); }, 'Good to know'],
+    ['Check-in / out',   function(x){ return t(x.checkIn)&&t(x.checkOut); }, 'Good to know'],
+    ['Airport',          function(x){ return t(x.airportDistance); }, 'Good to know'],
+    ['Activities',       function(x){ return t(x.activitiesIncluded)||t(x.activities); }, 'Core Info'],
+    ['Club level',       function(x){ return t(x.clubName)||x.clubLevelNA===true; }, 'Club Level'],
+    ['Section photos',   function(x){ return Object.keys(x.sectionPhotos||{}).length>=3; }, 'Photos'],
+    ['Real wedding',     function(x){ return t(x.realWeddingUrl); }, 'Links']
+  ];
+
+  function css(){
+    if(document.getElementById('acGapsCss'))return;
+    var st=document.createElement('style'); st.id='acGapsCss';
+    st.textContent=
+      '#acGaps{background:#FFFDF8;border:1px solid #E0D7C4;border-left:3px solid #B08D57;'
+      +'border-radius:8px;padding:16px 18px;margin:0 0 18px;font-family:system-ui,sans-serif;}'
+      +'#acGaps h4{margin:0 0 4px;font-size:.95rem;color:#2A241C;}'
+      +'#acGaps .sub{font-size:.78rem;color:#8A7C67;margin:0 0 12px;}'
+      +'#acGaps .bar{height:6px;background:#E8E0D0;border-radius:3px;overflow:hidden;margin:0 0 12px;}'
+      +'#acGaps .bar i{display:block;height:100%;background:#B08D57;}'
+      +'#acGaps ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:7px;}'
+      +'#acGaps li{font-size:.79rem;background:#F6EBD2;color:#8A6A2F;border:1px solid #E0CFA6;'
+      +'border-radius:999px;padding:4px 11px;cursor:pointer;}'
+      +'#acGaps li:hover{background:#E0CFA6;color:#2A241C;}'
+      +'#acGaps .ok{color:#2F6B4F;font-size:.86rem;font-weight:600;}';
+    document.head.appendChild(st);
+  }
+
+  function jump(label){
+    var a=[].slice.call(document.querySelectorAll('#acSideNav a.nb'))
+            .filter(function(x){return x.dataset.label===label;})[0];
+    if(a){ a.click(); return; }
+    var h=[].slice.call(document.querySelectorAll('h3'))
+            .filter(function(x){return x.textContent.indexOf(label)>-1;})[0];
+    if(h) h.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function mount(){
+    if(document.getElementById('acGaps'))return document.getElementById('acGaps');
+    css();
+    var host=document.getElementById('sec-core');
+    if(!host)return null;
+    var sec=host.closest('.upload-section'); if(!sec)return null;
+    var d=document.createElement('div'); d.id='acGaps';
+    sec.parentNode.insertBefore(d, sec);
+    return d;
+  }
+
+  async function refresh(){
+    var d=mount(); if(!d)return;
+    var slug=(document.getElementById('masterResort')||{}).value;
+    if(!slug || typeof firebase==='undefined'){ d.innerHTML='<p class="sub">Pick a resort.</p>'; return; }
+    var x;
+    try { var s=await firebase.firestore().collection('resortProfiles').doc(slug).get();
+          x=s.exists?s.data():{}; } catch(e){ return; }
+    var missing=CHECKS.filter(function(c){ try{return !c[1](x);}catch(e){return true;} });
+    var done=CHECKS.length-missing.length;
+    var pct=Math.round(done/CHECKS.length*100);
+    d.innerHTML='<h4>'+done+' of '+CHECKS.length+' done</h4>'
+      +'<p class="sub">Measured against what a client quote actually shows.</p>'
+      +'<div class="bar"><i style="width:'+pct+'%"></i></div>'
+      +(missing.length
+        ? '<ul>'+missing.map(function(c){
+            return '<li data-go="'+c[2]+'">'+c[0]+'</li>'; }).join('')+'</ul>'
+        : '<p class="ok">Nothing missing — this one is ready to quote.</p>');
+    d.querySelectorAll('li').forEach(function(li){
+      li.onclick=function(){ jump(li.dataset.go); };
+    });
+  }
+
+  window.acRefreshGaps=refresh;
+  function boot(){
+    refresh();
+    var sel=document.getElementById('masterResort');
+    if(sel && !sel.__acGapHook){ sel.addEventListener('change', function(){ setTimeout(refresh,700); });
+                                 sel.__acGapHook=1; }
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(boot,1500);});
+  else setTimeout(boot,1500);
+})();
+</script>
 </body>
 </html>
