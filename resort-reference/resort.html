@@ -1030,10 +1030,10 @@ function cmpTable(pc){
     return [m.photo,m.photoUrl].find(photoOk)||'';
   };
   const pics=pc.packages.map(p=>photoOk(p.photo)?p.photo:pkPic(p.name));
-  const anyPic=pics.some(Boolean);
-  const head=pc.packages.map((p,i)=>'<th'+(anyPic?' class="withpic"':'')+'>'+
-    (anyPic?(pics[i]?'<img class="cmppic" src="'+esc(pics[i])+'" alt="'+esc(p.name)+'" loading="lazy">'
-                   :'<span class="cmppic" style="background:var(--sand);"></span>'):'')+
+  // all or nothing — one photo among blanks looks broken
+  const allPic=pics.length>0&&pics.every(Boolean);
+  const head=pc.packages.map((p,i)=>'<th'+(allPic?' class="withpic"':'')+'>'+
+    (allPic?'<img class="cmppic" src="'+esc(pics[i])+'" alt="'+esc(p.name)+'" loading="lazy">':'')+
     '<span class="pn">'+esc(p.name)+'</span>'+
     (p.cap?'<span class="pc">'+esc(p.cap)+'</span>':'')+'</th>').join('');
   const body=pc.groups.map(g=>
