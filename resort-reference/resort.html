@@ -617,6 +617,15 @@ async function loadResort(slug){
     $id('doc-venues').innerHTML=docBtns('venues');
     (function(){const t=cmpTable(p.packageComparison);
       if(t)$id('pkg-grid').insertAdjacentHTML('afterend','<details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>');})();
+    const gBand=(key,anchorId)=>{
+      const u=[(p.sectionPhotos||{})[key]].find(photoOk)||'';
+      const el=$id(anchorId);
+      if(!u||!el||el.previousElementSibling&&el.previousElementSibling.classList&&el.previousElementSibling.classList.contains('bandimg'))return;
+      el.insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(u)+'" alt="" loading="lazy" style="margin-bottom:28px;">');
+    };
+    gBand('venues','venues-grid');
+    gBand('dining','rest-grid');
+    gBand('packages','pkg-grid');
     (function(){const gi=[(p.sectionPhotos||{}).groups].find(photoOk)||'';
       if(gi)$id('groups-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(gi)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
