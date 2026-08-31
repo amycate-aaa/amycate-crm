@@ -2359,13 +2359,18 @@ body{padding-left:210px !important;padding-bottom:56px !important}
 </style>
 <script>
 (function(){
- var SECT=[['\u270e Resort Profile','Profile'],['\ud83c\udfe0 Core Info','Core Info'],
-  ['\ud83d\udd17 Links','Links'],['\ud83c\udff7 Promotions','Promotions'],
+ // Order matches the page, top to bottom. The first value must match the
+ // <h3> text EXACTLY or the item silently does nothing.
+ var SECT=[['\u270e Resort Profile','Profile'],
+  ['\ud83c\udfe0 Core Info','Core Info'],
+  ['\ud83d\udd17 Links','Links'],
+  ['\u24d8 Good To Know','Good to know'],
+  ['\ud83c\udff7 Promotions','Promotions'],
   ['\u2728 Club Level (if applicable)','Club Level'],
   ['\ud83c\udfed Room Categories & Descriptions *','Rooms'],
+  ['\ud83d\udc8d Wedding Venues *','Venues'],
   ['\ud83c\udf7d Restaurants & Bars','Dining'],
   ['\ud83c\udf0a Pools & Beach','Pools'],
-  ['\ud83d\udc8d Wedding Venues *','Venues'],
   ['\ud83d\udc8d Wedding Packages & Pricing *','Packages'],
   ['\ud83d\udcdd Agent Notes','Agent Notes']];
 
