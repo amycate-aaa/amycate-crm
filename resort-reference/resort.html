@@ -238,6 +238,11 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
 .dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
 .cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
 .cmp{border-collapse:collapse;width:100%;min-width:860px;}
 .cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
@@ -367,9 +372,10 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
       </div>
       <div id="panel-wed">
         <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"></div>
         <p class="pkg-hint">Click any package to see full inclusions</p>
         <div class="pkglist" id="pkg-grid"></div>
-        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div class="vgrid" id="venues-grid"></div></div>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><div class="vgrid" id="venues-grid"></div></div>
       </div>
       <div id="panel-grp" hidden><div id="groups-body"></div></div>
     </div>
@@ -554,6 +560,8 @@ async function loadResort(slug){
     $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
     $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').map(clean).filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
+    $id('doc-packages').innerHTML=docBtns('packages');
+    $id('doc-venues').innerHTML=docBtns('venues');
     (function(){const t=cmpTable(p.packageComparison);
       if(t)$id('pkg-grid').insertAdjacentHTML('afterend','<details class="tuck" style="margin-top:30px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>');})();
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
@@ -619,6 +627,7 @@ const AGENT=(function(){var host=function(){return /(^|\.)amy-cate\.com$/i.test(
    resortProfiles.documents = [{label, url, public:true|false}] */
 function renderDownloads(){
   const docs=(P.documents||P.docLinks||[])
+    .filter(d=>!String(d&&d.section||'').trim())
     .filter(d=>d&&d.url&&/^https?:\/\//.test(String(d.url).trim()))
     .filter(d=>(d.public===true||d.public==='true'||d.isPublic===true))
     .filter(d=>isClean(d.label));
@@ -755,7 +764,7 @@ function renderQuote(){
   /* 5 — PACKAGES */
   const pkgs=(P.packages||[]).filter(p=>p&&p.name);
   if(pkgs.length){
-    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+
+    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
         const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
         return'<div class="pkgrow'+(lines.length?'':' solo')+'">'+
@@ -773,7 +782,7 @@ function renderQuote(){
   /* 6 — VENUES */
   const vens=(P.venues||[]).filter(v=>v&&v.name);
   if(vens.length){
-    S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+
+    S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+docBtns('venues')+
       '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
         const img=[v.photo,v.photoUrl].find(photoOk)||'';
         return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(v.name)+'" loading="lazy">':'<div style="height:190px;background:var(--sand);"></div>')+
@@ -835,7 +844,7 @@ function renderQuote(){
 
   /* 12 — DOWNLOADS */
   if(q.opts.docs){
-    const docs=(P.documents||P.docLinks||[]).filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim())&&(d.public===true||d.public==='true'||d.isPublic===true)&&isClean(d.label));
+    const docs=(P.documents||P.docLinks||[]).filter(d=>!String(d&&d.section||'').trim()).filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim())&&(d.public===true||d.public==='true'||d.isPublic===true)&&isClean(d.label));
     if(docs.length)S.push(sec('',head('Take It With You','Downloads & Resources')+
       '<div class="dl-list" style="margin-top:34px;">'+docs.map(d=>'<a href="'+esc(d.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span><span class="lb">'+esc(d.label)+'</span></a>').join('')+'</div>'));
   }
@@ -892,6 +901,19 @@ function renderQuote(){
   qbChrome(false);
 }
 
+function docsFor(section){
+  return (P.documents||P.docLinks||[])
+    .filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim()))
+    .filter(d=>(d.public===true||d.public==='true'||d.isPublic===true))
+    .filter(d=>isClean(d.label))
+    .filter(d=>(String(d.section||'').toLowerCase().trim())===section);
+}
+function docBtns(section){
+  const d=docsFor(section);
+  if(!d.length)return'';
+  return'<div class="docrow">'+d.map(x=>'<a class="docbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+
+    '<span class="ic">&#10022;</span>'+esc(x.label)+'</a>').join('')+'</div>';
+}
 function cmpTable(pc){
   if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
   const cell=v=>{
