@@ -238,6 +238,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
 .dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
 .docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
 .docbtn:hover{background:var(--gold);color:#fff;}
 .docbtn .ic{font-size:13px;color:var(--gold);}
@@ -571,7 +573,8 @@ async function loadResort(slug){
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
     const pools=p.pools||[];
-    $id('pools-grid').innerHTML=pools.length?pools.map(pl=>'<div class="pool-card"><h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>').join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
+    $id('pools-grid').innerHTML=pools.length?pools.map(pl=>{const pi=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
+      return'<div class="pool-card">'+(pi?'<img src="'+esc(pi)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+'<h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>';}).join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
     const cats=p.roomCategories||[];
     const rPhotos=photos.filter(ph=>(ph.roomCategory||'')!=='');
     $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk)||'';const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);return'<div class="rcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(clean(r.description||r.view)?'<p>'+esc(clean(r.description||r.view))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
@@ -806,9 +809,15 @@ function renderQuote(){
   /* 8 — POOLS */
   const pools=(P.pools||[]).filter(p=>p&&p.name);
   if(q.opts.pools&&pools.length){
+    const poolBand=photosByCat(/pool|beach/i).filter(u=>!pools.some(pl=>matchPhoto(pl.name)===u))[0]||photosByCat(/pool|beach/i)[0]||'';
     S.push(sec('',head('In The Water','Pools & Beach')+
-      '<div class="price-grid" style="margin-top:34px;">'+pools.map(pl=>'<div class="pcard"><div class="b"><h4>'+esc(pl.name)+'</h4>'+
-        (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+'</div></div>').join('')+'</div>'));
+      (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="Pools and beach" loading="lazy">':'')+
+      '<div class="price-grid" style="margin-top:34px;">'+pools.map(pl=>{
+        const img=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
+        return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+
+          '<div class="b"><h4>'+esc(pl.name)+'</h4>'+
+          (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+
+          '</div></div>';}).join('')+'</div>'));
   }
 
   /* 9 — CLUB LEVEL */
@@ -896,6 +905,17 @@ function renderQuote(){
   qbChrome(false);
 }
 
+function matchPhoto(name){
+  const nm=String(name||'').toLowerCase().trim(); if(!nm)return'';
+  const ok=ph=>photoOk(ph.url||ph.downloadURL);
+  let hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().trim()===nm||String(ph.roomCategory||'').toLowerCase().trim()===nm));
+  if(!hit)hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().includes(nm)||String(ph.roomCategory||'').toLowerCase().includes(nm)));
+  return hit?(hit.url||hit.downloadURL):'';
+}
+function photosByCat(re){
+  return PHOTOS.filter(ph=>photoOk(ph.url||ph.downloadURL)&&re.test(String(ph.category||'')+' '+String(ph.caption||'')))
+               .map(ph=>ph.url||ph.downloadURL);
+}
 function docsFor(section){
   return (P.documents||P.docLinks||[])
     .filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim()))
