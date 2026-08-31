@@ -240,6 +240,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
 .bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
 .pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
 .docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
 .docbtn:hover{background:var(--gold);color:#fff;}
 .docbtn .ic{font-size:13px;color:var(--gold);}
@@ -579,7 +581,9 @@ async function loadResort(slug){
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
     $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
     const rests=p.restaurants||[];
-    $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':r.photo||r.photoUrl||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(clean(desc)?'<p>'+esc(clean(desc))+'</p>':'')+'</div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">Restaurant details coming soon.</p>';
+    $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':r.photo||r.photoUrl||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(clean(desc)?'<p>'+esc(clean(desc))+'</p>':'')+
+      ((typeof r!=='string'&&photoOk(r.menuUrl||r.menu))?'<a class="menulink" href="'+esc(r.menuUrl||r.menu)+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+      '</div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">Restaurant details coming soon.</p>';
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
     const pools=p.pools||[];
@@ -828,7 +832,9 @@ function renderQuote(){
     S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+bandImg('dining',/dining|restaurant/i)+
       '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
         (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
-        (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+'</div>').join('')+'</div>'+
+        (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+
+        (photoOk(r.menuUrl||r.menu)?'<a class="menulink" href="'+esc(r.menuUrl||r.menu)+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+        '</div>').join('')+'</div>'+
       (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
         return bars.length?'<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist">'+
           bars.map(b=>'<div class="bl"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div>').join('')+
