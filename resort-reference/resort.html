@@ -287,6 +287,14 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .ga-card .i{font-size:22px;margin:0 0 12px;}
 .ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
 .ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
 .tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
 .tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
 .tuck summary::-webkit-details-marker{display:none;}
@@ -565,7 +573,7 @@ async function loadResort(slug){
     $id('doc-packages').innerHTML=docBtns('packages');
     $id('doc-venues').innerHTML=docBtns('venues');
     (function(){const t=cmpTable(p.packageComparison);
-      if(t)$id('pkg-grid').insertAdjacentHTML('afterend','<details class="tuck" style="margin-top:30px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>');})();
+      if(t)$id('pkg-grid').insertAdjacentHTML('afterend','<details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>');})();
     (function(){const gi=[(p.sectionPhotos||{}).groups].find(photoOk)||'';
       if(gi)$id('groups-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(gi)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
@@ -780,7 +788,7 @@ function renderQuote(){
             lines.map(h=>'<p>&#10022;&nbsp;&nbsp;'+esc(h)+'</p>').join('')+'</div></div>':'')+
           '</div>';}).join('')+'</div>'+
       (function(){const t=cmpTable(P.packageComparison);
-        return t?'<details class="tuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>':'';})()));
+        return t?'<details class="tuck cmptuck" style="margin-top:38px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>':'';})()));
   }
 
   /* 6 — VENUES */
