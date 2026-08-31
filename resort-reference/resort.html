@@ -1074,6 +1074,11 @@ function docsFor(section){
 // re-typing them as document links.
 function autoDocs(section){
   const out=[];
+  if(section==='venues' && photoOk(P.realWeddingUrl)){
+    const who=clean(P.realWeddingNames);
+    out.push({label: who ? (who+' \u2014 a real wedding here') : 'See a real wedding here',
+              url: P.realWeddingUrl});
+  }
   if(section===''){
     if(photoOk(P.bookingLink)) out.push({label:'Resort Info at Destination Weddings',url:P.bookingLink});
     if(photoOk(P.galleryLink)) out.push({label:'Photo Gallery',url:P.galleryLink});
