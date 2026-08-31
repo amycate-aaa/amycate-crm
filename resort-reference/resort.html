@@ -1045,7 +1045,9 @@ function downloadQuote(){
   if(!$id('quote-page').innerHTML)renderQuote();
   const q=collectQ();
   const css=document.querySelector('style').outerHTML;
-  const fonts='<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">';
+  const fonts=[...document.querySelectorAll('link[rel="stylesheet"],link[rel="preconnect"]')]
+    .map(l=>l.outerHTML).join('')
+    ||'<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">';
   const title=(q.couple?q.couple+' \u00b7 ':'')+(P.resortName||P.name||'Quote');
   const html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+
     title+'</title>'+fonts+css+'<style>#quote-page{display:block!important;}</style></head><body><div id="quote-page">'+
