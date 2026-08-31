@@ -1027,7 +1027,8 @@ function renderQuote(){
       (priced
         ? '<div class="price-grid">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
-            const img=[c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'';
+            // with air, the package band carries the visual — a room photo competes with it
+            const img=q.needAir?'':([c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'');
             const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Sleeps up to '+c.maxOccupancy:null,c.swimOut?'Swim-out':null].filter(Boolean).join(' \u00b7 ');
             return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
