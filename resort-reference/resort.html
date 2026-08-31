@@ -197,6 +197,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
 .flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
 .flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
 @media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
 .qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
 #q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
@@ -563,7 +565,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <p class="qb-h">Flights</p>
     <label class="airtoggle"><input type="checkbox" id="q-needair" onchange="toggleAir()"> This group needs air</label>
     <div id="q-airbox" style="display:none;">
-      <p class="qb-note">One row per departure city. Type the flight number and date, press Look up, and the airports and times fill themselves.</p>
+      <p class="qb-note">One row per flight. Type the flight number and date, press Look up, and the airports and times fill themselves. For a connection, add another row with the <em>same</em> city name and the quote shows them as legs of one journey.</p>
       <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
         <th style="min-width:130px;">Who / city</th><th style="width:110px;">Flight</th><th style="width:130px;">Date</th>
         <th style="width:80px;">From</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
@@ -937,17 +939,19 @@ function renderQuote(){
     if(!rows.length)return;
     const anyFl=rows.some(r=>r.flight), anyRt=rows.some(r=>r.from||r.to), anyTm=rows.some(r=>r.dep||r.arr);
     S.push(sec('',head('Getting There','Flights')+
-      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Everyone is coming from somewhere different, so here is each routing side by side. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
+      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
       '<table class="flighttbl"><thead><tr>'+
       '<th>Departing from</th>'+(anyFl?'<th>Flight</th>':'')+'<th>Date</th>'+
       (anyRt?'<th>Route</th>':'')+(anyTm?'<th>Departs</th><th>Arrives</th>':'')+
       '</tr></thead><tbody>'+
-      rows.map(r=>'<tr><td class="city">'+esc(r.who||'\u2014')+'</td>'+
+      rows.map((r,i)=>{
+        const same=i>0 && String(rows[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
+        return '<tr'+(same?' class="leg"':'')+'><td class="city">'+(same?'':esc(r.who||'\u2014'))+'</td>'+
         (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
         '<td>'+esc(r.date||'\u2014')+'</td>'+
         (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
         (anyTm?'<td>'+esc(r.dep||'\u2014')+'</td><td>'+esc(r.arr||'\u2014')+'</td>':'')+
-        '</tr>').join('')+'</tbody></table>'+
+        '</tr>';}).join('')+'</tbody></table>'+
       '<p class="small" style="margin-top:22px;">Nothing here is ticketed yet. Once you are ready I hold the seats, and I book everyone\u2019s flights alongside their rooms so it is one conversation rather than five.</p>'));
   })();
 
