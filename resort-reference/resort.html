@@ -771,12 +771,15 @@ function renderQuote(){
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   let ROOMS='';
   const allCats=(P.roomCategories||[]).filter(c=>c&&c.name);
-  const rows=q.prices.length?q.prices:allCats.map(c=>({name:c.name,ppn:''}));
+  const priceMap={}; q.prices.forEach(r=>{priceMap[String(r.name||'').toLowerCase().trim()]=r.ppn;});
+  const rows=allCats.length
+    ? allCats.map(c=>({name:c.name,ppn:priceMap[String(c.name||'').toLowerCase().trim()]||''}))
+    : q.prices;
   if(rows.length){
     const cats=allCats;
     ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+bandImg('rooms')+
       (priced
-        ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement.</p>'
+        ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement. Categories without a figure are available too; tell me which ones interest you and I will price them.</p>'
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every suite has a private balcony or terrace. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 I\u2019ll price whichever categories you want once we know your dates.</p>')+
       (priced
         ? '<div class="price-grid">'+rows.map(r=>{
