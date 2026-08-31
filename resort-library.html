@@ -2940,7 +2940,43 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   +'b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});'
   +'if(location.hash==="#groups"){sel("tab-grp");}})();\n<\/script>\n\n'
   +'<footer><div class="wrap">\n  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>\n'
-  +'  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>\n</div></footer>\n\n</body>\n</html>\n';
+  +'  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>\n</div></footer>\n\n
+<script id="acUploadJump">
+/* Big Upload Photos button pinned to the bottom of the sidebar. Scrolls to the
+   drop zone and opens the file picker, so uploading never means hunting. */
+(function(){
+  function add(){
+    var nav=document.getElementById('acSideNav');
+    if(!nav||document.getElementById('acUploadBtn'))return;
+    var st=document.createElement('style');
+    st.textContent=
+      '#acUploadBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
+      +'background:#B08D57;color:#fff;border:0;border-top:1px solid #9C7B48;'
+      +'padding:15px 14px;font-family:system-ui,sans-serif;font-size:.86rem;font-weight:600;'
+      +'letter-spacing:.03em;cursor:pointer;text-align:center;z-index:9998;}'
+      +'#acUploadBtn:hover{background:#9C7B48;}'
+      +'#acUploadBtn small{display:block;font-weight:400;font-size:.68rem;opacity:.85;margin-top:2px;}'
+      +'@media(max-width:900px){#acUploadBtn{display:none;}}';
+    document.head.appendChild(st);
+    var b=document.createElement('button');
+    b.id='acUploadBtn'; b.type='button';
+    b.innerHTML='\uD83D\uDCF7 Upload Photos<small>drop or browse</small>';
+    b.onclick=function(){
+      var dz=document.getElementById('dropZone');
+      if(!dz){return;}
+      dz.scrollIntoView({behavior:'smooth',block:'center'});
+      dz.style.transition='box-shadow .3s';
+      dz.style.boxShadow='0 0 0 3px #B08D57';
+      setTimeout(function(){dz.style.boxShadow='';},1600);
+      setTimeout(function(){var f=document.getElementById('fileInput'); if(f)f.click();},650);
+    };
+    document.body.appendChild(b);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1200);});
+  else setTimeout(add,1200);
+})();
+</script>
+</body>\n</html>\n';
  }
 
  function card(slug,a){
