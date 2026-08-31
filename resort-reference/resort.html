@@ -936,17 +936,19 @@ function renderQuote(){
     const poolBand=sectionPhoto('pools');
     const poolPics=pools.map(pl=>[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'');
     const allPools=poolPics.every(Boolean);   // all or nothing — a half-illustrated list looks unfinished
+    const poolTxt=pools.map(pl=>clean(pl.features||pl.description));
+    const allPoolTxt=poolTxt.every(Boolean);  // same for descriptions
     S.push(sec('',head('In The Water','Pools & Beach')+
       (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="" loading="lazy">':'')+
       (allPools
         ? '<div class="price-grid" style="margin-top:34px;">'+pools.map((pl,i)=>
             '<div class="pcard"><img src="'+esc(poolPics[i])+'" alt="'+esc(pl.name)+'" loading="lazy">'+
             '<div class="b"><h4>'+esc(pl.name)+'</h4>'+
-            (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+
+            (allPoolTxt?'<p class="desc">'+esc(poolTxt[i])+'</p>':'')+
             '</div></div>').join('')+'</div>'
-        : '<div class="dinelist" style="margin-top:34px;">'+pools.map(pl=>
+        : '<div class="dinelist" style="margin-top:34px;">'+pools.map((pl,i)=>
             '<div class="d"><h4>'+esc(pl.name)+'</h4>'+
-            (clean(pl.features||pl.description)?'<p>'+esc(clean(pl.features||pl.description))+'</p>':'')+
+            (allPoolTxt?'<p>'+esc(poolTxt[i])+'</p>':'')+
             '</div>').join('')+'</div>')));
   }
 
