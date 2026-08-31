@@ -3823,10 +3823,10 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
     if(document.getElementById('acSecPicCss'))return;
     var st=document.createElement('style'); st.id='acSecPicCss';
     st.textContent=
-      '.acSecPic{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:10px 12px;'
-      +'background:#F3EEE3;border:1px solid #DCD2BF;border-radius:6px;}'
-      +'.acSecPic img{width:76px;height:52px;object-fit:cover;border-radius:4px;border:1px solid #DCD2BF;}'
-      +'.acSecPic .none{width:76px;height:52px;border-radius:4px;border:1px dashed #C9BCA2;}'
+      '.acSecPic{margin:0 0 16px;padding:12px;background:#F3EEE3;border:1px solid #DCD2BF;border-radius:6px;}'
+      +'.acSecPic img{width:100%;height:150px;object-fit:cover;border-radius:4px;border:1px solid #DCD2BF;display:block;}'
+      +'.acSecPic .none{width:100%;height:150px;border-radius:4px;border:1px dashed #C9BCA2;display:block;}'
+      +'.acSecPic .bar{display:flex;align-items:center;gap:12px;margin-top:10px;}'
       +'.acSecPic .lbl{flex:1;font-size:.82rem;color:#5C5347;font-family:system-ui,sans-serif;}'
       +'.acSecPic button{background:#B08D57;color:#fff;border:0;border-radius:6px;padding:8px 15px;'
       +'font-size:.82rem;font-weight:600;cursor:pointer;font-family:system-ui,sans-serif;}'
@@ -3875,10 +3875,11 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
                 h.parentNode.insertBefore(row, h.nextSibling); }
       var u=sp[cfg[1]]||'';
       row.innerHTML=(u?'<img src="'+u+'" alt="">':'<div class="none"></div>')
-        +'<span class="lbl">'+(u?'Banner photo for '+cfg[2]+' on the guide and quote'
-                                :'No banner photo yet for '+cfg[2])+'</span>'
+        +'<div class="bar"><span class="lbl">'
+        +(u?'Banner photo for '+cfg[2]+' \u2014 shown full width on the guide and quote'
+           :'No banner photo yet for '+cfg[2])+'</span>'
         +'<button type="button">'+(u?'Change':'Choose photo')+'</button>'
-        +(u?'<button type="button" class="clr">Clear</button>':'');
+        +(u?'<button type="button" class="clr">Clear</button>':'')+'</div>';
       row.querySelectorAll('button')[0].onclick=function(){ pick(cfg[1]); };
       if(u) row.querySelector('.clr').onclick=function(){ save(cfg[1],''); };
     });
