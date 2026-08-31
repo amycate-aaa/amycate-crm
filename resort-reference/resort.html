@@ -651,9 +651,8 @@ async function loadResort(slug){
     }else{$id('act-grid').innerHTML='<p class="empty">Activities details coming soon.</p>';}
     const essBlocks=[];
     const facItems=[];
-    if(p.checkIn)facItems.push({lbl:'Check-in',val:p.checkIn});if(p.checkOut)facItems.push({lbl:'Check-out',val:p.checkOut});if(p.resortFee)facItems.push({lbl:'Resort Fee',val:p.resortFee});if(p.totalRooms)facItems.push({lbl:'Total Rooms',val:p.totalRooms});if(p.airportDistance||p.airport)facItems.push({lbl:'Airport',val:p.airportDistance||p.airport});if(p.yearBuilt)facItems.push({lbl:'Year Built',val:p.yearBuilt});
+    if(p.checkIn)facItems.push({lbl:'Check-in',val:p.checkIn});if(p.checkOut)facItems.push({lbl:'Check-out',val:p.checkOut});if(p.totalRooms)facItems.push({lbl:'Total Rooms',val:p.totalRooms});if(p.airportDistance||p.airport)facItems.push({lbl:'Airport',val:p.airportDistance||p.airport});if(p.yearBuilt)facItems.push({lbl:'Year Built',val:p.yearBuilt});
     if(facItems.length)essBlocks.push({title:'At a Glance',items:facItems});
-    if(clean(p.dressCodes))essBlocks.push({title:'Dress Codes',text:clean(p.dressCodes)});
     if(clean(p.facilityNotes))essBlocks.push({title:'Resort Notes',text:clean(p.facilityNotes)});
     if(p.romanticDining||p.romanticNotes)essBlocks.push({title:'Romantic & Private Dining',items:(p.romanticDining||p.romanticNotes).split(' · ').filter(Boolean).map(r=>({val:r.trim()}))});
     if(p.excursions||p.excursionNotes)essBlocks.push({title:'Excursions',items:(p.excursions||p.excursionNotes).split(' · ').filter(Boolean).map(e=>({val:e.trim()}))});
@@ -928,7 +927,6 @@ function renderQuote(){
         return bars.length?'<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist">'+
           bars.map(b=>'<div class="bl"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div>').join('')+
         '</div></div>':'';})()+
-      (clean(P.dressCodes)?'<div class="note-box"><p><strong>Dress codes.</strong> '+esc(clean(P.dressCodes))+'</p></div>':'')+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
 
@@ -972,7 +970,7 @@ function renderQuote(){
 
   /* 11 — GOOD TO KNOW */
   if(q.opts.essentials){
-    const f=[['Check-in',P.checkIn],['Check-out',P.checkOut],['Resort fee',P.resortFee],['Total rooms',P.totalRooms],
+    const f=[['Check-in',P.checkIn],['Check-out',P.checkOut],['Total rooms',P.totalRooms],
       ['Airport',P.airportDistance||P.airport],['Opened',P.yearBuilt],['Ages',P.agePolicy]].filter(x=>clean(x[1]));
     const notes=clean(P.facilityNotes);
     if(f.length||notes)S.push(sec('sand-band',head('The Practical Part','Good To Know')+
