@@ -230,6 +230,12 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
 .mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
 .mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
 .mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
 .note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
 .note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
@@ -1107,10 +1113,13 @@ function stayTotals(q){
   if(!r)return'';
   const v=num(r.ppn);
   const f=x=>'$'+x.toLocaleString('en-US',{maximumFractionDigits:0});
+  const nights=[3,4,5,7];
   return'<div class="mathbox"><h4>What that looks like for a stay</h4>'+
     '<p>'+esc(r.name)+' at <strong>'+money(r.ppn)+'</strong> per person, per night:</p>'+
-    '<p class="big">Three nights &rarr; <strong>'+f(v*3)+'</strong> &nbsp;\u00b7&nbsp; Four nights &rarr; <strong>'+f(v*4)+'</strong> &nbsp;\u00b7&nbsp; Five nights &rarr; <strong>'+f(v*5)+'</strong></p>'+
-    '<p style="font-size:15.5px;color:#6E665C;margin-top:14px;">Per person \u2014 so the two of you sharing a room doubles those figures.</p></div>';
+    '<ul class="stay">'+nights.map(nn=>'<li><span class="n">'+nn+' nights</span><span class="v">'+f(v*nn)+'</span></li>').join('')+'</ul>'+
+    '<p style="font-size:15.5px;color:#6E665C;margin-top:16px;">Per person \u2014 so the two of you sharing a room doubles those figures.</p>'+
+    '<p class="notquote">This is an idea, not a quote. Nothing is held and nothing is booked. Real rates come from the resort in your group agreement, and I will put the actual numbers in front of you before you decide anything.</p>'+
+    '</div>';
 }
 
 function splitActs(){
