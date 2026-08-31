@@ -365,13 +365,13 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <a href="#sec-links" onclick="jumpTo(event,'sec-links')">Links</a>
       <a href="#acDocs" onclick="jumpTo(event,'acDocs')">Documents</a>
       <a href="#sec-goodtoknow" onclick="jumpTo(event,'sec-goodtoknow')">Good to know</a>
-      <a href="#sec-activities" onclick="jumpTo(event,'sec-activities')">Activities</a>
       <a href="#sec-venues" onclick="jumpTo(event,'sec-venues')">Venues</a>
       <a href="#sec-packages" onclick="jumpTo(event,'sec-packages')">Packages</a>
       <a href="#sec-dining" onclick="jumpTo(event,'sec-dining')">Dining</a>
       <a href="#sec-pools" onclick="jumpTo(event,'sec-pools')">Pools</a>
       <a href="#sec-rooms" onclick="jumpTo(event,'sec-rooms')">Rooms</a>
       <a href="#sec-club" onclick="jumpTo(event,'sec-club')">Club Level</a>
+      <a href="#sec-activities" onclick="jumpTo(event,'sec-activities')">Activities</a>
       <a href="#sec-promos" onclick="jumpTo(event,'sec-promos')">Promos</a>
       <a href="#sec-photos" onclick="jumpTo(event,'sec-photos')">Photos</a>
     </div>
@@ -2395,18 +2395,19 @@ body{padding-left:210px !important;padding-bottom:56px !important}
 (function(){
  // Order matches the page, top to bottom. The first value must match the
  // <h3> text EXACTLY or the item silently does nothing.
+ // Order follows the page, top to bottom. First value must match the <h3> text EXACTLY.
  var SECT=[['\u270e Resort Profile','Profile'],
   ['\ud83c\udfe0 Core Info','Core Info'],
   ['\ud83d\udd17 Links','Links'],
   ['\ud83d\udcce Document Links','Documents'],
   ['\u24d8 Good To Know','Good to know'],
-  ['\ud83c\udfc3 Activities','Activities'],
   ['\ud83d\udc8d Wedding Venues *','Venues'],
   ['\ud83d\udc8d Wedding Packages & Pricing *','Packages'],
   ['\ud83c\udf7d Restaurants & Bars','Dining'],
   ['\ud83c\udf0a Pools & Beach','Pools'],
   ['\ud83c\udfed Room Categories & Descriptions *','Rooms'],
   ['\u2728 Club Level (if applicable)','Club Level'],
+  ['\ud83c\udfc3 Activities','Activities'],
   ['\ud83c\udff7 Promotions','Promotions'],
   ['\ud83d\udcdd Agent Notes','Agent Notes']];
 
@@ -3659,8 +3660,8 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
    the underlying save is not per-section — but having it where you finish typing
    means you don't scroll away and lose the edit. */
 (function(){
-  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-activities','sec-venues','sec-packages',
-            'sec-dining','sec-pools','sec-rooms','sec-club','sec-promos'];
+  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-venues','sec-packages',
+            'sec-dining','sec-pools','sec-rooms','sec-club','sec-activities','sec-promos'];
   function mainSaveBtn(){
     return [].slice.call(document.querySelectorAll('button')).filter(function(b){
       return /Save Profile/i.test(b.textContent) && b.id!=='acSaveBarBtn'
