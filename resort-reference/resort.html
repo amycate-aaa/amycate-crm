@@ -413,12 +413,15 @@ async function loadResort(slug){
       return best?best.url:'';
     }
 
-    // Gallery photos (non-room)
+    // Gallery photos — all photos for this resort
     const galleryPhotos=photos.filter(ph=>{
       const cat=(ph.category||'').toLowerCase();
       const rcat=(ph.roomCategory||'').toLowerCase();
-      return cat!=='rooms & suites'&&cat!=='room'&&!rcat;
+      // Include everything EXCEPT room suite photos (those go in rooms section)
+      return cat!=='rooms & suites'&&cat!=='room'&&rcat==='';
     });
+    // If no non-room photos, use ALL photos for gallery
+    const galPhotosToShow = galleryPhotos.length ? galleryPhotos : photos;
 
     // ── SET PAGE TITLE ──
     document.title=p.resortName||p.name||'Resort Reference';
@@ -591,10 +594,9 @@ async function loadResort(slug){
 
     // ── GALLERY ──
     const galGrid=$('gallery-grid');
-    const galPhotos=galleryPhotos.length?galleryPhotos:photos.slice(0,40);
-    if(galPhotos.length){
-      galGrid.innerHTML=galPhotos.map(ph=>`<figure class="gal">
-        <img src="${esc(ph.url||ph.downloadURL)}" alt="" loading="lazy">
+    if(galPhotosToShow.length){
+      galGrid.innerHTML=galPhotosToShow.map(ph=>`<figure class="gal">
+        <img src="${esc(ph.url||ph.downloadURL)}" alt="${esc(ph.caption||ph.roomCategory||ph.category||'')}" loading="lazy">
       </figure>`).join('');
     } else if(p.photos&&p.photos.length){
       galGrid.innerHTML=p.photos.map(url=>`<figure class="gal">
