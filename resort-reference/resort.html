@@ -246,6 +246,7 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
       <a href="#pools">Pools</a>
       <a href="#planning">Planning</a>
       <a href="#activities">Activities</a>
+      <a href="#essentials">Essentials</a>
       <a href="#gallery">Gallery</a>
     </div>
   </nav>
@@ -334,6 +335,39 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
       <div id="activities-body"></div>
     </div></section>
 
+    <!-- ESSENTIALS -->
+    <section id="essentials"><div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2>Resort Essentials</h2>
+      <div style="display:grid;gap:clamp(20px,4vw,40px);grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+        
+        <!-- DRESS CODES -->
+        <div id="dress-block">
+          <div class="subhead" style="margin-top:0">Dress Codes</div>
+          <div id="dress-body"></div>
+        </div>
+
+        <!-- RESORT FACILITIES -->
+        <div id="facilities-block">
+          <div class="subhead" style="margin-top:0">Resort Facilities</div>
+          <div id="facilities-body"></div>
+        </div>
+
+        <!-- ROMANTIC DINING -->
+        <div id="romantic-block">
+          <div class="subhead" style="margin-top:0">Romantic & Private Dining</div>
+          <div id="romantic-body"></div>
+        </div>
+
+        <!-- EXCURSIONS -->
+        <div id="excursions-block">
+          <div class="subhead" style="margin-top:0">Excursions & Adventures</div>
+          <div id="excursions-body"></div>
+        </div>
+
+      </div>
+    </div></section>
+
     <!-- GALLERY -->
     <section id="gallery"><div class="wrap">
       <p class="eyebrow">The Resort</p>
@@ -344,8 +378,21 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
   </main>
 
   <footer><div class="wrap">
-    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel · amy.cate@destinationweddings.com</p>
-    <p>Details drawn from the resort's published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+    <div style="display:grid;gap:clamp(24px,4vw,40px);grid-template-columns:1fr auto;align-items:end;margin-bottom:2rem">
+      <div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;color:var(--black);margin-bottom:.3rem">Ready to make it yours?</p>
+        <p style="color:var(--soft);max-width:44ch">I'd love to help you plan every detail. Reach out and let's start building your perfect destination experience.</p>
+      </div>
+      <div style="text-align:right">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:500;color:var(--black)">Amy Cate</p>
+        <p style="font-size:.82rem;color:var(--muted)">Certified Destination Wedding &amp; Group Travel Specialist</p>
+        <p style="font-size:.82rem;color:var(--muted)">Destination Weddings Travel Group &amp; Celebration Travel</p>
+        <a href="mailto:amy.cate@destinationweddings.com" style="font-size:.85rem;color:var(--gold-deep);text-decoration:none;display:block;margin-top:.3rem">amy.cate@destinationweddings.com</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--line);padding-top:1rem">
+      <p style="font-size:.78rem;color:var(--muted)">Details drawn from the resort's published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+    </div>
   </div></footer>
 </div>
 
@@ -658,6 +705,50 @@ async function loadResort(slug){
       resortPhotoStrip.style.display='flex';
     }
     const galGrid=$('gallery-grid');
+
+    // ── DRESS CODES ──
+    const dressBody=$('dress-body');
+    if(p.dressCodes||p.diningNotes){
+      const text=p.dressCodes||p.diningNotes||'';
+      dressBody.innerHTML=`<div class="prose"><p style="font-size:.9rem;color:var(--soft)">${esc(text)}</p></div>`;
+    } else { $('dress-block').style.display='none'; }
+
+    // ── RESORT FACILITIES ──
+    const facBody=$('facilities-body');
+    const facs=[];
+    if(p.checkIn) facs.push({label:'Check-in',val:p.checkIn});
+    if(p.checkOut) facs.push({label:'Check-out',val:p.checkOut});
+    if(p.resortFee) facs.push({label:'Resort Fee',val:p.resortFee});
+    if(p.totalRooms) facs.push({label:'Total Rooms',val:p.totalRooms});
+    if(p.airportDistance||p.airport) facs.push({label:'Airport',val:p.airportDistance||p.airport});
+    if(p.yearBuilt||p.yearRenovated) facs.push({label:'Built / Renovated',val:[p.yearBuilt,p.yearRenovated].filter(Boolean).join(' / ')});
+    if(p.facilityNotes||p.extrasNotes){
+      const extraText=p.facilityNotes||p.extrasNotes||'';
+      extraText.split(' · ').filter(Boolean).slice(0,6).forEach(e=>facs.push({label:'',val:e.trim()}));
+    }
+    if(facs.length){
+      facBody.innerHTML=`<ul style="list-style:none;padding:0">${facs.map(f=>`
+        <li style="padding:.4rem 0;border-bottom:1px solid var(--line);display:flex;gap:.8rem;font-size:.88rem">
+          ${f.label?`<span style="color:var(--muted);min-width:90px;flex-shrink:0">${esc(f.label)}</span>`:'<span style="min-width:90px;flex-shrink:0"></span>'}
+          <span style="color:var(--soft)">${esc(f.val)}</span>
+        </li>`).join('')}</ul>`;
+    } else { $('facilities-block').style.display='none'; }
+
+    // ── ROMANTIC DINING ──
+    const romBody=$('romantic-body');
+    if(p.romanticDining||p.romanticNotes){
+      const text=p.romanticDining||p.romanticNotes||'';
+      romBody.innerHTML=text.split(' · ').filter(Boolean).map(r=>`<p style="padding:.4rem 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:.88rem">✦ ${esc(r.trim())}</p>`).join('');
+    } else { $('romantic-block').style.display='none'; }
+
+    // ── EXCURSIONS ──
+    const excBody=$('excursions-body');
+    if(p.excursions||p.excursionNotes){
+      const text=p.excursions||p.excursionNotes||'';
+      excBody.innerHTML=`<ul style="list-style:none;padding:0">${text.split(' · ').filter(Boolean).map(e=>`<li style="padding:.4rem 0;border-bottom:1px solid var(--line);color:var(--soft);font-size:.88rem;display:flex;gap:.6rem"><span style="color:var(--gold-deep);flex-shrink:0">→</span>${esc(e.trim())}</li>`).join('')}</ul>`;
+    } else { $('excursions-block').style.display='none'; }
+
+    // ── GALLERY ──
     if(galPhotosToShow.length){
       galGrid.innerHTML=galPhotosToShow.map(ph=>`<figure class="gal">
         <img src="${esc(ph.url||ph.downloadURL)}" alt="${esc(ph.caption||ph.roomCategory||ph.category||'')}" loading="lazy">
