@@ -962,16 +962,19 @@ function openVenuePhotoPicker(inputEl) {
     .then(snap => {
       const photos = snap.docs.map(d => d.data()).filter(p => p.url || p.downloadURL);
       if (!photos.length) { grid.innerHTML = '<div style="color:#888;padding:20px;">No photos uploaded for this resort yet.</div>'; return; }
+      grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(190px,1fr))';
+      grid.style.gap = '12px';
       grid.innerHTML = photos.map(p => {
         const url = p.url || p.downloadURL;
         const cap = p.caption || p.category || '';
         const safeUrl = url.replace(/'/g,"\\'");
-        return `<div onclick="selectVenuePhoto('${safeUrl}',this)" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .15s;background:#2a2a2a;" title="${cap}">
-          <div style="position:relative;height:90px;background:#222;">
-            <img src="${url}" style="width:100%;height:90px;object-fit:cover;display:block;position:absolute;inset:0;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-            <div style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:1.5rem;">🏖</div>
+        // a photo that fails to load removes its own tile, so no blank gaps
+        return `<div onclick="selectVenuePhoto('${safeUrl}',this)" style="cursor:pointer;border-radius:8px;overflow:hidden;border:2px solid transparent;transition:border .15s;background:#F3EEE3;" title="${cap}">
+          <div style="height:140px;background:#E8E0D0;">
+            <img src="${url}" style="width:100%;height:140px;object-fit:cover;display:block;"
+                 onerror="this.closest('div[onclick]').remove()">
           </div>
-          <div style="font-size:.7rem;color:#ccc;padding:4px 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#1a1a1a;">${cap || 'Photo'}</div>
+          <div style="font-size:.76rem;color:#3B342E;padding:7px 9px;line-height:1.35;background:#FFFDF8;min-height:34px;">${cap || 'Untitled'}</div>
         </div>`;
       }).join('');
     })
