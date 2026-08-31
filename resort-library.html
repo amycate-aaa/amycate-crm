@@ -1173,7 +1173,7 @@ function getRoomCategories() {
 // (or two tabs) had the same resort open, the last save silently wiped the
 // other's work. Now we write only the parts THIS person actually changed, and
 // warn if someone else changed the same part while the form was open.
-const SECTION_FIELDS = ['restaurants','venues','packages','roomCategories'];
+const SECTION_FIELDS = ['restaurants','pools','venues','packages','roomCategories'];
 const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','ctUrl',
   'galleryLink','notes','weddingUrl','realWeddingUrl','realWeddingNames',
   'clubLevelName','clubName','clubLevelPerks','clubPerks','weddingGuide',
@@ -1229,7 +1229,7 @@ function buildSafePayload(data, fresh, slug) {
     if (check(f, nowVal, (fresh[f]==null?'':String(fresh[f])))) payload[f] = data[f];
   });
   if (clashes.length) {
-    const pretty = {restaurants:'Dining',venues:'Venues',packages:'Wedding Packages',
+    const pretty = {restaurants:'Dining',pools:'Pools',venues:'Venues',packages:'Wedding Packages',
                     roomCategories:'Room Categories'};
     const names = clashes.map(c => pretty[c] || c).join(', ');
     if (!confirm('Someone else changed this resort while you had it open.\n\n' +
