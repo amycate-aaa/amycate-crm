@@ -645,6 +645,7 @@ const AGENT=(function(){var host=function(){return /(^|\.)amy-cate\.com$/i.test(
 function renderDownloads(){
   const html=docBtns('');
   if(!html)return;
+  
   $id('dl-list').innerHTML=html;
   $id('downloads').style.display='block';
 }
@@ -951,8 +952,25 @@ function docsFor(section){
     .filter(d=>isClean(d.label))
     .filter(d=>(String(d.section||'').toLowerCase().trim())===section);
 }
+// Links already on the profile that should always surface, without Amy
+// re-typing them as document links.
+function autoDocs(section){
+  const out=[];
+  if(section===''){
+    if(photoOk(P.bookingLink)) out.push({label:'Resort Info at Destination Weddings',url:P.bookingLink});
+    if(photoOk(P.galleryLink)) out.push({label:'Photo Gallery',url:P.galleryLink});
+  }
+  if(section==='packages'){
+    if(photoOk(P.weddingUrl)) out.push({label:'Wedding Details at Destination Weddings',url:P.weddingUrl});
+  }
+  return out;
+}
 function docBtns(section){
-  const d=docsFor(section);
+  const seen={};
+  const d=docsFor(section).concat(autoDocs(section)).filter(x=>{
+    const k=String(x.url||'').trim().replace(/\/+$/,'').toLowerCase();
+    if(!k||seen[k])return false; seen[k]=1; return true;
+  });
   if(!d.length)return'';
   return'<div class="docrow">'+d.map(x=>'<a class="docbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+
     '<span class="ic">&#10022;</span>'+esc(x.label)+'</a>').join('')+'</div>';
