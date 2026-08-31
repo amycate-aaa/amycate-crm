@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hard Rock Hotel &amp; Casino Punta Cana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="https://assets.milestoneinternet.com/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/sun-pool2.jpg?width=1920&amp;height=1080" alt="Hard Rock Hotel &amp; Casino Punta Cana">
+  <div class="wrap">
+    <p class="eyebrow light">Punta Cana, Dominican Republic</p>
+    <h1>Hard Rock Hotel &amp; Casino Punta Cana</h1>
+    <p class="tag">The crown jewel of Punta Cana — where Caribbean luxury meets one of the Dominican Republic's most exclusive resort communities.</p>
+    <ul class="chips"><li>1882 rooms</li><li>14 categories</li><li>20 restaurants</li><li>All ages</li><li>Rock Royalty</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Hard Rock Hotel &amp; Casino Punta Cana</h2></div>
+  <div class="prose"><p>Thrilling gaming action in the biggest and best casino in the Caribbean, exhilarating nightlife, tantalizing culinary options, state-of-the-art meeting facilities and rooms worth tweeting about, all infused with our legendary rock and roll vibe? Delivered. This is Hard Rock after all. The best All-Inclusive Resort in Punta Cana.</p></div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>14 room categories</h2>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/24936829_ImageLargeWidth.jpg" alt="Deluxe Suite King Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Deluxe Suite King Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920346602_16363699_imagelargewidth.jpg?alt=media&amp;token=269167b5-419a-4613-9c19-cbbdea1ece54" alt="Caribbean Suite King Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Suite King Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920345853_16834945_imagelargewidth.jpg?alt=media&amp;token=e40376e2-a31d-4730-9b48-a2270fd5b822" alt="Caribbean Suite King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Suite King Bed &amp; Sofa Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite King" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Sand Suite King</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Sand Suite</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920543041_16363711_imagelargewidth.jpg?alt=media&amp;token=76981173-cc76-4b28-9393-d6ba36346e70" alt="Caribbean Diamond King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Diamond King Bed &amp; Sofa Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363715_ImageLargeWidth.jpg" alt="Caribbean Diamond Double Beds &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Diamond Double Beds &amp; Sofa Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854636_ImageLargeWidth.jpg" alt="Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920436123_16369501_imagelargewidth.jpg?alt=media&amp;token=54fcd5f1-74f8-414d-9b59-792a5b16b540" alt="Islander Junior Suite King" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite King</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22240837_ImageLargeWidth.jpg" alt="Islander Junior Suite Double" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite Double</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920435421_16369505_imagelargewidth.jpg?alt=media&amp;token=443fc497-fd0f-4556-a23a-eddf41f2d7d0" alt="Islander Junior Suite King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite King Bed &amp; Sofa Bed</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1783046342533_hrhpc_-_rock_suite.jpg?alt=media&amp;token=8c946513-9d2b-486a-bb83-3e8b1f1ff231" alt="Rock Family Suite One Bedroom — King &amp; Two Sofa Beds" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Family Suite One Bedroom — King &amp; Two Sofa Beds</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854674_ImageLargeWidth.jpg" alt="Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant</h3><p></p></div></article>
+      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16365460_ImageLargeWidth.jpg" alt="Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant</h3><p></p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Rock Royalty</h2></div>
+  <div class="prose"><ul class="perks"><li>Dedicated telephone concierge</li><li>Upgraded full-size Rock Spa bath products</li><li>Aromatherapy and pillow menu</li><li>Complimentary 25-minute couple’s massage at Rock Spa</li><li>Late check-out until 3:00 PM, subject to availability</li><li>Complimentary beach bag, one per room per stay</li><li>Priority booking for bali beds (additional cost)</li><li>Plush bathrobes and slippers on request</li><li>Sleeping mask, loofah sponge and bath salts</li><li>24-hour room service</li><li>Welcome petit fours</li><li>Rock Royalty Level pin, one per room per stay</li><li>Selection of Fender guitars (Picks) and Crosley turntables (Wax), with priority reservations</li><li>Espresso machine with premium coffee</li></ul></div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/toro-1.jpg?width=1920&amp;height=1080" alt="Toro" loading="lazy"><h4>Toro</h4><p class="cuisine">Restaurant · Steakhouse</p><p>At night becomes hotel´s steakhouse offering Premium cuts grilled to perfection and an extensive wine list.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883376_ImageLargeWidth.jpeg" alt="Zen" loading="lazy"><h4>Zen</h4><p class="cuisine">Restaurant · Teppanyaki &amp; Sushi</p><p>After sunsets, this teppanyaki eatery main attraction is our chef ́s show performance while creates memorable meals right before your eyes. Don ́t miss our authentic sushi experience!</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22089731_ImageLargeWidth.jpg" alt="Ciao" loading="lazy"><h4>Ciao</h4><p class="cuisine">Restaurant · Italian</p><p>Contemporary Italian for dinner — antipasti, fresh pastas made to order and a dolce treat.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/25537288_ImageLargeWidth.jpg" alt="Ciao Trattoria" loading="lazy"><h4>Ciao Trattoria</h4><p class="cuisine">Restaurant · Pizza</p><p>Artisanal pizzas and Mediterranean-influenced dishes made with fresh ingredients. Daily 12–10pm.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854836_ImageLargeWidth.jpeg" alt="Ipanema" loading="lazy"><h4>Ipanema</h4><p class="cuisine">Restaurant · Brazilian Rodizio</p><p>International breakfast; by night a Brazilian rodizio surrounded by the lazy pool, with a vast selection of meats and poultry.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/bistro-med-2.jpg?width=1920&amp;height=1080" alt="Bistro Med" loading="lazy"><h4>Bistro Med</h4><p class="cuisine">Restaurant · Mediterranean &amp; Lebanese</p><p>Fresh Lebanese and Mediterranean food full of flavor. Lunch 11:30am–6pm, dinner 6–10:30pm.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/isla-3.jpg?width=1920&amp;height=1080" alt="Isla" loading="lazy"><h4>Isla</h4><p class="cuisine">Restaurant · Mexican / Gastro Market</p><p>Eight food stations with dishes from around the world; now also serving the Los Gallos menu for dinner — traditional Mexican recipes with tequila-based cocktails.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/15919211_ImageLargeWidth.jpg" alt="Market Food Hall" loading="lazy"><h4>Market Food Hall</h4><p class="cuisine">Food Hall · International</p><p>A journey through the world's street food cuisines, made to order with seasonal local ingredients, in a contemporary greenhouse setting with a hanging tropical garden.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/stacked-1.jpg?width=1920&amp;height=1080" alt="Stacked" loading="lazy"><h4>Stacked</h4><p class="cuisine">Restaurant · Burgers</p><p>Certified Angus beef smash burgers, milkshakes, chicken and plant-based options. Daily 11am–11:30pm.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22109367_ImageLargeWidth.jpg" alt="The Split" loading="lazy"><h4>The Split</h4><p class="cuisine">Restaurant · Sandwiches</p><p>Inspired by the classic Italian-American restaurants of Submarine Sandwiches, The Split offers a variety of options made with fresh ingredients on homemade breads that can be served hot or cold. Enjoy all the possibilities and customize your sandwich by selecting the ingredients of your choice.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883455_ImageLargeWidth.jpg" alt="Ice Cone" loading="lazy"><h4>Ice Cone</h4><p class="cuisine">Dessert · Ice Cream</p><p>Enjoy an American-style ice cream in the centrally located parlor. And yes, it's handmade on site with fresh ingredients, so you know it is amazing! The variety encompasses classic, as well as more adventurous flavors.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Rain-Deli.jpg" alt="Constant Grind Coffee &amp; Bar" loading="lazy"><h4>Constant Grind Coffee &amp; Bar</h4><p class="cuisine">Cafe · 24 Hours</p><p>Coffee, cappuccino, espresso and desserts at the end of the Boulevard overlooking the sunset. Open 24 hours.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/los-gallos-1.jpg?width=1920&amp;height=1080" alt="Los Gallos" loading="lazy"><h4>Los Gallos</h4><p class="cuisine">Restaurant · Mexican (temporarily closed)</p><p>Traditional ancient Mexican recipes with tequila-based cocktails. NOTE: closed until further notice — the menu is currently served at Isla.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20541833_ImageLargeWidth.jpg" alt="Youyu" loading="lazy"><h4>Youyu</h4><p class="cuisine">Restaurant · Asian ($)</p><p>Asian-Pacific and modern Chinese with Mandarin, Cantonese, Szechwan and Vietnamese flair, in a Hong Kong-inspired setting at the casino. Additional cost.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20542299_ImageLargeWidth.jpg" alt="Montserrat Manor" loading="lazy"><h4>Montserrat Manor</h4><p class="cuisine">Restaurant · American Steakhouse ($)</p><p>Prime Chicago meat wet-aged 21 days, local fish caught daily and live lobster. Additional cost.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/Uncorked-Experience-Punta-Cana.jpg" alt="Uncorked Experience" loading="lazy"><h4>Uncorked Experience</h4><p class="cuisine">Wine Store ($)</p><p>Discover Uncorked Experience, Hard Rock Hotel Punta Cana’s exclusive wine store—a space designed for those who appreciate the art of great taste. Here, every bottle tells a story, and every sip becomes part of yours.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/moon-lounge-hard-rock-hotel-casino-punta-cana.jpg" alt="Moon Lounge" loading="lazy"><h4>Moon Lounge</h4><p class="cuisine">Bar · Lounge</p><p>Mysterious and sophisticated, this popular lounge features top music, amazing views, a large selection of top shelf liquors, and DJ’s two times a week.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/bowlling-bar-4.jpg?width=1920&amp;height=1080" alt="Bowling Bar" loading="lazy"><h4>Bowling Bar</h4><p class="cuisine">Bar · Bowling</p><p>Drinks and snacks with black lights, lounge seats and HD video walls playing live sports and music videos. 11am–11pm.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/beach-bar-1.jpg?width=1920&amp;height=1080" alt="Beach Bar" loading="lazy"><h4>Beach Bar</h4><p class="cuisine">Bar · Beachfront</p><p>Beachfront bar service on Macao Beach.</p></div>
+      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/tiki-bar-1.jpg?width=1920&amp;height=1080" alt="Tiki Bar" loading="lazy"><h4>Tiki Bar</h4><p class="cuisine">Bar · Poolside</p><p>Poolside tiki bar.</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eclipse-Pool.jpg" alt="Eclipse Pool" loading="lazy"><h4>Eclipse Pool</h4><p>Live events, music and performances by the water — the resort’s high-energy entertainment pool.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/central-pool-hard-rock-hotel-punta-cana.jpg" alt="Central Pool" loading="lazy"><h4>Central Pool</h4><p>The traditional Hard Rock pool, with organised activities running through the day.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/isla-pool-hard-rock-punta-cana.jpg" alt="Isla Pool" loading="lazy"><h4>Isla Pool</h4><p>Rock and Latin-flavoured beats with a global influence. Reserved for VIP and Deluxe members.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sun-pool-punta-cana.jpg" alt="Sun Pool" loading="lazy"><h4>Sun Pool</h4><p>Sunbeds and tropical palms in a quiet corner of the resort. Reserved for Hall of Fame and Chairman members.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Kids-Pool-VT.jpg" alt="Family Pool" loading="lazy"><h4>Family Pool</h4><p>Teen-friendly music, waterslides and activities for under-16s, with a dedicated kids’ slide alongside.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sax-pool-hard-rock-hotel-punta-cana.jpg" alt="Sax Pool" loading="lazy"><h4>Sax Pool</h4><p>A quieter, more exclusive pool for resting and relaxing to rock and pop.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/bongo-pool-hard-rock-punta-cana.jpg" alt="Bongo Pool" loading="lazy"><h4>Bongo Pool</h4><p>The Latin pool, with food and beverage service and the best of Latin and urban music.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Drums-Guitar-Pool.jpg" alt="Guitar Pool" loading="lazy"><h4>Guitar Pool</h4><p>A high-energy pool playing the best of pop.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/drum-poo-hard-rock-hotel-punta-cana.jpg" alt="Drums Pool" loading="lazy"><h4>Drums Pool</h4><p>Another high-energy pool, this one for timeless rock.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Sun-Moon-Pool.jpg" alt="Moon Pool" loading="lazy"><h4>Moon Pool</h4><p>Pop music by the water — you will know all the songs.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Woodstock-Pool.jpg" alt="Woodstock Pool" loading="lazy"><h4>Woodstock Pool</h4><p>The traditional Hard Rock collection, played poolside.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/lazy-river-pool-hard-rock-hotel-punta-cana.jpg" alt="Lazy River" loading="lazy"><h4>Lazy River</h4><p>Grab a floatie and drift the calm waters of the resort’s Venetian-style canal setting.</p></div>
+      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eden-Pool.jpg" alt="Eden Pool" loading="lazy"><h4>Eden Pool</h4><p>Adults-only and lively, with a full bar, bali beds and optional European-style bathing.</p></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
+      <div class="note"><h4>Exclusive Destination Wedding Packages</h4><p>Discover amazing destination wedding savings you won't find anywhere else. We're thrilled to offer you exclusive deals from our wide variety of preferred partner hotels &amp; resorts. Browse our exclusive wedding packages for your perfect dream day.</p></div>
+      <p class="subhead">Venues</p>
+      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>
+          <tr><th>Harmonica Beach</th><td>300</td></tr>
+          <tr><th>Isla Beach</th><td>100</td></tr>
+          <tr><th>Harmonica Gazebo</th><td>80</td></tr>
+          <tr><th>Sax Pool</th><td>200</td></tr>
+          <tr><th>Ipanema Beach</th><td>150</td></tr>
+          <tr><th>Element Terrace</th><td>300</td></tr>
+          <tr><th>Ipanema Garden</th><td>200</td></tr>
+      </tbody></table></div>
+      <p class="subhead">Packages</p>
+      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>
+          <tr><th>Classic Arrangement</th><td>Complimentary with deposit*</td></tr>
+          <tr><th>Free Spirit</th><td>From $3,500</td></tr>
+          <tr><th>Tropical Paradise</th><td>From $4,000</td></tr>
+          <tr><th>Modern Enchantment</th><td>From $4,500</td></tr>
+          <tr><th>Lavish Daydream</th><td>From $5,000</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
+      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/sun-pool2.jpg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-hero.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});if(location.hash==="#groups"){sel("tab-grp");}})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+
+</body>
+</html>
