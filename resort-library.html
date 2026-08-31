@@ -505,7 +505,12 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <h3 id="sec-dining" style="margin-bottom:4px;">🍽 Restaurants &amp; Bars</h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">All dining outlets — restaurants, bars, cafés, and snack spots. Shown on the resort detail page and client quotes.</p>
       <div id="restaurant-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:10px;margin-bottom:12px;align-items:start;"></div>
-      <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant / Bar</button>
+      <button class="btn btn-secondary btn-sm" onclick="addRestaurantRow()">+ Add Restaurant</button>
+
+      <h4 style="margin:26px 0 4px;font-size:.95rem;color:#2A241C;">&#127864; Bars &amp; Lounges</h4>
+      <p style="color:#666;font-size:.82rem;margin-bottom:12px;">Bars belong here, not above &mdash; they render as their own list on the guide and quote.</p>
+      <div id="bar-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-bottom:12px;align-items:start;"></div>
+      <button class="btn btn-secondary btn-sm" onclick="addBarRow()">+ Add Bar</button>
     </div>
 
     <!-- SECTION: POOLS & BEACH -->
@@ -820,7 +825,7 @@ function clearProfileForm(){
    'profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink',
    'profileAgePolicy','profileTotalRooms','profileCheckIn','profileCheckOut','profileAirportDistance','profileYearBuilt','profileFacilityNotes']
    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
-  ['roomcat-list','restaurant-list','venue-list','pkg-list']
+  ['roomcat-list','restaurant-list','bar-list','pool-list','venue-list','pkg-list']
    .forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=''; });
 }
 
@@ -897,6 +902,10 @@ async function loadResortProfile(slugOverride) {
         else { addRestaurantRow(r.name||'', r.type||'', r.description||'', r.photo||'', r.menuUrl||r.menu||''); }
       }); }
       // Load pools & beach
+      const barList = document.getElementById('bar-list');
+      if (barList) { barList.innerHTML=''; (d.bars || []).forEach(b => addBarRow(
+        (typeof b==='string' ? b.split(',')[0].trim() : (b.name||'')),
+        (typeof b==='string' ? (b.split(',').slice(1).join(',').trim()) : (b.description||'')))); }
       const poolList = document.getElementById('pool-list');
       if (poolList) { poolList.innerHTML = ''; (d.pools || []).forEach(p => addPoolRow(
         (typeof p==='string'? p : (p.name||'')),
@@ -915,7 +924,7 @@ async function loadResortProfile(slugOverride) {
        'profileNotes','profileWeddingUrl','profileRealWeddingUrl','profileRealWeddingNames',
        'profileClubName','profileClubPerks','profileWeddingGuide','profileStars',
        'profileWeddingPromoTitle','profileWeddingPromoSummary','profileWeddingPromoLink','profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink'].forEach(id => set(id, ''));
-      ['roomcat-list','restaurant-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
+      ['roomcat-list','restaurant-list','bar-list','pool-list','venue-list','pkg-list'].forEach(id => { const el = document.getElementById(id); if (el) el.innerHTML = ''; });
       const noProfileMsg = document.getElementById('noProfileMsg');
       if (noProfileMsg) { noProfileMsg.style.display = 'block'; setTimeout(() => noProfileMsg.style.display = 'none', 4000); }
     }
@@ -1082,6 +1091,30 @@ function addPoolRow(name='', type='', description='', photo='') {
   list.appendChild(div);
 }
 
+function addBarRow(name='', description='') {
+  const list = document.getElementById('bar-list');
+  if (!list) return;
+  const d = document.createElement('div');
+  d.style.cssText = 'background:#F3EEE3;border:1px solid #D8CBB2;border-radius:8px;padding:12px;position:relative;';
+  const LB='style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;"';
+  d.innerHTML = `
+    <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">&#10005;</button>
+    <label ${LB}>Bar name <span style="color:#c0392b;">* required</span></label>
+    <input class="form-control bar-name" value="${name}" style="font-weight:600;margin-bottom:8px;">
+    <label ${LB}>Description</label>
+    <textarea class="form-control bar-desc" rows="2">${description}</textarea>`;
+  list.appendChild(d);
+}
+function getBars() {
+  const all = [...document.querySelectorAll('#bar-list > div')].map(d => ({
+    name:        d.querySelector('.bar-name')?.value?.trim() || '',
+    description: d.querySelector('.bar-desc')?.value?.trim() || ''
+  }));
+  const dropped = all.filter(b => !b.name && b.description);
+  if (dropped.length && typeof toast === 'function')
+    toast(dropped.length + ' bar row' + (dropped.length===1?'':'s') + ' had no name and were not saved.', 'error');
+  return all.filter(b => b.name);
+}
 function getPools() {
   const all = [...document.querySelectorAll('#pool-list > div')].map(div => ({
     name:        div.querySelector('.pool-name')?.value?.trim() || '',
@@ -1209,7 +1242,7 @@ function getRoomCategories() {
 // (or two tabs) had the same resort open, the last save silently wiped the
 // other's work. Now we write only the parts THIS person actually changed, and
 // warn if someone else changed the same part while the form was open.
-const SECTION_FIELDS = ['restaurants','pools','venues','packages','roomCategories'];
+const SECTION_FIELDS = ['restaurants','bars','pools','venues','packages','roomCategories'];
 const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','ctUrl',
   'galleryLink','notes','weddingUrl','realWeddingUrl','realWeddingNames',
   'clubLevelName','clubName','clubLevelPerks','clubPerks','weddingGuide',
@@ -1220,7 +1253,7 @@ const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','c
 let LOADED = { slug:null, form:{}, remote:{} };
 
 function currentSections() {
-  return { restaurants:getRestaurants(), pools:getPools(), venues:getVenues(),
+  return { restaurants:getRestaurants(), bars:getBars(), pools:getPools(), venues:getVenues(),
            packages:getPackages(), roomCategories:getRoomCategories() };
 }
 // Snapshot both what the form shows and what the database held, so we can tell
@@ -1321,6 +1354,7 @@ async function saveResortProfile() {
     excursions:         document.getElementById('profileExcursions')?.value?.trim() || '',
     facilityNotes: document.getElementById('profileFacilityNotes')?.value?.trim() || '',
     restaurants:  getRestaurants(),
+    bars:         getBars(),
     pools:        getPools(),
     venues:       getVenues(),
     packages:     getPackages(),
