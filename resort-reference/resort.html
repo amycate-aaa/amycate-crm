@@ -269,6 +269,14 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
 .amybar .eyebrow{margin-bottom:14px;}
 .amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
 .herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
 .herobtn:hover{background:transparent;color:var(--espresso);}
 .amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
@@ -515,6 +523,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 
     <p class="qb-h">Include In The Quote</p>
     <div class="qb-toggles">
+      <label><input type="checkbox" id="o-offers" checked> Current offers</label>
       <label><input type="checkbox" id="o-inclusions" checked> Full package inclusions</label>
       <label><input type="checkbox" id="o-example" checked> Sample stay totals</label>
       <label><input type="checkbox" id="o-dining" checked> Dining</label>
@@ -670,7 +679,7 @@ function collectQ(){
     const el=tr.querySelector('.d');
     return el?{name:tr.dataset.name,ppn:el.value.trim()}:null;
   }).filter(r=>r&&r.ppn);
-  const o={};['inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
+  const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
     priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
     headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o};
@@ -780,6 +789,25 @@ function renderQuote(){
   ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
 
+
+  /* 3b — OFFERS */
+  (function(){
+    const o=[];
+    if(!CT) o.push({tag:'Always applies \u2014 nothing to enter',
+      title:'Up to $2,500 off your destination wedding',
+      body:'Major wedding savings at over 200 all-inclusive resorts across Mexico and the Caribbean. It is applied for you \u2014 there is nothing to claim.',
+      link:''});
+    const t=CT?clean(P.ctPromoTitle):clean(P.weddingPromoTitle);
+    const b=CT?clean(P.ctPromoSummary):clean(P.weddingPromoSummary);
+    const l=CT?P.ctPromoLink:P.weddingPromoLink;
+    if(t) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
+    if(!o.length||q.opts.offers===false)return;
+    S.push('<div class="offers"><div class="wrap">'+o.map(x=>
+      '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
+      '<h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(x.body)+'</p>':'')+
+      (x.link?'<a class="more" href="'+esc(x.link)+'" target="_blank" rel="noopener">See the details &rarr;</a>':'')+
+      '</div>').join('')+'</div></div>');
+  })();
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   let ROOMS='';
