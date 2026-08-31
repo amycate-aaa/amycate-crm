@@ -3586,7 +3586,9 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
     if(!nav||document.getElementById('acUploadBtn'))return;
     var st=document.createElement('style');
     st.textContent=
-      '#acPhotosBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
+      // the nav must scroll clear of the two pinned buttons + the save bar
+      '#acSideNav{overflow-y:auto;overflow-x:hidden;padding-bottom:176px;}'
+      +'#acPhotosBtn{position:fixed;left:0;bottom:56px;width:186px;display:block;'
       +'background:#3F3A32;color:#F2EDE4;border:0;border-top:1px solid #2C2822;'
       +'padding:13px 14px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;'
       +'cursor:pointer;text-align:center;z-index:9998;}'
