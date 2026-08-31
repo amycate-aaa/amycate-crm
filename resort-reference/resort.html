@@ -764,9 +764,20 @@ function renderQuote(){
   if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
   const priced=q.prices.length>0;
-  const facts=[q.date?['When',q.date]:null,q.travel?['Travel Dates',q.travel]:null,
+  const cnt=v=>Array.isArray(v)&&v.length?String(v.length):'';
+  const shortAge=v=>{const t=String(v||'').trim();if(!t)return'';
+    const f=t.split(/[.\u00b7]/)[0].trim();
+    return f.length>40?f.slice(0,40).replace(/\s+\S*$/,'')+'\u2026':f;};
+  const facts=[
+    q.date?['When',q.date]:null,
     P.destination?['Where',P.destination]:null,
-    (priced&&q.priced)?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
+    clean(P.agePolicy)?['Who it suits',shortAge(clean(P.agePolicy))]:null,
+    clean(P.totalRooms)?['Suites',String(clean(P.totalRooms))]:null,
+    cnt(P.restaurants)?['Restaurants',cnt(P.restaurants)]:null,
+    cnt(P.bars)?['Bars',cnt(P.bars)]:null,
+    cnt(P.pools)?['Pools',cnt(P.pools)]:null,
+    clean(P.airportDistance)?['Airport',shortAge(clean(P.airportDistance))]:null
+  ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
 
 
