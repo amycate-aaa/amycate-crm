@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dreams Bahia Mita Surf &amp; Spa Resort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
+ --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
+:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
+ --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
+ font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
+.eyebrow.light{color:#DFC48B}
+.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
+.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;
+ background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
+.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
+.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
+ line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
+.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
+ font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
+.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
+ border-radius:999px;padding:.26rem .68rem}
+section{padding:clamp(44px,6.5vw,80px) 0}
+section+section{border-top:1px solid var(--line)}
+h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
+ line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
+.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
+ line-height:1.5;color:var(--soft);max-width:34ch}
+.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
+.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
+@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
+.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
+ margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
+.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
+.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
+.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
+ display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
+.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
+.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
+.card:hover .shot img{transform:scale(1.04)}
+.cbody{padding:1rem 1.1rem 1.25rem}
+.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
+.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
+.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
+ margin-bottom:.5rem!important}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
+caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
+th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
+thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
+tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
+.num{font-variant-numeric:tabular-nums;color:var(--black)}
+.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
+ color:var(--soft);font-size:.92rem}
+.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
+ border:1px solid var(--gold);transform:rotate(45deg)}
+.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
+@media(max-width:640px){.dining{column-count:1}}
+.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
+.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
+ color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
+.dish p{margin:0;font-size:.89rem;color:var(--soft)}
+.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
+.gal figure{margin:0}
+.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
+.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
+.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
+.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
+.note p:last-child{margin:0}
+footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- audience tabs ---- */
+.tabwrap{margin-top:26px}
+.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
+.tabbtn:hover{color:var(--ink)}
+.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+.tabpanel{padding-top:34px}
+.tabpanel[hidden]{display:none}
+.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
+@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+
+
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <img src="https://alg.widen.net/content/wb7wclqf8l/webp/DRBMI-EXT-Aerial-AP.webp" alt="Dreams Bahia Mita Surf &amp; Spa Resort">
+  <div class="wrap">
+    <p class="eyebrow light">Riviera Nayarit, Mexico</p>
+    <h1>Dreams Bahia Mita Surf &amp; Spa Resort</h1>
+    <p class="tag">Discover Dreams Bahia Mita with stylish suites, a family-favorite waterpark, oceanfront infinity pool and surf-inspired activities.</p>
+    <ul class="chips"><li>421 rooms</li><li>16 categories</li><li>22 restaurants</li><li>All ages</li><li>Preferred Club</li></ul>
+  </div>
+</header>
+
+<main>
+<section id="overview"><div class="wrap split">
+  <div><p class="eyebrow">The resort</p><h2>Dreams Bahia Mita Surf &amp; Spa Resort</h2></div>
+  <div class="prose"><p>Dreams Bahia Mita Surf &amp; Spa Resort marries golden sand beaches and mountaintop views with luxurious suites and daily activities for a family-friendly, all-inclusive vacation. Designed by architect Sordo Madaleno, this eco-friendly resort sits on Banderas Bay, about 50 minutes from Puerto Vallarta and 35 minutes from Nuevo Vallarta. All 421 suites offer tropical or ocean views, modern décor, and refined amenities like a daily refreshed mini-bar and 24-hour room service. The Unlimited-Luxury® program means everything is included — no wristbands or gratuities required — with activities from kayaking and surf lessons to golf, plus a Marietas Island-inspired Secrets Spa, eight dining venues and six bars. Guests also have access to the adjoining adults-only Secrets Bahia Mita, which adds flexible wedding venue options.</p></div>
+</div></section>
+
+<section id="rooms"><div class="wrap">
+  <p class="eyebrow">Accommodation</p><h2>16 room categories</h2>
+  <div class="grid">
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Junior Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Tropical View</h3><p>516 sq ft junior suite with a separate living area and sofa bed, overlooking the tropical grounds. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ksg8hfbgdk/webp/DRBMI-JR-Waterpark-View-KING-CP.webp" alt="Junior Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Waterpark View</h3><p>516 sq ft junior suite overlooking the resort's waterpark, with sofa bed — a strong pick for families. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ahqejsh1jl/webp/DRBMI-JR-SO-TV-2A-CB.webp" alt="Junior Suite Tropical Swim Out" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Tropical Swim Out</h3><p>516 sq ft junior suite with semi-private SWIM-OUT pool access directly from your terrace. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ecji2xd8dv/webp/DRBMI-PC-JR-OF-KING-1A-CB.webp" alt="Junior Suite Ocean Front" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Ocean Front</h3><p>516 sq ft oceanfront junior suite with a full bathroom, double vanity and living area. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Family Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Family Suite Tropical View</h3><p>1,032 sq ft family suite connecting two Junior Suite Tropical View rooms, sleeping up to 7. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Preferred Club Junior Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Tropical View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, overlooking the tropical grounds and the mountains behind the resort. Located on the eighth floor near the Preferred Club Sky Bar. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ksg8hfbgdk/webp/DRBMI-JR-Waterpark-View-KING-CP.webp" alt="Preferred Club Junior Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Waterpark View</h3><p>Junior suite overlooking the waterpark with Preferred Club privileges.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/qvqyd42fwd/webp/SEBMI-PC-JR-POV-1A-CB.webp" alt="Preferred Club Junior Suite Partial Ocean View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Partial Ocean View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub and partial ocean views. Located on the third and fifth floors of the Preferred Club Tower. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/xta3vg8sdf/webp/DRBMI-PC-JR-Sundeck-1A-CB.webp" alt="Preferred Club Junior Suite Sun Deck" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Sun Deck</h3><p>Junior suite with EXCLUSIVE SUN DECK ACCESS, plus Preferred Club privileges.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/amgvunlngv/webp/DRBMI-PC-Ambition-STE-Bedroom-KING-AFC.webp" alt="Preferred Club Ambition Suite Panoramic View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Ambition Suite Panoramic View</h3><p>A generous 1,111 sq ft suite with a private terrace and outdoor soaking tub, a separate living area with sofa bed, and a full bathroom with double vanity. Upgraded amenities throughout, panoramic views, and Preferred Club privileges. Connects with the Preferred Club Panoramic View room.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ksg8hfbgdk/webp/DRBMI-JR-Waterpark-View-KING-CP.webp" alt="Preferred Club Master Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Master Suite Waterpark View</h3><p>1,451 sq ft master suite overlooking the waterpark with Preferred Club privileges.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ahqejsh1jl/webp/DRBMI-JR-SO-TV-2A-CB.webp" alt="Preferred Club Master Suite Tropical View Swim Out" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Master Suite Tropical View Swim Out</h3><p>1,117 sq ft Preferred Club master suite with a private swim-out pool leading straight to the solarium, plus a spacious separate living area. Located in the Tropical Tower on the fourth floor. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/dgryhi5v2g/webp/DRBMI-PC-STE-Panorama-AFC.webp" alt="Preferred Club Family Suite Panoramic View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Family Suite Panoramic View</h3><p>Family suite with panoramic views sleeping up to 7, plus Preferred Club privileges.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/6tsdiftwae/webp/DRBMI-PC-BahiaMita-OV-BED-1A-CB.webp" alt="Preferred Club Bahia Mita Suite Ocean View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Bahia Mita Suite Ocean View</h3><p>The signature Bahia Mita Suite with ocean views and Preferred Club privileges.</p></div></article>
+      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/sf1gcby0nz/webp/DRBMI-PC-PRES-STE-Bedroom-AFC.webp" alt="Preferred Club Presidential Suite" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Presidential Suite</h3><p>2,687 sq ft Presidential Suite — the top category. Its oceanfront terrace also serves as a wedding venue for up to 120 guests.</p></div></article>
+      <article class="card"><div class="shot" style="display:flex;align-items:center;justify-content:center;text-align:center;padding:0 18px"><span style="font-size:.8rem;color:var(--mute);font-style:italic">Photography on request</span></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Panoramic View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, looking out over the resort, the pools and the ocean beyond. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
+  </div>
+</div></section>
+
+<section id="club"><div class="wrap split">
+  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2></div>
+  <div class="prose"><ul class="perks"><li>Personalized check-in and check-out with concierge service</li><li>Daily continental breakfast</li><li>Afternoon hot and cold hors d'oeuvres, exquisite desserts and premium liquors</li><li>Access to the exclusive Preferred Club lounge (7 AM – 7 PM)</li><li>EXCLUSIVE access to the adults-only rooftop Sky Bar and infinity pool</li><li>Upgraded room locations and amenities</li></ul></div>
+</div></section>
+
+<section id="dining"><div class="wrap">
+  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://alg.widen.net/img/alg/qukjqi42re/2048px@1x/DRBMI-RES-ElPatio-1A-CB.webp" alt="El Patio" loading="lazy"><h4>El Patio</h4><p class="cuisine">Mexican · Casual Elegance</p><p>Authentic à la carte Mexican dishes full of traditional flavours. Dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/k5o9mmqodf/2048px@1x/DRBMI-RES-Himitsu-1A-CB.webp" alt="Himitsu" loading="lazy"><h4>Himitsu</h4><p class="cuisine">Pan-Asian · Adults Only</p><p>Pan-Asian cuisine with teppanyaki tables. Adults only, reservation required. Dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/ohkbyd9aoo/2048px@1x/GettyImages-937237154.webp" alt="Meraki" loading="lazy"><h4>Meraki</h4><p class="cuisine">Mediterranean-Asian · Casual Elegance</p><p>Mediterranean and Asian fusion à la carte. Dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/vsvd5wljx4/2048px@1x/Italian-Cuisine-GettyImages-1181611076.webp" alt="Nebbiolo" loading="lazy"><h4>Nebbiolo</h4><p class="cuisine">Italian · Casual Elegance</p><p>Traditional Italian dishes and pizza. Dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/8l1q5wdhhv/2048px@1x/DRBMI-RES-Portofino-1A-CB.webp" alt="Portofino" loading="lazy"><h4>Portofino</h4><p class="cuisine">Italian · Adults Only</p><p>Adults-only Italian with over 100 wines, and a private wine-cellar table for up to 12. Dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/bhzrcocxzm/2048px@1x/DRBMI-RES-SeasideGrill-1A-CB.webp" alt="Seaside Grill" loading="lazy"><h4>Seaside Grill</h4><p class="cuisine">Grill · Casual Elegance</p><p>À la carte grilled steaks and burgers with ocean views and a private pool area. Lunch 12–4pm, dinner 6–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/content/olmfozdzxt/webp/DRBMI-RES-WorldCafe-AP.webp" alt="World Café" loading="lazy"><h4>World Café</h4><p class="cuisine">International Buffet</p><p>International buffet of local and global cuisine, including late-night bites. Breakfast 7–11am, lunch 1:30–4pm, dinner 6–10:45pm. Casual elegance required at dinner.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/c2tputev6i/2048px@1x/DRBMI-RES-BarefootGrill-1A-CB.webp" alt="Barefoot Grill" loading="lazy"><h4>Barefoot Grill</h4><p class="cuisine">Grill · Casual</p><p>À la carte grilled specialities by the pool. 11am–5pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/ynhtfiehoi/2048px@1x/DRBMI-RES-Bahia-Bites-CP.webp" alt="Bahia Bites" loading="lazy"><h4>Bahia Bites</h4><p class="cuisine">Food Truck · Casual</p><p>Food truck serving grilled tacos by the pool. Lunch 12–3pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/ekokkz9bq8/2048px@1x/DRBMI-RES-Tacoyotl-AFC.webp" alt="Tacoyotl Taquería" loading="lazy"><h4>Tacoyotl Taquería</h4><p class="cuisine">Taquería · Casual</p><p>Nachos, tacos and other favourites. 12–4:30pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/content/pansyfmnws/webp/DRBMI-RES-Tides-Pizza-CP.webp" alt="Tides" loading="lazy"><h4>Tides</h4><p class="cuisine">Poolside Grill · Casual</p><p>Poolside grill with hamburgers, hot dogs and snacks. 11am–6pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/goi9twre3b/2048px@1x/DRBMI-RES-CafeMita-AFC.webp" alt="Café Mita" loading="lazy"><h4>Café Mita</h4><p class="cuisine">Café</p><p>Premium coffee, pastries and snacks. 7am–10pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/qxbmprr4l0/2048px@1x/DRBMI-RES-CocoCafe-AFC.webp" alt="Coco Café &amp; Gelato" loading="lazy"><h4>Coco Café &amp; Gelato</h4><p class="cuisine">Café</p><p>Coffee and snack bar, open 24 hours.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/lia1k668hy/2048px@1x/DRBMI-RES-Sundaez-CP.webp" alt="Sundaez" loading="lazy"><h4>Sundaez</h4><p class="cuisine">Ice Cream</p><p>Ice cream, 11am–5pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/ln4outglit/2048px@1x/DRBMI-BAR-Barracuda-Beach-AFC.webp" alt="Barracuda" loading="lazy"><h4>Barracuda</h4><p class="cuisine">Beach Bar</p><p>Light bites like ceviche, right by the sea. 12–6pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/0voci3tnuf/2048px@1x/DRBMI-BAR-Desires-1A-CB.webp" alt="Desires" loading="lazy"><h4>Desires</h4><p class="cuisine">Sports Bar</p><p>Snacks and drinks. Dinner 4–9pm, bar until 1am.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/bjtyorneok/2048px@1x/NOLPC-DRINK-ChampagneGlasses-2.webp" alt="Preferred Club Lounge" loading="lazy"><h4>Preferred Club Lounge</h4><p class="cuisine">Lounge · Preferred Club</p><p>A relaxing lounge for Preferred Club guests. 7am–11pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/vygtchndwe/2048px@1x/DRBMI-BAR-SeaLegs-1A-CB.webp" alt="Sea Legs" loading="lazy"><h4>Sea Legs</h4><p class="cuisine">Swim-Up Bar</p><p>Swim-up bar for cocktails. 11am–6pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/8bo1iidfij/2048px@1x/SECBR-BEV-Wine-Pouring-FEM.webp" alt="Showtime" loading="lazy"><h4>Showtime</h4><p class="cuisine">Theater Bar</p><p>Theatre bar, open during show hours.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/mv37qer0bs/2048px@1x/DRBMI-EXT-SkyBarPool-1A-CB.webp" alt="Sky Bar" loading="lazy"><h4>Sky Bar</h4><p class="cuisine">Rooftop Bar · Adults Only</p><p>Rooftop bar with infinity pool. Preferred Club and adults only. 10am–7pm.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/bdiutvflyf/2048px@1x/DRBMI-BAR-SpeakEasy-1A-CB.webp" alt="Speak Easy" loading="lazy"><h4>Speak Easy</h4><p class="cuisine">Lounge · Nightlife</p><p>Disco and music lounge. 11pm–1am.</p></div>
+      <div class="dish"><img src="https://alg.widen.net/img/alg/5qfrfd7yhd/2048px@1x/DRBMI-BAR-Splash-02-CP.webp" alt="Splash" loading="lazy"><h4>Splash</h4><p class="cuisine">Pool Bar</p><p>Poolside bar near the waterslides. 11am–5pm.</p></div>
+  </div>
+</div></section>
+
+<section id="pools"><div class="wrap">
+  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>
+  <div class="dining">
+      <div class="dish"><img src="https://alg.widen.net/content/ybju4y4vpl/webp/DRBMI-EXT-Infinity-Pool-3-CB.webp" alt="Oceanfront infinity pool" loading="lazy"><h4>Oceanfront infinity pool</h4></div>
+      <div class="dish"><img src="https://alg.widen.net/content/dntkgr4ozd/webp/DRBMI-Family-Pool-Fun-CP.webp" alt="Main pools with kids' section" loading="lazy"><h4>Main pools with kids' section</h4></div>
+      <div class="dish"><h4>Sky Bar rooftop infinity pool</h4></div>
+      <div class="dish"><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="Pirate ship splash pool" loading="lazy"><h4>Pirate ship splash pool</h4></div>
+      <div class="dish"><img src="https://alg.widen.net/content/ukur5kit9x/webp/DRBMI-Family-Waterslide-01-CP.webp" alt="Waterpark slides" loading="lazy"><h4>Waterpark slides</h4></div>
+      <div class="dish"><h4>Hot tub</h4></div>
+  </div>
+</div></section>
+
+<section id="planning"><div class="wrap">
+  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
+  <div class="tabwrap">
+    <div class="tabbar" role="tablist" aria-label="Event type">
+      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
+      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+    </div>
+    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
+      <p class="subhead">Venues</p>
+      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>
+          <tr><th>Garden Bahia Mita</th><td>Up to 400 Guests</td></tr>
+          <tr><th>Beach Garden &amp; Wooden Deck</th><td>Up to 240 Guests</td></tr>
+          <tr><th>Moon Deck</th><td>Up to 200 Guests</td></tr>
+          <tr><th>Dreams Presidential Terrace</th><td>Up to 120 Guests</td></tr>
+          <tr><th>Secrets Presidential Terrace</th><td>Up to 90 Guests</td></tr>
+          <tr><th>Sand Terrace</th><td>Up to 80 Guests</td></tr>
+          <tr><th>Beach Terrace (The Nest)</th><td>Up to 50 Guests</td></tr>
+      </tbody></table></div>
+      <p class="subhead">Packages</p>
+      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>
+          <tr><th>Wedding in Paradise</th><td>Complimentary or from $1,499</td></tr>
+          <tr><th>Eternal Love</th><td>From $5,049</td></tr>
+          <tr><th>Beyond Memorable</th><td>From $12,049</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
+      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="gallery"><div class="wrap">
+  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
+      <figure class="gal"><img src="https://alg.widen.net/content/wb7wclqf8l/webp/DRBMI-EXT-Aerial-AP.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/ub9amjmvot/webp/DRBMI-EXT-Aerial-Resort-02-CP.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/ccsydtq215/webp/DRBMI-Couple-Poolside-CP.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/90vz1w9x4o/webp/DRBMI-Couple-SurfBoards1B-2A-CB.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/th5hmckc3n/webp/DRBMI-Couple-Yoga-01-CP.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/c00ddng9wj/webp/DRBMI-ExplorersClub-AFC.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/buqomysgku/webp/DRBMI-CoreZone-1A-CB.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/1nxfr4cgba/webp/DRBMI-Beach-WaitService-1A-CB.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://alg.widen.net/content/mv37qer0bs/webp/DRBMI-EXT-SkyBarPool-1A-CB.webp" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-grp-beachcocktail-3a-cb.jpeg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/sebmi-drbmi-couple-surfboards1b-2a-cb.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-res-portofino-1a-cb.jpeg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pc-bahia-ste-bed-rndr.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pres-bed-rndr.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ap.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/preferred-club-panoramic-view.png" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/waterpark.png" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-pc-jr-tv-king-cp.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ter-1a-cb.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/ambition.jpg" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/junior-suite-ocean-front.png" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa-resort/aioapi/dreams-bahia-mita-hero-image.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
+      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg" alt="" loading="lazy"></figure>
+  </div>
+</div></section>
+</main>
+
+<script>
+(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});if(location.hash==="#groups"){sel("tab-grp");}})();
+</script>
+
+<footer><div class="wrap">
+  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
+  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
+</div></footer>
+
+</body>
+</html>
