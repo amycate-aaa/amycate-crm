@@ -363,6 +363,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
          border-radius:8px;padding:8px 10px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px;">
       <a href="#sec-core" onclick="jumpTo(event,'sec-core')">Core Info</a>
       <a href="#sec-links" onclick="jumpTo(event,'sec-links')">Links</a>
+      <a href="#acDocs" onclick="jumpTo(event,'acDocs')">Documents</a>
       <a href="#sec-goodtoknow" onclick="jumpTo(event,'sec-goodtoknow')">Good to know</a>
       <a href="#sec-venues" onclick="jumpTo(event,'sec-venues')">Venues</a>
       <a href="#sec-packages" onclick="jumpTo(event,'sec-packages')">Packages</a>
@@ -2365,6 +2366,7 @@ body{padding-left:210px !important;padding-bottom:56px !important}
  var SECT=[['\u270e Resort Profile','Profile'],
   ['\ud83c\udfe0 Core Info','Core Info'],
   ['\ud83d\udd17 Links','Links'],
+  ['\ud83d\udcce Document Links','Documents'],
   ['\u24d8 Good To Know','Good to know'],
   ['\ud83d\udc8d Wedding Venues *','Venues'],
   ['\ud83d\udc8d Wedding Packages & Pricing *','Packages'],
@@ -3498,10 +3500,16 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
         '<button type="button" class="btn go" id="acDocSave">Save Document Links</button>'+
         '<span class="msg" id="acDocMsg"></span>'+
       '</div>';
-    var anchor=document.getElementById('profileSaveMsg');
-    var host=anchor?anchor.parentNode:null;
-    if(host&&host.parentNode){host.parentNode.insertBefore(d,host);}
-    else{(document.querySelector('.container')||document.body).appendChild(d);}
+    // sit directly under Links, near the top — these get edited often
+    var lk=document.getElementById('sec-links');
+    var sec=lk?lk.closest('.upload-section'):null;
+    if(sec&&sec.parentNode){ sec.parentNode.insertBefore(d, sec.nextSibling); }
+    else {
+      var anchor=document.getElementById('profileSaveMsg');
+      var host=anchor?anchor.parentNode:null;
+      if(host&&host.parentNode){host.parentNode.insertBefore(d,host);}
+      else{(document.querySelector('.container')||document.body).appendChild(d);}
+    }
     document.getElementById('acDocAdd').onclick=function(){DOCS.push({label:'',url:'',section:'',public:false});draw();};
     document.getElementById('acDocSave').onclick=save;
     return d;
