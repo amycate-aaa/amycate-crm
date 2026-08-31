@@ -576,7 +576,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
         </div>
         <div style="flex:1 1 260px;">
           <label class="qb-lbl">What it covers <span style="opacity:.6;">(optional &mdash; overrides the default line)</span></label>
-          <input type="text" id="q-pkgcovers" class="qb-in" placeholder="Flights, 5 nights, all-inclusive and transfers" oninput="saveLocal()">
+          <input type="text" id="q-pkgcovers" class="qb-in" value="Flights, 3 nights all-inclusive and roundtrip airport transfers" oninput="saveLocal()">
         </div>
       </div>
     </div>
@@ -838,6 +838,8 @@ const RAPIDAPI_KEY='1540ad94fcmsh80790b3065091f5p1285b9jsn51218123bdb5';
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
   $id('q-pkgbox').style.display=on?'block':'none';
+  const cv=$id('q-pkgcovers');
+  if(on&&cv&&!cv.value.trim())cv.value='Flights, 3 nights all-inclusive and roundtrip airport transfers';
   const h=$id('q-pricehint');
   if(h)h.innerHTML=on
     ? 'With air included, enter the <strong>package total per person</strong> \u2014 flights, room and transfers together, not a nightly rate.'
