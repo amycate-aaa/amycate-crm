@@ -772,18 +772,15 @@ function renderQuote(){
   let ROOMS='';
   const allCats=(P.roomCategories||[]).filter(c=>c&&c.name);
   const priceMap={}; q.prices.forEach(r=>{priceMap[String(r.name||'').toLowerCase().trim()]=r.ppn;});
-  const SAMPLE=5;                       // unpriced info sheet: show this many, not all
-  const pickCats=priced?allCats:allCats.slice(0,SAMPLE);
-  const moreRooms=priced?0:Math.max(0,allCats.length-pickCats.length);
   const rows=allCats.length
-    ? pickCats.map(c=>({name:c.name,ppn:priceMap[String(c.name||'').toLowerCase().trim()]||''}))
+    ? allCats.map(c=>({name:c.name,ppn:priceMap[String(c.name||'').toLowerCase().trim()]||''}))
     : q.prices;
   if(rows.length){
     const cats=allCats;
-    ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+bandImg('rooms')+
+    ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+(priced?bandImg('rooms'):'')+
       (priced
         ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement. Categories without a figure are available too; tell me which ones interest you and I will price them.</p>'
-        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">A sample of the room types'+(moreRooms?', with '+moreRooms+' more categories beyond these':'')+'. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
+        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
         ? '<div class="price-grid">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
