@@ -263,6 +263,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
 .price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
 .price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:26px 0 0;background:transparent;border:0;border-top:1px solid var(--sand-deep);padding:22px 0 0;}
+.price-grid.solo .pcard .b .mathbox h4{margin-top:0;}
 @media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
   .price-grid.solo .pcard img{min-height:220px;}}
 .pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
@@ -1025,6 +1027,8 @@ function renderQuote(){
     : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices);
   if(rows.length||hasPkg){
     const cats=allCats;
+    const solo=rows.length===1&&!q.needAir;
+    const stayHTML=(priced&&q.opts.example&&!q.needAir)?stayTotals(q):'';
     ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+
       (priced
         ?(q.needAir
@@ -1032,7 +1036,7 @@ function renderQuote(){
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. This is where the pricing <em>starts</em> \u2014 the entry category, so you can see the shape of it. Every resort has several room types, and once you have settled on where you are going I lay out all of them side by side so your guests can pick what suits them and what they want to spend. Rates are confirmed when you book, and held against increases if your group reaches ten rooms.</p>')
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
-        ? '<div class="price-grid'+((rows.length===1&&!q.needAir)?' solo':'')+'">'+rows.map(r=>{
+        ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
             // with air, the package band carries the visual — a room photo competes with it
             const img=q.needAir?'':([c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'');
@@ -1041,6 +1045,7 @@ function renderQuote(){
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
               (r.ppn?'<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">'+(q.needAir?'per person<br>flights, room and transfers':'per person, per night<br>based on double occupancy')+'</p></div>':'')+
+              (solo?stayHTML:'')+
               '</div></div>';}).join('')+'</div>'
         : '<div class="dinelist">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
@@ -1050,7 +1055,7 @@ function renderQuote(){
               (meta?'<p class="t">'+esc(meta)+'</p>':'')+
               (clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+
               '</div>';}).join('')+'</div>')+
-      ((priced&&q.opts.example&&!q.needAir)?stayTotals(q):'')+
+      (solo?'':stayHTML)+
       ((q.needAir&&clean(q.pkgPrice))
         ?(function(){
             const legs=(q.air||[]).filter(r=>r.from&&r.to)
