@@ -363,6 +363,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
          border-radius:8px;padding:8px 10px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px;">
       <a href="#sec-core" onclick="jumpTo(event,'sec-core')">Core Info</a>
       <a href="#sec-links" onclick="jumpTo(event,'sec-links')">Links</a>
+      <a href="#sec-goodtoknow" onclick="jumpTo(event,'sec-goodtoknow')">Good to know</a>
       <a href="#sec-promos" onclick="jumpTo(event,'sec-promos')">Promos</a>
       <a href="#sec-club" onclick="jumpTo(event,'sec-club')">Club Level</a>
       <a href="#sec-rooms" onclick="jumpTo(event,'sec-rooms')">Rooms</a>
@@ -441,6 +442,50 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <div class="form-group">
         <label>Real Wedding Couple Names</label>
         <input type="text" class="form-control" id="profileRealWeddingNames" placeholder="e.g. Sarah &amp; James — shown with the real wedding link">
+      </div>
+    </div>
+
+    <!-- SECTION 2c: GOOD TO KNOW -->
+    <div class="upload-section" style="margin-bottom:16px;">
+      <h3 id="sec-goodtoknow" style="margin-bottom:4px;">&#9432; Good To Know</h3>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">The practical facts. These render in the header strip and the Good To Know grid on client quotes. Leave a field blank rather than guessing &mdash; blank disappears cleanly.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;">
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Age Policy</label>
+        <input type="text" class="form-control" id="profileAgePolicy" placeholder="Max 6 words — e.g. Family friendly, all ages / Adults only, 18+">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Total Rooms</label>
+        <input type="text" class="form-control" id="profileTotalRooms" placeholder="e.g. 639">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Check-in</label>
+        <input type="text" class="form-control" id="profileCheckIn" placeholder="e.g. 3:00 PM">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Check-out</label>
+        <input type="text" class="form-control" id="profileCheckOut" placeholder="e.g. 12:00 PM">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Resort Fee</label>
+        <input type="text" class="form-control" id="profileResortFee" placeholder="None, or $25 per room per night">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Airport</label>
+        <input type="text" class="form-control" id="profileAirportDistance" placeholder="ONE figure — e.g. 35 minutes from SJD">
+      </div>
+      <div class="form-group" style="flex:1 1 210px;">
+        <label>Opened / Renovated</label>
+        <input type="text" class="form-control" id="profileYearBuilt" placeholder="e.g. 2019">
+      </div>
+      </div>
+      <div class="form-group" style="margin-top:12px;">
+        <label>Dress Codes</label>
+        <textarea class="form-control" id="profileDressCodes" rows="2" placeholder="Resort casual by day &middot; Long trousers and closed shoes for men at &agrave; la carte dinner &middot; No swimwear in restaurants"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Resort Notes <span style="color:#888;font-size:.75rem;">(client-facing caveats)</span></label>
+        <textarea class="form-control" id="profileFacilityNotes" rows="2" placeholder="Outdoor music curfews, setup fees, sections under renovation, an adults-only area inside a family resort. No &quot;confirm with resort&quot; &mdash; that belongs in Notes."></textarea>
       </div>
     </div>
 
@@ -753,7 +798,8 @@ function clearProfileForm(){
    'profileGalleryLink','profileNotes','profileWeddingUrl','profileRealWeddingUrl',
    'profileRealWeddingNames','profileClubName','profileClubPerks','profileWeddingGuide','profileStars',
    'profileWeddingPromoTitle','profileWeddingPromoSummary','profileWeddingPromoLink',
-   'profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink']
+   'profileCtPromoTitle','profileCtPromoSummary','profileCtPromoLink',
+   'profileAgePolicy','profileTotalRooms','profileCheckIn','profileCheckOut','profileResortFee','profileAirportDistance','profileYearBuilt','profileDressCodes','profileFacilityNotes']
    .forEach(id => { const el=document.getElementById(id); if(el) el.value=''; });
   ['roomcat-list','restaurant-list','venue-list','pkg-list']
    .forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=''; });
@@ -811,6 +857,15 @@ async function loadResortProfile(slugOverride) {
       set('profileCtPromoTitle',        d.ctPromoTitle);
       set('profileCtPromoSummary',      d.ctPromoSummary);
       set('profileCtPromoLink',         d.ctPromoLink);
+      set('profileAgePolicy', d.agePolicy);
+      set('profileTotalRooms', d.totalRooms);
+      set('profileCheckIn', d.checkIn);
+      set('profileCheckOut', d.checkOut);
+      set('profileResortFee', d.resortFee);
+      set('profileAirportDistance', d.airportDistance);
+      set('profileYearBuilt', d.yearBuilt);
+      set('profileDressCodes', d.dressCodes);
+      set('profileFacilityNotes', d.facilityNotes);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
       if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo || '')); }
@@ -1215,6 +1270,15 @@ async function saveResortProfile() {
     ctPromoTitle:    document.getElementById('profileCtPromoTitle')?.value?.trim() || '',
     ctPromoSummary:  document.getElementById('profileCtPromoSummary')?.value?.trim() || '',
     ctPromoLink:     document.getElementById('profileCtPromoLink')?.value?.trim() || '',
+    agePolicy: document.getElementById('profileAgePolicy')?.value?.trim() || '',
+    totalRooms: document.getElementById('profileTotalRooms')?.value?.trim() || '',
+    checkIn: document.getElementById('profileCheckIn')?.value?.trim() || '',
+    checkOut: document.getElementById('profileCheckOut')?.value?.trim() || '',
+    resortFee: document.getElementById('profileResortFee')?.value?.trim() || '',
+    airportDistance: document.getElementById('profileAirportDistance')?.value?.trim() || '',
+    yearBuilt: document.getElementById('profileYearBuilt')?.value?.trim() || '',
+    dressCodes:   document.getElementById('profileDressCodes')?.value?.trim() || '',
+    facilityNotes: document.getElementById('profileFacilityNotes')?.value?.trim() || '',
     restaurants:  getRestaurants(),
     pools:        getPools(),
     venues:       getVenues(),
