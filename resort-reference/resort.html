@@ -621,7 +621,7 @@ async function loadResort(slug){
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
     const pools=p.pools||[];
-    (function(){const pb=[(p.sectionPhotos||{}).pools].find(photoOk)||photosByCat(/pool|beach/i)[0]||'';
+    (function(){const pb=[(p.sectionPhotos||{}).pools].find(photoOk)||'';
       if(pb)$id('pools-grid').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(pb)+'" alt="" loading="lazy" style="margin-bottom:30px;">');})();
     $id('pools-grid').innerHTML=pools.length?pools.map(pl=>{const pi=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
       return'<div class="pool-card">'+(pi?'<img src="'+esc(pi)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+'<h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>';}).join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
@@ -918,15 +918,21 @@ function renderQuote(){
   /* 8 — POOLS */
   const pools=(P.pools||[]).filter(p=>p&&p.name);
   if(q.opts.pools&&pools.length){
-    const poolBand=sectionPhoto('pools',/pool|beach/i);
+    const poolBand=sectionPhoto('pools');
+    const poolPics=pools.map(pl=>[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'');
+    const allPools=poolPics.every(Boolean);   // all or nothing — a half-illustrated list looks unfinished
     S.push(sec('',head('In The Water','Pools & Beach')+
       (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="" loading="lazy">':'')+
-      '<div class="price-grid" style="margin-top:34px;">'+pools.map(pl=>{
-        const img=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
-        return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+
-          '<div class="b"><h4>'+esc(pl.name)+'</h4>'+
-          (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+
-          '</div></div>';}).join('')+'</div>'));
+      (allPools
+        ? '<div class="price-grid" style="margin-top:34px;">'+pools.map((pl,i)=>
+            '<div class="pcard"><img src="'+esc(poolPics[i])+'" alt="'+esc(pl.name)+'" loading="lazy">'+
+            '<div class="b"><h4>'+esc(pl.name)+'</h4>'+
+            (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+
+            '</div></div>').join('')+'</div>'
+        : '<div class="dinelist" style="margin-top:34px;">'+pools.map(pl=>
+            '<div class="d"><h4>'+esc(pl.name)+'</h4>'+
+            (clean(pl.features||pl.description)?'<p>'+esc(clean(pl.features||pl.description))+'</p>':'')+
+            '</div>').join('')+'</div>')));
   }
 
   /* 9 — CLUB LEVEL */
@@ -1042,18 +1048,16 @@ function menuUrlOf(r){ return (r && typeof r!=='string') ? (r.menuUrl||r.menu||'
 function matchPhoto(name){
   const nm=String(name||'').toLowerCase().trim(); if(!nm)return'';
   const ok=ph=>photoOk(ph.url||ph.downloadURL);
-  let hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().trim()===nm||String(ph.roomCategory||'').toLowerCase().trim()===nm));
-  if(!hit)hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().includes(nm)||String(ph.roomCategory||'').toLowerCase().includes(nm)));
+  const hit=PHOTOS.find(ph=>ok(ph)&&(String(ph.caption||'').toLowerCase().trim()===nm||String(ph.roomCategory||'').toLowerCase().trim()===nm));
   return hit?(hit.url||hit.downloadURL):'';
 }
-function bandImg(key,re){
-  const u=sectionPhoto(key,re);
+function bandImg(key){
+  const u=sectionPhoto(key);
   return u?'<img class="bandimg" src="'+esc(u)+'" alt="" loading="lazy">':'';
 }
-function sectionPhoto(key,re){
+function sectionPhoto(key){
   const sp=(P.sectionPhotos||{})[key];
-  if(photoOk(sp))return sp;
-  return re?(photosByCat(re)[0]||''):'';
+  return photoOk(sp)?sp:'';
 }
 function photosByCat(re){
   return PHOTOS.filter(ph=>photoOk(ph.url||ph.downloadURL)&&re.test(String(ph.category||'')+' '+String(ph.caption||'')))
