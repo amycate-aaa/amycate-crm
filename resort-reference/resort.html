@@ -652,9 +652,18 @@ async function loadResort(slug){
     }
 
     // ── GROUPS ──
-    $('groups-body').innerHTML=p.groupNotes
-      ?`<div class="prose"><p>${esc(p.groupNotes)}</p></div>`
-      :'<p class="empty">Contact Amy for group rates, room minimums and private event spaces.</p>';
+    // Groups — only show clean published info, never internal notes
+    const grpBody=$('groups-body');
+    const grpInfo=p.groupsInfo||p.groupBenefits||'';
+    if(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT')){
+      grpBody.innerHTML=`<div class="prose"><p>${esc(grpInfo)}</p></div>`;
+    } else {
+      grpBody.innerHTML=`<div style="padding:2rem 0">
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--black);margin-bottom:.6rem">Planning a group celebration?</p>
+        <p style="color:var(--soft);max-width:48ch;margin-bottom:1.2rem">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p>
+        <a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;background:var(--gold);color:var(--white);text-decoration:none;padding:.65rem 1.4rem;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;border-radius:1px">Get in Touch →</a>
+      </div>`;
+    }
 
     // ── ACTIVITIES ──
     const actBody=$('activities-body');
