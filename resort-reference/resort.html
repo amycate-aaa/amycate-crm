@@ -966,7 +966,7 @@ function renderQuote(){
   /* 14 — GROUP AGREEMENT */
   if(!CT){
   if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
-    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being a holiday everyone books separately and starts being <em>your</em> week. Here is what that changes.</p>'+
+    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being a holiday everyone books separately and starts being <em>your</em> week. Under ten rooms none of this applies and none of it is needed \u2014 everyone simply books individually and I look after each reservation. Here is what changes once you are over that line.</p>'+
     '<div class="ga-grid">'+
     '<div class="ga-card"><p class="i">&#128274;</p><h4>Your price stops moving</h4><p>Every category we price gets held at today\u2019s number. Rates will go up between now and your date \u2014 yours will not. A guest who decides next spring that they want the ocean view still pays what you are looking at right now.</p></div>'+
     '<div class="ga-card"><p class="i">&#127873;</p><h4>Rooms you do not pay for</h4><p>Your block earns complimentary rooms, and that value comes back to <em>you</em> as cash once everyone is home. I count them, submit the claim, and stay on the resort until the money lands. You will not have to ask anyone for it.</p></div>'+
@@ -976,7 +976,7 @@ function renderQuote(){
     '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request your agreement. It comes back in a few days and we get on a call and walk through every line of it together before you sign anything \u2014 you will never be handed a contract and left to figure it out.</p></div>'));
   } else {
   if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
-    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being everyone booking separately and starts being <em>your</em> trip. Here is what that changes.</p>'+
+    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being everyone booking separately and starts being <em>your</em> trip. Under ten rooms none of this applies and none of it is needed \u2014 everyone simply books individually and I look after each reservation. Here is what changes once you are over that line.</p>'+
     '<div class="ga-grid">'+
     '<div class="ga-card"><p class="i">&#128274;</p><h4>Your price stops moving</h4><p>Every category we price gets held at today\u2019s number. Rates will go up between now and your dates \u2014 yours will not. Someone who decides months from now that they want the ocean view still pays what you are looking at today.</p></div>'+
     '<div class="ga-card"><p class="i">&#127873;</p><h4>Rooms you do not pay for</h4><p>A block this size earns complimentary rooms, and that value comes back to the organiser once everyone is home. I count them, submit the claim, and stay on the resort until it lands.</p></div>'+
@@ -991,12 +991,10 @@ function renderQuote(){
   if(q.opts.steps)S.push(sec('sand-band',head('No Rush','Next Steps')+
     '<div class="steps" style="margin-top:34px;">'+
     '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
+    '<div><p class="n">02</p><h4>I request the group agreement</h4><p>Only if you need one. Ten rooms or more and I go to the resort and ask for your contract \u2014 it comes back in a few days, and we get on a call and walk through it together before anything is signed. Under ten rooms there is no agreement and nothing to sign: everyone books individually and I handle each booking for you exactly the same way.</p></div>'+
     (CT
-      ?'<div><p class="n">02</p><h4>I request the group agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>'
-      :'<div><p class="n">02</p><h4>I request the agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>')+
-    (CT
-      ?'<div><p class="n">03</p><h4>Your booking site goes live</h4><p>Five to seven business days after signing. From there everyone books themselves and I take it from you.</p></div>'
-      :'<div><p class="n">03</p><h4>Your website goes live</h4><p>Five to seven business days after signing. From there your guests book themselves and I take it from you.</p></div>')+
+      ?'<div><p class="n">03</p><h4>Everyone books</h4><p>With an agreement, your booking site goes live five to seven business days after signing and everyone books themselves at your locked rates. Without one, they book directly through me. Either way it stops being your job.</p></div>'
+      :'<div><p class="n">03</p><h4>Your guests book</h4><p>With an agreement, your wedding website goes live five to seven business days after signing and your guests book themselves at your locked rates. Without one, they book directly through me. Either way it stops being your job.</p></div>')+
     '</div>'+
     '<div class="free-box"><p><strong>And this costs you nothing.</strong> The resorts pay me, not you \u2014 and that covers everything: the quotes, the room block, chasing the resorts, and managing '+(CT?'everyone\u2019s':'your guests\u2019')+' bookings and payments.</p></div>'));
 
