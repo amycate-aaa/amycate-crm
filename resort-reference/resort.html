@@ -238,6 +238,11 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
 .dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
 .pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
 .pkgrow.solo{grid-template-columns:1fr;}
 .pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
@@ -707,6 +712,9 @@ function renderQuote(){
   const facts=[q.date?['When',q.date]:null,q.travel?['Travel Dates',q.travel]:null,
     P.destination?['Where',P.destination]:null,q.priced?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
+  S.push('<div class="amybar"><p class="eyebrow">Start Here</p>'+
+    '<p>Most couples have never planned a destination wedding before \u2014 so I put the whole process, start to finish, on one page. It takes two minutes to read and it answers almost everything before you have to ask.</p>'+
+    '<a class="amybtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></div>');
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   if(q.prices.length){
@@ -830,8 +838,7 @@ function renderQuote(){
     '<div class="ga-card"><p class="i">&#128187;</p><h4>You stop being the travel agent</h4><p>Your guests get their own booking site and book themselves at your locked rates. No spreadsheet, no collecting deposits, no answering questions at eleven at night. Every booking and every payment comes to me instead.</p></div>'+
     '<div class="ga-card"><p class="i">&#127870;</p><h4>The extras that add up</h4><p>Roundtrip airport transfers for every guest, room upgrades placed where they do the most good, a private cocktail hour for your group, and a booking credit that comes off your own final payment.</p></div>'+
     '</div>'+
-    '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request your agreement. It comes back in a few days and we get on a call and walk through every line of it together before you sign anything \u2014 you will never be handed a contract and left to figure it out.</p></div>'+
-    '<p style="margin-top:30px;"><a href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:15px 32px;text-decoration:none;">Working With Amy \u2014 the whole process &rarr;</a></p>'));
+    '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request your agreement. It comes back in a few days and we get on a call and walk through every line of it together before you sign anything \u2014 you will never be handed a contract and left to figure it out.</p></div>'));
 
   /* 15 — NEXT STEPS */
   if(q.opts.steps)S.push(sec('sand-band',head('No Rush','Next Steps')+
