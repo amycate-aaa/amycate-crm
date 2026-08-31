@@ -448,7 +448,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <!-- SECTION 2c: GOOD TO KNOW -->
     <div class="upload-section" style="margin-bottom:16px;">
       <h3 id="sec-goodtoknow" style="margin-bottom:4px;">&#9432; Good To Know</h3>
-      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">The practical facts. These render in the header strip and the Good To Know grid on client quotes. Leave a field blank rather than guessing &mdash; blank disappears cleanly.</p>
+      <p style="color:#666;font-size:.82rem;margin-bottom:16px;">The practical facts. These render in the header strip and the Good To Know grid on client quotes. Leave a field blank rather than guessing &mdash; blank disappears cleanly. Check-in and check-out prefill to 3:00 PM / 11:00 AM &mdash; change them if this resort differs.</p>
       <div style="display:flex;flex-wrap:wrap;gap:12px;">
       <div class="form-group" style="flex:1 1 210px;">
         <label>Age Policy</label>
@@ -460,11 +460,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       </div>
       <div class="form-group" style="flex:1 1 210px;">
         <label>Check-in</label>
-        <input type="text" class="form-control" id="profileCheckIn" placeholder="e.g. 3:00 PM">
+        <input type="text" class="form-control" id="profileCheckIn" placeholder="3:00 PM">
       </div>
       <div class="form-group" style="flex:1 1 210px;">
         <label>Check-out</label>
-        <input type="text" class="form-control" id="profileCheckOut" placeholder="e.g. 12:00 PM">
+        <input type="text" class="form-control" id="profileCheckOut" placeholder="11:00 AM">
       </div>
       <div class="form-group" style="flex:1 1 210px;">
         <label>Resort Fee</label>
@@ -859,8 +859,8 @@ async function loadResortProfile(slugOverride) {
       set('profileCtPromoLink',         d.ctPromoLink);
       set('profileAgePolicy', d.agePolicy);
       set('profileTotalRooms', d.totalRooms);
-      set('profileCheckIn', d.checkIn);
-      set('profileCheckOut', d.checkOut);
+      set('profileCheckIn', d.checkIn || '3:00 PM');
+      set('profileCheckOut', d.checkOut || '11:00 AM');
       set('profileResortFee', d.resortFee);
       set('profileAirportDistance', d.airportDistance);
       set('profileYearBuilt', d.yearBuilt);
