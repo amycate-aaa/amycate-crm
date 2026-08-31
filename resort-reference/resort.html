@@ -488,8 +488,8 @@ async function loadResort(slug){
     $('hero-title').textContent=p.resortName||p.name||'';
     $('hero-tag').textContent=p.tagline||'';
     const chips=[
-      p.agePolicy||null,
-      p.destination||p.tagline||null,
+      p.agePolicy?p.agePolicy.split('.')[0].split(';')[0].trim().slice(0,40):null,
+      p.destination||null,
       p.stars?p.stars+' Stars':null,
       p.clubName||null
     ].filter(Boolean);
