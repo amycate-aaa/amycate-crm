@@ -661,7 +661,7 @@ async function loadResort(slug){
     // ── ACTIVITIES ──
     const actBody=$('activities-body');
     const acts=p.activities||p.activitiesIncluded||'';
-    const actsExtra=p.activitiesExtra||p.extrasNotes||'';
+    const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     
     if(acts||actsExtra){
       // Split by " · " into individual items
@@ -723,8 +723,8 @@ async function loadResort(slug){
     if(p.totalRooms) facs.push({label:'Total Rooms',val:p.totalRooms});
     if(p.airportDistance||p.airport) facs.push({label:'Airport',val:p.airportDistance||p.airport});
     if(p.yearBuilt||p.yearRenovated) facs.push({label:'Built / Renovated',val:[p.yearBuilt,p.yearRenovated].filter(Boolean).join(' / ')});
-    if(p.facilityNotes||p.extrasNotes){
-      const extraText=p.facilityNotes||p.extrasNotes||'';
+    if(p.facilityNotes){
+      const extraText=p.facilityNotes||'';
       extraText.split(' · ').filter(Boolean).slice(0,6).forEach(e=>facs.push({label:'',val:e.trim()}));
     }
     if(facs.length){
