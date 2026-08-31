@@ -269,6 +269,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
 .amybar .eyebrow{margin-bottom:14px;}
 .amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
 .amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
 .amybtn:hover{background:transparent;color:var(--espresso);}
 .pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
@@ -754,6 +756,7 @@ function renderQuote(){
     (q.headline?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
+    '<p style="margin:0;"><a class="herobtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></p>'+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
@@ -764,9 +767,7 @@ function renderQuote(){
     P.destination?['Where',P.destination]:null,
     (priced&&q.priced)?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
-  S.push('<div class="amybar"><p class="eyebrow">Start Here</p>'+
-    '<p>Most couples have never planned a destination wedding before \u2014 so I put the whole process, start to finish, on one page. It takes two minutes to read and it answers almost everything before you have to ask.</p>'+
-    '<a class="amybtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></div>');
+
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   let ROOMS='';
