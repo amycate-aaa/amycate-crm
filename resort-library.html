@@ -1745,6 +1745,12 @@ async function setSectionPhoto(key){
   }catch(e){ toast('Error: '+e.message,'error'); }
 }
 
+document.addEventListener('keydown',function(e){
+  if(e.key!=='Escape')return;
+  var m=document.getElementById('editPhotoModal');
+  if(m&&m.style.display!=='none')closeEditPhoto();
+});
+
 async function setAsHeroPhoto() {
   const id = document.getElementById("editPhotoId").value;
   const slug = document.getElementById("editPhotoResort").value;
@@ -1994,8 +2000,9 @@ async function runAudit() {
 </div>
 
 <!-- EDIT PHOTO MODAL -->
-<div id="editPhotoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;">
-  <div style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:420px;width:90%;max-height:90vh;overflow-y:auto;">
+<div id="editPhotoModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;" onclick="if(event.target===this)closeEditPhoto()">
+  <div style="position:relative;background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:24px;max-width:420px;width:90%;max-height:88vh;overflow-y:auto;">
+    <button type="button" onclick="closeEditPhoto()" title="Close (Esc)" style="position:sticky;top:0;float:right;margin:-6px -6px 0 0;background:#1a1a1a;border:1px solid #444;color:#ccc;width:32px;height:32px;border-radius:6px;font-size:17px;line-height:1;cursor:pointer;z-index:5;">&times;</button>
     <h3 style="margin:0 0 16px;color:#f0c958;font-size:1.1rem;">Edit Photo</h3>
     <input type="hidden" id="editPhotoId">
     <input type="hidden" id="editPhotoResort">
