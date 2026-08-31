@@ -919,19 +919,25 @@ function renderQuote(){
     if(CT){
       o.push({tag:'Current offers',
         title:'Celebration Travel Offers',
-        body:'Resort promotions change through the year \u2014 free nights, resort credits, reduced deposits. Whatever is running when you book, I apply it.',
+        body:'Your dream group celebration just got a whole lot sunnier. Have a look at the exclusive deals available to you from a variety of our favourite hotels and resorts.',
         link:CT_OFFERS});
     } else {
       o.push({tag:'Always applies \u2014 nothing to enter',
         title:'Up to $2,500 off your destination wedding',
         body:'Major wedding savings at over 200 all-inclusive resorts across Mexico and the Caribbean. It is applied for you \u2014 there is nothing to claim.',
         link:DWT_OFFERS});
+      o.push({tag:'Exclusive offers',
+        title:'Exclusive Destination Wedding Packages',
+        body:'Destination wedding savings you will not find anywhere else, from our preferred partner hotels and resorts.',
+        link:DWT_OFFERS});
     }
-    // a resort-specific offer only shows if it says something the standing card does not
+    // a resort-specific offer shows only if it is genuinely about this resort
+    const norm=u=>String(u||'').trim().replace(/\/+$/,'').toLowerCase();
     const t=CT?clean(P.ctPromoTitle):clean(P.weddingPromoTitle);
     const b=CT?clean(P.ctPromoSummary):clean(P.weddingPromoSummary);
     const l=CT?P.ctPromoLink:P.weddingPromoLink;
-    if(t && b) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
+    const standing=norm(CT?CT_OFFERS:DWT_OFFERS);
+    if(t && b && norm(l)!==standing) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
     if(!o.length||q.opts.offers===false)return;
     S.push('<div class="offers"><div class="wrap">'+o.map(x=>
       '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
