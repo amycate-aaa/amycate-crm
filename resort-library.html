@@ -3345,5 +3345,48 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 })();
 </script>
 
+<script>
+/* ══════════════════════════════════════════════════════════════
+   LIVE GUIDE + QUOTE LINKS
+   Adds two buttons to the save bar, next to "Build guide page".
+   Both carry &agent=1, which unlocks the Build Quote button on
+   the guide and remembers it in this browser from then on.
+   ══════════════════════════════════════════════════════════════ */
+(function(){
+  var BASE=location.origin+'/resort-reference/resort.html';
+  function slugNow(){
+    return (document.getElementById('masterResort')||{}).value
+        || (document.getElementById('profileResort')||{}).value || '';
+  }
+  function mk(id,label,suffix,title){
+    var b=document.createElement('button');
+    b.id=id; b.type='button'; b.textContent=label; b.title=title;
+    b.style.cssText='background:none;border:1px solid #B08D57;color:#8A6A2F;padding:9px 18px;'
+      +'border-radius:5px;font-weight:600;font-size:.86rem;cursor:pointer;margin-right:10px';
+    b.onmouseover=function(){b.style.background='#B08D57';b.style.color='#fff';};
+    b.onmouseout=function(){b.style.background='none';b.style.color='#8A6A2F';};
+    b.onclick=function(){
+      var s=slugNow();
+      if(!s){alert('Pick a resort first.');return;}
+      window.open(BASE+'?r='+encodeURIComponent(s)+suffix+'&agent=1','_blank','noopener');
+    };
+    return b;
+  }
+  function add(){
+    var bar=document.getElementById('acSaveBar');
+    if(!bar)return false;
+    if(!document.getElementById('acLiveGuide'))
+      bar.appendChild(mk('acLiveGuide','\uD83D\uDD17 Live guide','',
+        'Open this resort on the live Firestore-backed guide, in agent mode'));
+    if(!document.getElementById('acBuildQuote'))
+      bar.appendChild(mk('acBuildQuote','\u2726 Build quote','&quote=true',
+        'Open the live guide straight into the quote builder for this resort'));
+    return true;
+  }
+  var tries=0;
+  (function wait(){ if(add()||++tries>40)return; setTimeout(wait,300); })();
+})();
+</script>
+
 </body>
 </html>
