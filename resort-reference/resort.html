@@ -66,9 +66,9 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
 .vcard img{width:100%;height:200px;object-fit:cover;display:block;}
 .vcard .vbody{padding:22px 22px 26px;flex:1;}
-.vcard h4{font-size:21px;color:var(--espresso);margin:0;font-weight:400;}
+.vcard h4{font-size:24px;color:var(--espresso);margin:0;font-weight:400;}
 .vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
-.vcard p{font-size:16px;line-height:1.7;color:#4A433C;margin:4px 0 0;}
+.vcard p{font-size:17px;line-height:1.7;color:var(--ink);margin:4px 0 0;}
 .pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
 .pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
 .pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
@@ -316,7 +316,7 @@ async function loadResort(slug){
     const strip=$id('photo-strip');
     if(resortWide.length){strip.innerHTML=resortWide.slice(0,10).map(ph=>'<figure><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.caption||ph.category||'')+'" loading="lazy"></figure>').join('');strip.style.display='flex';}
     const venues=p.venues||[];
-    $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(v.photo?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--gold-soft);margin:6px 0 0">Up to '+esc(v.capacity)+' guests</p>':'')+(v.description?'<p>'+esc(v.description)+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
+    $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(v.photo?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(v.description?'<p>'+esc(v.description)+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
     $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
