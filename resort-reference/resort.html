@@ -807,14 +807,17 @@ function renderQuote(){
   /* 3b — OFFERS */
   (function(){
     const o=[];
+    const STANDING='https://www.destinationweddings.com/exclusive-offers';
     if(!CT) o.push({tag:'Always applies \u2014 nothing to enter',
       title:'Up to $2,500 off your destination wedding',
       body:'Major wedding savings at over 200 all-inclusive resorts across Mexico and the Caribbean. It is applied for you \u2014 there is nothing to claim.',
-      link:''});
+      link:STANDING});
     const t=CT?clean(P.ctPromoTitle):clean(P.weddingPromoTitle);
     const b=CT?clean(P.ctPromoSummary):clean(P.weddingPromoSummary);
     const l=CT?P.ctPromoLink:P.weddingPromoLink;
-    if(t) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
+    // don't show a second card that just points at the same offers page
+    const same=u=>String(u||'').trim().replace(/\/+$/,'').toLowerCase()===STANDING;
+    if(t && !(!CT && !b && same(l))) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
     if(!o.length||q.opts.offers===false)return;
     S.push('<div class="offers"><div class="wrap">'+o.map(x=>
       '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
