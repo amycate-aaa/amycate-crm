@@ -226,8 +226,6 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .pcard .row span:first-child{color:#7C7368;}
 .pcard .row span:last-child{color:var(--espresso);font-weight:500;}
 .pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
-.pcard.pick{border-color:var(--gold);border-width:2px;}
-.pick-flag{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:var(--gold);padding:5px 12px;align-self:flex-start;margin-bottom:12px;}
 .mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
 .mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
 .mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
@@ -430,11 +428,7 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
       <div class="qb-f"><label>Couple / Group Names</label><input id="q-couple" placeholder="Kaylee &amp; Derek"></div>
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
       <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028"></div>
-      <div class="qb-f"><label>Guest Count</label><input id="q-guests" placeholder="75"></div>
-      <div class="qb-f"><label>Estimated Rooms</label><input id="q-rooms" placeholder="30"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
-      <div class="qb-f"><label>Ceremony Venue</label><select id="q-venue"></select></div>
-      <div class="qb-f"><label>Wedding Package</label><select id="q-pkg"></select></div>
       <div class="qb-f"><label>Send As</label><select id="q-brand">
         <option value="dwt">Destination Weddings Travel Group</option>
         <option value="ct">Celebration Travel</option>
@@ -457,7 +451,6 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
     <p class="qb-h">Include In The Quote</p>
     <div class="qb-toggles">
       <label><input type="checkbox" id="o-inclusions" checked> Full package inclusions</label>
-      <label><input type="checkbox" id="o-allvenues" checked> All venues (not just selected)</label>
       <label><input type="checkbox" id="o-example" checked> Sample stay totals</label>
       <label><input type="checkbox" id="o-dining" checked> Dining</label>
       <label><input type="checkbox" id="o-pools" checked> Pools</label>
@@ -602,15 +595,14 @@ function collectQ(){
     const el=tr.querySelector('.d');
     return el?{name:tr.dataset.name,ppn:el.value.trim()}:null;
   }).filter(r=>r&&r.ppn);
-  const o={};['inclusions','allvenues','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
+  const o={};['inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
-    guests:$id('q-guests').value.trim(),rooms:$id('q-rooms').value.trim(),priced:$id('q-priced').value.trim(),
-    venue:$id('q-venue').value,pkg:$id('q-pkg').value,brand:$id('q-brand').value,
+    priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
     headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o};
 }
 function applyQ(q){
   if(!q)return;
-  ['couple','date','travel','guests','rooms','priced','venue','pkg','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
+  ['couple','date','travel','priced','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el)el.checked=!!q.opts[k];});
   (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
 }
@@ -621,10 +613,6 @@ function saveLocal(){try{localStorage.setItem('ac_quote_'+SLUG,JSON.stringify(co
 /* ══════════════════ BUILDER ══════════════════ */
 function buildBuilder(){
   $id('qb-for').textContent=(P.resortName||P.name||'')+(P.destination?' \u00b7 '+P.destination:'');
-  const vs=(P.venues||[]).map(v=>v.name).filter(Boolean);
-  $id('q-venue').innerHTML='<option value="">\u2014 none selected \u2014</option>'+vs.map(n=>'<option>'+esc(n)+'</option>').join('');
-  const ps=(P.packages||[]).map(p=>p.name).filter(Boolean);
-  $id('q-pkg').innerHTML='<option value="">\u2014 none selected \u2014</option>'+ps.map(n=>'<option>'+esc(n)+'</option>').join('');
   ROOMCATS=(P.roomCategories||[]).map(r=>r.name).filter(Boolean);
   $id('q-room-add').innerHTML=ROOMCATS.length
     ? ROOMCATS.map(n=>'<option>'+esc(n)+'</option>').join('')
@@ -698,15 +686,9 @@ function renderQuote(){
   /* 2 — NOTE + FACTS */
   if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
-  const facts=[q.date?['When',q.date]:null,q.guests?['Guests',q.guests]:null,q.travel?['Travel Dates',q.travel]:null,
-    P.destination?['Where',P.destination]:null,q.priced?['Priced On',q.priced]:null,q.rooms?['Rooms Held',q.rooms]:null].filter(Boolean).slice(0,4);
+  const facts=[q.date?['When',q.date]:null,q.travel?['Travel Dates',q.travel]:null,
+    P.destination?['Where',P.destination]:null,q.priced?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
-
-  /* 3 — YOUR SELECTIONS */
-  if(q.venue||q.pkg){S.push(sec('sel-band','<p class="eyebrow">Your Selections</p><div class="sel-grid">'+
-    (q.venue?'<div><h4>Ceremony Venue</h4><p>'+esc(q.venue)+'</p></div>':'')+
-    (q.pkg?'<div><h4>Wedding Package</h4><p>'+esc(q.pkg)+'</p></div>':'')+
-    (q.date?'<div><h4>Your Date</h4><p>'+esc(q.date)+'</p></div>':'')+'</div>'));}
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   if(q.prices.length){
@@ -733,10 +715,8 @@ function renderQuote(){
   if(pkgs.length){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+
       '<div class="price-grid" style="margin-top:34px;">'+pkgs.map(pk=>{
-        const picked=q.pkg&&pk.name===q.pkg;
         const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
-        return'<div class="pcard'+(picked?' pick':'')+'"><div class="b">'+
-          (picked?'<span class="pick-flag">Your selection</span>':'')+
+        return'<div class="pcard"><div class="b">'+
           '<h4>'+esc(pk.name)+'</h4>'+
           (clean(pk.price)?'<p class="meta" style="color:var(--gold);font-size:15px;letter-spacing:.06em;text-transform:none;">'+esc(clean(pk.price))+'</p>':'')+
           (clean(pk.summary)?'<p class="desc">'+esc(clean(pk.summary))+'</p>':'')+
@@ -746,14 +726,13 @@ function renderQuote(){
   }
 
   /* 6 — VENUES */
-  const vens=(P.venues||[]).filter(v=>v&&v.name).filter(v=>q.opts.allvenues||!q.venue||v.name===q.venue);
+  const vens=(P.venues||[]).filter(v=>v&&v.name);
   if(vens.length){
     S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+
       '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
         const img=[v.photo,v.photoUrl].find(photoOk)||'';
-        const picked=q.venue&&v.name===q.venue;
-        return'<div class="pcard'+(picked?' pick':'')+'">'+(img?'<img src="'+esc(img)+'" alt="'+esc(v.name)+'" loading="lazy">':'<div style="height:190px;background:var(--sand);"></div>')+
-          '<div class="b">'+(picked?'<span class="pick-flag">Your selection</span>':'')+
+        return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(v.name)+'" loading="lazy">':'<div style="height:190px;background:var(--sand);"></div>')+
+          '<div class="b">'+
           (clean(v.bestFor||v.type)?'<p class="meta">'+esc(clean(v.bestFor||v.type))+'</p>':'')+
           '<h4>'+esc(v.name)+'</h4>'+
           (v.capacity?'<p class="meta" style="color:var(--gold-soft);text-transform:none;letter-spacing:.04em;font-size:15px;">Up to '+esc(v.capacity)+' guests</p>':'')+
