@@ -180,6 +180,12 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
 .qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
 .qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
 .qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
 .qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
 .qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
@@ -438,9 +444,14 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
     </div>
 
     <p class="qb-h">Room Pricing</p>
-    <p class="qb-note">Per person, per night, based on double occupancy. Just the number &mdash; the quote adds the framing. Leave a room blank and it is hidden.</p>
+    <p class="qb-note">Add only the categories you are actually pricing. Per person, per night, based on double occupancy &mdash; just the number.</p>
+    <div class="qb-addrow">
+      <select id="q-room-add"></select>
+      <button type="button" class="qb-btn ghost" onclick="addRoomRow()">+ Add room</button>
+      <button type="button" class="qb-btn ghost" onclick="addAllRooms()">Add all</button>
+    </div>
     <div style="overflow-x:auto;"><table class="qb-rooms"><thead><tr>
-      <th style="min-width:220px;">Room Category</th><th style="width:220px;">Per Person / Night</th>
+      <th style="min-width:220px;">Room Category</th><th style="width:200px;">Per Person / Night</th><th style="width:44px;"></th>
     </tr></thead><tbody id="q-price-rows"></tbody></table></div>
 
     <p class="qb-h">Include In The Quote</p>
@@ -587,10 +598,10 @@ function renderDownloads(){
 
 /* ══════════════════ QUOTE STATE ══════════════════ */
 function collectQ(){
-  const rows=[...document.querySelectorAll('#q-price-rows tr')].map(tr=>({
-    name:tr.dataset.name,
-    ppn:tr.querySelector('.d').value.trim()
-  })).filter(r=>r.ppn);
+  const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{
+    const el=tr.querySelector('.d');
+    return el?{name:tr.dataset.name,ppn:el.value.trim()}:null;
+  }).filter(r=>r&&r.ppn);
   const o={};['inclusions','allvenues','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
     guests:$id('q-guests').value.trim(),rooms:$id('q-rooms').value.trim(),priced:$id('q-priced').value.trim(),
@@ -601,8 +612,7 @@ function applyQ(q){
   if(!q)return;
   ['couple','date','travel','guests','rooms','priced','venue','pkg','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el)el.checked=!!q.opts[k];});
-  (q.prices||[]).forEach(r=>{const tr=[...document.querySelectorAll('#q-price-rows tr')].find(t=>t.dataset.name===r.name);
-    if(tr){tr.querySelector('.d').value=r.ppn||r.dbl||'';}});
+  (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
 }
 function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
@@ -615,9 +625,11 @@ function buildBuilder(){
   $id('q-venue').innerHTML='<option value="">\u2014 none selected \u2014</option>'+vs.map(n=>'<option>'+esc(n)+'</option>').join('');
   const ps=(P.packages||[]).map(p=>p.name).filter(Boolean);
   $id('q-pkg').innerHTML='<option value="">\u2014 none selected \u2014</option>'+ps.map(n=>'<option>'+esc(n)+'</option>').join('');
-  const cats=(P.roomCategories||[]).map(r=>r.name).filter(Boolean);
-  $id('q-price-rows').innerHTML=(cats.length?cats:['Room category']).map(n=>
-    '<tr data-name="'+esc(n)+'"><td>'+esc(n)+'</td><td><input class="d" placeholder="309"></td></tr>').join('');
+  ROOMCATS=(P.roomCategories||[]).map(r=>r.name).filter(Boolean);
+  $id('q-room-add').innerHTML=ROOMCATS.length
+    ? ROOMCATS.map(n=>'<option>'+esc(n)+'</option>').join('')
+    : '<option value="">No room categories on this resort yet</option>';
+  $id('q-price-rows').innerHTML='';syncRooms();
   document.querySelectorAll('#qb input,#qb select,#qb textarea').forEach(el=>{
     el.addEventListener('input',()=>{if(el.classList.contains('d')||el.classList.contains('s')||el.classList.contains('t')||el.classList.contains('c'))el.classList.toggle('on',!!el.value.trim());saveLocal();});
     el.addEventListener('change',saveLocal);});
@@ -625,6 +637,33 @@ function buildBuilder(){
   if(url)applyQ(decQ(url));
   else{try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s)applyQ(JSON.parse(s));}catch(e){}}
   if(!$id('q-priced').value)$id('q-priced').value='Per person, per night';
+}
+let ROOMCATS=[];
+const NOROOMS='<tr id="q-norooms"><td colspan="3" class="none">No rooms added yet \u2014 choose one above and hit Add room.</td></tr>';
+function syncRooms(){
+  const tb=$id('q-price-rows');if(!tb)return;
+  if(!tb.querySelector('tr[data-name]')){tb.innerHTML=NOROOMS;}
+  else{const ph=$id('q-norooms');if(ph)ph.remove();}
+}
+function addRoomRow(name,val){
+  const n=(name||$id('q-room-add').value||'').trim();
+  if(!n)return;
+  if([...document.querySelectorAll('#q-price-rows tr[data-name]')].some(t=>t.dataset.name===n))return;
+  $id('q-price-rows').insertAdjacentHTML('beforeend',
+    '<tr data-name="'+esc(n)+'"><td>'+esc(n)+'</td>'+
+    '<td><input class="d" placeholder="309" value="'+esc(val||'')+'"></td>'+
+    '<td><button type="button" class="rx" title="Remove">\u00d7</button></td></tr>');
+  syncRooms();wireRooms();
+}
+function addAllRooms(){ROOMCATS.forEach(n=>addRoomRow(n));}
+function wireRooms(){
+  document.querySelectorAll('#q-price-rows .d').forEach(el=>{
+    el.classList.toggle('on',!!el.value.trim());
+    el.oninput=function(){el.classList.toggle('on',!!el.value.trim());saveLocal();};
+  });
+  document.querySelectorAll('#q-price-rows .rx').forEach(b=>{
+    b.onclick=function(){b.closest('tr').remove();syncRooms();saveLocal();};
+  });
 }
 function openQuote(){$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
 function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
