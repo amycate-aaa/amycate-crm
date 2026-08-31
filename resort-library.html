@@ -2976,6 +2976,56 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   else setTimeout(add,1200);
 })();
 </script>
+
+<script id="acSectionSave">
+/* A Save button at the foot of every section. Each one saves the whole profile —
+   the underlying save is not per-section — but having it where you finish typing
+   means you don't scroll away and lose the edit. */
+(function(){
+  var SECS=['sec-core','sec-links','sec-goodtoknow','sec-venues','sec-packages',
+            'sec-dining','sec-pools','sec-rooms','sec-club','sec-promos'];
+  function mainSaveBtn(){
+    return [].slice.call(document.querySelectorAll('button')).filter(function(b){
+      return /Save Profile/i.test(b.textContent) && b.id!=='acSaveBarBtn'
+             && !b.classList.contains('acSecSave');
+    })[0];
+  }
+  function add(){
+    if(!document.getElementById('acSecSaveCss')){
+      var st=document.createElement('style'); st.id='acSecSaveCss';
+      st.textContent=
+        '.acSecSaveRow{display:flex;justify-content:flex-end;align-items:center;gap:12px;'
+        +'margin-top:18px;padding-top:14px;border-top:1px solid #E0D7C4;}'
+        +'.acSecSaveRow .hint{font-size:.74rem;color:#8A7C67;}'
+        +'.acSecSave{background:#B08D57;color:#fff;border:0;border-radius:6px;'
+        +'padding:9px 20px;font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;}'
+        +'.acSecSave:hover{background:#9C7B48;}'
+        +'.acSecSave.done{background:#2F6B4F;}';
+      document.head.appendChild(st);
+    }
+    SECS.forEach(function(id){
+      var h=document.getElementById(id); if(!h)return;
+      var sec=h.closest('.upload-section'); if(!sec)return;
+      if(sec.querySelector('.acSecSaveRow'))return;
+      var row=document.createElement('div'); row.className='acSecSaveRow';
+      var hint=document.createElement('span'); hint.className='hint';
+      hint.textContent='Saves the whole profile';
+      var b=document.createElement('button');
+      b.type='button'; b.className='acSecSave'; b.textContent='\uD83D\uDCBE Save';
+      b.onclick=function(){
+        var m=mainSaveBtn(); if(!m){return;}
+        m.click();
+        b.textContent='\u2713 Saved'; b.classList.add('done');
+        setTimeout(function(){b.textContent='\uD83D\uDCBE Save'; b.classList.remove('done');},2200);
+      };
+      row.appendChild(hint); row.appendChild(b);
+      sec.appendChild(row);
+    });
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(add,1300);});
+  else setTimeout(add,1300);
+})();
+</script>
 </body>\n</html>\n';
  }
 
