@@ -509,7 +509,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <label><input type="checkbox" id="o-pools" checked> Pools</label>
       <label><input type="checkbox" id="o-activities" checked> Activities</label>
       <label><input type="checkbox" id="o-essentials" checked> Good to know</label>
-      <label><input type="checkbox" id="o-gallery" checked> Photo gallery</label>
+      <label><input type="checkbox" id="o-gallery"> Photo gallery</label>
       <label><input type="checkbox" id="o-docs" checked> More info</label>
       <label><input type="checkbox" id="o-group" checked> What a group gets you</label>
       <label><input type="checkbox" id="o-steps" checked> Next steps</label>
@@ -664,7 +664,7 @@ function collectQ(){
 function applyQ(q){
   if(!q)return;
   ['couple','date','travel','priced','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
-  if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el)el.checked=!!q.opts[k];});
+  if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el&&k!=='gallery')el.checked=!!q.opts[k];});
   (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
 }
 function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
