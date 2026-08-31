@@ -181,6 +181,23 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
 .qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
 .qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:30px;}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
 .qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
 #q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
 #q-room-add:focus{outline:none;border-color:var(--gold);}
@@ -543,6 +560,21 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <th style="min-width:220px;">Room Category</th><th style="width:200px;">Per Person / Night</th><th style="width:44px;"></th>
     </tr></thead><tbody id="q-price-rows"></tbody></table></div>
 
+    <p class="qb-h">Flights</p>
+    <label class="airtoggle"><input type="checkbox" id="q-needair" onchange="toggleAir()"> This group needs air</label>
+    <div id="q-airbox" style="display:none;">
+      <p class="qb-note">One row per departure city. Type the flight number and date, press Look up, and the airports and times fill themselves.</p>
+      <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
+        <th style="min-width:130px;">Who / city</th><th style="width:110px;">Flight</th><th style="width:130px;">Date</th>
+        <th style="width:80px;">From</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
+        <th style="width:90px;"></th><th style="width:40px;"></th>
+      </tr></thead><tbody id="q-air-rows"></tbody></table></div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px;">
+        <button type="button" class="qb-btn ghost" onclick="addAirRow()">+ Add flight</button>
+        <span class="airmsg" id="q-air-msg"></span>
+      </div>
+    </div>
+
     <p class="qb-h">Include In The Quote</p>
     <div class="qb-toggles">
       <label><input type="checkbox" id="o-offers" checked> Current offers</label>
@@ -712,10 +744,20 @@ function collectQ(){
   const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
     priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
+    needAir:$id('q-needair').checked,
+    air:[...document.querySelectorAll('#q-air-rows tr[data-air]')].map(tr=>({
+      who:tr.querySelector('.a-who').value.trim(), flight:tr.querySelector('.a-fl').value.trim(),
+      date:tr.querySelector('.a-dt').value.trim(), from:tr.querySelector('.a-fr').value.trim(),
+      to:tr.querySelector('.a-to').value.trim(),   dep:tr.querySelector('.a-dp').value.trim(),
+      arr:tr.querySelector('.a-ar').value.trim()
+    })).filter(r=>r.who||r.flight),
     headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o};
 }
 function applyQ(q){
   if(!q)return;
+  if(q.needAir!=null)$id('q-needair').checked=!!q.needAir;
+  toggleAir();
+  (q.air||[]).forEach(r=>addAirRow(r));
   ['couple','date','travel','priced','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el&&k!=='gallery')el.checked=!!q.opts[k];});
   (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
@@ -766,6 +808,53 @@ function wireRooms(){
   document.querySelectorAll('#q-price-rows .rx').forEach(b=>{
     b.onclick=function(){b.closest('tr').remove();syncRooms();saveLocal();};
   });
+}
+const RAPIDAPI_KEY='1540ad94fcmsh80790b3065091f5p1285b9jsn51218123bdb5';
+function toggleAir(){ $id('q-airbox').style.display=$id('q-needair').checked?'block':'none';
+  if($id('q-needair').checked && !document.querySelector('#q-air-rows tr[data-air]')) addAirRow(); }
+function addAirRow(v){
+  v=v||{};
+  $id('q-air-rows').insertAdjacentHTML('beforeend',
+    '<tr data-air><td><input class="a-who" placeholder="Denver" value="'+esc(v.who||'')+'"></td>'+
+    '<td><input class="a-fl" placeholder="UA1167" value="'+esc(v.flight||'')+'"></td>'+
+    '<td><input class="a-dt" placeholder="2027-05-14" value="'+esc(v.date||'')+'"></td>'+
+    '<td><input class="a-fr" value="'+esc(v.from||'')+'"></td>'+
+    '<td><input class="a-to" value="'+esc(v.to||'')+'"></td>'+
+    '<td><input class="a-dp" value="'+esc(v.dep||'')+'"></td>'+
+    '<td><input class="a-ar" value="'+esc(v.arr||'')+'"></td>'+
+    '<td><button type="button" class="look">Look up</button></td>'+
+    '<td><button type="button" class="rx">\u00d7</button></td></tr>');
+  wireAir();
+}
+function wireAir(){
+  document.querySelectorAll('#q-air-rows tr[data-air]').forEach(tr=>{
+    tr.querySelectorAll('input').forEach(i=>{ i.oninput=saveLocal; });
+    tr.querySelector('.rx').onclick=()=>{tr.remove();saveLocal();};
+    tr.querySelector('.look').onclick=()=>lookupAir(tr);
+  });
+}
+async function lookupAir(tr){
+  const msg=$id('q-air-msg');
+  const fl=tr.querySelector('.a-fl').value.trim().replace(/\s/g,'').toUpperCase();
+  const dt=tr.querySelector('.a-dt').value.trim();
+  if(!fl||!dt){ msg.className='airmsg bad'; msg.textContent='Flight number and date first (date as 2027-05-14).'; return; }
+  msg.className='airmsg'; msg.textContent='Looking up '+fl+'\u2026';
+  try{
+    const r=await fetch('https://aerodatabox.p.rapidapi.com/flights/number/'+fl+'/'+dt,
+      {headers:{'X-RapidAPI-Key':RAPIDAPI_KEY,'X-RapidAPI-Host':'aerodatabox.p.rapidapi.com'}});
+    if(!r.ok){ msg.className='airmsg bad'; msg.textContent='Not found \u2014 fill it in by hand.'; return; }
+    const data=await r.json();
+    const f=Array.isArray(data)?data[0]:data;
+    if(!f){ msg.className='airmsg bad'; msg.textContent='No data for that flight and date.'; return; }
+    const fmt=t=>{ if(!t)return''; const d=new Date(t);
+      return isNaN(d)?'':d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'}); };
+    if(f.departure){ if(f.departure.airport&&f.departure.airport.iata)tr.querySelector('.a-fr').value=f.departure.airport.iata;
+                     tr.querySelector('.a-dp').value=fmt(f.departure.scheduledTime&&f.departure.scheduledTime.local); }
+    if(f.arrival){   if(f.arrival.airport&&f.arrival.airport.iata)tr.querySelector('.a-to').value=f.arrival.airport.iata;
+                     tr.querySelector('.a-ar').value=fmt(f.arrival.scheduledTime&&f.arrival.scheduledTime.local); }
+    msg.className='airmsg ok'; msg.textContent='\u2713 '+fl+' filled in.';
+    saveLocal();
+  }catch(e){ msg.className='airmsg bad'; msg.textContent='Lookup failed \u2014 fill it in by hand.'; }
 }
 function openQuote(){$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
 function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
@@ -839,6 +928,27 @@ function renderQuote(){
       '<h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(x.body)+'</p>':'')+
       (x.link?'<a class="more" href="'+esc(x.link)+'" target="_blank" rel="noopener">See the details &rarr;</a>':'')+
       '</div>').join('')+'</div></div>');
+  })();
+
+  /* 3c — FLIGHTS */
+  (function(){
+    if(!q.needAir)return;
+    const rows=(q.air||[]).filter(r=>r.who||r.flight);
+    if(!rows.length)return;
+    const anyFl=rows.some(r=>r.flight), anyRt=rows.some(r=>r.from||r.to), anyTm=rows.some(r=>r.dep||r.arr);
+    S.push(sec('',head('Getting There','Flights')+
+      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Everyone is coming from somewhere different, so here is each routing side by side. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
+      '<table class="flighttbl"><thead><tr>'+
+      '<th>Departing from</th>'+(anyFl?'<th>Flight</th>':'')+'<th>Date</th>'+
+      (anyRt?'<th>Route</th>':'')+(anyTm?'<th>Departs</th><th>Arrives</th>':'')+
+      '</tr></thead><tbody>'+
+      rows.map(r=>'<tr><td class="city">'+esc(r.who||'\u2014')+'</td>'+
+        (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
+        '<td>'+esc(r.date||'\u2014')+'</td>'+
+        (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
+        (anyTm?'<td>'+esc(r.dep||'\u2014')+'</td><td>'+esc(r.arr||'\u2014')+'</td>':'')+
+        '</tr>').join('')+'</tbody></table>'+
+      '<p class="small" style="margin-top:22px;">Nothing here is ticketed yet. Once you are ready I hold the seats, and I book everyone\u2019s flights alongside their rooms so it is one conversation rather than five.</p>'));
   })();
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
@@ -1153,7 +1263,7 @@ const NAVLABEL={'Accommodations & Pricing':'Rooms','Rooms & Suites':'Rooms',
   'Wedding Packages':'Wedding info','Ceremony & Reception Venues':'Wedding venues',
   'Pools & Beach':'Pools','Good To Know':'Good to know','More Info':'More info',
   'What A Group Gets You':'Groups','Next Steps':'Next steps',
-  'A Real Wedding Here':'Real wedding'};
+  'A Real Wedding Here':'Real wedding','Flights':'Flights'};
 function buildQuoteNav(){
   const qp=$id('quote-page');
   const old=qp.querySelector('.qnav'); if(old)old.remove();
