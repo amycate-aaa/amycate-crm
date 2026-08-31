@@ -741,7 +741,8 @@ function copyQuoteLink(){const u=location.origin+location.pathname+'?r='+SLUG+'&
 function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.resortName||P.name||'';
-  const email=q.brand==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
+  const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
+  const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
   const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
   const hero=photoOk(P.heroPhoto)?P.heroPhoto:(RESORTWIDE.find(p=>photoOk(p.url||p.downloadURL))||{}).url||'';
   const closeImg=(RESORTWIDE.filter(p=>photoOk(p.url||p.downloadURL)).map(p=>p.url||p.downloadURL)[1])||hero;
@@ -756,7 +757,7 @@ function renderQuote(){
     (q.headline?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
-    '<p style="margin:0;"><a class="herobtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></p>'+
+    (CT?'':'<p style="margin:0;"><a class="herobtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></p>')+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
@@ -808,7 +809,7 @@ function renderQuote(){
   if(priced&&ROOMS){S.push(ROOMS);ROOMS='';}   // priced: show it here, near the top
 
   /* 5 — PACKAGES */
-  const pkgs=(P.packages||[]).filter(p=>p&&p.name);
+  const pkgs=CT?[]:(P.packages||[]).filter(p=>p&&p.name);
   if(pkgs.length){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
@@ -828,7 +829,7 @@ function renderQuote(){
   }
 
   /* 6 — VENUES */
-  const vens=(P.venues||[]).filter(v=>v&&v.name);
+  const vens=CT?[]:(P.venues||[]).filter(v=>v&&v.name);
   if(vens.length){
     S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+bandImg('venues',/venue|ceremony/i)+docBtns('venues')+
       '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
@@ -918,6 +919,7 @@ function renderQuote(){
   if(ROOMS)S.push(ROOMS);
 
   /* 14 — GROUP AGREEMENT */
+  if(!CT){
   if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
     '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being a holiday everyone books separately and starts being <em>your</em> week. Here is what that changes.</p>'+
     '<div class="ga-grid">'+
@@ -927,15 +929,31 @@ function renderQuote(){
     '<div class="ga-card"><p class="i">&#127870;</p><h4>The extras that add up</h4><p>Roundtrip airport transfers for every guest, room upgrades placed where they do the most good, a private cocktail hour for your group, and a booking credit that comes off your own final payment.</p></div>'+
     '</div>'+
     '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request your agreement. It comes back in a few days and we get on a call and walk through every line of it together before you sign anything \u2014 you will never be handed a contract and left to figure it out.</p></div>'));
+  } else {
+  if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
+    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being everyone booking separately and starts being <em>your</em> trip. Here is what that changes.</p>'+
+    '<div class="ga-grid">'+
+    '<div class="ga-card"><p class="i">&#128274;</p><h4>Your price stops moving</h4><p>Every category we price gets held at today\u2019s number. Rates will go up between now and your dates \u2014 yours will not. Someone who decides months from now that they want the ocean view still pays what you are looking at today.</p></div>'+
+    '<div class="ga-card"><p class="i">&#127873;</p><h4>Rooms you do not pay for</h4><p>A block this size earns complimentary rooms, and that value comes back to the organiser once everyone is home. I count them, submit the claim, and stay on the resort until it lands.</p></div>'+
+    '<div class="ga-card"><p class="i">&#128187;</p><h4>You stop being the organiser</h4><p>Everyone gets their own booking site and books themselves at your locked rates. No spreadsheet, no collecting money, no chasing anyone for a deposit. Every booking and every payment comes to me instead.</p></div>'+
+    '<div class="ga-card"><p class="i">&#127870;</p><h4>The extras that add up</h4><p>Roundtrip airport transfers for everyone, room upgrades placed where they do the most good, and a private cocktail hour so the whole group is together at least once.</p></div>'+
+    '</div>'+
+    '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request the group agreement. It comes back in a few days and we get on a call and walk through it together before anyone signs anything.</p></div>'));
+  }
+
 
   /* 15 — NEXT STEPS */
   if(q.opts.steps)S.push(sec('sand-band',head('No Rush','Next Steps')+
     '<div class="steps" style="margin-top:34px;">'+
     '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
-    '<div><p class="n">02</p><h4>I request the agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>'+
-    '<div><p class="n">03</p><h4>Your website goes live</h4><p>Five to seven business days after signing. From there your guests book themselves and I take it from you.</p></div>'+
+    (CT
+      ?'<div><p class="n">02</p><h4>I request the group agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>'
+      :'<div><p class="n">02</p><h4>I request the agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>')+
+    (CT
+      ?'<div><p class="n">03</p><h4>Your booking site goes live</h4><p>Five to seven business days after signing. From there everyone books themselves and I take it from you.</p></div>'
+      :'<div><p class="n">03</p><h4>Your website goes live</h4><p>Five to seven business days after signing. From there your guests book themselves and I take it from you.</p></div>')+
     '</div>'+
-    '<div class="free-box"><p><strong>And this costs you nothing.</strong> The resorts pay me, not you \u2014 and that covers everything: the quotes, the room block, chasing the resorts, and managing your guests\u2019 bookings and payments.</p></div>'));
+    '<div class="free-box"><p><strong>And this costs you nothing.</strong> The resorts pay me, not you \u2014 and that covers everything: the quotes, the room block, chasing the resorts, and managing '+(CT?'everyone\u2019s':'your guests\u2019')+' bookings and payments.</p></div>'));
 
   /* 16 — CLOSING */
   S.push('<div class="q-close sand-band" style="background:var(--espresso);color:#EDE4D6;">'+
