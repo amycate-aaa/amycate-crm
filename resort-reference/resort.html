@@ -6,7 +6,7 @@
 <title>Resort Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -16,16 +16,16 @@ const db=firebase.firestore();
 firebase.auth().signInAnonymously().catch(e=>console.warn('Auth:',e));
 </script>
 <style>
-:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#2A241F;--ink:#3B342E;--gold:#B08D57;--gold-soft:#C9AD82;--sea:#7FA8A3;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;}
 *{box-sizing:border-box;}html{scroll-behavior:smooth;}
-body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--serif);font-weight:300;font-size:20px;line-height:1.72;-webkit-font-smoothing:antialiased;}
 img{max-width:100%;display:block;}a{color:inherit;}
-.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
-h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
-h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.eyebrow{font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;}
+h2.display{font-size:clamp(1.9rem,3.4vw,2.9rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-size:clamp(1.4rem,2.2vw,1.9rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
 .rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
 .rule.center{margin:22px auto;}
-.small{font-size:15px;line-height:1.82;color:var(--ink);}
+.small{font-size:17px;line-height:1.82;color:var(--ink);}
 section{padding:clamp(56px,7vw,96px) 0;}
 .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
 .center{text-align:center;}
@@ -40,9 +40,9 @@ section{padding:clamp(56px,7vw,96px) 0;}
 #picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--serif);transition:.3s;}
 #picker-btn:hover{background:var(--gold);color:#fff;}
 #page{display:none;}
-nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
-nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
-nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(176,141,87,.18);}
+nav ul{list-style:none;margin:0;padding:18px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;}
 nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
 .hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
@@ -66,58 +66,58 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
 .vcard img{width:100%;height:200px;object-fit:cover;display:block;}
 .vcard .vbody{padding:22px 22px 26px;flex:1;}
-.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--serif);}
+.vcard h4{font-size:21px;color:var(--espresso);margin:0;font-weight:400;}
 .vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
-.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.vcard p{font-size:16px;line-height:1.7;color:#4A433C;margin:4px 0 0;}
 .pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
 .pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
 .pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
 .pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--serif);}
 .pkgtrigger:hover .pname{color:var(--gold);}
-.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
-.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
-.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
-.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pname{font-size:1.2rem;font-weight:400;color:var(--espresso);line-height:1.2;display:block;transition:.2s;}
+.phint{font-size:14px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:15px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.65rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
 .pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
 .pkgbody{display:none;padding:0 0 28px;}
 .pkgbody.open{display:block;}
 .pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
-.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(176,141,87,.15);font-size:16.5px;color:#3B342E;line-height:1.5;}
 .pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
 .dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
 .dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
 .dcard img{width:100%;height:180px;object-fit:cover;}
 .dcard .dbody{padding:20px 22px 24px;}
-.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--serif);}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;}
 .dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
-.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.dcard p{font-size:16px;line-height:1.7;color:#4A433C;margin:0;}
 .barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
 .barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
 .bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
 .bars-list li{text-align:center;}
-.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bname{font-size:18px;color:var(--ivory);display:block;}
 .bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
 .pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
 .pool-card{background:var(--sand);padding:30px 26px;}
-.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--serif);}
-.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;}
+.pool-card p{font-size:16px;line-height:1.72;color:#4A433C;margin:0;}
 .room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
 .rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
 .rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
 .rcard:hover img{transform:scale(1.03);}
 .rcard .rbody{padding:22px 22px 26px;flex:1;}
 .rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
-.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--serif);}
-.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rcard h4{font-size:21px;color:var(--espresso);margin:0 0 10px;font-weight:400;}
+.rcard p{font-size:16px;line-height:1.7;color:#4A433C;margin:0;}
 .rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
 .rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
 .club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
 .club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
-.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.club-block p{font-size:17px;line-height:1.78;color:#3B342E;margin:0;}
 .act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
 .act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
 .act-list{list-style:none;padding:0;margin:0;}
-.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(176,141,87,.2);font-size:17px;line-height:1.5;color:#3B342E;}
 .act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
 .act-list.incl li::before{content:"✓";}
 .act-list.extra li::before{content:"+";}
@@ -125,9 +125,9 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .ess-block{background:var(--sand);padding:34px 28px;}
 .ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
 .ess-block ul{list-style:none;padding:0;margin:0;}
-.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(176,141,87,.18);font-size:16px;color:#3B342E;line-height:1.4;}
 .ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
-.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.ess-block p{font-size:16.5px;line-height:1.75;color:#3B342E;margin:0;}
 .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
 .gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
 .gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
@@ -156,6 +156,121 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
   .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
   .gallery{grid-template-columns:1fr 1fr;}
 }
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--serif);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--serif);font-size:17px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--serif);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--serif);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
+
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:19px;color:var(--espresso);margin:0;line-height:1.4;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.pcard .ppn{font-size:2.5rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:#7C7368;line-height:1.75;margin:0;}
+.pcard.pick{border-color:var(--gold);border-width:2px;}
+.pick-flag{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:#fff;background:var(--gold);padding:5px 12px;align-self:flex-start;margin-bottom:12px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.mathbox .big{font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:17px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
+
 </style>
 </head>
 <body>
@@ -188,13 +303,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
   <section>
     <div class="wrap">
       <div class="split">
-        <div>
-          <p class="eyebrow">Overview</p>
-          <h2 class="display" id="ov-title"></h2>
-          <hr class="rule">
-          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--serif);font-style:italic;"></p>
-        </div>
-        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"></div>
+        <div><p class="eyebrow">Overview</p><h2 class="display" id="ov-title"></h2><hr class="rule"><p class="small" id="ov-lede"></p></div>
+        <div id="ov-prose" style="font-size:18px;line-height:1.82;color:#3B342E;"></div>
       </div>
     </div>
   </section>
@@ -209,10 +319,9 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
         <button class="tab-btn" id="tab-grp" onclick="selTab('grp')">Groups &amp; Celebrations</button>
       </div>
       <div id="panel-wed">
-        <h3 class="lead">Wedding Packages</h3>
-        <p class="pkg-hint">Click any package to see full inclusions</p>
-        <div class="pkglist" id="pkg-grid"></div>
-        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div class="vgrid" id="venues-grid"></div></div>
+        <h3 class="lead">Venues</h3>
+        <div class="vgrid" id="venues-grid"></div>
+        <div style="margin-top:52px;"><h3 class="lead">Wedding Packages</h3><p class="pkg-hint">Click any package to see full inclusions</p><div class="pkglist" id="pkg-grid"></div></div>
       </div>
       <div id="panel-grp" hidden><div id="groups-body"></div></div>
     </div>
@@ -269,6 +378,14 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
       <div class="ess-grid" id="ess-grid"></div>
     </div>
   </section>
+  <section class="sand-band" id="downloads" style="display:none;">
+    <div class="wrap">
+      <p class="eyebrow">Take It With You</p>
+      <h2 class="display">Downloads &amp; Resources</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
+    </div>
+  </section>
   <section id="gallery">
     <div class="wrap">
       <p class="eyebrow">The Resort</p>
@@ -290,6 +407,62 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
     <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
   </footer>
 </div>
+<button id="qb-open" onclick="openQuote()">&#10022; Build Quote</button>
+<div id="qb">
+  <div class="qb-card">
+    <h2>Build a Quote</h2>
+    <p class="qb-sub" id="qb-for"></p>
+
+    <div class="qb-grid">
+      <div class="qb-f"><label>Couple / Group Names</label><input id="q-couple" placeholder="Kaylee &amp; Derek"></div>
+      <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
+      <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028"></div>
+      <div class="qb-f"><label>Guest Count</label><input id="q-guests" placeholder="75"></div>
+      <div class="qb-f"><label>Estimated Rooms</label><input id="q-rooms" placeholder="30"></div>
+      <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
+      <div class="qb-f"><label>Ceremony Venue</label><select id="q-venue"></select></div>
+      <div class="qb-f"><label>Wedding Package</label><select id="q-pkg"></select></div>
+      <div class="qb-f"><label>Send As</label><select id="q-brand">
+        <option value="dwt">Destination Weddings Travel Group</option>
+        <option value="ct">Celebration Travel</option>
+      </select></div>
+      <div class="qb-f wide"><label>Headline (optional &mdash; something about them)</label><input id="q-headline" placeholder="Five Years Late"></div>
+      <div class="qb-f wide"><label>Your Note To Them</label><textarea id="q-note" placeholder="Reflect their brief back in their own words, then say why their instinct is right&hellip;"></textarea></div>
+    </div>
+
+    <p class="qb-h">Room Pricing</p>
+    <p class="qb-note">Per person, per night, based on double occupancy. Just the number &mdash; the quote adds the framing. Leave a room blank and it is hidden.</p>
+    <div style="overflow-x:auto;"><table class="qb-rooms"><thead><tr>
+      <th style="min-width:220px;">Room Category</th><th style="width:220px;">Per Person / Night</th>
+    </tr></thead><tbody id="q-price-rows"></tbody></table></div>
+
+    <p class="qb-h">Include In The Quote</p>
+    <div class="qb-toggles">
+      <label><input type="checkbox" id="o-inclusions" checked> Full package inclusions</label>
+      <label><input type="checkbox" id="o-allvenues" checked> All venues (not just selected)</label>
+      <label><input type="checkbox" id="o-example" checked> Sample stay totals</label>
+      <label><input type="checkbox" id="o-dining" checked> Dining</label>
+      <label><input type="checkbox" id="o-pools" checked> Pools</label>
+      <label><input type="checkbox" id="o-activities" checked> Activities</label>
+      <label><input type="checkbox" id="o-essentials" checked> Good to know</label>
+      <label><input type="checkbox" id="o-gallery" checked> Photo gallery</label>
+      <label><input type="checkbox" id="o-docs" checked> Downloads &amp; resources</label>
+      <label><input type="checkbox" id="o-group" checked> Group agreement section</label>
+      <label><input type="checkbox" id="o-steps" checked> Next steps</label>
+    </div>
+
+    <div class="qb-bar">
+      <button class="qb-btn solid" onclick="renderQuote()">Preview Quote &rarr;</button>
+      <button class="qb-btn" onclick="downloadQuote()">Download HTML</button>
+      <button class="qb-btn" onclick="copyQuoteLink()">Copy Link</button>
+      <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
+      <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
+      <span class="qb-msg" id="qb-msg"></span>
+    </div>
+  </div>
+</div>
+<div id="quote-page"></div>
+
 <script>
 function selTab(t){['wed','grp'].forEach(id=>{document.getElementById('tab-'+id).className='tab-btn'+(id===t?' active':'');document.getElementById('panel-'+id).hidden=id!==t;});}
 if(location.hash==='#groups')setTimeout(()=>selTab('grp'),100);
@@ -304,9 +477,11 @@ async function loadResort(slug){
     const[profSnap,photosSnap]=await Promise.all([db.collection('resortProfiles').doc(slug).get(),db.collection('resortPhotos').where('resortSlug','==',slug).get()]);
     if(!profSnap.exists){$id('error-msg').textContent='No resort found with slug "'+slug+'".';$id('loading').style.display='none';$id('error').style.display='flex';return;}
     const p=profSnap.data();
+    P=p;SLUG=slug;
     const photos=photosSnap.docs.map(d=>d.data());
     const photoMap={};const resortWide=[];
     photos.forEach(ph=>{const rcat=(ph.roomCategory||'').toLowerCase().trim();const cat=(ph.category||'').toLowerCase();if(rcat&&cat!=='rooms & suites'){if(!photoMap[rcat])photoMap[rcat]=ph.url||ph.downloadURL||'';}else if(!rcat&&cat&&cat!=='rooms & suites'&&cat!=='room'){resortWide.push(ph);}});
+    PHOTOS=photos;RESORTWIDE=resortWide;PHOTOMAP=photoMap;
     function findPhoto(name){const n=(name||'').toLowerCase().trim();if(photoMap[n])return photoMap[n];const k=Object.keys(photoMap).find(k=>k.includes(n)||n.includes(k));return k?photoMap[k]:'';}
     document.title=(p.resortName||p.name||'Resort Reference')+' · Amy Cate';
     $id('hero-name').textContent=p.resortName||p.name||'';
@@ -314,36 +489,30 @@ async function loadResort(slug){
     $id('hero-dest').textContent=p.destination||'';
     const ageshort=p.agePolicy?p.agePolicy.split('.')[0].split(';')[0].trim().slice(0,40):'';
     $id('hero-chips').innerHTML=[ageshort||null,p.stars?p.stars+' Stars':null,p.clubName||null].filter(Boolean).map(c=>'<li>'+esc(c)+'</li>').join('');
-    const heroImg=p.heroPhoto||(resortWide[0]?.url)||Object.values(photoMap)[0]||'';
+    const heroImg=[p.heroPhoto,(resortWide[0]||{}).url,Object.values(photoMap)[0]].find(photoOk)||'';
     $id('hero-img').src=heroImg;$id('hero-img').alt=p.name||'';
     $id('ov-title').textContent=p.name||'';
-    // Lede = tagline if available, otherwise first sentence of description
-    $id('ov-lede').textContent=p.tagline||(p.description?p.description.split('.')[0]+'.':'');
-    // Prose = overview text (don't repeat description)
-    const overviewText=p.overview||'';
-    const descText=p.description||'';
-    $id('ov-prose').innerHTML=overviewText
-      ?overviewText.split('\n\n').map(t=>'<p style="margin:0 0 1em">'+esc(t)+'</p>').join('')
-      :(descText?'<p>'+esc(descText)+'</p>':'');
+    $id('ov-lede').textContent=p.description?p.description.split('.').slice(0,2).join('.')+'.':'';
+    $id('ov-prose').innerHTML=p.overview?p.overview.split('\n\n').map(t=>'<p style="margin:0 0 1em">'+esc(t)+'</p>').join(''):(p.description?'<p>'+esc(p.description)+'</p>':'');
     const strip=$id('photo-strip');
     if(resortWide.length){strip.innerHTML=resortWide.slice(0,10).map(ph=>'<figure><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.caption||ph.category||'')+'" loading="lazy"></figure>').join('');strip.style.display='flex';}
     const venues=p.venues||[];
-    $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(v.photo?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(v.description?'<p>'+esc(v.description)+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
+    $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(clean(v.bestFor||v.type))+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--gold-soft);margin:6px 0 0">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
-    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
+    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const sn=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');const lines=pk.highlights?pk.highlights.split(' · ').map(clean).filter(Boolean):[];return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
     $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
     const rests=p.restaurants||[];
-    $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':r.photo||r.photoUrl||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(desc?'<p>'+esc(desc)+'</p>':'')+'</div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">Restaurant details coming soon.</p>';
+    $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':[r.photo,r.photoUrl].find(photoOk)||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(clean(desc)?'<p>'+esc(clean(desc))+'</p>':'')+'</div></div>';}).join(''):'<p class="empty" style="grid-column:1/-1">Restaurant details coming soon.</p>';
     const bars=p.bars||[];
     if(bars.length){$id('bars-box').style.display='block';$id('bars-list').innerHTML=bars.map(b=>{const name=typeof b==='string'?b:b.name||'';const desc=typeof b==='string'?'':b.description||b.type||'';return'<li><span class="bname">'+esc(name)+'</span>'+(desc?'<span class="bdesc">'+esc(desc)+'</span>':'')+'</li>';}).join('');}
     const pools=p.pools||[];
-    $id('pools-grid').innerHTML=pools.length?pools.map(pl=>'<div class="pool-card"><h4>'+esc(pl.name)+'</h4><p>'+esc(pl.features||pl.description||'')+'</p></div>').join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
+    $id('pools-grid').innerHTML=pools.length?pools.map(pl=>'<div class="pool-card"><h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>').join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
     const cats=p.roomCategories||[];
     const rPhotos=photos.filter(ph=>(ph.roomCategory||'')!=='');
-    $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=r.photo||r.photoUrl||findPhoto(r.name||'');const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);return'<div class="rcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(r.description||r.view?'<p>'+esc(r.description||r.view)+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
+    $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk)||'';const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);return'<div class="rcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(clean(r.description||r.view)?'<p>'+esc(clean(r.description||r.view))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
     $id('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
-    $id('club-body').innerHTML=(p.clubName||p.clubPerks)?'<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(p.clubPerks?'<p>'+esc(p.clubPerks)+'</p>':'')+'</div>':'<p class="empty">This resort does not have a dedicated club tier.</p>';
+    $id('club-body').innerHTML=(p.clubName||p.clubPerks)?'<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(clean(p.clubPerks||p.clubLevelPerks)?'<p>'+esc(clean(p.clubPerks||p.clubLevelPerks))+'</p>':'')+'</div>':'<p class="empty">This resort does not have a dedicated club tier.</p>';
     const acts=p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     if(acts){let incl=[],extra=[];
       if(typeof acts==='string'&&acts.includes('Additional charge')){const parts=acts.split(/Additional charge[:\s]*/i);incl=parts[0].split(' · ').map(s=>s.trim()).filter(Boolean);extra=parts[1]?parts[1].split(' · ').map(s=>s.trim()).filter(Boolean):[];}
@@ -358,15 +527,340 @@ async function loadResort(slug){
     const facItems=[];
     if(p.checkIn)facItems.push({lbl:'Check-in',val:p.checkIn});if(p.checkOut)facItems.push({lbl:'Check-out',val:p.checkOut});if(p.resortFee)facItems.push({lbl:'Resort Fee',val:p.resortFee});if(p.totalRooms)facItems.push({lbl:'Total Rooms',val:p.totalRooms});if(p.airportDistance||p.airport)facItems.push({lbl:'Airport',val:p.airportDistance||p.airport});if(p.yearBuilt)facItems.push({lbl:'Year Built',val:p.yearBuilt});
     if(facItems.length)essBlocks.push({title:'At a Glance',items:facItems});
-    if(p.dressCodes)essBlocks.push({title:'Dress Codes',text:p.dressCodes});
+    if(clean(p.dressCodes))essBlocks.push({title:'Dress Codes',text:clean(p.dressCodes)});
+    if(clean(p.facilityNotes))essBlocks.push({title:'Resort Notes',text:clean(p.facilityNotes)});
     if(p.romanticDining||p.romanticNotes)essBlocks.push({title:'Romantic & Private Dining',items:(p.romanticDining||p.romanticNotes).split(' · ').filter(Boolean).map(r=>({val:r.trim()}))});
     if(p.excursions||p.excursionNotes)essBlocks.push({title:'Excursions',items:(p.excursions||p.excursionNotes).split(' · ').filter(Boolean).map(e=>({val:e.trim()}))});
     $id('ess-grid').innerHTML=essBlocks.length?essBlocks.map(b=>'<div class="ess-block"><h4>'+esc(b.title)+'</h4>'+(b.text?'<p>'+esc(b.text)+'</p>':'')+(b.items?'<ul>'+b.items.map(i=>'<li>'+(i.lbl?'<span class="lbl">'+esc(i.lbl)+'</span>':'')+'<span>'+esc(i.val)+'</span></li>').join('')+'</ul>':'')+'</div>').join(''):'<div class="ess-block"><p class="empty">Details coming soon.</p></div>';
-    const galPhotos=resortWide.length?resortWide:(p.photos||[]).map(url=>({url}));
+    const galPhotos=(resortWide.length?resortWide:(p.photos||[]).map(url=>({url}))).filter(ph=>photoOk(ph.url||ph.downloadURL||ph));
     $id('gallery-grid').innerHTML=galPhotos.length?galPhotos.map(ph=>'<figure><img src="'+esc(ph.url||ph.downloadURL||ph)+'" alt="'+esc(ph.caption||ph.category||'')+'" loading="lazy"></figure>').join(''):'<p class="empty" style="grid-column:1/-1">Resort photos coming soon.</p>';
+    renderDownloads();
+    buildBuilder();
+    if(AGENT)$id('qb-open').style.display='block';
     $id('loading').style.display='none';$id('page').style.display='block';
+    const _qp=new URLSearchParams(location.search);
+    if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
+      if(_qp.get('q'))renderQuote();
+      else if(AGENT)openQuote();
+    }
   }catch(e){console.error(e);$id('error-msg').textContent='Error loading: '+e.message;$id('loading').style.display='none';$id('error').style.display='flex';}
 }
+/* ══════════════════ INTERNAL-NOTE GUARD ══════════════════
+   Nothing matching these ever reaches a client-facing surface.
+   Applies to the live guide AND the quote. */
+const AC_BLOCK=[/not published/i,/conflict/i,/\u26a0/,/confirm with(\s+the)?\s+resort/i,/verify current/i,/not confirmed/i,/not detailed in the brochure/i,/contact the (resort\s+)?wedding coordinator/i,/listed on destinationweddings/i,/needs? (to be )?verif/i,/internal only/i,/check with the resort/i];
+function isClean(s){if(s===0)return true;if(!s)return false;const t=String(s).trim();if(!t)return false;return !AC_BLOCK.some(r=>r.test(t));}
+function clean(s){return isClean(s)?String(s).trim():'';}
+function photoOk(u){if(!u)return false;const s=String(u).trim();const l=s.toLowerCase();if(!s||l==='null'||l==='undefined')return false;return /^https?:\/\//.test(s);}
+function money(v){v=String(v==null?'':v).trim();if(!v)return '';if(/^[\d.,]+$/.test(v)){const n=parseFloat(v.replace(/,/g,''));if(!isNaN(n))return '$'+n.toLocaleString('en-US',{maximumFractionDigits:2});}return v;}
+function num(v){const n=parseFloat(String(v==null?'':v).replace(/[^0-9.]/g,''));return isNaN(n)?null:n;}
+
+/* ══════════════════ SHARED STATE ══════════════════ */
+let P=null,PHOTOS=[],RESORTWIDE=[],PHOTOMAP={},SLUG='';
+const AGENT=(function(){try{const q=new URLSearchParams(location.search);if(q.get('agent')==='1'){localStorage.setItem('ac_agent','1');return true;}if(q.get('agent')==='0'){localStorage.removeItem('ac_agent');return false;}return localStorage.getItem('ac_agent')==='1';}catch(e){return false;}})();
+
+/* ══════════════════ DOWNLOADS & RESOURCES ══════════════════
+   resortProfiles.documents = [{label, url, public:true|false}] */
+function renderDownloads(){
+  const docs=(P.documents||P.docLinks||[])
+    .filter(d=>d&&d.url&&/^https?:\/\//.test(String(d.url).trim()))
+    .filter(d=>(d.public===true||d.public==='true'||d.isPublic===true))
+    .filter(d=>isClean(d.label));
+  if(!docs.length)return[];
+  $id('dl-list').innerHTML=docs.map(d=>'<a href="'+esc(d.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span><span class="lb">'+esc(d.label)+'</span></a>').join('');
+  $id('downloads').style.display='block';
+  return docs;
+}
+
+/* ══════════════════ QUOTE STATE ══════════════════ */
+function collectQ(){
+  const rows=[...document.querySelectorAll('#q-price-rows tr')].map(tr=>({
+    name:tr.dataset.name,
+    ppn:tr.querySelector('.d').value.trim()
+  })).filter(r=>r.ppn);
+  const o={};['inclusions','allvenues','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
+  return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
+    guests:$id('q-guests').value.trim(),rooms:$id('q-rooms').value.trim(),priced:$id('q-priced').value.trim(),
+    venue:$id('q-venue').value,pkg:$id('q-pkg').value,brand:$id('q-brand').value,
+    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o};
+}
+function applyQ(q){
+  if(!q)return;
+  ['couple','date','travel','guests','rooms','priced','venue','pkg','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
+  if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el)el.checked=!!q.opts[k];});
+  (q.prices||[]).forEach(r=>{const tr=[...document.querySelectorAll('#q-price-rows tr')].find(t=>t.dataset.name===r.name);
+    if(tr){tr.querySelector('.d').value=r.ppn||r.dbl||'';}});
+}
+function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
+function saveLocal(){try{localStorage.setItem('ac_quote_'+SLUG,JSON.stringify(collectQ()));}catch(e){}}
+
+/* ══════════════════ BUILDER ══════════════════ */
+function buildBuilder(){
+  $id('qb-for').textContent=(P.resortName||P.name||'')+(P.destination?' \u00b7 '+P.destination:'');
+  const vs=(P.venues||[]).map(v=>v.name).filter(Boolean);
+  $id('q-venue').innerHTML='<option value="">\u2014 none selected \u2014</option>'+vs.map(n=>'<option>'+esc(n)+'</option>').join('');
+  const ps=(P.packages||[]).map(p=>p.name).filter(Boolean);
+  $id('q-pkg').innerHTML='<option value="">\u2014 none selected \u2014</option>'+ps.map(n=>'<option>'+esc(n)+'</option>').join('');
+  const cats=(P.roomCategories||[]).map(r=>r.name).filter(Boolean);
+  $id('q-price-rows').innerHTML=(cats.length?cats:['Room category']).map(n=>
+    '<tr data-name="'+esc(n)+'"><td>'+esc(n)+'</td><td><input class="d" placeholder="309"></td></tr>').join('');
+  document.querySelectorAll('#qb input,#qb select,#qb textarea').forEach(el=>{
+    el.addEventListener('input',()=>{if(el.classList.contains('d')||el.classList.contains('s')||el.classList.contains('t')||el.classList.contains('c'))el.classList.toggle('on',!!el.value.trim());saveLocal();});
+    el.addEventListener('change',saveLocal);});
+  const url=new URLSearchParams(location.search).get('q');
+  if(url)applyQ(decQ(url));
+  else{try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s)applyQ(JSON.parse(s));}catch(e){}}
+  if(!$id('q-priced').value)$id('q-priced').value='Per person, per night';
+}
+function openQuote(){$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
+function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
+function backToBuilder(){$id('quote-page').style.display='none';$id('page').style.display='block';$id('qb').classList.add('on');document.body.style.overflow='hidden';qbChrome(true);}
+function qbChrome(on){if($id('qb-open'))$id('qb-open').style.display=(on&&AGENT)?'block':'none';if($id('q-back'))$id('q-back').style.display=on?'none':'block';}
+function printQuote(){if(!$id('quote-page').innerHTML)renderQuote();window.print();}
+function copyQuoteLink(){const u=location.origin+location.pathname+'?r='+SLUG+'&quote=true&q='+encQ(collectQ());
+  navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied \u2014 paste it anywhere.';setTimeout(()=>$id('qb-msg').textContent='',4000);})
+  .catch(()=>{$id('qb-msg').textContent=u;});}
+
+/* ══════════════════ QUOTE RENDER ══════════════════ */
+function renderQuote(){
+  const q=collectQ();saveLocal();
+  const R=P.resortName||P.name||'';
+  const email=q.brand==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
+  const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
+  const hero=photoOk(P.heroPhoto)?P.heroPhoto:(RESORTWIDE.find(p=>photoOk(p.url||p.downloadURL))||{}).url||'';
+  const closeImg=(RESORTWIDE.filter(p=>photoOk(p.url||p.downloadURL)).map(p=>p.url||p.downloadURL)[1])||hero;
+  const S=[];
+  const sec=(cls,inner)=>'<section'+(cls?' class="'+cls+'"':'')+'><div class="wrap">'+inner+'</div></section>';
+  const head=(eyebrow,title)=>'<p class="eyebrow">'+esc(eyebrow)+'</p><h2 class="display">'+esc(title)+'</h2><hr class="rule">';
+
+  /* 1 — HERO */
+  S.push('<header class="q-hero"><div class="c">'+
+    (q.couple?'<p class="eyebrow">Prepared for '+esc(q.couple)+'</p>':'<p class="eyebrow">Amy Cate \u00b7 Your Quote</p>')+
+    '<h1 class="q-name">'+esc(q.headline||R)+'</h1>'+
+    (q.headline?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
+    (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
+    (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
+    '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
+
+  /* 2 — NOTE + FACTS */
+  if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
+    '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
+  const facts=[q.date?['When',q.date]:null,q.guests?['Guests',q.guests]:null,q.travel?['Travel Dates',q.travel]:null,
+    P.destination?['Where',P.destination]:null,q.priced?['Priced On',q.priced]:null,q.rooms?['Rooms Held',q.rooms]:null].filter(Boolean).slice(0,4);
+  if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
+
+  /* 3 — YOUR SELECTIONS */
+  if(q.venue||q.pkg){S.push(sec('sel-band','<p class="eyebrow">Your Selections</p><div class="sel-grid">'+
+    (q.venue?'<div><h4>Ceremony Venue</h4><p>'+esc(q.venue)+'</p></div>':'')+
+    (q.pkg?'<div><h4>Wedding Package</h4><p>'+esc(q.pkg)+'</p></div>':'')+
+    (q.date?'<div><h4>Your Date</h4><p>'+esc(q.date)+'</p></div>':'')+'</div>'));}
+
+  /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
+  if(q.prices.length){
+    const cats=P.roomCategories||[];
+    S.push(sec('',head('Your Guests','Accommodations &amp; Pricing')+
+      '<p class="small" style="max-width:64ch;margin:0 0 34px;">Every figure below is <em>per person, per night</em>, based on two people sharing. It includes the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Treat these as an idea of where this lands \u2014 your real rates are set in the group agreement.</p>'+
+      '<div class="price-grid">'+q.prices.map(r=>{
+        const c=cats.find(x=>x.name===r.name)||{};
+        const img=[c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'';
+        const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Sleeps up to '+c.maxOccupancy:null,c.swimOut?'Swim-out':null].filter(Boolean).join(' \u00b7 ');
+        return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+
+          '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
+          (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
+          '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>based on double occupancy</p></div>'+
+          '</div></div>';}).join('')+'</div>'+
+      (q.opts.example?stayTotals(q):'')+
+      '<div class="note-box"><p><strong>These are an idea, not a rate sheet.</strong> Nothing here is held yet. These figures show you roughly where this lands so you can plan around a real number. Your actual rates get negotiated into the group agreement \u2014 and once that is signed they are locked and protected against increases between now and your date.</p>'+
+      '<p><strong>What you are looking at is two people sharing.</strong> Someone travelling alone pays more per person, because a room costs what it costs whether one or two people are in it. Three sharing pays slightly less each, but only slightly \u2014 the third person still eats, drinks and uses the resort. I price every one of those the moment the agreement rates come back.</p>'+
+      '<p><strong>Children under two travel free.</strong> All you pay for them is the airport transfer, and that does not divide by nights \u2014 three nights or ten, it is the same. Ages 3\u201312 come in at roughly a third of the adult rate. Ages are counted at the time of travel, not at booking, so tell me about anyone close to a cutoff.</p>'+
+      '<p><strong>Guests book whatever length of stay they want.</strong> Three nights, five, ten. They only ever see the rate for their room and their own dates.</p></div>'));
+  }
+
+  /* 5 — PACKAGES */
+  const pkgs=(P.packages||[]).filter(p=>p&&p.name);
+  if(pkgs.length){
+    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+
+      '<div class="price-grid" style="margin-top:34px;">'+pkgs.map(pk=>{
+        const picked=q.pkg&&pk.name===q.pkg;
+        const lines=q.opts.inclusions&&pk.highlights?String(pk.highlights).split(' \u00b7 ').map(clean).filter(Boolean):[];
+        return'<div class="pcard'+(picked?' pick':'')+'"><div class="b">'+
+          (picked?'<span class="pick-flag">Your selection</span>':'')+
+          '<h4>'+esc(pk.name)+'</h4>'+
+          (clean(pk.price)?'<p class="meta" style="color:var(--gold);font-size:15px;letter-spacing:.06em;text-transform:none;">'+esc(clean(pk.price))+'</p>':'')+
+          (clean(pk.summary)?'<p class="desc">'+esc(clean(pk.summary))+'</p>':'')+
+          (lines.length?'<div class="rows"><div style="font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;">Included</div>'+
+            lines.map(h=>'<p style="font-size:15.5px;line-height:1.6;margin:0 0 9px;color:#5A544C;">&#10022; '+esc(h)+'</p>').join('')+'</div>':'')+
+          '</div></div>';}).join('')+'</div>'));
+  }
+
+  /* 6 — VENUES */
+  const vens=(P.venues||[]).filter(v=>v&&v.name).filter(v=>q.opts.allvenues||!q.venue||v.name===q.venue);
+  if(vens.length){
+    S.push(sec('',head('Where You Say It','Ceremony &amp; Reception Venues')+
+      '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
+        const img=[v.photo,v.photoUrl].find(photoOk)||'';
+        const picked=q.venue&&v.name===q.venue;
+        return'<div class="pcard'+(picked?' pick':'')+'">'+(img?'<img src="'+esc(img)+'" alt="'+esc(v.name)+'" loading="lazy">':'<div style="height:190px;background:var(--sand);"></div>')+
+          '<div class="b">'+(picked?'<span class="pick-flag">Your selection</span>':'')+
+          (clean(v.bestFor||v.type)?'<p class="meta">'+esc(clean(v.bestFor||v.type))+'</p>':'')+
+          '<h4>'+esc(v.name)+'</h4>'+
+          (v.capacity?'<p class="meta" style="color:var(--gold-soft);text-transform:none;letter-spacing:.04em;font-size:15px;">Up to '+esc(v.capacity)+' guests</p>':'')+
+          (clean(v.description)?'<p class="desc">'+esc(clean(v.description))+'</p>':'')+'</div></div>';}).join('')+'</div>'));
+  }
+
+  /* 7 — DINING */
+  const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
+  if(q.opts.dining&&rests.length){
+    S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+
+      '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
+        (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
+        (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+'</div>').join('')+'</div>'+
+      (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
+        return bars.length?'<div style="margin-top:44px;"><p class="eyebrow">Bars &amp; Lounges</p><p class="small" style="max-width:70ch;">'+bars.map(b=>esc(b.name)).join(' \u00b7 ')+'</p></div>':'';})()+
+      (clean(P.dressCodes)?'<div class="note-box"><p><strong>Dress codes.</strong> '+esc(clean(P.dressCodes))+'</p></div>':'')+
+      (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
+  }
+
+  /* 8 — POOLS */
+  const pools=(P.pools||[]).filter(p=>p&&p.name);
+  if(q.opts.pools&&pools.length){
+    S.push(sec('',head('In The Water','Pools &amp; Beach')+
+      '<div class="price-grid" style="margin-top:34px;">'+pools.map(pl=>'<div class="pcard"><div class="b"><h4>'+esc(pl.name)+'</h4>'+
+        (clean(pl.features||pl.description)?'<p class="desc">'+esc(clean(pl.features||pl.description))+'</p>':'')+'</div></div>').join('')+'</div>'));
+  }
+
+  /* 9 — CLUB LEVEL */
+  if((P.clubName||P.clubLevelName)&&clean(P.clubPerks||P.clubLevelPerks)){
+    S.push(sec('sand-band',head('Worth The Upgrade',P.clubName||P.clubLevelName)+
+      '<p class="small" style="max-width:66ch;margin-top:24px;">'+esc(clean(P.clubPerks||P.clubLevelPerks))+'</p>'));
+  }
+
+  /* 10 — ACTIVITIES */
+  if(q.opts.activities){
+    const a=splitActs();
+    if(a.incl.length||a.extra.length)S.push(sec('',head('Between The Events','Activities')+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:44px;margin-top:34px;">'+
+      (a.incl.length?'<div><p class="eyebrow">Included</p>'+a.incl.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
+      (a.extra.length?'<div><p class="eyebrow">Additional Charge</p>'+a.extra.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;color:#5A544C;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
+      '</div>'+(clean(P.excursions||P.excursionNotes)?'<div class="note-box"><p><strong>Excursions.</strong> '+esc(clean(P.excursions||P.excursionNotes))+'</p></div>':'')));
+  }
+
+  /* 11 — GOOD TO KNOW */
+  if(q.opts.essentials){
+    const f=[['Check-in',P.checkIn],['Check-out',P.checkOut],['Resort fee',P.resortFee],['Total rooms',P.totalRooms],
+      ['Airport',P.airportDistance||P.airport],['Opened',P.yearBuilt],['Ages',P.agePolicy]].filter(x=>clean(x[1]));
+    const notes=clean(P.facilityNotes);
+    if(f.length||notes)S.push(sec('sand-band',head('The Practical Part','Good To Know')+
+      (f.length?'<div class="fact-grid" style="margin-top:34px;background:#fff;">'+f.map(x=>'<div><p class="k">'+esc(x[0])+'</p><p class="v">'+esc(clean(x[1]))+'</p></div>').join('')+'</div>':'')+
+      (notes?'<div class="note-box"><p>'+esc(notes)+'</p></div>':'')));
+  }
+
+  /* 12 — DOWNLOADS */
+  if(q.opts.docs){
+    const docs=(P.documents||P.docLinks||[]).filter(d=>d&&/^https?:\/\//.test(String(d.url||'').trim())&&(d.public===true||d.public==='true'||d.isPublic===true)&&isClean(d.label));
+    if(docs.length)S.push(sec('',head('Take It With You','Downloads &amp; Resources')+
+      '<div class="dl-list" style="margin-top:34px;">'+docs.map(d=>'<a href="'+esc(d.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span><span class="lb">'+esc(d.label)+'</span></a>').join('')+'</div>'));
+  }
+
+  /* 13 — GALLERY */
+  if(q.opts.gallery){
+    const g=RESORTWIDE.map(p=>p.url||p.downloadURL).concat((P.photos||[])).filter(photoOk).slice(0,12);
+    if(g.length)S.push(sec('sand-band',head('The Place Itself','Gallery')+
+      '<div class="gallery" style="margin-top:34px;">'+g.map(u=>'<figure><img src="'+esc(u)+'" alt="'+esc(R)+'" loading="lazy"></figure>').join('')+'</div>'));
+  }
+
+  /* 14 — GROUP AGREEMENT */
+  if(q.opts.group)S.push(sec('',head('How A Group Works','The Group Agreement')+
+    '<p class="small" style="max-width:64ch;margin:0 0 34px;">Ten rooms or more and we can put a group agreement in place. Nothing here is due today \u2014 this is just so you know what it is before we talk about it.</p>'+
+    '<div class="ga-grid">'+
+    '<div class="ga-card"><p class="i">&#128274;</p><h4>Rates locked and protected</h4><p>Your rates are fixed against increases between now and your date. Every category we price today is held at today\u2019s pricing \u2014 so a guest who comes to me next spring wanting an ocean view still gets this rate, not next spring\u2019s.</p></div>'+
+    '<div class="ga-card"><p class="i">&#128656;</p><h4>Roundtrip transfers included</h4><p>Every guest, airport to resort and back. It is already in the per-person price above.</p></div>'+
+    '<div class="ga-card"><p class="i">&#128187;</p><h4>Complimentary booking website</h4><p>Your guests book at the locked rates through your own site. I handle every booking and every payment. You are not chasing anyone.</p></div>'+
+    '<div class="ga-card"><p class="i">&#128179;</p><h4>$100 per room to book</h4><p>Group deposit is $100 a room, fully refundable, due 30 days after signing. Guest deposits paid in that window count against it, so it largely covers itself \u2014 whatever is left applies to your own reservation.</p></div>'+
+    '</div>'+
+    '<div class="note-box"><p><strong>Three things that surprise every couple.</strong></p>'+
+    '<p>&#10022; Your complimentary rooms come back to you as <em>cash after you are home</em> \u2014 they are not taken off anyone\u2019s bill. Reconciliation takes up to 90 days after you return and is net of hotel taxes and fees. Once everyone has travelled I count the rooms, submit the claim and push it through with the resort until the refund lands with you. Chasing it is my job.</p>'+
+    '<p>&#10022; Complimentary rooms do not count toward the credit tier. Thirty rooms with four comps is twenty-six qualifying. That can quietly drop you a tier, so it is worth holding one or two extra.</p>'+
+    '<p>&#10022; Rooms booked outside the block count for nothing \u2014 not free rooms, not upgrades, not the credit.</p></div>'+
+    '<details class="tuck"><summary>The credit tiers, if you want the numbers</summary><div class="tb">'+
+    '<p class="small">10\u201314 rooms \u00b7 $750 &nbsp;&nbsp;\u00b7&nbsp;&nbsp; 15\u201319 rooms \u00b7 $1,000 &nbsp;&nbsp;\u00b7&nbsp;&nbsp; 20\u201324 rooms \u00b7 $1,500 &nbsp;&nbsp;\u00b7&nbsp;&nbsp; 25+ rooms \u00b7 $2,000</p>'+
+    '<p class="small">Some properties sit on a higher schedule \u2014 I will tell you which one applies to you. The credit comes off your own final payment once all guests have paid and the room count is final. It is not cash back, and it is only earned if you carry Cancel For Any Reason protection through travel.</p>'+
+    '</div></details>'+
+    '<p style="margin-top:30px;"><a href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener" style="display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:15px 32px;text-decoration:none;">Working With Amy \u2014 the whole process &rarr;</a></p>'));
+
+  /* 15 — NEXT STEPS */
+  if(q.opts.steps)S.push(sec('sand-band',head('No Rush','Next Steps')+
+    '<div class="steps" style="margin-top:34px;">'+
+    '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
+    '<div><p class="n">02</p><h4>I request the agreement</h4><p>I go to the resort and ask for your contract. It comes back in a few days, and we get on a call and walk through it together before anything is signed.</p></div>'+
+    '<div><p class="n">03</p><h4>Your website goes live</h4><p>Five to seven business days after signing. From there your guests book themselves and I take it from you.</p></div>'+
+    '</div>'+
+    '<div class="free-box"><p><strong>And this costs you nothing.</strong> The resorts pay me, not you \u2014 and that covers everything: the quotes, the room block, chasing the resorts, and managing your guests\u2019 bookings and payments.</p></div>'));
+
+  /* 16 — CLOSING */
+  S.push('<div class="q-close sand-band" style="background:var(--espresso);color:#EDE4D6;">'+
+    '<div class="c"><p class="eyebrow" style="color:var(--gold-soft)">Amy Cate</p>'+
+    '<h2 class="display" style="color:#FBF8F3;">Tell me which part you want to talk about first.</h2>'+
+    '<p style="font-size:18px;line-height:1.8;color:#EDE4D6;max-width:52ch;">Every question is a good one \u2014 and if it is easier to talk it through out loud, send me a few times that work and I will call you.</p>'+
+    '<p style="margin-top:26px;"><a href="mailto:'+esc(email)+'?subject='+encodeURIComponent((q.couple?q.couple+' \u2014 ':'')+R)+'" style="display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Email Me &rarr;</a></p>'+
+    '<p class="sig">Hugs, Amy</p></div>'+
+    (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
+
+  S.push('<footer><p>Amy Cate \u00b7 '+esc(brandName)+'</p><p>'+esc(email)+'</p>'+
+    '<p>Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
+
+  $id('quote-page').innerHTML=S.join('');
+  $id('quote-page').style.display='block';
+  $id('page').style.display='none';
+  $id('qb').classList.remove('on');
+  document.body.style.overflow='';
+  document.title=(q.couple?q.couple+' \u00b7 ':'')+R;
+  window.scrollTo(0,0);
+  if(AGENT&&!$id('q-back')){const b=document.createElement('button');b.id='q-back';b.textContent='\u21a9 Edit Quote';
+    b.style.cssText='position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:14px 26px;font-family:var(--serif);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;';
+    b.onclick=backToBuilder;document.body.appendChild(b);}
+  qbChrome(false);
+}
+
+function stayTotals(q){
+  const r=q.prices.find(x=>num(x.ppn));
+  if(!r)return'';
+  const v=num(r.ppn);
+  const f=x=>'$'+x.toLocaleString('en-US',{maximumFractionDigits:0});
+  return'<div class="mathbox"><h4>What that looks like for a stay</h4>'+
+    '<p>'+esc(r.name)+' at <strong>'+money(r.ppn)+'</strong> per person, per night:</p>'+
+    '<p class="big">Three nights &rarr; <strong>'+f(v*3)+'</strong> &nbsp;\u00b7&nbsp; Four nights &rarr; <strong>'+f(v*4)+'</strong> &nbsp;\u00b7&nbsp; Five nights &rarr; <strong>'+f(v*5)+'</strong></p>'+
+    '<p style="font-size:15.5px;color:#7C7368;margin-top:14px;">Per person \u2014 so the two of you sharing a room doubles those figures.</p></div>';
+}
+
+function splitActs(){
+  const a=P.activitiesIncluded||P.activities||'';const x=P.activitiesExtra||P.activitiesAdditional||'';
+  let incl=[],extra=[];
+  const toArr=v=>Array.isArray(v)?v.map(String):String(v||'').split(' \u00b7 ');
+  if(typeof a==='string'&&/additional charge/i.test(a)){const parts=a.split(/Additional charge[:\s]*/i);
+    incl=parts[0].split(' \u00b7 ');extra=parts[1]?parts[1].split(' \u00b7 '):[];}
+  else incl=toArr(a);
+  if(x)extra=extra.concat(toArr(x));
+  return{incl:incl.map(s=>clean(s.trim())).filter(Boolean),extra:extra.map(s=>clean(s.trim())).filter(Boolean)};
+}
+
+function downloadQuote(){
+  if(!$id('quote-page').innerHTML)renderQuote();
+  const q=collectQ();
+  const css=document.querySelector('style').outerHTML;
+  const fonts='<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">';
+  const title=(q.couple?q.couple+' \u00b7 ':'')+(P.resortName||P.name||'Quote');
+  const html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+
+    title+'</title>'+fonts+css+'<style>#quote-page{display:block!important;}</style></head><body><div id="quote-page">'+
+    $id('quote-page').innerHTML+'</div></body></html>';
+  const name=(q.couple||P.slug||SLUG||'quote').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-quote.html';
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([html],{type:'text/html'}));a.download=name;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  $id('qb-msg').textContent='Saved '+name+' \u2014 drag it onto drop.netlify.com.';
+  setTimeout(()=>$id('qb-msg').textContent='',6000);
+}
+
 const slug=new URLSearchParams(location.search).get('r');
 firebase.auth().onAuthStateChanged(()=>{if(slug)loadResort(slug);else loadPicker();});
 </script>
