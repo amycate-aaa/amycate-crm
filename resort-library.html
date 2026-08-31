@@ -535,6 +535,10 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <div class="upload-section" style="margin-bottom:16px;">
       <h3 id="sec-club" style="margin-bottom:4px;">&#10024; Club Level <span style="font-size:.75rem;color:#555;font-weight:400;text-transform:none;letter-spacing:0;">(if applicable)</span></h3>
       <p style="color:#666;font-size:.82rem;margin-bottom:16px;">Preferred Club, Elegance Club, etc. — shown as an upgrade option in quotes.</p>
+      <label style="display:flex;align-items:center;gap:9px;margin-bottom:14px;padding:10px 12px;background:#F3EEE3;border:1px solid #DCD2BF;border-radius:6px;cursor:pointer;font-size:.86rem;color:#5C5347;">
+        <input type="checkbox" id="profileNoClubLevel" style="width:16px;height:16px;accent-color:#B08D57;">
+        This resort has no club level — mark it N/A so the audit stops flagging it
+      </label>
       <div class="form-group" style="margin-bottom:12px;">
         <label>Club Level Name</label>
         <input type="text" class="form-control" id="profileClubName" placeholder="e.g. Elegance Club, Preferred Club, Sky Club">
@@ -852,6 +856,7 @@ async function loadResortProfile(slugOverride) {
       set('profileClubName', d.clubLevelName || d.clubName);
       const rawPerks = d.clubLevelPerks || d.clubPerks || '';
       set('profileClubPerks', Array.isArray(rawPerks) ? rawPerks.join('\n') : rawPerks);
+      var nc=document.getElementById('profileNoClubLevel'); if(nc) nc.checked = !!d.clubLevelNA;
       set('profileWeddingGuide', d.weddingGuide);
       set('profileWeddingPromoTitle',   d.weddingPromoTitle);
       set('profileWeddingPromoSummary', d.weddingPromoSummary);
@@ -1191,7 +1196,7 @@ const SCALAR_FIELDS  = ['tagline','description','highlights','stars','dwtUrl','c
   'clubLevelName','clubName','clubLevelPerks','clubPerks','weddingGuide',
   'weddingPromoTitle','weddingPromoSummary','weddingPromoLink','ctPromoTitle','ctPromoSummary','ctPromoLink',
   'agePolicy','totalRooms','checkIn','checkOut','resortFee','airportDistance','yearBuilt',
-  'dressCodes','facilityNotes'];
+  'dressCodes','facilityNotes','clubLevelNA'];
 let LOADED = { slug:null, form:{}, remote:{} };
 
 function currentSections() {
@@ -1276,6 +1281,7 @@ async function saveResortProfile() {
     clubLevelName:   document.getElementById('profileClubName').value.trim(),
     clubName:        document.getElementById('profileClubName').value.trim(),
     clubLevelPerks:  document.getElementById('profileClubPerks').value.trim(),
+    clubLevelNA:     !!document.getElementById('profileNoClubLevel')?.checked,
     clubPerks:       document.getElementById('profileClubPerks').value.trim(),
     weddingGuide:    document.getElementById('profileWeddingGuide').value.trim(),
     weddingPromoTitle: document.getElementById('profileWeddingPromoTitle')?.value?.trim() || '',
@@ -2472,7 +2478,8 @@ body{padding-left:210px !important;padding-bottom:56px !important}
     set('Photos',String(n(a.photos)),n(a.photos)>=15?'ok':(n(a.photos)>0?'warn':'no'));
     var dl=(a.description||'').length;
     set('Core Info',dl>=300?'\u2713':'!',dl>=300?'ok':'warn');
-    set('Club Level',a.clubName?'\u2713':'\u2013',a.clubName?'ok':'no');
+    set('Club Level', a.clubLevelNA?'N/A':(a.clubName?'\u2713':'\u2013'),
+        (a.clubLevelNA||a.clubName)?'ok':'no');
     // Agent Notes: never flagged — optional field
     set('Agent Notes','','ok');
    });
