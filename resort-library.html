@@ -3870,9 +3870,13 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   async function draw(){
     css();
     var sg=slug(); if(!sg||typeof firebase==='undefined')return;
-    var sp={};
+    var sp={}, caps={};
     try{ var d=await firebase.firestore().collection('resortProfiles').doc(sg).get();
          sp=(d.exists&&d.data().sectionPhotos)||{}; }catch(e){}
+    try{ var ph=await firebase.firestore().collection('resortPhotos')
+                     .where('resortSlug','==',sg).get();
+         ph.forEach(function(x){ var v=x.data(); var u=v.url||v.downloadURL;
+           if(u) caps[u]=v.caption||v.category||''; }); }catch(e){}
     SECS.forEach(function(cfg){
       var h=document.getElementById(cfg[0]); if(!h)return;
       var sec=h.closest('.upload-section'); if(!sec)return;
@@ -3880,9 +3884,11 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
       if(!row){ row=document.createElement('div'); row.className='acSecPic';
                 h.parentNode.insertBefore(row, h.nextSibling); }
       var u=sp[cfg[1]]||'';
+      var cap=u?(caps[u]||''):'';
       row.innerHTML=(u?'<img src="'+u+'" alt="">':'<div class="none"></div>')
         +'<div class="bar"><span class="lbl">'
-        +(u?'Banner photo for '+cfg[2]+' \u2014 shown full width on the guide and quote'
+        +(u?(cap?'<strong>'+cap+'</strong> \u2014 banner for '+cfg[2]
+                :'Banner for '+cfg[2]+' \u2014 this photo is not in the library, so it has no caption')
            :'No banner photo yet for '+cfg[2])+'</span>'
         +'<button type="button">'+(u?'Change':'Choose photo')+'</button>'
         +(u?'<button type="button" class="clr">Clear</button>':'')+'</div>';
