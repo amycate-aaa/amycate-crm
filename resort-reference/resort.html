@@ -147,8 +147,9 @@ tr:last-child td{border-bottom:none}
 .pkgtrigger:hover{background:var(--cream-2)}
 .pkgtrigger .pname{font-family:"Cormorant Garamond",serif;font-size:1.1rem;font-weight:500;color:var(--black);line-height:1.2}
 .pkgtrigger .pprice{font-size:.82rem;color:var(--gold-deep);font-weight:500;text-align:right;max-width:200px;line-height:1.3}
-.pkgtrigger .parrow{color:var(--muted);font-size:.7rem;transition:transform .2s;flex-shrink:0}
+.pkgtrigger .parrow{color:var(--gold-deep);font-size:.7rem;transition:transform .2s;flex-shrink:0;opacity:.8}
 .pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg)}
+.pkghint{font-size:.68rem;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-top:.15rem}
 .pkgbody{display:none;padding:1rem 1.4rem 1.2rem;border-top:1px solid var(--line);background:var(--cream-2)}
 .pkgbody.open{display:block}
 .pkgsummary{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 .6rem}
@@ -279,6 +280,7 @@ footer p{font-size:.82rem;color:var(--mute);max-width:60ch;margin:.3em 0}
         <div class="subhead">Venues</div>
         <div class="vgrid" id="venues-grid"></div>
         <div class="subhead" style="margin-top:2.5rem">Wedding Packages</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Click any package to see full inclusions.</p>
         <div class="pkglist" id="pkg-grid"></div>
       </div>
       <div id="panel-grp" hidden>
@@ -627,15 +629,19 @@ async function loadResort(slug){
         // Show just the first price point, not the full string
         const fullPrice=pk.price||'';
         const shortPrice=fullPrice.split('·')[0].trim();
+        const snippet=pk.summary||(pk.highlights?pk.highlights.split(' · ').slice(0,2).join(' · '):'');
         return`<div class="pkgitem">
           <button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)">
-            <span class="pname">${esc(pk.name)}</span>
+            <span>
+              <span class="pname">${esc(pk.name)}</span>
+              ${snippet?`<span class="pkghint">${esc(snippet.slice(0,60))}${snippet.length>60?'…':''}</span>`:''}
+            </span>
             <span class="pprice">${esc(shortPrice)}</span>
             <span class="parrow">▼</span>
           </button>
           <div class="pkgbody">
             ${fullPrice!==shortPrice?`<div class="pkgsummary">${esc(fullPrice)}</div>`:''}
-            ${pk.summary?`<div class="pkgsummary">${esc(pk.summary)}</div>`:''}
+            ${pk.summary&&pk.summary!==snippet?`<div class="pkgsummary">${esc(pk.summary)}</div>`:''}
             ${pk.highlights?`<div class="pkghi">${esc(pk.highlights).split(' · ').map(h=>`· ${h}`).join('<br>')}</div>`:''}
           </div>
         </div>`;
