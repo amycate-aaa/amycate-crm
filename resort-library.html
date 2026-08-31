@@ -1060,11 +1060,9 @@ function addPoolRow(name='', type='', description='', photo='') {
   const safePhoto = (photo||'').replace(/"/g,'&quot;');
   div.innerHTML = `
     <button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:6px;right:8px;background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;">&#10005;</button>
-    <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px;margin-bottom:6px;">
-      <div><label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Pool name <span style="color:#c0392b;">* required</span></label>
-        <input class="form-control pool-name" value="${name}" style="font-weight:600;"></div>
-      <div><label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Type</label>
-        <input class="form-control pool-type" value="${type}"></div>
+    <div style="margin-bottom:6px;">
+      <label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Pool name <span style="color:#c0392b;">* required</span></label>
+      <input class="form-control pool-name" value="${name}" style="font-weight:600;" placeholder="Main infinity pool">
     </div>
     <label style="font-size:.72rem;color:#8A7C67;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px;">Description</label>
     <textarea class="form-control pool-desc" rows="2">${description}</textarea>
@@ -1079,12 +1077,11 @@ function addPoolRow(name='', type='', description='', photo='') {
 function getPools() {
   const all = [...document.querySelectorAll('#pool-list > div')].map(div => ({
     name:        div.querySelector('.pool-name')?.value?.trim() || '',
-    type:        div.querySelector('.pool-type')?.value?.trim() || '',
     description: div.querySelector('.pool-desc')?.value?.trim() || '',
     photo:       div.querySelector('.pool-photo')?.value?.trim() || ''
   }));
   // A row with no name used to be thrown away in silence. Say so instead.
-  const dropped = all.filter(p => !p.name && (p.description || p.type || p.photo));
+  const dropped = all.filter(p => !p.name && (p.description || p.photo));
   if (dropped.length && typeof toast === 'function') {
     toast(dropped.length + ' pool row' + (dropped.length===1?'':'s') +
           ' had no name and were not saved — add a pool name.', 'error');
@@ -3090,7 +3087,7 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 (function(){
  var MAP={
   'rest-name':'Name','rest-type':'Cuisine / type','rest-desc':'Description (shown to clients)','rest-photo':'Photo URL',
-  'pool-name':'Name','pool-type':'Family / adults-only','pool-desc':'Description','pool-photo':'Photo URL',
+  'pool-name':'Name','pool-desc':'Description','pool-photo':'Photo URL',
   'venue-name':'Venue name','venue-capacity':'Capacity','venue-bestfor':'Best for',
   'venue-desc':'Description','venue-photo':'Photo URL',
   'pkg-name':'Package name','pkg-price':'Price','pkg-highlights':'What it includes',
@@ -3185,7 +3182,6 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   'rest-desc':'One or two lines a client would read \u2014 what it serves, hours, whether it needs booking',
   'rest-photo':'Paste a URL, or use the camera to pick an uploaded photo',
   'pool-name':'e.g. Main pool',
-  'pool-type':'Family or adults-only \u00b7 swim-up bar \u00b7 heated',
   'pool-desc':'Hours, depth, kids\u2019 section, any age or height limit',
   'pool-photo':'Paste a URL, or use the camera to pick an uploaded photo',
   'venue-name':'e.g. South Beach',
