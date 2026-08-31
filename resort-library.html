@@ -3902,5 +3902,20 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   else setTimeout(boot,1600);
 })();
 </script>
+
+<style id="acPickerFix">
+/* The picker grid is a flex child with a bounded height, so its rows were being
+   squeezed to fit — tiles came out 15px tall with the image clipped inside.
+   max-content rows plus start alignment makes them size to the photo and scroll. */
+#venuePhotoGrid{
+  align-content:start !important;
+  grid-auto-rows:max-content !important;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr)) !important;
+  gap:14px !important;
+  padding-right:4px;
+}
+#venuePhotoGrid > div{ align-self:start !important; }
+#venuePhotoGrid > div img{ height:170px !important; object-fit:cover !important; }
+</style>
 </body>
 </html>
