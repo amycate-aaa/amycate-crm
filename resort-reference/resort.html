@@ -439,8 +439,8 @@ async function loadResort(slug){
       // Include everything EXCEPT room suite photos (those go in rooms section)
       return cat!=='rooms & suites'&&cat!=='room'&&rcat==='';
     });
-    // If no non-room photos, use ALL photos for gallery
-    const galPhotosToShow = galleryPhotos.length ? galleryPhotos : photos;
+    // Never fall back to room photos in gallery
+    const galPhotosToShow = galleryPhotos;
 
     // ── SET PAGE TITLE ──
     document.title=p.resortName||p.name||'Resort Reference';
