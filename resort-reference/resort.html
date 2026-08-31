@@ -297,6 +297,7 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .realwed h2.display{color:#FBF8F3;}
 .realwed .rule{margin-left:auto;margin-right:auto;}
 .realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
 .realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);margin:0 0 18px;}
 .herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
 .herobtn:hover{background:transparent;color:var(--espresso);}
@@ -910,7 +911,7 @@ function renderQuote(){
     S.push(sec('realwed',head('Not A Brochure Shot','A Real Wedding Here')+
       (who?'<p class="names">'+esc(who)+'</p>':'')+
       '<p>A couple I worked with married at this resort. Their photographs, their setup, their day \u2014 the same venues you have just been reading about, with real people standing in them.</p>'+
-      '<p style="margin:0;"><a class="amybtn" href="'+esc(P.realWeddingUrl)+'" target="_blank" rel="noopener">'+
+      '<p class="cta"><a class="amybtn" href="'+esc(P.realWeddingUrl)+'" target="_blank" rel="noopener">'+
       (who?'See '+esc(who)+'\u2019s Wedding':'See Their Wedding')+' \u2192</a></p>'));
   }
 
