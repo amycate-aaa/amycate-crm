@@ -746,8 +746,10 @@ function renderQuote(){
   /* 2 — NOTE + FACTS */
   if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
+  const priced=q.prices.length>0;
   const facts=[q.date?['When',q.date]:null,q.travel?['Travel Dates',q.travel]:null,
-    P.destination?['Where',P.destination]:null,q.priced?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
+    P.destination?['Where',P.destination]:null,
+    (priced&&q.priced)?['Priced On',q.priced]:null].filter(Boolean).slice(0,4);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
   S.push('<div class="amybar"><p class="eyebrow">Start Here</p>'+
     '<p>Most couples have never planned a destination wedding before \u2014 so I put the whole process, start to finish, on one page. It takes two minutes to read and it answers almost everything before you have to ask.</p>'+
@@ -906,7 +908,8 @@ function renderQuote(){
     (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
 
   S.push('<footer><p>Amy Cate \u00b7 '+esc(brandName)+'</p><p>'+esc(email)+'</p>'+
-    '<p>Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
+    '<p>'+(priced?'Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. ':'')+
+    'Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
 
   $id('quote-page').innerHTML=S.join('');
   $id('quote-page').style.display='block';
