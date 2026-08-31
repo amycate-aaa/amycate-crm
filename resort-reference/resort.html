@@ -639,7 +639,7 @@ async function loadResort(slug){
       if(ci)$id('club-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(ci)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     $id('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
     $id('club-body').innerHTML=(p.clubName||p.clubPerks)?'<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(clean(p.clubPerks||p.clubLevelPerks)?'<p>'+esc(clean(p.clubPerks||p.clubLevelPerks))+'</p>':'')+'</div>':'<p class="empty">This resort does not have a dedicated club tier.</p>';
-    const acts=p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
+    const acts=p.activitiesIncluded||p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     if(acts){let incl=[],extra=[];
       if(typeof acts==='string'&&acts.includes('Additional charge')){const parts=acts.split(/Additional charge[:\s]*/i);incl=parts[0].split(' · ').map(s=>s.trim()).filter(Boolean);extra=parts[1]?parts[1].split(' · ').map(s=>s.trim()).filter(Boolean):[];}
       else if(typeof acts==='string'){incl=acts.split(' · ').map(s=>s.trim()).filter(Boolean);}
