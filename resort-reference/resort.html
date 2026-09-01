@@ -98,7 +98,9 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .bars-list li{text-align:center;}
 .bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
 .bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
-.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+/* auto-fit, not auto-fill: empty columns collapse instead of showing the
+   gold backdrop as a blank block when there are fewer cards than columns */
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
 .pool-card{background:var(--sand);padding:30px 26px;}
 .pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
 .pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
