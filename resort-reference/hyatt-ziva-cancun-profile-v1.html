@@ -1,0 +1,557 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hyatt Ziva Cancun · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
+
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
+
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
+
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Hyatt Ziva Cancun</h1>
+      <p class="hero-tag" id="hero-tag">Vibrant Escape in the Heart of Cancun</p>
+      <p class="hero-meta" id="hero-dest">Cancun, Mexico</p>
+      <ul class="hero-chips" id="hero-chips"><li>Family-Friendly · All Ages</li><li>4.5 Stars</li><li>Hyatt Ziva Club Level / Turquoize</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
+    </div>
+    <img class="hero-photo" id="hero-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhyatt-ziva-cancun%2F1787169178517_hyatt-ziva-cancun.jpg?alt=media&amp;token=97a52076-5bf4-4f7b-80cc-7ae015e98ba5" alt="Hyatt Ziva Cancun">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Hyatt Ziva Cancun</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">Vibrant Escape in the Heart of Cancun</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p style="margin:0 0 1em">Hyatt Ziva Cancun is a stunning all-inclusive resort featuring 547 luxury suites on a prime beachfront location in the Cancun Hotel Zone. All suites feature designer accents, spa-like bathrooms with rainfall showers, furnished balconies, and sweeping Caribbean Sea views. The resort offers two distinct experiences: a family-friendly main resort and the exclusive adults-only Turquoize Tower (18+), with private hot tubs on every balcony, a rooftop infinity pool, and direct access to Zen Spa. With 8 specialty restaurants, 11 bars and lounges, swim-up suites, Club Level access, and one of the most diverse room inventories in Cancun, this is an ideal property for FIT clients and groups alike.</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display:none;"></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Hyatt%20Ziva%20Cancun%20Wedding%20Packages%20(1)-1780510186578.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Details at Destination Weddings</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <img class="bandimg" src="https://playa-media.imgix.net/mediavalet/medialibrary-4454e06b53b64519ba3d815bb8b551e5/799c873f22e042588bda737f0905da25/799c873f22e042588bda737f0905da25/Original/Hyatt-Ziva-Cancun-Weddings-Sky-Terrace-Reception-10.jpg?w=2000&amp;auto=format" alt="" loading="lazy" style="margin-bottom:28px;"><div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Just for the Two of You</span><span class="phint">COUPLE ONLY. 2026: $709 Mon–Wed / $1,389 Thu–Sun. 2027: $749 / $1,459.…</span></span><span class="pprice">Complimentary* or from $709 (2026)</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">COUPLE ONLY. 2026: $709 Mon–Wed / $1,389 Thu–Sun. 2027: $749 / $1,459. Additional guest $47</div><div class="pkghi-line">Additional non-guest $80</div><div class="pkghi-line">Children 3–12 half price. COMPLIMENTARY with 7+ night stay in Club or Turquoize Tower categories (Mon–Wed 10AM only). Includes: symbolic ceremony + certificate with bilingual secular officiant, bouquets/boutonnieres, sparkling wine toast, signature wedding cake, room decoration with rose petals + sparkling wine, late check-out to 3PM, onsite wedding specialist, online registry &amp; website, 15% spa discount for couple / 10% for guests.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Intimate Elegance</span><span class="phint">COUPLE + UP TO 10 GUESTS. 2026: $1,789 Mon–Wed / $2,389 Thu–Sun. 2027:…</span></span><span class="pprice">Complimentary* or from $1,789 (2026)</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">COUPLE + UP TO 10 GUESTS. 2026: $1,789 Mon–Wed / $2,389 Thu–Sun. 2027: $1,879 / $2,509. Additional guest $47</div><div class="pkghi-line">Non-guest $80</div><div class="pkghi-line">Children half price. COMPLIMENTARY with 25 room nights in Club or Turquoize Tower categories. Adds: ceremony table with white linen + white folding chairs, sound system, 25-min massage each for the couple, romantic oceanfront dinner. Add-ons available: private cocktail hour and/or 3-hour reception dinner.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Lavish &amp; Opulent</span><span class="phint">COUPLE + UP TO 20 GUESTS. 2026: $6,789 Mon–Wed / $7,299 Thu–Sun. 2027:…</span></span><span class="pprice">From $6,789 (2026)</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">COUPLE + UP TO 20 GUESTS. 2026: $6,789 Mon–Wed / $7,299 Thu–Sun. 2027: $7,129 / $7,669. Additional guest $127</div><div class="pkghi-line">Non-guest $182</div><div class="pkghi-line">Children half price. Includes: floral altar centerpiece, hairstyling/makeup/grooming for couple, mani-pedi for couple, chocolate-dipped strawberries wedding night, private 1-hour cocktail party with open bar + 3 hors d'oeuvres, private 3-hour reception with 3-course meal + open bar + wait staff, 25-min massages, romantic oceanfront dinner, 1 complimentary anniversary night with 4 nights booked.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Luxury</span><span class="phint">COUPLE + 40 GUESTS. 2026: $14,236 Mon–Thu / $15,271 Fri–Sun. 2027: $14…</span></span><span class="pprice">From $14,236 (2026)</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">COUPLE + 40 GUESTS. 2026: $14,236 Mon–Thu / $15,271 Fri–Sun. 2027: $14,949 / $16,039. Additional guest $127</div><div class="pkghi-line">Non-guest $182. Includes: decorated gazebo with white fabrics, avant-garde ceremony chairs, local-flower altar centerpiece, solo musician (guitarist or violinist), professional photographer (25 edited photos), video services, private 1-hour cocktail party, private 3-hour reception with 3-course meal, Mexican trio or saxophonist (45 min), champagne + fruit basket on arrival, 50-min massages, hairstyling/makeup/shave/haircut, beach bag, late checkout to 6PM, anniversary night free.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Zama</span><span class="phint">COUPLE + 48 GUESTS — the resort's top-tier package. 2026: $18,112 Mon–…</span></span><span class="pprice">From $18,112 (2026)</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">COUPLE + 48 GUESTS — the resort's top-tier package. 2026: $18,112 Mon–Thu / $19,147 Fri–Sun. 2027: $19,019 / $20,109. Additional guest $143</div><div class="pkghi-line">Non-guest $193. Includes: local-flower bouquets, avant-garde chairs, 50-min spa massages, champagne + fruit basket welcome amenity, professional photographer (25 edited photos), video services, DJ service up to 4 hours with DJ/MC + basic lighting + dance floor for 50, 5 floral centerpieces, private 1-hour cocktail party with international open bar, private FOUR-hour reception with 3-course set menu, 15% spa discount for couple AND guests, late checkout to 6PM, anniversary night free.</div></div></div></div>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><img class="bandimg" src="https://playa-media.imgix.net/mediavalet/medialibrary-4454e06b53b64519ba3d815bb8b551e5/623c147ffc6f42468e8b881c82907e1f/623c147ffc6f42468e8b881c82907e1f/Original/Hyatt-Ziva-Cancun-Weddings-Sahara-Beach-Ceremony-18.jpg?w=2000&amp;auto=format" alt="" loading="lazy" style="margin-bottom:28px;"><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72825-hyatt-ziva-cancun/aioapi/hyatt-ziva-cancun-sahara-beach-venue.jpg" alt="Sahara Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Sahara Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 400 Guests guests</p><p>Sahara Beach provides ample space for you and your loved ones to come together and create cherished memories that will be treasured for a lifetime. Whether it's exchanging vows with the sea as your backdrop or enjoying a joyful celebration by the water, Sahara Beach promises to be a dreamy and idyllic location for your wedding day.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hyatt-ziva-cancun/hyatt-ziva-cancun-weddings-cliff-gazebo-ceremony-10.jpg?width=800&amp;height=600" alt="Cliff Gazebo" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Cocktail Hour</p><h4>Cliff Gazebo</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 65 Guests guests</p><p>Nestled amidst swaying palms and offering breathtaking oceanfront views, the Cliff Gazebo is the perfect romantic location to tie the knot. This enchanting venue provides an intimate and picturesque setting for your wedding ceremony, creating an atmosphere of pure romance and magic.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72825-hyatt-ziva-cancun/aioapi/hyatt-ziva-cancun-lighthouse-terrace-venue.jpg" alt="Lighthouse Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Lighthouse Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 Guests guests</p><p>The Lighthouse Terrace offers a truly magical experience as you feel the gentle ocean breeze and take in the panoramic views of the Punta Cancun lighthouse. With its elevated location and stunning vistas, it provides a spectacular backdrop for your celebration.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hyatt-ziva-cancun/hyatt-ziva-cancun-weddings-sky-terrace-reception.jpg?width=800&amp;height=600" alt="Sky Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Sky Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 150 Guests guests</p><p>With its stunning ocean views stretching out before you, the Sky Terrace offers a picturesque backdrop that will make your wedding celebration truly memorable.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72825-hyatt-ziva-cancun/aioapi/hyatt-ziva-cancun-five-elements-ballroom-venue.webp" alt="Five Elements Ballroom" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Five Elements Ballroom</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 745 Guests guests</p><p>With its flexible layout, the Five Elements Ballroom can be customized to suit your unique vision. The warm and inviting ambiance sets the stage for intimate moments and unforgettable experiences — the largest indoor venue on property.</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><img class="bandimg" src="https://playa-cms-assets.s3.amazonaws.com/media/Hyatt_ziva_cancun/meetings/2021/hyatt-ziva-cancun-mice-rooftop-terrace-cocktail-setup-covid-2.jpg" alt="" loading="lazy" style="margin-bottom:26px;"><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://playa-cms-assets.s3.amazonaws.com/media/Hyatt_Ziva_Cancun_Turquoize/Hyatt_Ziva_Cancun_Dining/Hyatt-Ziva-Cancun-El-Mercado.Jpg" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/01/19/1429/Hyatt-Ziva-Cancun-P112-La-Bastille.jpg/Hyatt-Ziva-Cancun-P112-La-Bastille.16x9.jpg?imwidth=1280" alt="La Bastille" loading="lazy"><div class="dbody"><p class="dtag">French Brasserie</p><h4>La Bastille</h4><p>Romantic French brasserie on the lobby floor with an adults-only (18+) vibe. Known for onion soup, quiche, and steak tartare. Smart casual dress required.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/0912/Hyatt-Ziva-Cancun-P067-The-Moongate.jpg/Hyatt-Ziva-Cancun-P067-The-Moongate.16x9.jpg?imwidth=1280" alt="The Moongate" loading="lazy"><div class="dbody"><p class="dtag">Asian Fusion</p><h4>The Moongate</h4><p>Asian fusion dinner spot featuring dim sum, teppanyaki, and stir-fry style dishes. Also offers miso soup, pad Thai, and fried ice cream.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/01/19/1429/Hyatt-Ziva-Cancun-P113-Lorenzos.jpg/Hyatt-Ziva-Cancun-P113-Lorenzos.16x9.jpg?imwidth=1280" alt="Lorenzo's" loading="lazy"><div class="dbody"><p class="dtag">Italian Trattoria</p><h4>Lorenzo's</h4><p>Rustic Italian trattoria with a wood-fired pizza oven, house-made pastas, and an antipasti bar with olive oils, meats, and cheeses. Casual at lunch, smart casual at dinner.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/0859/Hyatt-Ziva-Cancun-P056-Chevys.jpg/Hyatt-Ziva-Cancun-P056-Chevys.16x9.jpg?imwidth=1280" alt="Chevy's" loading="lazy"><div class="dbody"><p class="dtag">American Diner</p><h4>Chevy's</h4><p>Casual all-American diner themed around a classic car. Burgers, shakes, Caesar salad, BBQ ribs, and diner classics.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/01/19/1429/Hyatt-Ziva-Cancun-P104-El-Mercado.jpg/Hyatt-Ziva-Cancun-P104-El-Mercado.16x9.jpg?imwidth=1280" alt="El Mercado" loading="lazy"><div class="dbody"><p class="dtag">International Buffet</p><h4>El Mercado</h4><p>The resort's sprawling international buffet with indoor and outdoor seating. Endless variety, vegetarian and gluten-free options. Open all day.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/20/1736/Hyatt-Ziva-Cancun-P239-Tradewinds.jpg/Hyatt-Ziva-Cancun-P239-Tradewinds.16x9.jpg?imwidth=1280" alt="Tradewinds" loading="lazy"><div class="dbody"><p class="dtag">Oceanfront Bistro &amp; Steakhouse</p><h4>Tradewinds</h4><p>Signature oceanfront venue — a relaxed breakfast bistro by day that transforms into a classic steakhouse at night.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/02/16/1851/Hyatt-Ziva-Cancun-P372-Habaneros-Couple-Having-Lunch.jpg/Hyatt-Ziva-Cancun-P372-Habaneros-Couple-Having-Lunch.16x9.jpg?imwidth=1280" alt="Habaneros" loading="lazy"><div class="dbody"><p class="dtag">Beachside Mexican Cevicheria</p><h4>Habaneros</h4><p>Authentic tacos and fresh ceviche right on the beach. Specialties include octopus ceviche, Acapulco-style shrimp cocktail, and chips &amp; guacamole. Swing-up bar seating.</p></div></div><div class="dcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2020/02/28/0942/Hyatt-Ziva-Cancun-P483-Chefs-Table.jpg/Hyatt-Ziva-Cancun-P483-Chefs-Table.16x9.jpg?imwidth=1280" alt="Chef's Table" loading="lazy"><div class="dbody"><p class="dtag">Tasting Experience</p><h4>Chef's Table</h4><p>Six-course seasonal tasting menu paired with cocktails and wines, served adjacent to the show kitchen. Seats up to 12. Reservations required through the concierge.</p></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Casa del Café</span><span class="bdesc">Espressos, cappuccinos, and sweet bread in a cozy lounge setting.</span></li><li><span class="bname">Healthy Juana's Smoothies</span><span class="bdesc">Fresh-blended smoothies in the morning (with calorie counts) that transition to margaritas at night.</span></li><li><span class="bname">Pasteles</span><span class="bdesc">Dark, milk, and white chocolate fountains, cotton candy, ice cream, pastries, candy, and crepes.</span></li><li><span class="bname">The Den</span><span class="bdesc">Refined retreat for quality craft cocktails and bites in a relaxed atmosphere.</span></li><li><span class="bname">Saasil Bar</span><span class="bdesc">Posh Mayan-inspired lobby bar with bold geometric artwork, indoor/outdoor seating, and an extensive martini menu. Open evenings to 1am.</span></li><li><span class="bname">Juana Margarita</span><span class="bdesc">Sample local tequilas and signature margaritas like the Martini Ziva (mezcal, watermelon, lime, Blue Curaçao).</span></li><li><span class="bname">Tres Cervezas Brewery</span><span class="bdesc">HDTVs, gaming tables, and three house-brewed beers by the resort's own brewmaster. Wings in 10+ varieties plus bar bites. Open noon–11pm.</span></li><li><span class="bname">Punta Vista</span><span class="bdesc">Rooftop infinity pool bar with panoramic Caribbean views. Signature "Iceberg" — Mexican beer with frozen margarita on top. Open 11am–7pm.</span></li><li><span class="bname">Dips &amp; Sips</span><span class="bdesc">Outdoor infinity pool bar with swim-up seating. Mojitos, Bay Breezes, and Caipiroskas. Open 11am–6pm.</span></li><li><span class="bname">Bar del Mar</span><span class="bdesc">Pool-deck bar with stunning views from infinity pool to the Caribbean Sea. "Green Eyes" cocktail (coconut rum, melon liqueur, pineapple). Open 11am–6pm.</span></li><li><span class="bname">Club Lounge</span><span class="bdesc">Overlooking the infinity pool, Club Lounge offers premium cocktails, fine wine, and snacks. Continental breakfast daily. Exclusive to Club Tower guests.</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://playa-cms-assets.s3.amazonaws.com/media/Hyatt_Ziva_Cancun_Turquoize/Hyatt_Ziva_Cancun_General_Resort/Hyatt-Ziva-Cancun-Main-Pool-Family-11.Jpg" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><h4>Main Infinity Pool</h4><p></p></div><div class="pool-card"><h4>Punta Vista Rooftop Infinity Pool</h4><p></p></div><div class="pool-card"><h4>Third Infinity Pool</h4><p></p></div><div class="pool-card"><h4>Kids pool and KidZ Club</h4><p></p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1142/Hyatt-Ziva-Cancun-P256-King-Room.jpg/Hyatt-Ziva-Cancun-P256-King-Room.16x9.jpg?imwidth=1280" alt="Resort View King" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Resort View King</h4><p>Private balcony overlooking the resort with king bed and queen sofa bed. Rainfall shower, mini bar, floor-to-ceiling windows.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1142/Hyatt-Ziva-Cancun-P255-Resort-View-Double-Room.jpg/Hyatt-Ziva-Cancun-P255-Resort-View-Double-Room.16x9.jpg?imwidth=1280" alt="Resort View Double" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Resort View Double</h4><p>Private balcony with resort views, two queen beds. Rainfall shower, mini bar, floor-to-ceiling windows.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/02/02/1521/Hyatt-Ziva-Cancun-P307-Ocean-View-King-Couple-3.jpg/Hyatt-Ziva-Cancun-P307-Ocean-View-King-Couple-3.16x9.jpg?imwidth=1280" alt="Ocean View King" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Ocean View King</h4><p>Balcony with Caribbean Sea views, king bed and sofa bed. Rainfall shower, mini bar, floor-to-ceiling windows.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P175-Ocean-View-Room.jpg/Hyatt-Ziva-Cancun-P175-Ocean-View-Room.16x9.jpg?imwidth=1280" alt="Ocean View Double" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Ocean View Double</h4><p>Balcony with Caribbean Sea views, two queen beds. Rainfall shower, mini bar, floor-to-ceiling windows.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.jpg/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.16x9.jpg?imwidth=1280" alt="Ocean Front King" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Ocean Front King</h4><p>Direct Caribbean Sea views from the balcony. King bed and sofa bed. Rainfall shower, mini bar.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.jpg/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.16x9.jpg?imwidth=1280" alt="Ocean Front Double" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Ocean Front Double</h4><p>Direct Caribbean Sea views from the balcony. Two queen beds. Rainfall shower, mini bar.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P178-Dolphin-View-Master-Room.jpg/Hyatt-Ziva-Cancun-P178-Dolphin-View-Master-Room.16x9.jpg?imwidth=1280" alt="Dolphin View Master King" loading="lazy"><div class="rbody"><p class="rmeta">598 sq ft</p><h4>Dolphin View Master King</h4><p>Larger suite with unique dolphin habitat views, separate shower and soaking tub, dedicated workspace. 598 sq ft.</p><div class="rpills"><span class="rpill">598 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P180-Dolphin-View-Master-Room-Balcony.jpg/Hyatt-Ziva-Cancun-P180-Dolphin-View-Master-Room-Balcony.16x9.jpg?imwidth=1280" alt="Dolphin View Master Double" loading="lazy"><div class="rbody"><p class="rmeta">598 sq ft</p><h4>Dolphin View Master Double</h4><p>Larger suite with dolphin habitat views, separate shower and soaking tub, workspace. Sleeps 5. 598 sq ft.</p><div class="rpills"><span class="rpill">598 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.jpg/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.16x9.jpg?imwidth=1280" alt="Swim Up King" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Swim Up King</h4><p>Direct semi-private pool access from the terrace with Caribbean Sea views. Pyramid building. Ages 13+ only. Marble bathroom.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.jpg/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.16x9.jpg?imwidth=1280" alt="Swim Up Double" loading="lazy"><div class="rbody"><p class="rmeta">483 sq ft</p><h4>Swim Up Double</h4><p>Direct semi-private pool access with Caribbean Sea views. Pyramid building. Ages 13+ only. Two queens.</p><div class="rpills"><span class="rpill">483 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.jpg/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.16x9.jpg?imwidth=1280" alt="Club Ocean Front King" loading="lazy"><div class="rbody"><p class="rmeta">463 sq ft</p><h4>Club Ocean Front King</h4><p>Hyatt Ziva Club Level with direct Caribbean views. Private check-in, Club Lounge (premium drinks + continental breakfast), espresso machine. Marble bath.</p><div class="rpills"><span class="rpill">463 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P181-Ziva-Club-Oceanfront-Room.jpg/Hyatt-Ziva-Cancun-P181-Ziva-Club-Oceanfront-Room.16x9.jpg?imwidth=1280" alt="Club Ocean Front Double" loading="lazy"><div class="rbody"><p class="rmeta">463 sq ft</p><h4>Club Ocean Front Double</h4><p>Club Level with direct ocean views. Private check-in, Hyatt Ziva Club Lounge access, espresso machine, upgraded snack minibar.</p><div class="rpills"><span class="rpill">463 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P276-Turquoize-Ocean-Front-Master-King-Living-Room.jpg/Hyatt-Ziva-Cancun-P276-Turquoize-Ocean-Front-Master-King-Living-Room.16x9.jpg?imwidth=1280" alt="Turquoize Ocean Front Master King" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Ocean Front Master King</h4><p>Adults-only (18+) Turquoize Tower. Private hot tub on balcony, floor-to-ceiling glass corner shower. VIP check-in, rooftop infinity pool, Zen Spa access, Punta Vista bar.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P280-Turquoize-Ocean-Front-Master-Double-Bathroom.jpg/Hyatt-Ziva-Cancun-P280-Turquoize-Ocean-Front-Master-Double-Bathroom.16x9.jpg?imwidth=1280" alt="Turquoize Ocean Front Master Double" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Ocean Front Master Double</h4><p>Adults-only (18+) Turquoize Tower. Private hot tub on balcony, glass corner shower. VIP check-in, rooftop infinity pool, Zen Spa, Punta Vista bar. Two queens.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P275-Turquoize-Ocean-Front-Master-King-Room.jpg/Hyatt-Ziva-Cancun-P275-Turquoize-Ocean-Front-Master-King-Room.16x9.jpg?imwidth=1280" alt="Turquoize Sky Ocean Front Master King" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Sky Ocean Front Master King</h4><p>Adults-only, 8th floor and above. Superior ocean views, private balcony hot tub, glass corner shower, VIP check-in, rooftop infinity pool + Punta Vista bar.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P281-Turquoize-Sky-Ocean-Front-Master-Double-Living-Room.jpg/Hyatt-Ziva-Cancun-P281-Turquoize-Sky-Ocean-Front-Master-Double-Living-Room.16x9.jpg?imwidth=1280" alt="Turquoize Sky Ocean Front Master Double" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Sky Ocean Front Master Double</h4><p>Adults-only, high floor. Direct ocean views, hot tub on balcony, VIP check-in, rooftop infinity pool, Zen Spa access. Two queens.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P283-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.jpg/Hyatt-Ziva-Cancun-P283-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.16x9.jpg?imwidth=1280" alt="Turquoize Sky Swim Up Ocean Front King" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Sky Swim Up Ocean Front King</h4><p>Adults-only high-floor swim-up with semi-private infinity pool and hot tub on balcony. VIP check-in, Zen Spa, Punta Vista bar access.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P284-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.jpg/Hyatt-Ziva-Cancun-P284-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.16x9.jpg?imwidth=1280" alt="Turquoize Sky Swim Up Ocean Front Double" loading="lazy"><div class="rbody"><p class="rmeta">695 sq ft</p><h4>Turquoize Sky Swim Up Ocean Front Double</h4><p>Adults-only high-floor swim-up, infinity pool + hot tub on balcony. VIP check-in, Zen Spa, Punta Vista access. Two queens.</p><div class="rpills"><span class="rpill">695 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2024/03/08/1024/CANIF-P0581-Oceanfront-Lighthouse-Suite-Patio.jpg/CANIF-P0581-Oceanfront-Lighthouse-Suite-Patio.16x9.jpg?imwidth=1280" alt="Ocean Front Lighthouse Suite" loading="lazy"><div class="rbody"><p class="rmeta">624 sq ft</p><h4>Ocean Front Lighthouse Suite</h4><p>Unique staircase entrance to a panoramic suite with views of the Caribbean Sea and Punta Cancun lighthouse. 624 sq ft.</p><div class="rpills"><span class="rpill">624 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P270-Ocean-Front-Pyramid-Suite-Bedroom.jpg/Hyatt-Ziva-Cancun-P270-Ocean-Front-Pyramid-Suite-Bedroom.16x9.jpg?imwidth=1280" alt="Ocean Front Pyramid Suite" loading="lazy"><div class="rbody"><p class="rmeta">1316 sq ft</p><h4>Ocean Front Pyramid Suite</h4><p>Dramatic two-floor suite with 1,316 sq ft and two private balconies. Living room on lower floor, master bedroom and full bath on upper floor. Club Lounge access.</p><div class="rpills"><span class="rpill">1316 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P194-Ziva-Club-Oceanfront-Corner-Suite-Balcony.jpg/Hyatt-Ziva-Cancun-P194-Ziva-Club-Oceanfront-Corner-Suite-Balcony.16x9.jpg?imwidth=1280" alt="Club Ocean Front Corner Suite" loading="lazy"><div class="rbody"><p class="rmeta">1087 sq ft</p><h4>Club Ocean Front Corner Suite</h4><p>Corner suite with wraparound balcony and hot tub. 1,087 sq ft. Full bath + powder room. Club Lounge, butler service, espresso machine, complimentary calls.</p><div class="rpills"><span class="rpill">1087 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.jpg/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.16x9.jpg?imwidth=1280" alt="Club Ocean Front Master Suite" loading="lazy"><div class="rbody"><p class="rmeta">1524 sq ft</p><h4>Club Ocean Front Master Suite</h4><p>Expansive 1,524 sq ft suite with private hot tub, butler + concierge service, Club Lounge access, espresso machine, dining area. The pinnacle of Club Level.</p><div class="rpills"><span class="rpill">1524 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P183-Ziva-Club-Two-Bedroom-Oceanfront-Suite.jpg/Hyatt-Ziva-Cancun-P183-Ziva-Club-Two-Bedroom-Oceanfront-Suite.16x9.jpg?imwidth=1280" alt="Club Two Bedroom Ocean Front Suite" loading="lazy"><div class="rbody"><p class="rmeta">2115 sq ft</p><h4>Club Two Bedroom Ocean Front Suite</h4><p>2,115 sq ft two-bedroom suite with hot tub balcony. Butler + concierge, Club Lounge access, sparkling wine on arrival. Ideal for families or multi-couple groups.</p><div class="rpills"><span class="rpill">2115 sq ft</span></div></div></div><div class="rcard"><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/23/0955/Hyatt-Ziva-Cancun-P199-Presidential-Suite-Bedroom.jpg/Hyatt-Ziva-Cancun-P199-Presidential-Suite-Bedroom.16x9.jpg?imwidth=1280" alt="Presidential Suite" loading="lazy"><div class="rbody"><p class="rmeta">4381 sq ft</p><h4>Presidential Suite</h4><p>The crown jewel: 4,381 sq ft encompassing the entire 18th floor. Two bedrooms, kitchen, dining room, butler + concierge, Club Lounge access, panoramic Caribbean views.</p><div class="rpills"><span class="rpill">4381 sq ft</span></div></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Hyatt Ziva Club Level / Turquoize</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://playa-cms-assets.s3.amazonaws.com/media/Hyatt_Ziva_Cancun_Turquoize/Hyatt_Ziva_Cancun_Rooms/Hyatt-Ziva-Cancun-Club-Ocean-Front-Master-Suite-Living-Area.Jpg" alt="" loading="lazy" style="margin-bottom:26px;"><div id="club-body"><div class="club-block"><h3>Hyatt Ziva Club Level / Turquoize</h3><p>Private check-in and check-out in an exclusive area
+Personalized concierge services
+Hyatt Ziva Club Lounge access
+Premium-brand liquors
+Upgraded in-suite amenities
+Butler service in Club Master and Two-Bedroom Suites
+Late check-out based on availability
+
+TURQUOIZE (Adults-Only 18+ Tower):
+Exclusive private check-in and reception area
+Adults-only dining experiences
+Rooftop infinity pool
+Balcony with private hot tub in every suite
+Direct elevator access to the spa
+Nearly 700 sq ft suites with floor-to-ceiling glass corner showers</p></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Three infinity pools</li><li>Two hot tubs</li><li>Non-motorized watersports, including kayaking and paddleboarding</li><li>Fitness centre with cardio and strength equipment and onsite trainers</li><li>Yoga and aqua cycling</li><li>Daily pool and beach activities, including water polo and dance classes</li><li>Nightly live entertainment at the open-air amphitheatre, with musicians, dancers and acrobatics</li><li>KidZ Club, ages 4 to 12, with supervised pool games, arts and crafts, video games, beach excursions and a mini water park</li><li>@Moods teen lounge and club, ages 10 to 17, with pool, Xbox, PlayStation, karaoke and a DJ lab</li><li>Tastings and social activities</li></ul></div>
+        <div id="act-extra-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"><li>Zen Spa massages, holistic body treatments and beauty salon</li><li>Hydrotherapy circuit</li><li>Poolside and double-deck beach cabanas, 9:00 AM to 6:00 PM</li><li>Mulligan'Z virtual golf</li><li>Premium private dining, including private beach and in-suite dinners</li><li>Lobster and specialty private dinners</li><li>Wine cellar access</li><li>Off-site tours and excursions</li><li>Babysitting, by advance request</li></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3:00 PM</span></li><li><span class="lbl">Check-out</span><span>12:00 PM</span></li><li><span class="lbl">Total Rooms</span><span>547</span></li><li><span class="lbl">Airport</span><span>Cancun International (CUN)</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>A family resort with an adults-only tower, so room choice matters: the six Turquoize categories are strictly 18 and over and cannot be booked by anyone travelling with children, and the Swim-Up King and Swim-Up Double carry a minimum age of 13. Fitness equipment is for guests 18 and over. Minimum age for check-in is 18. Smoking, including electronic cigarettes, is prohibited in suites, on suite decks and balconies, and throughout most common areas, dining venues and bars; designated smoking areas are provided, and a cleaning fee may be charged for smoking in a smoke-free area. Pets are not allowed. The resort accepts Visa, Mastercard and American Express only, and a pre-authorisation hold is placed on the card at check-in. Pre-arrival check-in is not offered. Tap water is not for drinking; filtered and bottled water is provided throughout, and the water and ice served at all resort venues are filtered.</p></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display:none;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1142/Hyatt-Ziva-Cancun-P256-King-Room.jpg/Hyatt-Ziva-Cancun-P256-King-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1142/Hyatt-Ziva-Cancun-P255-Resort-View-Double-Room.jpg/Hyatt-Ziva-Cancun-P255-Resort-View-Double-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2017/02/02/1521/Hyatt-Ziva-Cancun-P307-Ocean-View-King-Couple-3.jpg/Hyatt-Ziva-Cancun-P307-Ocean-View-King-Couple-3.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P175-Ocean-View-Room.jpg/Hyatt-Ziva-Cancun-P175-Ocean-View-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.jpg/Hyatt-Ziva-Cancun-P176-Ocean-View-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P178-Dolphin-View-Master-Room.jpg/Hyatt-Ziva-Cancun-P178-Dolphin-View-Master-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/19/1836/Hyatt-Ziva-Cancun-P180-Dolphin-View-Master-Room-Balcony.jpg/Hyatt-Ziva-Cancun-P180-Dolphin-View-Master-Room-Balcony.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.jpg/Hyatt-Ziva-Cancun-P084-Hyatt-Ziva-Swim-Up-King.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2015/12/28/1147/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.jpg/Hyatt-Ziva-Cancun-P090-Hyatt-Ziva-Club-Ocean-Front-Corner-Suite.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P181-Ziva-Club-Oceanfront-Room.jpg/Hyatt-Ziva-Cancun-P181-Ziva-Club-Oceanfront-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P276-Turquoize-Ocean-Front-Master-King-Living-Room.jpg/Hyatt-Ziva-Cancun-P276-Turquoize-Ocean-Front-Master-King-Living-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P280-Turquoize-Ocean-Front-Master-Double-Bathroom.jpg/Hyatt-Ziva-Cancun-P280-Turquoize-Ocean-Front-Master-Double-Bathroom.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P275-Turquoize-Ocean-Front-Master-King-Room.jpg/Hyatt-Ziva-Cancun-P275-Turquoize-Ocean-Front-Master-King-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P281-Turquoize-Sky-Ocean-Front-Master-Double-Living-Room.jpg/Hyatt-Ziva-Cancun-P281-Turquoize-Sky-Ocean-Front-Master-Double-Living-Room.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P283-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.jpg/Hyatt-Ziva-Cancun-P283-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P284-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.jpg/Hyatt-Ziva-Cancun-P284-Turquoize-Sky-Swim-Up-Ocean-Front-Master-Double-View.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2024/03/08/1024/CANIF-P0581-Oceanfront-Lighthouse-Suite-Patio.jpg/CANIF-P0581-Oceanfront-Lighthouse-Suite-Patio.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/07/28/1144/Hyatt-Ziva-Cancun-P270-Ocean-Front-Pyramid-Suite-Bedroom.jpg/Hyatt-Ziva-Cancun-P270-Ocean-Front-Pyramid-Suite-Bedroom.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P194-Ziva-Club-Oceanfront-Corner-Suite-Balcony.jpg/Hyatt-Ziva-Cancun-P194-Ziva-Club-Oceanfront-Corner-Suite-Balcony.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/20/0841/Hyatt-Ziva-Cancun-P183-Ziva-Club-Two-Bedroom-Oceanfront-Suite.jpg/Hyatt-Ziva-Cancun-P183-Ziva-Club-Two-Bedroom-Oceanfront-Suite.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure><figure><img src="https://assets.hyatt.com/content/dam/hyatt/hyattdam/images/2016/06/23/0955/Hyatt-Ziva-Cancun-P199-Presidential-Suite-Bedroom.jpg/Hyatt-Ziva-Cancun-P199-Presidential-Suite-Bedroom.16x9.jpg?imwidth=1280" alt="" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
+    </div>
+  </div>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
