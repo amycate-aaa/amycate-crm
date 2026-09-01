@@ -4084,5 +4084,101 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
 #venuePhotoGrid > div{ align-self:start !important; }
 #venuePhotoGrid > div img{ height:170px !important; object-fit:cover !important; }
 </style>
+
+<script id="acPullPhotos">
+/* "Pull photos from this record" — copies any photo URL sitting on the resort
+   profile (rooms, venues, packages, pools, dining, banners, hero) into the
+   photo library, so the picker can see them. Skips anything already there. */
+(function(){
+  function slug(){ var s=document.getElementById('masterResort'); return s ? s.value : ''; }
+
+  function css(){
+    if(document.getElementById('acPullCss'))return;
+    var st=document.createElement('style'); st.id='acPullCss';
+    st.textContent=
+      '#acPullBtn{background:#3F3A32;color:#F2EDE4;border:0;border-radius:6px;padding:9px 18px;'
+      +'font-family:system-ui,sans-serif;font-size:.84rem;font-weight:600;cursor:pointer;margin-left:10px;}'
+      +'#acPullBtn:hover{background:#2C2822;}'
+      +'#acPullBtn:disabled{opacity:.6;cursor:default;}'
+      +'#acPullMsg{font-size:.8rem;color:#5C5347;margin-left:10px;font-family:system-ui,sans-serif;}';
+    document.head.appendChild(st);
+  }
+
+  async function pull(btn,msg){
+    var sg=slug();
+    if(!sg){ msg.textContent='Pick a resort first.'; return; }
+    btn.disabled=true; msg.textContent='Looking\u2026';
+    try{
+      var db=firebase.firestore();
+      var prof=(await db.collection('resortProfiles').doc(sg).get()).data()||{};
+      var nm=prof.name||prof.resortName||sg;
+      var t=function(v){return String(v==null?'':v).trim();};
+      var arr=function(v){return Array.isArray(v)?v:[];};
+      var snap=await db.collection('resortPhotos').where('resortSlug','==',sg).get();
+      var have={}; snap.forEach(function(d){var v=d.data();var u=t(v.url||v.downloadURL); if(u)have[u]=1;});
+
+      var found=[], empty=[];
+      function add(url,caption,category,roomCategory){
+        url=t(url); if(!url||have[url])return;
+        have[url]=1;
+        found.push({url:url,caption:caption||'',category:category,roomCategory:roomCategory||''});
+      }
+      var vs=arr(prof.venues), ps=arr(prof.packages), pl=arr(prof.pools),
+          rs=arr(prof.restaurants), rc=arr(prof.roomCategories);
+      vs.forEach(function(v){add(v&&v.photo,v&&v.name,'Wedding Venues');});
+      ps.forEach(function(x){add(x&&x.photo,x&&x.name,'Wedding Venues');});
+      pl.forEach(function(x){add(x&&x.photo,x&&x.name,'Pools & Beach');});
+      rs.forEach(function(x){add(x&&x.photo,x&&x.name,'Dining');});
+      rc.forEach(function(x){add(x&&x.photo,x&&x.name,'Rooms & Suites',x&&x.name);});
+      add(prof.heroPhoto,nm+' hero','Resort & Property');
+      var sp=prof.sectionPhotos||{};
+      Object.keys(sp).forEach(function(k){add(sp[k],nm+' '+k+' banner','Resort & Property');});
+      arr(prof.photos).forEach(function(u){add(u,'','Resort & Property');});
+
+      // tell her which sections had nothing to give
+      function none(list){ return list.length && !list.filter(function(x){return x&&t(x.photo);}).length; }
+      if(none(pl)) empty.push('pools');
+      if(none(rs)) empty.push('restaurants');
+      if(none(vs)) empty.push('venues');
+      if(none(rc)) empty.push('rooms');
+
+      if(!found.length){
+        msg.textContent='Nothing new \u2014 the library already has everything on this record.'
+          + (empty.length ? ' No photos on: '+empty.join(', ')+'.' : '');
+        btn.disabled=false; return;
+      }
+      for(var i=0;i<found.length;i++){
+        var f=found[i];
+        await db.collection('resortPhotos').add({
+          resortSlug:sg, resortName:nm, resort:nm,
+          url:f.url, downloadURL:f.url,
+          caption:f.caption, category:f.category, roomCategory:f.roomCategory,
+          source:'pulled from profile', uploadedAt:new Date().toISOString()
+        });
+      }
+      msg.textContent='Added '+found.length+'.'
+        + (empty.length ? ' No photos on: '+empty.join(', ')+'.' : '')
+        + ' Reload to see them.';
+      if(typeof toast==='function')toast('Added '+found.length+' photos to the library.','success');
+    }catch(e){ console.warn(e); msg.textContent='Failed \u2014 see the console.'; }
+    btn.disabled=false;
+  }
+
+  function mount(){
+    if(document.getElementById('acPullBtn'))return;
+    var anchor=document.getElementById('filterCategory');
+    if(!anchor)return;
+    css();
+    var b=document.createElement('button');
+    b.id='acPullBtn'; b.type='button'; b.textContent='\u2b07 Pull photos from this record';
+    var m=document.createElement('span'); m.id='acPullMsg';
+    b.onclick=function(){ pull(b,m); };
+    anchor.parentNode.insertBefore(b, anchor.nextSibling);
+    anchor.parentNode.insertBefore(m, b.nextSibling);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(mount,1500);});
+  else setTimeout(mount,1500);
+})();
+</script>
 </body>
 </html>
