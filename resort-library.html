@@ -1314,13 +1314,11 @@ async function saveResortProfile() {
   const slug = document.getElementById('masterResort')?.value || document.getElementById('profileResort')?.value;
   if (!slug) { toast('Please select a resort from the Active Resort dropdown first.', 'error'); return; }
 
-  // OWNERSHIP CHECK — only Amy can save Amy's resorts
+  // OWNERSHIP CHECK — only Amy can save Amy's resorts (Amy can override anything as Firebase owner)
   const existingDoc = await db.collection('resortProfiles').doc(slug).get();
   const existingOwner = existingDoc.exists ? (existingDoc.data().owner || 'amy') : 'amy';
-  if (existingOwner !== 'amy') {
-    toast('This is ' + existingOwner + '\'s resort — you can view it but not edit it.', 'error');
-    return;
-  }
+  // Amy is the Firebase owner — she can edit anything
+  // No ownership restriction for Amy's library
 
   const masterSel = document.getElementById('masterResort');
   const resortName = masterSel?.options[masterSel.selectedIndex]?.text || slug;
