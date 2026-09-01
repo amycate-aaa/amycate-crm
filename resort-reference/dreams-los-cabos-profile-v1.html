@@ -1,0 +1,552 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dreams Los Cabos Suites Golf Resort &amp; Spa · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
+
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
+
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
+
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Dreams Los Cabos Suites Golf Resort &amp; Spa</h1>
+      <p class="hero-tag" id="hero-tag">Desert meets the sea at Land's End — Los Cabos' most scenic all-inclusive for destination weddings and honeymoons.</p>
+      <p class="hero-meta" id="hero-dest">Los Cabos</p>
+      <ul class="hero-chips" id="hero-chips"><li>All ages</li><li>4.5 Stars</li><li>Preferred Club</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
+    </div>
+    <img class="hero-photo" id="hero-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1783023938495_img_9586.webp?alt=media&amp;token=ca5f49b4-cc6f-4b8b-bf47-72f36e915757" alt="Dreams Los Cabos Suites Golf Resort &amp; Spa">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Dreams Los Cabos Suites Golf Resort &amp; Spa</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">Desert meets the sea at Land's End — Los Cabos' most scenic all-inclusive for destination weddings and honeymoons.</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p style="margin:0 0 1em">Dreams Los Cabos Suites Golf Resort &amp; Spa is perfectly positioned in one of Mexico's most iconic natural settings, where the Baja Peninsula's dramatic desert landscape meets the turquoise waters at the convergence of the Pacific Ocean and the Sea of Cortez. Four wedding venues leverage this extraordinary backdrop, with sweeping ocean views, legendary Baja sunset skies, and the famous Arch of Cabo San Lucas visible in the distance. Seven wedding packages within an Unlimited-Luxury® framework give couples the tools to build their perfect celebration while their guests enjoy world-class amenities and activities. Los Cabos' world-class airport connections, year-round sunshine, and unique combination of desert adventure and beach luxury make it one of the most versatile and sought-after destinations for wedding celebrations in all of Mexico.</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display: flex;"><figure><img src="https://alg.widen.net/img/alg/6gtpq8y0vw/2140px@1x/DRELC-EXT-Couple-Beach-1A-CB.webp" alt="Dreams Los Cabos Suites Golf Resort &amp; Spa activities banner" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-hero.jpeg?width=1920&amp;height=1080" alt="Resort &amp; Property" loading="lazy"></figure><figure><img src="https://alg.widen.net/img/alg/pdoy6lvons/2140px@1x/DRELC-EXT-Couple-AdultsPool-2A-CB.webp" alt="Tranquility Adults-Only Pool" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-beach-wedding-venue.png?width=800&amp;height=600" alt="The Beach" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-cascada-pool-wedding-venue.jpg?width=800&amp;height=600" alt="Cascade Terrace" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/drelc-ext-main-pool-panoramic-1.jpg?width=1920&amp;height=1080" alt="Resort &amp; Property" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-ocean-pool-wedding-venue.jpg?width=800&amp;height=600" alt="Oceana Terrace" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-gazebo-wedding-venue.png?width=800&amp;height=600" alt="Gazebo" loading="lazy"></figure></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Dreams%20Los%20Cabos%20Wedding%20Guide-1780428207009.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Brochure</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-gazebo-wedding-venue.png?width=800&amp;height=600" alt="" loading="lazy" style="margin-bottom:28px;"><div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Wedding in Paradise</span><span class="phint">COMPLIMENTARY when booking a Junior Suite Preferred Club or higher for…</span></span><span class="pprice">$1,649–$1,799 high season</span><span class="parrow">▼</span></button><div class="pkgbody"><p class="pkgfull">$1,649–$1,799 high season · $1,499–$1,599 Aug–Oct · often COMPLIMENTARY</p><div class="pkghi-line">COMPLIMENTARY when booking a Junior Suite Preferred Club or higher for 7 nights</div><div class="pkghi-line">OR a group of 5 rooms for 3 nights minimum in any category. Includes: symbolic ceremony, bouquet and/or boutonniere, wedding cake and sparkling wine toast for up to 10 guests, special turndown the night of the wedding</div><div class="pkghi-line">15% off spa, onsite wedding coordinator, preparation and ironing of attire, complimentary room for one of the couple the night before, late checkout</div><div class="pkghi-line">Newlywed Package and free anniversary nights. Additional guest $19, children $12. Deposit $250. NOTE: minister or judge is NOT included — $600 extra.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Eternal Love</span><span class="phint">COVERS 20 GUESTS. Semi-private rehearsal dinner for 10, symbolic cerem…</span></span><span class="pprice">$5,549–$5,949 high season</span><span class="parrow">▼</span></button><div class="pkgbody"><p class="pkgfull">$5,549–$5,949 high season · $5,049–$5,349 Aug–Oct</p><div class="pkghi-line">COVERS 20 GUESTS. Semi-private rehearsal dinner for 10, symbolic ceremony, bouquets</div><div class="pkghi-line">2 boutonnieres and 2 corsages for the wedding party, floral centerpieces for the ceremonial and sweetheart tables</div><div class="pkghi-line">PRIVATE COCKTAIL HOUR with hors d'oeuvres for 20, live Mexican trio for 45 minutes</div><div class="pkghi-line">PRIVATE DINNER RECEPTION on the Gold menu for 20</div><div class="pkghi-line">FOUR HOURS OF OPEN BAR across cocktail and reception, cake and toast for 20</div><div class="pkghi-line">50 printed photos with album, ceremony video, hairstyling and makeup for one of the couple, couples spa treatment</div><div class="pkghi-line">15% off spa, coordinator, attire prep, complimentary room the night before, late checkout</div><div class="pkghi-line">Newlywed Package, anniversary nights. Additional guest $95, children $50. Deposit $500.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Beyond Memorable</span><span class="phint">FOR 50 TO 79 GUESTS ONLY — not available for smaller groups. Requires …</span></span><span class="pprice">$13,299–$13,949 high season</span><span class="parrow">▼</span></button><div class="pkgbody"><p class="pkgfull">$13,299–$13,949 high season · $12,049–$12,649 Aug–Oct</p><div class="pkghi-line">FOR 50 TO 79 GUESTS ONLY — not available for smaller groups. Requires 75 or 120 cumulative paid room nights and booking at least one year ahead. Welcome cocktail party (1hr), rehearsal dinner with open bar (2hrs), beach pergola or gazebo drapery, sound systems for ceremony and reception, shoe check station for beach ceremonies, private dinner reception (3hrs), sweetheart table, buffet with a choice of cuisines, dessert station and cake</div><div class="pkghi-line">20% spa discount for the couple and parents up to 6, hydrotherapy access, sparkling wine and fruit in suite for couple and parents up to 3 rooms. Additional guest $160, children $90. Deposit $750. DJ and minister NOT included.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Elope in Luxury</span><span class="phint">FOR THE TWO OF YOU. Coordinator, sparkling wine and fruit on arrival, …</span></span><span class="pprice">$1,849–$1,999 high season</span><span class="parrow">▼</span></button><div class="pkgbody"><p class="pkgfull">$1,849–$1,999 high season · $1,649–$1,799 Aug–Oct</p><div class="pkghi-line">FOR THE TWO OF YOU. Coordinator, sparkling wine and fruit on arrival, hairstyling and makeup for one, bouquets and boutonnieres, attire prep, symbolic ceremony</div><div class="pkghi-line">20 digital photos, cake and toast for two, romantic dinner for two the night of the ceremony, turndown service.</div></div></div></div><details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb"><div class="cmpwrap"><table class="cmp"><thead><tr><th></th><th><span class="pn">Elope in Luxury</span><span class="pc">2 people</span></th><th><span class="pn">Wedding in Paradise</span><span class="pc">Up to 10 guests</span></th><th><span class="pn">Eternal Love</span><span class="pc">Up to 20 guests</span></th><th><span class="pn">Beyond Memorable</span><span class="pc">50–79 guests</span></th></tr></thead><tbody><tr class="grp"><td colspan="5">The cost</td></tr><tr><th scope="row">Price, from — Aug–Oct, Mon–Wed</th><td class="v">$1,649</td><td class="v">$1,499</td><td class="v">$5,049</td><td class="v">$12,049</td></tr><tr><th scope="row">High — rest of year, Thu–Sun</th><td class="v">$1,999</td><td class="v">$1,799</td><td class="v">$5,949</td><td class="v">$13,949</td></tr><tr><th scope="row">Additional guest</th><td><span class="dh">—</span></td><td class="v">$19</td><td class="v">$95</td><td class="v">$160</td></tr><tr><th scope="row">Additional child, 3–12</th><td><span class="dh">—</span></td><td class="v">$12</td><td class="v">$50</td><td class="v">$90</td></tr><tr><th scope="row">Deposit to hold the date</th><td><span class="dh">—</span></td><td class="v">$250</td><td class="v">$500</td><td class="v">$750</td></tr><tr><th scope="row">Can be complimentary</th><td><span class="dh">—</span></td><td class="v">7 nights in a Preferred Club Junior Suite or higher, or 5 rooms × 3 nights</td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">How far ahead to book</th><td class="v">30 days</td><td class="v">30 days</td><td class="v">30 days</td><td class="v">1 year</td></tr><tr><th scope="row">Room nights required</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">75 paid, or 120</td></tr><tr><th scope="row">Cancellation penalty</th><td class="v">$250</td><td class="v">$100</td><td class="v">$500</td><td class="v">$750</td></tr><tr class="grp"><td colspan="5">The ceremony</td></tr><tr><th scope="row">Symbolic ceremony</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Minister or judge</th><td class="v">Not included — $600</td><td class="v">Not included — $600</td><td class="v">Not included — $600</td><td class="v">Not included — $600</td></tr><tr><th scope="row">Sound system</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Ceremony and reception</td></tr><tr><th scope="row">Pergola or gazebo drapery</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Shoe check for a beach ceremony</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Attire pressed and ironed</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr class="grp"><td colspan="5">Flowers &amp; cake</td></tr><tr><th scope="row">Bouquet and boutonniere</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">For the wedding party</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">2 boutonnieres, 2 corsages</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Floral centrepieces</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Ceremonial and sweetheart table</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Cake and sparkling wine</th><td class="v">For 2</td><td class="v">For up to 10</td><td class="v">For up to 20</td><td class="v">Couple’s choice, dessert station</td></tr><tr class="grp"><td colspan="5">Photography &amp; music</td></tr><tr><th scope="row">Photographs</th><td class="v">20 digital</td><td><span class="dh">—</span></td><td class="v">50 printed, plus an album</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Video of the ceremony</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Live music</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Mexican trio, 45 minutes at cocktail hour</td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">The party</td></tr><tr><th scope="row">Welcome cocktail party</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">1 hour</td></tr><tr><th scope="row">Rehearsal dinner</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Semi-private, for 10</td><td class="v">2 hours with open bar</td></tr><tr><th scope="row">Private cocktail hour</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Up to 20, hors d’oeuvres</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Private dinner reception</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Gold menu, up to 20</td><td class="v">3 hours, buffet</td></tr><tr><th scope="row">Open bar</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">4 hours across cocktail and reception</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Sweetheart table</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Romantic dinner for the two of you</th><td class="v">Night of the ceremony</td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">For the two of you</td></tr><tr><th scope="row">Hair and makeup</th><td class="v">For one of you</td><td><span class="dh">—</span></td><td class="v">For one of you</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Room the night before</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Couples spa treatment</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Hydrotherapy access</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Couple and parents, one day</td></tr><tr><th scope="row">Spa discount</th><td class="v">15%</td><td class="v">15%</td><td class="v">15%</td><td class="v">20% for up to 6 people</td></tr><tr><th scope="row">Sparkling wine and fruit on arrival</th><td><span class="tk">✓</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Couple and parents, up to 3 rooms</td></tr><tr><th scope="row">Turndown the night of the wedding</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Late check-out</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Newlywed package</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Free anniversary nights</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr></tbody></table></div><div class="cmpkey"><span><b>✓</b> included</span><span><b>—</b> not included</span><span>text = what differs between packages</span></div></div></details>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"><div class="docrow"><a class="docbtn" href="https://drive.google.com/file/d/1BAjo0zfRjy6Rv5WNfrsyFP9nPlKTFLzu/view?usp=drive_link" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Locations</a></div></div><img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-ocean-pool-wedding-venue.jpg?width=800&amp;height=600" alt="" loading="lazy" style="margin-bottom:28px;"><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-beach-wedding-venue.png?width=800&amp;height=600" alt="The Beach" loading="lazy"><div class="vbody"><p class="vtag"></p><h4>The Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Ceremony · up to 200 guests</p><p>Ceremony on the sand with the Sea of Cortez behind you. The largest of the ceremony spaces.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-gazebo-wedding-venue.png?width=800&amp;height=600" alt="Gazebo" loading="lazy"><div class="vbody"><p class="vtag"></p><h4>Gazebo</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Ceremony · up to 150 guests</p><p>A traditional gazebo ceremony setting, with drapery available.</p></div></div><div class="vcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788273698552_drelc-grp-gala-infintypool-ter-2a-cb.jpg?alt=media&amp;token=8b949059-2a27-4b6b-a9eb-d02a9d821845" alt="Cascade Terrace" loading="lazy"><div class="vbody"><p class="vtag"></p><h4>Cascade Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Reception · minimum 50, up to 250 guests</p><p>A spacious terrace in front of the beach beside the infinity pool. Note the minimum of 50 guests — this space is not available to smaller groups.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-ocean-pool-wedding-venue.jpg?width=800&amp;height=600" alt="Oceana Terrace" loading="lazy"><div class="vbody"><p class="vtag"></p><h4>Oceana Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Reception · up to 80 guests</p><p>An intimate pool terrace surrounded by gardens and palm trees on the quiet side of the resort. The natural choice for a smaller wedding party.</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1783023940454_img_9588.webp?alt=media&amp;token=4d0b0d10-8e90-455f-8579-1e2269e926ef" alt="" loading="lazy" style="margin-bottom:26px;"><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274047472_drelc-res-bordeaux-cellar-2a-cb.jpg?alt=media&amp;token=c2a3b698-0f5e-4447-9416-870dd4338f1e" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274441660_drelc-res-worldcafe-3-cb.jpg?alt=media&amp;token=58bb6385-5d3d-4aad-922c-6c6d49e9e632" alt="World Café" loading="lazy"><div class="dbody"><p class="dtag">International buffet</p><h4>World Café</h4><p>Main buffet with oceanfront views and cooking-show stations, open for breakfast, lunch and dinner.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274435750_drelc-res-portofino-2015-2-cb.jpg?alt=media&amp;token=2199ed6b-4d0d-4dd3-98ee-d3b8dc4028c4" alt="Portofino" loading="lazy"><div class="dbody"><p class="dtag">Italian</p><h4>Portofino</h4><p>Northern Italian and Mediterranean cooking à la carte, in an elegant room. Smart casual.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274624786_drelc-res-bordeaux-diningroom-cb.jpg?alt=media&amp;token=48238a33-007d-4a9a-84ba-20e449465275" alt="Bordeaux" loading="lazy"><div class="dbody"><p class="dtag">French fine dining</p><h4>Bordeaux</h4><p>Adults-only French restaurant with a curated wine cellar and a romantic setting. Formal dress.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274621351_drelc-res-oceana-2a-cb.jpg?alt=media&amp;token=2cd12185-9f7d-40fb-9c04-06639b999a8e" alt="Oceana" loading="lazy"><div class="dbody"><p class="dtag">Seafood</p><h4>Oceana</h4><p>Oceanfront seafood, local and international, beside the adults-only pool.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274437730_drelc-res-seasidegrill-2015-1a-cb.jpg?alt=media&amp;token=a94de3ab-7fa0-4671-9ef9-f3ce111f2643" alt="Seaside Grill" loading="lazy"><div class="dbody"><p class="dtag">Grill</p><h4>Seaside Grill</h4><p>Open-air poolside grill for steaks, seafood and international plates by the main infinity pool.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274037235_drelc-coco-cafe-ap.jpg?alt=media&amp;token=bfce9531-4889-4ac7-b052-5be13271c3b5" alt="Coco Café" loading="lazy"><div class="dbody"><p class="dtag">Café</p><h4>Coco Café</h4><p>Premium coffees, teas and deli snacks by day; crêpes and desserts through the night.</p></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1788274439611_drelc-res-barefootgrill-2a-cb.jpg?alt=media&amp;token=5a3ed75d-a365-4e58-8b1a-f01c5fccd250" alt="Barefoot Grill" loading="lazy"><div class="dbody"><p class="dtag">Casual American</p><h4>Barefoot Grill</h4><p>Beachside snack grill for burgers, tacos and poolside bites.</p></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Barefoot Bar</span><span class="bdesc">Beachfront bar beside Barefoot Grill, cocktails with an ocean view.</span></li><li><span class="bname">Rendezvous</span><span class="bdesc">Main lobby bar with nightly live entertainment and premium spirits.</span></li><li><span class="bname">Manatees</span><span class="bdesc">Swim-up bar at the main pool for tropical cocktails and beer.</span></li><li><span class="bname">Sugar Reef</span><span class="bdesc">A quieter second swim-up bar away from the main pool.</span></li><li><span class="bname">Desires Music Lounge</span><span class="bdesc">Adults-only music lounge with a dance floor and DJ, late into the night.</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1783023946062_img_9582.webp?alt=media&amp;token=f210ab63-559a-4d0b-a2fa-ac39d494d7d5" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1783023946062_img_9582.webp?alt=media&amp;token=f210ab63-559a-4d0b-a2fa-ac39d494d7d5" alt="Infinity Pool" loading="lazy"><h4>Infinity Pool</h4><p>The main heated pool, with a children’s swimming area and a water slide.</p></div><div class="pool-card"><img src="https://alg.widen.net/img/alg/pdoy6lvons/2140px@1x/DRELC-EXT-Couple-AdultsPool-2A-CB.webp" alt="Tranquility Adults-Only Pool" loading="lazy"><h4>Tranquility Adults-Only Pool</h4><p>A quieter heated pool reserved for guests 18 and over.</p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://alg.widen.net/img/alg/lljxtzqw8h/2140px@1x/DRELC-JR-DBL-TV-2A-CB.webp" alt="Junior Suite Garden View" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Junior Suite Garden View</h4><p>650 sq ft suite with a private furnished balcony, garden view. King or 2 double beds, separate sitting area with sofa bed, rain shower. Sleeps up to 4 (max 3 adults). Starting from $194.50/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/uvov5p61az/2140px@1x/DRELC-JR-OV-2015-2-CB.webp" alt="Junior Suite Ocean View" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Junior Suite Ocean View</h4><p>650 sq ft suite with a private balcony and ocean view. King or 2 double beds, separate sitting area with sofa bed, rain shower. Sleeps up to 4 (max 3 adults). Starting from $210.50/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/z6tvtt8aoq/2140px@1x/DRELC-1BED-STE-OV-FE.webp" alt="One Bedroom Suite Ocean View" loading="lazy"><div class="rbody"><p class="rmeta">1080 sq ft</p><h4>One Bedroom Suite Ocean View</h4><p>1,080 sq ft suite with ocean view. Spacious living room with sofa bed, two satellite TVs, walk-in closet, full marble bathroom. King bed, sleeps up to 5 (max 3 adults). Starting from $224.00/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">1080 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/fvga1dagkw/2140px@1x/DRELC-FAM-JR-OV-Bedroom-1-CB.webp" alt="Family Junior Suite Ocean View" loading="lazy"><div class="rbody"><p class="rmeta">1080 sq ft</p><h4>Family Junior Suite Ocean View</h4><p>1,080 sq ft family suite with ocean view. Private bedroom, living room with sofa bed, dining area, two marble bathrooms, rain shower. King bed, sleeps up to 4 (max 3 adults). Starting from $234.00/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">1080 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/mexklerevc/2140px@1x/DRELC-JR-DBL-SO-AdultPV-2A-CB.webp" alt="Junior Suite Pool View Swim Out" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Junior Suite Pool View Swim Out</h4><p>650 sq ft suite with pool view and furnished terrace with direct swim-out pool access. King or 2 double beds, sitting area with sofa bed. Sleeps up to 4 (max 3 adults). Starting from $253.50/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/kabec9q0gg/2140px@1x/DRELC-EXT-Pano-SO-PV-2A-CB.webp" alt="One Bedroom Suite Pool View Swim Out" loading="lazy"><div class="rbody"><p class="rmeta">1080 sq ft</p><h4>One Bedroom Suite Pool View Swim Out</h4><p>1,080 sq ft suite with full marble bathroom and terrace with direct swim-out pool access. King bed, sleeps up to 4 (max 3 adults). Starting from $262.50/person/night (dbl occ). Includes Unlimited-Luxury all-inclusive.</p><div class="rpills"><span class="rpill">1080 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/cg64bv1k9q/2140px@1x/DRELC-PC-PC-JR-OF-DBL-2015-3-CB.webp" alt="Preferred Club Junior Suite Ocean Front" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Preferred Club Junior Suite Ocean Front</h4><p>650 sq ft suite with oceanfront views. Preferred Club tier: personalized check-in/out, continental breakfast, hors d'oeuvres, premium liquors, exclusive lounge, upgraded suite. King or 2 doubles, sleeps up to 4 (max 3 adults). Starting from $292.00/person/night (dbl occ).</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/uvov5p61az/2140px@1x/DRELC-JR-OV-2015-2-CB.webp" alt="Preferred Club Junior Suite Ocean View" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Preferred Club Junior Suite Ocean View</h4><p>650 sq ft suite with ocean view. Preferred Club tier: personalized check-in/out, continental breakfast, hors d'oeuvres, premium liquors, exclusive lounge. King bed, sleeps up to 4 (max 3 adults). Starting from $243.00/person/night (dbl occ).</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/ebttrm6u2z/2140px@1x/DRELC-PC-1BDRM-ST-OF-SO-TER-2A-CB.webp" alt="Preferred Club Junior Suite Oceanfront Swim Out" loading="lazy"><div class="rbody"><p class="rmeta">650 sq ft</p><h4>Preferred Club Junior Suite Oceanfront Swim Out</h4><p>650 sq ft suite with oceanfront views and direct swim-out terrace. Preferred Club tier. 2 double beds, sleeps up to 4 (max 3 adults). Starting from $350.50/person/night (dbl occ).</p><div class="rpills"><span class="rpill">650 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/ebttrm6u2z/2140px@1x/DRELC-PC-1BDRM-ST-OF-SO-TER-2A-CB.webp" alt="Preferred Club One Bedroom Suite Oceanfront Swim Out" loading="lazy"><div class="rbody"><p class="rmeta">1080 sq ft</p><h4>Preferred Club One Bedroom Suite Oceanfront Swim Out</h4><p>1,080 sq ft suite with oceanfront views, full marble bathroom, and terrace with direct swim-out access. Preferred Club tier. King bed, sleeps up to 4 (max 3 adults). Starting from $389.00/person/night (dbl occ).</p><div class="rpills"><span class="rpill">1080 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/zzgmfsnhxr/2140px@1x/DRELC-PC1BED-STE-OV-Double-FE.webp" alt="Preferred Club One Bedroom Suite Ocean View" loading="lazy"><div class="rbody"><p class="rmeta">1080 sq ft</p><h4>Preferred Club One Bedroom Suite Ocean View</h4><p>1,080 sq ft suite with ocean view. Private bedroom, living room with sofa bed, dining area. Preferred Club tier. King or 2 doubles, sleeps up to 4 (max 3 adults). Starting from $311.00/person/night (dbl occ).</p><div class="rpills"><span class="rpill">1080 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/tz92gjcs5l/2140px@1x/DRELC-PCJROF-PC1BEDOV-2015-2-CB.webp" alt="Preferred Club Family Master Two Bedroom Suite Ocean Front" loading="lazy"><div class="rbody"><p class="rmeta">1540 sq ft</p><h4>Preferred Club Family Master Two Bedroom Suite Ocean Front</h4><p>1,540 sq ft oceanfront family suite. Two bedrooms each with full bath, living room, dining room. Preferred Club tier with butler service. King + 2 doubles or 2 kings, sleeps up to 6 (max 5 adults). Starting from $690.50/person/night (dbl occ).</p><div class="rpills"><span class="rpill">1540 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/tz92gjcs5l/2140px@1x/DRELC-PCJROF-PC1BEDOV-2015-2-CB.webp" alt="Preferred Club Presidential Suite Ocean Front" loading="lazy"><div class="rbody"><p class="rmeta">1540 sq ft</p><h4>Preferred Club Presidential Suite Ocean Front</h4><p>1,540 sq ft oceanfront presidential suite with connecting junior suite, dining room, three marble bathrooms, rain shower, and courtyard entrance. Preferred Club tier. King + 2 doubles, sleeps up to 6 (max 5 adults). Starting from $720.00/person/night (dbl occ).</p><div class="rpills"><span class="rpill">1540 sq ft</span></div></div></div><div class="rcard"><img src="https://alg.widen.net/img/alg/hve2dscrba/2140px@1x/DRELC-PC-Pres-1BDRM-STE-OF-SO-KING-3A-CB.webp" alt="Preferred Club Presidential Suite Oceanfront Swim Out" loading="lazy"><div class="rbody"><p class="rmeta">1540 sq ft</p><h4>Preferred Club Presidential Suite Oceanfront Swim Out</h4><p>1,540 sq ft oceanfront presidential suite with two separate bedrooms, three marble bathrooms, and an expansive swim-out terrace. Preferred Club tier. King + 2 doubles, sleeps up to 6 (max 5 adults). Starting from $875.50/person/night (dbl occ).</p><div class="rpills"><span class="rpill">1540 sq ft</span></div></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Preferred Club</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-los-cabos%2F1783023944550_img_9581.webp?alt=media&amp;token=51fa7940-1300-4056-b2fb-2152a975242d" alt="" loading="lazy" style="margin-bottom:26px;"><div id="club-body"><div class="club-block"><h3>Preferred Club</h3><p>Personalized check-in and check-out
+Daily continental breakfast in the Preferred Club Lounge
+Afternoon hot and cold hors d’oeuvres
+Exquisite desserts and premium liquors in the lounge
+Access to the Preferred Club lounge and bar
+Preferred Club suites in premium resort locations
+Upgraded mini-bar
+Upgraded bath amenities
+Pillow menu
+Special spa and resort store discounts</p></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Archery,Beach Soccer,Beach Volleyball,Bingo,Bocce-Ball,Cooking Classes,Dance Lessons,Darts,Euro-Bungee,Fishing,Golf nearby,Hiking,Horseback Riding,Kids Club,Kids Activities,Kids Camping,Local Tours/Shuttles,Motorized Watersports,Movies on the Beach,Pool Volleyball,Snorkeling,Spanish/Language Classes,Table Tennis,Tennis,Theme Parties,Wine/cocktail tasting,Yoga</li></ul></div>
+        <div id="act-extra-col" style="display:none"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3:00 PM</span></li><li><span class="lbl">Check-out</span><span>11:00 AM</span></li><li><span class="lbl">Total Rooms</span><span>279</span></li><li><span class="lbl">Airport</span><span>Los Cabos International (SJD)</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>The Tranquility pool is reserved for guests 18 and over. Bordeaux is adults-only and the only restaurant with a formal dress code; the others range from casual to casual elegance. The Explorer’s Club is for ages 3–12 and children must be fully potty-trained. Golf is played at nearby championship courses at preferred rates rather than on site. Music at outdoor events finishes at 10:30pm.</p></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display:none;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://alg.widen.net/img/alg/6gtpq8y0vw/2140px@1x/DRELC-EXT-Couple-Beach-1A-CB.webp" alt="Dreams Los Cabos Suites Golf Resort &amp; Spa activities banner" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-hero.jpeg?width=1920&amp;height=1080" alt="Resort &amp; Property" loading="lazy"></figure><figure><img src="https://alg.widen.net/img/alg/pdoy6lvons/2140px@1x/DRELC-EXT-Couple-AdultsPool-2A-CB.webp" alt="Tranquility Adults-Only Pool" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-beach-wedding-venue.png?width=800&amp;height=600" alt="The Beach" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-cascada-pool-wedding-venue.jpg?width=800&amp;height=600" alt="Cascade Terrace" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/drelc-ext-main-pool-panoramic-1.jpg?width=1920&amp;height=1080" alt="Resort &amp; Property" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-ocean-pool-wedding-venue.jpg?width=800&amp;height=600" alt="Oceana Terrace" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72641-dreams-los-cabos-suites-golf-resort-spa/aioapi/dreams-los-cabos-gazebo-wedding-venue.png?width=800&amp;height=600" alt="Gazebo" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
+    </div>
+  </div>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
