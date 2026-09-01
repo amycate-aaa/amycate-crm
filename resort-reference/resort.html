@@ -1333,6 +1333,8 @@ function docsFor(section){
 // re-typing them as document links.
 function autoDocs(section){
   const out=[];
+  if(section==='packages' && photoOk(P.weddingGuide))
+    out.push({label:'Wedding Brochure', url:P.weddingGuide});
   if(section===''){
     if(photoOk(P.bookingLink)) out.push({label:'Resort Info at Destination Weddings',url:P.bookingLink});
     if(photoOk(P.galleryLink)) out.push({label:'Photo Gallery',url:P.galleryLink});
