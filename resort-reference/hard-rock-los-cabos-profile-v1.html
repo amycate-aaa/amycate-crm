@@ -1,329 +1,543 @@
-<title>Hard Rock Hotel Los Cabos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
-<style>
-:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
- --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
-:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
- font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
-img{display:block;max-width:100%}
-.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
-.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
-.eyebrow.light{color:#DFC48B}
-.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;
- background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
-.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
-.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
- line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
-.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
- font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
-.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
- border-radius:999px;padding:.26rem .68rem}
-section{padding:clamp(44px,6.5vw,80px) 0}
-section+section{border-top:1px solid var(--line)}
-h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
- line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
-.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
- line-height:1.5;color:var(--soft);max-width:34ch}
-.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
-.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
-@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
-.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
- margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
-.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
-.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
-.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
- display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
-.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
-.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
-.card:hover .shot img{transform:scale(1.04)}
-.cbody{padding:1rem 1.1rem 1.25rem}
-.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
-.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
-.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
- margin-bottom:.5rem!important}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
-caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
-th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
-thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
-tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
-.num{font-variant-numeric:tabular-nums;color:var(--black)}
-.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
-.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
- color:var(--soft);font-size:.92rem}
-.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
- border:1px solid var(--gold);transform:rotate(45deg)}
-.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
-@media(max-width:640px){.dining{column-count:1}}
-.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
-.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
-.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
- color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
-.dish p{margin:0;font-size:.89rem;color:var(--soft)}
-.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
-.gal figure{margin:0}
-.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
-.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
-.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
-.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
-.note p:last-child{margin:0}
-footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-<style>
-.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
-.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
-.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
-.tiergap{margin-top:2.2rem}
-.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
-@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
-.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
-.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
-.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hard Rock Hotel Los Cabos · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
 
-<header class="hero">
-  <img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLosCabos_Lifestyle_Pool_Beach.jpg" alt="Hard Rock Hotel Los Cabos pools and beach">
-  <div class="wrap">
-    <p class="eyebrow light">Fraccionamiento Diamante, Cabo San Lucas</p>
-    <h1>Hard Rock Hotel Los Cabos</h1>
-    <p class="tag">639 suites, six pools and a 1,500-guest ballroom &mdash; on a Pacific beach nobody swims from.</p>
-    <ul class="chips"><li>639 rooms &amp; suites</li><li>8 wedding venues</li><li>Up to 1,500 guests</li><li>8 restaurants &middot; 11 bars</li><li>6 pools</li><li>No ocean swimming</li><li>All ages</li></ul>
-  </div>
-</header>
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
 
-<main>
-<section id="overview"><div class="wrap split">
-  <div><p class="eyebrow">The resort</p><h2>A big, loud, well-run party resort &mdash; and one hard limitation to name up front</h2><p class="lede">Everything here is scaled for a crowd. The one thing it cannot give a couple is a swimmable ocean.</p></div>
-  <div class="prose">
-    <p>Hard Rock Hotel Los Cabos opened in 2018 as the brand&rsquo;s first purpose-built all-inclusive in Mexico &mdash; 639 rooms and suites in the Diamante development at the southern tip of Baja. Every room is at least 522 sq ft with a terrace and a hydro spa tub. Six pools, a music-themed everything, a bowling alley in the Moonlight lounge, and 60,000 sq ft of event space including a ballroom that seats 1,500.</p>
-    <p><strong>Name the beach issue in the first five minutes of the call.</strong> This property sits on the <strong>Pacific side</strong>, not the Sea of Cortez. The resort itself warns that currents are dangerous even for strong swimmers and asks guests to keep away from the shoreline. A beach ceremony on the sand is lovely and completely normal here &mdash; but nobody swims in that ocean, and a couple picturing a snorkelling week will be disappointed. The six pools carry all of the water time.</p>
-    <p><strong>Where it wins.</strong> Group capacity and entertainment. The Muse Terrace and Harmony Ballroom can absorb weddings that most Cabo properties would have to split, the Rock Suites come with a personal assistant, and the resort&rsquo;s own energy does a lot of the work for a couple who want a loud, late celebration rather than a quiet one.</p>
-    <p><strong>Transfer runs long.</strong> Roughly 51&ndash;55 km from Los Cabos International, 45 to 75 minutes depending on traffic, because it is past Cabo San Lucas rather than on the corridor. Build that into arrival-day planning.</p>
-    <ul class="facts">
-      <li><b>639</b>rooms &amp; suites</li>
-      <li><b>4.5</b>star rating</li>
-      <li><b>8</b>wedding venues</li>
-      <li><b>1,500</b>largest venue</li>
-      <li><b>8</b>restaurants</li>
-      <li><b>11</b>bars &amp; lounges</li>
-      <li><b>6</b>pools</li>
-      <li><b>2018</b>opened</li>
-    </ul>
-  </div>
-</div></section>
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
 
-<section id="rooms"><div class="wrap">
-  <p class="eyebrow">Accommodation</p><h2>Eleven categories, nothing under 522 square feet</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every room and suite has a terrace with a hydro spa tub. Most categories work out to three adults, or two adults plus one teenager (13&ndash;17), or two adults plus two children (4&ndash;12); an infant in a crib does not count against the maximum. All Rock Suites include a personal assistant and Rock Royalty amenities.</p>
-
-  <p class="subhead">Deluxe rooms &mdash; 522 sq ft</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/22872601_ImageLargeWidth.JPG" alt="Deluxe Gold"></div>
-      <div class="cbody"><h3>Deluxe Gold</h3><p class="meta">522 sq ft &middot; Sleeps 3 &middot; Resort view</p><p>The entry category. One king with a full-size sofa bed, or two queens. Terrace with hydro spa tub, double-sink vanity and the full in-room amenity set.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889198_ImageLargeWidth.jpg" alt="Deluxe Partial Ocean View"></div>
-      <div class="cbody"><h3>Deluxe Partial Ocean View</h3><p class="meta">522 sq ft &middot; Sleeps 3&ndash;4 &middot; Partial ocean</p><p>Same footprint with a partial ocean outlook. King sleeps three; the two-queen configuration sleeps four. An accessible king is available.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889168_ImageLargeWidth.jpg" alt="Deluxe Swim-Up"></div>
-      <div class="cbody"><h3>Deluxe Swim-Up</h3><p class="meta">522 sq ft &middot; Sleeps 4 &middot; Garden</p><p>Ground floor with a terrace opening straight into a swim-up pool. King bed, two lounge chairs on the terrace.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889180_ImageLargeWidth.jpg" alt="Rock Royalty Ocean View"></div>
-      <div class="cbody"><h3>Rock Royalty Ocean View</h3><p class="meta">522 sq ft &middot; Sleeps 3 &middot; Ocean</p><p>The concierge tier at room level &mdash; full ocean views plus every Rock Royalty perk, including the complimentary couples massage. King or two queens.</p></div></article>
-  </div>
-
-  <p class="subhead tiergap">Suites</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889213_ImageLargeWidth.jpg" alt="Junior Suite"></div>
-      <div class="cbody"><h3>Junior Suite</h3><p class="meta">814 sq ft &middot; Sleeps 3 &middot; Partial ocean or garden</p><p>A king bed plus a living area with a full-size sofa bed, and a hydro spa tub on the terrace. The cheapest way into real space.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/14039358_ImageLargeWidth.jpg" alt="Deluxe Family"></div>
-      <div class="cbody"><h3>Deluxe Family</h3><p class="meta">1,044 sq ft &middot; Sleeps 7 &middot; View varies</p><p>Two bedrooms &mdash; a king and two queens &mdash; with two full bathrooms, children&rsquo;s bathrobes and bath amenities, beach toys, and an Xbox One S. The strongest family room on the property.</p></div></article>
-  </div>
-
-  <p class="subhead tiergap">Rock Suites &mdash; personal assistant and Rock Royalty included</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889368_ImageLargeWidth.jpg" alt="Rock Suite Ocean View"></div>
-      <div class="cbody"><h3>Rock Suite Ocean View</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>King bed with dining and living areas, or two bedrooms adding two queens. Hydro spa tub on the terrace.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889266_ImageLargeWidth.jpg" alt="Rock Suite Ocean Front"></div>
-      <div class="cbody"><h3>Rock Suite Ocean Front</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>Directly facing the water. One bedroom with a king and a sofa bed, or two bedrooms with a king and two queens.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889281_ImageLargeWidth.jpg" alt="Rock Suite Rooftop Terrace"></div>
-      <div class="cbody"><h3>Rock Suite Rooftop Terrace</h3><p class="meta">1,240 / 1,762 sq ft + 987 sq ft terrace &middot; Sleeps 4&ndash;7</p><p>A fully furnished private rooftop terrace of nearly a thousand square feet, over ocean or ocean-front views. The obvious room for the couple, and for photographs.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/13889400_ImageLargeWidth.jpg" alt="Rock Suite Swim-Up Ocean Front"></div>
-      <div class="cbody"><h3>Rock Suite Swim-Up Ocean Front</h3><p class="meta">1,240 sq ft (1BR) &middot; 1,762 sq ft (2BR) &middot; Sleeps 4&ndash;7</p><p>Ocean-front views and a private plunge pool on the terrace. One or two bedrooms.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/15755299_ImageLargeWidth.jpg" alt="Rock Star Suite"></div>
-      <div class="cbody"><h3>Rock Star Suite</h3><p class="meta">4,000 sq ft (2BR) &middot; 4,522 sq ft (3BR) &middot; Large groups</p><p>Up to three bedrooms &mdash; one king and two rooms with two queens each &mdash; plus a living room with its own full bathroom and a wet bar. Built for an entourage.</p></div></article>
-  </div>
-</div></section>
-
-<section id="club"><div class="wrap split">
-  <div><p class="eyebrow">Club level</p><h2>Rock Royalty</h2><p class="lede">A concierge tier rather than a lounge-and-lounge-bar club &mdash; the perks are service and spa, not a private restaurant.</p></div>
-  <div>
-    <ul class="perks">
-      <li>Dedicated telephone concierge, 7 a.m.&ndash;11 p.m.</li>
-      <li>Complimentary 25-minute couples massage at Rock Spa&reg;</li>
-      <li>Priority reservations for the Picks&reg;, Tracks&reg; and Wax&reg; programmes</li>
-      <li>Priority reservations for Balinese beds (extra cost)</li>
-      <li>Upgraded full-size Rock Spa&reg; bath products</li>
-      <li>Aromatherapy and pillow menus</li>
-      <li>Welcome petit fours and snacks</li>
-      <li>Loofah and sleeping mask</li>
-      <li>Complimentary beach bag</li>
-      <li>Late checkout to 3 p.m., subject to availability</li>
-    </ul>
-    <div class="note">
-      <p><strong>Set expectations against Preferred Club or Platinum.</strong> Rock Royalty has no private lounge, no exclusive restaurant and no dedicated beach the way the AMR and Princess club tiers do. It buys service, spa and priority &mdash; which suits some couples and disappoints others who have stayed at a Dreams or a Princess.</p>
-      <p><strong>Rock Suites include it,</strong> along with a personal assistant, on top of the Rock Royalty Ocean View room category itself.</p>
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Hard Rock Hotel Los Cabos</h1>
+      <p class="hero-tag" id="hero-tag">Where the Music Never Stops, and Neither Does the Fun.</p>
+      <p class="hero-meta" id="hero-dest">Los Cabos, Mexico</p>
+      <ul class="hero-chips" id="hero-chips"><li>Family friendly, adults-only pool</li><li>4.5 Stars</li><li>Rock Royalty</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
+    </div>
+    <img class="hero-photo" id="hero-img" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-heroimage.jpg" alt="Hard Rock Hotel Los Cabos">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Hard Rock Hotel Los Cabos</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">Where the Music Never Stops, and Neither Does the Fun.</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p>Perched on the shores of Los Cabos, Hard Rock Hotel Los Cabos delivers an all-inclusive escape that blends laid-back beach luxury with the electric energy Hard Rock is known for. Guests can unwind at multiple pools, indulge in gourmet dining, and recharge at the on-site spa and salon, all while soaking up VIP perks through the resort's signature rock-star-inspired amenities. Families are covered too, with a dedicated kids club and hands-on music activities, while couples can take advantage of wedding and honeymoon packages designed to make celebrations unforgettable. It's a destination built for travelers who want their vacation to hit all the right notes.</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display: flex;"><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889266_ImageLargeWidth.jpg" alt="Rock Suite Ocean Front" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_EDEN_POOL.jpg" alt="Eden Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889396_ImageLargeWidth.jpg" alt="Rock Suite Swim-Up Ocean Front" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_RED_POOL.jpg" alt="Red Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Rhythm-Pool-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Rhythm Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/rock-star-suite-dining-room-los-cabos.jpg" alt="Rock Star Suite — Dining Room" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_LYRIC_POOL_SLIDES.jpg" alt="Lyric Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_JR_SUITE_LIVING_ROOM.jpg" alt="Junior Suite — Living Room" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Sunset-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Sunset Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Pool" loading="lazy"></figure></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://www.allinweddings.com/en/calculator" target="_blank" rel="noopener"><span class="ic">✦</span>All In Weddings Calculator</a><a class="docbtn" href="https://drive.google.com/file/d/166p0H0mdrrTd4M4EScRTiNuuQa-sk4Tw/view?usp=drive_link" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Timeline</a><a class="docbtn" href="https://drive.google.com/file/d/1paTDCK1DsVTWXAnpjufrd_LidYo9HQ55/view?usp=sharing" target="_blank" rel="noopener"><span class="ic">✦</span>Hard Rock Los Cabos Group Benefits</a><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Los%20Cabos%20-%20Wedding%20Sales%20Guide%20Edited%20(1)-1782158107699.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Hard Rock Los Cabos Wedding Guide</a><a class="docbtn" href="https://www.destinationweddings.com/hard-rock-hotel-los-cabos" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Details at Destination Weddings</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-los-cabos/weddinginspiration-tropicalparadise-reception-roundtable.jpg" alt="" loading="lazy" style="margin-bottom:28px;"><div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Classic Arrangement</span><span class="phint">Brown ceremony structure with white roses · Avant Garde chairs for 32</span></span><span class="pprice">Complimentary w/ Wedding Deposit</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194878071_screenshot-2026-08-31-at-11.47.49-am.png?alt=media&amp;token=6dd9794c-8c7d-4154-8513-2ab332460df7" alt="Classic Arrangement" loading="lazy"><div class="pkghi-line">Brown ceremony structure with white roses</div><div class="pkghi-line">Avant Garde chairs for 32</div><div class="pkghi-line">Bouquet &amp; boutonniere</div><div class="pkghi-line">1-tier wedding cake</div><div class="pkghi-line">Minister</div><div class="pkghi-line">Sparkling wine</div><div class="pkghi-line">Audio system</div><div class="pkghi-line">Coordinator</div><div class="pkghi-line">Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Free Spirit</span><span class="phint">Triangular wooden arch with greenery, roses &amp; pampas · Ceremony seatin…</span></span><span class="pprice">$3,500</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194470051_weddinginspiration_freespirit_rceremony.jpg?alt=media&amp;token=d73eef18-5c7e-4260-bda4-1a75e296acd2" alt="Free Spirit" loading="lazy"><div class="pkghi-line">Triangular wooden arch with greenery, roses &amp; pampas</div><div class="pkghi-line">Ceremony seating for 32</div><div class="pkghi-line">Wooden column &amp; gold pedestal</div><div class="pkghi-line">Pampas lining aisle</div><div class="pkghi-line">Natural wooden runner</div><div class="pkghi-line">Mixed rose bouquet &amp; boutonniere</div><div class="pkghi-line">2-tier cake</div><div class="pkghi-line">Minister</div><div class="pkghi-line">Soloist</div><div class="pkghi-line">Sparkling wine</div><div class="pkghi-line">Coordinator</div><div class="pkghi-line">Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Tropical Paradise</span><span class="phint">Tropical greenery structure · Mixed tropical leaf arrangements lining …</span></span><span class="pprice">$4,000</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-los-cabos/weddinginspiration-tropicalparadise-reception-roundtable.jpg" alt="Tropical Paradise" loading="lazy"><div class="pkghi-line">Tropical greenery structure</div><div class="pkghi-line">Mixed tropical leaf arrangements lining aisle</div><div class="pkghi-line">Burlap or white wooden runner</div><div class="pkghi-line">Anthuriums &amp; greenery at structure base</div><div class="pkghi-line">Tropical bouquet &amp; boutonniere</div><div class="pkghi-line">2-tier cake</div><div class="pkghi-line">Minister</div><div class="pkghi-line">Soloist</div><div class="pkghi-line">Sparkling wine</div><div class="pkghi-line">Coordinator</div><div class="pkghi-line">Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Modern Enchantment</span><span class="phint">White circular structure with sparkling crystal curtains · Ceremony se…</span></span><span class="pprice">$4,500</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194590412_weddinginspiration_modernenchantment_ceremony1.jpg?alt=media&amp;token=38049295-2be6-4779-93e5-70f74d536ad0" alt="Modern Enchantment" loading="lazy"><div class="pkghi-line">White circular structure with sparkling crystal curtains</div><div class="pkghi-line">Ceremony seating for 32</div><div class="pkghi-line">White floral bouquet &amp; boutonniere</div><div class="pkghi-line">2-tier cake</div><div class="pkghi-line">Minister</div><div class="pkghi-line">Soloist</div><div class="pkghi-line">Sparkling wine</div><div class="pkghi-line">Coordinator</div><div class="pkghi-line">Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Lavish Daydream</span><span class="phint">Floral top covering with chandelier &amp; 2 front arrangements in permanen…</span></span><span class="pprice">$5,000</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194597728_weddinginspiration_lavishdaydream_ceremony_structure.jpg?alt=media&amp;token=120f15e2-9617-4f9e-9138-58241311496f" alt="Lavish Daydream" loading="lazy"><div class="pkghi-line">Floral top covering with chandelier &amp; 2 front arrangements in permanent botanicals</div><div class="pkghi-line">32 gold chairs with white cushions</div><div class="pkghi-line">Gold urns at aisle entrance</div><div class="pkghi-line">White petaled runner</div><div class="pkghi-line">White &amp; blush rose bouquet</div><div class="pkghi-line">2-tier cake</div><div class="pkghi-line">Minister</div><div class="pkghi-line">Soloist</div><div class="pkghi-line">16 rose petal cones for send-off</div><div class="pkghi-line">Sparkling wine</div><div class="pkghi-line">Coordinator</div><div class="pkghi-line">Honeymoon Package</div></div></div></div><details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb"><div class="cmpwrap"><table class="cmp"><thead><tr><th></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194878071_screenshot-2026-08-31-at-11.47.49-am.png?alt=media&amp;token=6dd9794c-8c7d-4154-8513-2ab332460df7" alt="Classic Arrangement" loading="lazy"><span class="pn">Classic Arrangement</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194470051_weddinginspiration_freespirit_rceremony.jpg?alt=media&amp;token=d73eef18-5c7e-4260-bda4-1a75e296acd2" alt="Free Spirit" loading="lazy"><span class="pn">Free Spirit</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-los-cabos/weddinginspiration-tropicalparadise-reception-roundtable.jpg" alt="Tropical Paradise" loading="lazy"><span class="pn">Tropical Paradise</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194590412_weddinginspiration_modernenchantment_ceremony1.jpg?alt=media&amp;token=38049295-2be6-4779-93e5-70f74d536ad0" alt="Modern Enchantment" loading="lazy"><span class="pn">Modern Enchantment</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788194597728_weddinginspiration_lavishdaydream_ceremony_structure.jpg?alt=media&amp;token=120f15e2-9617-4f9e-9138-58241311496f" alt="Lavish Daydream" loading="lazy"><span class="pn">Lavish Daydream</span><span class="pc">Up to 32 guests</span></th></tr></thead><tbody><tr class="grp"><td colspan="6">The cost</td></tr><tr><th scope="row">Collection cost</th><td class="v">Wedding deposit</td><td class="v">$3,500</td><td class="v">$4,000</td><td class="v">$4,500</td><td class="v">$5,000</td></tr><tr><th scope="row">Guests included</th><td class="v">32</td><td class="v">32</td><td class="v">32</td><td class="v">32</td><td class="v">32</td></tr><tr><th scope="row">Reception table, seats 8</th><td><span class="tk">✓</span></td><td class="v">$450</td><td class="v">$450</td><td class="v">$500</td><td class="v">$550</td></tr><tr class="grp"><td colspan="6">The ceremony</td></tr><tr><th scope="row">Ceremony location</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Nondenominational minister</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Seating for 32</th><td class="v">Brown Avant Garde</td><td class="v">Ceremony seating</td><td class="v">With tropical pillows</td><td class="v">Acrylic Napoleon</td><td class="v">Gold, white cushions</td></tr><tr><th scope="row">Ceremony structure</th><td class="v">Brown structure</td><td class="v">Triangular wooden arch</td><td class="v">Tropical, greenery</td><td class="v">White circular, tear drops</td><td class="v">Floral drape + chandelier</td></tr><tr><th scope="row">Aisle runner</th><td><span class="dh">—</span></td><td class="v">Natural wood</td><td class="v">Burlap or white wood</td><td class="v">White vinyl</td><td class="v">White petals</td></tr><tr><th scope="row">Aisle décor</th><td class="v">Podium, gold vase</td><td class="v">2 pampas vases</td><td class="v">4 tropical leaf vases</td><td class="v">6 vases, lilies</td><td class="v">2 gold urns</td></tr><tr><th scope="row">Audio system</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Soloist — violin, sax or guitar</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Rose petal cones for send-off</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">16 cones</td><td class="v">16 cones</td></tr><tr class="grp"><td colspan="6">Flowers &amp; cake</td></tr><tr><th scope="row">Bouquet and boutonniere</th><td class="v">White roses</td><td class="v">Mixed roses, greenery</td><td class="v">Anthuriums, tropical</td><td class="v">White florals</td><td class="v">White and blush roses</td></tr><tr><th scope="row">Themed wedding cake for 32</th><td class="v">1-tier</td><td class="v">2-tier</td><td class="v">2-tier</td><td class="v">2-tier</td><td class="v">2-tier</td></tr><tr><th scope="row">Sparkling wine for 32</th><td class="v">During ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td></tr><tr class="grp"><td colspan="6">Planning &amp; extras</td></tr><tr><th scope="row">Wedding specialist and onsite coordinator</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Wedding website and registry</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">With Love honeymoon package</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr></tbody></table></div><div class="cmpkey"><span><b>✓</b> included</span><span><b>—</b> not included</span><span>text = what differs between packages</span></div></div></details>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"><div class="docrow"><a class="docbtn" href="https://www.destinationweddings.com/real-weddings/real-wedding-stories/tara-michaels-destination-wedding-in-cabo-san-lucas-mexico" target="_blank" rel="noopener"><span class="ic">✦</span>Tara and Michael Real Wedding</a></div></div><img class="bandimg" src="https://destify.com/wp-content/uploads/2025/02/HRLC-Echo-Terrace-5.jpg.webp" alt="" loading="lazy" style="margin-bottom:28px;"><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://holaweddings.com/wp-content/uploads/2023/04/HRHLC-Wedding-venue-Beach-1.jpg" alt="Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 1400 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/chapel-hard-rock-wide-scaled.jpg.webp" alt="Chapel" loading="lazy"><div class="vbody"><p class="vtag">Ceremony</p><h4>Chapel</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 112 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/HRLC-Serenade-Terrace-3.jpg.webp" alt="Serenade Terrace" loading="lazy"><div class="vbody"><p class="vtag">Reception, Cocktail Hour</p><h4>Serenade Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 650 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/DFresort-hardrockLClosgallos-gallery-scaled.jpg.webp" alt="Los Gallos Terrace" loading="lazy"><div class="vbody"><p class="vtag">Reception, Cocktail Hour</p><h4>Los Gallos Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 250 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/HRLC-Codea-Garden-5.jpg.webp" alt="Coda Garden" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Coda Garden</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/HRLC-Beat-Patio-2.jpg.webp" alt="Beat Patio" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception</p><h4>Beat Patio</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/HRLC-Muse-Terrace-1.jpg.webp" alt="Muse Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Muse Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 1000 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/DFresort-hardrockLCeden-gallery-scaled.jpg.webp" alt="Eden Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Eden Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2025/02/HRLC-Sunset-Terrace-1.jpg.webp" alt="Sunset Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Sunset Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 150 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2022/06/DFresort-hardrockLCtune-gallery.jpg.webp" alt="Tune Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Tune Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 130 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2025/02/HRLC-Echo-Terrace-5.jpg.webp" alt="Echo Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Echo Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 130 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2025/02/HRLC-Retune-Terrace-1.jpg.webp" alt="Retune Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Retune Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 80 guests</p></div></div><div class="vcard"><img src="https://destify.com/wp-content/uploads/2025/02/HRLC-Moonlight-Terrace-3.jpg.webp" alt="Moonlight Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Moonlight Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_TORO_RESTAURANT.jpg" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/13888665_ImageLargeWidth.jpg" alt="ZEN" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Asian / Teppanyaki</p><h4>ZEN</h4><p>Teppanyaki-style dining with Chinese and Japanese dishes, chefs performing tableside. Also Asian à la carte and an authentic sushi counter.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/Zen-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CIAO_RESTAURANT_TERRACE.jpg" alt="CIAO" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Italian</p><h4>CIAO</h4><p>The resort's fine-dining Italian. Internationally-influenced breakfast buffet in the mornings; Italian specialties and pasta in an elegant setting at night.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/Ciao-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/25651842_ImageLargeWidth.jpg" alt="UMO" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Yucatecan</p><h4>UMO</h4><p>Yucatecan cuisine built on local, seasonal ingredients with smoke and fire central to the cooking. Handmade artisanal tortillas and guacamole.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/UMO-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1786640195343_13888649_imagelargewidth.jpg?alt=media&amp;token=d0d7b01e-efa4-4bf1-b60b-16597165830d" alt="THE MARKET" loading="lazy"><div class="dbody"><p class="dtag">Buffet · International</p><h4>THE MARKET</h4><p>A bountiful international buffet spanning cuisines from Mexico to Asia. Breakfast, lunch and dinner.</p></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/16723790_ImageLargeWidth.jpg" alt="LOS GALLOS" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Mexican</p><h4>LOS GALLOS</h4><p>You'll find fiery flavors, spices and passion infusing the cuisine at this Mexican hacienda. Here, traditional Mexican cuisine mingle with icy margaritas, tasty tequilas and a festive atmosphere.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/Los-Gallos-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1786640193195_toto.jpg?alt=media&amp;token=2423fc2c-2eae-4ffd-bfd2-fba8eb3f21c6" alt="TORO" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Steakhouse</p><h4>TORO</h4><p>Premium cuts and lavish à la carte dishes for dinner.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/Toro-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889452_ImageLargeWidth.jpg" alt="PIZZETO" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Pizza</p><h4>PIZZETO</h4><p>Artisanal brick-oven pizzas made with traditional Italian recipes, plus Mediterranean options.</p><a class="menulink" href="https://hotel.hardrock.com/los-cabos/files/6148/Pizzeto-Menu-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/14403754_ImageLargeWidth.jpg" alt="CAFETTO" loading="lazy"><div class="dbody"><p class="dtag">Cafe</p><h4>CAFETTO</h4><p>Continental breakfast, snacks, coffee and tea — open 6am–1am.</p></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Bar &amp; Grill" loading="lazy"><div class="dbody"><p class="dtag">Bar</p><h4>Legendary Bar &amp; Grill</h4></div></div><div class="dcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/Lyric-Bar-and-Grill-Hard-Rock-Los-Cabos.jpg" alt="Lyric Bar &amp; Grill" loading="lazy"><div class="dbody"><p class="dtag">Bar</p><h4>Lyric Bar &amp; Grill</h4></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Moonlight Bar, Lounge &amp; Bowling Alley</span></li><li><span class="bname">Sunlight Bar</span></li><li><span class="bname">Pulse Swim-Up Bar</span></li><li><span class="bname">Legendary Bar &amp; Grill</span></li><li><span class="bname">Legendary Wet Bar</span></li><li><span class="bname">Lyric Bar &amp; Grill</span></li><li><span class="bname">Lyric Wet Bar</span></li><li><span class="bname">Eden Bar, Grill &amp; Wet Bar</span></li><li><span class="bname">Rhythm Wet Bar (adults only)</span></li><li><span class="bname">Holding Bar</span></li><li><span class="bname">Moonlight Bar</span><span class="bdesc">Lounge &amp; Bowling Alley</span></li><li><span class="bname">Eden Bar</span><span class="bdesc">Grill &amp; Wet Bar</span></li><li><span class="bname">Rhythm Wet Bar</span><span class="bdesc">adults only</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-ocean-front-pool.jpg" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788199321794_screenshot-2026-08-31-at-1.01.46-pm.png?alt=media&amp;token=f03003ce-b54f-4545-a850-057ea0386ea4" alt="Lyric Pool" loading="lazy"><h4>Lyric Pool</h4><p>Cool off in the biggest pool of Hard Rock Los Cabos. Kids and adults alike can have a blast around this semicircular swimming pool, where there's a safe children's area as well as adult's area. This pool hosts the principal water activities, live music, foam parties, and water slides.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/los-cabos/files/6148/Rhythm-Pool-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Rhythm Pool" loading="lazy"><h4>Rhythm Pool</h4><p>Designed to make you feel like it's part of the nearby sea. Be part of the ultimate rock star experience we're crafting for you. At this adult-only pool you'll find sunbeds placed in the middle of the pool are available to live the vacation experience at its best. It is also, an ideal spot to presence the beautiful sunsets.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_RED_POOL.jpg" alt="Red Pool" loading="lazy"><h4>Red Pool</h4><p>Acknowledged for its red floor this pool features a DJ booth in the center. The Red Pool will host fun pool parties, great music ambiance for dancing, non-stop rocker vibes, and instagramable hot spots.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_EDEN_POOL.jpg" alt="Eden Pool" loading="lazy"><h4>Eden Pool</h4><p>If you want a tranquil but luxury ambiance, this pool is the perfect venue for spending the day with your couple, friends, and family. Eden Wet Bar &amp; Eden Snack Bar are available to drink cocktails and try some appetizers.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Pool" loading="lazy"><h4>Legendary Pool</h4><p>Take advantage of being a Hard Rock Hotel Legendary guests. Surrounded by 13 Pool Cabanas and fire pits is the ideal place for a more intimate poolside lounging experience. Premium cocktails await you at the Legendary Wet Bar.</p></div><div class="pool-card"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-los-cabos%2F1788199318782_screenshot-2026-08-31-at-1.01.25-pm.png?alt=media&amp;token=ca534a37-2d5b-401c-a0ec-9bb200bc8f04" alt="Pulse Pool" loading="lazy"><h4>Pulse Pool</h4><p>One of the guest’s favorites for being next to the main pool. You’ll get easy access to Pizzeto restaurant to grab a slice of pizza, nachos, chicken wings or burgers. Just a few steps away from the unlimited Slides fun.</p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hrhlc-deluxe-king.jpg" alt="Deluxe Gold" loading="lazy"><div class="rbody"><h4>Deluxe Gold</h4><p>522 sq ft room with resort view. King or 2 queens, max 3 adults. Furnished terrace with hydro spa tub, double-sink vanity, stocked mini-bar, 24-hr dining, Egyptian cotton bedding. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/deluxe-partial-ocean-view-king.jpg" alt="Deluxe Partial Ocean View" loading="lazy"><div class="rbody"><h4>Deluxe Partial Ocean View</h4><p>522 sq ft room with partial ocean view. 3 ADA-accessible king rooms available. King or 2 queens, max 3 adults. Furnished terrace with hydro spa tub, stocked mini-bar, 24-hr dining. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/deluxe-swim-up-king.jpg" alt="Deluxe Swim-Up" loading="lazy"><div class="rbody"><h4>Deluxe Swim-Up</h4><p>522 sq ft room with garden view and exterior semi-private swim-up pool access. Available for connecting rooms only. King bed, max 3 adults. Furnished terrace with hydro spa tub, stocked mini-bar. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/rock-royalty-ocean-view-king.jpg" alt="Rock Royalty Ocean View" loading="lazy"><div class="rbody"><h4>Rock Royalty Ocean View</h4><p>522 sq ft room with ocean view and exclusive Rock Royalty tier perks: dedicated telephone concierge (7am–11pm), welcome petit fours, upgraded Rock Spa bath products, aromatherapy/pillow menu, late checkout, beach bag, priority Balinese-bed reservations, and a complimentary 25-minute couples massage. King or 2 queens, max 3 adults. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_JR_SUITE_KING.jpg" alt="Junior Suite" loading="lazy"><div class="rbody"><h4>Junior Suite</h4><p>814 sq ft suite with garden or partial ocean view and a separate living room area. King bed, max 3 adults. Furnished terrace with hydro spa tub, stocked mini-bar, 24-hr dining. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hrhlc-deluxe-2-queens.jpg" alt="Deluxe Family" loading="lazy"><div class="rbody"><h4>Deluxe Family</h4><p>1,044 sq ft two-bedroom family suite (connecting rooms). King + 2 queens, two full bathrooms, max 7 adults. Family extras include Xbox One-S with games, kids' beach toys, L'Oréal kids bath amenities, adult/kid bathrobes &amp; slippers, arrival candies/cookies, and complimentary birthday mini-cake. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/rock-suite-ocean-view-one-bedroom-with-personal-assistant.jpg" alt="Rock Suite Ocean View" loading="lazy"><div class="rbody"><h4>Rock Suite Ocean View</h4><p>1BR (1,240 sq ft, king, max 3A) or 2BR (1,762 sq ft, king + 2 queens, max 7A) with ocean view and a dining room for 4–6. Includes full Personal Assistant Services: VIP check-in, personal assistant (7am–11pm), spa/tour booking, wake-up calls, bag pull, express checkout, ironing, shoe shining, and packing/unpacking. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/rock-suite-ocean-front.jpg" alt="Rock Suite Ocean Front" loading="lazy"><div class="rbody"><h4>Rock Suite Ocean Front</h4><p>1BR (1,240 sq ft) or 2BR (1,762 sq ft) oceanfront suite with living room area. King or king + 2 queens, max 3A (1BR) / 7A (2BR). Includes full Personal Assistant Services. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_ROCK_SUITE_ROOFTOP_TERRACE.jpg" alt="Rock Suite Rooftop Terrace" loading="lazy"><div class="rbody"><h4>Rock Suite Rooftop Terrace</h4><p>1BR (1,240 sq ft) or 2BR (1,762 sq ft) suite plus a 987 sq ft private rooftop terrace with an 8-person sofa, lounge chairs, and a 6-person dining table. Max 3A (1BR) / 7A (2BR). Includes full Personal Assistant Services. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/rock-suite-swim-up-ocean-front.jpg" alt="Rock Suite Swim-Up Ocean Front" loading="lazy"><div class="rbody"><h4>Rock Suite Swim-Up Ocean Front</h4><p>1BR (1,240 sq ft) or 2BR (1,762 sq ft) oceanfront suite with exterior semi-private swim-up pool. Max 3A (1BR) / 7A (2BR). Includes full Personal Assistant Services. Pricing available upon date selection.</p></div></div><div class="rcard"><img src="https://hotel.hardrock.com/los-cabos/files/6148/rock-star-suite-dining-room-los-cabos.jpg" alt="Rock Star Suite" loading="lazy"><div class="rbody"><h4>Rock Star Suite</h4><p>The ultimate suite: 2BR (4,000 sq ft, max 7A) or 3BR (4,522 sq ft, max 11A), oceanfront. Features a private bathroom with dual rain showers, full wet-bar living room, and an expansive terrace with a quadruple hydro spa tub, 6-person dining table, 12-person sofa, pool table, and bar. Includes full Personal Assistant Services. Pricing available upon date selection.</p></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Rock Royalty</h2>
+      <hr class="rule">
+      <div id="club-body"><div class="club-block"><h3>Rock Royalty</h3></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Daily activities programme</li><li>Water aerobics, water polo, water volleyball and water basketball</li><li>Beach volleyball</li><li>Body Rock fitness classes, HIIT and Zumba</li><li>Body Rock fitness centre</li><li>Two lighted tennis courts, reservation required</li><li>Land and water sports</li><li>Water slides at Lyric Pool</li><li>Foam parties and pool parties</li><li>Live DJ sets and theme nights</li><li>Nightly live music and theatre shows</li><li>Moonlight nightclub, adults only, no cover charge</li><li>Roxity Kids Club</li><li>Teen club</li><li>Music Lab guitar and stage sessions, ages 12 and over</li></ul></div>
+        <div id="act-extra-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"><li>Rock Spa treatments</li><li>Golf, extra fee; caddies $50, optional, 24 hours notice</li><li>Bowling alley, $12 to $25 per person depending on time of day</li><li>Off-site tours and excursions</li><li>Airport transfers and transportation</li><li>Rock Shop merchandise</li><li>Doctor visits and medication</li></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3 PM</span></li><li><span class="lbl">Check-out</span><span>12:00 PM</span></li><li><span class="lbl">Total Rooms</span><span>639</span></li><li><span class="lbl">Airport</span><span>55 minutes from SJD</span></li><li><span class="lbl">Year Built</span><span>2019</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>Outdoor private events must be over by 10:30 PM, and certain outdoor locations by 9:00 PM. Pool areas are not available for cocktail or private functions until 7:00 PM. Beach and terrace events carry an outdoor setup fee of $18 per person, ages 4 and up, and a ceremony on Tune Terrace or Echo Terrace carries an additional $500 fee. Any vendor hired who is not a hotel preferred vendor carries a $1,500 outside vendor fee. Buffet and plated dinner service requires a minimum of 20 persons. Weddings must be booked at least 31 days before arrival, and a $650 surcharge applies to a ceremony reserved within 30 days. This is a family resort with two adults-only areas: the Rhythm Pool and the Moonlight nightclub. The water slides require a minimum height of 43 inches and are not open to children under 8. The bowling alley is a paid activity, socks are required and sandals are not allowed. The resort holds $100 per night on a credit card at check-in for incidentals. Evening dress code in the restaurants is casual but excludes flip flops, wet clothing and visible swimwear; Zen is the only restaurant that requires a reservation.</p></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display: block;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"><div class="docrow"><a class="docbtn" href="https://hotel.hardrock.com/los-cabos/files/6148/Resort-Map-Hard-Rock-Hotel-Los-Cabos.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Resort Map</a><a class="docbtn" href="https://drive.google.com/file/d/1PYjt0_7tDr7sHm7dVwPKPcy9xlkkL14k/view?usp=drive_link" target="_blank" rel="noopener"><span class="ic">✦</span>Hard Rock Los Cabos Resort Guide</a><a class="docbtn" href="https://drive.google.com/file/d/1ZnOT06NZ9bXUTgsT4_jBsrwm2F0cupvM/view?usp=drive_link" target="_blank" rel="noopener"><span class="ic">✦</span>Hard Rock Los Cabos Facts</a></div></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889266_ImageLargeWidth.jpg" alt="Rock Suite Ocean Front" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_EDEN_POOL.jpg" alt="Eden Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889396_ImageLargeWidth.jpg" alt="Rock Suite Swim-Up Ocean Front" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_RED_POOL.jpg" alt="Red Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Rhythm-Pool-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Rhythm Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/rock-star-suite-dining-room-los-cabos.jpg" alt="Rock Star Suite — Dining Room" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_LYRIC_POOL_SLIDES.jpg" alt="Lyric Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_JR_SUITE_LIVING_ROOM.jpg" alt="Junior Suite — Living Room" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Sunset-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Sunset Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889368_ImageLargeWidth.jpg" alt="Rock Suite Ocean View" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889213_ImageLargeWidth.jpg" alt="Junior Suite — Interior" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Toro-hard-rock-hotel-los-cabos.jpg" alt="Toro Restaurant" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/15755299_ImageLargeWidth.jpg" alt="Rock Star Suite" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-pulse-swim-up-bar.jpg" alt="Pulse Swim-Up Bar" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLosCabos_Lifestyle_Pool_Beach.jpg" alt="Beachfront" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/14039958_ImageLargeWidth.jpg" alt="Rock Star Suite — Living Area" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/22872601_ImageLargeWidth.JPG" alt="Deluxe Gold — Two Queens" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/moonlight-bar-lounge.jpg" alt="Moonlight Bar Lounge" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889354_ImageLargeWidth.jpg" alt="Deluxe Partial Ocean View — Balcony" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889400_ImageLargeWidth.jpg" alt="Rock Suite Swim-Up — Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CAFETTO_RESTAURANT.jpg" alt="Cafetto Restaurant" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CIAO_RESTAURANT_TERRACE.jpg" alt="Ciao Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/14039358_ImageLargeWidth.jpg" alt="Deluxe Family — Queen Bedroom" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-ocean-front-pool.jpg" alt="Ocean-Front Pool" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/14039591_ImageLargeWidth.jpg" alt="Deluxe Family Suite" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/29717517_ImageLargeWidth.JPG" alt="Junior Suite — Bathroom" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889180_ImageLargeWidth.jpg" alt="Rock Royalty Ocean View" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889281_ImageLargeWidth.jpg" alt="Rock Suite Rooftop Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889228_ImageLargeWidth.jpg" alt="Deluxe Family — King Bedroom" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/29717511_ImageLargeWidth.JPG" alt="Junior Suite — Tub" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Romantic-Sunset-Dinner-Hard-Rock-Los-Cabos.jpg" alt="Romantic Sunset Dinner" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/sunlight-bar-terrace.jpg" alt="Sunlight Bar Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/29717629_ImageLargeWidth.jpg" alt="Rock Suite Rooftop" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889168_ImageLargeWidth.jpg" alt="Deluxe Swim-Up" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/Los-Gallos-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Los Gallos Terrace" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_ZEN_RESTAURANT_2.jpg" alt="Zen Restaurant" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889358_ImageLargeWidth.jpg" alt="Deluxe Partial Ocean View — Two Beds" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_MARKET_RESTAURANT.jpg" alt="Market Restaurant" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/13889198_ImageLargeWidth.jpg" alt="Deluxe Partial Ocean View — Room" loading="lazy"></figure><figure><img src="https://hotel.hardrock.com/los-cabos/files/6148/22872607_ImageLargeWidth.JPG" alt="Deluxe Gold — King" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
     </div>
   </div>
-</div></section>
-
-<section id="dining"><div class="wrap">
-  <p class="eyebrow">Dining &amp; drinks</p><h2>Eight restaurants, eleven bars, walk-in everywhere</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">No reservations required anywhere except ZEN&rsquo;s teppanyaki tables. UMO is the only smart-casual dress code; everything else is casual.</p>
-  <div class="dining">
-    <div class="dish"><h4>TORO</h4><p class="cuisine">Steakhouse</p><p>Premium cuts and lavish &agrave; la carte dishes. Dinner 5:30&ndash;10 p.m.</p></div>
-    <div class="dish"><h4>ZEN</h4><p class="cuisine">Asian &middot; Teppanyaki &middot; Sushi</p><p>&Agrave; la carte 5:30&ndash;10 p.m.; teppanyaki seatings at 5, 6, 7, 8 and 9 p.m. Teppanyaki takes reservations, maximum twelve guests.</p></div>
-    <div class="dish"><h4>UMO</h4><p class="cuisine">Yucatecan &middot; Smart casual</p><p>Local, seasonal cooking over smoke and fire, with handmade tortillas and guacamole. Dinner 5:30&ndash;10 p.m. No bathing suits.</p></div>
-    <div class="dish"><h4>CIAO</h4><p class="cuisine">Italian</p><p>The fine-dining Italian, and an international breakfast buffet in the mornings. Breakfast 8 a.m.&ndash;noon, dinner 5:30&ndash;10 p.m.</p></div>
-    <div class="dish"><h4>LOS GALLOS</h4><p class="cuisine">Mexican</p><p>Hacienda-style, with margaritas and tequila. Breakfast, lunch and dinner.</p></div>
-    <div class="dish"><h4>THE MARKET</h4><p class="cuisine">International buffet</p><p>Breakfast 7&ndash;11 a.m., lunch noon&ndash;5 p.m., dinner 6&ndash;10 p.m.</p></div>
-    <div class="dish"><h4>PIZZETO</h4><p class="cuisine">Pizza &middot; Mediterranean</p><p>Brick-oven artisanal pizzas, 11 a.m.&ndash;6 p.m.</p></div>
-    <div class="dish"><h4>CAFETTO</h4><p class="cuisine">Caf&eacute;</p><p>Continental breakfast, coffee, tea and snacks, 6 a.m.&ndash;1 a.m.</p></div>
-    <div class="dish"><h4>Awaken Your Senses</h4><p class="cuisine">Immersive dining &middot; Extra cost</p><p>A ticketed multi-sensory dinner, not part of the all-inclusive.</p></div>
-    <div class="dish"><h4>In-room dining</h4><p class="cuisine">24 hours</p><p>Full room-service menu, around the clock.</p></div>
-    <div class="dish"><h4>Moonlight Bar, Lounge &amp; Bowling Alley</h4><p class="cuisine">Lounge &middot; Bowling</p><p>Sun&ndash;Wed 5 p.m.&ndash;1 a.m., Thu&ndash;Sat to 2 a.m. Children are allowed in the bowling area only.</p></div>
-    <div class="dish"><h4>Sunlight Bar</h4><p class="cuisine">Bar &amp; lounge</p><p>10 a.m.&ndash;midnight.</p></div>
-    <div class="dish"><h4>Pulse Swim-Up Bar</h4><p class="cuisine">Swim-up</p><p>10 a.m.&ndash;6 p.m.</p></div>
-    <div class="dish"><h4>Legendary Bar &amp; Grill</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11 a.m.&ndash;6 p.m. Legendary Wet Bar alongside.</p></div>
-    <div class="dish"><h4>Lyric Bar &amp; Grill</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11:30 a.m.&ndash;6 p.m. Lyric Wet Bar alongside.</p></div>
-    <div class="dish"><h4>Eden Bar, Grill &amp; Wet Bar</h4><p class="cuisine">Pool bar &amp; grill</p><p>Drinks 10 a.m.&ndash;6 p.m., lunch 11 a.m.&ndash;6 p.m.</p></div>
-    <div class="dish"><h4>Rhythm Wet Bar</h4><p class="cuisine">Adults-only pool bar</p><p>10 a.m.&ndash;6 p.m., at the adults-only Rhythm Pool.</p></div>
-    <div class="dish"><h4>Holding Bar</h4><p class="cuisine">Bar</p><p>5&ndash;10 p.m.</p></div>
-  </div>
-  <div class="note"><p><strong>See The Show Bar is closed until further notice</strong> &mdash; still listed on the resort&rsquo;s own dining page as unavailable.</p></div>
-</div></section>
-
-<section id="pools"><div class="wrap">
-  <p class="eyebrow">Pools</p><h2>Six pools, and only one of them adults-only</h2>
-  <div class="dining">
-    <div class="dish"><h4>Lyric Pool</h4><p class="cuisine">Family &middot; Largest</p><p>The main pool, with a separated children&rsquo;s area, the water slides, live music and foam parties.</p></div>
-    <div class="dish"><h4>Rhythm Pool</h4><p class="cuisine">Adults only</p><p>Mid-pool sunbeds and sunset views, designed to echo the ocean beyond.</p></div>
-    <div class="dish"><h4>Red Pool</h4><p class="cuisine">Family &middot; Party</p><p>Red floor and a central DJ booth &mdash; this is where the pool parties happen.</p></div>
-    <div class="dish"><h4>Eden Pool</h4><p class="cuisine">Family &middot; Quiet</p><p>The calm one, with a wet bar and snack bar. Works for couples and families both.</p></div>
-    <div class="dish"><h4>Pulse Pool</h4><p class="cuisine">Family</p><p>Beside the main pool, closest to Pizzeto and the slides.</p></div>
-    <div class="dish"><h4>Legendary Pool</h4><p class="cuisine">Reserved tier</p><p>Thirteen cabanas and fire pits with premium cocktails at the Legendary Wet Bar.</p></div>
-  </div>
-  <div class="note"><p><strong>Slide rules:</strong> minimum height 43 inches, no children under 8, adult supervision required. Worth checking against the ages in the wedding party before anyone sells the waterslides.</p></div>
-</div></section>
-
-<section id="weddings"><div class="wrap">
-  <p class="eyebrow">Weddings</p><h2>Eight venues, from a 112-seat chapel to a 1,500-guest ballroom</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">One of very few Cabo properties with a real indoor rain plan at scale, and one of fewer still with an actual chapel on site.</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-beach-venue.png" alt="Beach"></div>
-      <div class="cbody"><h3>Beach</h3><p class="meta">Up to 1,400 guests &middot; Ceremony, cocktails, reception</p><p>Vows on the sand with the Pacific behind. Ceremonies here are routine; swimming is not &mdash; see the planning notes.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-chapel-venue.jpg" alt="Chapel"></div>
-      <div class="cbody"><h3>Chapel</h3><p class="meta">Up to 112 guests &middot; Ceremony</p><p>A real on-site chapel with pews and a glazed wall to the ocean &mdash; contemporary architecture, traditional feel. Rare in Los Cabos.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-muse-terrace-venue.jpg" alt="Muse Terrace"></div>
-      <div class="cbody"><h3>Muse Terrace</h3><p class="meta">Up to 1,100 guests &middot; Reception, cocktails</p><p>The big outdoor reception space, elevated with ocean views and room for a very large seated dinner.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-harmony-ballroom-venue.jpg" alt="Harmony Ballroom"></div>
-      <div class="cbody"><h3>Harmony Ballroom</h3><p class="meta">Up to 1,500 guests &middot; Reception, cocktails</p><p>17,440 sq ft, divisible into six sections. The largest venue on the property and the weather plan for any group that cannot move indoors elsewhere.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-serenade-terrace-venue.jpg" alt="Serenade Terrace"></div>
-      <div class="cbody"><h3>Serenade Terrace</h3><p class="meta">Up to 650 guests &middot; Reception, cocktails</p><p>8,447 sq ft of open terrace with panoramic views over the resort &mdash; the middle-size reception option.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-los-gallos-terrace-wedding-venue.jpeg" alt="Los Gallos Terrace"></div>
-      <div class="cbody"><h3>Los Gallos Terrace</h3><p class="meta">Up to 250 guests &middot; Reception, cocktails</p><p>An intimate outdoor terrace off the Mexican restaurant, good for a cocktail-style gathering or dinner under the stars.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-coda-garden-wedding-venue.jpeg" alt="Coda Garden"></div>
-      <div class="cbody"><h3>Coda Garden</h3><p class="meta">Up to 200 guests &middot; Ceremony, cocktails, reception</p><p>A lawn venue that takes a full ceremony-to-reception run without moving guests off the grass.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72768-hard-rock-hotel-los-cabos/aioapi/hard-rock-hotel-los-cabos-beat-patio-venue.jpg" alt="Beat Patio"></div>
-      <div class="cbody"><h3>Beat Patio</h3><p class="meta">Up to 200 guests &middot; Ceremony, reception</p><p>A covered contemporary patio attached to the Beat event space &mdash; 4,756 sq ft, divisible into ten sections.</p></div></article>
-  </div>
-
-  <h2 class="tiergap" style="margin-top:2.8rem">Wedding packages</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 .6rem">All five packages are built around ceremony seating for 32. Anything larger is a custom quote through the coordinator.</p>
-  <div>
-    <div class="pkg"><div><h3>Classic Arrangement</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">Complimentary</div>
-      <p class="det">Included with a qualifying stay and wedding deposit. Brown ceremony structure with white roses, Avant Garde chairs, bouquet and boutonniere, one-tier cake, minister, sparkling wine, audio system, coordinator and the honeymoon package.</p></div>
-    <div class="pkg"><div><h3>Free Spirit</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$3,500</div>
-      <p class="det">Triangular wooden arch with greenery, roses and pampas, wooden column and gold pedestal, pampas lining the aisle, natural wooden runner, mixed rose bouquet, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
-    <div class="pkg"><div><h3>Tropical Paradise</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$4,000</div>
-      <p class="det">Tropical greenery structure with anthuriums at the base, tropical leaf arrangements down the aisle, burlap or white wooden runner, tropical bouquet, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
-    <div class="pkg"><div><h3>Modern Enchantment</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$4,500</div>
-      <p class="det">White circular structure with sparkling crystal curtains, white floral bouquet and boutonniere, two-tier cake, minister, soloist, sparkling wine, coordinator and honeymoon package.</p></div>
-    <div class="pkg"><div><h3>Lavish Daydream</h3><p class="lead">Ceremony seating for 32</p></div><div class="price">$5,000</div>
-      <p class="det">Floral top covering with a chandelier and permanent botanical arrangements, 32 gold chairs with white cushions, gold urns at the aisle entrance, white petalled runner, white and blush rose bouquet, two-tier cake, minister, soloist, 16 rose petal cones for the send-off, sparkling wine, coordinator and honeymoon package.</p></div>
-  </div>
-</div></section>
-
-<section id="planning"><div class="wrap split">
-  <div><p class="eyebrow">Planning notes</p><h2>What to raise before the deposit</h2><p class="lede">Most of this property is straightforward. Three things are not.</p></div>
-  <div>
-    <p class="subhead">On-site services</p>
-    <ul class="perks">
-      <li>Civil / legal wedding</li>
-      <li>Symbolic wedding</li>
-      <li>Religious wedding</li>
-      <li>On-site wedding coordinator, included</li>
-      <li>Bouquets and boutonnieres</li>
-      <li>Hair and makeup</li>
-      <li>DJ services</li>
-      <li>Live music</li>
-      <li>Floral arrangements and decor</li>
-      <li>Photographer</li>
-      <li>Bridal suite available</li>
-    </ul>
-    <p class="subhead">Families in the group</p>
-    <ul class="perks">
-      <li>Hard Rock Roxity Kids Club&trade;</li>
-      <li>Teen club</li>
-      <li>Music Lab</li>
-      <li>Water slides &mdash; 43&Prime; minimum, no under-8s</li>
-      <li>Bowling alley at Moonlight</li>
-      <li>Deluxe Family suites sleep seven</li>
-    </ul>
-    <div class="note">
-      <p><strong>The ocean is not swimmable.</strong> The resort is on the Pacific side at Diamante, not the Sea of Cortez, and warns that currents are dangerous even for experienced swimmers. Ceremonies on the sand are fine; ocean swimming, snorkelling and most water sports are not available here. Say it early &mdash; it is the most common source of disappointment on this property.</p>
-      <p><strong>Rock Royalty is a service tier, not a club.</strong> No private lounge, restaurant or beach. Couples coming from a Dreams or a Princess will expect more than it delivers.</p>
-      <p><strong>Every package caps ceremony seating at 32.</strong> Above that, pricing is custom &mdash; so a 60-guest wedding cannot simply be quoted from the published list.</p>
-      <p><strong>Transfer is 45&ndash;75 minutes</strong> over roughly 51&ndash;55 km from Los Cabos International, because the resort sits past Cabo San Lucas rather than on the corridor.</p>
-    </div>
-  </div>
-</div></section>
-
-<section id="gallery"><div class="wrap">
-  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
-  <div class="gal">
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLosCabos_Lifestyle_Pool_Beach.jpg" alt="Pools and beach"><figcaption>Pools and beach</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_LYRIC_POOL_SLIDES.jpg" alt="Lyric Pool slides"><figcaption>Lyric Pool and slides</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Rhythm-Pool-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Rhythm Pool"><figcaption>Rhythm Pool, adults only</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_RED_POOL.jpg" alt="Red Pool"><figcaption>Red Pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_EDEN_POOL.jpg" alt="Eden Pool"><figcaption>Eden Pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-ocean-front-pool.jpg" alt="Ocean front pool"><figcaption>Ocean-front pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-pulse-swim-up-bar.jpg" alt="Pulse swim-up bar"><figcaption>Pulse swim-up bar</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/hard-rock-hotel-los-cabos-legendary-bar-and-grill.jpg" alt="Legendary Bar and Grill"><figcaption>Legendary Bar &amp; Grill</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Toro-hard-rock-hotel-los-cabos.jpg" alt="Toro"><figcaption>Toro</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_ZEN_RESTAURANT_2.jpg" alt="Zen"><figcaption>Zen</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CIAO_RESTAURANT_TERRACE.jpg" alt="Ciao terrace"><figcaption>Ciao terrace</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_MARKET_RESTAURANT.jpg" alt="The Market"><figcaption>The Market</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/HRHLC_CAFETTO_RESTAURANT.jpg" alt="Cafetto"><figcaption>Cafetto</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/moonlight-bar-lounge.jpg" alt="Moonlight bar and lounge"><figcaption>Moonlight bar &amp; lounge</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/sunlight-bar-terrace.jpg" alt="Sunlight bar terrace"><figcaption>Sunlight bar terrace</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Sunset-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Sunset terrace"><figcaption>Sunset terrace</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Los-Gallos-Terrace-Hard-Rock-Hotel-Los-Cabos.jpg" alt="Los Gallos terrace"><figcaption>Los Gallos terrace</figcaption></figure>
-    <figure><img loading="lazy" src="https://hotel.hardrock.com/los-cabos/files/6148/Romantic-Sunset-Dinner-Hard-Rock-Los-Cabos.jpg" alt="Romantic sunset dinner"><figcaption>Private sunset dinner</figcaption></figure>
-  </div>
-</div></section>
-</main>
-
-<footer><div class="wrap">
-  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
-  <p>Internal reference sheet. Package pricing and venue capacities change &mdash; confirm against the current wedding sales guide before quoting a client.</p>
-</div></footer>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
