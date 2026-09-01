@@ -1,361 +1,557 @@
-<title>Dreams Macao Beach Punta Cana</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap">
-<style>
-:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
- --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
-:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
- font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
-img{display:block;max-width:100%}
-.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
-.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
-.eyebrow.light{color:#DFC48B}
-.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;
- background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
-.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
-.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
- line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
-.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
- font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
-.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
- border-radius:999px;padding:.26rem .68rem}
-section{padding:clamp(44px,6.5vw,80px) 0}
-section+section{border-top:1px solid var(--line)}
-h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
- line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
-.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
- line-height:1.5;color:var(--soft);max-width:34ch}
-.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
-.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
-@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
-.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
- margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
-.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
-.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
-.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
- display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
-.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
-.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
-.card:hover .shot img{transform:scale(1.04)}
-.cbody{padding:1rem 1.1rem 1.25rem}
-.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
-.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
-.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
- margin-bottom:.5rem!important}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
-caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
-th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
-thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
-tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
-.num{font-variant-numeric:tabular-nums;color:var(--black)}
-.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
-.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
- color:var(--soft);font-size:.92rem}
-.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
- border:1px solid var(--gold);transform:rotate(45deg)}
-.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
-@media(max-width:640px){.dining{column-count:1}}
-.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
-.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
-.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
- color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
-.dish p{margin:0;font-size:.89rem;color:var(--soft)}
-.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
-.gal figure{margin:0}
-.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
-.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
-.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
-.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
-.note p:last-child{margin:0}
-footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-<style>
-.facts{list-style:none;margin:1.6rem 0 0;padding:0;display:grid;gap:0;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));border-top:1px solid var(--line)}
-.facts li{padding:.72rem .2rem;border-bottom:1px solid var(--line);font-size:.9rem;color:var(--soft)}
-.facts b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--black);line-height:1.1}
-.tiergap{margin-top:2.2rem}
-.pkg{border-top:1px solid var(--line);padding:1.1rem 0;display:grid;gap:.35rem .9rem;grid-template-columns:1fr}
-@media(min-width:720px){.pkg{grid-template-columns:1fr auto;align-items:baseline}}
-.pkg h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.35rem;margin:0}
-.pkg .lead{font-size:.68rem;letter-spacing:.17em;text-transform:uppercase;color:var(--gold-deep);margin:.1rem 0 0}
-.pkg .price{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;color:var(--black);font-variant-numeric:tabular-nums;white-space:nowrap}
-.pkg p.det{grid-column:1/-1;margin:.45rem 0 0;font-size:.89rem;color:var(--soft);max-width:70ch}
-</style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dreams Macao Beach Punta Cana · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
 
-<header class="hero">
-  <img src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp" alt="Dreams Macao Beach Punta Cana from the beach">
-  <div class="wrap">
-    <p class="eyebrow light">Macao Beach, Punta Cana</p>
-    <h1>Dreams Macao Beach Punta Cana</h1>
-    <p class="tag">The only all-inclusive on Macao Beach — and from 2026, half of a two-resort campus.</p>
-    <ul class="chips"><li>500 rooms</li><li>10 wedding venues</li><li>9 restaurants &middot; 7 bars</li><li>Up to 3 weddings a day</li><li>45 min from PUJ</li><li>Waterpark &amp; lazy river</li><li>All ages</li></ul>
-  </div>
-</header>
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
 
-<main>
-<section id="overview"><div class="wrap split">
-  <div><p class="eyebrow">The resort</p><h2>A new-build on a UNESCO beach, with a second resort arriving next door</h2><p class="lede">Modern, compact and genuinely family-friendly — the strongest waterpark property in Punta Cana for a wedding with children in the group.</p></div>
-  <div class="prose">
-    <p>Dreams Macao Beach is the first and only all-inclusive resort on Macao Beach, on the northeastern coast of the Dominican Republic. It is a modern build rather than a refurbished older property, and it shows: 500 rooms and suites in calm neutrals with teal accents, connected infinity pools, a full waterpark with a lazy river, and the Spa by Pevonia&reg;.</p>
-    <p><strong>Where it wins is families.</strong> Every standard category is a 603 sq ft Junior Suite sleeping four, the waterpark and Explorer&rsquo;s Club are included, and the layout is walkable rather than sprawling. For a wedding party travelling with children, that combination is hard to beat on this coast.</p>
-    <p><strong>What to raise on the call.</strong> Macao Beach is beautiful and gets noticeably less seaweed than the Bavaro strip, but the surf is real &mdash; waves run strong from December through March and it is not a beach for toddlers to swim off. The pools carry that load. The transfer is also about 45 minutes from Punta Cana International, against roughly 20 for the Bavaro resorts.</p>
-    <p><strong>The 2026 change.</strong> Hyatt is opening the adults-only Secrets Macao Beach Punta Cana &mdash; 406 rooms &mdash; directly adjacent, with free-flow access between the two resorts for guests of either. For a wedding party split between couples and families, that is a real advantage. It also means construction next door until it opens.</p>
-    <ul class="facts">
-      <li><b>500</b>rooms &amp; suites</li>
-      <li><b>4.5</b>star rating</li>
-      <li><b>10</b>wedding venues</li>
-      <li><b>3</b>weddings per day</li>
-      <li><b>9</b>restaurants</li>
-      <li><b>7</b>bars</li>
-      <li><b>45 min</b>from PUJ (40 km)</li>
-      <li><b>All ages</b>family-friendly</li>
-    </ul>
-  </div>
-</div></section>
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
 
-<section id="rooms"><div class="wrap">
-  <p class="eyebrow">Accommodation</p><h2>Sixteen categories &mdash; four resort-view, twelve Preferred Club</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 .4rem">Every standard room is a Junior Suite; there is no smaller entry category. Preferred Club here is family-inclusive, though the Master and Presidential Suites cap at two or three adults and take no children.</p>
-
-  <p class="subhead">Resort view &mdash; 603 sq ft Junior Suites</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp" alt="Junior Suite Tropical View"></div>
-      <div class="cbody"><h3>Junior Suite Tropical View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Tropical</p><p>One king or two queen beds, a living area and a full bathroom with rain shower, opening onto a private balcony or terrace. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp" alt="Junior Suite Pool View"></div>
-      <div class="cbody"><h3>Junior Suite Pool View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Pool</p><p>The same layout overlooking the pool complex &mdash; the pick for families who want eyes on the water. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp" alt="Junior Suite Partial Ocean View"></div>
-      <div class="cbody"><h3>Junior Suite Partial Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Partial ocean</p><p>One king or two double beds, living area and balcony or terrace with a partial view of the Caribbean. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp" alt="Junior Suite Ocean View"></div>
-      <div class="cbody"><h3>Junior Suite Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Ocean</p><p>The best of the resort-view categories, with a full ocean outlook from the balcony or terrace. Maximum three adults.</p></div></article>
-  </div>
-
-  <p class="subhead tiergap">Preferred Club &mdash; Junior Suites</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/lnrlfqjiif/webp/DRMPC-PC-JR-TV-KING-TC.webp" alt="Preferred Club Junior Suite Tropical View"></div>
-      <div class="cbody"><h3>Preferred Club Junior Suite Tropical View</h3><p class="meta">572 sq ft &middot; Sleeps 4 &middot; Tropical</p><p>One king or two double beds and a full bathroom with a hot tub for two, plus every Preferred Club privilege. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp" alt="Preferred Club Junior Suite Partial Ocean View"></div>
-      <div class="cbody"><h3>Preferred Club Junior Suite Partial Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Partial ocean</p><p>One king or two queens, a separate living room and a rain shower, on a private balcony or terrace. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp" alt="Preferred Club Junior Suite Ocean View"></div>
-      <div class="cbody"><h3>Preferred Club Junior Suite Ocean View</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Ocean</p><p>The same suite with a full ocean view &mdash; the sweet spot for a bridal party that wants Club access without the adults-only cap. Maximum three adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp" alt="Preferred Club Junior Suite Swim Out"></div>
-      <div class="cbody"><h3>Preferred Club Junior Suite Swim Out</h3><p class="meta">603 sq ft &middot; Sleeps 4 &middot; Garden / pool</p><p>A furnished terrace with direct access into the pool, straight from the suite. Maximum three adults.</p></div></article>
-  </div>
-
-  <p class="subhead tiergap">Preferred Club &mdash; Master Suites &middot; 1,205 sq ft with living room, dining room and kitchenette</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp" alt="Preferred Club Master Suite Ocean View"></div>
-      <div class="cbody"><h3>Preferred Club Master Suite Ocean View</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Ocean</p><p>A king bed, full living and dining rooms and a kitchenette, on a private balcony or terrace. Two adult guests only &mdash; no children.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp" alt="Preferred Club Master Suite Ocean Front"></div>
-      <div class="cbody"><h3>Preferred Club Master Suite Ocean Front</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Oceanfront</p><p>King bed and a queen sofa bed, directly facing the water. Two adult guests only &mdash; no children.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/gqlkvepgoi/webp/DRMPC-PC-MSTR-SO-LIVING-TC.webp" alt="Preferred Club Master Suite living room"></div>
-      <div class="cbody"><h3>Preferred Club Master Suite Rooftop</h3><p class="meta">1,205 sq ft &middot; Sleeps 3 &middot; Oceanfront</p><p>A rooftop oceanfront suite with a king bed and queen sofa bed. The only Master Suite that takes a child &mdash; up to three guests, maximum two adults.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp" alt="Preferred Club Master Suite Swim Out"></div>
-      <div class="cbody"><h3>Preferred Club Master Suite Swim Out</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Garden / pool</p><p>A king bed and a terrace with direct swim-out access. Two adult guests only &mdash; no children.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp" alt="Preferred Club Master Suite Swim Out Ocean Front"></div>
-      <div class="cbody"><h3>Preferred Club Master Suite Swim Out Ocean Front</h3><p class="meta">1,205 sq ft &middot; 2 adults &middot; Oceanfront</p><p>Swim-out access and an oceanfront outlook in one suite &mdash; the strongest honeymoon room short of a Presidential. Two adult guests only.</p></div></article>
-  </div>
-
-  <p class="subhead tiergap">Preferred Club &mdash; Presidential Suites &amp; Villa &middot; 1,808 sq ft</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp" alt="Preferred Club Presidential Suite Rooftop Ocean Front"></div>
-      <div class="cbody"><h3>Preferred Club Presidential Suite Rooftop Ocean Front</h3><p class="meta">1,808 sq ft &middot; 3 adults &middot; Oceanfront</p><p>King bed, living and dining rooms, kitchenette, and a private balcony with its own hot tub above the water. Three adult guests.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp" alt="Preferred Club Presidential Suite Swim Out Ocean Front"></div>
-      <div class="cbody"><h3>Preferred Club Presidential Suite Swim Out Ocean Front</h3><p class="meta">1,808 sq ft &middot; Sleeps 3 &middot; Oceanfront</p><p>The same footprint at ground level, with a terrace that has both a hot tub and direct pool access.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://alg.widen.net/content/ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp" alt="Preferred Club Two-Bedroom Villa with Pool"></div>
-      <div class="cbody"><h3>Preferred Club Two-Bedroom Villa with Pool</h3><p class="meta">1,808 sq ft &middot; Sleeps 8 &middot; Pool / waterpark</p><p>Two bedrooms &mdash; one king, two queens &mdash; a large living and dining area, kitchenette, private ground-floor entrance and a terrace onto its own plunge pool. Steps from the waterpark. Up to eight guests, maximum six adults.</p></div></article>
-  </div>
-</div></section>
-
-<section id="club"><div class="wrap split">
-  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2><p class="lede">A private lounge, an adults-only saltwater pool and a dedicated stretch of beach &mdash; open to families, with a separate family pool section of its own.</p></div>
-  <div>
-    <ul class="perks">
-      <li>Personalized check-in and check-out</li>
-      <li>Access to the Preferred Club lounge and bar</li>
-      <li>Daily continental breakfast in the lounge</li>
-      <li>Afternoon hot and cold hors d&rsquo;oeuvres</li>
-      <li>Exquisite desserts and premium liquors</li>
-      <li>Dedicated Preferred Club beach area</li>
-      <li>Exclusive adults-only saltwater pool</li>
-      <li>Exclusive family pool section</li>
-      <li>Suites in premium resort locations</li>
-      <li>Upgraded mini-bar and bath amenities</li>
-      <li>Pillow menu</li>
-      <li>Daily in-suite newspaper</li>
-      <li>Complimentary computer access in the lounge</li>
-      <li>Spa and resort store discounts</li>
-    </ul>
-    <div class="note">
-      <p><strong>Preferred Club also unlocks two meals.</strong> Breakfast at Oceana (7&ndash;11 a.m.) and lunch there (12&ndash;4 p.m.) are Preferred Club only, as is breakfast at the Macao Bites food truck.</p>
-      <p><strong>Watch the adult caps.</strong> Every Master and Presidential Suite takes two or three adults and no children. Families upgrading to Club need a Junior Suite, the Rooftop Master, or the Two-Bedroom Villa.</p>
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Dreams Macao Beach Punta Cana</h1>
+      <p class="hero-tag" id="hero-tag">The only all-inclusive on Macao Beach — wide, protected sand, and room for everyone you love.</p>
+      <p class="hero-meta" id="hero-dest">Punta Cana, Dominican Republic</p>
+      <ul class="hero-chips" id="hero-chips"><li>All Ages</li><li>4.5 Stars</li><li>Preferred Club</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
+    </div>
+    <img class="hero-photo" id="hero-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-macao%2F1782735692703_drmpc-ext-infinity-pool-tdc.jpg?alt=media&amp;token=2eef733b-d4be-44a4-b156-2c6979b0ea9c" alt="Dreams Macao Beach Punta Cana">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Dreams Macao Beach Punta Cana</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">The only all-inclusive on Macao Beach — wide, protected sand, and room for everyone you love.</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p>Uncover serenity, adventure, and romance at the first and only all-inclusive, family-friendly resort on Macao Beach. Located on the northeastern coast of the Dominican Republic, Dreams Macao Beach Punta Cana provides the perfect backdrop for your romantic wedding celebration in paradise. Enjoy direct access to a pristine white-sand beach and the crystal-clear waters of the Caribbean Sea. With four shimmering pools, elegant rooms and suites, limitless gourmet dining at 10 restaurants, endless activities including a full waterpark, and the world-class Spa by Pevonia®, every moment of your stay will be unforgettable.</p></div>
+      </div>
+    </div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display:none;"></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Dreams%20Macao%20Beach%20Wedding%20Guide%202025%20&amp;%202026-1736789829891.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Details at Destination Weddings</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <img class="bandimg" src="https://alg.widen.net/content/smhwj87nbv/webp/DRMPC-WED-Rooftop-Wedding-Ceremony-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:28px;"><div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Wedding in Paradise</span><span class="phint">Up to 10 guests</span></span><span class="pprice">From $1,499</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Up to 10 guests. Symbolic ceremony, bouquet &amp; boutonniere, wedding cake &amp; sparkling wine toast, newlywed package, breakfast in bed. Complimentary with 7+ nights in Preferred Master Suite Swim-Out or higher, or 5 rooms × 3 nights. From $1</div><div class="pkghi-line">499 to $1</div><div class="pkghi-line">949. Extra guests: $25/person.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Elope in Luxury</span><span class="phint">Couple only (max 5 extra guests)</span></span><span class="pprice">From $1,649</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Couple only (max 5 extra guests). Symbolic ceremony, hair &amp; makeup, room upgrade</div><div class="pkghi-line">20 digital photos, romantic dinner, spa treatments. From $1</div><div class="pkghi-line">649 (Mon–Wed off-peak) to $2</div><div class="pkghi-line">099 (Thu–Sun peak). Mon–Thu only.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Eternal Love</span><span class="phint">Up to 20 guests</span></span><span class="pprice">From $5,049</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Up to 20 guests. Symbolic ceremony, rehearsal dinner, hair &amp; makeup, flowers, live music cocktail hour, private reception dinner</div><div class="pkghi-line">50 photos + 30-min video, couples spa treatment. From $5</div><div class="pkghi-line">049 to $6</div><div class="pkghi-line">249. Extra adults: $96 + 28% tax; kids (3–12): $48.64 + 28% tax.</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Beyond Memorable</span><span class="phint">Up to 79 guests (min</span></span><span class="pprice">From $12,049</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Up to 79 guests (min. 75 room nights). Welcome cocktail party, rehearsal dinner, private ceremony, cocktail hour, private reception. $100 resort coupons/guest, spa perks. From $12</div><div class="pkghi-line">049 to $14</div><div class="pkghi-line">699. Extra guests: $185/adult, $92/child.</div></div></div></div><details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb"><div class="cmpwrap"><table class="cmp"><thead><tr><th></th><th><span class="pn">Elope in Luxury</span><span class="pc">2 people</span></th><th><span class="pn">Wedding in Paradise</span><span class="pc">Up to 10 guests</span></th><th><span class="pn">Eternal Love</span><span class="pc">Up to 20 guests</span></th><th><span class="pn">Beyond Memorable</span><span class="pc">Up to 79 guests</span></th></tr></thead><tbody><tr class="grp"><td colspan="5">The cost</td></tr><tr><th scope="row">Selling price, from</th><td class="v">$1,649</td><td class="v">$1,499</td><td class="v">$5,049</td><td class="v">$12,049</td></tr><tr><th scope="row">Can be complimentary</th><td><span class="dh">—</span></td><td class="v">7+ nights in Preferred Master Suite Swim-Out or higher, or 5 rooms × 3 nights</td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Additional guest</th><td class="v">Up to 5, chair and toast only</td><td class="v">$20</td><td class="v">$96</td><td class="v">$185</td></tr><tr><th scope="row">Additional child, 3–12</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">$48.64</td><td class="v">$92</td></tr><tr><th scope="row">How far ahead to book</th><td class="v">30 days</td><td class="v">30 days</td><td class="v">30 days</td><td class="v">1 year</td></tr><tr><th scope="row">Room nights required</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">75 cumulative paid</td></tr><tr class="grp"><td colspan="5">What is set up for you</td></tr><tr><th scope="row">Ceremony chairs</th><td><span class="dh">—</span></td><td class="v">10</td><td class="v">20 white folding</td><td class="v">79 white folding</td></tr><tr><th scope="row">Ceremonial table</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Ceremonial centrepiece</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Tropical flowers</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Aisle runner</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Gazebo</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Bamboo with white fabric</td></tr><tr><th scope="row">Shoe check for a beach ceremony</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Cocktail tables</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">3</td><td class="v">5</td></tr><tr><th scope="row">Reception set-up</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Round tables, white linen, charger plates, chairs for up to 30</td><td class="v">Round tables, white linen, charger plates, chairs for up to 79</td></tr><tr><th scope="row">Sweetheart table</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">White linen, floral centrepiece</td><td class="v">Coloured linen, upgraded Tiffany chairs</td></tr><tr><th scope="row">Centrepieces for guest tables</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Not included</td></tr><tr><th scope="row">Photographs</th><td class="v">Printed, not digital</td><td></td><td></td><td></td></tr><tr class="grp"><td colspan="5">Add-ons, same price whichever package</td></tr><tr><th scope="row">Extra chair</th><td class="v">$5</td><td class="v">$5</td><td class="v">$5</td><td class="v">$5</td></tr><tr><th scope="row">Extra sparkling wine toast</th><td class="v">$5</td><td class="v">$5</td><td class="v">$5</td><td class="v">$5</td></tr><tr><th scope="row">Extra cake</th><td><span class="dh">—</span></td><td class="v">$10</td><td class="v">$10</td><td class="v">$10</td></tr><tr><th scope="row">Reception extension, per person per hour</th><td class="v">$20</td><td class="v">$20</td><td class="v">$20</td><td class="v">$20</td></tr><tr class="grp"><td colspan="5">Fees to plan around</td></tr><tr><th scope="row">Judge or priest for a legal ceremony</th><td class="v">$750</td><td class="v">$750</td><td class="v">$750</td><td class="v">$750</td></tr><tr><th scope="row">Outside photographer</th><td class="v">$1,000 up to 2, $250 each after</td><td class="v">$1,000 up to 2, $250 each after</td><td class="v">$1,000 up to 2, $250 each after</td><td class="v">$1,000 up to 2, $250 each after</td></tr><tr><th scope="row">Outside hair and makeup</th><td class="v">$1,000 up to 2, $500 each after</td><td class="v">$1,000 up to 2, $500 each after</td><td class="v">$1,000 up to 2, $500 each after</td><td class="v">$1,000 up to 2, $500 each after</td></tr><tr><th scope="row">Outside planner</th><td class="v">$3,000 plus $2,000 insurance</td><td class="v">$3,000 plus $2,000 insurance</td><td class="v">$3,000 plus $2,000 insurance</td><td class="v">$3,000 plus $2,000 insurance</td></tr><tr><th scope="row">Resort DJ, 3 hours</th><td class="v">$950</td><td class="v">$950</td><td class="v">$950</td><td class="v">$950</td></tr><tr><th scope="row">Wedding pass for outside guests</th><td class="v">$80</td><td class="v">$80</td><td class="v">$80</td><td class="v">$80</td></tr></tbody></table></div><div class="cmpkey"><span><b>✓</b> included</span><span><b>—</b> not included</span><span>text = what differs between packages</span></div></div></details>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><img class="bandimg" src="https://alg.widen.net/content/atqshdyqca/webp/DRMPC-WED-BeachWeddingGazebo-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:28px;"><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-gazebo-wedding-venue.jpg" alt="Beach Gazebo" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Cocktail Hour</p><h4>Beach Gazebo</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 40 guests</p><p>A semi-private minimalistic oceanfront location made of natural materials, simply radiating elegance and serenity, ideal for a small wedding.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seaside-sky-wedding-venue.jpg" alt="Seaside Sky Terrace" loading="lazy"><div class="vbody"><p class="vtag">Reception,Cocktail Hour</p><h4>Seaside Sky Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 100 guests</p><p>A spacious, contemporary open-air location with panoramic views of the beach, gardens, and the sparkling Caribbean Sea.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-himitsu-garden-wedding-venue.jpg" alt="Himitsu Garden Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Himitsu Garden Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 250 guests</p><p>A customizable terrace that can be transformed to reflect your wedding vision and style, with floral arrangements, lighting, and design elements.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-ballroom-wedding-venue.jpg" alt="Ballroom" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Ballroom</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 700 guests</p><p>A grand, ornate wedding ballroom with a dance floor, custom decoration and complete privacy.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-area-leftside.jpg" alt="Beach Area - Left Side" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Beach Area - Left Side</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p><p>A semi-private open-air location on the white sands of Punta Cana, for a memorable reception and the romantic ceremony of your dreams.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-rightside-wedding-venue.jpg" alt="Beach Area - Right" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Beach Area - Right</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 150 guests</p><p>The sound of waves, the gentle ocean breeze, and the warm sunshine combine to create a serene and unforgettable ambiance for your ceremony.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-preferred-beach-wedding-venue.jpg" alt="Macao Preferred Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Macao Preferred Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 350 guests</p><p>Celebrate your love in a truly enchanting setting with soft white sand, crystal-clear turquoise waters, and swaying palm trees.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-macao-plaza-wedding-venue.jpeg" alt="Macao Plaza" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Macao Plaza</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 500 guests</p><p>A popular venue that can be transformed to reflect your desired wedding theme and decor, perfect for accommodating larger wedding parties.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seasidegrill-garden-terrace-wedding-venue.jpeg" alt="Seaside Grill &amp; Garden Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony,Reception</p><h4>Seaside Grill &amp; Garden Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 250 guests</p><p>A versatile open-air setting where you can enjoy the natural beauty of the resort while celebrating with your loved ones.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-sugar-reef-terrace-venue.jpeg" alt="Sugar Reef Terrace" loading="lazy"><div class="vbody"><p class="vtag">Reception,Cocktail Hour</p><h4>Sugar Reef Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 120 guests</p><p>An intimate and romantic space for your reception, surrounded by the natural beauty of the resort.</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><img class="bandimg" src="https://alg.widen.net/content/ljjxs5bmn1/webp/DRMPC-EXT-Aerial1-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:26px;"><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://alg.widen.net/content/gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://alg.widen.net/content/pn8cghm6sb/webp/DRMPC-RES-WorldCafe-TC.webp?u=itfpsm&amp;q=80" alt="World Café" loading="lazy"><div class="dbody"><h4>World Café</h4><p>International and local buffet. Casual elegance dress code for dinner.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/glrdoxwxcj/webp/DRMPC-RES-Seaside-Grill-1A-CB.webp?u=itfpsm&amp;q=80" alt="Seaside Grill" loading="lazy"><div class="dbody"><h4>Seaside Grill</h4><p>Grilled meats, fish, and burgers with show cooking.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/quy4xf31qt/webp/DRMPC-RES-Portofino-TC.webp?u=itfpsm&amp;q=80" alt="Portofino" loading="lazy"><div class="dbody"><h4>Portofino</h4><p>À la carte gourmet Italian cuisine.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp?u=itfpsm&amp;q=80" alt="Oceana" loading="lazy"><div class="dbody"><h4>Oceana</h4><p>À la carte fresh seafood specialties.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/mxoxu7dvhl/webp/DRMPC-RES-Himitsu-TC.webp?u=itfpsm&amp;q=80" alt="Himitsu" loading="lazy"><div class="dbody"><h4>Himitsu</h4><p>À la carte Asian cuisine with 3 teppanyaki tables. Reservation required. Ages 12+.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/kecc0tf8o8/webp/DRMPC-RES-El-Patio-TC.webp?u=itfpsm&amp;q=80" alt="El Patio" loading="lazy"><div class="dbody"><h4>El Patio</h4><p>À la carte authentic Mexican cuisine.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/0fcgavveuk/webp/DRMPC-RES-Bordeaux-3A-CB.webp?u=itfpsm&amp;q=80" alt="Bordeaux" loading="lazy"><div class="dbody"><h4>Bordeaux</h4><p>Adults-only à la carte gourmet French cuisine. Casual elegance dress code.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/gcbgleg2ub/webp/DRMPC-RES-CocoCafe-TC.webp?u=itfpsm&amp;q=80" alt="Coco Café" loading="lazy"><div class="dbody"><h4>Coco Café</h4><p>24-hour premium coffee, snacks, and ice cream. Late night soup, sandwiches, and pastries.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/fotji8itnv/webp/DRMPC-RES-BarefootGrill-TC.webp?u=itfpsm&amp;q=80" alt="Barefoot Grill" loading="lazy"><div class="dbody"><h4>Barefoot Grill</h4><p>Poolside burgers, hot dogs, and late-night bites.</p></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Barracuda</span><span class="bdesc">Beach bar with swings and ocean views.</span></li><li><span class="bname">Desires</span><span class="bdesc">Adults-only sports bar by evening, nightclub later on.</span></li><li><span class="bname">Manatees</span><span class="bdesc">Swim-up pool bar.</span></li><li><span class="bname">Rendezvous</span><span class="bdesc">Lobby bar.</span></li><li><span class="bname">Showtime</span><span class="bdesc">Theater bar.</span></li><li><span class="bname">Sugar Reef</span><span class="bdesc">Pool bar.</span></li><li><span class="bname">Preferred Club Bar</span><span class="bdesc">Exclusive lounge bar for Preferred Club guests.</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://alg.widen.net/content/xqbsjmugft/webp/DRMPC-EXT-Infinity-Pool-2-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><img src="https://alg.widen.net/content/evdidetvnt/webp/DRMPC-EXT-Infinity-Pool-TC.webp?u=itfpsm&amp;q=80" alt="Infinity Pool" loading="lazy"><h4>Infinity Pool</h4><p>The resort's main pool, open to all guests, with loungers along the water.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/tdlhshyqkv/webp/DRMPC-EXT-Relax-Pool-TC.webp?u=itfpsm&amp;q=80" alt="Relaxation Pool" loading="lazy"><h4>Relaxation Pool</h4><p>A quieter pool set apart from the main pool activity.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/mevkpoupkm/webp/DRMPC-EXT-PC-POOL-2A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Adults-Only Pool" loading="lazy"><h4>Preferred Club Adults-Only Pool</h4><p>Adults-only and exclusive to Preferred Club guests, with shaded daybeds.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/cx0mrvdukv/webp/DRMPC-EXT-WaterPark-1A-CB.webp?u=itfpsm&amp;q=80" alt="Water Park" loading="lazy"><h4>Water Park</h4><p>Waterslides, racer slides and a splash area — the headline draw for families.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/njx3wczlal/webp/DRMPC-EXT-Waterpark-Lazy-River-TC.webp?u=itfpsm&amp;q=80" alt="Lazy River" loading="lazy"><h4>Lazy River</h4><p>A lazy river winding through the water park.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp?u=itfpsm&amp;q=80" alt="Macao Beach" loading="lazy"><h4>Macao Beach</h4><p>White-sand beach on Playa Macao fronting the resort.</p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://alg.widen.net/content/a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&amp;q=80" alt="Junior Suite Tropical View" loading="lazy"><div class="rbody"><h4>Junior Suite Tropical View</h4><p>Tropical View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp?u=itfpsm&amp;q=80" alt="Junior Suite Pool View" loading="lazy"><div class="rbody"><h4>Junior Suite Pool View</h4><p>Pool View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&amp;q=80" alt="Junior Suite Partial Ocean View" loading="lazy"><div class="rbody"><h4>Junior Suite Partial Ocean View</h4><p>Partial Ocean View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&amp;q=80" alt="Junior Suite Ocean View" loading="lazy"><div class="rbody"><h4>Junior Suite Ocean View</h4><p>Ocean View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Junior Suite Tropical View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Tropical View</h4><p>Tropical View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Junior Suite Partial Ocean View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Partial Ocean View</h4><p>Partial Ocean View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Junior Suite Ocean View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Ocean View</h4><p>Ocean View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Junior Suite Swim Out" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Swim Out</h4><p>Garden/Pool</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Master Suite Ocean View" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Ocean View</h4><p>Ocean View</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Master Suite Ocean Front" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Ocean Front</h4><p>Ocean Front</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/gavtiuf7ud/webp/DRMPC-PC-MSTR-SO-KING-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Master Suite Rooftop" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Rooftop</h4><p>Ocean Front</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Master Suite Swim Out" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Swim Out</h4><p>Garden/Pool</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Master Suite Swim Out Ocean Front" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Swim Out Ocean Front</h4><p>Ocean Front</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp?u=itfpsm&amp;q=80" alt="Preferred Club Presidential Suite Rooftop Ocean Front" loading="lazy"><div class="rbody"><h4>Preferred Club Presidential Suite Rooftop Ocean Front</h4><p>Ocean Front</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Presidential Suite Swim Out Ocean Front" loading="lazy"><div class="rbody"><h4>Preferred Club Presidential Suite Swim Out Ocean Front</h4><p>Ocean Front</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp?u=itfpsm&amp;q=80" alt="Preferred Club Two-Bedroom Villa with Pool" loading="lazy"><div class="rbody"><h4>Preferred Club Two-Bedroom Villa with Pool</h4><p>Pool/Waterpark View</p></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Preferred Club</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://alg.widen.net/content/ruyk4riz1z/webp/DRMPC-PC-Lounge-3A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy" style="margin-bottom:26px;"><div id="club-body"><div class="club-block"><h3>Preferred Club</h3><p>Personalized check-in and check-out
+Daily continental breakfast in Preferred Club Lounge
+Afternoon hot and cold hors d'oeuvres
+Exquisite desserts and premium liquors in lounge
+Access to Preferred Club lounge and bar
+Complimentary computer access in lounge
+Preferred Club suites in premium resort locations
+Upgraded mini-bar
+Upgraded bath amenities
+Pillow menu
+Complimentary in-suite newspaper daily (English or Spanish)
+Dedicated Preferred Club beach area
+Exclusive bar and adults-only saltwater pool
+Exclusive family pool section
+Special spa and resort store discounts</p></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Water Park,Explorer's Club for Kids,Core Zone Teens Club,Scuba Diving Instruction,Aqua Aerobics,Aerobics,Paintball,Basketball,Tennis,Volleyball,Golf Nearby ($),Off-Property Tours ($),Nightclub,Live Entertainment,Theme Parties</li></ul></div>
+        <div id="act-extra-col" style="display:none"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3:00 PM</span></li><li><span class="lbl">Check-out</span><span>11:00 AM</span></li><li><span class="lbl">Total Rooms</span><span>500</span></li><li><span class="lbl">Airport</span><span>Punta Cana International (PUJ) — about 40 minutes</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>The Preferred Club pool is adults-only and reserved for Preferred Club guests. Racer slides at the water park may carry an additional cost. Teppanyaki seating at Himitsu is for guests age 12 and older.</p></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display:none;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://alg.widen.net/content/ljjxs5bmn1/webp/DRMPC-EXT-Aerial1-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/xqbsjmugft/webp/DRMPC-EXT-Infinity-Pool-2-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/evdidetvnt/webp/DRMPC-EXT-Infinity-Pool-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/iegb0xwuz6/webp/DRMPC-EXT-InfinityPool-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/qqwbx5jsq4/webp/DRMPC-EXT-Lobby-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/nb4j8ekxlf/webp/DRMPC-EXT-PC-Beach-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/mevkpoupkm/webp/DRMPC-EXT-PC-POOL-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/zjevjxd3qn/webp/DRMPC-EXT-PC-SaltPool-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/tdlhshyqkv/webp/DRMPC-EXT-Relax-Pool-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/cx0mrvdukv/webp/DRMPC-EXT-WaterPark-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/njx3wczlal/webp/DRMPC-EXT-Waterpark-Lazy-River-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/irsm5xkdh5/webp/DRMPC-EXT-WaterPark-Pano-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/nu4zjiaf2p/webp/DRMPC-INT-Lobby-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/vzjmv5x398/webp/DRMPC-INT-Showtime-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/hztnjzzddp/webp/DRMPC-INT-Theater-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/irerzq9vtu/webp/DRMPC-INT-BowlingAlley-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/0zvqqmx90y/webp/DRMPC-FIT-Fitness-Center-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/t18pihbkyv/webp/DRMPC-SPA-Hydrotherapy-2-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/bchca3x51y/webp/DRMPC-SPA-MassageCabin-AP.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/fotji8itnv/webp/DRMPC-RES-BarefootGrill-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/0fcgavveuk/webp/DRMPC-RES-Bordeaux-3A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/gcbgleg2ub/webp/DRMPC-RES-CocoCafe-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/kecc0tf8o8/webp/DRMPC-RES-El-Patio-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/mxoxu7dvhl/webp/DRMPC-RES-Himitsu-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/qaeswfvbso/webp/DRMPC-RES-LaCava-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/wyr8y7vr4i/webp/DRMPC-RES-Oceana-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/quy4xf31qt/webp/DRMPC-RES-Portofino-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/glrdoxwxcj/webp/DRMPC-RES-Seaside-Grill-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/pn8cghm6sb/webp/DRMPC-RES-WorldCafe-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/a4dtobnnoq/webp/DRMPC-BAR-Barracuda-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ib2xwfbz9k/webp/DRMPC-BAR-Manatees-4A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/zv6tsqrczq/webp/DRMPC-BAR-Manatees-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/uzdyvacwsp/webp/DRMPC-BAR-Rendevouz-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/qviwfy0koo/webp/DRMPC-BAR-Sports-Bar-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/u762xf2jge/webp/DRMPC-BAR-SugarReef-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/viojlgrdhp/webp/DRMPC-EC-ExplorersClub-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/hdtzzhzx6o/webp/DRMPC-EC-ExplorersClub2-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/1juusb5bxi/webp/DRMPC-EC-WaterPark-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/a2cwuivggf/webp/DRMPC-JR-TV-KING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/scmwa2j7rs/webp/DRMPC-JR-TV-DBL-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/wondndnfgd/webp/DRMPC-JR-PV-KING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/azjg0mkdhh/webp/DRMPC-JR-PV-DBL-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/0n98rrcerb/webp/DRMPC-PC-JR-POV-DBL-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/s7nd3ggipq/webp/DRMPC-PC-JR-POV-KING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/mz2rcutdee/webp/DRMPC-PC-JR-SO-DBL-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ngwf6yt344/webp/DRMPC-PC-JR-SO-KING-TC-2.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/lnrlfqjiif/webp/DRMPC-PC-JR-TV-KING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ruyk4riz1z/webp/DRMPC-PC-Lounge-3A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/iipecaxi4j/webp/DRMPC-PC-MSTR-BATH-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/nbnqlpn1dd/webp/DRMPC-PC-MSTR-OF-BED-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/tpnz1uxvnr/webp/DRMPC-PC-MSTR-OF-LIVING-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/2ev4akb5xr/webp/DRMPC-PC-MSTR-OF-SO-TER-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/rb6usikdnn/webp/DRMPC-PC-MSTR-SO-2-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/gavtiuf7ud/webp/DRMPC-PC-MSTR-SO-KING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/upoiunwwa5/webp/DRMPC-PC-MSTR-SO-LIVING-TC-2.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/gqlkvepgoi/webp/DRMPC-PC-MSTR-SO-LIVING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ap7bqblkc6/webp/DRMPC-PC-PRES-BATH-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/0inmsi0wlx/webp/DRMPC-PC-PRES-LIVING-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/8sp73huwh9/webp/DRMPC-PC-PRES-Rooftop-Bedroom-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/iq8swvt1cb/webp/DRMPC-PC-PRES-Rooftop-LIVING-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/rwzpjstf1c/webp/DRMPC-PC-Villa-BATH-1A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/bi7fg2qnxr/webp/DRMPC-PC-Villa-DoubleBeds-3A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/dtici5oeq4/webp/DRMPC-PC-Villa-Living-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ytpcwlpsos/webp/DRMPC-PC-Villa-MainRoom-2A-CB.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/atqshdyqca/webp/DRMPC-WED-BeachWeddingGazebo-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ylrqyf3ixq/webp/DRMPC-WED-Bridalsuite-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/smhwj87nbv/webp/DRMPC-WED-Rooftop-Wedding-Ceremony-TC.webp?u=itfpsm&amp;q=80" alt="" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
     </div>
   </div>
-</div></section>
-
-<section id="dining"><div class="wrap">
-  <p class="eyebrow">Dining &amp; drinks</p><h2>Nine restaurants, seven bars, no reservations required</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">Six &agrave; la carte restaurants, a buffet, a caf&eacute; and a beach grill, plus a food truck by the waterpark. Himitsu&rsquo;s teppanyaki tables are the one place that does take a booking.</p>
-  <div class="dining">
-    <div class="dish"><h4>Bordeaux</h4><p class="cuisine">French &middot; Adults only</p><p>&Agrave; la carte gourmet French cuisine, casual elegance dress code. Dinner 6&ndash;10:30 p.m.</p></div>
-    <div class="dish"><h4>Portofino</h4><p class="cuisine">Italian</p><p>&Agrave; la carte gourmet Italian. Dinner 6&ndash;10:30 p.m.</p></div>
-    <div class="dish"><h4>Oceana</h4><p class="cuisine">Seafood</p><p>&Agrave; la carte seafood specialties. Dinner 6&ndash;10:30 p.m. Breakfast and lunch here are Preferred Club only.</p></div>
-    <div class="dish"><h4>Himitsu</h4><p class="cuisine">Asian &middot; Teppanyaki</p><p>&Agrave; la carte Asian cuisine. Three teppanyaki tables, ages 12 and up, reservation required. Dinner 6&ndash;11 p.m.</p></div>
-    <div class="dish"><h4>El Patio</h4><p class="cuisine">Mexican</p><p>&Agrave; la carte authentic Mexican. Dinner 6&ndash;11 p.m.</p></div>
-    <div class="dish"><h4>Seaside Grill</h4><p class="cuisine">Grill &middot; Show cooking</p><p>&Agrave; la carte grilled meats, fish and burgers with show cooking. Dinner 6&ndash;10:30 p.m.</p></div>
-    <div class="dish"><h4>World Caf&eacute;</h4><p class="cuisine">International buffet</p><p>International and local specialties across breakfast, lunch and dinner. Casual elegance dress code at dinner.</p></div>
-    <div class="dish"><h4>Coco Caf&eacute;</h4><p class="cuisine">Caf&eacute; &middot; 24 hours</p><p>Premium coffee, snacks and an ice cream booth, open around the clock.</p></div>
-    <div class="dish"><h4>Barefoot Grill</h4><p class="cuisine">Casual &middot; Poolside</p><p>Burgers and hot dogs poolside 11 a.m.&ndash;6 p.m., late-night bites 11 p.m.&ndash;3 a.m.</p></div>
-    <div class="dish"><h4>Macao Bites Food Truck</h4><p class="cuisine">Casual &middot; Waterpark</p><p>Bites served by the waterpark, noon&ndash;6 p.m. Breakfast 8&ndash;10 a.m. for Preferred Club guests.</p></div>
-    <div class="dish"><h4>Barracuda</h4><p class="cuisine">Beach bar</p><p>Beach bar with swings and ocean views, 10 a.m.&ndash;6 p.m.</p></div>
-    <div class="dish"><h4>Manatees</h4><p class="cuisine">Swim-up bar</p><p>In-pool swim-up bar, 10 a.m.&ndash;6 p.m.</p></div>
-    <div class="dish"><h4>Sugar Reef</h4><p class="cuisine">Pool bar</p><p>Pool bar, 10 a.m.&ndash;10 p.m.</p></div>
-    <div class="dish"><h4>Rendezvous</h4><p class="cuisine">Lobby bar</p><p>Lobby bar, 10 a.m.&ndash;1 a.m.</p></div>
-    <div class="dish"><h4>Desires</h4><p class="cuisine">Sports bar &middot; Adults only</p><p>Sports bar 6&ndash;10 p.m., night club 10 p.m.&ndash;2 a.m.</p></div>
-    <div class="dish"><h4>Showtime</h4><p class="cuisine">Theater bar</p><p>Theater bar, 8&ndash;10:30 p.m.</p></div>
-    <div class="dish"><h4>Preferred Club Bar</h4><p class="cuisine">Lounge bar &middot; Club only</p><p>Inside the Preferred Club lounge, 10 a.m.&ndash;11 p.m.</p></div>
-  </div>
-  <div class="note"><p><strong>Sip, Savor &amp; See</strong> is included &mdash; dinner, drinks and entertainment at a nearby participating resort, arranged with the concierge by 3 p.m.</p></div>
-</div></section>
-
-<section id="weddings"><div class="wrap">
-  <p class="eyebrow">Weddings</p><h2>Ten venues, up to three weddings a day</h2>
-  <p style="max-width:66ch;color:var(--soft);margin:0 0 1.6rem">Capacities run from a 40-guest beach gazebo to a 700-guest ballroom &mdash; the widest span of any Dreams property in Punta Cana. Both a beach ceremony and an indoor rain plan are available on the same property.</p>
-  <div class="grid">
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-gazebo-wedding-venue.jpg" alt="Beach Gazebo"></div>
-      <div class="cbody"><h3>Beach Gazebo</h3><p class="meta">Up to 40 guests</p><p>A semi-private, minimalist oceanfront gazebo in natural materials &mdash; elegant and serene, and the right scale for a small wedding.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-preferred-beach-wedding-venue.jpg" alt="Macao Preferred Beach"></div>
-      <div class="cbody"><h3>Macao Preferred Beach</h3><p class="meta">Up to 350 guests</p><p>Soft white sand, turquoise water and swaying palms &mdash; the classic Punta Cana beach ceremony, on the Preferred stretch.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-area-leftside.jpg" alt="Beach Area, left side"></div>
-      <div class="cbody"><h3>Beach Area &mdash; Left Side</h3><p class="meta">Up to 200 guests</p><p>A semi-private open-air stretch of white sand, used for both ceremonies and receptions.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-rightside-wedding-venue.jpg" alt="Beach Area, right side"></div>
-      <div class="cbody"><h3>Beach Area &mdash; Right Side</h3><p class="meta">Up to 150 guests</p><p>Waves, ocean breeze and warm sun &mdash; a serene setting for the ceremony itself.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seaside-sky-wedding-venue.jpg" alt="Seaside Sky Terrace"></div>
-      <div class="cbody"><h3>Seaside Sky Terrace</h3><p class="meta">Up to 100 guests</p><p>A contemporary open-air terrace with panoramic views over the beach, the gardens and the Caribbean.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-himitsu-garden-wedding-venue.jpg" alt="Himitsu Garden Terrace"></div>
-      <div class="cbody"><h3>Himitsu Garden Terrace</h3><p class="meta">Up to 250 guests</p><p>A blank-canvas terrace built to take florals, lighting and design &mdash; the venue to pitch when a couple has a strong look in mind.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-seasidegrill-garden-terrace-wedding-venue.jpeg" alt="Seaside Grill &amp; Garden Terrace"></div>
-      <div class="cbody"><h3>Seaside Grill &amp; Garden Terrace</h3><p class="meta">Up to 250 guests</p><p>A versatile open-air setting with the resort&rsquo;s planting around it, good for a reception that stays outdoors.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-beach-sugar-reef-terrace-venue.jpeg" alt="Sugar Reef Terrace"></div>
-      <div class="cbody"><h3>Sugar Reef Terrace</h3><p class="meta">Up to 120 guests</p><p>An intimate, romantic reception space surrounded by the resort&rsquo;s gardens and pool.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-macao-plaza-wedding-venue.jpeg" alt="Macao Plaza"></div>
-      <div class="cbody"><h3>Macao Plaza</h3><p class="meta">Up to 500 guests</p><p>A large open plaza that takes almost any theme and decor &mdash; the choice for a big wedding party outdoors.</p></div></article>
-    <article class="card"><div class="shot"><img loading="lazy" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72642-dreams-macao-beach-punta-cana/aioapi/dreams-macao-ballroom-wedding-venue.jpg" alt="Ballroom"></div>
-      <div class="cbody"><h3>Ballroom</h3><p class="meta">Up to 700 guests</p><p>A grand, ornate ballroom with a dance floor, custom decoration and complete privacy &mdash; and the property&rsquo;s answer to weather.</p></div></article>
-  </div>
-
-  <h2 class="tiergap" style="margin-top:2.8rem">Wedding packages</h2>
-  <div>
-    <div class="pkg"><div><h3>Infinitely Yours</h3><p class="lead">Couple only &middot; up to 5 extra guests</p></div><div class="price">From $799</div>
-      <p class="det">Vow renewal or symbolic ceremony, corsages and boutonnieres, sparkling wine toast, romantic dinner for two and a spa discount. Extra guests $5 per chair and $5 per toast.</p></div>
-    <div class="pkg"><div><h3>Wedding in Paradise</h3><p class="lead">Couple + up to 10 guests</p></div><div class="price">From $1,499</div>
-      <p class="det">Symbolic ceremony, bouquet and boutonniere, wedding cake and sparkling wine toast, newlywed package and breakfast in bed. Complimentary with seven nights in a Preferred Club Master Suite Swim Out or higher, or five rooms for three nights. Extra guests $25 each.</p></div>
-    <div class="pkg"><div><h3>Elope in Luxury</h3><p class="lead">Couple only &middot; up to 5 extra guests</p></div><div class="price">From $1,649</div>
-      <p class="det">Symbolic ceremony, hair and makeup, room upgrade, 20 digital photographs, romantic dinner and spa treatments. Monday to Thursday only.</p></div>
-    <div class="pkg"><div><h3>Eternal Love</h3><p class="lead">Couple + up to 20 guests</p></div><div class="price">From $5,049</div>
-      <p class="det">Symbolic ceremony, rehearsal dinner, hair and makeup, flowers, live music at the cocktail hour, private reception dinner, 50 photographs with a 30-minute video and a couples spa treatment. Extra adults $96 plus tax; children 3&ndash;12 $48.64 plus tax.</p></div>
-    <div class="pkg"><div><h3>Beyond Memorable</h3><p class="lead">Couple + up to 79 guests &middot; minimum 75 room nights</p></div><div class="price">From $12,049</div>
-      <p class="det">Welcome cocktail party, rehearsal dinner, private ceremony, cocktail hour and private reception, with $100 in resort coupons per guest and spa perks. Extra guests $185 per adult, $92 per child.</p></div>
-    <div class="pkg"><div><h3>Dulha &amp; Dulhan South Asian Wedding</h3><p class="lead">Couple + up to 79 guests &middot; minimum 25 rooms for 3 nights</p></div><div class="price">From $10,599</div>
-      <p class="det">Welcome cocktail party, Sangeet and Mehndi, Baraat, mandap ceremony and a South Asian reception buffet, with a certified South Asian coordinator and $100 in resort coupons per guest.</p></div>
-  </div>
-</div></section>
-
-<section id="planning"><div class="wrap split">
-  <div><p class="eyebrow">Planning notes</p><h2>Fees, vendors and the fine print</h2><p class="lede">The numbers that decide whether a package works before you price the rooms.</p></div>
-  <div>
-    <div class="tablewrap">
-      <table>
-        <caption>Known wedding fees, in US dollars. Confirm against the current brochure before quoting.</caption>
-        <thead><tr><th>Item</th><th>Fee</th></tr></thead>
-        <tbody>
-          <tr><th scope="row">Civil ceremony &mdash; judge</th><td class="num">$750</td></tr>
-          <tr><th scope="row">Religious ceremony &mdash; priest</th><td class="num">$750</td></tr>
-          <tr><th scope="row">DJ &mdash; basic</th><td class="num">$950</td></tr>
-          <tr><th scope="row">DJ &mdash; full</th><td class="num">$1,300</td></tr>
-          <tr><th scope="row">Outside photography</th><td class="num">$1,000</td></tr>
-          <tr><th scope="row">Outside hair &amp; makeup</th><td class="num">$1,000</td></tr>
-          <tr><th scope="row">Day pass, non-staying guest</th><td class="num">$150</td></tr>
-          <tr><th scope="row">Wedding pass</th><td class="num">$80</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="subhead">On-site services</p>
-    <ul class="perks">
-      <li>Civil / legal wedding</li>
-      <li>Symbolic wedding</li>
-      <li>On-site wedding coordinator</li>
-      <li>Hair and makeup</li>
-      <li>DJ services</li>
-      <li>Live music</li>
-      <li>Bridal suite available</li>
-      <li>Floral arrangements and decor</li>
-      <li>Photographer</li>
-      <li>Videographer</li>
-      <li>Wedding attire preparation</li>
-    </ul>
-    <p class="subhead">Families in the group</p>
-    <ul class="perks">
-      <li>Explorer&rsquo;s Club for Kids, ages 3&ndash;12, daily 9:30 a.m.&ndash;10 p.m.</li>
-      <li>Children must be fully potty-trained for the Kids Club</li>
-      <li>Core Zone Teens Club</li>
-      <li>Waterpark with seven slides and a lazy river</li>
-      <li>Babysitting available at extra cost</li>
-      <li>Waterpark closes at 6 p.m.</li>
-    </ul>
-    <div class="note">
-      <p><strong>Bring up the surf.</strong> Macao Beach is a UNESCO-recognised beach with noticeably less seaweed than the Bavaro strip, but the waves run strong from December through March. Fine for a ceremony backdrop; not a beach where small children swim.</p>
-      <p><strong>Transfer is 40 km, about 45 minutes</strong> from Punta Cana International &mdash; roughly double the Bavaro resorts. Worth setting expectations with an older wedding party.</p>
-      <p><strong>Secrets Macao Beach opens next door in 2026</strong> with 406 adults-only rooms and free-flow access between the two resorts. A genuine advantage for a mixed group &mdash; and construction next door until it opens.</p>
-    </div>
-  </div>
-</div></section>
-
-<section id="gallery"><div class="wrap">
-  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
-  <div class="gal">
-    <figure><img loading="lazy" src="https://alg.widen.net/content/ljjxs5bmn1/webp/DRMPC-EXT-Aerial1-1A-CB.webp" alt="Aerial view"><figcaption>Aerial over the resort</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/bqbg5cshcn/webp/DRMPC-EXT-Beach-Panoramic-3A-CB.webp" alt="Macao Beach"><figcaption>Macao Beach</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/iegb0xwuz6/webp/DRMPC-EXT-InfinityPool-2A-CB.webp" alt="Infinity pool"><figcaption>Infinity pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/evdidetvnt/webp/DRMPC-EXT-Infinity-Pool-TC.webp" alt="Pool deck"><figcaption>Pool deck</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/nb4j8ekxlf/webp/DRMPC-EXT-PC-Beach-2A-CB.webp" alt="Preferred Club beach"><figcaption>Preferred Club beach</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/zjevjxd3qn/webp/DRMPC-EXT-PC-SaltPool-TC.webp" alt="Preferred Club saltwater pool"><figcaption>Preferred Club saltwater pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/mevkpoupkm/webp/DRMPC-EXT-PC-POOL-2A-CB.webp" alt="Preferred Club pool"><figcaption>Preferred Club pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/ruyk4riz1z/webp/DRMPC-PC-Lounge-3A-CB.webp" alt="Preferred Club lounge"><figcaption>Preferred Club lounge</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/irsm5xkdh5/webp/DRMPC-EXT-WaterPark-Pano-1A-CB.webp" alt="Waterpark"><figcaption>Waterpark</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/njx3wczlal/webp/DRMPC-EXT-Waterpark-Lazy-River-TC.webp" alt="Lazy river"><figcaption>Lazy river</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/viojlgrdhp/webp/DRMPC-EC-ExplorersClub-TC.webp" alt="Explorer's Club for Kids"><figcaption>Explorer&rsquo;s Club for Kids</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/tdlhshyqkv/webp/DRMPC-EXT-Relax-Pool-TC.webp" alt="Relaxation pool"><figcaption>Relaxation pool</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/nu4zjiaf2p/webp/DRMPC-INT-Lobby-TC.webp" alt="Lobby"><figcaption>Lobby</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/0fcgavveuk/webp/DRMPC-RES-Bordeaux-3A-CB.webp" alt="Bordeaux"><figcaption>Bordeaux</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/gadd9ttgca/webp/DRMPC-RES-Oceana-1A-CB.webp" alt="Oceana"><figcaption>Oceana</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/quy4xf31qt/webp/DRMPC-RES-Portofino-TC.webp" alt="Portofino"><figcaption>Portofino</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/kecc0tf8o8/webp/DRMPC-RES-El-Patio-TC.webp" alt="El Patio"><figcaption>El Patio</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/glrdoxwxcj/webp/DRMPC-RES-Seaside-Grill-1A-CB.webp" alt="Seaside Grill"><figcaption>Seaside Grill</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/ib2xwfbz9k/webp/DRMPC-BAR-Manatees-4A-CB.webp" alt="Manatees swim-up bar"><figcaption>Manatees swim-up bar</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/u762xf2jge/webp/DRMPC-BAR-SugarReef-2A-CB.webp" alt="Sugar Reef pool bar"><figcaption>Sugar Reef pool bar</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/t18pihbkyv/webp/DRMPC-SPA-Hydrotherapy-2-TC.webp" alt="Spa hydrotherapy"><figcaption>Spa by Pevonia hydrotherapy</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/0zvqqmx90y/webp/DRMPC-FIT-Fitness-Center-TC.webp" alt="Fitness centre"><figcaption>Fitness centre</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/atqshdyqca/webp/DRMPC-WED-BeachWeddingGazebo-TC.webp" alt="Beach wedding gazebo"><figcaption>Beach wedding gazebo</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/smhwj87nbv/webp/DRMPC-WED-Rooftop-Wedding-Ceremony-TC.webp" alt="Rooftop ceremony"><figcaption>Rooftop ceremony</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/ylrqyf3ixq/webp/DRMPC-WED-Bridalsuite-TC.webp" alt="Bridal suite"><figcaption>Bridal suite</figcaption></figure>
-    <figure><img loading="lazy" src="https://alg.widen.net/content/irerzq9vtu/webp/DRMPC-INT-BowlingAlley-TC.webp" alt="Bowling alley"><figcaption>Bowling alley</figcaption></figure>
-  </div>
-</div></section>
-</main>
-
-<footer><div class="wrap">
-  <p>Amy Cate &middot; Destination Weddings Travel Group &middot; amy.cate@destinationweddings.com</p>
-  <p>Internal reference sheet. Room rates, package pricing and wedding fees change &mdash; confirm against the current resort brochure before quoting a client.</p>
-</div></footer>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
