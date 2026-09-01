@@ -1,245 +1,543 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hard Rock Hotel &amp; Casino Punta Cana</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Hard Rock Hotel &amp; Casino Punta Cana · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
 
-:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
- --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
-:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
- font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
-img{display:block;max-width:100%}
-.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
-.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
-.eyebrow.light{color:#DFC48B}
-.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;
- background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
-.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
-.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
- line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
-.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
- font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
-.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
- border-radius:999px;padding:.26rem .68rem}
-section{padding:clamp(44px,6.5vw,80px) 0}
-section+section{border-top:1px solid var(--line)}
-h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
- line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
-.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
- line-height:1.5;color:var(--soft);max-width:34ch}
-.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
-.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
-@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
-.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
- margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
-.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
-.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
-.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
- display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
-.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
-.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
-.card:hover .shot img{transform:scale(1.04)}
-.cbody{padding:1rem 1.1rem 1.25rem}
-.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
-.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
-.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
- margin-bottom:.5rem!important}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
-caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
-th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
-thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
-tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
-.num{font-variant-numeric:tabular-nums;color:var(--black)}
-.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
-.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
- color:var(--soft);font-size:.92rem}
-.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
- border:1px solid var(--gold);transform:rotate(45deg)}
-.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
-@media(max-width:640px){.dining{column-count:1}}
-.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
-.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
-.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
- color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
-.dish p{margin:0;font-size:.89rem;color:var(--soft)}
-.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
-.gal figure{margin:0}
-.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
-.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
-.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
-.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
-.note p:last-child{margin:0}
-footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
 
-/* ---- audience tabs ---- */
-.tabwrap{margin-top:26px}
-.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
-  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
-.tabbtn:hover{color:var(--ink)}
-.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
-.tabpanel{padding-top:34px}
-.tabpanel[hidden]{display:none}
-.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
-@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
 
-
-</style>
-</head>
-<body>
-
-<header class="hero">
-  <img src="https://assets.milestoneinternet.com/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/sun-pool2.jpg?width=1920&amp;height=1080" alt="Hard Rock Hotel &amp; Casino Punta Cana">
-  <div class="wrap">
-    <p class="eyebrow light">Punta Cana, Dominican Republic</p>
-    <h1>Hard Rock Hotel &amp; Casino Punta Cana</h1>
-    <p class="tag">The crown jewel of Punta Cana — where Caribbean luxury meets one of the Dominican Republic's most exclusive resort communities.</p>
-    <ul class="chips"><li>1882 rooms</li><li>14 categories</li><li>17 restaurants</li><li>All ages</li><li>Rock Royalty</li></ul>
-  </div>
-</header>
-
-<main>
-<section id="overview"><div class="wrap split">
-  <div><p class="eyebrow">The resort</p><h2>Hard Rock Hotel &amp; Casino Punta Cana</h2></div>
-  <div class="prose"><p>Thrilling gaming action in the biggest and best casino in the Caribbean, exhilarating nightlife, tantalizing culinary options, state-of-the-art meeting facilities and rooms worth tweeting about, all infused with our legendary rock and roll vibe? Delivered. This is Hard Rock after all. The best All-Inclusive Resort in Punta Cana.</p></div>
-</div></section>
-
-<section id="rooms"><div class="wrap">
-  <p class="eyebrow">Accommodation</p><h2>14 room categories</h2>
-  <div class="grid">
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/24936829_ImageLargeWidth.jpg" alt="Deluxe Suite King Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Deluxe Suite King Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920346602_16363699_imagelargewidth.jpg?alt=media&amp;token=269167b5-419a-4613-9c19-cbbdea1ece54" alt="Caribbean Suite King Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Suite King Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920345853_16834945_imagelargewidth.jpg?alt=media&amp;token=e40376e2-a31d-4730-9b48-a2270fd5b822" alt="Caribbean Suite King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Suite King Bed &amp; Sofa Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite King" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Sand Suite King</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Sand Suite</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920543041_16363711_imagelargewidth.jpg?alt=media&amp;token=76981173-cc76-4b28-9393-d6ba36346e70" alt="Caribbean Diamond King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Diamond King Bed &amp; Sofa Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363715_ImageLargeWidth.jpg" alt="Caribbean Diamond Double Beds &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Caribbean Diamond Double Beds &amp; Sofa Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854636_ImageLargeWidth.jpg" alt="Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920436123_16369501_imagelargewidth.jpg?alt=media&amp;token=54fcd5f1-74f8-414d-9b59-792a5b16b540" alt="Islander Junior Suite King" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite King</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22240837_ImageLargeWidth.jpg" alt="Islander Junior Suite Double" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite Double</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920435421_16369505_imagelargewidth.jpg?alt=media&amp;token=443fc497-fd0f-4556-a23a-eddf41f2d7d0" alt="Islander Junior Suite King Bed &amp; Sofa Bed" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Islander Junior Suite King Bed &amp; Sofa Bed</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1783046342533_hrhpc_-_rock_suite.jpg?alt=media&amp;token=8c946513-9d2b-486a-bb83-3e8b1f1ff231" alt="Rock Family Suite One Bedroom — King &amp; Two Sofa Beds" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Family Suite One Bedroom — King &amp; Two Sofa Beds</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854674_ImageLargeWidth.jpg" alt="Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant</h3><p></p></div></article>
-      <article class="card"><div class="shot"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16365460_ImageLargeWidth.jpg" alt="Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant</h3><p></p></div></article>
-  </div>
-</div></section>
-
-<section id="club"><div class="wrap split">
-  <div><p class="eyebrow">Club level</p><h2>Rock Royalty</h2></div>
-  <div class="prose"><ul class="perks"><li>Dedicated telephone concierge</li><li>Upgraded full-size Rock Spa bath products</li><li>Aromatherapy and pillow menu</li><li>Complimentary 25-minute couple’s massage at Rock Spa</li><li>Late check-out until 3:00 PM, subject to availability</li><li>Complimentary beach bag, one per room per stay</li><li>Priority booking for bali beds (additional cost)</li><li>Plush bathrobes and slippers on request</li><li>Sleeping mask, loofah sponge and bath salts</li><li>24-hour room service</li><li>Welcome petit fours</li><li>Rock Royalty Level pin, one per room per stay</li><li>Selection of Fender guitars (Picks) and Crosley turntables (Wax), with priority reservations</li><li>Espresso machine with premium coffee</li></ul></div>
-</div></section>
-
-<section id="dining"><div class="wrap">
-  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>
-  <div class="dining">
-      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/toro-1.jpg?width=1920&amp;height=1080" alt="Toro" loading="lazy"><h4>Toro</h4><p class="cuisine">Restaurant · Steakhouse</p><p>At night becomes hotel´s steakhouse offering Premium cuts grilled to perfection and an extensive wine list.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883376_ImageLargeWidth.jpeg" alt="Zen" loading="lazy"><h4>Zen</h4><p class="cuisine">Restaurant · Teppanyaki &amp; Sushi</p><p>After sunsets, this teppanyaki eatery main attraction is our chef ́s show performance while creates memorable meals right before your eyes. Don ́t miss our authentic sushi experience!</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22089731_ImageLargeWidth.jpg" alt="Ciao" loading="lazy"><h4>Ciao</h4><p class="cuisine">Restaurant · Italian</p><p>Contemporary Italian for dinner — antipasti, fresh pastas made to order and a dolce treat.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/25537288_ImageLargeWidth.jpg" alt="Ciao Trattoria" loading="lazy"><h4>Ciao Trattoria</h4><p class="cuisine">Restaurant · Pizza</p><p>Artisanal pizzas and Mediterranean-influenced dishes made with fresh ingredients. Daily 12–10pm.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854836_ImageLargeWidth.jpeg" alt="Ipanema" loading="lazy"><h4>Ipanema</h4><p class="cuisine">Restaurant · Brazilian Rodizio</p><p>International breakfast; by night a Brazilian rodizio surrounded by the lazy pool, with a vast selection of meats and poultry.</p></div>
-      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/bistro-med-2.jpg?width=1920&amp;height=1080" alt="Bistro Med" loading="lazy"><h4>Bistro Med</h4><p class="cuisine">Restaurant · Mediterranean &amp; Lebanese</p><p>Fresh Lebanese and Mediterranean food full of flavor. Lunch 11:30am–6pm, dinner 6–10:30pm.</p></div>
-      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/isla-3.jpg?width=1920&amp;height=1080" alt="Isla" loading="lazy"><h4>Isla</h4><p class="cuisine">Restaurant · Mexican / Gastro Market</p><p>Eight food stations with dishes from around the world; now also serving the Los Gallos menu for dinner — traditional Mexican recipes with tequila-based cocktails.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/15919211_ImageLargeWidth.jpg" alt="Market Food Hall" loading="lazy"><h4>Market Food Hall</h4><p class="cuisine">Food Hall · International</p><p>A journey through the world's street food cuisines, made to order with seasonal local ingredients, in a contemporary greenhouse setting with a hanging tropical garden.</p></div>
-      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/stacked-1.jpg?width=1920&amp;height=1080" alt="Stacked" loading="lazy"><h4>Stacked</h4><p class="cuisine">Restaurant · Burgers</p><p>Certified Angus beef smash burgers, milkshakes, chicken and plant-based options. Daily 11am–11:30pm.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22109367_ImageLargeWidth.jpg" alt="The Split" loading="lazy"><h4>The Split</h4><p class="cuisine">Restaurant · Sandwiches</p><p>Inspired by the classic Italian-American restaurants of Submarine Sandwiches, The Split offers a variety of options made with fresh ingredients on homemade breads that can be served hot or cold. Enjoy all the possibilities and customize your sandwich by selecting the ingredients of your choice.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883455_ImageLargeWidth.jpg" alt="Ice Cone" loading="lazy"><h4>Ice Cone</h4><p class="cuisine">Dessert · Ice Cream</p><p>Enjoy an American-style ice cream in the centrally located parlor. And yes, it's handmade on site with fresh ingredients, so you know it is amazing! The variety encompasses classic, as well as more adventurous flavors.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Rain-Deli.jpg" alt="Constant Grind Coffee &amp; Bar" loading="lazy"><h4>Constant Grind Coffee &amp; Bar</h4><p class="cuisine">Cafe · 24 Hours</p><p>Coffee, cappuccino, espresso and desserts at the end of the Boulevard overlooking the sunset. Open 24 hours.</p></div>
-      <div class="dish"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/los-gallos-1.jpg?width=1920&amp;height=1080" alt="Los Gallos" loading="lazy"><h4>Los Gallos</h4><p class="cuisine">Restaurant · Mexican (temporarily closed)</p><p>Traditional ancient Mexican recipes with tequila-based cocktails. NOTE: closed until further notice — the menu is currently served at Isla.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20541833_ImageLargeWidth.jpg" alt="Youyu" loading="lazy"><h4>Youyu</h4><p class="cuisine">Restaurant · Asian ($)</p><p>Asian-Pacific and modern Chinese with Mandarin, Cantonese, Szechwan and Vietnamese flair, in a Hong Kong-inspired setting at the casino. Additional cost.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20542299_ImageLargeWidth.jpg" alt="Montserrat Manor" loading="lazy"><h4>Montserrat Manor</h4><p class="cuisine">Restaurant · American Steakhouse ($)</p><p>Prime Chicago meat wet-aged 21 days, local fish caught daily and live lobster. Additional cost.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/Uncorked-Experience-Punta-Cana.jpg" alt="Uncorked Experience" loading="lazy"><h4>Uncorked Experience</h4><p class="cuisine">Wine Store ($)</p><p>Discover Uncorked Experience, Hard Rock Hotel Punta Cana’s exclusive wine store—a space designed for those who appreciate the art of great taste. Here, every bottle tells a story, and every sip becomes part of yours.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/moon-lounge-hard-rock-hotel-casino-punta-cana.jpg" alt="Moon Lounge" loading="lazy"><h4>Moon Lounge</h4><p class="cuisine">Bar · Lounge</p><p>Mysterious and sophisticated, this popular lounge features top music, amazing views, a large selection of top shelf liquors, and DJ’s two times a week.</p></div>
-  </div>
-</div></section>
-
-<section id="pools"><div class="wrap">
-  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>
-  <div class="dining">
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eclipse-Pool.jpg" alt="Eclipse Pool" loading="lazy"><h4>Eclipse Pool</h4><p>Live events, music and performances by the water — the resort’s high-energy entertainment pool.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/central-pool-hard-rock-hotel-punta-cana.jpg" alt="Central Pool" loading="lazy"><h4>Central Pool</h4><p>The traditional Hard Rock pool, with organised activities running through the day.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/isla-pool-hard-rock-punta-cana.jpg" alt="Isla Pool" loading="lazy"><h4>Isla Pool</h4><p>Rock and Latin-flavoured beats with a global influence. Reserved for VIP and Deluxe members.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sun-pool-punta-cana.jpg" alt="Sun Pool" loading="lazy"><h4>Sun Pool</h4><p>Sunbeds and tropical palms in a quiet corner of the resort. Reserved for Hall of Fame and Chairman members.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Kids-Pool-VT.jpg" alt="Family Pool" loading="lazy"><h4>Family Pool</h4><p>Teen-friendly music, waterslides and activities for under-16s, with a dedicated kids’ slide alongside.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sax-pool-hard-rock-hotel-punta-cana.jpg" alt="Sax Pool" loading="lazy"><h4>Sax Pool</h4><p>A quieter, more exclusive pool for resting and relaxing to rock and pop.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/bongo-pool-hard-rock-punta-cana.jpg" alt="Bongo Pool" loading="lazy"><h4>Bongo Pool</h4><p>The Latin pool, with food and beverage service and the best of Latin and urban music.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Drums-Guitar-Pool.jpg" alt="Guitar Pool" loading="lazy"><h4>Guitar Pool</h4><p>A high-energy pool playing the best of pop.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/drum-poo-hard-rock-hotel-punta-cana.jpg" alt="Drums Pool" loading="lazy"><h4>Drums Pool</h4><p>Another high-energy pool, this one for timeless rock.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Sun-Moon-Pool.jpg" alt="Moon Pool" loading="lazy"><h4>Moon Pool</h4><p>Pop music by the water — you will know all the songs.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Woodstock-Pool.jpg" alt="Woodstock Pool" loading="lazy"><h4>Woodstock Pool</h4><p>The traditional Hard Rock collection, played poolside.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/lazy-river-pool-hard-rock-hotel-punta-cana.jpg" alt="Lazy River" loading="lazy"><h4>Lazy River</h4><p>Grab a floatie and drift the calm waters of the resort’s Venetian-style canal setting.</p></div>
-      <div class="dish"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eden-Pool.jpg" alt="Eden Pool" loading="lazy"><h4>Eden Pool</h4><p>Adults-only and lively, with a full bar, bali beds and optional European-style bathing.</p></div>
-  </div>
-</div></section>
-
-<section id="planning"><div class="wrap">
-  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
-  <div class="tabwrap">
-    <div class="tabbar" role="tablist" aria-label="Event type">
-      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
-      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Hard Rock Hotel &amp; Casino Punta Cana</h1>
+      <p class="hero-tag" id="hero-tag">The crown jewel of Punta Cana — where Caribbean luxury meets one of the Dominican Republic's most exclusive resort communities.</p>
+      <p class="hero-meta" id="hero-dest">Punta Cana, Dominican Republic</p>
+      <ul class="hero-chips" id="hero-chips"><li>Family Friendly</li><li>5 Stars</li><li>Rock Royalty</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
     </div>
-    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
-      <div class="note"><h4>Exclusive Destination Wedding Packages</h4><p>Discover amazing destination wedding savings you won't find anywhere else. We're thrilled to offer you exclusive deals from our wide variety of preferred partner hotels &amp; resorts. Browse our exclusive wedding packages for your perfect dream day.</p></div>
-      <p class="subhead">Venues</p>
-      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>
-          <tr><th>Harmonica Beach</th><td>300</td></tr>
-          <tr><th>Isla Beach</th><td>100</td></tr>
-          <tr><th>Harmonica Gazebo</th><td>80</td></tr>
-          <tr><th>Sax Pool</th><td>200</td></tr>
-          <tr><th>Ipanema Beach</th><td>150</td></tr>
-          <tr><th>Element Terrace</th><td>300</td></tr>
-          <tr><th>Ipanema Garden</th><td>200</td></tr>
-      </tbody></table></div>
-      <p class="subhead">Packages</p>
-      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>
-          <tr><th>Classic Arrangement</th><td>Complimentary with deposit*</td></tr>
-          <tr><th>Free Spirit</th><td>From $3,500</td></tr>
-          <tr><th>Tropical Paradise</th><td>From $4,000</td></tr>
-          <tr><th>Modern Enchantment</th><td>From $4,500</td></tr>
-          <tr><th>Lavish Daydream</th><td>From $5,000</td></tr>
-      </tbody></table></div>
+    <img class="hero-photo" id="hero-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1783082295899_back-view-hard-rock-hotel-punta-cana.jpg?alt=media&amp;token=2daad5b9-ead2-4985-97c7-cf54a60cc80f" alt="Hard Rock Hotel &amp; Casino Punta Cana">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Hard Rock Hotel &amp; Casino Punta Cana</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">The crown jewel of Punta Cana — where Caribbean luxury meets one of the Dominican Republic's most exclusive resort communities.</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p>Thrilling gaming action in the biggest and best casino in the Caribbean, exhilarating nightlife, tantalizing culinary options, state-of-the-art meeting facilities and rooms worth tweeting about, all infused with our legendary rock and roll vibe? Delivered. This is Hard Rock after all. The best All-Inclusive Resort in Punta Cana.</p></div>
+      </div>
     </div>
-    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
-      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display:none;"></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Punta%20Cana%20-%20Wedding%20Sales%20Guide%20Edited%20(1)-1782159128890.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Details at Destination Weddings</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-harmonica-beach-wedding-venue.jpeg?width=1600&amp;height=1200" alt="" loading="lazy" style="margin-bottom:28px;"><div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Classic Arrangement</span><span class="phint">White ceremony structure with gold mirrored vase &amp; white roses · White…</span></span><span class="pprice">Complimentary with deposit*</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212302827_screenshot-2026-08-31-at-4.36.49-pm.png?alt=media&amp;token=548057a0-9cdf-40e0-b96f-fd1c27c908be" alt="Classic Arrangement" loading="lazy"><div class="pkghi-line">White ceremony structure with gold mirrored vase &amp; white roses</div><div class="pkghi-line">White Avant Garde chairs for up to 32 guests</div><div class="pkghi-line">Bridal bouquet of white roses &amp; boutonniere</div><div class="pkghi-line">1-tier themed wedding cake (32 guests)</div><div class="pkghi-line">Nondenominational minister (symbolic or vow renewal)</div><div class="pkghi-line">Sparkling wine for 32 guests during ceremony</div><div class="pkghi-line">Audio system for ceremony</div><div class="pkghi-line">Wedding Specialist &amp; onsite coordinator</div><div class="pkghi-line">With Love Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Free Spirit</span><span class="phint">Triangular wooden arch with greenery, roses &amp; pampas grass · Ceremony …</span></span><span class="pprice">From $3,500</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212305141_screenshot-2026-08-31-at-4.37.14-pm.png?alt=media&amp;token=a8f688f0-e7e4-4682-9c00-ad76bfe7060e" alt="Free Spirit" loading="lazy"><div class="pkghi-line">Triangular wooden arch with greenery, roses &amp; pampas grass</div><div class="pkghi-line">Ceremony seating for 32 guests</div><div class="pkghi-line">Wooden column &amp; gold pedestal with mixed roses and greenery</div><div class="pkghi-line">Two pampas vases lining the aisle, natural wooden aisle runner</div><div class="pkghi-line">Bouquet of mixed roses &amp; greenery, blush rose boutonniere</div><div class="pkghi-line">2-tier themed wedding cake (32 guests)</div><div class="pkghi-line">Nondenominational minister (symbolic or vow renewal)</div><div class="pkghi-line">Violin</div><div class="pkghi-line">Saxophone, or Guitar soloist</div><div class="pkghi-line">Sparkling wine for 32 guests following ceremony</div><div class="pkghi-line">Wedding Specialist &amp; onsite coordinator</div><div class="pkghi-line">With Love Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Tropical Paradise</span><span class="phint">Tropical structure with greenery &amp; tropical pillows on seating · Four …</span></span><span class="pprice">From $4,000</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212306959_screenshot-2026-08-31-at-4.37.36-pm.png?alt=media&amp;token=cd8f0113-e0a3-4e97-aa6b-c0d9ab696397" alt="Tropical Paradise" loading="lazy"><div class="pkghi-line">Tropical structure with greenery &amp; tropical pillows on seating</div><div class="pkghi-line">Four vases with mixed tropical leaves lining the aisle entrance</div><div class="pkghi-line">Natural burlap or white wooden aisle runner</div><div class="pkghi-line">Bouquet with anthuriums &amp; tropical leaves, pink ginger boutonniere</div><div class="pkghi-line">2-tier themed wedding cake (32 guests)</div><div class="pkghi-line">Nondenominational minister (symbolic or vow renewal)</div><div class="pkghi-line">Violin</div><div class="pkghi-line">Saxophone, or Guitar soloist</div><div class="pkghi-line">Sparkling wine for 32 guests following ceremony</div><div class="pkghi-line">Wedding Specialist &amp; onsite coordinator</div><div class="pkghi-line">With Love Honeymoon Package</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Modern Enchantment</span><span class="phint">White circular structure with curtains of sparkling teardrops &amp; white …</span></span><span class="pprice">From $4,500</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212308417_screenshot-2026-08-31-at-4.37.50-pm.png?alt=media&amp;token=b6ed8ca1-34a0-4654-b7cb-bd070d36f667" alt="Modern Enchantment" loading="lazy"><div class="pkghi-line">White circular structure with curtains of sparkling teardrops &amp; white flowers</div><div class="pkghi-line">32 Acrylic Napoleon chairs</div><div class="pkghi-line">6 aisle vases with anthuriums, roses &amp; oriental lilies</div><div class="pkghi-line">White vinyl aisle runner</div><div class="pkghi-line">Bouquet with white florals &amp; greenery, white rose boutonniere</div><div class="pkghi-line">2-tier themed wedding cake (32 guests)</div><div class="pkghi-line">Nondenominational minister (symbolic or vow renewal)</div><div class="pkghi-line">Violin</div><div class="pkghi-line">Saxophone, or Guitar soloist</div><div class="pkghi-line">Ground fireworks display after ceremony</div><div class="pkghi-line">Sparkling wine for 32 guests</div><div class="pkghi-line">Wedding Specialist &amp; onsite coordinator</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Lavish Daydream</span><span class="phint">Floral top covering post-to-post with hanging chandelier &amp; 2 front arr…</span></span><span class="pprice">From $5,000</span><span class="parrow">▼</span></button><div class="pkgbody"><img class="pkgpic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212309961_screenshot-2026-08-31-at-4.38.08-pm.png?alt=media&amp;token=43494518-d26c-451c-8c34-e07bc1d69fe8" alt="Lavish Daydream" loading="lazy"><div class="pkghi-line">Floral top covering post-to-post with hanging chandelier &amp; 2 front arrangements</div><div class="pkghi-line">32 Gold chairs with white cushions</div><div class="pkghi-line">2 gold urns with botanicals at aisle entrance</div><div class="pkghi-line">White petaled aisle runner</div><div class="pkghi-line">Bouquet of white &amp; blush roses, white rose boutonniere</div><div class="pkghi-line">2-tier themed wedding cake (32 guests)</div><div class="pkghi-line">Nondenominational minister (symbolic or vow renewal)</div><div class="pkghi-line">Violin</div><div class="pkghi-line">Saxophone, or Guitar soloist</div><div class="pkghi-line">Ground fireworks display after ceremony</div><div class="pkghi-line">Sparkling wine for 32 guests</div><div class="pkghi-line">Wedding Specialist &amp; onsite coordinator</div><div class="pkghi-line">With Love Honeymoon Package</div></div></div></div><details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb"><div class="cmpwrap"><table class="cmp"><thead><tr><th></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212302827_screenshot-2026-08-31-at-4.36.49-pm.png?alt=media&amp;token=548057a0-9cdf-40e0-b96f-fd1c27c908be" alt="Classic Arrangement" loading="lazy"><span class="pn">Classic Arrangement</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212305141_screenshot-2026-08-31-at-4.37.14-pm.png?alt=media&amp;token=a8f688f0-e7e4-4682-9c00-ad76bfe7060e" alt="Free Spirit" loading="lazy"><span class="pn">Free Spirit</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212306959_screenshot-2026-08-31-at-4.37.36-pm.png?alt=media&amp;token=cd8f0113-e0a3-4e97-aa6b-c0d9ab696397" alt="Tropical Paradise" loading="lazy"><span class="pn">Tropical Paradise</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212308417_screenshot-2026-08-31-at-4.37.50-pm.png?alt=media&amp;token=b6ed8ca1-34a0-4654-b7cb-bd070d36f667" alt="Modern Enchantment" loading="lazy"><span class="pn">Modern Enchantment</span><span class="pc">Up to 32 guests</span></th><th class="withpic"><img class="cmppic" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1788212309961_screenshot-2026-08-31-at-4.38.08-pm.png?alt=media&amp;token=43494518-d26c-451c-8c34-e07bc1d69fe8" alt="Lavish Daydream" loading="lazy"><span class="pn">Lavish Daydream</span><span class="pc">Up to 32 guests</span></th></tr></thead><tbody><tr class="grp"><td colspan="6">The cost</td></tr><tr><th scope="row">Collection cost</th><td class="v">Wedding deposit</td><td class="v">$3,500</td><td class="v">$4,000</td><td class="v">$4,500</td><td class="v">$5,000</td></tr><tr><th scope="row">Guests included</th><td class="v">32</td><td class="v">32</td><td class="v">32</td><td class="v">32</td><td class="v">32</td></tr><tr><th scope="row">Reception table, seats 8</th><td><span class="tk">✓</span></td><td class="v">$450</td><td class="v">$450</td><td class="v">$500</td><td class="v">$550</td></tr><tr class="grp"><td colspan="6">The ceremony</td></tr><tr><th scope="row">Ceremony location</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Nondenominational minister</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Seating for 32</th><td class="v">White Avant Garde</td><td class="v">Ceremony seating</td><td class="v">With tropical pillows</td><td class="v">Acrylic Napoleon</td><td class="v">Gold, white cushions</td></tr><tr><th scope="row">Ceremony structure</th><td class="v">White structure</td><td class="v">Triangular wooden arch</td><td class="v">Tropical, greenery</td><td class="v">White circular, tear drops</td><td class="v">Floral drape + chandelier</td></tr><tr><th scope="row">Aisle runner</th><td><span class="dh">—</span></td><td class="v">Natural wood</td><td class="v">Burlap or white wood</td><td class="v">White vinyl</td><td class="v">White petals</td></tr><tr><th scope="row">Aisle décor</th><td class="v">Podium, gold vase</td><td class="v">2 pampas vases</td><td class="v">4 tropical leaf vases</td><td class="v">6 vases, lilies</td><td class="v">2 gold urns</td></tr><tr><th scope="row">Audio system</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Soloist — violin, sax or guitar</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Ground fireworks after the ceremony</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr class="grp"><td colspan="6">Flowers &amp; cake</td></tr><tr><th scope="row">Bouquet and boutonniere</th><td class="v">White roses</td><td class="v">Mixed roses, greenery</td><td class="v">Anthuriums, tropical</td><td class="v">White florals</td><td class="v">White and blush roses</td></tr><tr><th scope="row">Themed wedding cake for 32</th><td class="v">1-tier</td><td class="v">2-tier</td><td class="v">2-tier</td><td class="v">2-tier</td><td class="v">2-tier</td></tr><tr><th scope="row">Sparkling wine for 32</th><td class="v">During ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td><td class="v">After ceremony</td></tr><tr class="grp"><td colspan="6">Planning &amp; extras</td></tr><tr><th scope="row">Wedding specialist and onsite coordinator</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Wedding website and registry</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">With Love honeymoon package</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr></tbody></table></div><div class="cmpkey"><span><b>✓</b> included</span><span><b>—</b> not included</span><span>text = what differs between packages</span></div></div></details>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-eclipse-gardens-wedding-venue.jpg?cropX=216&amp;cropW=1600&amp;cropH=1200" alt="" loading="lazy" style="margin-bottom:28px;"><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-harmonica-beach-wedding-venue.jpeg?width=1600&amp;height=1200" alt="Harmonica Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Harmonica Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 300 guests</p><p>Exchange vows on pristine shores — soft sand underfoot and the vast ocean as your backdrop.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-isla-beach-wedding-venue.jpeg?width=1600&amp;height=1200" alt="Isla Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Isla Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 100 guests</p><p>Celebrate on the shores of Isla Beach, with decor options to fit your aesthetic.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-casino-punta-cana/aioapi/hardrock-hotel-casino-punta-cana-harmonica-gazebo-wedding-venue.jpg?cropW=1600&amp;cropH=1200" alt="Harmonica Gazebo" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Harmonica Gazebo</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 80 guests</p><p>Surrounded by nature's beauty — a picturesque setting for the ceremony.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-sax-pool-wedding-venue.jpg?cropX=278&amp;cropW=1600&amp;cropH=1200" alt="Sax Pool" loading="lazy"><div class="vbody"><p class="vtag">Reception, Cocktail Hour</p><h4>Sax Pool</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p><p>Poolside venue with incredible sunset views — ideal for cocktail hour and reception.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-ipanema-beach-wedding-venue.jpeg?width=1600&amp;height=1200" alt="Ipanema Beach" loading="lazy"><div class="vbody"><p class="vtag">Ceremony</p><h4>Ipanema Beach</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 150 guests</p><p>Romantic beachfront setting for up to 150, with customizable ceremony decor.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-element-terrrace-wedding-venue.jpg?cropX=217&amp;cropW=1600&amp;cropH=1200" alt="Element Terrace" loading="lazy"><div class="vbody"><p class="vtag">Reception, Cocktail Hour</p><h4>Element Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 300 guests</p><p>Charming terrace with beautiful views of the resort grounds — cocktail hour and reception.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-eclipse-gardens-wedding-venue.jpg?cropX=216&amp;cropW=1600&amp;cropH=1200" alt="Ipanema Garden" loading="lazy"><div class="vbody"><p class="vtag">Ceremony, Reception, Cocktail Hour</p><h4>Ipanema Garden</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to 200 guests</p><p>Surrounded by blooming flowers and lush greenery — an idyllic garden setting full of romance and charm.</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1786935568898_22089731_imagelargewidth.jpg?alt=media&amp;token=1e7ead1d-ba86-4231-9d7c-8145924c9911" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/toro-1.jpg?width=1920&amp;height=1080" alt="Toro" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Steakhouse</p><h4>Toro</h4><p>At night becomes hotel´s steakhouse offering Premium cuts grilled to perfection and an extensive wine list.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Toro-Menu-Hard-Rock-Hotel-Casino-Punta-Cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883376_ImageLargeWidth.jpeg" alt="Zen" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Teppanyaki &amp; Sushi</p><h4>Zen</h4><p>After sunsets, this teppanyaki eatery main attraction is our chef ́s show performance while creates memorable meals right before your eyes. Don ́t miss our authentic sushi experience!</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Zen-Menu-Hard-Rock-Hotel-Casino-Punta-Cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22089731_ImageLargeWidth.jpg" alt="Ciao" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Italian</p><h4>Ciao</h4><p>Contemporary Italian for dinner — antipasti, fresh pastas made to order and a dolce treat.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Ciao-Menu-Hard-Rock-Hotel-Casino-Punta-Cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/25537288_ImageLargeWidth.jpg" alt="Ciao Trattoria" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Pizza</p><h4>Ciao Trattoria</h4><p>Artisanal pizzas and Mediterranean-influenced dishes made with fresh ingredients. Daily 12–10pm.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/ciao-trattoria-restaurant-menu-hard-rock-hotel-punta-cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854836_ImageLargeWidth.jpeg" alt="Ipanema" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Brazilian Rodizio</p><h4>Ipanema</h4><p>International breakfast; by night a Brazilian rodizio surrounded by the lazy pool, with a vast selection of meats and poultry.</p></div></div><div class="dcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/bistro-med-2.jpg?width=1920&amp;height=1080" alt="Bistro Med" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Mediterranean &amp; Lebanese</p><h4>Bistro Med</h4><p>Fresh Lebanese and Mediterranean food full of flavor. Lunch 11:30am–6pm, dinner 6–10:30pm.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Bistro-Med-Hard-Rock-Hotel-Casino-Punta-Cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/isla-3.jpg?width=1920&amp;height=1080" alt="Isla" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Mexican / Gastro Market</p><h4>Isla</h4><p>Eight food stations with dishes from around the world; now also serving the Los Gallos menu for dinner — traditional Mexican recipes with tequila-based cocktails.</p></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/15919211_ImageLargeWidth.jpg" alt="Market Food Hall" loading="lazy"><div class="dbody"><p class="dtag">Food Hall · International</p><h4>Market Food Hall</h4><p>A journey through the world's street food cuisines, made to order with seasonal local ingredients, in a contemporary greenhouse setting with a hanging tropical garden.</p></div></div><div class="dcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/stacked-1.jpg?width=1920&amp;height=1080" alt="Stacked" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Burgers</p><h4>Stacked</h4><p>Certified Angus beef smash burgers, milkshakes, chicken and plant-based options. Daily 11am–11:30pm.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Stacked-Restaurant-Menu.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22109367_ImageLargeWidth.jpg" alt="The Split" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Sandwiches</p><h4>The Split</h4><p>Inspired by the classic Italian-American restaurants of Submarine Sandwiches, The Split offers a variety of options made with fresh ingredients on homemade breads that can be served hot or cold. Enjoy all the possibilities and customize your sandwich by selecting the ingredients of your choice.</p></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13883455_ImageLargeWidth.jpg" alt="Ice Cone" loading="lazy"><div class="dbody"><p class="dtag">Dessert · Ice Cream</p><h4>Ice Cone</h4><p>Enjoy an American-style ice cream in the centrally located parlor. And yes, it's handmade on site with fresh ingredients, so you know it is amazing! The variety encompasses classic, as well as more adventurous flavors.</p></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Rain-Deli.jpg" alt="Constant Grind Coffee &amp; Bar" loading="lazy"><div class="dbody"><p class="dtag">Cafe · 24 Hours</p><h4>Constant Grind Coffee &amp; Bar</h4><p>Coffee, cappuccino, espresso and desserts at the end of the Boulevard overlooking the sunset. Open 24 hours.</p></div></div><div class="dcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/los-gallos-1.jpg?width=1920&amp;height=1080" alt="Los Gallos" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Mexican (temporarily closed)</p><h4>Los Gallos</h4><p>Traditional ancient Mexican recipes with tequila-based cocktails. NOTE: closed until further notice — the menu is currently served at Isla.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/Los-Gallos-Menu-Hard-Rock-Hotel-Casino-Punta-Cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20541833_ImageLargeWidth.jpg" alt="Youyu" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · Asian ($)</p><h4>Youyu</h4><p>Asian-Pacific and modern Chinese with Mandarin, Cantonese, Szechwan and Vietnamese flair, in a Hong Kong-inspired setting at the casino. Additional cost.</p><a class="menulink" href="https://online.fliphtml5.com/dahkl/oqzo/" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/20542299_ImageLargeWidth.jpg" alt="Montserrat Manor" loading="lazy"><div class="dbody"><p class="dtag">Restaurant · American Steakhouse ($)</p><h4>Montserrat Manor</h4><p>Prime Chicago meat wet-aged 21 days, local fish caught daily and live lobster. Additional cost.</p><a class="menulink" href="https://online.fliphtml5.com/dahkl/gyus/" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/Uncorked-Experience-Punta-Cana.jpg" alt="Uncorked Experience" loading="lazy"><div class="dbody"><p class="dtag">Wine Store ($)</p><h4>Uncorked Experience</h4><p>Discover Uncorked Experience, Hard Rock Hotel Punta Cana’s exclusive wine store—a space designed for those who appreciate the art of great taste. Here, every bottle tells a story, and every sip becomes part of yours.</p><a class="menulink" href="https://hotel.hardrock.com/punta-cana/files/6136/uncorked-experience-wine-list-hard-rock-punta-cana.pdf" target="_blank" rel="noopener">View menu →</a></div></div><div class="dcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/moon-lounge-hard-rock-hotel-casino-punta-cana.jpg" alt="Moon Lounge" loading="lazy"><div class="dbody"><p class="dtag">Bar · Lounge</p><h4>Moon Lounge</h4><p>Mysterious and sophisticated, this popular lounge features top music, amazing views, a large selection of top shelf liquors, and DJ’s two times a week.</p></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Moon Lounge</span><span class="bdesc">Mysterious and sophisticated, with top-shelf liquors, wide views, nightly karaoke and DJs twice a week. Ages 18 and over.</span></li><li><span class="bname">Bowling Bar</span><span class="bdesc">Drinks and snacks beside black-light bowling lanes, soft lounge seating and HD video walls showing live sport and music videos.</span></li><li><span class="bname">Constant Grind Coffee &amp; Bar</span><span class="bdesc">Coffee, cappuccino, espresso and desserts at the end of the Boulevard, looking out over the sunset. Open 24 hours.</span></li><li><span class="bname">Game Bar</span><span class="bdesc">The casino sports bar, with a big-screen wall for live games and cocktails until 4:00 AM.</span></li><li><span class="bname">Casino Center Bar</span><span class="bdesc">The bar at the heart of the casino floor, with live salsa, reggaeton and bachata on Wednesday nights.</span></li><li><span class="bname">Beach Bar</span><span class="bdesc">Beachfront bar service on Macao Beach.</span></li><li><span class="bname">Tiki Bar</span><span class="bdesc">Poolside tiki bar.</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-ipanema-beach-wedding-venue.jpeg?width=1600&amp;height=1200" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eclipse-Pool.jpg" alt="Eclipse Pool" loading="lazy"><h4>Eclipse Pool</h4><p>Live events, music and performances by the water — the resort’s high-energy entertainment pool.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/central-pool-hard-rock-hotel-punta-cana.jpg" alt="Central Pool" loading="lazy"><h4>Central Pool</h4><p>The traditional Hard Rock pool, with organised activities running through the day.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/isla-pool-hard-rock-punta-cana.jpg" alt="Isla Pool" loading="lazy"><h4>Isla Pool</h4><p>Rock and Latin-flavoured beats with a global influence. Reserved for VIP and Deluxe members.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sun-pool-punta-cana.jpg" alt="Sun Pool" loading="lazy"><h4>Sun Pool</h4><p>Sunbeds and tropical palms in a quiet corner of the resort. Reserved for Hall of Fame and Chairman members.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Kids-Pool-VT.jpg" alt="Family Pool" loading="lazy"><h4>Family Pool</h4><p>Teen-friendly music, waterslides and activities for under-16s, with a dedicated kids’ slide alongside.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/sax-pool-hard-rock-hotel-punta-cana.jpg" alt="Sax Pool" loading="lazy"><h4>Sax Pool</h4><p>A quieter, more exclusive pool for resting and relaxing to rock and pop.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/bongo-pool-hard-rock-punta-cana.jpg" alt="Bongo Pool" loading="lazy"><h4>Bongo Pool</h4><p>The Latin pool, with food and beverage service and the best of Latin and urban music.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Drums-Guitar-Pool.jpg" alt="Guitar Pool" loading="lazy"><h4>Guitar Pool</h4><p>A high-energy pool playing the best of pop.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/drum-poo-hard-rock-hotel-punta-cana.jpg" alt="Drums Pool" loading="lazy"><h4>Drums Pool</h4><p>Another high-energy pool, this one for timeless rock.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Sun-Moon-Pool.jpg" alt="Moon Pool" loading="lazy"><h4>Moon Pool</h4><p>Pop music by the water — you will know all the songs.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Woodstock-Pool.jpg" alt="Woodstock Pool" loading="lazy"><h4>Woodstock Pool</h4><p>The traditional Hard Rock collection, played poolside.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/lazy-river-pool-hard-rock-hotel-punta-cana.jpg" alt="Lazy River" loading="lazy"><h4>Lazy River</h4><p>Grab a floatie and drift the calm waters of the resort’s Venetian-style canal setting.</p></div><div class="pool-card"><img src="https://hotel.hardrock.com/punta-cana/files/6136/850x300-Eden-Pool.jpg" alt="Eden Pool" loading="lazy"><h4>Eden Pool</h4><p>Adults-only and lively, with a full bar, bali beds and optional European-style bathing.</p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/24936829_ImageLargeWidth.jpg" alt="Deluxe Suite King Bed" loading="lazy"><div class="rbody"><h4>Deluxe Suite King Bed</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920346602_16363699_imagelargewidth.jpg?alt=media&amp;token=269167b5-419a-4613-9c19-cbbdea1ece54" alt="Caribbean Suite King Bed" loading="lazy"><div class="rbody"><h4>Caribbean Suite King Bed</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920345853_16834945_imagelargewidth.jpg?alt=media&amp;token=e40376e2-a31d-4730-9b48-a2270fd5b822" alt="Caribbean Suite King Bed &amp; Sofa Bed" loading="lazy"><div class="rbody"><h4>Caribbean Suite King Bed &amp; Sofa Bed</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite King" loading="lazy"><div class="rbody"><h4>Caribbean Sand Suite King</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363703_ImageLargeWidth.jpg" alt="Caribbean Sand Suite" loading="lazy"><div class="rbody"><h4>Caribbean Sand Suite</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920543041_16363711_imagelargewidth.jpg?alt=media&amp;token=76981173-cc76-4b28-9393-d6ba36346e70" alt="Caribbean Diamond King Bed &amp; Sofa Bed" loading="lazy"><div class="rbody"><h4>Caribbean Diamond King Bed &amp; Sofa Bed</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16363715_ImageLargeWidth.jpg" alt="Caribbean Diamond Double Beds &amp; Sofa Bed" loading="lazy"><div class="rbody"><h4>Caribbean Diamond Double Beds &amp; Sofa Bed</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854636_ImageLargeWidth.jpg" alt="Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed" loading="lazy"><div class="rbody"><h4>Rock Royalty Caribbean Sand Suite King &amp; Sofa Bed</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920436123_16369501_imagelargewidth.jpg?alt=media&amp;token=54fcd5f1-74f8-414d-9b59-792a5b16b540" alt="Islander Junior Suite King" loading="lazy"><div class="rbody"><h4>Islander Junior Suite King</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/22240837_ImageLargeWidth.jpg" alt="Islander Junior Suite Double" loading="lazy"><div class="rbody"><h4>Islander Junior Suite Double</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1782920435421_16369505_imagelargewidth.jpg?alt=media&amp;token=443fc497-fd0f-4556-a23a-eddf41f2d7d0" alt="Islander Junior Suite King Bed &amp; Sofa Bed" loading="lazy"><div class="rbody"><h4>Islander Junior Suite King Bed &amp; Sofa Bed</h4></div></div><div class="rcard"><img src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fhard-rock-punta-cana%2F1783046342533_hrhpc_-_rock_suite.jpg?alt=media&amp;token=8c946513-9d2b-486a-bb83-3e8b1f1ff231" alt="Rock Family Suite One Bedroom — King &amp; Two Sofa Beds" loading="lazy"><div class="rbody"><h4>Rock Family Suite One Bedroom — King &amp; Two Sofa Beds</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/13854674_ImageLargeWidth.jpg" alt="Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant" loading="lazy"><div class="rbody"><h4>Rock Suite One Bedroom — King &amp; Sofa Beds w/ Personal Assistant</h4></div></div><div class="rcard"><img src="https://hotel.hardrock.com/punta-cana/files/6136/16365460_ImageLargeWidth.jpg" alt="Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant" loading="lazy"><div class="rbody"><h4>Rock Suite Two Bedroom — Three Kings &amp; Two Sofa Beds w/ Personal Assistant</h4></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Rock Royalty</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://hotel.hardrock.com/punta-cana/files/6136/20542299_ImageLargeWidth.jpg" alt="" loading="lazy" style="margin-bottom:26px;"><div id="club-body"><div class="club-block"><h3>Rock Royalty</h3><p>Dedicated telephone concierge,Upgraded full-size Rock Spa bath products,Aromatherapy and pillow menu,Complimentary 25-minute couple’s massage at Rock Spa,Late check-out until 3:00 PM, subject to availability,Complimentary beach bag, one per room per stay,Priority booking for bali beds (additional cost),Plush bathrobes and slippers on request,Sleeping mask, loofah sponge and bath salts,24-hour room service,Welcome petit fours,Rock Royalty Level pin, one per room per stay,Selection of Fender guitars (Picks) and Crosley turntables (Wax), with priority reservations,Espresso machine with premium coffee</p></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Daily activities programme</li><li>Pool and beach activities with poolside and beachside service</li><li>Land sports</li><li>Fitness centre and Body Rock classes</li><li>13 pools plus Rockaway Waterpark</li><li>Kids Club with daily activities, games and shows</li><li>Mini-golf, arcade and Xtreme Center for older kids and teens</li><li>Nightly entertainment and shows at the Theater</li><li>Sound of Your Stay guitar and turntable lending</li><li>24-hour room service</li><li>Unlimited a la carte dining with no reservations required</li></ul></div>
+        <div id="act-extra-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"><li>Rock Spa treatments</li><li>Hard Rock Golf Club green fees, caddies mandatory for golfers</li><li>Bowling lanes at the Bowling Bar, lane rates apply</li><li>Casino gaming, and casino bar drinks which sit outside the all-inclusive</li><li>Off-site tours and excursions</li><li>Airport transfers and transportation</li><li>Bali bed reservations</li><li>Rock Shop merchandise</li><li>Doctor visits and medication</li></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3:00 PM</span></li><li><span class="lbl">Check-out</span><span>11:00 AM</span></li><li><span class="lbl">Total Rooms</span><span>1882</span></li><li><span class="lbl">Airport</span><span>Punta Cana International (PUJ)</span></li><li><span class="lbl">Year Built</span><span>2010</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>Outdoor private events must be over by 10:30 PM. Cocktail hours and private events held on the beach or a terrace carry a set-up fee of $6 per person for a cocktail hour, $12 for a private event, or $18 for both, ages 4 and up. Outside vendors are charged $1,500 per service per day; the fee and vendor passes are waived when the vendor stays on property at least three nights, and only for photographers, videographers, hair and make-up artists, and DJs without equipment. Local Dominican Republic vendors are not permitted on property. At least 80% of wedding guests must stay at the resort, day passes are capped at 20% of those attending, and day-pass guests must leave by 11:00 PM. The couple arrives two business days before a symbolic ceremony and three before a Catholic ceremony. There is no minimum-night stay requirement. Eden Pool is adults-only and allows optional European-style bathing; Isla Pool and Sun Pool are reserved for higher Unity by Hard Rock membership tiers. Casino drinks, golf, spa treatments and bowling lanes sit outside the all-inclusive. As of August 2026 the Family Pool and the Lazy River are listed as closed for maintenance.</p></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display:none;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://assets.milestoneinternet.com/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/sun-pool2.jpg?width=1920&amp;height=1080" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-hero.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
     </div>
   </div>
-</div></section>
-
-<section id="gallery"><div class="wrap">
-  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
-  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/sun-pool2.jpg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72766-hard-rock-hotel-casino-punta-cana/aioapi/hard-rock-hotel-casino-punta-cana-hero.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
-  </div>
-</div></section>
-</main>
-
-<script>
-(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});if(location.hash==="#groups"){sel("tab-grp");}})();
-</script>
-
-<footer><div class="wrap">
-  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
-  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
-</div></footer>
-
-</body>
-</html>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
