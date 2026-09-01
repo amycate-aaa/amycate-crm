@@ -1450,7 +1450,7 @@ function downloadGuide(){
   if(!page){alert('The guide has not finished loading yet.');return;}
   const clone=page.cloneNode(true);
   // strip anything that needs the database or a click handler
-  clone.querySelectorAll('.agentonly,#quote-bar,.qb-wrap,#quote-page').forEach(el=>el.remove());
+  clone.querySelectorAll('.agentonly,#quote-bar,.qb-wrap,#quote-page,.change-link').forEach(el=>el.remove());
   clone.querySelectorAll('[onclick]').forEach(el=>{
     if(/togglePkg|toggleTab|openPhoto/.test(el.getAttribute('onclick')||''))return;
     el.removeAttribute('onclick');
