@@ -163,6 +163,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <button onclick="addNewResort()" style="background:#f0c958;border:none;color:#111;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:700;white-space:nowrap;">&#43; Add New Resort</button>
     <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
+    <div style="display:flex;flex-direction:column;gap:4px;min-width:260px;">
+      <div style="display:flex;gap:0;background:#1a1a1a;border:1px solid #333;border-radius:6px;overflow:hidden;width:fit-content;">
+        <button id="myResortsBtn" onclick="filterResorts('mine')" style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border:none;cursor:pointer;background:#f0c958;color:#111;font-weight:700;">My Resorts</button>
+        <button id="allResortsBtn" onclick="filterResorts('all')" style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border:none;cursor:pointer;background:transparent;color:#888;">All Resorts</button>
+      </div>
     <select class="form-control" id="masterResort" onchange="localStorage.setItem('lastResort',this.value);onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
                         <option value="">Select resort...</option>
       <option value="ava-resort-cancun">Ava Resort Cancun</option>
@@ -268,6 +273,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="viva-fortuna-beach">Viva Fortuna Beach by Wyndham</option>
       <option value="other">Other Resort</option>
     </select>
+    </div><!-- end resort select wrapper -->
   </div>
 </div>
 
@@ -744,6 +750,50 @@ function removeQueueItem(id) {
   if (item && item.status === 'uploading') return; // don't allow removal mid-upload
   queueItems = queueItems.filter(q => q.id !== id);
   document.getElementById(id)?.remove();
+}
+
+// ── RESORT FILTER (My Resorts / All Resorts) ──
+let myResortSlugs = new Set();
+
+async function initResortFilter() {
+  try {
+    const snap = await db.collection('resortProfiles').where('owner', '==', 'amy').get();
+    myResortSlugs = new Set(snap.docs.map(d => d.id));
+    filterResorts('mine'); // default to My Resorts
+  } catch(e) {
+    console.warn('Resort filter init failed:', e);
+    filterResorts('all'); // fallback to all
+  }
+}
+
+function filterResorts(mode) {
+  const sel = document.getElementById('masterResort');
+  const myBtn = document.getElementById('myResortsBtn');
+  const allBtn = document.getElementById('allResortsBtn');
+  if (!sel) return;
+
+  // Update button styles
+  if (myBtn && allBtn) {
+    myBtn.style.background = mode === 'mine' ? '#f0c958' : 'transparent';
+    myBtn.style.color = mode === 'mine' ? '#111' : '#888';
+    allBtn.style.background = mode === 'all' ? '#f0c958' : 'transparent';
+    allBtn.style.color = mode === 'all' ? '#111' : '#888';
+  }
+
+  Array.from(sel.options).forEach(opt => {
+    if (!opt.value || opt.value === 'other') { opt.style.display = ''; return; }
+    if (mode === 'all') {
+      opt.style.display = '';
+    } else {
+      opt.style.display = myResortSlugs.has(opt.value) ? '' : 'none';
+    }
+  });
+
+  // If current selection is now hidden, reset
+  const cur = sel.value;
+  if (cur && mode === 'mine' && !myResortSlugs.has(cur)) {
+    sel.value = '';
+  }
 }
 
 // ── MASTER RESORT CHANGE ──
@@ -1944,6 +1994,8 @@ initFilterResortDropdown();
       setTimeout(() => onMasterResortChange(last), 800);
     }
   }
+  // Initialize resort filter after Firebase ready
+  setTimeout(() => initResortFilter(), 1200);
 })();
 
 // ── RESORT AUDIT ──
