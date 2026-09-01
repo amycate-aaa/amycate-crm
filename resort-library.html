@@ -163,6 +163,11 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
     <button onclick="addNewResort()" style="background:#f0c958;border:none;color:#111;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:700;white-space:nowrap;">&#43; Add New Resort</button>
     <button onclick="toggleAudit()" style="background:#1a1a1a;border:1px solid #444;color:#ccc;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;white-space:nowrap;">&#128202; Resort Audit</button>
     <label style="font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Active Resort</label>
+    <div style="display:flex;flex-direction:column;gap:4px;min-width:260px;">
+      <div style="display:flex;gap:0;background:#1a1a1a;border:1px solid #333;border-radius:6px;overflow:hidden;width:fit-content;">
+        <button id="myResortsBtn" onclick="filterResorts('mine')" style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border:none;cursor:pointer;background:#f0c958;color:#111;font-weight:700;">My Resorts</button>
+        <button id="allResortsBtn" onclick="filterResorts('all')" style="font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border:none;cursor:pointer;background:transparent;color:#888;">All Resorts</button>
+      </div>
     <select class="form-control" id="masterResort" onchange="localStorage.setItem('lastResort',this.value);onMasterResortChange(this.value)" style="min-width:260px;background:#111;border:1px solid #f0c958;color:#f0c958;font-weight:600;">
                         <option value="">Select resort...</option>
       <option value="ava-resort-cancun">Ava Resort Cancun</option>
@@ -196,20 +201,36 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="dreams-vista-cancun">Dreams Vista Cancun Golf &amp; Spa Resort</option>
       <option value="el-dorado-casitas">El Dorado Casitas Royale</option>
       <option value="el-dorado-royale">El Dorado Royale</option>
+      <option value="family-selection-bavaro">Family Selection at Grand Palladium Bávaro</option>
       <option value="fives-beach">Fives Beach Hotels &amp; Residences</option>
       <option value="garza-blanca">Garza Blanca Preserve Resort &amp; Spa</option>
       <option value="grand-hyatt-baha-mar">Grand Hyatt Baha Mar</option>
-      <option value="grand-palladium-costa-mujeres">Grand Palladium Costa Mujeres Resort &amp; Spa</option>
+      <option value="grand-palladium-bavaro">Grand Palladium Bávaro Resort &amp; Spa</option>
+      <option value="grand-palladium-colonial">Grand Palladium Colonial Resort &amp; Spa</option>
+      <option value="grand-palladium-jamaica">Grand Palladium Jamaica Resort &amp; Spa</option>
+      <option value="grand-palladium-kantenah">Grand Palladium Kantenah Resort &amp; Spa</option>
+      <option value="grand-palladium-lady-hamilton">Grand Palladium Lady Hamilton Resort &amp; Spa</option>
+      <option value="grand-palladium-palace">Grand Palladium Palace Resort Spa &amp; Casino</option>
+      <option value="grand-palladium-punta-cana">Grand Palladium Punta Cana Resort &amp; Spa</option>
+      <option value="grand-palladium-vallarta">Grand Palladium Vallarta Resort &amp; Spa</option>
+      <option value="grand-palladium-white-sand">Grand Palladium White Sand Resort &amp; Spa</option>
       <option value="grand-velas-riviera-maya">Grand Velas Riviera Maya</option>
       <option value="hard-rock-punta-cana">Hard Rock Hotel &amp; Casino Punta Cana</option>
       <option value="hard-rock-los-cabos">Hard Rock Hotel Los Cabos</option>
       <option value="hard-rock-riviera-maya">Hard Rock Hotel Riviera Maya</option>
       <option value="hard-rock-vallarta">Hard Rock Hotel Vallarta</option>
       <option value="haven-riviera-cancun">Haven Riviera Cancun</option>
+      <option value="hilton-los-cabos">Hilton Los Cabos Beach &amp; Golf Resort</option>
+      <option value="hilton-tulum-riviera-maya">Hilton Tulum Riviera Maya All-Inclusive</option>
+      <option value="hotel-xcaret-arte">Hotel Xcaret Arte</option>
+      <option value="hotel-xcaret-mexico">Hotel Xcaret México</option>
       <option value="hyatt-zilara-cancun">Hyatt Zilara Cancun</option>
       <option value="hyatt-zilara-cap-cana">Hyatt Zilara Cap Cana</option>
       <option value="hyatt-zilara-riviera-maya">Hyatt Zilara Riviera Maya</option>
       <option value="hyatt-zilara-rose-hall">Hyatt Zilara Rose Hall</option>
+      <option value="hyatt-vivid-cancun">Hyatt Vivid Grand Island Cancun</option>
+      <option value="hyatt-vivid-playa-del-carmen">Hyatt Vivid Grand Island Playa del Carmen</option>
+      <option value="hyatt-vivid-punta-cana">Hyatt Vivid Grand Island Punta Cana</option>
       <option value="hyatt-ziva-cancun">Hyatt Ziva Cancun</option>
       <option value="hyatt-ziva-cap-cana">Hyatt Ziva Cap Cana</option>
       <option value="hyatt-ziva-los-cabos">Hyatt Ziva Los Cabos</option>
@@ -223,6 +244,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="majestic-mirage">Majestic Mirage Costa Mujeres</option>
       <option value="majestic-mirage-punta-cana">Majestic Mirage Punta Cana</option>
       <option value="margaritaville-island-reserve-riviera-maya">Margaritaville Island Reserve Resort Riviera Maya</option>
+      <option value="lopesan-costa-bavaro">Lopesan Costa Bávaro Resort, Spa &amp; Casino</option>
       <option value="moon-palace-cancun">Moon Palace Cancun</option>
       <option value="moon-palace-jamaica">Moon Palace Jamaica</option>
       <option value="ocean-allure-costa-mujeres">Ocean Allure Costa Mujeres</option>
@@ -261,6 +283,8 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="secrets-tulum">Secrets Tulum Resort &amp; Beach Club</option>
       <option value="secrets-vallarta-bay">Secrets Vallarta Bay Puerto Vallarta</option>
       <option value="secrets-wild-orchid">Secrets Wild Orchid Montego Bay</option>
+      <option value="signature-level-lady-hamilton">Signature Level at Grand Palladium Lady Hamilton</option>
+      <option value="trs-coral">TRS Coral Hotel</option>
       <option value="trs-turquesa">TRS Turquesa</option>
       <option value="trs-yucatan-hotel">TRS Yucatan Hotel</option>
       <option value="valentin-imperial-riviera-maya">Valentin Imperial Riviera Maya</option>
@@ -268,6 +292,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       <option value="viva-fortuna-beach">Viva Fortuna Beach by Wyndham</option>
       <option value="other">Other Resort</option>
     </select>
+    </div><!-- end resort select wrapper -->
   </div>
 </div>
 
@@ -637,10 +662,14 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       </div>
     </div>
 
+    <!-- OWNERSHIP BANNER -->
+    <div id="ownershipBanner" style="display:none;border-radius:6px;padding:10px 14px;font-size:.85rem;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;"></div>
+
     <!-- SAVE -->
     <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in the details above and click Save Profile.</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <button class="btn btn-primary" onclick="saveResortProfile()">&#128190; Save Profile</button>
+      <button class="btn btn-primary" id="saveProfileBtn" onclick="saveResortProfile()">&#128190; Save Profile</button>
+      <button id="copyToMineBtn" style="display:none;background:#1a3a5c;border:1px solid #2a6aac;color:#6aacef;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600;" onclick="copyToMyLibrary()">&#128203; Copy to My Library</button>
       <span id="profileSaveMsg" style="display:none;color:#27ae60;font-size:.85rem;"></span>
     </div>
 
@@ -746,6 +775,124 @@ function removeQueueItem(id) {
   document.getElementById(id)?.remove();
 }
 
+// ── RESORT FILTER (My Resorts / All Resorts) ──
+let myResortSlugs = new Set();
+
+async function initResortFilter() {
+  try {
+    const snap = await db.collection('resortProfiles').where('owner', '==', 'amy').get();
+    myResortSlugs = new Set(snap.docs.map(d => d.id));
+    filterResorts('mine'); // default to My Resorts
+  } catch(e) {
+    console.warn('Resort filter init failed:', e);
+    filterResorts('all'); // fallback to all
+  }
+}
+
+function filterResorts(mode) {
+  const sel = document.getElementById('masterResort');
+  const myBtn = document.getElementById('myResortsBtn');
+  const allBtn = document.getElementById('allResortsBtn');
+  if (!sel) return;
+
+  // Update button styles
+  if (myBtn && allBtn) {
+    myBtn.style.background = mode === 'mine' ? '#f0c958' : 'transparent';
+    myBtn.style.color = mode === 'mine' ? '#111' : '#888';
+    allBtn.style.background = mode === 'all' ? '#f0c958' : 'transparent';
+    allBtn.style.color = mode === 'all' ? '#111' : '#888';
+  }
+
+  Array.from(sel.options).forEach(opt => {
+    if (!opt.value || opt.value === 'other') { opt.style.display = ''; return; }
+    if (mode === 'all') {
+      opt.style.display = '';
+    } else {
+      opt.style.display = myResortSlugs.has(opt.value) ? '' : 'none';
+    }
+  });
+
+  // If current selection is now hidden, reset
+  const cur = sel.value;
+  if (cur && mode === 'mine' && !myResortSlugs.has(cur)) {
+    sel.value = '';
+  }
+}
+
+// ── OWNERSHIP UI ──
+async function updateOwnershipUI(slug) {
+  const banner = document.getElementById('ownershipBanner');
+  const saveBtn = document.getElementById('saveProfileBtn');
+  const copyBtn = document.getElementById('copyToMineBtn');
+  if (!banner || !slug) return;
+
+  try {
+    const doc = await db.collection('resortProfiles').doc(slug).get();
+    const owner = doc.exists ? (doc.data().owner || 'amy') : null;
+
+    if (!owner || owner === 'amy') {
+      // Amy's resort — full edit
+      banner.style.display = 'none';
+      if (saveBtn) saveBtn.style.display = '';
+      if (copyBtn) copyBtn.style.display = 'none';
+    } else {
+      // Someone else's resort
+      banner.style.display = 'flex';
+      banner.style.background = '#1a1a2e';
+      banner.style.border = '1px solid #2a2a5e';
+      banner.style.color = '#8888cc';
+      banner.innerHTML = `<span>🔒 This is <strong>${owner}'s</strong> resort — view only</span>`;
+      if (saveBtn) saveBtn.style.display = 'none';
+      if (copyBtn) copyBtn.style.display = '';
+      copyBtn.setAttribute('data-slug', slug);
+      copyBtn.setAttribute('data-owner', owner);
+    }
+  } catch(e) {
+    console.warn('Ownership check failed:', e);
+  }
+}
+
+async function copyToMyLibrary() {
+  const btn = document.getElementById('copyToMineBtn');
+  const slug = btn?.getAttribute('data-slug');
+  const originalOwner = btn?.getAttribute('data-owner');
+  if (!slug) return;
+
+  const newSlug = slug + '-amy';
+  if (!confirm(`Copy this resort to your library as "${newSlug}"? You can rename it after.`)) return;
+
+  try {
+    // Get original data
+    const orig = (await db.collection('resortProfiles').doc(slug).get()).data() || {};
+    // Save as new record with Amy's ownership
+    await db.collection('resortProfiles').doc(newSlug).set({
+      ...orig,
+      slug: newSlug,
+      owner: 'amy',
+      copiedFrom: slug,
+      copiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge: false});
+
+    toast(`✅ Copied! Now saved as "${newSlug}" in your library.`, 'success');
+
+    // Add to dropdown and switch to it
+    const sel = document.getElementById('masterResort');
+    const existingOpt = [...sel.options].find(o => o.value === newSlug);
+    if (!existingOpt) {
+      const opt = document.createElement('option');
+      opt.value = newSlug;
+      opt.textContent = (orig.name || orig.resortName || newSlug) + ' (copy)';
+      sel.appendChild(opt);
+    }
+    sel.value = newSlug;
+    myResortSlugs.add(newSlug);
+    onMasterResortChange(newSlug);
+  } catch(e) {
+    toast('Error copying: ' + e.message, 'error');
+  }
+}
+
 // ── MASTER RESORT CHANGE ──
 
 function onMasterResortChange(slug) {
@@ -754,8 +901,11 @@ function onMasterResortChange(slug) {
   if (!slug) {
     const form = document.getElementById('profileForm');
     if (form) form.style.display = 'none';
+    const banner = document.getElementById('ownershipBanner');
+    if (banner) banner.style.display = 'none';
   } else {
     loadResortProfile(slug);
+    updateOwnershipUI(slug);
   }
   const filterSel = document.getElementById('filterResort');
   if (filterSel) {
@@ -1314,6 +1464,12 @@ async function saveResortProfile() {
   const slug = document.getElementById('masterResort')?.value || document.getElementById('profileResort')?.value;
   if (!slug) { toast('Please select a resort from the Active Resort dropdown first.', 'error'); return; }
 
+  // OWNERSHIP CHECK — only Amy can save Amy's resorts (Amy can override anything as Firebase owner)
+  const existingDoc = await db.collection('resortProfiles').doc(slug).get();
+  const existingOwner = existingDoc.exists ? (existingDoc.data().owner || 'amy') : 'amy';
+  // Amy is the Firebase owner — she can edit anything
+  // No ownership restriction for Amy's library
+
   const masterSel = document.getElementById('masterResort');
   const resortName = masterSel?.options[masterSel.selectedIndex]?.text || slug;
 
@@ -1359,6 +1515,7 @@ async function saveResortProfile() {
     venues:       getVenues(),
     packages:     getPackages(),
     roomCategories: getRoomCategories(),
+    owner:        'amy',
     updatedAt:    firebase.firestore.FieldValue.serverTimestamp()
   };
 
@@ -1937,6 +2094,8 @@ initFilterResortDropdown();
       setTimeout(() => onMasterResortChange(last), 800);
     }
   }
+  // Initialize resort filter after Firebase ready
+  setTimeout(() => initResortFilter(), 1200);
 })();
 
 // ── RESORT AUDIT ──
