@@ -752,7 +752,9 @@ async function loadResort(slug){
     renderDownloads();
     buildBuilder();
     if(AGENT)$id('qb-open').style.display='block';
-    $id('loading').style.display='none';$id('page').style.display='block';
+    $id('loading').style.display='none';
+    if(new URLSearchParams(location.search).get('download')==='1')
+      setTimeout(()=>{try{downloadGuide();}catch(e){console.warn(e);}},1200);$id('page').style.display='block';
     const _qp=new URLSearchParams(location.search);
     if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
       if(_qp.get('q'))renderQuote();
@@ -1432,6 +1434,41 @@ function splitActs(){
   else incl=toArr(a);
   if(x)extra=extra.concat(toArr(x));
   return{incl:incl.map(s=>clean(s.trim())).filter(Boolean),extra:extra.map(s=>clean(s.trim())).filter(Boolean)};
+}
+
+/* Export the guide exactly as rendered, as one self-contained file.
+   Same layout as the live page, so there is only ever one design to maintain. */
+function downloadGuide(){
+  const css=document.querySelector('style').outerHTML;
+  const fonts=[...document.querySelectorAll('link[rel="stylesheet"],link[rel="preconnect"]')]
+    .map(l=>l.outerHTML).join('');
+  const page=$id('page');
+  if(!page){alert('The guide has not finished loading yet.');return;}
+  const clone=page.cloneNode(true);
+  // strip anything that needs the database or a click handler
+  clone.querySelectorAll('.agentonly,#quote-bar,.qb-wrap,#quote-page').forEach(el=>el.remove());
+  clone.querySelectorAll('[onclick]').forEach(el=>{
+    if(/togglePkg|toggleTab|openPhoto/.test(el.getAttribute('onclick')||''))return;
+    el.removeAttribute('onclick');
+  });
+  const title=(P.resortName||P.name||'Resort')+' \u00b7 Amy Cate';
+  const html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'+
+    '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'+esc(title)+'</title>'+
+    fonts+css+
+    '<style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style>'+
+    '</head><body><div id="page">'+clone.innerHTML+'</div>'+
+    '<script>'+
+    'document.addEventListener("click",function(e){'+
+    'var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;'+
+    'if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}'+
+    'var s=e.target.closest("summary");if(s)return;'+
+    '});<\/script>'+
+    '</body></html>';
+  const blob=new Blob([html],{type:'text/html'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(SLUG||'resort')+'-guide.html';
+  document.body.appendChild(a);a.click();a.remove();
 }
 
 function downloadQuote(){
