@@ -1,257 +1,548 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dreams Bahia Mita Surf &amp; Spa Resort</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Dreams Bahia Mita Surf &amp; Spa Resort · Amy Cate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Jost:wght@300;400;500&amp;display=swap" rel="stylesheet"><style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}
+body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+img{max-width:100%;display:block;}a{color:inherit;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 18px;font-family:var(--sans);}
+h2.display{font-family:var(--serif);font-size:clamp(2.2rem,3.8vw,3.2rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.2;}
+h3.lead{font-family:var(--serif);font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:300;line-height:1.3;color:var(--espresso);margin:0 0 20px;letter-spacing:.01em;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:22px 0;}
+.rule.center{margin:22px auto;}
+.small{font-size:15px;line-height:1.82;color:var(--ink);}
+section{padding:clamp(56px,7vw,96px) 0;}
+.wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+.center{text-align:center;}
+#loading{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:16px;color:var(--gold);}
+#loading .spinner{width:32px;height:32px;border:1px solid var(--sand-deep);border-top-color:var(--gold);border-radius:50%;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+#error{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:12px;text-align:center;padding:40px;}
+#error h2{font-size:2rem;color:var(--espresso);}
+#picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
+#picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
+#picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
+#picker-btn:hover{background:var(--gold);color:#fff;}
+#page{display:none;}
+nav{position:sticky;top:0;z-index:50;background:rgba(251,248,243,.94);backdrop-filter:blur(8px);border-bottom:1px solid rgba(139,105,20,.18);}
+nav ul{list-style:none;margin:0;padding:16px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 28px;}
+nav a{text-decoration:none;font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink);font-weight:500;padding:3px 0;border-bottom:1px solid transparent;transition:.25s;font-family:var(--sans);}
+nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
+.hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
+.hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
+.hero-name{font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-tag{font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
+.hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
+.hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
+.change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
+.hero-photo{min-height:88vh;height:100%;width:100%;object-fit:cover;display:block;}
+.photo-strip{display:flex;gap:10px;overflow-x:auto;padding:0 32px 40px;scrollbar-width:none;background:var(--ivory);}
+.photo-strip::-webkit-scrollbar{display:none;}
+.photo-strip figure{margin:0;flex:0 0 clamp(200px,24vw,300px);aspect-ratio:4/3;overflow:hidden;background:var(--sand);}
+.photo-strip figure img{width:100%;height:100%;object-fit:cover;}
+.split{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:clamp(36px,5vw,72px);}
+.sand-band{background:var(--sand);}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid rgba(176,141,87,.3);margin-bottom:44px;}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:14px 28px 12px;font-family:var(--sans);font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#8A8175;cursor:pointer;margin-bottom:-1px;transition:.2s;}
+.tab-btn.active{border-bottom-color:var(--gold);color:var(--espresso);}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.vcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.vcard img{width:100%;height:200px;object-fit:cover;display:block;}
+.vcard .vbody{padding:22px 22px 26px;flex:1;}
+.vcard h4{font-size:22px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.vcard .vtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.vcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:4px 0 0;font-family:var(--sans);}
+.pkg-hint{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 16px;}
+.pkglist{border-top:1px solid rgba(176,141,87,.25);margin-top:44px;}
+.pkgitem{border-bottom:1px solid rgba(176,141,87,.25);}
+.pkgtrigger{width:100%;background:none;border:none;padding:22px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;cursor:pointer;text-align:left;gap:20px;font-family:var(--sans);}
+.pkgtrigger:hover .pname{color:var(--gold);}
+.pname{font-size:1rem;font-weight:500;color:var(--espresso);line-height:1.2;display:block;transition:.2s;font-family:var(--sans);}
+.phint{font-size:15px;color:#8A8175;margin-top:4px;display:block;font-style:italic;}
+.pprice{font-size:16px;color:var(--gold);font-weight:500;text-align:right;white-space:nowrap;padding-top:4px;}
+.parrow{color:var(--gold-soft);font-size:.75rem;transition:transform .2s;padding-top:7px;flex-shrink:0;}
+.pkgtrigger[aria-expanded="true"] .parrow{transform:rotate(180deg);}
+.pkgbody{display:none;padding:0 0 28px;}
+.pkgbody .pkgpic{width:100%;max-width:440px;height:auto;display:block;margin:4px 0 18px;border:1px solid var(--sand-deep);}
+.pkgbody.open{display:block;}
+.pkgfull{font-size:14px;color:#5A544C;margin:0 0 14px;font-style:italic;}
+.pkghi-line{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid rgba(139,105,20,.15);font-size:14px;color:var(--ink);line-height:1.5;font-family:var(--sans);}
+.pkghi-line::before{content:"·";color:var(--gold);flex-shrink:0;}
+.dgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px;}
+.dcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.dcard img{width:100%;height:180px;object-fit:cover;}
+.dcard .dbody{padding:20px 22px 24px;}
+.dcard h4{font-size:20px;color:var(--espresso);margin:0;font-weight:400;font-family:var(--sans);}
+.dcard .dtag{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:7px 0 10px;}
+.dcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.barsbox{background:var(--espresso);color:var(--sand);padding:44px 36px;text-align:center;margin-top:36px;}
+.barsbox h4{font-style:italic;font-size:clamp(1.4rem,2.2vw,1.8rem);color:var(--gold-soft);margin:0 0 10px;font-weight:300;}
+.bars-list{display:flex;flex-wrap:wrap;justify-content:center;gap:20px 36px;margin-top:24px;padding:0;list-style:none;}
+.bars-list li{text-align:center;}
+.bars-list .bname{font-size:16px;color:var(--ivory);display:block;font-family:var(--sans);}
+.bars-list .bdesc{font-size:14px;color:var(--gold-soft);font-style:italic;display:block;margin-top:3px;}
+.pool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.pool-card{background:var(--sand);padding:30px 26px;}
+.pool-card h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.pool-card p{font-size:14px;line-height:1.72;color:var(--ink);margin:0;font-family:var(--sans);}
+.room-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;margin-top:44px;}
+.rcard{background:#fff;border:1px solid rgba(176,141,87,.22);overflow:hidden;display:flex;flex-direction:column;}
+.rcard img{width:100%;height:196px;object-fit:cover;display:block;transition:transform .6s ease;}
+.rcard:hover img{transform:scale(1.03);}
+.rcard .rbody{padding:22px 22px 26px;flex:1;}
+.rmeta{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin:0 0 8px;}
+.rcard h4{font-size:20px;color:var(--espresso);margin:0 0 10px;font-weight:400;font-family:var(--sans);}
+.rcard p{font-size:14px;line-height:1.7;color:var(--ink);margin:0;font-family:var(--sans);}
+.rpills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
+.rpill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;border:1px solid rgba(176,141,87,.4);padding:5px 10px;color:var(--ink);}
+.club-block{background:var(--ivory);border-left:3px solid var(--gold);padding:36px 40px;margin-top:44px;}
+.club-block h3{font-size:clamp(1.3rem,2vw,1.7rem);color:var(--espresso);margin:0 0 12px;font-weight:400;}
+.club-block p{font-size:15px;line-height:1.78;color:var(--ink);margin:0;font-family:var(--sans);}
+.act-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,5vw,64px);margin-top:44px;}
+.act-col h4{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;}
+.act-list{list-style:none;padding:0;margin:0;}
+.act-list li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(139,105,20,.2);font-size:14px;line-height:1.5;color:var(--ink);font-family:var(--sans);}
+.act-list li::before{color:var(--gold);flex-shrink:0;font-size:14px;padding-top:2px;}
+.act-list.incl li::before{content:"✓";}
+.act-list.extra li::before{content:"+";}
+.ess-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:rgba(176,141,87,.25);margin-top:44px;}
+.ess-block{background:var(--sand);padding:34px 28px;}
+.ess-block h4{font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 16px;font-weight:500;}
+.ess-block ul{list-style:none;padding:0;margin:0;}
+.ess-block li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(139,105,20,.18);font-size:14px;color:var(--ink);line-height:1.4;font-family:var(--sans);}
+.ess-block .lbl{color:var(--gold-soft);min-width:88px;flex-shrink:0;font-size:13px;letter-spacing:.06em;}
+.ess-block p{font-size:14px;line-height:1.75;color:var(--ink);margin:0;font-family:var(--sans);}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px;}
+.gallery figure{margin:0;overflow:hidden;aspect-ratio:4/5;background:var(--sand);}
+.gallery figure img{width:100%;height:100%;object-fit:cover;transition:transform .6s ease;display:block;}
+.gallery figure:hover img{transform:scale(1.04);}
+.contact-band{background:var(--espresso);padding:clamp(56px,7vw,96px) 0;}
+.contact-band .eyebrow{color:var(--gold-soft);}
+.contact-band h2{color:var(--ivory);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;margin:0 0 16px;}
+.contact-band p{color:#EDE4D6;font-size:17px;max-width:46ch;margin:0;}
+.contact-band .btn{display:inline-block;font-size:12px;letter-spacing:.26em;text-transform:uppercase;text-decoration:none;border:1px solid var(--gold-soft);padding:16px 36px;color:var(--gold-soft);margin-top:28px;transition:.3s;font-family:var(--sans);}
+.contact-band .btn:hover{background:var(--gold);border-color:var(--gold);color:#fff;}
+footer{background:var(--sand);padding:32px 24px;text-align:center;}
+footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);}
+.empty{font-style:italic;color:var(--gold-soft);font-size:17px;}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;}
+  .hero-copy{padding:56px 28px 44px;text-align:center;align-items:center;}
+  .hero-photo{min-height:60vh;}
+  .hero-chips{justify-content:center;}
+  .vgrid,.dgrid{grid-template-columns:1fr 1fr;}
+  .room-grid{grid-template-columns:1fr 1fr;}
+  .act-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+  .split{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .vgrid,.dgrid,.room-grid{grid-template-columns:1fr;}
+  .gallery{grid-template-columns:1fr 1fr;}
+}
+/* ══════════ AGENT: QUOTE BUILDER ══════════ */
+.quote-link{color:var(--gold)!important;border-bottom-color:var(--gold)!important;}
+#qb-open{position:fixed;right:22px;bottom:22px;z-index:900;background:var(--espresso);color:#F6EFE2;border:1px solid var(--gold);padding:15px 26px;font-family:var(--sans);font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;cursor:pointer;display:none;box-shadow:0 8px 30px rgba(42,36,31,.22);}
+#qb-open:hover{background:var(--gold);color:#fff;}
+#qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
+#qb.on{display:block;}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
+.qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
+.qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
+.qb-f{display:flex;flex-direction:column;gap:6px;}
+.qb-f.wide{grid-column:1/-1;}
+.qb-f label{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);font-weight:500;}
+.qb-f input,.qb-f select,.qb-f textarea{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);width:100%;}
+.qb-f textarea{min-height:96px;line-height:1.6;resize:vertical;}
+.qb-f input:focus,.qb-f select:focus,.qb-f textarea:focus{outline:none;border-color:var(--gold);}
+.qb-h{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);font-weight:500;margin:34px 0 6px;padding-top:22px;border-top:1px solid var(--sand-deep);}
+.qb-note{font-size:14px;color:#7C7368;font-style:italic;margin:0 0 14px;}
+.qb-rooms{width:100%;border-collapse:collapse;font-size:15px;}
+.qb-rooms th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.qb-rooms td{padding:4px 8px 4px 0;vertical-align:middle;border-top:1px solid rgba(228,216,198,.6);}
+.qb-rooms td:first-child{max-width:230px;line-height:1.35;padding-right:16px;}
+.qb-rooms input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:74px;}
+.qb-rooms input.on{border-color:var(--gold);background:#FFFDF8;}
+.airtoggle{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:15px;color:var(--ink);cursor:pointer;}
+.airtoggle input{accent-color:var(--gold);width:17px;height:17px;}
+.airrows{width:100%;border-collapse:collapse;font-size:15px;}
+.airrows th{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;text-align:left;padding:0 8px 9px 0;}
+.airrows td{padding:4px 8px 4px 0;border-top:1px solid rgba(228,216,198,.6);vertical-align:middle;}
+.airrows input{font-family:var(--sans);font-size:15px;padding:7px 9px;border:1px solid var(--sand-deep);background:#fff;width:100%;min-width:70px;}
+.airrows .look{background:var(--espresso);color:#F6EFE2;border:0;padding:7px 12px;font-family:var(--sans);font-size:11px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;}
+.airrows .look:hover{background:var(--gold);}
+.airrows .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;border-radius:3px;cursor:pointer;font-family:var(--sans);}
+.airmsg{font-size:13px;color:#6E665C;padding-left:2px;}
+.airmsg.ok{color:#2F6B4F;} .airmsg.bad{color:#B4553F;}
+/* quote output */
+.flighttbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--sand-deep);margin-top:26px;}
+/* the flights table is short — it does not need a full section's worth of air beneath it */
+#quote-page section.flightsec{padding-bottom:clamp(14px,1.6vw,22px);}
+/* the section after flights starts closer too */
+#quote-page section.flightsec + section{padding-top:clamp(26px,3vw,42px);}
+.flighttbl th{background:var(--espresso);color:#FBF8F3;font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;padding:14px 16px;text-align:left;}
+.flighttbl td{padding:14px 16px;border-top:1px solid #EFE7DA;font-size:15.5px;color:var(--ink);}
+.flighttbl td.city{font-family:var(--serif);font-size:1.15rem;color:var(--espresso);}
+.flighttbl tr.leg td{border-top:1px dotted #E4D8C6;color:#6E665C;}
+.flighttbl tr.leg td:first-child{border-top:0;}
+@media(max-width:700px){.flighttbl{display:block;overflow-x:auto;}}
+.qb-addrow{display:flex;gap:10px;align-items:center;margin:0 0 16px;flex-wrap:wrap;}
+#q-room-add{font-family:var(--sans);font-size:15px;padding:10px 12px;border:1px solid var(--sand-deep);background:#fff;color:var(--ink);min-width:260px;flex:1;}
+#q-room-add:focus{outline:none;border-color:var(--gold);}
+.qb-rooms .rx{background:none;border:1px solid var(--sand-deep);color:#A08F7A;width:30px;height:30px;line-height:1;border-radius:3px;cursor:pointer;font-size:16px;font-family:var(--sans);}
+.qb-rooms .rx:hover{border-color:#B4553F;color:#B4553F;}
+.qb-rooms .none{color:#7C7368;font-size:14px;padding:14px 0;}
+.qb-toggles{display:flex;flex-wrap:wrap;gap:10px 24px;margin-top:6px;}
+.qb-toggles label{display:flex;align-items:center;gap:9px;font-size:14.5px;color:var(--ink);cursor:pointer;}
+.qb-toggles input{accent-color:var(--gold);width:16px;height:16px;}
+.qb-bar{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px;padding-top:24px;border-top:1px solid var(--sand-deep);align-items:center;}
+.qb-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;padding:14px 30px;border:1px solid var(--gold);background:transparent;color:var(--espresso);cursor:pointer;transition:.25s;}
+.qb-btn:hover{background:var(--gold);color:#fff;}
+.qb-btn.solid{background:var(--espresso);color:#F6EFE2;border-color:var(--espresso);}
+.qb-btn.solid:hover{background:var(--gold);border-color:var(--gold);}
+.qb-btn.ghost{border-color:var(--sand-deep);color:#7C7368;}
+.qb-msg{font-size:14px;color:var(--gold);font-style:italic;}
 
-:root{--black:#1E1A14;--soft:#4C463C;--mute:#8A8172;--gold:#B8975A;--gold-deep:#95763E;
- --cream:#FAF7F2;--cream-2:#F3EDE3;--line:#E4DACA;--white:#fff;--sea:#2C5A5F}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
- --black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}}
-:root[data-theme="dark"]{--black:#F2EDE4;--soft:#CFC6B7;--mute:#9A9284;--gold:#CBAA6C;--gold-deep:#E0C489;
- --cream:#15130F;--cream-2:#1D1A15;--line:#332E26;--white:#1D1A15;--sea:#7FB3B6}
-*{box-sizing:border-box}
-body{margin:0;background:var(--cream);color:var(--black);font-family:"Jost",system-ui,sans-serif;
- font-weight:300;font-size:16.5px;line-height:1.68;-webkit-font-smoothing:antialiased}
-img{display:block;max-width:100%}
-.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
-.eyebrow{font-weight:400;font-size:.68rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin:0}
-.eyebrow.light{color:#DFC48B}
-.hero{position:relative;min-height:min(74vh,600px);display:grid;align-items:end;background:#0d0c0a;isolation:isolate}
-.hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.hero::after{content:"";position:absolute;inset:0;z-index:-1;
- background:linear-gradient(180deg,rgba(12,11,9,.15),rgba(12,11,9,.32) 48%,rgba(12,11,9,.84))}
-.hero .wrap{width:100%;padding-top:clamp(56px,11vh,110px);padding-bottom:clamp(28px,6vh,56px)}
-.hero h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.4rem,6.4vw,4.2rem);
- line-height:1.03;margin:.16em 0 .12em;color:#FBF7F0;text-wrap:balance}
-.hero .tag{font-family:"Cormorant Garamond",Georgia,serif;font-style:italic;color:#EDE2CE;
- font-size:clamp(1.1rem,2.4vw,1.6rem);margin:0 0 .9rem;max-width:30ch}
-.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:0;padding:0;list-style:none}
-.chips li{font-size:.76rem;letter-spacing:.05em;color:#F2E9D8;border:1px solid rgba(223,196,139,.45);
- border-radius:999px;padding:.26rem .68rem}
-section{padding:clamp(44px,6.5vw,80px) 0}
-section+section{border-top:1px solid var(--line)}
-h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);
- line-height:1.1;margin:.25em 0 .5em;text-wrap:balance}
-.lede{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(1.18rem,2.3vw,1.48rem);
- line-height:1.5;color:var(--soft);max-width:34ch}
-.prose p{max-width:66ch;color:var(--soft);margin:0 0 1em}
-.split{display:grid;gap:clamp(22px,4vw,50px);grid-template-columns:1fr}
-@media(min-width:860px){.split{grid-template-columns:1fr 1.35fr;align-items:start}}
-.subhead{font-weight:500;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--sea);
- margin:2.4rem 0 1rem;display:flex;align-items:center;gap:.85rem}
-.subhead::after{content:"";flex:1;height:1px;background:var(--line)}
-.grid{display:grid;gap:clamp(16px,2.2vw,24px);grid-template-columns:repeat(auto-fill,minmax(262px,1fr))}
-.card{background:var(--white);border:1px solid var(--line);border-radius:2px;overflow:hidden;
- display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(30,26,20,.05),0 12px 30px -20px rgba(30,26,20,.25)}
-.shot{height:196px;flex:0 0 196px;background:var(--cream-2);overflow:hidden}
-.shot img{width:100%;height:196px;object-fit:cover;transition:transform .6s ease}
-.card:hover .shot img{transform:scale(1.04)}
-.cbody{padding:1rem 1.1rem 1.25rem}
-.cbody h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.26rem;margin:0 0 .25rem}
-.cbody p{margin:0;font-size:.9rem;color:var(--soft)}
-.meta{font-size:.68rem!important;letter-spacing:.11em;text-transform:uppercase;color:var(--gold-deep)!important;
- margin-bottom:.5rem!important}
-.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:2px;background:var(--white)}
-table{border-collapse:collapse;width:100%;min-width:560px;font-size:.92rem}
-caption{text-align:left;padding:.95rem 1.05rem;color:var(--mute);font-size:.79rem}
-th,td{padding:.8rem 1.05rem;text-align:left;border-top:1px solid var(--line);color:var(--soft)}
-thead th{border-top:0;font-weight:500;font-size:.67rem;letter-spacing:.17em;text-transform:uppercase;color:var(--mute)}
-tbody th{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.18rem;font-weight:500;color:var(--black)}
-.num{font-variant-numeric:tabular-nums;color:var(--black)}
-.perks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
-.perks li{padding:.68rem 0 .68rem 1.45rem;border-bottom:1px solid var(--line);position:relative;
- color:var(--soft);font-size:.92rem}
-.perks li::before{content:"";position:absolute;left:0;top:1.16rem;width:6px;height:6px;
- border:1px solid var(--gold);transform:rotate(45deg)}
-.dining{column-count:2;column-gap:clamp(26px,4.5vw,56px)}
-@media(max-width:640px){.dining{column-count:1}}
-.dish{break-inside:avoid;padding:0 0 1rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
-.dish h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:1.2rem;margin:0}
-.cuisine{font-size:.63rem!important;letter-spacing:.17em;text-transform:uppercase;
- color:var(--gold-deep)!important;margin:.1rem 0 .35rem!important}
-.dish p{margin:0;font-size:.89rem;color:var(--soft)}
-.gal{display:grid;gap:13px;grid-template-columns:repeat(auto-fill,minmax(236px,1fr))}
-.gal figure{margin:0}
-.gal img{width:100%;height:184px;object-fit:cover;border:1px solid var(--line);border-radius:2px}
-.gal figcaption{font-size:.75rem;color:var(--mute);padding-top:.42rem}
-.note{background:var(--cream-2);border-left:2px solid var(--gold);padding:1rem 1.2rem;margin:1.5rem 0 0;max-width:66ch}
-.note p{margin:0 0 .55rem;font-size:.9rem;color:var(--soft)}
-.note p:last-child{margin:0}
-footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute);font-size:.81rem}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ══════════ QUOTE OUTPUT ══════════ */
+#quote-page{display:none;}
+.q-hero{display:grid;grid-template-columns:1fr 1fr;min-height:78vh;}
+.q-hero .c{display:flex;flex-direction:column;justify-content:center;padding:clamp(44px,6vw,86px);background:var(--ivory);}
+.q-hero img{width:100%;height:100%;object-fit:cover;min-height:340px;}
+.q-name{font-family:var(--serif);font-size:clamp(2.4rem,5.2vw,4.3rem);font-weight:300;line-height:1.06;letter-spacing:.02em;color:var(--espresso);margin:0 0 16px;}
+.q-sub{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.15rem,2vw,1.5rem);margin:0 0 26px;}
+.q-when{font-size:12.5px;letter-spacing:.3em;text-transform:uppercase;color:var(--ink);margin:0 0 5px;}
+.fact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));border-top:1px solid var(--sand-deep);border-left:1px solid var(--sand-deep);}
+.fact-grid div{border-right:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:28px 24px;}
+.fact-grid .k{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 9px;}
+.fact-grid .v{font-size:23px;font-weight:300;color:var(--espresso);margin:0;line-height:1.35;}
+.sel-band{background:var(--espresso);color:#EDE4D6;}
+.sel-band .eyebrow{color:var(--gold-soft);}
+.sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
+.sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
+.sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
+.pcard img{width:100%;height:190px;object-fit:cover;}
+.pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
+.pcard h4{font-family:var(--serif);font-size:1.28rem;font-weight:400;color:var(--espresso);margin:0 0 8px;line-height:1.28;}
+.pcard .meta{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 12px;}
+.pcard .desc{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0 0 16px;}
+.pcard .rows{margin-top:auto;border-top:1px solid var(--sand);padding-top:14px;}
+.pcard .row{display:flex;justify-content:space-between;gap:14px;font-size:15.5px;padding:5px 0;}
+.pcard .row span:first-child{color:#7C7368;}
+.pcard .row span:last-child{color:var(--espresso);font-weight:500;}
+.pcard .row.lead span:last-child{color:var(--gold);font-size:19px;}
+.mathbox{border:1px solid var(--gold-soft);background:#FFFDF8;padding:28px 32px;max-width:640px;margin-top:34px;}
+.mathbox h4{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 14px;font-weight:500;}
+.mathbox p{font-size:17px;line-height:1.8;margin:0 0 8px;color:var(--ink);}
+.stay{list-style:none;margin:18px 0 0;padding:0;}
+.stay li{display:flex;justify-content:space-between;align-items:baseline;gap:20px;padding:11px 0;border-bottom:1px solid var(--sand-deep);}
+.stay li:last-child{border-bottom:0;}
+.stay .n{font-size:16px;color:#5A544C;}
+.stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
+/* a single priced room reads better side by side than as one wide card */
+.price-grid.solo{display:block;}
+.price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
+.price-grid.solo .pcard img{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
+.price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
+.price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
+.price-grid.solo .pcard .b .mathbox p{font-size:14px;line-height:1.55;margin:0 0 4px;}
+.price-grid.solo .pcard .b .stay{margin-top:10px;}
+.price-grid.solo .pcard .b .stay li{padding:6px 0;gap:14px;}
+.price-grid.solo .pcard .b .stay .n{font-size:13.5px;}
+.price-grid.solo .pcard .b .stay .v{font-size:1.1rem;}
+.price-grid.solo .pcard .b .notquote{margin-top:12px;padding-top:10px;font-size:12.5px;line-height:1.55;}
+@media(max-width:760px){.price-grid.solo .pcard{grid-template-columns:1fr;}
+  .price-grid.solo .pcard img{min-height:220px;}}
+ul.pricepts{list-style:none;margin:0 0 34px;padding:0;max-width:70ch;}
+ul.pricepts li{position:relative;padding:0 0 12px 22px;font-size:16px;line-height:1.65;color:var(--ink);}
+ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px;height:6px;
+  border:1px solid var(--gold);transform:rotate(45deg);}
+ul.pricepts b{font-weight:500;color:var(--espresso);}
+.pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
+.pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
+.pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
+.pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
+.pkgprice .legs span{white-space:nowrap;}
+.pkgprice .hr{width:44px;height:1px;background:var(--gold);margin:0 auto 26px;border:0;}
+.pkgprice .covers{font-size:17px;line-height:1.7;color:#EDE4D6;max-width:52ch;margin:0 auto;}
+.notquote{border-top:1px solid var(--sand-deep);margin-top:20px;padding-top:16px;font-size:14.5px;line-height:1.7;color:#6E665C;}
+.mathbox .big{font-family:var(--serif);font-size:23px;color:var(--espresso);}
+.note-box{border:1px solid var(--sand-deep);background:#fff;padding:28px 32px;margin-top:34px;}
+.note-box p{font-size:16.5px;line-height:1.78;margin:0 0 12px;color:var(--ink);}
+.note-box p:last-child{margin:0;}
+.dinelist{column-count:2;column-gap:52px;}
+.dinelist .d{break-inside:avoid;padding:0 0 18px;margin:0 0 18px;border-bottom:1px solid var(--sand-deep);}
+.dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
+.dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
+.dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
+.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+.pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
+.menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.menulink:hover{color:var(--espresso);border-color:var(--espresso);}
+.docbtn{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:var(--espresso);border:1px solid var(--gold);padding:11px 20px;text-decoration:none;transition:.25s;margin:0 10px 10px 0;}
+.docbtn:hover{background:var(--gold);color:#fff;}
+.docbtn .ic{font-size:13px;color:var(--gold);}
+.docbtn:hover .ic{color:#fff;}
+.docrow{margin:0 0 26px;}
+.cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
+.cmp{border-collapse:collapse;width:100%;min-width:860px;}
+.cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
+.cmp thead th:first-child{border-left:0;}
+.cmp .pn{display:block;font-family:var(--serif);font-size:1.15rem;font-weight:400;line-height:1.25;}
+.cmp thead th.withpic{padding:0 0 18px;vertical-align:top;}
+.cmp .cmppic{width:100%;height:130px;object-fit:cover;display:block;margin:0 0 14px;}
+.cmp thead th.withpic .pn,.cmp thead th.withpic .pc{padding:0 14px;}
+@media(max-width:700px){.cmp .cmppic{height:100px;}}
+.cmp .pc{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AD82;margin-top:6px;}
+.cmp tr.grp td{background:var(--sand);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);font-weight:500;padding:13px 15px;border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);}
+.cmp tbody th{text-align:left;font-weight:400;font-size:14.5px;color:var(--ink);padding:11px 16px;border-bottom:1px solid #EFE7DA;width:34%;position:sticky;left:0;background:#fff;}
+.cmp tbody td{text-align:center;padding:11px 13px;border-bottom:1px solid #EFE7DA;border-left:1px solid #F4EEE4;font-size:14px;}
+.cmp .tk{color:var(--gold);font-size:18px;}
+.cmp .dh{color:#CFC6B8;}
+.cmp td.v{color:var(--espresso);font-size:13px;line-height:1.4;}
+.cmpkey{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px;font-size:13.5px;color:#6E665C;}
+.cmpkey b{color:var(--gold);font-weight:400;}
+.amybar{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(38px,4.5vw,56px) 32px;text-align:center;}
+.amybar .eyebrow{margin-bottom:14px;}
+.amybar p{font-size:17.5px;line-height:1.7;color:var(--ink);max-width:58ch;margin:0 auto 26px;}
+.qnav{position:sticky;top:0;z-index:60;background:var(--espresso);}
+.qnav .inner{display:flex;gap:28px;justify-content:center;overflow-x:auto;padding:0 clamp(20px,4vw,40px);scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.qnav .inner>a:first-child{margin-left:auto;}
+.qnav .inner>a:last-child{margin-right:auto;}
+.qnav .inner::-webkit-scrollbar{display:none;}
+.qnav a{flex:0 0 auto;padding:16px 0;color:#D8CCB8;text-decoration:none;font-family:var(--sans);font-size:10px;letter-spacing:.22em;text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:.2s;}
+.qnav a:hover,.qnav a.on{color:#FBF8F3;border-bottom-color:var(--gold);}
+#quote-page section{scroll-margin-top:62px;}
+@media print{.qnav{display:none!important;}}
+.offers{background:var(--sand);border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);padding:clamp(34px,4.5vw,52px) 0;}
+.offer{max-width:64ch;margin:0 auto;text-align:center;}
+.offer + .offer{margin-top:30px;padding-top:30px;border-top:1px solid var(--sand-deep);}
+.offer .tag{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 10px;font-weight:500;}
+.offer h3{font-family:var(--serif);font-size:clamp(1.5rem,2.8vw,2rem);font-weight:400;color:var(--espresso);margin:0 0 10px;line-height:1.25;}
+.offer p{font-size:16.5px;line-height:1.72;color:var(--ink);margin:0;}
+.offer a.more{display:inline-block;margin-top:12px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
+.offer a.more:hover{color:var(--espresso);border-color:var(--espresso);}
+.realwed{background:var(--espresso);color:#EDE4D6;text-align:center;}
+.realwed .eyebrow{color:var(--gold-soft);}
+.realwed h2.display{color:#FBF8F3;}
+.realwed .rule{margin-left:auto;margin-right:auto;}
+.realwed p{font-size:18px;line-height:1.75;color:#EDE4D6;max-width:56ch;margin:0 auto 28px;}
+.realwed p.cta{max-width:none;margin:0;}
+.realwed .names{font-family:var(--serif);font-style:italic;color:var(--gold-soft);font-size:clamp(1.4rem,2.6vw,1.9rem);max-width:none;margin:0 0 18px;}
+.herobtn{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:14px 30px;text-decoration:none;font-family:var(--sans);font-weight:500;transition:.25s;}
+.herobtn:hover{background:transparent;color:var(--espresso);}
+.amybtn{display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#fff;background:var(--gold);border:1px solid var(--gold);padding:17px 40px;text-decoration:none;transition:.25s;font-family:var(--sans);font-weight:500;}
+.amybtn:hover{background:transparent;color:var(--espresso);}
+.pkgrow{background:#fff;border:1px solid var(--sand-deep);display:grid;grid-template-columns:320px 1fr;margin:0 0 20px;}
+.pkgrow.haspic{grid-template-columns:300px minmax(200px,1fr) minmax(320px,1.5fr);}
+.pkgrow .pic{width:100%;height:100%;min-height:230px;object-fit:cover;}
+@media(max-width:1000px){.pkgrow.haspic{grid-template-columns:1fr;}.pkgrow .pic{min-height:220px;}}
+.pkgrow.solo{grid-template-columns:1fr;}
+.pkgrow .l{padding:34px 36px;background:#FFFDF8;border-right:1px solid var(--sand-deep);}
+.pkgrow.solo .l{border-right:0;}
+.pkgrow .l h4{font-family:var(--serif);font-size:1.6rem;font-weight:400;color:var(--espresso);margin:0 0 12px;line-height:1.22;}
+.pkgrow .l .price{font-family:var(--serif);font-size:1.35rem;color:var(--gold);margin:0 0 14px;line-height:1.4;}
+.pkgrow .l .sum{font-size:15px;line-height:1.66;color:#5A544C;margin:0;}
+.pkgrow .r{padding:34px 36px;}
+.pkgrow .r .lbl{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin:0 0 18px;font-weight:500;}
+.pkgrow .incl{column-count:2;column-gap:40px;}
+.pkgrow .incl p{break-inside:avoid;font-size:15.5px;line-height:1.6;color:#4A423A;margin:0 0 10px;padding-left:18px;text-indent:-18px;}
+@media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
+.barlist{column-count:3;column-gap:44px;margin-top:26px;}
+.barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
+.barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
+@media(max-width:900px){.barlist{column-count:2;}}
+@media(max-width:600px){.barlist{column-count:1;}}
+.ga-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:24px;}
+.ga-card{background:#fff;border:1px solid var(--sand-deep);padding:26px 26px 28px;}
+.ga-card .i{font-size:22px;margin:0 0 12px;}
+.ga-card h4{font-family:var(--serif);font-size:1.12rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.ga-card p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+details.cmptuck{border:0;text-align:center;}
+details.cmptuck>summary{display:inline-block;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:16px 40px;font-family:var(--sans);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;cursor:pointer;transition:.25s;list-style:none;}
+details.cmptuck>summary::-webkit-details-marker{display:none;}
+details.cmptuck>summary::after{content:"  +";}
+details.cmptuck[open]>summary::after{content:"  \2013";}
+details.cmptuck>summary:hover{background:transparent;color:var(--espresso);}
+details.cmptuck[open]>summary{margin-bottom:30px;}
+details.cmptuck .tb{text-align:left;padding:0;}
+.tuck{border-top:1px solid var(--sand-deep);border-bottom:1px solid var(--sand-deep);margin-top:30px;}
+.tuck summary{cursor:pointer;padding:20px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);list-style:none;}
+.tuck summary::-webkit-details-marker{display:none;}
+.tuck summary::after{content:" +";}
+.tuck[open] summary::after{content:" –";}
+.tuck .tb{padding:0 0 26px;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(228px,1fr));gap:32px;}
+.steps .n{font-family:var(--serif);font-size:2.5rem;font-weight:300;color:var(--gold-soft);line-height:1;margin:0 0 12px;}
+.steps h4{font-family:var(--serif);font-size:1.14rem;font-weight:500;color:var(--espresso);margin:0 0 9px;}
+.steps p{font-size:15.5px;line-height:1.68;color:#5A544C;margin:0;}
+.free-box{border:1px solid var(--gold-soft);background:#FFFDF8;padding:26px 30px;margin-top:34px;}
+.free-box p{font-size:16.5px;line-height:1.78;margin:0;color:var(--ink);}
+.q-close{display:grid;grid-template-columns:1fr 1fr;align-items:center;}
+.q-close .c{padding:clamp(44px,6vw,80px);}
+.q-close img{width:100%;height:100%;object-fit:cover;min-height:300px;}
+.sig{font-family:var(--serif);font-size:1.7rem;font-style:italic;color:var(--gold);margin:26px 0 0;}
+.dl-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(258px,1fr));gap:16px;}
+.dl-list a{display:flex;align-items:center;gap:14px;text-decoration:none;border:1px solid var(--sand-deep);background:#fff;padding:20px 22px;transition:.25s;color:var(--ink);}
+.dl-list a:hover{border-color:var(--gold);background:#FFFDF8;}
+.dl-list .ic{color:var(--gold);font-size:19px;flex-shrink:0;}
+.dl-list .lb{font-size:15px;line-height:1.35;}
+@media(max-width:860px){.q-hero,.q-close{grid-template-columns:1fr;}.dinelist{column-count:1;}}
+@media print{
+  #qb,#qb-open,#q-back,nav,.change-link{display:none!important;}
+  body{font-size:15px;}
+  section{padding:26px 0;page-break-inside:avoid;}
+  .q-hero{min-height:auto;}
+  .pcard,.ga-card,.mathbox,.note-box,.dinelist .d{page-break-inside:avoid;}
+}
 
-/* ---- audience tabs ---- */
-.tabwrap{margin-top:26px}
-.tabbar{display:flex;gap:0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.tabbtn{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
-  font-family:"Jost",system-ui,sans-serif;font-size:.72rem;font-weight:500;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--mute);padding:14px 22px 12px;cursor:pointer;transition:.15s}
-.tabbtn:hover{color:var(--ink)}
-.tabbtn[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
-.tabpanel{padding-top:34px}
-.tabpanel[hidden]{display:none}
-.tabnote{font-size:.82rem;color:var(--mute);margin-top:6px;letter-spacing:.02em}
-@media(max-width:640px){.tabbtn{padding:12px 14px 10px;font-size:.66rem;letter-spacing:.12em}}
+.pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
+.pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
 
-
-</style>
-</head>
-<body>
-
-<header class="hero">
-  <img src="https://alg.widen.net/content/wb7wclqf8l/webp/DRBMI-EXT-Aerial-AP.webp" alt="Dreams Bahia Mita Surf &amp; Spa Resort">
-  <div class="wrap">
-    <p class="eyebrow light">Riviera Nayarit, Mexico</p>
-    <h1>Dreams Bahia Mita Surf &amp; Spa Resort</h1>
-    <p class="tag">Discover Dreams Bahia Mita with stylish suites, a family-favorite waterpark, oceanfront infinity pool and surf-inspired activities.</p>
-    <ul class="chips"><li>421 rooms</li><li>16 categories</li><li>14 restaurants</li><li>All ages</li><li>Preferred Club</li></ul>
-  </div>
-</header>
-
-<main>
-<section id="overview"><div class="wrap split">
-  <div><p class="eyebrow">The resort</p><h2>Dreams Bahia Mita Surf &amp; Spa Resort</h2></div>
-  <div class="prose"><p>Dreams Bahia Mita Surf &amp; Spa Resort marries golden sand beaches and mountaintop views with luxurious suites and daily activities for a family-friendly, all-inclusive vacation. Designed by architect Sordo Madaleno, this eco-friendly resort sits on Banderas Bay, about 50 minutes from Puerto Vallarta and 35 minutes from Nuevo Vallarta. All 421 suites offer tropical or ocean views, modern décor, and refined amenities like a daily refreshed mini-bar and 24-hour room service. The Unlimited-Luxury® program means everything is included — no wristbands or gratuities required — with activities from kayaking and surf lessons to golf, plus a Marietas Island-inspired Secrets Spa, eight dining venues and six bars. Guests also have access to the adjoining adults-only Secrets Bahia Mita, which adds flexible wedding venue options.</p></div>
-</div></section>
-
-<section id="rooms"><div class="wrap">
-  <p class="eyebrow">Accommodation</p><h2>16 room categories</h2>
-  <div class="grid">
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Junior Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Tropical View</h3><p>516 sq ft junior suite with a separate living area and sofa bed, overlooking the tropical grounds. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ksg8hfbgdk/webp/DRBMI-JR-Waterpark-View-KING-CP.webp" alt="Junior Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Waterpark View</h3><p>516 sq ft junior suite overlooking the resort's waterpark, with sofa bed — a strong pick for families. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ahqejsh1jl/webp/DRBMI-JR-SO-TV-2A-CB.webp" alt="Junior Suite Tropical Swim Out" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Tropical Swim Out</h3><p>516 sq ft junior suite with semi-private SWIM-OUT pool access directly from your terrace. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ecji2xd8dv/webp/DRBMI-PC-JR-OF-KING-1A-CB.webp" alt="Junior Suite Ocean Front" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Junior Suite Ocean Front</h3><p>516 sq ft oceanfront junior suite with a full bathroom, double vanity and living area. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Family Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Family Suite Tropical View</h3><p>1,032 sq ft family suite connecting two Junior Suite Tropical View rooms, sleeping up to 7. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/fee3cxvzer/webp/DRBMI-PC-JR-TV-KING-CP.webp" alt="Preferred Club Junior Suite Tropical View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Tropical View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, overlooking the tropical grounds and the mountains behind the resort. Located on the eighth floor near the Preferred Club Sky Bar. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/7tdfv8zmls/webp/DRBMI-PC-JR-Waterpark-View-DBL-CP.webp" alt="Preferred Club Junior Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Waterpark View</h3><p>Junior suite overlooking the waterpark with Preferred Club privileges.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/ob9b3hw3bv/webp/DRBMI-PC-JR-POV-KING-2A-CB.webp" alt="Preferred Club Junior Suite Partial Ocean View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Partial Ocean View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub and partial ocean views. Located on the third and fifth floors of the Preferred Club Tower. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/xta3vg8sdf/webp/DRBMI-PC-JR-Sundeck-1A-CB.webp" alt="Preferred Club Junior Suite Sun Deck" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Sun Deck</h3><p>Junior suite with EXCLUSIVE SUN DECK ACCESS, plus Preferred Club privileges.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/amgvunlngv/webp/DRBMI-PC-Ambition-STE-Bedroom-KING-AFC.webp" alt="Preferred Club Ambition Suite Panoramic View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Ambition Suite Panoramic View</h3><p>A generous 1,111 sq ft suite with a private terrace and outdoor soaking tub, a separate living area with sofa bed, and a full bathroom with double vanity. Upgraded amenities throughout, panoramic views, and Preferred Club privileges. Connects with the Preferred Club Panoramic View room.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/s4xcieahu0/webp/DRBMI-MSTR-Waterpark-View-KING-CP.webp" alt="Preferred Club Master Suite Waterpark View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Master Suite Waterpark View</h3><p>1,451 sq ft master suite overlooking the waterpark with Preferred Club privileges.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/0olxk0cn4b/webp/DRBMI-PC-Dreams-STE-TV-SO-Living-2A-CB.webp" alt="Preferred Club Master Suite Tropical View Swim Out" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Master Suite Tropical View Swim Out</h3><p>1,117 sq ft Preferred Club master suite with a private swim-out pool leading straight to the solarium, plus a spacious separate living area. Located in the Tropical Tower on the fourth floor. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/dgryhi5v2g/webp/DRBMI-PC-STE-Panorama-AFC.webp" alt="Preferred Club Family Suite Panoramic View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Family Suite Panoramic View</h3><p>Family suite with panoramic views sleeping up to 7, plus Preferred Club privileges.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/6tsdiftwae/webp/DRBMI-PC-BahiaMita-OV-BED-1A-CB.webp" alt="Preferred Club Bahia Mita Suite Ocean View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Bahia Mita Suite Ocean View</h3><p>The signature Bahia Mita Suite with ocean views and Preferred Club privileges.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/sf1gcby0nz/webp/DRBMI-PC-PRES-STE-Bedroom-AFC.webp" alt="Preferred Club Presidential Suite" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Presidential Suite</h3><p>2,687 sq ft Presidential Suite — the top category. Its oceanfront terrace also serves as a wedding venue for up to 120 guests.</p></div></article>
-      <article class="card"><div class="shot"><img src="https://alg.widen.net/content/dgryhi5v2g/webp/DRBMI-PC-STE-Panorama-AFC.webp" alt="Preferred Club Junior Suite Panoramic View" loading="lazy"></div><div class="cbody"><p class="meta"></p><h3>Preferred Club Junior Suite Panoramic View</h3><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, looking out over the resort, the pools and the ocean beyond. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></article>
-  </div>
-</div></section>
-
-<section id="club"><div class="wrap split">
-  <div><p class="eyebrow">Club level</p><h2>Preferred Club</h2></div>
-  <div class="prose"><ul class="perks"><li>Personalized check-in and check-out with concierge service</li><li>Daily continental breakfast</li><li>Afternoon hot and cold hors d'oeuvres, exquisite desserts and premium liquors</li><li>Access to the exclusive Preferred Club lounge (7 AM – 7 PM)</li><li>EXCLUSIVE access to the adults-only rooftop Sky Bar and infinity pool</li><li>Upgraded room locations and amenities</li></ul></div>
-</div></section>
-
-<section id="dining"><div class="wrap">
-  <p class="eyebrow">Dining &amp; drinks</p><h2>Restaurants &amp; bars</h2>
-  <div class="dining">
-      <div class="dish"><img src="https://alg.widen.net/img/alg/qukjqi42re/2048px@1x/DRBMI-RES-ElPatio-1A-CB.webp" alt="El Patio" loading="lazy"><h4>El Patio</h4><p class="cuisine">Mexican · Casual Elegance</p><p>Authentic à la carte Mexican dishes full of traditional flavours. Dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/k5o9mmqodf/2048px@1x/DRBMI-RES-Himitsu-1A-CB.webp" alt="Himitsu" loading="lazy"><h4>Himitsu</h4><p class="cuisine">Pan-Asian · Adults Only</p><p>Pan-Asian cuisine with teppanyaki tables. Adults only, reservation required. Dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/ohkbyd9aoo/2048px@1x/GettyImages-937237154.webp" alt="Meraki" loading="lazy"><h4>Meraki</h4><p class="cuisine">Mediterranean-Asian · Casual Elegance</p><p>Mediterranean and Asian fusion à la carte. Dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/vsvd5wljx4/2048px@1x/Italian-Cuisine-GettyImages-1181611076.webp" alt="Nebbiolo" loading="lazy"><h4>Nebbiolo</h4><p class="cuisine">Italian · Casual Elegance</p><p>Traditional Italian dishes and pizza. Dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/8l1q5wdhhv/2048px@1x/DRBMI-RES-Portofino-1A-CB.webp" alt="Portofino" loading="lazy"><h4>Portofino</h4><p class="cuisine">Italian · Adults Only</p><p>Adults-only Italian with over 100 wines, and a private wine-cellar table for up to 12. Dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/bhzrcocxzm/2048px@1x/DRBMI-RES-SeasideGrill-1A-CB.webp" alt="Seaside Grill" loading="lazy"><h4>Seaside Grill</h4><p class="cuisine">Grill · Casual Elegance</p><p>À la carte grilled steaks and burgers with ocean views and a private pool area. Lunch 12–4pm, dinner 6–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/content/olmfozdzxt/webp/DRBMI-RES-WorldCafe-AP.webp" alt="World Café" loading="lazy"><h4>World Café</h4><p class="cuisine">International Buffet</p><p>International buffet of local and global cuisine, including late-night bites. Breakfast 7–11am, lunch 1:30–4pm, dinner 6–10:45pm. Casual elegance required at dinner.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/c2tputev6i/2048px@1x/DRBMI-RES-BarefootGrill-1A-CB.webp" alt="Barefoot Grill" loading="lazy"><h4>Barefoot Grill</h4><p class="cuisine">Grill · Casual</p><p>À la carte grilled specialities by the pool. 11am–5pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/ynhtfiehoi/2048px@1x/DRBMI-RES-Bahia-Bites-CP.webp" alt="Bahia Bites" loading="lazy"><h4>Bahia Bites</h4><p class="cuisine">Food Truck · Casual</p><p>Food truck serving grilled tacos by the pool. Lunch 12–3pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/ekokkz9bq8/2048px@1x/DRBMI-RES-Tacoyotl-AFC.webp" alt="Tacoyotl Taquería" loading="lazy"><h4>Tacoyotl Taquería</h4><p class="cuisine">Taquería · Casual</p><p>Nachos, tacos and other favourites. 12–4:30pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/content/pansyfmnws/webp/DRBMI-RES-Tides-Pizza-CP.webp" alt="Tides" loading="lazy"><h4>Tides</h4><p class="cuisine">Poolside Grill · Casual</p><p>Poolside grill with hamburgers, hot dogs and snacks. 11am–6pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/goi9twre3b/2048px@1x/DRBMI-RES-CafeMita-AFC.webp" alt="Café Mita" loading="lazy"><h4>Café Mita</h4><p class="cuisine">Café</p><p>Premium coffee, pastries and snacks. 7am–10pm.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/qxbmprr4l0/2048px@1x/DRBMI-RES-CocoCafe-AFC.webp" alt="Coco Café &amp; Gelato" loading="lazy"><h4>Coco Café &amp; Gelato</h4><p class="cuisine">Café</p><p>Coffee and snack bar, open 24 hours.</p></div>
-      <div class="dish"><img src="https://alg.widen.net/img/alg/lia1k668hy/2048px@1x/DRBMI-RES-Sundaez-CP.webp" alt="Sundaez" loading="lazy"><h4>Sundaez</h4><p class="cuisine">Ice Cream</p><p>Ice cream, 11am–5pm.</p></div>
-  </div>
-</div></section>
-
-<section id="pools"><div class="wrap">
-  <p class="eyebrow">Pools, beach &amp; water</p><h2>Pools &amp; beach</h2>
-  <div class="dining">
-      <div class="dish"><img src="https://alg.widen.net/content/ybju4y4vpl/webp/DRBMI-EXT-Infinity-Pool-3-CB.webp" alt="Oceanfront infinity pool" loading="lazy"><h4>Oceanfront infinity pool</h4></div>
-      <div class="dish"><img src="https://alg.widen.net/content/dntkgr4ozd/webp/DRBMI-Family-Pool-Fun-CP.webp" alt="Main pools with kids' section" loading="lazy"><h4>Main pools with kids' section</h4></div>
-      <div class="dish"><h4>Sky Bar rooftop infinity pool</h4></div>
-      <div class="dish"><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="Pirate ship splash pool" loading="lazy"><h4>Pirate ship splash pool</h4></div>
-      <div class="dish"><img src="https://alg.widen.net/content/ukur5kit9x/webp/DRBMI-Family-Waterslide-01-CP.webp" alt="Waterpark slides" loading="lazy"><h4>Waterpark slides</h4></div>
-      <div class="dish"><h4>Hot tub</h4></div>
-  </div>
-</div></section>
-
-<section id="planning"><div class="wrap">
-  <p class="eyebrow">Planning an event here</p><h2>Weddings &amp; groups</h2>
-  <div class="tabwrap">
-    <div class="tabbar" role="tablist" aria-label="Event type">
-      <button class="tabbtn" id="tab-wed" role="tab" aria-controls="panel-wed" aria-selected="true">Weddings</button>
-      <button class="tabbtn" id="tab-grp" role="tab" aria-controls="panel-grp" aria-selected="false">Groups &amp; celebrations</button>
+</style><style>#page{display:block!important;}.agentonly,#quote-bar{display:none!important;}</style></head><body><div id="page">
+  <header class="hero" id="top">
+    <div class="hero-copy">
+      <p class="eyebrow">Amy Cate · Resort Reference</p>
+      <h1 class="hero-name" id="hero-name">Dreams Bahia Mita Surf &amp; Spa Resort</h1>
+      <p class="hero-tag" id="hero-tag">Discover Dreams Bahia Mita with stylish suites, a family-favorite waterpark, oceanfront infinity pool and surf-inspired activities.</p>
+      <p class="hero-meta" id="hero-dest">Riviera Nayarit, Mexico</p>
+      <ul class="hero-chips" id="hero-chips"><li>Family-Friendly · All Ages</li><li>Preferred Club</li></ul>
+      <a class="change-link" href="#">↩ Change resort</a>
     </div>
-    <div class="tabpanel" id="panel-wed" role="tabpanel" aria-labelledby="tab-wed">
-      <p class="subhead">Venues</p>
-      <div class="tablewrap"><table><thead><tr><th>Venue</th><th>Capacity</th></tr></thead><tbody>
-          <tr><th>Garden Bahia Mita</th><td>Up to 400 Guests</td></tr>
-          <tr><th>Beach Garden &amp; Wooden Deck</th><td>Up to 240 Guests</td></tr>
-          <tr><th>Moon Deck</th><td>Up to 200 Guests</td></tr>
-          <tr><th>Dreams Presidential Terrace</th><td>Up to 120 Guests</td></tr>
-          <tr><th>Secrets Presidential Terrace</th><td>Up to 90 Guests</td></tr>
-          <tr><th>Sand Terrace</th><td>Up to 80 Guests</td></tr>
-          <tr><th>Beach Terrace (The Nest)</th><td>Up to 50 Guests</td></tr>
-      </tbody></table></div>
-      <p class="subhead">Packages</p>
-      <div class="tablewrap"><table><thead><tr><th>Package</th><th>From</th></tr></thead><tbody>
-          <tr><th>Wedding in Paradise</th><td>Complimentary or from $1,499</td></tr>
-          <tr><th>Eternal Love</th><td>From $5,049</td></tr>
-          <tr><th>Beyond Memorable</th><td>From $12,049</td></tr>
-      </tbody></table></div>
+    <img class="hero-photo" id="hero-img" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-bahia-mita%2F1782710438124_sebmi-drbmi-ext-moondeck-pano-2-cb.jpeg?alt=media&amp;token=12790ff3-2a1a-4225-ac25-76c26c6bb5d1" alt="Dreams Bahia Mita Surf &amp; Spa Resort">
+  </header>
+  <nav><ul>
+    <li><a href="#top">Overview</a></li>
+    <li><a href="#weddings">Weddings &amp; Groups</a></li>
+    <li><a href="#dining">Dining</a></li>
+    <li><a href="#pools">Pools</a></li>
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#club">Club Level</a></li>
+    <li><a href="#activities">Activities</a></li>
+    <li><a href="#essentials">Essentials</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul></nav>
+  <section>
+    <div class="wrap">
+      <div class="split">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2 class="display" id="ov-title">Dreams Bahia Mita Surf &amp; Spa Resort</h2>
+          <hr class="rule">
+          <p id="ov-lede" style="font-size:18px;line-height:1.7;color:var(--ink);font-family:var(--sans);font-style:italic;">Discover Dreams Bahia Mita with stylish suites, a family-favorite waterpark, oceanfront infinity pool and surf-inspired activities.</p>
+        </div>
+        <div id="ov-prose" style="font-size:15px;line-height:1.82;color:var(--ink);font-family:var(--sans);"><p>Dreams Bahia Mita Surf &amp; Spa Resort marries golden sand beaches and mountaintop views with luxurious suites and daily activities for a family-friendly, all-inclusive vacation. Designed by architect Sordo Madaleno, this eco-friendly resort sits on Banderas Bay, about 50 minutes from Puerto Vallarta and 35 minutes from Nuevo Vallarta. All 421 suites offer tropical or ocean views, modern décor, and refined amenities like a daily refreshed mini-bar and 24-hour room service. The Unlimited-Luxury® program means everything is included — no wristbands or gratuities required — with activities from kayaking and surf lessons to golf, plus a Marietas Island-inspired Secrets Spa, eight dining venues and six bars. Guests also have access to the adjoining adults-only Secrets Bahia Mita, which adds flexible wedding venue options.</p></div>
+      </div>
     </div>
-    <div class="tabpanel" id="panel-grp" role="tabpanel" aria-labelledby="tab-grp" hidden>
-      <div class="prose"><p>Group rates, room blocks and private event space are quoted directly. Send me your dates and rough numbers and I will put it together.</p></div>
+  </section>
+  <div class="photo-strip" id="photo-strip" style="display:none;"></div>
+  <section class="sand-band" id="weddings">
+    <div class="wrap">
+      <p class="eyebrow">For Your Event</p>
+      <h2 class="display">Weddings &amp; Groups</h2>
+      <hr class="rule">
+      <div class="tab-bar">
+        <button class="tab-btn active" id="tab-wed">Weddings</button>
+        <button class="tab-btn" id="tab-grp">Groups &amp; Celebrations</button>
+      </div>
+      <div id="panel-wed">
+        <h3 class="lead">Wedding Packages</h3>
+        <div id="doc-packages"><div class="docrow"><a class="docbtn" href="https://storage.googleapis.com/dwt-documents/Dreams%20%20Secrets-wedding-guide%202026%20-2027-1771347786521.pdf" target="_blank" rel="noopener"><span class="ic">✦</span>Wedding Package Guide</a><a class="docbtn" href="https://mail.google.com/mail/u/0/#advanced-search/from=arely.gutierrez%40secretsresorts.com&amp;query=arely&amp;isrefinement=true&amp;fromdisplay=Gutierrez%2C+Arely+(SEBMI)?projector=1" target="_blank" rel="noopener"><span class="ic">✦</span>Dance Floor Info</a><a class="docbtn" href="https://urlisolation.com/browser?clickId=6BD7B6B3-3939-449E-83FF-D080CE626345&amp;traceToken=1788152612%3Bhyatt_hosted2%3Bhttps%3A%2Fmy.stickyfolios.com%2Fccdzq&amp;url=https%3A%2F%2Fmy.stickyfolios.com%2Fccdzq10kxzwk" target="_blank" rel="noopener"><span class="ic">✦</span>Photography</a></div></div>
+        <p class="pkg-hint">Click any package to see full inclusions</p>
+        <div class="pkglist" id="pkg-grid"><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Wedding in Paradise</span><span class="phint">The complimentary tier — everything you need to say I do, for up to te…</span></span><span class="pprice">Complimentary or from $1,499</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Symbolic ceremony</div><div class="pkghi-line">On-site wedding coordinator</div><div class="pkghi-line">Preparation and pressing of the couple’s attire</div><div class="pkghi-line">Bouquet and boutonniere in local flowers</div><div class="pkghi-line">Wedding cake and sparkling wine toast for up to ten guests</div><div class="pkghi-line">Turndown service the night of the wedding</div><div class="pkghi-line">Late checkout</div><div class="pkghi-line">15% off spa treatments</div><div class="pkghi-line">Newlywed package — welcome letter, fresh fruit, sparkling wine and breakfast in bed with mimosas</div><div class="pkghi-line">Free anniversary nights</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Eternal Love</span><span class="phint">A full wedding for twenty, and the only tier that includes photography…</span></span><span class="pprice">From $5,049</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Symbolic ceremony</div><div class="pkghi-line">Service of a judge or minister</div><div class="pkghi-line">On-site wedding coordinator</div><div class="pkghi-line">Preparation and steaming of the couple’s attire</div><div class="pkghi-line">Choice of two getting-ready services — hairstyling, make-up or shave</div><div class="pkghi-line">Bouquet and boutonniere in local flowers</div><div class="pkghi-line">Two boutonnieres and two corsages for the wedding party</div><div class="pkghi-line">Floral centerpiece for the ceremony table</div><div class="pkghi-line">Floral centerpiece for the sweetheart table</div><div class="pkghi-line">Ceremony décor — twenty covered chairs, ceremonial table and aisle runner</div><div class="pkghi-line">Sound system with microphone and technician</div><div class="pkghi-line">Private cocktail hour with hors d’oeuvres and international open bar, up to 20 guests</div><div class="pkghi-line">Three-hour private dinner reception with international open bar, white linens and tiffany chairs, up to 20 guests</div><div class="pkghi-line">Semi-private rehearsal dinner for up to ten</div><div class="pkghi-line">Wedding cake and sparkling wine for up to 20 guests</div><div class="pkghi-line">Live music — one 45-minute set during cocktail hour</div><div class="pkghi-line">50 colour photographs and a wedding album</div><div class="pkghi-line">30-minute ceremony video</div><div class="pkghi-line">Choice of one couple’s spa treatment</div><div class="pkghi-line">Complimentary room for one of the couple the night before the wedding</div><div class="pkghi-line">Turndown service the night of the wedding</div><div class="pkghi-line">Late checkout</div><div class="pkghi-line">15% off spa treatments</div><div class="pkghi-line">Free anniversary nights</div></div></div><div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">Beyond Memorable</span><span class="phint">Three private events across the weekend, for a group of up to seventy-…</span></span><span class="pprice">From $12,049</span><span class="parrow">▼</span></button><div class="pkgbody"><div class="pkghi-line">Symbolic ceremony as a private event</div><div class="pkghi-line">On-site wedding coordinator</div><div class="pkghi-line">Preparation and steaming of the couple’s attire</div><div class="pkghi-line">Bouquet and boutonniere in local flowers</div><div class="pkghi-line">Beach pergola or wedding gazebo drapery</div><div class="pkghi-line">White-linen-covered chairs for guests</div><div class="pkghi-line">Shoe check station for ceremonies held on the beach</div><div class="pkghi-line">Sound system with microphone and technician</div><div class="pkghi-line">Basic illumination</div><div class="pkghi-line">One-hour welcome cocktail party with appetizers and international open bar</div><div class="pkghi-line">Two-hour rehearsal dinner with buffet and international open bar</div><div class="pkghi-line">Three-hour private dinner reception with international open bar, white linens and tiffany chairs</div><div class="pkghi-line">Buffet with salad bar, sides, main courses and a dessert station</div><div class="pkghi-line">Wedding cake</div><div class="pkghi-line">Sparkling wine and fresh fruit for the couple and their parents on arrival, up to three rooms</div><div class="pkghi-line">Complimentary room for one of the couple the night before the wedding</div><div class="pkghi-line">Romantic turndown service</div><div class="pkghi-line">Breakfast in bed with mimosas the day after the wedding</div><div class="pkghi-line">Late checkout until 3 p.m.</div><div class="pkghi-line">20% off spa treatments for the couple and their parents</div><div class="pkghi-line">Spa hydrotherapy access for the couple and their parents</div><div class="pkghi-line">$100 in resort coupons per guest</div><div class="pkghi-line">Free anniversary nights</div></div></div></div><details class="tuck cmptuck" style="margin-top:34px;"><summary>Compare all packages side by side</summary><div class="tb"><div class="cmpwrap"><table class="cmp"><thead><tr><th></th><th><span class="pn">Wedding in Paradise</span><span class="pc">Up to 10 guests</span></th><th><span class="pn">Elope in Luxury</span><span class="pc">The two of you</span></th><th><span class="pn">Eternal Love</span><span class="pc">Up to 20 guests</span></th><th><span class="pn">Beyond Memorable</span><span class="pc">Up to 79 guests</span></th></tr></thead><tbody><tr class="grp"><td colspan="5">The cost</td></tr><tr><th scope="row">2026 · Aug–Oct · Mon–Wed</th><td class="v">$1,499</td><td class="v">$1,649</td><td class="v">$5,049</td><td class="v">$12,049</td></tr><tr><th scope="row">2026 · Aug–Oct · Thu–Sun</th><td class="v">$1,549</td><td class="v">$1,649</td><td class="v">$5,349</td><td class="v">$12,649</td></tr><tr><th scope="row">2026 · Nov–Jul · Mon–Wed</th><td class="v">$1,649</td><td class="v">$1,649</td><td class="v">$5,549</td><td class="v">$13,299</td></tr><tr><th scope="row">2026 · Nov–Jul · Thu–Sun</th><td class="v">$1,799</td><td class="v">$1,649</td><td class="v">$5,949</td><td class="v">$13,949</td></tr><tr><th scope="row">2027 · Aug–Oct · Mon–Wed</th><td class="v">$1,749</td><td class="v">$1,649</td><td class="v">$5,349</td><td class="v">$12,649</td></tr><tr><th scope="row">2027 · Aug–Oct · Thu–Sun</th><td class="v">$1,799</td><td class="v">$1,649</td><td class="v">$5,649</td><td class="v">$13,349</td></tr><tr><th scope="row">2027 · Nov–Jul · Mon–Wed</th><td class="v">$1,549</td><td class="v">$1,649</td><td class="v">$5,899</td><td class="v">$13,949</td></tr><tr><th scope="row">2027 · Nov–Jul · Thu–Sun</th><td class="v">$1,949</td><td class="v">$1,649</td><td class="v">$6,249</td><td class="v">$14,699</td></tr><tr><th scope="row">Guests included</th><td class="v">10</td><td class="v">2</td><td class="v">20</td><td class="v">79</td></tr><tr><th scope="row">Additional guest · 2026</th><td class="v">$35</td><td></td><td class="v">$120</td><td class="v">$145</td></tr><tr><th scope="row">Additional guest · 2027</th><td class="v">$35</td><td></td><td class="v">$140</td><td class="v">$165</td></tr><tr><th scope="row">Can be complimentary</th><td class="v">7 nights, or 5 rooms</td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Must be booked by</th><td class="v">30 days out</td><td class="v">30 days out</td><td class="v">30 days out</td><td class="v">1 year out</td></tr><tr class="grp"><td colspan="5">Getting ready</td></tr><tr><th scope="row">Dedicated on-site wedding coordinator</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Attire prepared and pressed</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Hair, make-up or shave on the day</th><td><span class="dh">—</span></td><td class="v">2 services</td><td class="v">2 services</td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">The ceremony</td></tr><tr><th scope="row">Symbolic ceremony</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Judge or minister service</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Ceremony décor — chairs, table, aisle runner</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">For 20</td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Beach pergola or gazebo drapery</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Shoe check station for beach ceremonies</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Sound system and microphone</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr class="grp"><td colspan="5">Flowers</td></tr><tr><th scope="row">Bouquet and boutonniere for the couple</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Flowers for the wedding party</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Up to 4</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Centerpiece for the ceremony table</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Centerpiece for the sweetheart table</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">Photography &amp; music</td></tr><tr><th scope="row">Ceremony photographs</th><td><span class="dh">—</span></td><td class="v">20 photos</td><td class="v">50 + album</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Edited ceremony video</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">30 minutes</td><td><span class="dh">—</span></td></tr><tr><th scope="row">Live music</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">45-min set</td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">The party</td></tr><tr><th scope="row">Welcome or cocktail hour</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Up to 20</td><td class="v">1 hr private</td></tr><tr><th scope="row">Rehearsal dinner</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Semi-private, 10</td><td class="v">2 hr private</td></tr><tr><th scope="row">Private dinner reception</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">Up to 20</td><td class="v">3 hr private</td></tr><tr><th scope="row">Private bar, top-shelf spirits</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td class="v">International open bar</td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Wedding cake</th><td class="v">For 10</td><td class="v">For two</td><td class="v">For 20</td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Sparkling wine toast</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td></td></tr><tr><th scope="row">Dessert station</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Basic illumination</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Romantic dinner for two the night of</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr class="grp"><td colspan="5">For the two of you</td></tr><tr><th scope="row">Room the night before the wedding</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Room upgrade</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Sparkling wine and fruit on arrival</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td><td class="v">Couple + parents</td></tr><tr><th scope="row">Turndown service the night of the wedding</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Breakfast in bed with mimosas</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr><th scope="row">Late checkout</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td class="v">Until 3 p.m.</td></tr><tr><th scope="row">Couple’s spa treatment</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td></tr><tr><th scope="row">Spa hydrotherapy access</th><td><span class="dh">—</span></td><td><span class="tk">✓</span></td><td><span class="dh">—</span></td><td class="v">Couple + parents</td></tr><tr><th scope="row">Spa treatment discount</th><td class="v">15%</td><td class="v">15%</td><td class="v">15%</td><td class="v">20%</td></tr><tr><th scope="row">Free anniversary nights</th><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td><td><span class="tk">✓</span></td></tr><tr class="grp"><td colspan="5">For your guests</td></tr><tr><th scope="row">$100 in resort coupons per guest</th><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="dh">—</span></td><td><span class="tk">✓</span></td></tr></tbody></table></div><div class="cmpkey"><span><b>✓</b> included</span><span><b>—</b> not included</span><span>text = what differs between packages</span></div></div></details>
+        <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><div class="vgrid" id="venues-grid"><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/secrets-bahia-mita-surf-spa/aioapi/dreams-bahia-mita-garden-wedding-venue.jpg" alt="Garden Bahia Mita" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Garden Bahia Mita</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 400 Guests guests</p><p>Open air and the richest greens welcome your wedding celebration in the Bahia Mita Garden, perfect for extravagant, large parties. The largest venue on property.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/secrets-bahia-mita-surf-spa/sebmi-wed-reception-garden-deck-02-afc.jpg" alt="Beach Garden &amp; Wooden Deck" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Beach Garden &amp; Wooden Deck</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 240 Guests guests</p><p>Blends tropical elegance with seaside charm, offering an open-air platform on polished wood planks just steps from the beach and set against lush garden landscaping.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa-resort/aioapi/dreams-bahia-mita-moon-deck-wedding-venue.png" alt="Moon Deck" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Rehearsal Dinner · Cocktail Hour</p><h4>Moon Deck</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 200 Guests guests</p><p>A semi-private elegant venue with views of the ocean and resort grounds. NOTE: best for ceremony, rehearsal dinner and cocktail hour — not listed for full receptions.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/secrets-bahia-mita-surf-spa/aioapi/dreams-bahia-mita-terraza-presidential-suite-marietas-wedding-venue.jpg" alt="Dreams Presidential Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Dreams Presidential Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 120 Guests guests</p><p>Elegance meets minimalism on the presidential terrace with the ultimate oceanfront view.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa-resort/aioapi/dreams-bahia-mita-terraza-presidential-suite-sayulita-wedding-venue.jpeg" alt="Secrets Presidential Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Cocktail Hour</p><h4>Secrets Presidential Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 90 Guests guests</p><p>Celebrate your romance up high on this presidential terrace with unparalleled views. A secluded and opulent setting. Located at the adjoining adults-only Secrets Bahia Mita.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/secrets-bahia-mita-surf-spa/sebmi-wed-reception-sand-terrace-afc.jpg" alt="Sand Terrace" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Sand Terrace</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 80 Guests guests</p><p>A secluded romantic beach terrace, ideal for an intimate ceremony and reception.</p></div></div><div class="vcard"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/secrets-bahia-mita-surf-spa/sebmi-wed-reception-the-nest-afc.jpg" alt="Beach Terrace (The Nest)" loading="lazy"><div class="vbody"><p class="vtag">Ceremony · Reception · Cocktail Hour</p><h4>Beach Terrace (The Nest)</h4><p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to Up to 50 Guests guests</p><p>Start the new chapter of your romance at The Nest — the most intimate venue on property.</p></div></div></div></div>
+      </div>
+      <div id="panel-grp" hidden=""><div id="groups-body"><div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div></div></div>
+    </div>
+  </section>
+  <section id="dining">
+    <div class="wrap">
+      <p class="eyebrow">Food &amp; Drink</p>
+      <h2 class="display">Dining</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-bahia-mita%2F1788152281891_drbmi-res-portofino-1a-cb.webp?alt=media&amp;token=2afef8c5-295f-409d-8d1f-2c0d02a0f6d9" alt="" loading="lazy" style="margin-bottom:28px;"><div class="dgrid" id="rest-grid"><div class="dcard"><img src="https://alg.widen.net/img/alg/qukjqi42re/2048px@1x/DRBMI-RES-ElPatio-1A-CB.webp" alt="El Patio" loading="lazy"><div class="dbody"><p class="dtag">Mexican · Casual Elegance</p><h4>El Patio</h4><p>Authentic à la carte Mexican dishes full of traditional flavours. Dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/k5o9mmqodf/2048px@1x/DRBMI-RES-Himitsu-1A-CB.webp" alt="Himitsu" loading="lazy"><div class="dbody"><p class="dtag">Pan-Asian · Adults Only</p><h4>Himitsu</h4><p>Pan-Asian cuisine with teppanyaki tables. Adults only, reservation required. Dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/ohkbyd9aoo/2048px@1x/GettyImages-937237154.webp" alt="Meraki" loading="lazy"><div class="dbody"><p class="dtag">Mediterranean-Asian · Casual Elegance</p><h4>Meraki</h4><p>Mediterranean and Asian fusion à la carte. Dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/vsvd5wljx4/2048px@1x/Italian-Cuisine-GettyImages-1181611076.webp" alt="Nebbiolo" loading="lazy"><div class="dbody"><p class="dtag">Italian · Casual Elegance</p><h4>Nebbiolo</h4><p>Traditional Italian dishes and pizza. Dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/8l1q5wdhhv/2048px@1x/DRBMI-RES-Portofino-1A-CB.webp" alt="Portofino" loading="lazy"><div class="dbody"><p class="dtag">Italian · Adults Only</p><h4>Portofino</h4><p>Adults-only Italian with over 100 wines, and a private wine-cellar table for up to 12. Dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/bhzrcocxzm/2048px@1x/DRBMI-RES-SeasideGrill-1A-CB.webp" alt="Seaside Grill" loading="lazy"><div class="dbody"><p class="dtag">Grill · Casual Elegance</p><h4>Seaside Grill</h4><p>À la carte grilled steaks and burgers with ocean views and a private pool area. Lunch 12–4pm, dinner 6–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/olmfozdzxt/webp/DRBMI-RES-WorldCafe-AP.webp" alt="World Café" loading="lazy"><div class="dbody"><p class="dtag">International Buffet</p><h4>World Café</h4><p>International buffet of local and global cuisine, including late-night bites. Breakfast 7–11am, lunch 1:30–4pm, dinner 6–10:45pm. Casual elegance required at dinner.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/c2tputev6i/2048px@1x/DRBMI-RES-BarefootGrill-1A-CB.webp" alt="Barefoot Grill" loading="lazy"><div class="dbody"><p class="dtag">Grill · Casual</p><h4>Barefoot Grill</h4><p>À la carte grilled specialities by the pool. 11am–5pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/ynhtfiehoi/2048px@1x/DRBMI-RES-Bahia-Bites-CP.webp" alt="Bahia Bites" loading="lazy"><div class="dbody"><p class="dtag">Food Truck · Casual</p><h4>Bahia Bites</h4><p>Food truck serving grilled tacos by the pool. Lunch 12–3pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/ekokkz9bq8/2048px@1x/DRBMI-RES-Tacoyotl-AFC.webp" alt="Tacoyotl Taquería" loading="lazy"><div class="dbody"><p class="dtag">Taquería · Casual</p><h4>Tacoyotl Taquería</h4><p>Nachos, tacos and other favourites. 12–4:30pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/content/pansyfmnws/webp/DRBMI-RES-Tides-Pizza-CP.webp" alt="Tides" loading="lazy"><div class="dbody"><p class="dtag">Poolside Grill · Casual</p><h4>Tides</h4><p>Poolside grill with hamburgers, hot dogs and snacks. 11am–6pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/goi9twre3b/2048px@1x/DRBMI-RES-CafeMita-AFC.webp" alt="Café Mita" loading="lazy"><div class="dbody"><p class="dtag">Café</p><h4>Café Mita</h4><p>Premium coffee, pastries and snacks. 7am–10pm.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/qxbmprr4l0/2048px@1x/DRBMI-RES-CocoCafe-AFC.webp" alt="Coco Café &amp; Gelato" loading="lazy"><div class="dbody"><p class="dtag">Café</p><h4>Coco Café &amp; Gelato</h4><p>Coffee and snack bar, open 24 hours.</p></div></div><div class="dcard"><img src="https://alg.widen.net/img/alg/lia1k668hy/2048px@1x/DRBMI-RES-Sundaez-CP.webp" alt="Sundaez" loading="lazy"><div class="dbody"><p class="dtag">Ice Cream</p><h4>Sundaez</h4><p>Ice cream, 11am–5pm.</p></div></div></div>
+      <div class="barsbox" id="bars-box" style="display: block;"><h4>Bars &amp; Lounges</h4><ul class="bars-list" id="bars-list"><li><span class="bname">Barracuda</span><span class="bdesc">Light bites like ceviche, right by the sea. 12–6pm.</span></li><li><span class="bname">Desires</span><span class="bdesc">Snacks and drinks. Dinner 4–9pm, bar until 1am.</span></li><li><span class="bname">Preferred Club Lounge</span><span class="bdesc">A relaxing lounge for Preferred Club guests. 7am–11pm.</span></li><li><span class="bname">Sea Legs</span><span class="bdesc">Swim-up bar for cocktails. 11am–6pm.</span></li><li><span class="bname">Showtime</span><span class="bdesc">Theatre bar, open during show hours.</span></li><li><span class="bname">Sky Bar</span><span class="bdesc">Rooftop bar with infinity pool. Preferred Club and adults only. 10am–7pm.</span></li><li><span class="bname">Speak Easy</span><span class="bdesc">Disco and music lounge. 11pm–1am.</span></li><li><span class="bname">Splash</span><span class="bdesc">Poolside bar near the waterslides. 11am–5pm.</span></li></ul></div>
+    </div>
+  </section>
+  <section class="sand-band" id="pools">
+    <div class="wrap">
+      <p class="eyebrow">Water &amp; Beach</p>
+      <h2 class="display">Pools &amp; Beach</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-bahia-mita%2F1788153103910_drbmi-ext-infinity-pool-3-cb.webp?alt=media&amp;token=85e0ea01-545b-4688-aab8-83d51574fa4c" alt="" loading="lazy" style="margin-bottom:30px;"><div class="pool-grid" id="pools-grid"><div class="pool-card"><img src="https://alg.widen.net/content/ybju4y4vpl/webp/DRBMI-EXT-Infinity-Pool-3-CB.webp" alt="Oceanfront infinity pool" loading="lazy"><h4>Oceanfront infinity pool</h4><p>Infinity edge reading straight out over Banderas Bay · Pale stone deck with loungers two rows deep and planted beds breaking up the terrace · Open to all guests</p></div><div class="pool-card"><img src="https://alg.widen.net/content/dntkgr4ozd/webp/DRBMI-Family-Pool-Fun-CP.webp" alt="Main pools with kids' section" loading="lazy"><h4>Main pools with kids' section</h4><p>Two main pools with a separate kids' section · Open to all guests</p></div><div class="pool-card"><h4>Sky Bar rooftop infinity pool</h4><p>A long, narrow infinity channel running the length of the rooftop terrace, with daybeds and cabana seating along the inside edge and the open Pacific beyond · Preferred Club, adults only · Bar 10:00 a.m.–7:00 p.m.</p></div><div class="pool-card"><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="Pirate ship splash pool" loading="lazy"><h4>Pirate ship splash pool</h4><p>A full pirate-ship play structure sitting in a heated pool, tipping buckets in the rigging and a shallow splash zone alongside</p></div><div class="pool-card"><img src="https://alg.widen.net/content/ukur5kit9x/webp/DRBMI-Family-Waterslide-01-CP.webp" alt="Waterpark slides" loading="lazy"><h4>Waterpark slides</h4><p>Three waterslides and a giant tipping bucket · The Splash bar sits directly alongside</p></div><div class="pool-card"><h4>Hot tub</h4><p>Adults only</p></div></div>
+    </div>
+  </section>
+  <section id="rooms">
+    <div class="wrap">
+      <p class="eyebrow">Accommodation</p>
+      <h2 class="display">Rooms &amp; Suites</h2>
+      <hr class="rule">
+      <div class="room-grid" id="rooms-grid"><div class="rcard"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Junior Suite Tropical View" loading="lazy"><div class="rbody"><h4>Junior Suite Tropical View</h4><p>516 sq ft junior suite with a separate living area and sofa bed, overlooking the tropical grounds. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/ksg8hfbgdk/webp/DRBMI-JR-Waterpark-View-KING-CP.webp" alt="Junior Suite Waterpark View" loading="lazy"><div class="rbody"><h4>Junior Suite Waterpark View</h4><p>516 sq ft junior suite overlooking the resort's waterpark, with sofa bed — a strong pick for families. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/ahqejsh1jl/webp/DRBMI-JR-SO-TV-2A-CB.webp" alt="Junior Suite Tropical Swim Out" loading="lazy"><div class="rbody"><h4>Junior Suite Tropical Swim Out</h4><p>516 sq ft junior suite with semi-private SWIM-OUT pool access directly from your terrace. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/ecji2xd8dv/webp/DRBMI-PC-JR-OF-KING-1A-CB.webp" alt="Junior Suite Ocean Front" loading="lazy"><div class="rbody"><h4>Junior Suite Ocean Front</h4><p>516 sq ft oceanfront junior suite with a full bathroom, double vanity and living area. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/9c9ph8esgp/webp/DRBMI-JR-TV-AP.webp" alt="Family Suite Tropical View" loading="lazy"><div class="rbody"><h4>Family Suite Tropical View</h4><p>1,032 sq ft family suite connecting two Junior Suite Tropical View rooms, sleeping up to 7. Unlimited-Luxury® included — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/fee3cxvzer/webp/DRBMI-PC-JR-TV-KING-CP.webp" alt="Preferred Club Junior Suite Tropical View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Tropical View</h4><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, overlooking the tropical grounds and the mountains behind the resort. Located on the eighth floor near the Preferred Club Sky Bar. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/7tdfv8zmls/webp/DRBMI-PC-JR-Waterpark-View-DBL-CP.webp" alt="Preferred Club Junior Suite Waterpark View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Waterpark View</h4><p>Junior suite overlooking the waterpark with Preferred Club privileges.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/ob9b3hw3bv/webp/DRBMI-PC-JR-POV-KING-2A-CB.webp" alt="Preferred Club Junior Suite Partial Ocean View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Partial Ocean View</h4><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub and partial ocean views. Located on the third and fifth floors of the Preferred Club Tower. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/xta3vg8sdf/webp/DRBMI-PC-JR-Sundeck-1A-CB.webp" alt="Preferred Club Junior Suite Sun Deck" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Sun Deck</h4><p>Junior suite with EXCLUSIVE SUN DECK ACCESS, plus Preferred Club privileges.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/amgvunlngv/webp/DRBMI-PC-Ambition-STE-Bedroom-KING-AFC.webp" alt="Preferred Club Ambition Suite Panoramic View" loading="lazy"><div class="rbody"><h4>Preferred Club Ambition Suite Panoramic View</h4><p>A generous 1,111 sq ft suite with a private terrace and outdoor soaking tub, a separate living area with sofa bed, and a full bathroom with double vanity. Upgraded amenities throughout, panoramic views, and Preferred Club privileges. Connects with the Preferred Club Panoramic View room.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/s4xcieahu0/webp/DRBMI-MSTR-Waterpark-View-KING-CP.webp" alt="Preferred Club Master Suite Waterpark View" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Waterpark View</h4><p>1,451 sq ft master suite overlooking the waterpark with Preferred Club privileges.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/0olxk0cn4b/webp/DRBMI-PC-Dreams-STE-TV-SO-Living-2A-CB.webp" alt="Preferred Club Master Suite Tropical View Swim Out" loading="lazy"><div class="rbody"><h4>Preferred Club Master Suite Tropical View Swim Out</h4><p>1,117 sq ft Preferred Club master suite with a private swim-out pool leading straight to the solarium, plus a spacious separate living area. Located in the Tropical Tower on the fourth floor. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/dgryhi5v2g/webp/DRBMI-PC-STE-Panorama-AFC.webp" alt="Preferred Club Family Suite Panoramic View" loading="lazy"><div class="rbody"><h4>Preferred Club Family Suite Panoramic View</h4><p>Family suite with panoramic views sleeping up to 7, plus Preferred Club privileges.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/6tsdiftwae/webp/DRBMI-PC-BahiaMita-OV-BED-1A-CB.webp" alt="Preferred Club Bahia Mita Suite Ocean View" loading="lazy"><div class="rbody"><h4>Preferred Club Bahia Mita Suite Ocean View</h4><p>The signature Bahia Mita Suite with ocean views and Preferred Club privileges.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/sf1gcby0nz/webp/DRBMI-PC-PRES-STE-Bedroom-AFC.webp" alt="Preferred Club Presidential Suite" loading="lazy"><div class="rbody"><h4>Preferred Club Presidential Suite</h4><p>2,687 sq ft Presidential Suite — the top category. Its oceanfront terrace also serves as a wedding venue for up to 120 guests.</p></div></div><div class="rcard"><img src="https://alg.widen.net/content/dgryhi5v2g/webp/DRBMI-PC-STE-Panorama-AFC.webp" alt="Preferred Club Junior Suite Panoramic View" loading="lazy"><div class="rbody"><h4>Preferred Club Junior Suite Panoramic View</h4><p>516 sq ft Preferred Club junior suite with a private terrace and soaking tub, looking out over the resort, the pools and the ocean beyond. Preferred Club privileges included, along with Unlimited-Luxury® — daily refreshed mini-bar, 24-hour room service, and no wristbands or gratuities.</p></div></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="club">
+    <div class="wrap">
+      <p class="eyebrow">Exclusive Access</p>
+      <h2 class="display" id="club-title">Preferred Club</h2>
+      <hr class="rule">
+      <img class="bandimg" src="https://firebasestorage.googleapis.com/v0/b/wedding-crm-e5d12.firebasestorage.app/o/resorts%2Fdreams-bahia-mita%2F1788153718300_drbmi-pc-bahiamita-ov-bed-1a-cb.webp?alt=media&amp;token=dbcb016d-5fa8-49a4-947e-3fb8010eedb3" alt="" loading="lazy" style="margin-bottom:26px;"><div id="club-body"><div class="club-block"><h3>Preferred Club</h3><p>Personalized check-in and check-out with concierge service
+Daily continental breakfast
+Afternoon hot and cold hors d'oeuvres, exquisite desserts and premium liquors
+Access to the exclusive Preferred Club lounge (7 AM – 7 PM)
+EXCLUSIVE access to the adults-only rooftop Sky Bar and infinity pool
+Upgraded room locations and amenities</p></div></div>
+    </div>
+  </section>
+  <section id="activities">
+    <div class="wrap">
+      <p class="eyebrow">On Property</p>
+      <h2 class="display">Activities &amp; Spa</h2>
+      <hr class="rule">
+      <div class="act-grid" id="act-grid">
+        <div id="act-incl-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Included</h4><ul class="act-list incl" id="act-incl"><li>Waterpark with three waterslides, pirate ship and splash zone</li><li>Three pools and a hot tub</li><li>Complimentary on-beach surf clinic</li><li>Introductory surf and dive lessons in the pool</li><li>Kayaks</li><li>Paddle boards and buggy boards</li><li>Water aerobics</li><li>Zip line</li><li>Pickleball</li><li>Ping pong</li><li>Shuffleboard</li><li>Board games</li><li>Observation decks with lounge seating and fire pits</li><li>Fitness centre with cardio equipment and free weights</li><li>Yoga, spinning and aerobics classes</li><li>Explorer's Club kids club, ages 3-12</li><li>Core Zone teens club, ages 13-17</li><li>Live music, theme nights and beach parties</li><li>Theatre and evening shows</li><li>Immersive 360 sight, sound and waterfall art show</li></ul></div>
+        <div id="act-extra-col" style="display: block;"><h4 style="font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 20px;font-weight:500;">Additional Charge</h4><ul class="act-list extra" id="act-extra"><li>Motorised watersports</li><li>Spa treatments, massages and facials</li><li>Tequila tastings</li><li>Golf at nearby courses</li><li>Childcare</li></ul></div>
+      </div>
+    </div>
+  </section>
+  <section class="sand-band" id="essentials">
+    <div class="wrap">
+      <p class="eyebrow">Good to Know</p>
+      <h2 class="display">Resort Essentials</h2>
+      <hr class="rule">
+      <div class="ess-grid" id="ess-grid"><div class="ess-block"><h4>At a Glance</h4><ul><li><span class="lbl">Check-in</span><span>3:00 PM</span></li><li><span class="lbl">Check-out</span><span>11:00 AM</span></li><li><span class="lbl">Total Rooms</span><span>421</span></li><li><span class="lbl">Airport</span><span>Puerto Vallarta International (PVR)</span></li></ul></div><div class="ess-block"><h4>Resort Notes</h4><p>Sky Bar and its rooftop infinity pool are reserved for Preferred Club guests and are adults-only. The hot tub is adults-only. Portofino and Himitsu are adults-only restaurants. Explorer's Club is for ages 3-12 and Core Zone for ages 13-17.</p></div><div class="ess-block"><h4>Excursions</h4><ul><li><span>Full-day and half-day tours exploring local marine life and culture, arranged through the resort's tour provider</span></li></ul></div></div>
+    </div>
+  </section>
+  <section class="sand-band" id="downloads" style="display: block;">
+    <div class="wrap">
+      <p class="eyebrow">Everything Else</p>
+      <h2 class="display">More Info</h2>
+      <hr class="rule">
+      <div class="dl-list" id="dl-list" style="margin-top:34px;"><div class="docrow"><a class="docbtn" href="https://www.destinationweddings.com/dreams-bahia-mita-surf-spa-resort" target="_blank" rel="noopener"><span class="ic">✦</span>Destination Weddings Resort Info</a></div></div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <p class="eyebrow">The Resort</p>
+      <h2 class="display">Gallery</h2>
+      <hr class="rule">
+      <div class="gallery" id="gallery-grid"><figure><img src="https://alg.widen.net/content/wb7wclqf8l/webp/DRBMI-EXT-Aerial-AP.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ub9amjmvot/webp/DRBMI-EXT-Aerial-Resort-02-CP.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/ccsydtq215/webp/DRBMI-Couple-Poolside-CP.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/90vz1w9x4o/webp/DRBMI-Couple-SurfBoards1B-2A-CB.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/th5hmckc3n/webp/DRBMI-Couple-Yoga-01-CP.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/c00ddng9wj/webp/DRBMI-ExplorersClub-AFC.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/buqomysgku/webp/DRBMI-CoreZone-1A-CB.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/1nxfr4cgba/webp/DRBMI-Beach-WaitService-1A-CB.webp" alt="" loading="lazy"></figure><figure><img src="https://alg.widen.net/content/mv37qer0bs/webp/DRBMI-EXT-SkyBarPool-1A-CB.webp" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-grp-beachcocktail-3a-cb.jpeg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/sebmi-drbmi-couple-surfboards1b-2a-cb.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-res-portofino-1a-cb.jpeg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pc-bahia-ste-bed-rndr.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pres-bed-rndr.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ap.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/preferred-club-panoramic-view.png" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/waterpark.png" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-pc-jr-tv-king-cp.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ter-1a-cb.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/ambition.jpg" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/junior-suite-ocean-front.png" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa-resort/aioapi/dreams-bahia-mita-hero-image.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure><figure><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg" alt="" loading="lazy"></figure></div>
+    </div>
+  </section>
+  <div class="contact-band">
+    <div class="wrap center">
+      <p class="eyebrow">Amy Cate</p>
+      <h2>Ready to make it yours?</h2>
+      <p>I'd love to help you plan every detail — from choosing the right room category to handling every guest's booking. Let's start building your perfect destination experience.</p>
+      <a class="btn" href="mailto:amy.cate@destinationweddings.com">Get in Touch →</a>
     </div>
   </div>
-</div></section>
-
-<section id="gallery"><div class="wrap">
-  <p class="eyebrow">Gallery</p><h2>Around the resort</h2>
-  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(230px,1fr))">
-      <figure class="gal"><img src="https://alg.widen.net/content/wb7wclqf8l/webp/DRBMI-EXT-Aerial-AP.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/ub9amjmvot/webp/DRBMI-EXT-Aerial-Resort-02-CP.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/ccsydtq215/webp/DRBMI-Couple-Poolside-CP.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/90vz1w9x4o/webp/DRBMI-Couple-SurfBoards1B-2A-CB.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/th5hmckc3n/webp/DRBMI-Couple-Yoga-01-CP.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/jctpsoz8rw/webp/DRBMI-EC-Waterpark-Kids-1A-CB.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/c00ddng9wj/webp/DRBMI-ExplorersClub-AFC.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/buqomysgku/webp/DRBMI-CoreZone-1A-CB.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/1nxfr4cgba/webp/DRBMI-Beach-WaitService-1A-CB.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://alg.widen.net/content/mv37qer0bs/webp/DRBMI-EXT-SkyBarPool-1A-CB.webp" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-grp-beachcocktail-3a-cb.jpeg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/sebmi-drbmi-couple-surfboards1b-2a-cb.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-res-portofino-1a-cb.jpeg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pc-bahia-ste-bed-rndr.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drpmi-pres-bed-rndr.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ap.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/preferred-club-panoramic-view.png" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/waterpark.png" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-pc-jr-tv-king-cp.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-jr-tv-ter-1a-cb.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/ambition.jpg" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/junior-suite-ocean-front.png" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa-resort/aioapi/dreams-bahia-mita-hero-image.jpeg?width=1920&amp;height=1080" alt="" loading="lazy"></figure>
-      <figure class="gal"><img src="https://assets.milestoneinternet.com/cdn-cgi/image/f=auto/destination-weddings-travel-group/72632-dreams-bahia-mita-surf-spa/aioapi/drbmi-sebmi-ext-beach-2a-cb.jpeg" alt="" loading="lazy"></figure>
-  </div>
-</div></section>
-</main>
-
-<script>
-(function(){var b=[].slice.call(document.querySelectorAll(".tabbtn"));function sel(id){b.forEach(function(x){var on=x.id===id;x.setAttribute("aria-selected",on?"true":"false");document.getElementById(x.getAttribute("aria-controls")).hidden=!on;});}b.forEach(function(x){x.addEventListener("click",function(){sel(x.id);});});if(location.hash==="#groups"){sel("tab-grp");}})();
-</script>
-
-<footer><div class="wrap">
-  <p>Amy Cate &middot; Destination Weddings Travel Group &amp; Celebration Travel &middot; amy.cate@destinationweddings.com</p>
-  <p>Details drawn from the resort&rsquo;s published information and subject to change. Availability and rates are confirmed at the time of booking.</p>
-</div></footer>
-
-</body>
-</html>
+  <footer>
+    <p>Amy Cate · Destination Weddings Travel Group &amp; Celebration Travel</p>
+    <p>Details from published resort information · Subject to change · Rates confirmed at booking</p>
+  </footer>
+</div><script>document.addEventListener("click",function(e){var t=e.target.closest(".pkgtrigger");if(t){var b=t.nextElementSibling;if(b){b.classList.toggle("open");t.setAttribute("aria-expanded",b.classList.contains("open"));}return;}var s=e.target.closest("summary");if(s)return;});</script></body></html>
