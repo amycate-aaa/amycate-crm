@@ -643,10 +643,14 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
       </div>
     </div>
 
+    <!-- OWNERSHIP BANNER -->
+    <div id="ownershipBanner" style="display:none;border-radius:6px;padding:10px 14px;font-size:.85rem;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;"></div>
+
     <!-- SAVE -->
     <div id="noProfileMsg" style="display:none;background:#1e2a1e;border:1px solid #2a4a2a;border-radius:6px;padding:10px 14px;color:#5a9a5a;font-size:.85rem;margin-bottom:14px;">No profile saved yet for this resort — fill in the details above and click Save Profile.</div>
     <div style="display:flex;align-items:center;gap:12px;">
-      <button class="btn btn-primary" onclick="saveResortProfile()">&#128190; Save Profile</button>
+      <button class="btn btn-primary" id="saveProfileBtn" onclick="saveResortProfile()">&#128190; Save Profile</button>
+      <button id="copyToMineBtn" style="display:none;background:#1a3a5c;border:1px solid #2a6aac;color:#6aacef;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:.82rem;font-weight:600;" onclick="copyToMyLibrary()">&#128203; Copy to My Library</button>
       <span id="profileSaveMsg" style="display:none;color:#27ae60;font-size:.85rem;"></span>
     </div>
 
@@ -796,6 +800,80 @@ function filterResorts(mode) {
   }
 }
 
+// ── OWNERSHIP UI ──
+async function updateOwnershipUI(slug) {
+  const banner = document.getElementById('ownershipBanner');
+  const saveBtn = document.getElementById('saveProfileBtn');
+  const copyBtn = document.getElementById('copyToMineBtn');
+  if (!banner || !slug) return;
+
+  try {
+    const doc = await db.collection('resortProfiles').doc(slug).get();
+    const owner = doc.exists ? (doc.data().owner || 'amy') : null;
+
+    if (!owner || owner === 'amy') {
+      // Amy's resort — full edit
+      banner.style.display = 'none';
+      if (saveBtn) saveBtn.style.display = '';
+      if (copyBtn) copyBtn.style.display = 'none';
+    } else {
+      // Someone else's resort
+      banner.style.display = 'flex';
+      banner.style.background = '#1a1a2e';
+      banner.style.border = '1px solid #2a2a5e';
+      banner.style.color = '#8888cc';
+      banner.innerHTML = `<span>🔒 This is <strong>${owner}'s</strong> resort — view only</span>`;
+      if (saveBtn) saveBtn.style.display = 'none';
+      if (copyBtn) copyBtn.style.display = '';
+      copyBtn.setAttribute('data-slug', slug);
+      copyBtn.setAttribute('data-owner', owner);
+    }
+  } catch(e) {
+    console.warn('Ownership check failed:', e);
+  }
+}
+
+async function copyToMyLibrary() {
+  const btn = document.getElementById('copyToMineBtn');
+  const slug = btn?.getAttribute('data-slug');
+  const originalOwner = btn?.getAttribute('data-owner');
+  if (!slug) return;
+
+  const newSlug = slug + '-amy';
+  if (!confirm(`Copy this resort to your library as "${newSlug}"? You can rename it after.`)) return;
+
+  try {
+    // Get original data
+    const orig = (await db.collection('resortProfiles').doc(slug).get()).data() || {};
+    // Save as new record with Amy's ownership
+    await db.collection('resortProfiles').doc(newSlug).set({
+      ...orig,
+      slug: newSlug,
+      owner: 'amy',
+      copiedFrom: slug,
+      copiedAt: firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    }, {merge: false});
+
+    toast(`✅ Copied! Now saved as "${newSlug}" in your library.`, 'success');
+
+    // Add to dropdown and switch to it
+    const sel = document.getElementById('masterResort');
+    const existingOpt = [...sel.options].find(o => o.value === newSlug);
+    if (!existingOpt) {
+      const opt = document.createElement('option');
+      opt.value = newSlug;
+      opt.textContent = (orig.name || orig.resortName || newSlug) + ' (copy)';
+      sel.appendChild(opt);
+    }
+    sel.value = newSlug;
+    myResortSlugs.add(newSlug);
+    onMasterResortChange(newSlug);
+  } catch(e) {
+    toast('Error copying: ' + e.message, 'error');
+  }
+}
+
 // ── MASTER RESORT CHANGE ──
 
 function onMasterResortChange(slug) {
@@ -804,8 +882,11 @@ function onMasterResortChange(slug) {
   if (!slug) {
     const form = document.getElementById('profileForm');
     if (form) form.style.display = 'none';
+    const banner = document.getElementById('ownershipBanner');
+    if (banner) banner.style.display = 'none';
   } else {
     loadResortProfile(slug);
+    updateOwnershipUI(slug);
   }
   const filterSel = document.getElementById('filterResort');
   if (filterSel) {
