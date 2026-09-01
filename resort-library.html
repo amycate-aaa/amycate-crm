@@ -3040,55 +3040,13 @@ footer{border-top:1px solid var(--line);padding:2.2rem 0 3.2rem;color:var(--mute
   b.id='acBuildGuide'; b.type='button'; b.textContent='\uD83D\uDCC4 Build guide page';
   b.style.cssText='background:none;border:1px solid #B08D57;color:#8A6A2F;padding:9px 18px;'
    +'border-radius:5px;font-weight:600;font-size:.86rem;cursor:pointer;margin-right:10px';
-  b.onclick=async function(){
+  b.onclick=function(){
    var sel=document.getElementById('masterResort');
    var slug=sel&&sel.value;
    if(!slug){alert('Pick a resort first.');return;}
-   b.textContent='Building\u2026'; b.disabled=true;
-   try{
-    var db=firebase.firestore();
-    var a=(await db.collection('resortProfiles').doc(slug).get()).data()||{};
-    var snap=await db.collection('resortPhotos').where('resortSlug','==',slug).get();
-    var rp={},gal=[];
-    snap.forEach(function(dd){var x=dd.data();var c=(x.roomCategory||'').trim();
-     if(c){if(!rp[c])rp[c]=x.url;}else gal.push(x.url);});
-    toList(a.photos).forEach(function(u){if(gal.indexOf(u)<0)gal.push(u);});
-    var html=build(a,rp,gal);
-    var blob=new Blob([html],{type:'text/html'});
-    var link=document.createElement('a');
-    link.href=URL.createObjectURL(blob);
-    link.download=slug+'-profile-v1.html';
-    document.body.appendChild(link); link.click(); link.remove();
-    var mk=card(slug,a);
-    try{
-     var IDX='https://raw.githubusercontent.com/amycate-aaa/amycate-crm/main/resort-reference/index.html';
-     var res=await fetch(IDX+'?t='+Date.now());
-     var idx=await res.text();
-     if(idx.indexOf(slug+'-profile-v1.html')>-1){
-      alert('Guide page downloaded.\n\nThis resort already has a card on the index, so index.html was left alone.');
-     } else {
-      var re=new RegExp('<a class="card"[\\\\s\\\\S]*?<\\/a>','g');
-      var m,last=null;
-      while((m=re.exec(idx))!==null){ last=m; }
-      if(last){
-       var at=last.index+last[0].length;
-       idx = idx.slice(0,at) + '\n\n      ' + mk + idx.slice(at);
-       var n=(idx.match(/<a class="card"/g)||[]).length;
-       idx = idx.replace(/>\d+ resorts</, '>'+n+' resorts<');
-       var b2=new Blob([idx],{type:'text/html'});
-       var l2=document.createElement('a');
-       l2.href=URL.createObjectURL(b2);
-       l2.download='index.html';
-       document.body.appendChild(l2); l2.click(); l2.remove();
-       alert('Two files downloaded:\n\n  '+slug+'-profile-v1.html\n  index.html  ('+n+' resorts)\n\nUpload BOTH to the resort-reference folder.');
-      }
-     }
-    }catch(e2){
-     try{await navigator.clipboard.writeText(mk);}catch(e3){}
-     alert('Guide page downloaded.\n\nCould not fetch the index, so the card is on your clipboard. Paste it into resort-reference/index.html and bump the count.');
-    }
-   }catch(e){alert('Could not build: '+e.message);}
-   b.textContent='\uD83D\uDCC4 Build guide page'; b.disabled=false;
+   // build it from the live guide, so the static page matches the real one
+   window.open('https://amy-cate.com/resort-reference/resort.html?r='+
+     encodeURIComponent(slug)+'&download=1','_blank');
   };
   bar.insertBefore(b, bar.querySelector('button'));
  }
