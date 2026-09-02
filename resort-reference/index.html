@@ -96,7 +96,7 @@ footer strong{font-weight:500;color:#5A5045}
     <div class="eyebrow">Amy Cate &middot; Internal Reference</div>
     <h1>Resort Reference</h1>
     <p>One page per resort &mdash; rooms, dining, club level, wedding venues with capacities, packages and planning notes. Built to read before a client call.</p>
-    <div class="count">18 resorts</div>
+    <div class="count" id="resort-count">28 resorts</div>
     <div class="audbar" role="tablist" aria-label="Audience">
       <button class="audbtn" id="aud-dwt" role="tab" aria-selected="true">Weddings</button>
       <button class="audbtn" id="aud-ct" role="tab" aria-selected="false">Groups &amp; Celebrations</button>
@@ -447,6 +447,19 @@ footer strong{font-weight:500;color:#5A5045}
         <div class="open">Open reference &rarr;</div>
       </a>
 
+      <a class="card" href="secrets-royal-beach-profile-v1.html">
+        <div class="region">Playa B&aacute;varo, Dominican Republic</div>
+        <h2>Secrets Royal Beach Punta Cana</h2>
+        <p>Adults-only on seven hundred yards of B&aacute;varo sand, with free-flow dining next door at Dreams Royal Beach.</p>
+        <div class="tags">
+          <span class="tag">Adults Only</span>
+          <span class="tag">639 Suites</span>
+          <span class="tag">8 Venues</span>
+          <span class="tag">Preferred Club</span>
+        </div>
+        <div class="open">Open reference &rarr;</div>
+      </a>
+
       <a class="card" href="sunscape-cancun-profile-v1.html">
         <div class="region">Hotel Zone, Canc&uacute;n</div>
         <h2>Sunscape Canc&uacute;n Resort &amp; Spa</h2>
@@ -492,6 +505,10 @@ footer strong{font-weight:500;color:#5A5045}
   var saved; try{ saved=localStorage.getItem('acAudience'); }catch(e){}
   if(saved==='aud-ct'){ sel('aud-ct'); }
 })();
+</script>
+<script>/* keep the count honest without anyone having to remember */
+(function(){var e=document.getElementById("resort-count");
+ if(e)e.textContent=document.querySelectorAll("a.card").length+" resorts";})();
 </script>
 </body>
 </html>
