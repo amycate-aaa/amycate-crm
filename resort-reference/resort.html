@@ -298,7 +298,11 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .dinelist h4{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:var(--espresso);margin:0 0 3px;}
 .dinelist .t{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:0 0 7px;}
 .dinelist p{font-size:15.5px;line-height:1.65;color:#5A544C;margin:0;}
-.bandimg{width:100%;height:clamp(230px,30vw,400px);object-fit:cover;display:block;margin-top:30px;}
+/* a shallow band crops an interior shot to nothing — give it more height,
+   and cap the width so a very wide screen doesn't flatten it further */
+.bandimg{width:100%;max-width:1100px;margin:30px auto 0;aspect-ratio:16/7;
+  height:auto;max-height:520px;object-fit:cover;display:block;}
+@media(max-width:760px){.bandimg{aspect-ratio:4/3;}}
 .pool-card img{width:100%;height:180px;object-fit:cover;margin:0 0 16px;}
 .menulink{display:inline-block;margin-top:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:2px;}
 .menulink:hover{color:var(--espresso);border-color:var(--espresso);}
