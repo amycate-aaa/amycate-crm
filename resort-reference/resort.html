@@ -282,6 +282,8 @@ ul.pricepts li::before{content:"";position:absolute;left:2px;top:.62em;width:6px
 ul.pricepts b{font-weight:500;color:var(--espresso);}
 .pkgprice{background:var(--espresso);color:#FBF8F3;text-align:center;padding:clamp(38px,5vw,58px) 32px;margin-top:34px;}
 .pkgprice .big{font-family:var(--serif);font-size:clamp(3rem,7vw,4.6rem);line-height:1;margin:0 0 12px;color:#FBF8F3;}
+.pkgprice .pkgroom{font-family:var(--serif);font-size:clamp(1.15rem,2.2vw,1.5rem);color:#EDE4D6;
+  font-style:italic;margin:14px 0 0;}
 .pkgprice .who{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 22px;}
 .pkgprice .when{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);margin:0 0 8px;}
 .pkgprice .legs{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.35rem);color:#EDE4D6;margin:0 0 26px;line-height:1.5;}
@@ -611,6 +613,8 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <div style="flex:1 1 260px;">
           <label class="qb-lbl">What it covers <span style="opacity:.6;">(optional &mdash; overrides the default line)</span></label>
           <input type="text" id="q-pkgcovers" class="qb-in" value="Flights, 3 nights all-inclusive and roundtrip airport transfers" oninput="saveLocal()">
+          <label class="qb-lb" style="margin-top:12px;">Room this price is based on</label>
+          <input type="text" id="q-pkgroom" class="qb-in" placeholder="Junior Suite Deluxe" oninput="saveLocal()">
         </div>
       </div>
     </div>
@@ -804,6 +808,7 @@ function collectQ(){
     needAir:$id('q-needair').checked,
     pkgPrice:$id('q-pkgprice').value.trim(),
     pkgCovers:$id('q-pkgcovers').value.trim(),
+    pkgRoom:$id('q-pkgroom')?$id('q-pkgroom').value.trim():'',
     air:[...document.querySelectorAll('#q-air-rows tr[data-air]')].map(tr=>({
       who:tr.querySelector('.a-who').value.trim(), flight:tr.querySelector('.a-fl').value.trim(),
       date:tr.querySelector('.a-dt').value.trim(), from:tr.querySelector('.a-fr').value.trim(),
@@ -1092,6 +1097,7 @@ function renderQuote(){
               (legs?'<p class="legs">'+legs+'</p>':'')+
               ((when||legs)?'<hr class="hr">':'')+
               '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
+              (clean(q.pkgRoom)?'<p class="pkgroom">'+esc(clean(q.pkgRoom))+'</p>':'')+
          '<p class="who">Per person</p>'+
          '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
