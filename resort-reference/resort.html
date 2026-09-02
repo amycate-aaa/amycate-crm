@@ -49,6 +49,11 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .hero-name{font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
 .hero-tag{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
 .hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
+.workwith{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-soft);padding-bottom:4px;transition:.2s;}
+.workwith:hover{color:var(--espresso);border-bottom-color:var(--espresso);}
+.q-hero .workwith{color:var(--gold-soft);border-bottom-color:rgba(201,173,130,.5);}
+.q-hero .workwith:hover{color:#FBF8F3;border-bottom-color:#FBF8F3;}
 .hero-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding:0;list-style:none;}
 .hero-chips li{font-size:11px;letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(176,141,87,.45);padding:7px 14px;color:var(--ink);}
 .change-link{margin-top:30px;display:inline-block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;border-bottom:1px solid rgba(201,173,130,.4);cursor:pointer;}
@@ -443,6 +448,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <p class="hero-tag" id="hero-tag"></p>
       <p class="hero-meta" id="hero-dest"></p>
       <ul class="hero-chips" id="hero-chips"></ul>
+      <a class="workwith" href="https://work-with-amy.netlify.app/" target="_blank" rel="noopener">What working with me looks like &rarr;</a>
       <a class="change-link" onclick="showPicker();return false;" href="#">↩ Change resort</a>
     </div>
     <img class="hero-photo" id="hero-img" src="" alt="">
@@ -959,7 +965,7 @@ function renderQuote(){
     (q.headline?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
-    (CT?'':'<p style="margin:0;"><a class="herobtn" href="https://drive.google.com/file/d/1tnA_M9gGH-FNJyeJRvr77_cvigOmb8hl/view?usp=drive_link" target="_blank" rel="noopener">Working With Amy \u2192</a></p>')+
+    '<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>'+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
