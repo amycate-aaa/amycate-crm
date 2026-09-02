@@ -1067,6 +1067,22 @@ function renderQuote(){
           '<li><b>Rates are confirmed when you book</b>, and held against increases if your group reaches ten rooms.</li>'+
           '</ul>')
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
+      ((q.needAir&&clean(q.pkgPrice))
+        ?(function(){
+            const legs=(q.air||[]).filter(r=>r.from&&r.to)
+              .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
+            const when=clean(q.travel);
+            return '<div class="pkgprice">'+
+              (when?'<p class="when">'+esc(when)+'</p>':'')+
+              (legs?'<p class="legs">'+legs+'</p>':'')+
+              ((when||legs)?'<hr class="hr">':'')+
+              '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
+              (clean(q.pkgRoom)?'<p class="pkgroom">'+esc(clean(q.pkgRoom))+'</p>':'')+
+         '<p class="who">Per person</p>'+
+         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
+         '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
+          })()
+        :'')+
       (priced
         ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
@@ -1087,22 +1103,7 @@ function renderQuote(){
               (clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+
               '</div>';}).join('')+'</div>')+
       (solo?'':stayHTML)+
-      ((q.needAir&&clean(q.pkgPrice))
-        ?(function(){
-            const legs=(q.air||[]).filter(r=>r.from&&r.to)
-              .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
-            const when=clean(q.travel);
-            return '<div class="pkgprice">'+
-              (when?'<p class="when">'+esc(when)+'</p>':'')+
-              (legs?'<p class="legs">'+legs+'</p>':'')+
-              ((when||legs)?'<hr class="hr">':'')+
-              '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
-              (clean(q.pkgRoom)?'<p class="pkgroom">'+esc(clean(q.pkgRoom))+'</p>':'')+
-         '<p class="who">Per person</p>'+
-         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
-         '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
-          })()
-        :'')+
+
       (!priced?'':'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
       (q.needAir
         ?'<p>Flight prices move daily and are only held once ticketed. If your group reaches ten rooms I can hold the room rates against any increase; below that everyone books individually and I look after each reservation the same way. Either way I tell you straight away if anything shifts.</p>'
