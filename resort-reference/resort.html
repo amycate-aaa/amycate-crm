@@ -659,6 +659,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn solid" onclick="renderQuote()">Preview Quote &rarr;</button>
       <button class="qb-btn" onclick="downloadQuote()">Download HTML</button>
       <button class="qb-btn" onclick="copyQuoteLink()">Copy Link</button>
+      <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
       <span class="qb-msg" id="qb-msg"></span>
@@ -836,7 +837,47 @@ function applyQ(q){
 }
 function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
-function saveLocal(){try{localStorage.setItem('ac_quote_'+SLUG,JSON.stringify(collectQ()));}catch(e){}}
+/* Names, dates, brand and flights belong to the trip, not the resort — they are kept
+   separately so switching resorts carries them across. Price and rooms stay per resort. */
+const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-head','q-note'];
+function saveTrip(){
+  try{
+    const t={};
+    TRIPKEYS.forEach(k=>{const el=$id(k); if(el)t[k]=el.value;});
+    const air=$id('q-needair'); if(air)t.needAir=air.checked;
+    t.air=[...document.querySelectorAll('#q-air-rows tr[data-air]')].map(tr=>
+      [...tr.querySelectorAll('input')].map(i=>i.value));
+    localStorage.setItem('ac_trip',JSON.stringify(t));
+  }catch(e){}
+}
+function loadTrip(){
+  try{
+    const raw=localStorage.getItem('ac_trip'); if(!raw)return false;
+    const t=JSON.parse(raw); let used=false;
+    TRIPKEYS.forEach(k=>{const el=$id(k); if(el&&t[k]){el.value=t[k];used=true;}});
+    if(t.needAir&&$id('q-needair')){$id('q-needair').checked=true;toggleAir();used=true;}
+    if(Array.isArray(t.air)&&t.air.length&&$id('q-air-rows')){
+      $id('q-air-rows').innerHTML='';
+      t.air.forEach(vals=>{addAirRow();
+        const tr=$id('q-air-rows').lastElementChild;
+        [...tr.querySelectorAll('input')].forEach((inp,i)=>{if(vals[i]!=null)inp.value=vals[i];});
+      });
+      used=true;
+    }
+    return used;
+  }catch(e){return false;}
+}
+function clearTrip(){
+  if(!confirm('Clear the client details and flights? The resort itself is untouched.'))return;
+  try{localStorage.removeItem('ac_trip');localStorage.removeItem('ac_quote_'+SLUG);}catch(e){}
+  TRIPKEYS.forEach(k=>{const el=$id(k); if(el)el.value='';});
+  const air=$id('q-needair'); if(air){air.checked=false;toggleAir();}
+  if($id('q-air-rows'))$id('q-air-rows').innerHTML='';
+  ['q-pkgprice','q-pkgroom'].forEach(k=>{const el=$id(k); if(el)el.value='';});
+  if($id('q-price-rows'))$id('q-price-rows').innerHTML='';
+  saveLocal();
+}
+function saveLocal(){try{localStorage.setItem('ac_quote_'+SLUG,JSON.stringify(collectQ()));saveTrip();}catch(e){}}
 
 /* ══════════════════ BUILDER ══════════════════ */
 function buildBuilder(){
@@ -851,7 +892,11 @@ function buildBuilder(){
     el.addEventListener('change',saveLocal);});
   const url=new URLSearchParams(location.search).get('q');
   if(url)applyQ(decQ(url));
-  else{try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s)applyQ(JSON.parse(s));}catch(e){}}
+  else{
+    let had=false;
+    try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s){applyQ(JSON.parse(s));had=true;}}catch(e){}
+    if(!had)loadTrip();   // first time on this resort — carry the trip details over
+  }
   if(!$id('q-priced').value)$id('q-priced').value='Per person, per night';
 }
 let ROOMCATS=[];
