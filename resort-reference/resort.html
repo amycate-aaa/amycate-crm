@@ -1042,16 +1042,18 @@ function renderQuote(){
   const allCats=(P.roomCategories||[]).filter(c=>c&&c.name);
   const priceMap={}; q.prices.forEach(r=>{priceMap[String(r.name||'').toLowerCase().trim()]=r.ppn;});
   const rows=priced
-    ? q.prices.slice()
+    ? (q.prices.length ? q.prices.slice()
+       : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices))
     : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices);
   if(rows.length||hasPkg){
     const cats=allCats;
     const solo=rows.length===1&&!q.needAir;
     const stayHTML=(priced&&q.opts.example&&!q.needAir)?stayTotals(q,solo):'';
-    ROOMS=sec('',head('Your Guests',priced?'Accommodations & Pricing':'Rooms & Suites')+
+    ROOMS=sec('',head('Your Guests',(priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites')+
       (priced
         ?(q.needAir
         ?'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
+        +(q.prices.length?'':'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">The price above is for the entry category. Here is every room type at the resort \u2014 tell me which appeals and I will price it.</p>')
         :'<ul class="pricepts">'+
           '<li><b>Per person, per night</b>, based on two people sharing.</li>'+
           '<li><b>Everything is in it</b> \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers.</li>'+
@@ -1063,8 +1065,7 @@ function renderQuote(){
       (priced
         ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
-            // with air, the package band carries the visual — a room photo competes with it
-            const img=q.needAir?'':([c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'');
+            const img=[c.photo,c.photoUrl,PHOTOMAP[(r.name||'').toLowerCase().trim()]].find(photoOk)||'';
             const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Sleeps up to '+c.maxOccupancy:null,c.swimOut?'Swim-out':null].filter(Boolean).join(' \u00b7 ');
             return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
