@@ -900,7 +900,7 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
     '<p class="small">The first quote page opened in a new tab; the links above open the others. The email is exactly what will go out \u2014 close it, fix anything, then <b>Create quotes &amp; email</b>.</p>';
     try{window.open(made[0].link,'_blank');}catch(e){}
     window.EB_ENTRIES=[];showEmailBox($id('mq-email').value.trim(),'[PREVIEW] '+subject,body,names);const eb=$id('eb-msg');if(eb)eb.innerHTML='<span style="color:#8B2E2E;">Preview only \u2014 links are temporary and nothing is saved. Close and click Create when it looks right.</span>';msg.textContent='Preview built \u2014 nothing saved.';window.scrollTo({top:pv.offsetTop-20,behavior:'smooth'});return;}
-  window.EB_ENTRIES=made;showEmailBox($id('mq-email').value.trim(),subject,body,names);msg.textContent='Done \u2014 '+made.length+' quote'+(made.length>1?'s':'')+' saved to '+couple+'\u2019s basket.';$id('mq-preview').style.display='none';renderPickerBaskets();if(window.RECENT_QUOTES){drawRecentQuotesFrom(made.map(m=>({slug:m.slug,resort:m.name,k:m.k,t:m.t,q:{couple,travel,brand,prices:m.rooms.length?[{ppn:1}]:[]}})).concat(window.RECENT_QUOTES));}}
+  window.EB_META={couple,date,travel};window.EB_ENTRIES=made;showEmailBox($id('mq-email').value.trim(),subject,body,names);msg.textContent='Done \u2014 '+made.length+' quote'+(made.length>1?'s':'')+' saved to '+couple+'\u2019s basket.';$id('mq-preview').style.display='none';renderPickerBaskets();if(window.RECENT_QUOTES){drawRecentQuotesFrom(made.map(m=>({slug:m.slug,resort:m.name,k:m.k,t:m.t,q:{couple,travel,brand,prices:m.rooms.length?[{ppn:1}]:[]}})).concat(window.RECENT_QUOTES));}}
 function renderRecentQuotes(snap){const box=$id('picker-recent');if(!box)return;const rows=[];snap.forEach(d=>{const p=d.data();const L=p.quoteLinks||{};Object.keys(L).forEach(k=>{const q=decQ(L[k].q)||{};rows.push({slug:d.id,resort:p.name||d.id,where:String(p.destination||'').replace(/,\s*/g,', '),k,t:L[k].t||0,sent:L[k].sent||0,q});});});
   rows.sort((a,b)=>b.t-a.t);window.RECENT_QUOTES=rows;const fmt=t=>t?new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
   if(!rows.length){box.innerHTML='';return;}
@@ -1305,15 +1305,16 @@ function ebToHtml(text){const E=esc;const lines=String(text||'').replace(/\r/g,'
     if(isHead(l)){const m=l.match(/^\d+\.\s+(.*?)(?:\s+\u2014\s+(.*))?$/);let name=m?m[1]:l,where=m&&m[2]?m[2]:'';let link='';const bullets=[];i++;
       while(i<lines.length&&lines[i].trim()){const t=lines[i].trim();if(isUrl(t)&&!link)link=t;else if(isBullet(lines[i])||/^\s{2,}/.test(lines[i]))bullets.push(t.replace(/^[\u2022\u2013-]\s+/,''));else break;i++;}
       out.push('<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;max-width:640px;border-bottom:1px solid #E4D8C6;margin:0 0 14px;"><tr><td style="padding:12px 0 14px;">'+
+        (where?'<div style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8B6914;margin-bottom:4px;">'+E(where)+'</div>':'')+
         '<div style="'+SERIF+'font-size:22px;color:#1A1510;line-height:1.2;">'+(link?'<a href="'+E(link)+'" style="color:#1A1510;text-decoration:none;">'+E(name)+'</a>':E(name))+'</div>'+
-        (where?'<div style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#6B6258;margin-top:4px;">'+E(where)+'</div>':'')+
         (bullets.length?'<div style="'+F+'font-size:14px;color:#2A241F;margin-top:8px;line-height:1.6;">'+bullets.map(E).join('<br>')+'</div>':'')+
-        (link?'<div style="margin-top:10px;"><a href="'+E(link)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">View the full quote \u2192</a></div>':'')+'</td></tr></table>');continue;}
+        (link?'<div style="margin-top:10px;"><a href="'+E(link)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">See this resort \u2192</a></div>':'')+'</td></tr></table>');continue;}
     // paragraph: gather until blank; URL-only line becomes a link
     const para=[];while(i<lines.length&&lines[i].trim()){para.push(lines[i].trim());i++;}
     const html=para.map(t=>isUrl(t)?'<a href="'+E(t)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">'+(/compare/.test(t)?'Open the side-by-side \u2192':/zcal|calendly/.test(t)?'Grab a time \u2192':/work-with-amy/.test(t)?'How working with me looks \u2192':/destinations/.test(t)?'Read about the destinations \u2192':E(t))+'</a>':E(t).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" style="color:#8B6914;">$1</a>')).join('<br>');
     out.push('<p style="'+F+'font-size:15px;line-height:1.7;color:#2A241F;margin:0 0 16px;">'+html+'</p>');}
-  return'<div style="max-width:640px;">'+out.join('')+'</div>';}
+  const M=window.EB_META||{};const hdr=M.couple?'<div style="text-align:center;padding:26px 0 30px;border-bottom:1px solid #E4D8C6;margin-bottom:26px;"><div style="'+F+'font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8B6914;">Prepared for '+E(M.couple)+'</div><div style="'+SERIF+'font-size:30px;color:#1A1510;margin:8px 0 6px;">Let\u2019s find your place</div><div style="'+F+'font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6B6258;">'+[M.date?E(M.date):'',M.travel?E(M.travel):''].filter(Boolean).join('  \u00b7  ')+'</div></div>':'';
+  return'<div style="max-width:640px;">'+hdr+out.join('')+'</div>';}
 const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.googleusercontent.com';
 const AGENT_SIG={name:'Amy M. Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group & Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'(832) 773-8664',hours:'Office Hours: Monday\u2013Thursday 9:00am\u20135:00pm, Friday 9:00am\u20133:00pm CST',hours2:'Weekends by appointment',call:'https://zcal.co/amymcate/letschat',address:'945 Concord Street | Framingham, MA | 01701',sigImage:'https://amy-cate.com/resort-reference/photos/signature.png'};
 function sigHtml(){const S=AGENT_SIG;const F='font-family:Helvetica,Arial,sans-serif;';const SERIF='font-family:Georgia,\'Times New Roman\',serif;';
@@ -1359,8 +1360,8 @@ function fillRoomList(){const dl=$id('q-roomlist');if(!dl)return;dl.innerHTML=(P
   const pr=$id('q-pkgroom');if(pr&&!pr.value.trim()){const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{const i=tr.querySelector('.d');return(i&&i.value.trim())?tr.dataset.name:'';}).filter(Boolean);if(rows.length===1)pr.value=rows[0];}}
 function priceLine(name,ppn,q){const money=v=>'$'+Number(String(v).replace(/[^0-9.]/g,'')).toLocaleString('en-US',{maximumFractionDigits:0});const t=Number(String(ppn).replace(/[^0-9.]/g,''));const occ=parseInt(q.occ,10)||2;const n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;const total=q.basis==='total'||/total/i.test(q.priced||'');
   if(!t)return name;
-  if(total){const pp=t/occ;const pn=n?pp/n:0;return name+': '+money(t)+' total for the room ('+occ+' adult'+(occ>1?'s':'')+(n?', '+n+' night'+(n>1?'s':''):'')+' \u2014 '+money(pp.toFixed(0))+' per person'+(pn?', '+money(pn.toFixed(0))+' per person per night':'')+')';}
-  const tot=n?t*occ*n:0;return name+': '+money(t)+' per person, per night'+(tot?' ('+occ+' adult'+(occ>1?'s':'')+', '+n+' night'+(n>1?'s':'')+' \u2014 '+money((t*n).toFixed(0))+' per person, '+money(tot.toFixed(0))+' total for the room)':'');}
+  if(total){const pp=t/occ;const pn=n?pp/n:0;return name+' \u2014 '+money(t)+' for the room'+(pn?'  \u00b7  '+money(pn.toFixed(0))+' pp / night':'')+' ('+occ+' adults'+(n?', '+n+' nights':'')+')';}
+  const tot=n?t*occ*n:0;return name+' \u2014 '+money(t)+' pp / night'+(tot?'  \u00b7  '+money(tot.toFixed(0))+' for the room':'')+' ('+occ+' adults'+(n?', '+n+' nights':'')+')';}
 function basketEntryFor(q,link){const R=P.name||P.resortName||'';const where=(P.destination||'').replace(/,\s*/g,', ');const rooms=(q.prices||[]).map(r=>'    \u2013 '+(r.ppn?priceLine(r.name,r.ppn,q):r.name));return{slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};}
 function basketAdd(entry){window.BASKET_KEY=null;const k=bkKey(entry.couple);let b=ebBasketGet(k).filter(e=>e.slug!==SLUG);b.push(entry);ebBasketSet(b,k);renderBasketBtn();return b;}
 function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();const all=bkAll();const others=Object.keys(all).filter(k=>k!==bkCurrentKey()).length;btn.textContent='Basket'+(b.length?' ('+b.length+')':'')+(others?' +'+others:'');}
@@ -1391,7 +1392,7 @@ async function emailDraft(){
   if(q.mode!=='guest')basketAdd(entry);
   const basket=q.mode==='guest'?[entry]:(window.BASKET_KEY?ebBasketGet(window.BASKET_KEY):ebBasketGet());
   const compareLink=basket.length>1?location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+basket.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(','):'';
-  const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?'\u2022 Rooms priced:\n'+e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
+  const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
   let subject,body;
   if(q.mode==='guest'){
     subject='Your room at '+R+(q.travel?' \u2014 '+q.travel:'');
@@ -1417,7 +1418,7 @@ async function emailDraft(){
     body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts(entry)+'\n\nOne more thing: these are the prices I\u2019m seeing today. If you come across the same resort, room and dates for less anywhere online, send it to me before we book \u2014 I price match, and I\u2019d rather you book with me knowing you have the best number.'+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   }
   const to=(($id('q-email')||{}).value||'').trim();
-  window.EB_ENTRIES=basket;showEmailBox(to,subject,body,basket.length>1?basket.map(e=>e.name):null);say('');
+  window.EB_META={couple:q.couple,date:q.date,travel:entry.travel};window.EB_ENTRIES=basket;showEmailBox(to,subject,body,basket.length>1?basket.map(e=>e.name):null);say('');
   if(compareLink){const bk=$id('eb-basket');if(bk)bk.innerHTML+=' <a href="'+compareLink+'" target="_blank" style="color:var(--gold);">Open the comparison \u2192</a>';}
 }
 function toggleAir(){ const on=$id('q-needair').checked;
