@@ -1395,6 +1395,7 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
   const pad=n=>String(n).padStart(2,'0');
   const parseDate=t=>{let m;
     if(m=t.match(/\b(20\d\d)-(\d\d)-(\d\d)\b/))return m[1]+'-'+m[2]+'-'+m[3];
+    if(m=t.match(/\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[A-Z]*\.?\s+(20\d\d)\b/i))return m[3]+'-'+pad(MON[m[2].toUpperCase().slice(0,3)])+'-'+pad(m[1]);
     if(m=t.match(/\b(\d{1,2})([A-Z]{3})(\d{2,4})?\b/i)){const mo=MON[m[2].toUpperCase()];if(mo)return (m[3]?(m[3].length===2?'20'+m[3]:m[3]):year)+'-'+pad(mo)+'-'+pad(m[1]);}
     if(m=t.match(/\b(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[A-Z]*\.?\s+(\d{1,2})(?:,?\s*(20\d\d))?/i))return (m[3]||year)+'-'+pad(MON[m[1].toUpperCase().slice(0,3)])+'-'+pad(m[2]);
     if(m=t.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/))return (m[3]?(m[3].length===2?'20'+m[3]:m[3]):year)+'-'+pad(m[1])+'-'+pad(m[2]);
@@ -1404,7 +1405,12 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
   const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l&&!skip.test(l));
   let rows=[],cur=null;
   lines.forEach(line=>{
-    let fl='';let m=line.match(/\b([A-Z][A-Z0-9])\s?(\d{2,4})\b/);
+    // DestiWorld / Softrip table row: date, time, code, airline, flight, class, from, from city, to, to city, arr date, arr time, equipment, stops
+    const tf=line.split('\t').map(x=>x.trim());
+    if(tf.length>=12&&/^[A-Z0-9]{2}$/.test(tf[2])&&/^\d{2,4}$/.test(tf[4])&&/^[A-Z]{3}$/.test(tf[6])&&/^[A-Z]{3}$/.test(tf[8])){
+      const dtv=parseDate(tf[0]);const dep=parseTimes(tf[1])[0]||'';const arr=parseTimes(tf[11]||'')[0]||'';
+      cur={flight:tf[2]+tf[4],date:dtv,from:tf[6],to:tf[8],dep,arr,fromCity:(tf[7]||'').split(',')[0].trim()};rows.push(cur);return;}
+    let fl='';let m=line.match(/\b([A-Z][A-Z0-9]) ?(\d{2,4})\b/);
     if(m&&!/^\d/.test(m[1]))fl=m[1]+m[2];
     if(!fl){for(const k in AIRLINE_NAMES){const r2=new RegExp('\\b'+k+'\\b(?:\\s+(?:airlines?|flight|#))?\\s*#?\\s*(\\d{2,4})','i');const mm=line.match(r2);if(mm){fl=AIRLINE_NAMES[k]+mm[1];break;}}}
     const dt=parseDate(line);
@@ -1412,12 +1418,13 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
     let from='',to='';const paren=[...line.toUpperCase().matchAll(/\(([A-Z]{3})\)/g)].map(x=>x[1]);const pair=line.toUpperCase().match(/(?:^|[\s,])([A-Z]{3})([A-Z]{3})(?=$|[\s,])/);
     if(paren.length>=2){from=paren[0];to=paren[1];}else if(pair&&!MON[pair[1]]&&!MON[pair[2]]&&!/^(UNITED|DELTA|SPIRIT|ALASKA|FRONTIER|JETBLUE|FLIGHT|ARRIVE|DEPART|RETURN|TRAVEL)$/.test(pair[1]+pair[2])){from=pair[1];to=pair[2];}else if(codes.length>=2){from=codes[0];to=codes[1];}else if(codes.length===1&&cur&&!cur.to){cur.to=codes[0];}
     const times=parseTimes(line);
-    if(fl){cur={flight:fl,date:dt,from,to,dep:times[0]||'',arr:times[1]||''};rows.push(cur);}
+    let fromCity='';if(from){const cm=line.match(new RegExp('\\b'+from+'\\b[\\t ]+([A-Z][A-Za-z.\' ]+?)(?:,|\\t|$)'));if(cm)fromCity=cm[1].trim();}
+    if(fl){cur={flight:fl,date:dt,from,to,dep:times[0]||'',arr:times[1]||'',fromCity};rows.push(cur);}
     else if(cur){if(!cur.date&&dt)cur.date=dt;if(!cur.from&&from)cur.from=from;if(!cur.to&&to)cur.to=to;if(!cur.dep&&times[0])cur.dep=times[0];if(!cur.arr&&times[1])cur.arr=times[1];}
   });
   rows=rows.filter(r=>r.flight);
   const cityOf0=c=>({IAH:'Houston',HOU:'Houston',DFW:'Dallas',DAL:'Dallas',AUS:'Austin',SAT:'San Antonio',DEN:'Denver',ATL:'Atlanta',ORD:'Chicago',MDW:'Chicago',LAX:'Los Angeles',SFO:'San Francisco',JFK:'New York',EWR:'Newark',LGA:'New York',BOS:'Boston',MIA:'Miami',FLL:'Fort Lauderdale',MCO:'Orlando',TPA:'Tampa',PHX:'Phoenix',LAS:'Las Vegas',SEA:'Seattle',MSP:'Minneapolis',DTW:'Detroit',CLT:'Charlotte',PHL:'Philadelphia',DCA:'Washington',IAD:'Washington',BWI:'Baltimore',STL:'St. Louis',MCI:'Kansas City',OKC:'Oklahoma City',TUL:'Tulsa',MSY:'New Orleans',BNA:'Nashville',RDU:'Raleigh',SLC:'Salt Lake City',PDX:'Portland',SAN:'San Diego',YYZ:'Toronto',YVR:'Vancouver',YYC:'Calgary',YUL:'Montreal'})[c]||'';
-  let lastWho0='';rows.forEach(r=>{let who=cityOf0(r.from)||cityOf0(r.to)||lastWho0;if(!cityOf0(r.from)&&lastWho0)who=lastWho0;lastWho0=who||lastWho0;r.who=who;});return rows;}
+  let lastWho0='';rows.forEach((r,i)=>{const home=cityOf0(r.from)||r.fromCity||'';let who=i===0?(home||cityOf0(r.to)):(lastWho0||home);lastWho0=who||lastWho0;r.who=who;delete r.fromCity;});return rows;}
 function parseAirBlock(){
   const msg=$id('q-air-msg');const rows=parseAirText($id('q-airtext').value);
   if(!rows.length){msg.className='airmsg bad';msg.textContent='No flight numbers found \u2014 paste one flight per line, e.g. UA 1167 14MAY IAHPUJ.';return;}
