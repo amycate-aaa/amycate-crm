@@ -1159,7 +1159,7 @@ function renderQuote(){
     ((q.headline||GUEST)?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
-    (GUEST?'':'<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>')+
+    (GUEST?'<p style="margin:0;"><a class="herobtn" href="meet-amy'+(CT?'?brand=ct':'')+'" target="_blank" rel="noopener">Meet Amy \u2192</a></p>':'<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>')+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
