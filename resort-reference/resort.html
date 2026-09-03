@@ -628,7 +628,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <div id="q-guests"></div>
         <button type="button" class="qb-btn ghost" style="margin-top:6px;" onclick="addGuestRow()">+ Add name</button></div>
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
-      <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028"></div>
+      <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028" oninput="autoNights()"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
       <div class="qb-f"><label>Quote Type</label><select id="q-mode" onchange="toggleMode()">
         <option value="resort">Resort quote &mdash; helping them choose</option>
@@ -677,9 +677,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
         </div>
         <div style="flex:1 1 260px;">
           <label class="qb-lbl">What it covers <span style="opacity:.6;">(optional &mdash; overrides the default line)</span></label>
-          <input type="text" id="q-pkgcovers" class="qb-in" value="Flights, 3 nights all-inclusive and roundtrip airport transfers" oninput="saveLocal()">
+          <input type="text" id="q-pkgcovers" class="qb-in" value="Flights, 3 nights all-inclusive and roundtrip airport transfers" oninput="saveLocal()"><span class="small" id="q-covers-note" style="display:block;opacity:.7;margin-top:4px;">Nights fill in from the travel dates.</span>
           <label class="qb-lb" style="margin-top:12px;">Room this price is based on</label>
-          <input type="text" id="q-pkgroom" class="qb-in" placeholder="Junior Suite Deluxe" oninput="saveLocal()">
+          <input type="text" id="q-pkgroom" class="qb-in" list="q-roomlist" placeholder="Start typing \u2014 the resort's rooms appear" oninput="saveLocal()"><datalist id="q-roomlist"></datalist>
         </div>
       </div>
     </div>
@@ -1113,6 +1113,20 @@ function ebCopy(what){const sub=$id('eb-subject').value,b=$id('eb-body').value;c
 function ebBasketGet(){try{const b=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');const cut=Date.now()-7*24*3600*1000;return b.filter(e=>e.t>cut);}catch(e){return[];}}
 function ebBasketSet(b){try{localStorage.setItem('ac_email_basket',JSON.stringify(b));}catch(e){}}
 function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
+function nightsFromTravel(t){t=String(t||'').replace(/\u2013|\u2014/g,'-').trim();if(!t)return 0;const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const yr=(t.match(/\b(20\d\d)\b/)||[])[1];const y=yr?+yr:new Date().getFullYear()+1;
+  let m;
+  if(m=t.match(/([a-z]{3})[a-z]*\.?\s+(\d{1,2})\s*-\s*(?:([a-z]{3})[a-z]*\.?\s+)?(\d{1,2})/i)){const m1=MON[m[1].toLowerCase().slice(0,3)],m2=m[3]?MON[m[3].toLowerCase().slice(0,3)]:m1;if(m1==null||m2==null)return 0;const a=new Date(y,m1,+m[2]),b=new Date(m2<m1?y+1:y,m2,+m[4]);return Math.round((b-a)/864e5);}
+  if(m=t.match(/(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\s*-\s*(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?/)){const a=new Date(y,+m[1]-1,+m[2]),b=new Date(y,+m[4]-1,+m[5]);return Math.round((b-a)/864e5);}
+  if(m=t.match(/(\d{1,2})\s*-\s*(\d{1,2})\s+([a-z]{3})/i)){const mo=MON[m[3].toLowerCase()];if(mo==null)return 0;return +m[2]-+m[1];}
+  return 0;}
+function autoNights(){const n=nightsFromTravel($id('q-travel').value);const nb=$id('q-nights');const cv=$id('q-pkgcovers');const note=$id('q-covers-note');
+  if(n>0&&n<60){if(nb&&(!nb.value||nb.dataset.auto==='1')){nb.value=n;nb.dataset.auto='1';}
+    if(cv&&(!cv.value.trim()||/^Flights, \d+ nights? all-inclusive and roundtrip airport transfers$/.test(cv.value.trim()))){cv.value='Flights, '+n+' night'+(n===1?'':'s')+' all-inclusive and roundtrip airport transfers';}
+    if(note)note.textContent=n+' night'+(n===1?'':'s')+' from the travel dates.';}
+  else if(note)note.textContent='Nights fill in from the travel dates.';
+  saveLocal();}
+function fillRoomList(){const dl=$id('q-roomlist');if(!dl)return;dl.innerHTML=(P.roomCategories||[]).filter(r=>r&&r.name).map(r=>'<option value="'+esc(r.name)+'">').join('');
+  const pr=$id('q-pkgroom');if(pr&&!pr.value.trim()){const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{const i=tr.querySelector('.d');return(i&&i.value.trim())?tr.dataset.name:'';}).filter(Boolean);if(rows.length===1)pr.value=rows[0];}}
 function basketEntryFor(q,link){const R=P.name||P.resortName||'';const where=(P.destination||'').replace(/,\s*/g,', ');const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));return{slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};}
 function basketAdd(entry){let b=ebBasketGet().filter(e=>e.slug!==SLUG&&(!e.couple||!entry.couple||e.couple.toLowerCase()===entry.couple.toLowerCase()));b.push(entry);ebBasketSet(b);renderBasketBtn();return b;}
 function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();btn.textContent='Basket'+(b.length?' ('+b.length+')':'');}
@@ -1258,7 +1272,7 @@ async function lookupAir(tr){
     saveLocal();
   }catch(e){ msg.className='airmsg bad'; msg.textContent='Lookup failed \u2014 fill it in by hand.'; }
 }
-function openQuote(){setTimeout(renderBasketBtn,0);$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
+function openQuote(){setTimeout(()=>{renderBasketBtn();fillRoomList();if(!($id('q-pkgcovers')||{}).value||/^Flights, \d+ nights? all-inclusive/.test($id('q-pkgcovers').value))autoNights();},50);$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
 function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
 function backToBuilder(){$id('quote-page').style.display='none';$id('page').style.display='block';$id('qb').classList.add('on');document.body.style.overflow='hidden';qbChrome(true);}
 function qbChrome(on){if($id('qb-open'))$id('qb-open').style.display=(on&&AGENT)?'block':'none';if($id('q-back'))$id('q-back').style.display=on?'none':'block';}
