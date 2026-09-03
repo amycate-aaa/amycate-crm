@@ -1110,8 +1110,14 @@ function ebCopy(what){const sub=$id('eb-subject').value,b=$id('eb-body').value;c
   const ok=()=>{$id('eb-msg').textContent='Copied \u2014 paste it into Outlook.';setTimeout(()=>$id('eb-msg').textContent='',5000);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(ok).catch(()=>{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();});
   else{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();}}
-function ebBasketGet(){try{const b=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');const cut=Date.now()-7*24*3600*1000;return b.filter(e=>e.t>cut);}catch(e){return[];}}
-function ebBasketSet(b){try{localStorage.setItem('ac_email_basket',JSON.stringify(b));}catch(e){}}
+function bkAll(){try{const all=JSON.parse(localStorage.getItem('ac_baskets')||'{}');const cut=Date.now()-14*24*3600*1000;Object.keys(all).forEach(k=>{all[k]=(all[k]||[]).filter(e=>e.t>cut);if(!all[k].length)delete all[k];});
+  // one-time migration from the old single basket
+  const old=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');if(old.length){const k=bkKey((old.find(e=>e.couple)||{}).couple);all[k]=(all[k]||[]).concat(old.filter(o=>!(all[k]||[]).some(e=>e.slug===o.slug)));localStorage.removeItem('ac_email_basket');localStorage.setItem('ac_baskets',JSON.stringify(all));}
+  return all;}catch(e){return{};}}
+function bkKey(c){c=String(c||'').trim().toLowerCase();return c||'(no client name)';}
+function bkCurrentKey(){if(window.BASKET_KEY)return window.BASKET_KEY;const c=($id('q-couple')||{}).value;return bkKey(c);}
+function ebBasketGet(key){const all=bkAll();return all[key||bkCurrentKey()]||[];}
+function ebBasketSet(b,key){try{const all=bkAll();const k=key||bkCurrentKey();if(b&&b.length)all[k]=b;else delete all[k];localStorage.setItem('ac_baskets',JSON.stringify(all));}catch(e){}}
 function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
 function nightsFromTravel(t){t=String(t||'').replace(/\u2013|\u2014/g,'-').trim();if(!t)return 0;const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const yr=(t.match(/\b(20\d\d)\b/)||[])[1];const y=yr?+yr:new Date().getFullYear()+1;
   let m;
@@ -1128,15 +1134,17 @@ function autoNights(){const n=nightsFromTravel($id('q-travel').value);const nb=$
 function fillRoomList(){const dl=$id('q-roomlist');if(!dl)return;dl.innerHTML=(P.roomCategories||[]).filter(r=>r&&r.name).map(r=>'<option value="'+esc(r.name)+'">').join('');
   const pr=$id('q-pkgroom');if(pr&&!pr.value.trim()){const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{const i=tr.querySelector('.d');return(i&&i.value.trim())?tr.dataset.name:'';}).filter(Boolean);if(rows.length===1)pr.value=rows[0];}}
 function basketEntryFor(q,link){const R=P.name||P.resortName||'';const where=(P.destination||'').replace(/,\s*/g,', ');const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));return{slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};}
-function basketAdd(entry){let b=ebBasketGet().filter(e=>e.slug!==SLUG&&(!e.couple||!entry.couple||e.couple.toLowerCase()===entry.couple.toLowerCase()));b.push(entry);ebBasketSet(b);renderBasketBtn();return b;}
-function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();btn.textContent='Basket'+(b.length?' ('+b.length+')':'');}
+function basketAdd(entry){window.BASKET_KEY=null;const k=bkKey(entry.couple);let b=ebBasketGet(k).filter(e=>e.slug!==SLUG);b.push(entry);ebBasketSet(b,k);renderBasketBtn();return b;}
+function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();const all=bkAll();const others=Object.keys(all).filter(k=>k!==bkCurrentKey()).length;btn.textContent='Basket'+(b.length?' ('+b.length+')':'')+(others?' +'+others:'');}
 async function saveToBasket(){const q=collectQ();saveLocal();const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},5000);}};say('Saving\u2026');const link=await quoteLink(q);const b=basketAdd(basketEntryFor(q,link));say('Saved for '+(q.couple||'this client')+' \u2014 '+b.length+' resort'+(b.length>1?'s':'')+' in the basket.');}
 function toggleBasket(){const box=$id('qb-basket');const on=box.style.display==='none';box.style.display=on?'block':'none';if(on)renderBasket();}
-function renderBasket(){const box=$id('qb-basket-list');const b=ebBasketGet();if(!b.length){box.innerHTML='<p class="small">Nothing saved yet. <b>Save for client</b> keeps this quote here (7 days) so you can add more resorts before emailing.</p>';return;}
+function renderBasket(){const box=$id('qb-basket-list');const all=bkAll();const cur=bkCurrentKey();const keys=Object.keys(all).sort((a,b)=>(a===cur?-1:b===cur?1:0));
+  const switcher=keys.length>1||(keys.length===1&&keys[0]!==cur)?'<p class="small" style="margin:0 0 10px;">Clients with a basket: '+keys.map(k=>'<a href="#" onclick="window.BASKET_KEY=\''+k.replace(/'/g,"\\'")+'\';renderBasket();renderBasketBtn();return false;" style="'+(k===cur?'font-weight:500;':'')+'color:var(--gold);margin-right:12px;">'+esc(all[k][0].couple||k)+' ('+all[k].length+')</a>').join('')+'</p>':'';
+  const b=ebBasketGet();if(!b.length){box.innerHTML=switcher+'<p class="small">Nothing saved yet for this client. <b>Save for client</b> keeps the quote here (14 days) so you can add more resorts before emailing.</p>';return;}
   const who=b.map(e=>e.couple).filter(Boolean)[0]||'';const cmp=location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+b.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(',');
-  box.innerHTML='<p class="small" style="margin:0 0 8px;"><b>'+esc(who||'Current client')+'</b> \u2014 '+b.length+' resort'+(b.length>1?'s':'')+'</p>'+
+  box.innerHTML=switcher+'<p class="small" style="margin:0 0 8px;"><b>'+esc(who||'Current client')+'</b> \u2014 '+b.length+' resort'+(b.length>1?'s':'')+'</p>'+
   '<table style="width:100%;border-collapse:collapse;font-size:13px;">'+b.map(e=>'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:7px 6px;"><b>'+esc(e.name)+'</b>'+(e.travel?' <span class="small">\u00b7 '+esc(e.travel)+'</span>':'')+(e.pkg?'<br><span class="small">'+esc(e.pkg)+'</span>':'')+'</td><td style="padding:7px 6px;white-space:nowrap;text-align:right;"><a href="'+esc(e.link)+'" target="_blank" class="qb-btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Open</a> <button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="basketRemove(\''+e.slug+'\')">Remove</button></td></tr>').join('')+'</table>'+
-  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty the basket?\')){ebBasketSet([]);renderBasket();renderBasketBtn();}">Empty basket</button></div>';}
+  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty this client\\'s basket?\')){ebBasketSet([]);window.BASKET_KEY=null;renderBasket();renderBasketBtn();}">Empty basket</button></div>';}
 function basketRemove(slug){ebBasketSet(ebBasketGet().filter(e=>e.slug!==slug));renderBasket();renderBasketBtn();}
 async function emailDraft(){
   const q=collectQ();const R=P.name||P.resortName||'';
@@ -1152,7 +1160,7 @@ async function emailDraft(){
   const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));
   const entry=basketEntryFor(q,link);
   if(q.mode!=='guest')basketAdd(entry);
-  const basket=q.mode==='guest'?[entry]:ebBasketGet();
+  const basket=q.mode==='guest'?[entry]:(window.BASKET_KEY?ebBasketGet(window.BASKET_KEY):ebBasketGet());
   const compareLink=basket.length>1?location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+basket.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(','):'';
   const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?'\u2022 Rooms priced:\n'+e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
   let subject,body;
