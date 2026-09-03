@@ -834,7 +834,7 @@ function regionKey(dest,name){const t=(String(dest||'')+' '+String(name||'')).to
   if(/tulum/.test(t))return 'tulum';if(/cancun|cancún|costa mujeres|playa mujeres|isla mujeres/.test(t))return 'cancun';
   if(/riviera maya|playa del carmen|puerto morelos|akumal|puerto aventuras|riviera cancun|xcaret/.test(t))return 'riviera-maya';
   if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
-  if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';return '';}
+  if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';if(/curacao|curaçao/.test(t))return 'curacao';return '';}
 function destGuideLink(entries,couple){const keys=[...new Set(entries.map(e=>regionKey(e.where,e.name)).filter(Boolean))];if(!keys.length)return '';return location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'destinations')+'?d='+keys.join(',')+(couple?'&for='+encodeURIComponent(couple):'');}
 function mqToggle(){const m=$id('mq');const on=m.style.display==='none';m.style.display=on?'block':'none';if(on&&!$id('mq-rows').children.length){mqAddRow();mqAddRow();mqAddRow();}}
 function mqDates(src){const F=$id('mq-from'),T=$id('mq-to'),N=$id('mq-nights');const iso=d=>d.toISOString().slice(0,10);const day=s=>new Date(s+'T12:00');
