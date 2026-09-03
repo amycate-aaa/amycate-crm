@@ -509,6 +509,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <p class="eyebrow" style="margin:26px 0 8px;">Your note <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; goes on every quote page</span></p>
     <textarea id="mq-note" class="qb-in" rows="4" style="width:100%;" placeholder="Optional. What you'd say to them about this shortlist."></textarea>
     <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:22px;">
+      <button type="button" class="qb-btn ghost" onclick="mqClear()">Clear form</button>
       <button type="button" class="qb-btn" onclick="mqCreate(true)">Preview first</button>
       <button type="button" class="qb-btn solid" onclick="mqCreate()">Create quotes &amp; email &rarr;</button>
       <span class="small" id="mq-msg"></span>
@@ -845,7 +846,17 @@ function regionKey(dest,name){const t=(String(dest||'')+' '+String(name||'')).to
   if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
   if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';if(/curacao|curaçao/.test(t))return 'curacao';return '';}
 function destGuideLink(entries,couple){const keys=[...new Set(entries.map(e=>regionKey(e.where,e.name)).filter(Boolean))];if(!keys.length)return '';return location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'destinations')+'?d='+keys.join(',')+(couple?'&for='+encodeURIComponent(couple):'');}
-function mqToggle(){const m=$id('mq');const on=m.style.display==='none';m.style.display=on?'block':'none';if(on&&!$id('mq-rows').children.length){mqAddRow();mqAddRow();mqAddRow();}}
+function mqState(){const F=['mq-couple','mq-date','mq-from','mq-nights','mq-to','mq-brand','mq-basis','mq-occ','mq-xfer','mq-email','mq-note'];const st={f:{},rows:[],air:{},guide:!!($id('mq-guide')||{}).checked,t:Date.now()};F.forEach(k=>{const el=$id(k);if(el)st.f[k]=el.value;});
+  st.rows=[...document.querySelectorAll('.mq-row')].map(r=>({slug:r.querySelector('.mq-resort').value,room:r.querySelector('.mq-room').value,price:r.querySelector('.mq-price').value,pkg:r.querySelector('.mq-pkg').value}));
+  document.querySelectorAll('#mq-air-blocks [data-dest]').forEach(el=>{st.air[el.dataset.dest]=el.querySelector('textarea').value;});return st;}
+function mqSave(){try{localStorage.setItem('ac_mq',JSON.stringify(mqState()));}catch(e){}}
+function mqRestore(){let st;try{st=JSON.parse(localStorage.getItem('ac_mq')||'null');}catch(e){}if(!st||!st.f)return false;if(Date.now()-(st.t||0)>7*24*3600*1000)return false;
+  Object.keys(st.f).forEach(k=>{const el=$id(k);if(el&&st.f[k]!=null)el.value=st.f[k];});if($id('mq-guide'))$id('mq-guide').checked=st.guide!==false;
+  $id('mq-rows').innerHTML='';(st.rows||[]).forEach(r=>{mqAddRow();const row=$id('mq-rows').lastElementChild;const sel=row.querySelector('.mq-resort');if(r.slug){sel.value=r.slug;mqRooms(sel);}const rs=row.querySelector('.mq-room');if(r.room){if(![...rs.options].some(o=>o.value===r.room||o.textContent===r.room)){const o=document.createElement('option');o.textContent=r.room;rs.insertBefore(o,rs.lastElementChild);}rs.value=r.room;}row.querySelector('.mq-price').value=r.price||'';row.querySelector('.mq-pkg').value=r.pkg||'';mqPriceHint(row.querySelector('.mq-price'));mqPkgHint(row.querySelector('.mq-pkg'));});
+  mqAirBlocks();Object.keys(st.air||{}).forEach(d=>{const el=document.querySelector('#mq-air-blocks [data-dest="'+d.replace(/"/g,'')+'"] textarea');if(el){el.value=st.air[d];mqAirPreview(el);}});return !!(st.rows||[]).length||!!st.f['mq-couple'];}
+function mqClear(){if(!confirm('Clear the quick quote form?'))return;localStorage.removeItem('ac_mq');['mq-couple','mq-date','mq-from','mq-to','mq-email','mq-note','mq-paste'].forEach(k=>{const el=$id(k);if(el)el.value='';});$id('mq-nights').value='3';$id('mq-occ').value='2';$id('mq-rows').innerHTML='';mqAddRow();mqAddRow();mqAddRow();mqAirBlocks();$id('mq-preview').style.display='none';$id('mq-msg').textContent='';}
+function mqToggle(){const m=$id('mq');const on=m.style.display==='none';m.style.display=on?'block':'none';if(on&&!$id('mq-rows').children.length){if(!mqRestore()){mqAddRow();mqAddRow();mqAddRow();}}
+  if(on&&!m.dataset.autosave){m.dataset.autosave='1';m.addEventListener('input',()=>{clearTimeout(window._mqT);window._mqT=setTimeout(mqSave,300);});m.addEventListener('change',()=>{clearTimeout(window._mqT);window._mqT=setTimeout(mqSave,300);});}}
 function mqDates(src){const F=$id('mq-from'),T=$id('mq-to'),N=$id('mq-nights');const iso=d=>d.toISOString().slice(0,10);const day=s=>new Date(s+'T12:00');
   if(src==='to'){if(F.value&&T.value){const n=Math.round((day(T.value)-day(F.value))/864e5);if(n>0)N.value=n;}return;}
   const n=parseInt(N.value,10);if(F.value&&n>0){const d=day(F.value);d.setDate(d.getDate()+n);T.value=iso(d);}}
@@ -954,7 +965,7 @@ function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-past
   if(!hotels.length)mqAddRow();
   // flights → one destination box (after rows exist)
   mqAirBlocks();const air=parseAirText(raw,($id('mq-from').value||'').slice(0,4));if(air.length){const newSlugs=hotels.map(h=>mqBestSlug(h.name)).filter(Boolean);const dest=newSlugs.length?mqDestOf(newSlugs[0]):'';let ta=dest?document.querySelector('#mq-air-blocks [data-dest="'+dest.replace(/"/g,'')+'"] textarea'):null;if(!ta)ta=[...document.querySelectorAll('#mq-air-blocks textarea')].find(t=>!t.value.trim())||document.querySelector('#mq-air-blocks textarea');if(ta){ta.value=raw;mqAirPreview(ta);}}
-  $id('mq-paste').value='';
+  $id('mq-paste').value='';mqSave();
   const incomplete=[...document.querySelectorAll('.mq-resort')].map(x=>window.LIB[x.value]).filter(l=>l&&!l.ready).map(l=>l.name);
   msg.textContent=hotels.length+' hotel'+(hotels.length===1?'':'s')+' found'+(hotels.length?' \u2014 '+(hotels.length-missed.length)+' matched to your library':'')+(missed.length?'. Not in library: '+missed.join('; '):'')+(air.length?' \u00b7 '+air.length+' flights':'')+(incomplete.length?'. \u26a0 Guide not complete: '+incomplete.join('; '):'')+'. Package totals are for all travelers ('+adults+' adults) \u2014 per person is shown under each. Check, then Create.';}
 async function mqPrefill(key){const b=ebBasketGet(key);if(!b.length)return;const e=b.find(x=>x.couple)||b[0];
@@ -964,7 +975,7 @@ async function mqPrefill(key){const b=ebBasketGet(key);if(!b.length)return;const
   // travel text -> dates
   const t=String((q&&q.travel)||e.travel||'').replace(/\u2013|\u2014/g,'-');const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};let mm;
   if(mm=t.match(/([a-z]{3})[a-z]*\.?\s+(\d{1,2})\s*-\s*(?:([a-z]{3})[a-z]*\.?\s+)?(\d{1,2}),?\s*(20\d\d)/i)){const m1=MON[mm[1].toLowerCase().slice(0,3)],m2=mm[3]?MON[mm[3].toLowerCase().slice(0,3)]:m1;const y=+mm[5];const iso=(yy,mo,d)=>yy+'-'+String(mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');$id('mq-from').value=iso(y,m1,+mm[2]);$id('mq-to').value=iso(m2<m1?y+1:y,m2,+mm[4]);mqDates('to');}
-  $id('mq-msg').textContent='Adding to '+(e.couple||'this client')+'\u2019s basket \u2014 pick the extra resorts and Create.';
+  mqSave();$id('mq-msg').textContent='Adding to '+(e.couple||'this client')+'\u2019s basket \u2014 pick the extra resorts and Create.';
   window.scrollTo({top:$id('mq-wrap').offsetTop-20,behavior:'smooth'});}
 function pickerBasketRemove(k,slug){ebBasketSet(ebBasketGet(k).filter(e=>e.slug!==slug),k);renderPickerBaskets();}
 function filterPicker(q){q=(q||'').trim().toLowerCase();const sel=$id('picker-select');let first=null;[...sel.querySelectorAll('optgroup')].forEach(g=>{let n=0;[...g.querySelectorAll('option')].forEach(o=>{const hit=!q||o.textContent.toLowerCase().includes(q)||o.value.includes(q.replace(/\s+/g,'-'));o.style.display=hit?'':'none';o.disabled=!hit;if(hit){n++;if(!first)first=o;}});g.style.display=n?'':'none';g.disabled=!n;});if(q&&first)sel.value=first.value;else if(!q)sel.value='';sel.size=q?Math.min(12,Math.max(4,[...sel.options].filter(o=>o.value&&!o.disabled).length+2)):1;}
