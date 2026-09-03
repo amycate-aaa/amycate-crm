@@ -318,12 +318,14 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .docbtn .ic{font-size:13px;color:var(--gold);}
 .docbtn:hover .ic{color:#fff;}
 .docrow{margin:0 0 26px;}
-/* Resources strip — every public link in one place, high on the page */
-.resbar{background:var(--sand);border-top:1px solid rgba(176,141,87,.35);border-bottom:1px solid rgba(176,141,87,.35);padding:26px 0 18px;}
-.resbar .eyebrow{margin:0 0 14px;}
-.resbar .docbtn{font-size:12px;padding:14px 24px;background:#fff;margin:0 12px 12px 0;}
-.resbar .docbtn:hover{background:var(--gold);color:#fff;}
-.resbar .docbtn:hover .ic{color:#fff;}
+/* Resources strip — a quiet row of small pills under the nav */
+.resbar{background:transparent;border-bottom:1px solid rgba(176,141,87,.25);padding:14px 0 6px;}
+.resbar .eyebrow{display:inline-block;margin:0 18px 8px 0;vertical-align:middle;font-size:9.5px;color:var(--gold-soft);}
+.resbar .docrow{display:inline;margin:0;}
+.resbar .docbtn{font-size:9.5px;letter-spacing:.14em;padding:7px 13px;margin:0 8px 8px 0;border-color:rgba(176,141,87,.5);background:transparent;color:#5A544C;}
+.resbar .docbtn .ic{font-size:10px;}
+.resbar .docbtn:hover{border-color:var(--gold);color:var(--espresso);background:transparent;}
+.resbar .docbtn:hover .ic{color:var(--gold);}
 .cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
 .cmp{border-collapse:collapse;width:100%;min-width:860px;}
 .cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
@@ -471,7 +473,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <li><a href="#gallery">Gallery</a></li>
     <li><a href="#resbar">Resources</a></li>
   </ul></nav>
-  <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><div id="resbar-list"></div></div></div>
+  <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><span id="resbar-list"></span></div></div>
   <section>
     <div class="wrap">
       <div class="split">
@@ -1074,7 +1076,7 @@ function renderQuote(){
     clean(P.airportDistance)?['Airport',shortAge(clean(P.airportDistance))]:null
   ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
-  if(q.opts.docs!==false){const ds=docStrip();if(ds)S.push('<div class="resbar"><div class="wrap"><p class="eyebrow">Resources</p>'+ds+'</div></div>');}
+  if(q.opts.docs!==false){const ds=docStrip();if(ds)S.push('<div class="resbar"><div class="wrap"><p class="eyebrow">Resources</p><span>'+ds+'</span></div></div>');}
 
 
   /* 3b — OFFERS */
@@ -1447,11 +1449,11 @@ function autoDocs(section){
   if(section==='packages' && photoOk(P.weddingGuide))
     out.push({label:'Wedding Brochure', url:P.weddingGuide});
   if(section===''){
-    if(photoOk(P.bookingLink)) out.push({label:'Resort Info at Destination Weddings',url:P.bookingLink});
+    if(photoOk(P.bookingLink)) out.push({label:'DWT resort page',url:P.bookingLink});
     if(photoOk(P.galleryLink)) out.push({label:'Photo Gallery',url:P.galleryLink});
   }
   if(section==='packages'){
-    if(photoOk(P.weddingUrl)) out.push({label:'Wedding Details at Destination Weddings',url:P.weddingUrl});
+    if(photoOk(P.weddingUrl)) out.push({label:'DWT wedding page',url:P.weddingUrl});
   }
   return out;
 }
