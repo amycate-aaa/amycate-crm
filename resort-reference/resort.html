@@ -707,7 +707,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn solid" onclick="renderQuote()">Preview Quote &rarr;</button>
       <button class="qb-btn" onclick="downloadQuote()">Download HTML</button>
       <button class="qb-btn" onclick="copyQuoteLink()">Copy Link</button>
-      <button class="qb-btn" onclick="emailDraft()" title="Opens a Gmail draft with the quote link in it">Email Draft</button>
+      <button class="qb-btn" onclick="emailDraft()" title="Opens a new email in your mail app with the quote link in it">Email Draft</button>
       <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
@@ -1077,10 +1077,11 @@ async function emailDraft(){
     body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   }
   const to=(($id('q-email')||{}).value||'').trim();
-  const gm='https://mail.google.com/mail/?view=cm&fs=1'+(to?'&to='+encodeURIComponent(to):'')+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  const w=window.open(gm,'_blank');
-  if(w){say('Opening the email in Gmail\u2026');}
-  else{const text='Subject: '+subject+'\n\n'+body;if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(()=>say('Pop-up blocked \u2014 email copied instead, paste it into a new message.'));else window.prompt('Copy this:',text);}
+  const mailto='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  const text='Subject: '+subject+'\n\n'+body;
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).catch(()=>{});
+  location.href=mailto;
+  say('Opening a new email in your mail app \u2014 the text is on your clipboard too, in case it doesn\u2019t.');
 }
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
