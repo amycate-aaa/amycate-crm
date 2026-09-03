@@ -859,6 +859,7 @@ async function mqCreate(){const msg=$id('mq-msg');const couple=$id('mq-couple').
   const key=bkKey(couple);let b=ebBasketGet(key).filter(e=>!made.some(m=>m.slug===e.slug));b=b.concat(made);ebBasketSet(b,key);
   const first=(couple.split(/[&,]| and /)[0]||'').trim().split(' ')[0].replace(/['\u2019]s$/,'');const hi='Hi'+(first&&!/celebration|retirement|wedding|trip|group|party|reunion|birthday|getaway/i.test(couple)?' '+first:'')+',';
   const CT=brand==='ct';const cmp=location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+made.map(m=>m.slug+':'+m.k).join(',');
+  const order=[];made.forEach(m=>{if(!order.includes(m.where))order.push(m.where);});made.sort((a,b)=>order.indexOf(a.where)-order.indexOf(b.where));
   const blocks=made.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+(e.rooms.length?'\n'+e.rooms.map(l=>'   '+l).join('\n'):'')+(e.pkg?'\n   \u2022 Package with flights: '+e.pkg:'')).join('\n\n');
   const names=made.map(e=>e.name);const subject=couple+': '+(names.length>1?names.slice(0,-1).join(', ')+' or '+names[names.length-1]:names[0])+' \u2014 take a look';
   const dests=[...new Set(made.map(m=>m.where).filter(Boolean))];const destTxt=dests.length?(dests.length>1?dests.slice(0,-1).join(', ')+' and '+dests[dests.length-1]:dests[0]):'';
