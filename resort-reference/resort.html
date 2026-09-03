@@ -730,7 +730,13 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
+      <button class="qb-btn ghost" onclick="toggleSavedQuotes()" id="qb-saved-btn">Saved Quotes</button>
       <span class="qb-msg" id="qb-msg"></span>
+    </div>
+    <div id="qb-saved" style="display:none;margin-top:14px;border-top:1px solid var(--sand-deep);padding-top:12px;">
+      <p class="qb-h" style="margin-bottom:6px;">Saved quotes for this resort</p>
+      <p class="qb-note">Every link you have copied, newest first. <b>Edit</b> loads it into the builder; <b>Open</b> shows the client view; <b>Copy</b> puts the link back on your clipboard.</p>
+      <div id="qb-saved-list"></div>
     </div>
   </div>
 </div>
@@ -1253,6 +1259,22 @@ async function quoteLink(q){
     return base+'&k='+id;
   }catch(e){console.warn('short link failed, using long link',e);return base+'&q='+enc;}
 }
+function toggleSavedQuotes(){const b=$id('qb-saved');const on=b.style.display==='none';b.style.display=on?'block':'none';if(on)renderSavedQuotes();}
+async function renderSavedQuotes(){const box=$id('qb-saved-list');box.innerHTML='<p class="small">Loading\u2026</p>';
+  try{const snap=await db.collection('resortProfiles').doc(SLUG).get();const links=(snap.data()||{}).quoteLinks||{};P.quoteLinks=links;
+    const rows=Object.keys(links).map(k=>{const q=decQ(links[k].q)||{};return{k,t:links[k].t||0,q};}).sort((a,b)=>b.t-a.t);
+    if(!rows.length){box.innerHTML='<p class="small">No saved quotes yet \u2014 Copy Link creates one.</p>';return;}
+    const fmt=t=>t?new Date(t).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+    box.innerHTML='<table style="width:100%;border-collapse:collapse;font-size:13px;">'+rows.map(r=>{const q=r.q;const who=esc(q.couple||(q.guests&&q.guests[0])||'(no client name)');const bits=[q.travel?esc(q.travel):'',q.brand==='ct'?'Celebration Travel':'',q.prices&&q.prices.length?q.prices.length+' room'+(q.prices.length>1?'s':''):''].filter(Boolean).join(' \u00b7 ');
+      return'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:8px 6px;"><b>'+who+'</b><br><span class="small">'+bits+(bits?' \u00b7 ':'')+'saved '+fmt(r.t)+'</span></td><td style="padding:8px 6px;white-space:nowrap;text-align:right;">'+
+      '<button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;" onclick="editSavedQuote(\''+r.k+'\')">Edit</button> '+
+      '<button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;" onclick="window.open(location.origin+location.pathname+\'?r=\'+SLUG+\'&quote=true&k='+r.k+'\',\'_blank\')">Open</button> '+
+      '<button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;" onclick="copySavedQuote(\''+r.k+'\')">Copy</button> '+
+      '<button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="deleteSavedQuote(\''+r.k+'\')">Delete</button></td></tr>';}).join('')+'</table>';
+  }catch(e){box.innerHTML='<p class="small">Could not load saved quotes.</p>';console.warn(e);}}
+function editSavedQuote(k){const l=(P.quoteLinks||{})[k];if(!l)return;const q=decQ(l.q);if(!q)return;applyQ(q);saveLocal();$id('qb-msg').textContent='Loaded \u2014 edit and Copy Link again to save a new version.';setTimeout(()=>$id('qb-msg').textContent='',5000);}
+function copySavedQuote(k){const u=location.origin+location.pathname+'?r='+SLUG+'&quote=true&k='+k;navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied.';setTimeout(()=>$id('qb-msg').textContent='',3000);}).catch(()=>{$id('qb-msg').textContent=u;});}
+async function deleteSavedQuote(k){if(!confirm('Delete this saved quote? The link you sent will stop working.'))return;const ref=db.collection('resortProfiles').doc(SLUG);const snap=await ref.get();const links=Object.assign({},(snap.data()||{}).quoteLinks||{});delete links[k];await ref.set({quoteLinks:links},{merge:true});renderSavedQuotes();}
 function copyQuoteLink(){quoteLink(collectQ()).then(u=>navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied \u2014 paste it anywhere.';setTimeout(()=>$id('qb-msg').textContent='',4000);}).catch(()=>{$id('qb-msg').textContent=u;}));}
 
 /* ══════════════════ QUOTE RENDER ══════════════════ */
