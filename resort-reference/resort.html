@@ -688,7 +688,13 @@ if(window.CTMODE){
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function $id(id){return document.getElementById(id);}
-async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return; /* other agents' twins stay out of Amy's picker */ const o=document.createElement('option');o.value=d.id;o.textContent=d.data().name||d.id;sel.appendChild(o);});}
+async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');const built=[],shells=[];
+  snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return; /* other agents' twins stay out of Amy's picker */
+    const p=d.data();const ok=/^https?:\/\//.test(String(p.heroPhoto||''))&&String(p.description||p.overview||'').trim().length>40;
+    (ok?built:shells).push({id:d.id,name:p.name||d.id});});
+  built.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name;sel.appendChild(o);});
+  if(shells.length){const g=document.createElement('optgroup');g.label='\u2014 Not built yet ('+shells.length+') \u2014';
+    shells.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name+' \u00b7 not built';o.style.color='#9A9086';g.appendChild(o);});sel.appendChild(g);}}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
