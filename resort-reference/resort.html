@@ -914,8 +914,11 @@ function mqParseHotels(raw){const L=raw.replace(/\r/g,'').split('\n').map(x=>x.t
     let price='';for(let j=i+1;j<Math.min(L.length,i+14);j++){if(/^Room #\d+:/i.test(L[j]))break;let p=L[j].match(/From\s*\$\s*([\d,]+(?:\.\d+)?)/i)||L[j].match(/^\$\s*([\d,]+\.\d{2})\s*$/)||L[j].match(/(?:total|price)[^$]*\$\s*([\d,]+\.\d{2})/i);if(p){price=p[1].replace(/,/g,'');break;}}
     if(name)out.push({name,room:m[1].trim(),total:price,src:'TI'});}
   // DestiWorld: name line then "<Room>Hotel Package Price: $N"
-  for(let i=0;i<L.length;i++){const m=L[i].match(/^(.*?)Hotel Package Price:\s*\$([\d,]+(?:\.\d+)?)/i);if(!m)continue;let name='';for(let j=i-1;j>=Math.max(0,i-6);j--){const t=L[j];if(!t||/^(rating|view hotel|temporary|see more|\d)/i.test(t))continue;name=t.replace(/\s+$/,'');break;}
-    if(name)out.push({name,room:m[1].replace(/\s*-\s*all inclusive$/i,'').trim(),total:m[2].replace(/,/g,''),src:'DW'});}
+  for(let i=0;i<L.length;i++){const m=L[i].match(/^(.*?)Hotel Package Price:?\s*\$?\s*([\d,]+(?:\.\d+)?)?/i);if(!m)continue;let room=m[1].trim();let total=(m[2]||'').replace(/,/g,'');let k=i;
+    if(!total){for(let j=i+1;j<Math.min(L.length,i+3);j++){const p=L[j].match(/\$\s*([\d,]+(?:\.\d+)?)/);if(p){total=p[1].replace(/,/g,'');break;}}}
+    if(!room){for(let j=i-1;j>=Math.max(0,i-3);j--){const t=L[j];if(t&&!/^(rating|view hotel|temporary|see more|select|\d|\$)/i.test(t)){room=t;k=j;break;}}}
+    let name='';for(let j=k-1;j>=Math.max(0,k-8);j--){const t=L[j];if(!t||/^(rating|view hotel|temporary|see more|select|\d|\$|kids|upgrade|promotion|resort credit|elevate|book now|rooms available)/i.test(t)||/hotel package price/i.test(t))continue;name=t.replace(/\s+$/,'');break;}
+    if(name&&room)out.push({name,room:room.replace(/\s*-\s*all inclusive$/i,'').replace(/select$/i,'').trim(),total,src:'DW'});}
   return out;}
 function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}
   // adults
