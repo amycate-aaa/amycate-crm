@@ -1131,8 +1131,7 @@ function renderQuote(){
             const when=clean(q.travel);
             return '<div class="pkgprice">'+
               (when?'<p class="when">'+esc(when)+'</p>':'')+
-              (legs?'<p class="legs">'+legs+'</p>':'')+
-              ((when||legs)?'<hr class="hr">':'')+
+              (when?'<hr class="hr">':'')+
               '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
               (clean(q.pkgRoom)?'<p class="pkgroom">'+esc(clean(q.pkgRoom))+'</p>':'')+
          '<p class="who">Per person</p>'+
