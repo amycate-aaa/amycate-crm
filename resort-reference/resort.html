@@ -769,7 +769,7 @@ async function loadPicker(){$id('loading').style.display='none';$id('picker-scre
   Object.keys(groups).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);}).forEach(reg=>{
     const list=groups[reg].sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
     const g=document.createElement('optgroup');g.label='\u2014 '+reg+' ('+list.length+') \u2014';
-    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name+(x.tier===1?'  \u00b7 in progress':x.tier===2?'  \u00b7 not built yet':'');if(x.tier===2)o.style.color='#9A9086';g.appendChild(o);});sel.appendChild(g);});}
+    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;const dot=x.tier===0?'\ud83d\udfe2 ':x.tier===1?'\ud83d\udfe1 ':'\ud83d\udd34 ';o.textContent=dot+x.name;o.style.color=x.tier===0?'#2E6B3A':x.tier===1?'#8A6A0E':'#8B2E2E';g.appendChild(o);});sel.appendChild(g);});}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
