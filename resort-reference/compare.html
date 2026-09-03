@@ -58,7 +58,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;',
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
 const sp=new URLSearchParams(location.search);
 const items=(sp.get('r')||'').split(',').map(s=>s.trim()).filter(Boolean).map(s=>{const [slug,key]=s.split(':');return{slug,key};});
-const guideBase=location.origin+location.pathname.replace(/compare\.html$/,'resort.html');
+const guideBase=location.origin+location.pathname.replace(/compare(\.html)?\/?$/,'resort');
 const arr=v=>Array.isArray(v)?v:[];const txt=v=>String(v||'').trim();
 function firstSentence(s,max){s=txt(s);if(!s)return'';const m=s.match(/^(.+?[.!?])(\s|$)/);let out=m?m[1]:s;if(out.length>max)out=out.slice(0,max-1).replace(/\s+\S*$/,'')+'…';return out;}
 function poolsCell(p){const pools=arr(p.pools);if(!pools.length)return'<span class="dim">—</span>';const names=pools.map(x=>(x.name||'').toLowerCase()).join(' ');const flags=[];if(/water ?park|slide/.test(names))flags.push('water park');if(/lazy river/.test(names))flags.push('lazy river');if(/swim-?out|swim ?up/.test(names))flags.push('swim-out rooms');if(/adult|quiet|preferred|club|vantage|privilege|platinum/.test(names))flags.push('adults / club pool');return pools.length+' pool'+(pools.length>1?'s':'')+(flags.length?'<br><span class="yes">'+flags.join(' · ')+'</span>':'');}
@@ -73,7 +73,7 @@ async function run(){
   const q0=cols.find(c=>c.q)?.q||{};const ct=q0.brand==='ct';
   if(q0.couple)$('ttl').textContent=q0.couple;
   const travel=cols.map(c=>c.q&&c.q.travel).filter(Boolean);const same=travel.length&&travel.every(t=>t===travel[0]);
-  $('sub').textContent=(cols.length===2?'Two':cols.length===3?'Three':cols.length)+' resorts, side by side'+(same?' — '+travel[0]:'');
+  $('sub').textContent=cols.length===1?'One resort':(cols.length===2?'Two':cols.length===3?'Three':cols.length)+' resorts, side by side'+(same?' — '+travel[0]:'');
   const head='<thead><tr><th class="lbl"></th>'+cols.map(c=>{const p=c.p;const img=p.heroPhoto||arr(p.photos)[0]||'';const link=guideBase+'?r='+c.slug+(c.key?'&quote=true&k='+c.key:'');return'<th>'+(img?'<img class="thumb" src="'+esc(img)+'" alt="">':'')+'<div class="rname">'+esc(p.name||c.slug)+'</div><div class="rwhere">'+esc((p.destination||'').replace(/,\s*/g,', '))+'</div><a class="btn" href="'+esc(link)+'">'+(c.key?'See the quote':'See the guide')+' →</a></th>';}).join('')+'</tr></thead>';
   const rowsDef=[
     ['Price',c=>priceCell(c.q)],
