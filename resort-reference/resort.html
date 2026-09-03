@@ -1261,7 +1261,7 @@ function sigHtml(){const S=AGENT_SIG;const F='font-family:Jost,Helvetica,Arial,s
   (S.call?'<div style="margin-top:12px;"><a href="'+esc(S.call)+'" style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8B6914;text-decoration:none;">Schedule a call with me \u2192</a></div>':'')+'</td></tr></table>';}
 function gmailToken(){return new Promise((res,rej)=>{if(!window.google||!google.accounts){rej(new Error('Google sign-in not loaded yet \u2014 try again in a second.'));return;}
   const tc=google.accounts.oauth2.initTokenClient({client_id:GMAIL_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.compose',hint:AGENT_SIG.email,callback:r=>r&&r.access_token?res(r.access_token):rej(new Error(r&&r.error?r.error:'No token'))});
-  tc.requestAccessToken({prompt:window.GMAIL_TOKEN?'':'consent'});});}
+  tc.requestAccessToken({prompt:''});});}
 function gmailFlash(html){const m=$id('eb-msg');m.style.display='block';m.style.width='100%';m.style.marginTop='10px';m.innerHTML=html;}
 function b64url(str){const bytes=new TextEncoder().encode(str);let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function mimeMessage(to,subject,text,html){const b='b'+Math.random().toString(36).slice(2);const enc=s=>'=?UTF-8?B?'+btoa(unescape(encodeURIComponent(s)))+'?=';
