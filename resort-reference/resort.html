@@ -174,7 +174,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 #qb-open:hover{background:var(--gold);color:#fff;}
 #qb{position:fixed;inset:0;z-index:1000;background:rgba(42,36,31,.55);display:none;overflow-y:auto;padding:34px 16px;}
 #qb.on{display:block;}
-.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);}
+.qb-card{max-width:960px;margin:0 auto;background:var(--ivory);border:1px solid var(--sand-deep);padding:clamp(26px,4vw,46px);position:relative;}
+.qb-x{position:sticky;top:0;float:right;margin:-10px -10px 0 0;width:40px;height:40px;border:1px solid var(--sand-deep);background:var(--ivory);color:var(--espresso);font-size:26px;line-height:1;cursor:pointer;font-family:var(--serif);z-index:5;}.qb-x:hover{background:var(--espresso);color:var(--ivory);}
 .qb-card h2{font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;}
 .qb-sub{font-size:15px;color:#7C7368;font-style:italic;margin:0 0 26px;}
 .qb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px 20px;}
@@ -619,6 +620,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 <button id="qb-open" onclick="openQuote()">&#10022; Build Quote</button>
 <div id="qb">
   <div class="qb-card">
+    <button type="button" class="qb-x" onclick="closeQuote()" title="Back to guide" aria-label="Close">&times;</button>
     <h2>Build a Quote</h2>
     <p class="qb-sub" id="qb-for"></p>
 
@@ -1291,6 +1293,7 @@ async function lookupAir(tr){
   }catch(e){ msg.className='airmsg bad'; msg.textContent='Lookup failed \u2014 fill it in by hand.'; }
 }
 function openQuote(){setTimeout(()=>{renderBasketBtn();fillRoomList();if(!($id('q-pkgcovers')||{}).value||/^Flights, \d+ nights? all-inclusive/.test($id('q-pkgcovers').value))autoNights();},50);$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$id('qb')&&$id('qb').classList.contains('on'))closeQuote();});
 function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
 function backToBuilder(){$id('quote-page').style.display='none';$id('page').style.display='block';$id('qb').classList.add('on');document.body.style.overflow='hidden';qbChrome(true);}
 function qbChrome(on){if($id('qb-open'))$id('qb-open').style.display=(on&&AGENT)?'block':'none';if($id('q-back'))$id('q-back').style.display=on?'none':'block';}
