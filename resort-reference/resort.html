@@ -2145,7 +2145,8 @@ function downloadQuote(){
 }
 
 const slug=new URLSearchParams(location.search).get('r');
-firebase.auth().onAuthStateChanged(()=>{if(slug)loadResort(slug);else{loadPicker();try{renderPickerBaskets();}catch(e){console.warn(e);}}});
+window.addEventListener('message',e=>{try{const d=e.data||{};if(d&&d.type==='amy-quote-paste'&&typeof d.text==='string'){const go=()=>{const m=$id('mq');if(!m)return false;if(m.style.display==='none')mqToggle();$id('mq-paste').value=d.text;mqPasteAll();window.scrollTo({top:$id('mq-wrap').offsetTop-20,behavior:'smooth'});return true;};if(!go()){let n=0;const t=setInterval(()=>{if(go()||++n>40)clearInterval(t);},250);}}}catch(err){console.warn(err);}});
+firebase.auth().onAuthStateChanged(()=>{if(slug)loadResort(slug);else{loadPicker().then(()=>{try{renderPickerBaskets();}catch(e){console.warn(e);}if(new URLSearchParams(location.search).get('quick')==='1'){mqToggle();if(window.opener)try{window.opener.postMessage({type:'amy-quote-ready'},'*');}catch(e){}}});}});
 </script>
 </body>
 </html>
