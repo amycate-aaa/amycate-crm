@@ -671,11 +671,25 @@ details.cmptuck .tb{text-align:left;padding:0;}
 <script>
 function selTab(t){['wed','grp'].forEach(id=>{document.getElementById('tab-'+id).className='tab-btn'+(id===t?' active':'');document.getElementById('panel-'+id).hidden=id!==t;});}
 if(location.hash==='#groups')setTimeout(()=>selTab('grp'),100);
+/* ── Celebration Travel mode: ?brand=ct (or #groups) — no Weddings tab, Groups heading, CT email, builder defaults to CT */
+window.CTMODE=(function(){try{const b=(new URLSearchParams(location.search).get('brand')||'').toLowerCase();return b==='ct'||location.hash==='#groups';}catch(e){return false;}})();
+window.CONTACT_EMAIL=window.CTMODE?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
+if(window.CTMODE){
+  document.documentElement.setAttribute('data-brand','ct');
+  const ws=document.getElementById('weddings');
+  if(ws){const eb=ws.querySelector('.eyebrow');if(eb)eb.textContent='For Your Group';
+    const h=ws.querySelector('h2.display');if(h)h.textContent='Groups & Celebrations';
+    const tb=ws.querySelector('.tab-bar');if(tb)tb.style.display='none';}
+  setTimeout(()=>selTab('grp'),0);
+  document.querySelectorAll('a[href^="mailto:amy.cate@destinationweddings.com"]').forEach(a=>{a.href=a.href.replace('amy.cate@destinationweddings.com','amy.cate@celebrationtravel.com');});
+  const fp=document.querySelector('footer p');if(fp)fp.textContent='Amy Cate \u00b7 Celebration Travel';
+  const pe=document.querySelector('#picker-screen .eyebrow');if(pe)pe.textContent='Amy Cate \u00b7 Celebration Travel';
+}
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function $id(id){return document.getElementById(id);}
 async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return; /* other agents' twins stay out of Amy's picker */ const o=document.createElement('option');o.value=d.id;o.textContent=d.data().name||d.id;sel.appendChild(o);});}
-function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v;}
+function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
   try{
@@ -727,7 +741,7 @@ async function loadResort(slug){
     (function(){const gi=[(p.sectionPhotos||{}).groups].find(photoOk)||'';
       if(gi)$id('groups-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(gi)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     const grpInfo=p.groupsInfo||p.groupBenefits||'';
-    $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:amy.cate@destinationweddings.com" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
+    $id('groups-body').innerHTML=(grpInfo&&!grpInfo.includes('NOT PUBLISHED')&&!grpInfo.includes('CONFLICT'))?'<div style="font-size:18px;line-height:1.82;color:#3B342E;max-width:60ch">'+grpInfo.split('\n').map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>':'<div style="max-width:50ch"><h3 class="lead">Planning a group celebration?</h3><p class="small">This resort offers dedicated group benefits including complimentary rooms, private event spaces, and custom programming. Contact me for current group rates and availability.</p><a href="mailto:'+window.CONTACT_EMAIL+'" style="display:inline-block;margin-top:24px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:14px 32px;text-decoration:none;">Get in Touch →</a></div>';
     const rests=p.restaurants||[];
     $id('rest-grid').innerHTML=rests.length?rests.map(r=>{const name=typeof r==='string'?r:r.name||'';const cuisine=typeof r==='string'?'':r.type||r.cuisine||'';const desc=typeof r==='string'?'':r.description||'';const photo=typeof r==='string'?'':r.photo||r.photoUrl||'';return'<div class="dcard">'+(photo?'<img src="'+esc(photo)+'" alt="'+esc(name)+'" loading="lazy">':'')+'<div class="dbody">'+(cuisine?'<p class="dtag">'+esc(cuisine)+'</p>':'')+'<h4>'+esc(name)+'</h4>'+(clean(desc)?'<p>'+esc(clean(desc))+'</p>':'')+
       (photoOk(menuUrlOf(r))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
@@ -898,6 +912,7 @@ function buildBuilder(){
     if(!had)loadTrip();   // first time on this resort — carry the trip details over
   }
   if(!$id('q-priced').value)$id('q-priced').value='Per person, per night';
+  if(window.CTMODE&&$id('q-brand')&&!url)$id('q-brand').value='ct';
 }
 let ROOMCATS=[];
 const NOROOMS='<tr id="q-norooms"><td colspan="3" class="none">No rooms added yet \u2014 choose one above and hit Add room.</td></tr>';
