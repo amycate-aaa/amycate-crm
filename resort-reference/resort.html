@@ -1125,6 +1125,7 @@ async function emailDraft(){
     b.push(entry);ebBasketSet(b);
   }
   const basket=q.mode==='guest'?[entry]:ebBasketGet();
+  const compareLink=basket.length>1?location.origin+location.pathname.replace(/resort\.html$/,'compare.html')+'?r='+basket.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(','):'';
   const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?'\u2022 Rooms priced:\n'+e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
   let subject,body;
   if(q.mode==='guest'){
@@ -1138,6 +1139,7 @@ async function emailDraft(){
     subject=(q.couple?q.couple+': ':'')+names.slice(0,-1).join(', ')+' or '+names[names.length-1]+' \u2014 take a look';
     const blocks=basket.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+'\n'+facts(e).split('\n').filter(l=>!/^\u2022 Resort:/.test(l)).map(l=>'   '+l).join('\n')).join('\n\n');
     body=hi+'\n\nHere are the '+(basket.length===2?'two':basket.length===3?'three':basket.length)+' resorts I\u2019d put in front of you'+(q.couple?' for '+q.couple:'')+(entry.travel&&basket.every(e=>e.travel===entry.travel)?', priced for '+entry.travel:'')+':\n\n'+blocks+
+      '\n\nSide by side on one page \u2014 price, beach, pools, rooms'+(CT?'':', wedding venues')+':\n'+compareLink+
       '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   } else {
     subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
@@ -1145,6 +1147,7 @@ async function emailDraft(){
   }
   const to=(($id('q-email')||{}).value||'').trim();
   showEmailBox(to,subject,body,basket.length>1?basket.map(e=>e.name):null);say('');
+  if(compareLink){const bk=$id('eb-basket');if(bk)bk.innerHTML+=' <a href="'+compareLink+'" target="_blank" style="color:var(--gold);">Open the comparison \u2192</a>';}
 }
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
