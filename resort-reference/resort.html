@@ -748,17 +748,28 @@ if(window.CTMODE){
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function $id(id){return document.getElementById(id);}
-async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');const ready=[],partial=[],shells=[];
+async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');
   const okUrl=u=>/^https?:\/\//.test(String(u||''));const arr=v=>Array.isArray(v)?v:[];
-  snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return; /* other agents' twins stay out of Amy's picker */
+  const region=(dest,name)=>{const t=(String(dest||'')+' '+String(name||'')).toLowerCase();
+    if(/cabo/.test(t))return 'Los Cabos';if(/vallarta|nayarit|bahia mita|bahía mita|punta de mita/.test(t))return 'Puerto Vallarta & Riviera Nayarit';
+    if(/tulum/.test(t))return 'Tulum';if(/cozumel/.test(t))return 'Cozumel';if(/huatulco/.test(t))return 'Huatulco';
+    if(/cancun|cancún|costa mujeres|playa mujeres|isla mujeres/.test(t))return 'Cancún & Costa Mujeres';
+    if(/riviera maya|playa del carmen|puerto morelos|akumal|puerto aventuras|riviera cancun|xcaret/.test(t))return 'Riviera Maya';
+    if(/cap cana/.test(t))return 'Cap Cana';if(/la romana|bayahibe/.test(t))return 'La Romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'Punta Cana';
+    if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'Jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'St. Lucia';if(/aruba/.test(t))return 'Aruba';if(/curacao|curaçao/.test(t))return 'Curaçao';
+    if(/costa rica|guanacaste|papagayo/.test(t))return 'Costa Rica';if(/panama/.test(t))return 'Panama';if(/bahamas|nassau/.test(t))return 'Bahamas';if(/mexico|méxico/.test(t))return 'Mexico — other';
+    return 'Other';};
+  const groups={};
+  snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return;
     const p=d.data();const base=okUrl(p.heroPhoto)&&String(p.description||p.overview||'').trim().length>40;
     const roomsWithPhotos=arr(p.roomCategories).some(r=>r&&okUrl(r.photo||r.photoUrl));
     const full=base&&roomsWithPhotos&&arr(p.restaurants).length>0&&arr(p.pools).length>0;
-    (full?ready:base?partial:shells).push({id:d.id,name:p.name||d.id});});
-  ready.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name;sel.appendChild(o);});
-  const grp=(label,list,dim)=>{if(!list.length)return;const g=document.createElement('optgroup');g.label='\u2014 '+label+' ('+list.length+') \u2014';
-    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name;if(dim)o.style.color='#9A9086';g.appendChild(o);});sel.appendChild(g);};
-  grp('In progress',partial,false);grp('Not built yet',shells,true);}
+    const tier=full?0:base?1:2;const reg=region(p.destination,p.name);(groups[reg]=groups[reg]||[]).push({id:d.id,name:p.name||d.id,tier});});
+  const order=['Cancún & Costa Mujeres','Riviera Maya','Tulum','Cozumel','Los Cabos','Puerto Vallarta & Riviera Nayarit','Huatulco','Mexico — other','Punta Cana','Cap Cana','La Romana','Jamaica','St. Lucia','Aruba','Curaçao','Bahamas','Costa Rica','Panama','Other'];
+  Object.keys(groups).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);}).forEach(reg=>{
+    const list=groups[reg].sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
+    const g=document.createElement('optgroup');g.label='\u2014 '+reg+' ('+list.length+') \u2014';
+    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;o.textContent=x.name+(x.tier===1?'  \u00b7 in progress':x.tier===2?'  \u00b7 not built yet':'');if(x.tier===2)o.style.color='#9A9086';g.appendChild(o);});sel.appendChild(g);});}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
