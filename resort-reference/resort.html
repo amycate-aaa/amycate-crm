@@ -471,7 +471,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 <body>
 <div id="loading"><div class="spinner"></div><p style="font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-soft);margin:0">Loading</p></div>
 <div id="error" style="display:none"><h2>Resort not found</h2><p id="error-msg" style="font-size:17px;color:#5A544C;"></p><br><a href="?" style="font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);">← Browse Resorts</a></div>
-<div id="picker-screen"><p class="eyebrow">Amy Cate · Resort Reference</p><h1>Choose a Resort</h1><p class="small">Select a property to view the full guide.</p><select id="picker-select"><option value="">Select a resort…</option></select><button id="picker-btn" onclick="goToResort()">Open Guide →</button></div>
+<div id="picker-screen"><p class="eyebrow">Amy Cate · Resort Reference</p><h1>Choose a Resort</h1><p class="small">Select a property to view the full guide.</p><select id="picker-select"><option value="">Select a resort…</option></select><button id="picker-btn" onclick="goToResort()">Open Guide →</button><a href="#" id="picker-unbuilt" onclick="window.SHOW_UNBUILT=!window.SHOW_UNBUILT;this.textContent=window.SHOW_UNBUILT?'hide unbuilt resorts':'show unbuilt resorts';loadPicker();return false;" style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;margin-top:6px;">show unbuilt resorts</a></div>
 <div id="page">
   <header class="hero" id="top">
     <div class="hero-copy">
@@ -759,12 +759,12 @@ async function loadPicker(){$id('loading').style.display='none';$id('picker-scre
     if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'Jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'St. Lucia';if(/aruba/.test(t))return 'Aruba';if(/curacao|curaçao/.test(t))return 'Curaçao';
     if(/costa rica|guanacaste|papagayo/.test(t))return 'Costa Rica';if(/panama/.test(t))return 'Panama';if(/bahamas|nassau/.test(t))return 'Bahamas';if(/mexico|méxico/.test(t))return 'Mexico — other';
     return 'Other';};
-  const groups={};
+  const groups={};window.PICKER_ALL=[];const showAll=window.SHOW_UNBUILT===true;while(sel.options.length>1)sel.remove(1);
   snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return;
     const p=d.data();const base=okUrl(p.heroPhoto)&&String(p.description||p.overview||'').trim().length>40;
     const roomsWithPhotos=arr(p.roomCategories).some(r=>r&&okUrl(r.photo||r.photoUrl));
     const full=base&&roomsWithPhotos&&arr(p.restaurants).length>0&&arr(p.pools).length>0;
-    const tier=full?0:base?1:2;const reg=region(p.destination,p.name);(groups[reg]=groups[reg]||[]).push({id:d.id,name:p.name||d.id,tier});});
+    const tier=full?0:base?1:2;if(tier===2&&!showAll)return;const reg=region(p.destination,p.name);(groups[reg]=groups[reg]||[]).push({id:d.id,name:p.name||d.id,tier});});
   const order=['Cancún & Costa Mujeres','Riviera Maya','Tulum','Cozumel','Los Cabos','Puerto Vallarta & Riviera Nayarit','Huatulco','Mexico — other','Punta Cana','Cap Cana','La Romana','Jamaica','St. Lucia','Aruba','Curaçao','Bahamas','Costa Rica','Panama','Other'];
   Object.keys(groups).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);}).forEach(reg=>{
     const list=groups[reg].sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
