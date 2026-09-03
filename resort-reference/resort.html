@@ -318,6 +318,12 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .docbtn .ic{font-size:13px;color:var(--gold);}
 .docbtn:hover .ic{color:#fff;}
 .docrow{margin:0 0 26px;}
+/* travellers block — the names, big, right under the facts */
+.travellers{background:var(--sand);border-bottom:1px solid rgba(176,141,87,.35);padding:34px 0 30px;text-align:center;}
+.travellers .eyebrow{margin:0 0 14px;}
+.travellers .names{font-family:var(--serif);font-weight:300;font-size:clamp(1.7rem,3.4vw,2.6rem);line-height:1.25;letter-spacing:.03em;color:var(--espresso);margin:0;max-width:none;}
+.travellers .names .dot{color:var(--gold);font-size:.55em;margin:0 .6em;vertical-align:middle;}
+.travellers .when{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);margin:14px 0 0;}
 /* room card gallery — tap a thumbnail to swap the main photo */
 .pcard .thumbs{display:flex;gap:4px;padding:4px 4px 0;background:#fff;}
 .pcard .thumbs img{flex:1 1 0;height:54px;min-height:0;object-fit:cover;cursor:pointer;opacity:.55;transition:.2s;}
@@ -1146,7 +1152,6 @@ function renderQuote(){
     '<h1 class="q-name">'+esc(q.headline||(GUEST?'Your Room At '+R:R))+'</h1>'+
     ((q.headline||GUEST)?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
-    ((q.guests||[]).length?'<p class="q-when" style="font-style:italic;text-transform:none;letter-spacing:.04em;">'+(GUEST?'Travelling: ':'For ')+esc(q.guests.join(' \u00b7 '))+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
     (GUEST?'':'<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>')+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
@@ -1170,6 +1175,9 @@ function renderQuote(){
     clean(P.airportDistance)?['Airport',shortAge(clean(P.airportDistance))]:null
   ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
+  if((q.guests||[]).length)S.push('<div class="travellers"><div class="wrap"><p class="eyebrow">'+(GUEST?'This quote is for':'Travelling')+'</p>'+
+    '<p class="names">'+q.guests.map(g=>'<span>'+esc(g)+'</span>').join('<span class="dot">&#10022;</span>')+'</p>'+
+    (q.travel?'<p class="when">'+esc(q.travel)+'</p>':'')+'</div></div>');
 
 
 
@@ -1637,7 +1645,7 @@ function buildQuoteNav(){
     const t=x.querySelector('h2.display').textContent.trim();
     return '<a href="#'+x.id+'">'+esc(NAVLABEL[t]||t)+'</a>';
   }).join('')+'</div>';
-  const anchor=qp.querySelector('.offers')||qp.querySelector('.fact-grid');
+  const anchor=qp.querySelector('.offers')||qp.querySelector('.travellers')||qp.querySelector('.fact-grid');
   if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(nav,anchor.nextSibling);
   else secs[0].parentNode.insertBefore(nav,secs[0]);
   // highlight the section you are in
