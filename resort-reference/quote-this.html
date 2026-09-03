@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Quote this — bookmarklet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>:root{--ivory:#FBF8F3;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;}body{margin:0;background:var(--ivory);color:var(--ink);font-family:Jost,system-ui,sans-serif;font-weight:300;font-size:16px;line-height:1.7;}
+.wrap{max-width:720px;margin:0 auto;padding:64px 28px 90px;}.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 14px;}h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:2.6rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;margin:0 0 20px;color:var(--espresso);}
+.btn{display:inline-block;padding:16px 28px;background:var(--espresso);color:var(--ivory);text-decoration:none;font-size:12px;letter-spacing:.28em;text-transform:uppercase;border:1px solid var(--espresso);cursor:grab;}
+ol{padding-left:20px;}li{margin:8px 0;}code{background:#F1E9DD;padding:2px 6px;}</style></head>
+<body><div class="wrap"><p class="eyebrow">Amy Cate · Resort Reference</p><h1>Quote this</h1>
+<p>Drag this button to your bookmarks bar. Then, on a Travel Impressions itinerary email or a DestiWorld results page, click it — your quick quote opens filled with the dates, adults, flights and resorts.</p>
+<p style="margin:28px 0;"><a class="btn" id="bm" href="#">✦ Quote this</a></p>
+<ol><li>Make sure the bookmarks bar is showing (View → Always Show Bookmarks Bar).</li><li>Drag the button above onto the bar.</li><li>On a TI email (in Gmail or Outlook web) or a DestiWorld search results page, click it.</li><li>Check the rows, add the client name, Create.</li></ol>
+<p style="opacity:.75;font-size:14px;">In Outlook desktop the email isn't a web page — open it in Gmail or Outlook on the web instead, or copy-paste as before.</p>
+</div>
+<script>
+const target='https://amy-cate.com/resort-reference/resort?quick=1';
+const code="(function(){var t=(window.getSelection&&String(window.getSelection()))||'';if(t.length<200)t=document.body.innerText||'';var w=window.open('"+target+"','amyquote');var n=0;var send=function(){try{w.postMessage({type:'amy-quote-paste',text:t},'https://amy-cate.com');}catch(e){}};var iv=setInterval(function(){send();if(++n>30)clearInterval(iv);},700);window.addEventListener('message',function(e){if(e.data&&e.data.type==='amy-quote-ready'){send();}});})();";
+document.getElementById('bm').href='javascript:'+encodeURIComponent(code);
+document.getElementById('bm').addEventListener('click',e=>{e.preventDefault();alert('Drag me to the bookmarks bar rather than clicking.');});
+</script></body></html>
