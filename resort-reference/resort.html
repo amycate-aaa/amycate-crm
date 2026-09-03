@@ -47,6 +47,8 @@ nav a:hover{color:var(--gold);border-bottom-color:var(--gold);}
 .hero{display:grid;grid-template-columns:.95fr 1.05fr;min-height:88vh;padding:0;}
 .hero-copy{display:flex;flex-direction:column;justify-content:center;padding:clamp(48px,6vw,80px) clamp(32px,5vw,72px);background:var(--ivory);}
 .hero-name{font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.8rem);line-height:.96;letter-spacing:.05em;color:var(--espresso);font-weight:300;margin:0;text-transform:uppercase;}
+.hero-sub{font-family:var(--serif);font-style:italic;font-weight:300;font-size:clamp(.95rem,1.5vw,1.2rem);letter-spacing:.06em;color:var(--espresso);opacity:.72;margin:.45rem 0 0;text-transform:none;}
+.hero-sub:empty{display:none;}
 .hero-tag{font-family:var(--serif);font-style:italic;color:var(--gold);font-size:clamp(1.1rem,1.8vw,1.4rem);margin:22px 0 26px;letter-spacing:.03em;}
 .hero-meta{font-size:13px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink);margin:0 0 6px;}
 .workwith{display:inline-block;margin-top:26px;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;
@@ -465,6 +467,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <div class="hero-copy">
       <p class="eyebrow">Amy Cate · Resort Reference</p>
       <h1 class="hero-name" id="hero-name"></h1>
+      <div class="hero-sub" id="hero-sub"></div>
       <p class="hero-tag" id="hero-tag"></p>
       <p class="hero-meta" id="hero-dest"></p>
       <ul class="hero-chips" id="hero-chips"></ul>
@@ -758,8 +761,9 @@ async function loadResort(slug){
     photos.forEach(ph=>{const rcat=(ph.roomCategory||'').toLowerCase().trim();const cat=(ph.category||'').toLowerCase();if(rcat&&cat!=='rooms & suites'){if(!photoMap[rcat])photoMap[rcat]=ph.url||ph.downloadURL||'';}else if(!rcat&&cat&&cat!=='rooms & suites'&&cat!=='room'){resortWide.push(ph);}});
     PHOTOS=photos;RESORTWIDE=resortWide;PHOTOMAP=photoMap;
     function findPhoto(name){const n=(name||'').toLowerCase().trim();if(photoMap[n])return photoMap[n];const k=Object.keys(photoMap).find(k=>k.includes(n)||n.includes(k));return k?photoMap[k]:'';}
-    document.title=(p.resortName||p.name||'Resort Reference')+' · Amy Cate';
-    $id('hero-name').textContent=p.resortName||p.name||'';
+    document.title=(p.name||p.resortName||'Resort Reference')+' · Amy Cate';
+    $id('hero-name').textContent=p.name||p.resortName||'';
+    {const nm=p.name||'',full=p.resortName||'';let sub=p.nameSuffix||'';if(!sub&&full&&nm&&full!==nm&&full.toLowerCase().startsWith(nm.toLowerCase()))sub=full.slice(nm.length).replace(/^[\s,\u2013\u2014\-:|]+/,'');$id('hero-sub').textContent=sub;}
     $id('hero-tag').textContent=p.tagline||'';
     $id('hero-dest').textContent=p.destination||'';
     const ageshort=p.agePolicy?p.agePolicy.split('.')[0].split(';')[0].trim().slice(0,40):'';
@@ -974,7 +978,7 @@ function saveLocal(){try{localStorage.setItem('ac_quote_'+SLUG,JSON.stringify(co
 
 /* ══════════════════ BUILDER ══════════════════ */
 function buildBuilder(){
-  $id('qb-for').textContent=(P.resortName||P.name||'')+(P.destination?' \u00b7 '+P.destination:'');
+  $id('qb-for').textContent=(P.name||P.resortName||'')+(P.destination?' \u00b7 '+P.destination:'');
   ROOMCATS=(P.roomCategories||[]).map(r=>r.name).filter(Boolean);
   $id('q-room-add').innerHTML=ROOMCATS.length
     ? ROOMCATS.map(n=>'<option>'+esc(n)+'</option>').join('')
@@ -1048,7 +1052,7 @@ function toggleBasis(){
   saveLocal();
 }
 function emailDraft(){
-  const q=collectQ();const R=P.resortName||P.name||'';const link=location.origin+location.pathname+'?r='+SLUG+'&q='+encQ(q);
+  const q=collectQ();const R=P.name||P.resortName||'';const link=location.origin+location.pathname+'?r='+SLUG+'&q='+encQ(q);
   const first=((q.guests&&q.guests[0])||q.couple||'').split(/[&,]| and /)[0].trim().split(' ')[0];
   const hi='Hi'+(first?' '+first:'')+',';
   let subject,body;
@@ -1134,7 +1138,7 @@ function copyQuoteLink(){const u=location.origin+location.pathname+'?r='+SLUG+'&
 /* ══════════════════ QUOTE RENDER ══════════════════ */
 function renderQuote(){
   const q=collectQ();saveLocal();
-  const R=P.resortName||P.name||'';
+  const R=P.name||P.resortName||'';
   const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
@@ -1697,7 +1701,7 @@ function downloadGuide(){
     if(/togglePkg|toggleTab|openPhoto/.test(el.getAttribute('onclick')||''))return;
     el.removeAttribute('onclick');
   });
-  const title=(P.resortName||P.name||'Resort')+' \u00b7 Amy Cate';
+  const title=(P.name||P.resortName||'Resort')+' \u00b7 Amy Cate';
   const html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">'+
     '<meta name="viewport" content="width=device-width, initial-scale=1"><title>'+esc(title)+'</title>'+
     fonts+css+
@@ -1724,7 +1728,7 @@ function downloadQuote(){
   const fonts=[...document.querySelectorAll('link[rel="stylesheet"],link[rel="preconnect"]')]
     .map(l=>l.outerHTML).join('')
     ||'<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">';
-  const title=(q.couple?q.couple+' \u00b7 ':'')+(P.resortName||P.name||'Quote');
+  const title=(q.couple?q.couple+' \u00b7 ':'')+(P.name||P.resortName||'Quote');
   const html='<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+
     title+'</title>'+fonts+css+'<style>#quote-page{display:block!important;}</style></head><body><div id="quote-page">'+
     $id('quote-page').innerHTML+'</div></body></html>';
