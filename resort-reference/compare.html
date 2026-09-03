@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Side by side — Amy Cate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+const db=firebase.firestore();
+firebase.auth().signInAnonymously().catch(e=>console.warn('Auth:',e));
+</script>
+<style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+a{color:inherit;}img{max-width:100%;display:block;}
+.wrap{max-width:1240px;margin:0 auto;padding:48px 28px 80px;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 14px;}
+h1{font-family:var(--serif);font-size:clamp(2rem,4vw,3rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;line-height:1.15;}
+.sub{font-family:var(--serif);font-style:italic;font-size:1.25rem;color:var(--gold-soft);margin:0 0 36px;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:18px 0 28px;}
+table{width:100%;border-collapse:collapse;table-layout:fixed;}
+th,td{vertical-align:top;padding:14px 16px;border-bottom:1px solid var(--sand-deep);text-align:left;}
+th{font-weight:400;}
+thead th{border-bottom:2px solid var(--gold-soft);padding-bottom:18px;}
+thead th.lbl{width:170px;}
+tbody th{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500;padding-top:18px;width:170px;}
+.rname{font-family:var(--serif);font-size:1.35rem;line-height:1.2;color:var(--espresso);margin:12px 0 4px;font-weight:400;}
+.rwhere{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);opacity:.75;}
+.thumb{width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--sand);}
+.price{font-family:var(--serif);font-size:1.3rem;color:var(--espresso);}
+.price small{font-family:var(--sans);font-size:12px;letter-spacing:.06em;color:var(--ink);opacity:.8;display:block;margin-top:2px;}
+.yes{color:var(--sea);}.dim{opacity:.55;}
+.btn{display:inline-block;margin-top:10px;padding:10px 18px;border:1px solid var(--espresso);font-size:11px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--espresso);}
+.btn:hover{background:var(--espresso);color:var(--ivory);}
+.foot{margin-top:40px;font-size:14px;color:var(--ink);opacity:.8;max-width:70ch;}
+.empty{padding:80px 0;text-align:center;font-family:var(--serif);font-size:1.4rem;color:var(--gold-soft);}
+@media print{.btn{display:none;}body{font-size:12px;}th,td{padding:8px 10px;}}
+@media(max-width:820px){table{display:block;overflow-x:auto;white-space:normal;}th,td{min-width:220px;}thead th.lbl,tbody th{min-width:130px;width:130px;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="eyebrow">Side by side</p>
+  <h1 id="ttl">Your shortlist</h1>
+  <p class="sub" id="sub"></p>
+  <div id="out"></div>
+  <p class="foot" id="foot"></p>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
+const sp=new URLSearchParams(location.search);
+const items=(sp.get('r')||'').split(',').map(s=>s.trim()).filter(Boolean).map(s=>{const [slug,key]=s.split(':');return{slug,key};});
+const guideBase=location.origin+location.pathname.replace(/compare\.html$/,'resort.html');
+const arr=v=>Array.isArray(v)?v:[];const txt=v=>String(v||'').trim();
+function firstSentence(s,max){s=txt(s);if(!s)return'';const m=s.match(/^(.+?[.!?])(\s|$)/);let out=m?m[1]:s;if(out.length>max)out=out.slice(0,max-1).replace(/\s+\S*$/,'')+'…';return out;}
+function poolsCell(p){const pools=arr(p.pools);if(!pools.length)return'<span class="dim">—</span>';const names=pools.map(x=>(x.name||'').toLowerCase()).join(' ');const flags=[];if(/water ?park|slide/.test(names))flags.push('water park');if(/lazy river/.test(names))flags.push('lazy river');if(/swim-?out|swim ?up/.test(names))flags.push('swim-out rooms');if(/adult|quiet|preferred|club|vantage|privilege|platinum/.test(names))flags.push('adults / club pool');return pools.length+' pool'+(pools.length>1?'s':'')+(flags.length?'<br><span class="yes">'+flags.join(' · ')+'</span>':'');}
+function venueCell(p){const v=arr(p.venues).filter(x=>x&&x.name);if(!v.length)return'<span class="dim">ask</span>';const cap=Math.max(0,...v.map(x=>+x.capacity||0));return v.length+' venue'+(v.length>1?'s':'')+(cap?'<br>largest '+cap+' guests':'')+(p.weddingsPerDay?'<br>'+esc(p.weddingsPerDay)+' wedding'+(String(p.weddingsPerDay)==='1'?'':'s')+' a day':'');}
+function priceCell(q){if(!q)return'<span class="dim">not priced yet</span>';const pr=arr(q.prices).filter(r=>r&&r.ppn);if(!pr.length&&!q.pkgPrice)return'<span class="dim">not priced yet</span>';const per=q.priced&&/total/i.test(q.priced)?'total for the room':'per person, per night';const rows=pr.slice(0,3).map(r=>'<div class="price">$'+esc(r.ppn)+'<small>'+esc(r.name)+' · '+per+'</small></div>').join('');const pkg=q.pkgPrice?'<div class="price">$'+esc(q.pkgPrice)+'<small>with flights, per person'+(q.pkgCovers?' · '+esc(q.pkgCovers):'')+'</small></div>':'';return rows+pkg+(pr.length>3?'<span class="dim">+'+(pr.length-3)+' more on the quote</span>':'');}
+function kidsCell(p){if(/adult/i.test(txt(p.agePolicy)))return'<span class="dim">adults only</span>';return txt(p.kidsInfo)?'<span class="yes">yes</span> — '+esc(firstSentence(p.kidsInfo,110)):'<span class="dim">ask</span>';}
+async function run(){
+  if(!items.length){$('out').innerHTML='<p class="empty">No resorts in this link.</p>';return;}
+  const cols=[];
+  for(const it of items){const s=await db.collection('resortProfiles').doc(it.slug).get();if(!s.exists)continue;const p=s.data();let q=null;if(it.key&&p.quoteLinks&&p.quoteLinks[it.key])q=decQ(p.quoteLinks[it.key].q);cols.push({slug:it.slug,p,q,key:it.key});}
+  if(!cols.length){$('out').innerHTML='<p class="empty">Could not find those resorts.</p>';return;}
+  const q0=cols.find(c=>c.q)?.q||{};const ct=q0.brand==='ct';
+  if(q0.couple)$('ttl').textContent=q0.couple;
+  const travel=cols.map(c=>c.q&&c.q.travel).filter(Boolean);const same=travel.length&&travel.every(t=>t===travel[0]);
+  $('sub').textContent=(cols.length===2?'Two':cols.length===3?'Three':cols.length)+' resorts, side by side'+(same?' — '+travel[0]:'');
+  const head='<thead><tr><th class="lbl"></th>'+cols.map(c=>{const p=c.p;const img=p.heroPhoto||arr(p.photos)[0]||'';const link=guideBase+'?r='+c.slug+(c.key?'&quote=true&k='+c.key:'');return'<th>'+(img?'<img class="thumb" src="'+esc(img)+'" alt="">':'')+'<div class="rname">'+esc(p.name||c.slug)+'</div><div class="rwhere">'+esc((p.destination||'').replace(/,\s*/g,', '))+'</div><a class="btn" href="'+esc(link)+'">'+(c.key?'See the quote':'See the guide')+' →</a></th>';}).join('')+'</tr></thead>';
+  const rowsDef=[
+    ['Price',c=>priceCell(c.q)],
+    ['Who it\u2019s for',c=>esc(txt(c.p.agePolicy)||'—')+(c.p.stars?'<br>'+esc(c.p.stars)+' stars':'')+(c.p.totalRooms?'<br>'+esc(c.p.totalRooms)+' rooms':'')],
+    ['Getting there',c=>c.p.airportMinutes?'<span class="yes">'+esc(c.p.airportMinutes)+' min</span> from the airport'+(c.p.airportNote?'<br><span class="dim">'+esc(firstSentence(c.p.airportNote,90))+'</span>':''):(txt(c.p.airportNote)?esc(firstSentence(c.p.airportNote,90)):'<span class="dim">ask</span>')],
+    ['Beach',c=>txt(c.p.beachInfo)?esc(firstSentence(c.p.beachInfo,140)):'<span class="dim">—</span>'],
+    ['Pools',c=>poolsCell(c.p)],
+    ['Dining',c=>{const r=arr(c.p.restaurants).length,b=arr(c.p.bars).length;return r?r+' restaurant'+(r>1?'s':'')+(b?' · '+b+' bar'+(b>1?'s':''):''):'<span class="dim">—</span>';}],
+    ['Room types',c=>{const r=arr(c.p.roomCategories);if(!r.length)return'<span class="dim">—</span>';const sq=r.map(x=>+x.sqft||0).filter(Boolean);const so=r.some(x=>x.swimOut);return r.length+' categories'+(sq.length?'<br>'+Math.min(...sq)+'–'+Math.max(...sq)+' sq ft':'')+(so?'<br><span class="yes">swim-out rooms</span>':'');}],
+    ['Club level',c=>txt(c.p.clubName)?esc(c.p.clubName)+(arr(c.p.clubPerks).length?'<br><span class="dim">'+esc(firstSentence(arr(c.p.clubPerks)[0],90))+'</span>':''):'<span class="dim">none</span>'],
+    ['Kids',c=>kidsCell(c.p)],
+    ['Spa',c=>txt(c.p.spaInfo)?esc(firstSentence(c.p.spaInfo,110)):'<span class="dim">—</span>'],
+  ];
+  if(!ct)rowsDef.push(['Weddings',c=>venueCell(c.p)],['Packages',c=>{const k=arr(c.p.packages).length;return k?k+' package'+(k>1?'s':'')+(arr(c.p.packages).some(x=>/complimentary|free/i.test(x.price||''))?'<br><span class="yes">one complimentary</span>':''):'<span class="dim">ask</span>';}]);
+  const body='<tbody>'+rowsDef.map(([lbl,fn])=>'<tr><th>'+esc(lbl)+'</th>'+cols.map(c=>'<td>'+fn(c)+'</td>').join('')+'</tr>').join('')+'</tbody>';
+  $('out').innerHTML='<table>'+head+body+'</table>';
+  $('foot').textContent='Each name opens the full page. Nothing is held and there is nothing to decide today \u2014 reply to the email or grab a time when you\u2019re ready. \u2014 Amy';
+  document.title=(q0.couple?q0.couple+' \u2014 ':'')+'Side by side';
+}
+firebase.auth().onAuthStateChanged(run);
+</script>
+</body>
+</html>
