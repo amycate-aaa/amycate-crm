@@ -1320,11 +1320,16 @@ async function emailDraft(){
       (terms?' To hold it, it\u2019s '+terms+(q.easyPay?' \u2014 and you can pay that in pieces any time before then':'')+'.':'')+
       '\n\nIf it looks right, hit the button at the bottom of the page and I\u2019ll get you booked. Any questions, just reply.';
   } else if(basket.length>1){
+    const order=[];basket.forEach(m=>{if(!order.includes(m.where))order.push(m.where);});basket.sort((a,b)=>order.indexOf(a.where)-order.indexOf(b.where));
     const names=basket.map(e=>e.name);
     subject=(q.couple?q.couple+': ':'')+names.slice(0,-1).join(', ')+' or '+names[names.length-1]+' \u2014 take a look';
-    const blocks=basket.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+'\n'+facts(e).split('\n').filter(l=>!/^\u2022 Resort:/.test(l)).map(l=>'   '+l).join('\n')).join('\n\n');
-    body=hi+'\n\nHere are the '+(basket.length===2?'two':basket.length===3?'three':basket.length)+' resorts I\u2019d put in front of you'+(q.couple?' for '+q.couple:'')+(entry.travel&&basket.every(e=>e.travel===entry.travel)?', priced for '+entry.travel:'')+':\n\n'+blocks+
-      '\n\nSide by side on one page \u2014 price, beach, pools, rooms'+(CT?'':', wedding venues')+':\n'+compareLink+
+    const sameTravel=entry.travel&&basket.every(e=>e.travel===entry.travel);
+    const blocks=basket.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+'\n'+facts(e).split('\n').filter(l=>!/^\u2022 Resort:/.test(l)&&!(sameTravel&&/^\u2022 Dates:/.test(l))).map(l=>'   '+l).join('\n')).join('\n\n');
+    if(!CT){const dests=[...new Set(basket.map(e=>(e.where||'').split(',')[0].trim()).filter(Boolean))];const destTxt=dests.length>1?dests.slice(0,-1).join(', ')+' and '+dests[dests.length-1]:(dests[0]||'');const n=parseInt(q.nights,10)||nightsFromTravel(entry.travel);const total=/total/i.test(q.priced||'')||q.basis==='total';const basisTxt=total?'2 adults for '+(n>0?n+' night'+(n===1?'':'s'):'the dates'):'per person, per night';
+      body=hi+'\n\n'+(q.note?q.note+'\n\n':'I\u2019ve put together a selection of resort options'+(destTxt?' in '+destTxt:'')+' that align with what you are looking for. Each one includes the accommodations, wedding packages, venues and current promotions, so you can see how they compare.\n\n')+
+        'For quoting purposes I have based the sample room pricing on '+basisTxt+(total?', which is the minimum stay for guests booking under a group block':'')+'. Deciding what price point feels comfortable for your guests is one of the biggest factors in choosing your resort.\n\nIf you decide to move forward with a group contract, you will receive slightly reduced rates and added perks such as complimentary nights, room upgrades and cocktail events.\n\nHave a look through the options and let me know if you have any questions. I am always happy to jump on a call to go through the resorts, pricing or wedding packages in more detail!\n\nYOUR RESORT OPTIONS'+(sameTravel?' \u2014 '+entry.travel:'')+'\n\n'+blocks+'\n\nSide by side on one page \u2014 price, beach, pools, rooms, wedding venues:\n'+compareLink;}
+    else body=hi+'\n\nHere are the '+(basket.length===2?'two':basket.length===3?'three':basket.length)+' resorts I\u2019d put in front of you'+(q.couple?' for '+q.couple:'')+(sameTravel?', priced for '+entry.travel:'')+':\n\n'+blocks+
+      '\n\nSide by side on one page \u2014 price, beach, pools, rooms:\n'+compareLink+
       '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   } else {
     subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
