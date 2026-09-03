@@ -318,6 +318,7 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .docbtn .ic{font-size:13px;color:var(--gold);}
 .docbtn:hover .ic{color:#fff;}
 .docrow{margin:0 0 26px;}
+.ppnbreak{font-size:14px;line-height:1.5;color:#6E665C;margin:8px 0 0;letter-spacing:.01em;}
 /* Resources strip — a quiet row of small pills under the nav */
 .resbar{background:transparent;border-bottom:1px solid rgba(176,141,87,.25);padding:14px 0 6px;}
 .resbar .eyebrow{display:inline-block;margin:0 18px 8px 0;vertical-align:middle;font-size:9.5px;color:var(--gold-soft);}
@@ -600,6 +601,10 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
       <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
+      <div class="qb-f"><label>Quote Type</label><select id="q-mode" onchange="toggleMode()">
+        <option value="resort">Resort quote &mdash; helping them choose</option>
+        <option value="guest">Guest quote &mdash; resort chosen, booking a room</option>
+      </select></div>
       <div class="qb-f"><label>Send As</label><select id="q-brand">
         <option value="dwt">Destination Weddings Travel Group</option>
         <option value="ct">Celebration Travel</option>
@@ -608,7 +613,21 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <div class="qb-f wide"><label>Your Note To Them</label><textarea id="q-note" placeholder="Reflect their brief back in their own words, then say why their instinct is right&hellip;"></textarea></div>
     </div>
 
+    <div id="q-guestbox" style="display:none;margin:0 0 26px;padding:18px 20px;border:1px solid var(--gold);background:#FBF8F3;">
+      <p class="qb-h" style="margin-top:0;">Booking Terms</p>
+      <div class="qb-grid">
+        <div class="qb-f"><label>Deposit</label><input id="q-deposit" placeholder="$100 per room" oninput="saveLocal()"></div>
+        <div class="qb-f"><label>Final payment due</label><input id="q-due" placeholder="March 2, 2027" oninput="saveLocal()"></div>
+        <div class="qb-f wide"><label>Booking / payment link (from your system)</label><input id="q-booklink" placeholder="https://..." oninput="saveLocal()"></div>
+        <div class="qb-f wide"><label class="airtoggle" style="margin:0;"><input type="checkbox" id="o-easypay" onchange="saveLocal()"> Easy Payments available &mdash; balance can be paid in pieces before the due date</label></div>
+      </div>
+    </div>
     <p class="qb-h">Room Pricing</p>
+    <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:0 0 10px;">
+      <label class="airtoggle" style="margin:0;"><input type="radio" name="q-basis" value="ppn" checked onchange="toggleBasis()"> Per person, per night</label>
+      <label class="airtoggle" style="margin:0;"><input type="radio" name="q-basis" value="total" onchange="toggleBasis()"> Total for the room</label>
+      <span id="q-nightsbox" style="display:none;">Nights <input id="q-nights" class="qb-in" style="width:64px;display:inline-block;" placeholder="4" oninput="saveLocal()"></span>
+    </div>
     <p class="qb-note" id="q-pricehint">Add only the categories you are actually pricing. Per person, per night, based on double occupancy &mdash; just the number.</p>
     <div class="qb-addrow">
       <select id="q-room-add"></select>
@@ -616,7 +635,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button type="button" class="qb-btn ghost" onclick="addAllRooms()">Add all</button>
     </div>
     <div style="overflow-x:auto;"><table class="qb-rooms"><thead><tr>
-      <th style="min-width:220px;">Room Category</th><th style="width:200px;">Per Person / Night</th><th style="width:44px;"></th>
+      <th style="min-width:220px;">Room Category</th><th style="width:200px;" id="q-pricecol">Per Person / Night</th><th style="width:44px;"></th>
     </tr></thead><tbody id="q-price-rows"></tbody></table></div>
 
     <div id="q-pkgbox" style="display:none;margin-bottom:26px;">
@@ -670,6 +689,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn solid" onclick="renderQuote()">Preview Quote &rarr;</button>
       <button class="qb-btn" onclick="downloadQuote()">Download HTML</button>
       <button class="qb-btn" onclick="copyQuoteLink()">Copy Link</button>
+      <button class="qb-btn" onclick="emailDraft()" title="Copies a short email with the quote link in it">Email Draft</button>
       <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
@@ -851,8 +871,14 @@ function collectQ(){
     return el?{name:tr.dataset.name,ppn:el.value.trim()}:null;
   }).filter(r=>r&&r.ppn);
   const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
+  const basisEl=document.querySelector('input[name="q-basis"]:checked');
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
     priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
+    mode:$id('q-mode')?$id('q-mode').value:'resort',
+    basis:basisEl?basisEl.value:'ppn',nights:$id('q-nights')?$id('q-nights').value.trim():'',
+    deposit:$id('q-deposit')?$id('q-deposit').value.trim():'',due:$id('q-due')?$id('q-due').value.trim():'',
+    bookLink:$id('q-booklink')?$id('q-booklink').value.trim():'',easyPay:$id('o-easypay')?$id('o-easypay').checked:false,
+    savedAt:Date.now(),
     needAir:$id('q-needair').checked,
     pkgPrice:$id('q-pkgprice').value.trim(),
     pkgCovers:$id('q-pkgcovers').value.trim(),
@@ -872,7 +898,11 @@ function applyQ(q){
   (q.air||[]).forEach(r=>addAirRow(r));
   ['pkgprice','pkgcovers'].forEach(k=>{const el=$id('q-'+k);
     if(el&&q[k==='pkgprice'?'pkgPrice':'pkgCovers']!=null)el.value=q[k==='pkgprice'?'pkgPrice':'pkgCovers'];});
-  ['couple','date','travel','priced','brand','headline','note'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
+  ['couple','date','travel','priced','brand','headline','note','mode','deposit','due','nights'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
+  if($id('q-booklink')&&q.bookLink!=null)$id('q-booklink').value=q.bookLink;
+  if($id('o-easypay')&&q.easyPay!=null)$id('o-easypay').checked=!!q.easyPay;
+  if(q.basis){const r=document.querySelector('input[name="q-basis"][value="'+q.basis+'"]');if(r)r.checked=true;}
+  toggleMode();toggleBasis();
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el&&k!=='gallery')el.checked=!!q.opts[k];});
   (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
 }
@@ -914,7 +944,8 @@ function clearTrip(){
   TRIPKEYS.forEach(k=>{const el=$id(k); if(el)el.value='';});
   const air=$id('q-needair'); if(air){air.checked=false;toggleAir();}
   if($id('q-air-rows'))$id('q-air-rows').innerHTML='';
-  ['q-pkgprice','q-pkgroom'].forEach(k=>{const el=$id(k); if(el)el.value='';});
+  ['q-pkgprice','q-pkgroom','q-deposit','q-due','q-booklink','q-nights'].forEach(k=>{const el=$id(k); if(el)el.value='';});
+  if($id('o-easypay'))$id('o-easypay').checked=false;
   if($id('q-price-rows'))$id('q-price-rows').innerHTML='';
   saveLocal();
 }
@@ -935,11 +966,14 @@ function buildBuilder(){
   if(url)applyQ(decQ(url));
   else{
     let had=false;
-    try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s){applyQ(JSON.parse(s));had=true;}}catch(e){}
+    try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s){const saved=JSON.parse(s);
+      if(saved.savedAt&&Date.now()-saved.savedAt>12*3600*1000){delete saved.prices;} /* rooms older than 12h don't come back */
+      applyQ(saved);had=true;}}catch(e){}
     if(!had)loadTrip();   // first time on this resort — carry the trip details over
   }
   if(!$id('q-priced').value)$id('q-priced').value='Per person, per night';
   if(window.CTMODE&&$id('q-brand')&&!url)$id('q-brand').value='ct';
+  toggleMode();toggleBasis();
 }
 let ROOMCATS=[];
 const NOROOMS='<tr id="q-norooms"><td colspan="3" class="none">No rooms added yet \u2014 choose one above and hit Add room.</td></tr>';
@@ -969,6 +1003,43 @@ function wireRooms(){
   });
 }
 const RAPIDAPI_KEY='1540ad94fcmsh80790b3065091f5p1285b9jsn51218123bdb5';
+function toggleMode(){
+  const guest=$id('q-mode')&&$id('q-mode').value==='guest';
+  if($id('q-guestbox'))$id('q-guestbox').style.display=guest?'block':'none';
+  ['o-offers','o-group','o-steps','o-inclusions'].forEach(k=>{const el=$id(k);if(el&&el.parentElement)el.parentElement.style.display=guest?'none':'';});
+  const h=document.querySelector('#qb h2');if(h)h.textContent=guest?'Build a Guest Quote':'Build a Quote';
+}
+function toggleBasis(){
+  const el=document.querySelector('input[name="q-basis"]:checked');const total=el&&el.value==='total';
+  if($id('q-nightsbox'))$id('q-nightsbox').style.display=total?'inline':'none';
+  if($id('q-pricecol'))$id('q-pricecol').textContent=total?'Total For The Room':'Per Person / Night';
+  const pr=$id('q-priced');if(pr&&(!pr.value||pr.value==='Per person, per night'||pr.value==='Total for the room'))pr.value=total?'Total for the room':'Per person, per night';
+  const h=$id('q-pricehint');if(h&&!$id('q-needair').checked)h.innerHTML=total
+    ?'Add only the categories you are actually pricing. Enter the <strong>total for the room</strong> for the whole stay, exactly as the operator quotes it, two people sharing. Per person is worked out for you; add the number of nights and per night is too.'
+    :'Add only the categories you are actually pricing. Per person, per night, based on double occupancy &mdash; just the number.';
+  saveLocal();
+}
+function emailDraft(){
+  const q=collectQ();const R=P.resortName||P.name||'';const link=location.origin+location.pathname+'?r='+SLUG+'&q='+encQ(q);
+  const first=(q.couple||'').split(/[&,]| and /)[0].trim();
+  const hi='Hi'+(first?' '+first:'')+',';
+  let subject,body;
+  if(q.mode==='guest'){
+    subject='Your room at '+R+(q.travel?' \u2014 '+q.travel:'');
+    const terms=[q.deposit?q.deposit+' now':'',q.due?'the balance by '+q.due:''].filter(Boolean).join(' and ');
+    body=hi+'\n\nHere\u2019s your quote for '+R+': '+link+'\n\nYour room'+(q.prices.length>1?' options':'')+', your dates, and the price, all on one page.'+
+      (terms?' To hold it, it\u2019s '+terms+(q.easyPay?' \u2014 you can pay that in pieces any time before then':'')+'.':'')+
+      '\n\nIf it looks right, hit the button at the bottom of the page and I\u2019ll get you booked. Any questions, just reply.\n\nAmy';
+  } else {
+    subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
+    body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+': '+link+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools, and how the group side works. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through.\n\nAmy';
+  }
+  const text='Subject: '+subject+'\n\n'+body;
+  const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
+  const done=()=>say('Email copied \u2014 paste it into a new message.');
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(done).catch(()=>{window.prompt('Copy this:',text);});
+  else window.prompt('Copy this:',text);
+}
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
   $id('q-pkgbox').style.display=on?'block':'none';
@@ -1037,6 +1108,8 @@ function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.resortName||P.name||'';
   const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
+  const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
+  const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
   const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
   const hero=photoOk(P.heroPhoto)?P.heroPhoto:(RESORTWIDE.find(p=>photoOk(p.url||p.downloadURL))||{}).url||'';
@@ -1048,8 +1121,8 @@ function renderQuote(){
   /* 1 — HERO */
   S.push('<header class="q-hero"><div class="c">'+
     (q.couple?'<p class="eyebrow">Prepared for '+esc(q.couple)+'</p>':'<p class="eyebrow">Amy Cate \u00b7 Your Quote</p>')+
-    '<h1 class="q-name">'+esc(q.headline||R)+'</h1>'+
-    (q.headline?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
+    '<h1 class="q-name">'+esc(q.headline||(GUEST?'Your Room At '+R:R))+'</h1>'+
+    ((q.headline||GUEST)?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
     '<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>'+
@@ -1105,7 +1178,7 @@ function renderQuote(){
     const l=CT?P.ctPromoLink:P.weddingPromoLink;
     const standing=norm(CT?CT_OFFERS:DWT_OFFERS);
     if(t && b && norm(l)!==standing) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
-    if(!o.length||q.opts.offers===false)return;
+    if(!o.length||q.opts.offers===false||GUEST)return;
     S.push('<div class="offers"><div class="wrap">'+o.map(x=>
       '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
       '<h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(x.body)+'</p>':'')+
@@ -1150,7 +1223,7 @@ function renderQuote(){
   if(rows.length||hasPkg){
     const cats=allCatsRaw;
     const solo=rows.length===1&&!q.needAir;
-    const stayHTML=(priced&&q.opts.example&&!q.needAir)?stayTotals(q,solo):'';
+    const stayHTML=(priced&&q.opts.example&&!q.needAir&&!TOTAL&&!GUEST)?stayTotals(q,solo):'';
     const PKGBAND=((q.needAir&&clean(q.pkgPrice))
         ?(function(){
             const legs=(q.air||[]).filter(r=>r.from&&r.to)
@@ -1166,19 +1239,21 @@ function renderQuote(){
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
         :'');
-    ROOMS=sec('',head('Your Guests',(priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites')+
+    ROOMS=sec('',head(GUEST?'Your Booking':'Your Guests',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
       PKGBAND+
       (priced
         ?(q.needAir
         ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
         +(q.prices.length?'':'<p class="small" style="max-width:64ch;margin:0 0 34px;">That figure is for the entry category. Here is every room type at the resort \u2014 tell me which appeals and I will price it.</p>')
-        :'<ul class="pricepts">'+
-          '<li><b>Per person, per night</b>, based on two people sharing.</li>'+
+        :(GUEST
+          ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">'+(TOTAL?'The price is the <b>total for the room</b> for your dates, two people sharing':'Prices are <b>per person, per night</b>, two people sharing')+' \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Nothing more to add on.</p>'
+          :'<ul class="pricepts">'+
+          (TOTAL?'<li><b>The price shown is the total for the room</b>, two people sharing, for your travel dates. Per person'+(NIGHTS?' and per night are':' is')+' shown underneath it.</li>':'<li><b>Per person, per night</b>, based on two people sharing.</li>')+
           '<li><b>Everything is in it</b> \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers.</li>'+
           '<li><b>This is where pricing starts.</b> It is the entry category, so you can see the shape of it.</li>'+
           '<li><b>Every room type follows.</b> Once you have settled on the resort I lay them all out side by side, so your guests pick what suits them and what they want to spend.</li>'+
           '<li><b>Rates are confirmed when you book</b>, and held against increases if your group reaches ten rooms.</li>'+
-          '</ul>')
+          '</ul>'))
         :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
         ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
@@ -1188,7 +1263,13 @@ function renderQuote(){
             return'<div class="pcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
-              (r.ppn?'<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">'+(q.needAir?'per person<br>flights, room and transfers':'per person, per night<br>based on double occupancy')+'</p></div>':'')+
+              (r.ppn?(function(){
+                  if(q.needAir)return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person<br>flights, room and transfers</p></div>';
+                  if(TOTAL){const t=num(r.ppn);const pp=t?t/2:0;const pn=(t&&NIGHTS)?pp/NIGHTS:0;
+                    return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', two people sharing':'<br>two people sharing')+'</p>'+
+                      (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+'</div>';}
+                  return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>based on double occupancy</p></div>';})():'')+
+              (GUEST&&q.bookLink?'<p style="margin:18px 0 0;"><a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a></p>':'')+
               (solo?stayHTML:'')+
               '</div></div>';}).join('')+'</div>'
         : '<div class="dinelist">'+rows.map(r=>{
@@ -1201,7 +1282,16 @@ function renderQuote(){
               '</div>';}).join('')+'</div>')+
       (solo?'':stayHTML)+
 
-      (!priced?'':'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
+      (GUEST?(function(){
+          const terms=[];
+          if(clean(q.deposit))terms.push('<p><strong>To hold it:</strong> '+esc(clean(q.deposit))+' now.</p>');
+          if(clean(q.due))terms.push('<p><strong>Balance due:</strong> '+esc(clean(q.due))+(q.easyPay?' \u2014 and you can pay it in pieces any time before then with Easy Payments.':'.')+'</p>');
+          if(!terms.length&&q.easyPay)terms.push('<p>Easy Payments are available \u2014 pay the balance in pieces before the due date.</p>');
+          terms.push('<p>Rates are confirmed at booking. Once your deposit is in, your room and your price are held.</p>');
+          const btn=q.bookLink?'<p class="cta"><a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a></p>'
+                              :'<p class="cta"><a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+R+(q.couple?' \u2014 '+q.couple:''))+'">I\u2019ll take this room \u2192</a></p>';
+          return '<div class="note-box" style="margin-top:44px;"><p class="eyebrow" style="margin:0 0 14px;">Booking Terms</p>'+terms.join('')+btn+'</div>';})()
+      :!priced?'':'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
       (q.needAir
         ?'<p>Flight prices move daily and are only held once ticketed. If your group reaches ten rooms I can hold the room rates against any increase; below that everyone books individually and I look after each reservation the same way. Either way I tell you straight away if anything shifts.</p>'
         :'<p>What you are seeing is two people sharing. Someone travelling alone pays a bit more, three sharing a bit less, and children 3\u201312 come in around a third \u2014 under two, they travel free. I price all of that out properly the moment the agreement rates land.</p>')+
@@ -1210,7 +1300,7 @@ function renderQuote(){
   if(priced&&ROOMS){S.push(ROOMS);ROOMS='';}   // priced: show it here, near the top
 
   /* 5 — PACKAGES */
-  const pkgs=CT?[]:(P.packages||[]).filter(p=>p&&p.name);
+  const pkgs=(CT||GUEST)?[]:(P.packages||[]).filter(p=>p&&p.name);
   if(pkgs.length){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
@@ -1230,7 +1320,7 @@ function renderQuote(){
   }
 
   /* 6 — VENUES */
-  const vens=CT?[]:(P.venues||[]).filter(v=>v&&v.name);
+  const vens=(CT||GUEST)?[]:(P.venues||[]).filter(v=>v&&v.name);
   if(vens.length){
     S.push(sec('',head('Where You Say It','Ceremony & Reception Venues')+bandImg('venues',/venue|ceremony/i)+docBtns('venues')+
       '<div class="price-grid" style="margin-top:34px;">'+vens.map(v=>{
@@ -1244,7 +1334,7 @@ function renderQuote(){
   }
 
   /* 6b — A REAL WEDDING HERE */
-  if(!CT && photoOk(P.realWeddingUrl)){
+  if(!CT && !GUEST && photoOk(P.realWeddingUrl)){
     const who=clean(P.realWeddingNames);
     S.push(sec('realwed',head('Not A Brochure Shot','A Real Wedding Here')+
       (who?'<p class="names">'+esc(who)+'</p>':'')+
@@ -1333,7 +1423,7 @@ function renderQuote(){
   if(ROOMS)S.push(ROOMS);
 
   /* 14 — GROUP AGREEMENT */
-  if(!CT){
+  if(GUEST){}else if(!CT){
   if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
     '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being a holiday everyone books separately and starts being <em>your</em> week. Under ten rooms none of this applies and none of it is needed \u2014 everyone simply books individually and I look after each reservation. Here is what changes once you are over that line.</p>'+
     '<div class="ga-grid">'+
@@ -1357,7 +1447,7 @@ function renderQuote(){
 
 
   /* 15 — NEXT STEPS */
-  if(q.opts.steps)S.push(sec('sand-band',head('No Rush','Next Steps')+
+  if(q.opts.steps&&!GUEST)S.push(sec('sand-band',head('No Rush','Next Steps')+
     '<div class="steps" style="margin-top:34px;">'+
     '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
     '<div><p class="n">02</p><h4>I request the group agreement</h4><p>Only if you need one. Ten rooms or more and I go to the resort and ask for your contract \u2014 it comes back in a few days, and we get on a call and walk through it together before anything is signed. Under ten rooms there is no agreement and nothing to sign: everyone books individually and I handle each booking for you exactly the same way.</p></div>'+
@@ -1370,14 +1460,17 @@ function renderQuote(){
   /* 16 — CLOSING */
   S.push('<div class="q-close sand-band" style="background:var(--espresso);color:#EDE4D6;">'+
     '<div class="c"><p class="eyebrow" style="color:var(--gold-soft)">Amy Cate</p>'+
-    '<h2 class="display" style="color:#FBF8F3;">Tell me which part you want to talk about first.</h2>'+
-    '<p style="font-size:18px;line-height:1.8;color:#EDE4D6;max-width:52ch;">Every question is a good one \u2014 and if it is easier to talk it through out loud, send me a few times that work and I will call you.</p>'+
-    '<p style="margin-top:26px;"><a href="mailto:'+esc(email)+'?subject='+encodeURIComponent((q.couple?q.couple+' \u2014 ':'')+R)+'" style="display:inline-block;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Email Me &rarr;</a></p>'+
+    '<h2 class="display" style="color:#FBF8F3;">'+(GUEST?'Ready when you are.':'Tell me which part you want to talk about first.')+'</h2>'+
+    '<p style="font-size:18px;line-height:1.8;color:#EDE4D6;max-width:52ch;">'+(GUEST?'Hit the button and I take it from there \u2014 confirmation, receipt, and every question between now and your trip.':'Every question is a good one \u2014 and if it is easier to talk it through out loud, grab a time that works for you and we will talk it through.')+'</p>'+
+    '<p style="margin-top:26px;">'+
+    (GUEST&&q.bookLink?'<a href="'+esc(q.bookLink)+'" target="_blank" rel="noopener" style="display:inline-block;margin:0 12px 12px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso);background:var(--gold);border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Accept &amp; Pay &rarr;</a>':'')+
+    '<a href="mailto:'+esc(email)+'?subject='+encodeURIComponent((q.couple?q.couple+' \u2014 ':'')+R)+'" style="display:inline-block;margin:0 12px 12px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Email Me &rarr;</a>'+
+    '<a href="https://zcal.co/amymcate/letschat" target="_blank" rel="noopener" style="display:inline-block;margin:0 0 12px;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Call Me &rarr;</a></p>'+
     '<p class="sig">Amy</p></div>'+
     (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
 
   S.push('<footer><p>Amy Cate \u00b7 '+esc(brandName)+'</p><p>'+esc(email)+'</p>'+
-    '<p>'+(priced?'Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. ':'')+
+    '<p>'+(GUEST?'Rates are confirmed at booking and held once your deposit is received. ':priced?'Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. ':'')+
     'Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
 
   $id('quote-page').innerHTML=S.join('');
@@ -1495,7 +1588,7 @@ const NAVLABEL={'Accommodations & Pricing':'Rooms','Rooms & Suites':'Rooms',
   'Wedding Packages':'Wedding info','Ceremony & Reception Venues':'Wedding venues',
   'Pools & Beach':'Pools','Good To Know':'Good to know','More Info':'More info',
   'What A Group Gets You':'Groups','Next Steps':'Next steps',
-  'A Real Wedding Here':'Real wedding','Flights':'Flights'};
+  'A Real Wedding Here':'Real wedding','Flights':'Flights','Your Room':'Your room','Your Room Options':'Your rooms'};
 function buildQuoteNav(){
   const qp=$id('quote-page');
   const old=qp.querySelector('.qnav'); if(old)old.remove();
