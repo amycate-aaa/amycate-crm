@@ -1063,19 +1063,23 @@ function toggleBasis(){
   saveLocal();
 }
 
-function showEmailBox(to,subject,body){
+function showEmailBox(to,subject,body,names){
   let m=$id('email-box');
   if(!m){m=document.createElement('div');m.id='email-box';m.innerHTML='<div class="eb-card"><div class="eb-head"><span class="eyebrow" style="margin:0">Email draft</span><button class="eb-x" onclick="document.getElementById(\'email-box\').style.display=\'none\'">\u00d7</button></div>'+
     '<label>To</label><input id="eb-to">'+'<label>Subject</label><input id="eb-subject">'+'<label>Message <span style="opacity:.6">(edit anything, then copy)</span></label><textarea id="eb-body" rows="16"></textarea>'+
-    '<div class="eb-actions"><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Copy message only</button><span id="eb-msg"></span></div></div>';
+    '<div class="eb-actions"><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Copy message only</button><span id="eb-msg"></span></div><p id="eb-basket" style="font-size:12px;color:#6B6258;margin:14px 0 0"></p></div>';
     document.body.appendChild(m);}
   $id('eb-to').value=to||'';$id('eb-subject').value=subject;$id('eb-body').value=body;m.style.display='flex';
+  const bk=$id('eb-basket');if(names&&names.length>1)bk.innerHTML='This email covers '+names.length+' resorts: '+names.map(esc).join(', ')+'. <a href="#" onclick="ebStartOver();return false;" style="color:var(--gold)">Start over with just this one</a>';else bk.innerHTML='To send two or three resorts in one email: build the quote on the next resort and click Email Draft there \u2014 this one is remembered for 24 hours.';
   setTimeout(()=>{const t=$id('eb-body');t.focus();t.select();},50);
 }
 function ebCopy(what){const sub=$id('eb-subject').value,b=$id('eb-body').value;const text=what==='all'?'Subject: '+sub+'\n\n'+b:b;
   const ok=()=>{$id('eb-msg').textContent='Copied \u2014 paste it into Outlook.';setTimeout(()=>$id('eb-msg').textContent='',5000);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(ok).catch(()=>{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();});
   else{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();}}
+function ebBasketGet(){try{const b=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');const cut=Date.now()-24*3600*1000;return b.filter(e=>e.t>cut);}catch(e){return[];}}
+function ebBasketSet(b){try{localStorage.setItem('ac_email_basket',JSON.stringify(b));}catch(e){}}
+function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
 async function emailDraft(){
   const q=collectQ();const R=P.name||P.resortName||'';
   const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
@@ -1087,21 +1091,33 @@ async function emailDraft(){
   first=first.replace(/['\u2019]s$/,'');
   const hi='Hi'+(first?' '+first:'')+',';
   const where=(P.destination||'').replace(/,\s*/g,', ');
-  const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):'')).join('\n');
-  const facts=['\u2022 Resort: '+R+(where?' \u2014 '+where:''),q.travel?'\u2022 Dates: '+q.travel:'',q.couple?'\u2022 For: '+q.couple:'',rooms?'\u2022 Rooms priced:\n'+rooms:'',q.needAir&&q.pkgPrice?'\u2022 Package with flights: $'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):''].filter(Boolean).join('\n');
+  const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));
+  const entry={slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};
+  if(q.mode!=='guest'){
+    let b=ebBasketGet().filter(e=>e.slug!==SLUG&&(!e.couple||!q.couple||e.couple.toLowerCase()===q.couple.toLowerCase()));
+    b.push(entry);ebBasketSet(b);
+  }
+  const basket=q.mode==='guest'?[entry]:ebBasketGet();
+  const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?'\u2022 Rooms priced:\n'+e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
   let subject,body;
   if(q.mode==='guest'){
     subject='Your room at '+R+(q.travel?' \u2014 '+q.travel:'');
     const terms=[q.deposit?q.deposit+' now':'',q.due?'the balance by '+q.due:''].filter(Boolean).join(' and ');
-    body=hi+'\n\nHere\u2019s your quote for '+R+':\n'+link+'\n\n'+facts+'\n\nYour room'+(q.prices.length>1?' options':'')+', your dates and the price are all on that page.'+
+    body=hi+'\n\nHere\u2019s your quote for '+R+':\n'+link+'\n\n'+facts(entry)+'\n\nYour room'+(q.prices.length>1?' options':'')+', your dates and the price are all on that page.'+
       (terms?' To hold it, it\u2019s '+terms+(q.easyPay?' \u2014 and you can pay that in pieces any time before then':'')+'.':'')+
       '\n\nIf it looks right, hit the button at the bottom of the page and I\u2019ll get you booked. Any questions, just reply.';
+  } else if(basket.length>1){
+    const names=basket.map(e=>e.name);
+    subject=(q.couple?q.couple+': ':'')+names.slice(0,-1).join(', ')+' or '+names[names.length-1]+' \u2014 take a look';
+    const blocks=basket.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+'\n'+facts(e).split('\n').filter(l=>!/^\u2022 Resort:/.test(l)).map(l=>'   '+l).join('\n')).join('\n\n');
+    body=hi+'\n\nHere are the '+(basket.length===2?'two':basket.length===3?'three':basket.length)+' resorts I\u2019d put in front of you'+(q.couple?' for '+q.couple:'')+(entry.travel&&basket.every(e=>e.travel===entry.travel)?', priced for '+entry.travel:'')+':\n\n'+blocks+
+      '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   } else {
     subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
-    body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
+    body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts(entry)+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   }
   const to=(($id('q-email')||{}).value||'').trim();
-  showEmailBox(to,subject,body);say('');
+  showEmailBox(to,subject,body,basket.length>1?basket.map(e=>e.name):null);say('');
 }
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
