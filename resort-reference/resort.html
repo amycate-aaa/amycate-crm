@@ -456,6 +456,16 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .pcard .ppn{font-family:var(--serif);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;margin:0 0 8px;}
 .pcard .ppnsub{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#6E665C;line-height:1.75;margin:0;}
 
+
+#email-box{display:none;position:fixed;inset:0;background:rgba(26,21,16,.55);z-index:9999;align-items:center;justify-content:center;padding:20px}
+.eb-card{background:var(--ivory);width:min(760px,100%);max-height:92vh;overflow:auto;padding:26px 28px 24px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.eb-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.eb-x{background:none;border:0;font-size:26px;line-height:1;color:var(--gold-soft);cursor:pointer}
+.eb-card label{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin:12px 0 5px;font-family:var(--sans)}
+.eb-card input,.eb-card textarea{width:100%;box-sizing:border-box;border:1px solid var(--sand-deep);background:#fff;padding:9px 11px;font-family:var(--sans);font-size:14px;line-height:1.55;color:var(--ink)}
+.eb-card textarea{resize:vertical;min-height:220px}
+.eb-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+#eb-msg{font-size:12px;color:var(--gold)}
 </style>
 </head>
 <body>
@@ -707,7 +717,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn solid" onclick="renderQuote()">Preview Quote &rarr;</button>
       <button class="qb-btn" onclick="downloadQuote()">Download HTML</button>
       <button class="qb-btn" onclick="copyQuoteLink()">Copy Link</button>
-      <button class="qb-btn" onclick="emailDraft()" title="Opens a new email in your mail app with the quote link in it">Email Draft</button>
+      <button class="qb-btn" onclick="emailDraft()" title="Writes the email for you \u2014 copy it into Outlook">Email Draft</button>
       <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
@@ -1052,6 +1062,20 @@ function toggleBasis(){
     :'Add only the categories you are actually pricing. Per person, per night, based on double occupancy &mdash; just the number.';
   saveLocal();
 }
+
+function showEmailBox(to,subject,body){
+  let m=$id('email-box');
+  if(!m){m=document.createElement('div');m.id='email-box';m.innerHTML='<div class="eb-card"><div class="eb-head"><span class="eyebrow" style="margin:0">Email draft</span><button class="eb-x" onclick="document.getElementById(\'email-box\').style.display=\'none\'">\u00d7</button></div>'+
+    '<label>To</label><input id="eb-to">'+'<label>Subject</label><input id="eb-subject">'+'<label>Message <span style="opacity:.6">(edit anything, then copy)</span></label><textarea id="eb-body" rows="16"></textarea>'+
+    '<div class="eb-actions"><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Copy message only</button><span id="eb-msg"></span></div></div>';
+    document.body.appendChild(m);}
+  $id('eb-to').value=to||'';$id('eb-subject').value=subject;$id('eb-body').value=body;m.style.display='flex';
+  setTimeout(()=>{const t=$id('eb-body');t.focus();t.select();},50);
+}
+function ebCopy(what){const sub=$id('eb-subject').value,b=$id('eb-body').value;const text=what==='all'?'Subject: '+sub+'\n\n'+b:b;
+  const ok=()=>{$id('eb-msg').textContent='Copied \u2014 paste it into Outlook.';setTimeout(()=>$id('eb-msg').textContent='',5000);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(ok).catch(()=>{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();});
+  else{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();}}
 async function emailDraft(){
   const q=collectQ();const R=P.name||P.resortName||'';
   const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
@@ -1077,11 +1101,7 @@ async function emailDraft(){
     body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   }
   const to=(($id('q-email')||{}).value||'').trim();
-  const mailto='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
-  const text='Subject: '+subject+'\n\n'+body;
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).catch(()=>{});
-  location.href=mailto;
-  say('Opening a new email in your mail app \u2014 the text is on your clipboard too, in case it doesn\u2019t.');
+  showEmailBox(to,subject,body);say('');
 }
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
