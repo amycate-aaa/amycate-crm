@@ -943,14 +943,16 @@ function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-past
   if(ci&&co){const a=pd(ci[1]),b=pd(co[1]);if(a&&b){$id('mq-from').value=a;$id('mq-to').value=b;mqDates('to');}}
   // hotels
   const hotels=mqParseHotels(raw);const nights=parseInt($id('mq-nights').value,10)||0;
-  $id('mq-rows').innerHTML='';const missed=[];
+  // keep existing filled rows; drop empty placeholder rows
+  [...document.querySelectorAll('.mq-row')].forEach(r=>{if(!r.querySelector('.mq-resort').value&&!r.querySelector('.mq-price').value&&!r.querySelector('.mq-pkg').value)r.remove();});const missed=[];
   hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;if(h.total){const inp=row.querySelector('.mq-pkg');inp.value=Math.round(parseFloat(h.total));mqPkgHint(inp);}
     const rs=row.querySelector('.mq-room');
     if(!slug){missed.push(h.name);row.querySelector('.mq-resort').value='';rs.innerHTML='<option selected>'+esc(h.room)+'</option>';let note=row.querySelector('.mq-ready');if(!note){note=document.createElement('div');note.className='mq-ready small';note.style.cssText='grid-column:1/-1;font-size:12px;margin:-4px 0 2px;';row.appendChild(note);}note.innerHTML='<span style="color:#8B2E2E;">'+esc(h.name)+' is not in your library \u2014 pick the resort, or remove this row.</span>';return;}
     const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);const rm=mqBestRoom(slug,h.room);if(rm)rs.value=rm;else{const o=document.createElement('option');o.textContent=h.room;o.selected=true;rs.appendChild(o);}});
   if(!hotels.length)mqAddRow();
   // flights → one destination box (after rows exist)
-  mqAirBlocks();const air=parseAirText(raw,($id('mq-from').value||'').slice(0,4));if(air.length){const ta=document.querySelector('#mq-air-blocks textarea');if(ta){ta.value=raw;mqAirPreview(ta);}}
+  mqAirBlocks();const air=parseAirText(raw,($id('mq-from').value||'').slice(0,4));if(air.length){const newSlugs=hotels.map(h=>mqBestSlug(h.name)).filter(Boolean);const dest=newSlugs.length?mqDestOf(newSlugs[0]):'';let ta=dest?document.querySelector('#mq-air-blocks [data-dest="'+dest.replace(/"/g,'')+'"] textarea'):null;if(!ta)ta=[...document.querySelectorAll('#mq-air-blocks textarea')].find(t=>!t.value.trim())||document.querySelector('#mq-air-blocks textarea');if(ta){ta.value=raw;mqAirPreview(ta);}}
+  $id('mq-paste').value='';
   const incomplete=[...document.querySelectorAll('.mq-resort')].map(x=>window.LIB[x.value]).filter(l=>l&&!l.ready).map(l=>l.name);
   msg.textContent=hotels.length+' hotel'+(hotels.length===1?'':'s')+' found'+(hotels.length?' \u2014 '+(hotels.length-missed.length)+' matched to your library':'')+(missed.length?'. Not in library: '+missed.join('; '):'')+(air.length?' \u00b7 '+air.length+' flights':'')+(incomplete.length?'. \u26a0 Guide not complete: '+incomplete.join('; '):'')+'. Package totals are for all travelers ('+adults+' adults) \u2014 per person is shown under each. Check, then Create.';}
 async function mqPrefill(key){const b=ebBasketGet(key);if(!b.length)return;const e=b.find(x=>x.couple)||b[0];
