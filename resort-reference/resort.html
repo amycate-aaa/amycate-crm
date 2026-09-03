@@ -1287,7 +1287,9 @@ function renderQuote(){
                     return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', two people sharing':'<br>two people sharing')+'</p>'+
                       (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+'</div>';}
                   return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>based on double occupancy</p></div>';})():'')+
-              (GUEST&&q.bookLink?'<p style="margin:18px 0 0;"><a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a></p>':'')+
+              (GUEST?'<p style="margin:18px 0 0;">'+(q.bookLink
+                  ?'<a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a>'
+                  :'<a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+r.name+' at '+R+(q.couple?' \u2014 '+q.couple:''))+'&body='+encodeURIComponent('Hi Amy,\n\nI\u2019ll take the '+r.name+' at '+R+(q.travel?' for '+q.travel:'')+'.\n\n'+((q.guests||[]).length?'Travelling: '+q.guests.join(', ')+'\n\n':''))+'">I\u2019ll take this room \u2192</a>')+'</p>':'')+
               (solo?stayHTML:'')+
               '</div></div>';}).join('')+'</div>'
         : '<div class="dinelist">'+rows.map(r=>{
@@ -1306,9 +1308,8 @@ function renderQuote(){
           if(clean(q.due))terms.push('<p><strong>Balance due:</strong> '+esc(clean(q.due))+(q.easyPay?' \u2014 and you can pay it in pieces any time before then with Easy Payments.':'.')+'</p>');
           if(!terms.length&&q.easyPay)terms.push('<p>Easy Payments are available \u2014 pay the balance in pieces before the due date.</p>');
           terms.push('<p>Rates are confirmed at booking. Once your deposit is in, your room and your price are held.</p>');
-          const btn=q.bookLink?'<p class="cta"><a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a></p>'
-                              :'<p class="cta"><a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+R+(q.couple?' \u2014 '+q.couple:''))+'">I\u2019ll take this room \u2192</a></p>';
-          return '<div class="note-box" style="margin-top:44px;"><p class="eyebrow" style="margin:0 0 14px;">Booking Terms</p>'+terms.join('')+btn+'</div>';})()
+          const pick=q.prices.length>1?'<p>Pick the room that suits you with the button on its card, and I take it from there.</p>':'';
+          return '<div class="note-box" style="margin-top:44px;"><p class="eyebrow" style="margin:0 0 14px;">Booking Terms</p>'+terms.join('')+pick+'</div>';})()
       :!priced?'':'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
       (q.needAir
         ?'<p>Flight prices move daily and are only held once ticketed. If your group reaches ten rooms I can hold the room rates against any increase; below that everyone books individually and I look after each reservation the same way. Either way I tell you straight away if anything shifts.</p>'
