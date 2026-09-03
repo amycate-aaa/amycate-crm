@@ -1124,20 +1124,7 @@ function renderQuote(){
     const cats=allCatsRaw;
     const solo=rows.length===1&&!q.needAir;
     const stayHTML=(priced&&q.opts.example&&!q.needAir)?stayTotals(q,solo):'';
-    ROOMS=sec('',head('Your Guests',(priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites')+
-      (priced
-        ?(q.needAir
-        ?'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
-        +(q.prices.length?'':'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">The price above is for the entry category. Here is every room type at the resort \u2014 tell me which appeals and I will price it.</p>')
-        :'<ul class="pricepts">'+
-          '<li><b>Per person, per night</b>, based on two people sharing.</li>'+
-          '<li><b>Everything is in it</b> \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers.</li>'+
-          '<li><b>This is where pricing starts.</b> It is the entry category, so you can see the shape of it.</li>'+
-          '<li><b>Every room type follows.</b> Once you have settled on the resort I lay them all out side by side, so your guests pick what suits them and what they want to spend.</li>'+
-          '<li><b>Rates are confirmed when you book</b>, and held against increases if your group reaches ten rooms.</li>'+
-          '</ul>')
-        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
-      ((q.needAir&&clean(q.pkgPrice))
+    const PKGBAND=((q.needAir&&clean(q.pkgPrice))
         ?(function(){
             const legs=(q.air||[]).filter(r=>r.from&&r.to)
               .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
@@ -1152,7 +1139,21 @@ function renderQuote(){
          '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
-        :'')+
+        :'');
+    ROOMS=sec('',head('Your Guests',(priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites')+
+      PKGBAND+
+      (priced
+        ?(q.needAir
+        ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
+        +(q.prices.length?'':'<p class="small" style="max-width:64ch;margin:0 0 34px;">That figure is for the entry category. Here is every room type at the resort \u2014 tell me which appeals and I will price it.</p>')
+        :'<ul class="pricepts">'+
+          '<li><b>Per person, per night</b>, based on two people sharing.</li>'+
+          '<li><b>Everything is in it</b> \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers.</li>'+
+          '<li><b>This is where pricing starts.</b> It is the entry category, so you can see the shape of it.</li>'+
+          '<li><b>Every room type follows.</b> Once you have settled on the resort I lay them all out side by side, so your guests pick what suits them and what they want to spend.</li>'+
+          '<li><b>Rates are confirmed when you book</b>, and held against increases if your group reaches ten rooms.</li>'+
+          '</ul>')
+        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
       (priced
         ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
