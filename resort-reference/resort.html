@@ -471,7 +471,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <li><a href="#rooms">Rooms</a></li>
     <li><a href="#club">Club Level</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#downloads">Resources</a></li>
+    <li><a href="#essentials">Resources</a></li>
   </ul></nav>
   <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><span id="resbar-list"></span></div></div><!-- top strip retired; nav Resources jumps to Downloads -->
   <section>
@@ -543,6 +543,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <h2 class="display">Resort Essentials</h2>
       <hr class="rule">
       <div class="ess-grid" id="ess-grid"></div>
+      <div id="ess-docs" style="margin-top:30px;"></div>
     </div>
   </section><section id="rooms">
     <div class="wrap">
@@ -837,13 +838,10 @@ function docStrip(){
   return '<div class="docrow">'+d.map(x=>'<a class="docbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span>'+esc(x.label)+'</a>').join('')+'</div>';
 }
 function renderDownloads(){
-  const strip=docStrip();
-  if(strip){$id('resbar-list').innerHTML=strip;} /* strip stays hidden — links live in their sections and in Downloads */
-  const html=docBtns('');
-  if(!html)return;
-  
-  $id('dl-list').innerHTML=html;
-  $id('downloads').style.display='block';
+  /* general resort links (tour, reel, fact sheet, map) live in Resort Essentials */
+  const general=docBtns('');
+  if(general){$id('ess-docs').innerHTML='<p class="eyebrow" style="margin:0 0 14px;">More About The Resort</p>'+general;}
+  return;
 }
 
 /* ══════════════════ QUOTE STATE ══════════════════ */
@@ -1316,17 +1314,13 @@ function renderQuote(){
     const f=[['Check-in',P.checkIn],['Check-out',P.checkOut],['Total rooms',P.totalRooms],
       ['Airport',P.airportDistance||P.airport],['Opened',P.yearBuilt],['Ages',P.agePolicy]].filter(x=>clean(x[1]));
     const notes=clean(P.facilityNotes);
-    if(f.length||notes)S.push(sec('sand-band',head('The Practical Part','Good To Know')+
+    if(f.length||notes||(q.opts.docs&&docBtns('')))S.push(sec('sand-band',head('The Practical Part','Good To Know')+
       (f.length?'<div class="fact-grid" style="margin-top:34px;background:#fff;">'+f.map(x=>'<div><p class="k">'+esc(x[0])+'</p><p class="v">'+esc(clean(x[1]))+'</p></div>').join('')+'</div>':'')+
-      (notes?'<div class="note-box"><p>'+esc(notes)+'</p></div>':'')));
+      (notes?'<div class="note-box"><p>'+esc(notes)+'</p></div>':'')+
+      ((q.opts.docs&&docBtns(''))?'<p class="eyebrow" style="margin:34px 0 14px;">More About The Resort</p>'+docBtns(''):'')));
   }
 
-  /* 12 — DOWNLOADS */
-  if(q.opts.docs){
-    const html=docBtns('');
-    if(html)S.push(sec('',head('Everything Else','More Info')+
-      '<p class="small" style="max-width:60ch;margin:0 0 28px;">A few things worth having in hand.</p>'+html));
-  }
+  /* 12 — DOWNLOADS: general links now render inside Good To Know (see 11) */
 
   /* 13 — GALLERY */
   if(q.opts.gallery){
