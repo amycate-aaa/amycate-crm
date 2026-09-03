@@ -318,6 +318,12 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .docbtn .ic{font-size:13px;color:var(--gold);}
 .docbtn:hover .ic{color:#fff;}
 .docrow{margin:0 0 26px;}
+/* Resources strip — every public link in one place, high on the page */
+.resbar{background:var(--sand);border-top:1px solid rgba(176,141,87,.35);border-bottom:1px solid rgba(176,141,87,.35);padding:26px 0 18px;}
+.resbar .eyebrow{margin:0 0 14px;}
+.resbar .docbtn{font-size:12px;padding:14px 24px;background:#fff;margin:0 12px 12px 0;}
+.resbar .docbtn:hover{background:var(--gold);color:#fff;}
+.resbar .docbtn:hover .ic{color:#fff;}
 .cmpwrap{overflow-x:auto;border:1px solid var(--sand-deep);background:#fff;margin-top:26px;}
 .cmp{border-collapse:collapse;width:100%;min-width:860px;}
 .cmp thead th{background:var(--espresso);color:#FBF8F3;padding:18px 14px;text-align:center;vertical-align:bottom;border-left:1px solid rgba(255,255,255,.12);}
@@ -463,7 +469,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <li><a href="#rooms">Rooms</a></li>
     <li><a href="#club">Club Level</a></li>
     <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#resbar">Resources</a></li>
   </ul></nav>
+  <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><div id="resbar-list"></div></div></div>
   <section>
     <div class="wrap">
       <div class="split">
@@ -816,7 +824,19 @@ const AGENT=(function(){var host=function(){return /(^|\.)amy-cate\.com$/i.test(
 
 /* ══════════════════ DOWNLOADS & RESOURCES ══════════════════
    resortProfiles.documents = [{label, url, public:true|false}] */
+function allDocs(){
+  const seen={};const out=[];
+  [].concat(docsFor(''),docsFor('packages'),docsFor('venues'),autoDocs(''),autoDocs('packages')).forEach(x=>{
+    const k=String(x.url||'').trim().replace(/\/+$/,'').toLowerCase(); if(!k||seen[k])return; seen[k]=1; out.push(x);});
+  return out;
+}
+function docStrip(){
+  const d=allDocs(); if(!d.length)return '';
+  return '<div class="docrow">'+d.map(x=>'<a class="docbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener"><span class="ic">&#10022;</span>'+esc(x.label)+'</a>').join('')+'</div>';
+}
 function renderDownloads(){
+  const strip=docStrip();
+  if(strip){$id('resbar-list').innerHTML=strip;$id('resbar').style.display='block';}
   const html=docBtns('');
   if(!html)return;
   
@@ -1054,6 +1074,7 @@ function renderQuote(){
     clean(P.airportDistance)?['Airport',shortAge(clean(P.airportDistance))]:null
   ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
+  if(q.opts.docs!==false){const ds=docStrip();if(ds)S.push('<div class="resbar"><div class="wrap"><p class="eyebrow">Resources</p>'+ds+'</div></div>');}
 
 
   /* 3b — OFFERS */
