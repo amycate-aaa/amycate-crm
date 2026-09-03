@@ -1055,8 +1055,9 @@ async function loadResort(slug){
     const acts=p.activitiesIncluded||p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     if(acts){let incl=[],extra=[];
       if(typeof acts==='string'&&acts.includes('Additional charge')){const parts=acts.split(/Additional charge[:\s]*/i);incl=parts[0].split(' · ').map(s=>s.trim()).filter(Boolean);extra=parts[1]?parts[1].split(' · ').map(s=>s.trim()).filter(Boolean):[];}
-      else if(typeof acts==='string'){incl=acts.split(' · ').map(s=>s.trim()).filter(Boolean);}
+      else if(typeof acts==='string'){incl=acts.split(/\s·\s|,(?!\s?\d)|;/).map(s=>s.trim()).filter(Boolean);}
       else if(Array.isArray(acts)){incl=acts;}
+      {const paid=incl.filter(t=>/\(\$\)/.test(t)).map(t=>t.replace(/\s*\(\$\)/g,'').trim());incl=incl.filter(t=>!/\(\$\)/.test(t));extra=[...new Set(paid.concat(extra))];}
       if(actsExtra)extra=[...extra,...actsExtra.split(' · ').map(s=>s.trim()).filter(Boolean)];
       if(incl.length){$id('act-incl-col').style.display='block';$id('act-incl').innerHTML=incl.map(a=>'<li>'+esc(a)+'</li>').join('');}
       if(extra.length){$id('act-extra-col').style.display='block';$id('act-extra').innerHTML=extra.map(a=>'<li>'+esc(a)+'</li>').join('');}
@@ -1714,7 +1715,7 @@ function renderQuote(){
       PKGBAND+
       (priced
         ?(q.needAir
-        ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers, for the whole trip. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
+        ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, and all resort taxes and fees'+(/separately/i.test(q.pkgCovers||'')?' for the whole trip; the airport transfer is quoted separately and I add it when we book':', and roundtrip airport transfers, for the whole trip')+'. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
         +(q.prices.length?'':'<p class="small" style="max-width:64ch;margin:0 0 34px;">That figure is for the entry category. Here is every room type at the resort \u2014 tell me which appeals and I will price it.</p>')
         :(GUEST
           ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">'+(TOTAL?'The price is the <b>total for the room</b> for your dates, two people sharing':'Prices are <b>per person, per night</b>, two people sharing')+' \u2014 the room, all food and drink, all resort taxes and fees, and roundtrip airport transfers. Nothing more to add on.</p>'
@@ -2116,12 +2117,13 @@ function stayTotals(q,compact){
 function splitActs(){
   const a=P.activitiesIncluded||P.activities||'';const x=P.activitiesExtra||P.activitiesAdditional||'';
   let incl=[],extra=[];
-  const toArr=v=>Array.isArray(v)?v.map(String):String(v||'').split(' \u00b7 ');
+  const toArr=v=>(Array.isArray(v)?v.map(String):String(v||'').split(/\s\u00b7\s|,(?!\s?\d)|;/)).map(t=>t.trim()).filter(Boolean);
   if(typeof a==='string'&&/additional charge/i.test(a)){const parts=a.split(/Additional charge[:\s]*/i);
     incl=parts[0].split(' \u00b7 ');extra=parts[1]?parts[1].split(' \u00b7 '):[];}
   else incl=toArr(a);
   if(x)extra=extra.concat(toArr(x));
-  return{incl:incl.map(s=>clean(s.trim())).filter(Boolean),extra:extra.map(s=>clean(s.trim())).filter(Boolean)};
+  incl=incl.map(s=>clean(s.trim())).filter(Boolean);extra=extra.map(s=>clean(s.trim())).filter(Boolean);const paid=incl.filter(t=>/\(\$\)|\$\)|surcharge|extra cost/i.test(t)).map(t=>t.replace(/\s*\(\$\)/g,'').trim());incl=incl.filter(t=>!/\(\$\)|\$\)|surcharge|extra cost/i.test(t));extra=[...new Set(paid.concat(extra))];
+  return{incl,extra};
 }
 
 /* Export the guide exactly as rendered, as one self-contained file.
