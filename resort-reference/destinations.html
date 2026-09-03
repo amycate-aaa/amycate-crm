@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where To? — Amy Cate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+const db=firebase.firestore();firebase.auth().signInAnonymously().catch(e=>console.warn('Auth:',e));
+</script>
+<style>
+:root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond',Georgia,serif;--sans:'Jost',system-ui,sans-serif;}
+*{box-sizing:border-box;}html{scroll-behavior:smooth;}body{margin:0;background:var(--ivory);color:var(--ink);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.72;-webkit-font-smoothing:antialiased;}
+a{color:inherit;}img{max-width:100%;display:block;}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px;}
+.eyebrow{font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);font-weight:500;margin:0 0 14px;}
+h1{font-family:var(--serif);font-size:clamp(2.4rem,5vw,3.8rem);font-weight:300;letter-spacing:.12em;text-transform:uppercase;color:var(--espresso);margin:0 0 8px;line-height:1.1;}
+h2{font-family:var(--serif);font-size:clamp(2rem,3.6vw,2.9rem);font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0 0 6px;line-height:1.15;}
+h3{font-family:var(--serif);font-size:1.35rem;font-weight:400;color:var(--espresso);margin:26px 0 6px;}
+.sub{font-family:var(--serif);font-style:italic;font-size:1.35rem;color:var(--gold-soft);margin:0 0 22px;}
+.rule{width:54px;height:1px;background:var(--gold-soft);border:0;margin:20px 0 26px;}
+header.top{padding:64px 0 28px;}
+nav.jump{position:sticky;top:0;background:rgba(251,248,243,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--sand-deep);z-index:10;}
+nav.jump .wrap{display:flex;gap:22px;overflow-x:auto;padding:14px 28px;white-space:nowrap;}
+nav.jump a{font-size:11px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--ink);opacity:.8;}nav.jump a:hover{color:var(--gold);opacity:1;}
+section.dest{padding:64px 0;border-top:1px solid var(--sand-deep);}
+section.dest .hero{width:100%;aspect-ratio:21/9;object-fit:cover;background:var(--sand);margin:26px 0 30px;}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px 28px;margin:26px 0 6px;}
+.fact b{display:block;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:4px;}
+.fact{font-size:15px;line-height:1.6;}
+.copy{max-width:72ch;font-size:16px;}
+.resorts{margin-top:30px;border-top:1px solid var(--sand-deep);padding-top:18px;}
+.resorts a{display:inline-block;margin:6px 14px 6px 0;text-decoration:none;font-family:var(--serif);font-size:1.15rem;color:var(--espresso);border-bottom:1px solid var(--sand-deep);}
+.resorts a:hover{border-color:var(--gold);}
+.resorts .dot{font-size:12px;margin-right:6px;}
+table.matrix{width:100%;border-collapse:collapse;font-size:14px;margin:28px 0 10px;}
+table.matrix th,table.matrix td{padding:11px 10px;border-bottom:1px solid var(--sand-deep);vertical-align:top;text-align:left;}
+table.matrix thead th{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:500;border-bottom:2px solid var(--gold-soft);}
+table.matrix tbody th{font-family:var(--serif);font-size:1.15rem;font-weight:400;white-space:nowrap;}
+table.matrix tbody th a{text-decoration:none;color:var(--espresso);}
+.pill{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--sand-deep);margin:2px 4px 2px 0;}
+.foot{padding:56px 0 90px;font-size:15px;color:var(--ink);}
+.foot a{color:var(--gold);}
+.btn{display:inline-block;margin-top:14px;padding:11px 20px;border:1px solid var(--espresso);font-size:11px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--espresso);}
+.btn:hover{background:var(--espresso);color:var(--ivory);}
+@media(max-width:760px){table.matrix{display:block;overflow-x:auto;}table.matrix th,table.matrix td{min-width:150px;}}
+@media print{nav.jump{display:none;}section.dest{page-break-before:always;padding:30px 0;}.btn{display:none;}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <p class="eyebrow">Amy Cate · Destination Weddings Travel Group · Celebration Travel</p>
+  <h1>Where To?</h1>
+  <p class="sub" id="sub">The places I send people, and how to choose between them.</p>
+  <p class="copy">Most people come to me knowing the feeling they want — a beach, a week with everyone in one place, a wedding that doesn't take a year to plan — and not the country. This is the short version of what I'd tell you on a call: where each place is, how long the flight is, what the beach and weather are like, what it costs relative to the others, and what it's best for. Pick two or three that sound right and I'll price real resorts.</p>
+</div></header>
+<nav class="jump"><div class="wrap" id="jump"></div></nav>
+<div class="wrap"><div id="matrix"></div></div>
+<div id="sections"></div>
+<div class="wrap foot" id="foot"></div>
+<script>
+const $=id=>document.getElementById(id);const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const region=(dest,name)=>{const t=(String(dest||'')+' '+String(name||'')).toLowerCase();
+  if(/cabo/.test(t))return 'los-cabos';if(/vallarta|nayarit|bahia mita|bahía mita|punta de mita/.test(t))return 'puerto-vallarta';
+  if(/tulum/.test(t))return 'tulum';if(/cancun|cancún|costa mujeres|playa mujeres|isla mujeres/.test(t))return 'cancun';
+  if(/riviera maya|playa del carmen|puerto morelos|akumal|puerto aventuras|riviera cancun|xcaret/.test(t))return 'riviera-maya';
+  if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
+  if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';return '';};
+const sp=new URLSearchParams(location.search);const only=(sp.get('d')||'').split(',').map(s=>s.trim()).filter(Boolean);const who=sp.get('for')||'';
+const guide=location.origin+location.pathname.replace(/destinations(\.html)?\/?$/,'resort');
+async function run(){
+  const [ds,rs]=await Promise.all([db.collection('destinations').orderBy('order').get(),db.collection('resortProfiles').get()]);
+  let D=[];ds.forEach(d=>D.push(Object.assign({id:d.id},d.data())));if(only.length)D=D.filter(d=>only.includes(d.id));
+  if(!D.length){$('sections').innerHTML='<div class="wrap"><p class="copy">No destinations written yet.</p></div>';return;}
+  const byRegion={};rs.forEach(d=>{const p=d.data();if(/-maggie$/.test(d.id))return;const ok=p.heroPhoto&&String(p.description||'').length>=40&&(p.roomCategories||[]).length&&(p.restaurants||[]).length&&(p.pools||[]).length;const k=region(p.destination,p.name);if(!k)return;(byRegion[k]=byRegion[k]||[]).push({slug:d.id,name:p.name||d.id,ok:!!ok,ages:p.agePolicy||'',photo:p.heroPhoto||''});});
+  if(who)$('sub').textContent='For '+who+' \u2014 the places worth a look, and how to choose between them.';
+  $('jump').innerHTML=D.map(d=>'<a href="#'+esc(d.id)+'">'+esc(d.short||d.name)+'</a>').join('');
+  $('matrix').innerHTML=D.length>1?'<p class="eyebrow" style="margin-top:34px;">At a glance</p><table class="matrix"><thead><tr><th></th><th>Flight from Houston</th><th>Airport to resort</th><th>Beach &amp; water</th><th>Best months</th><th>Price</th><th>Feels like</th><th>Weddings</th></tr></thead><tbody>'+
+    D.map(d=>'<tr><th><a href="#'+esc(d.id)+'">'+esc(d.name)+'</a></th><td>'+esc(d.flightHouston||'')+'</td><td>'+esc(d.transfer||'')+'</td><td>'+esc(d.beachShort||'')+'</td><td>'+esc(d.bestMonths||'')+'</td><td>'+esc(d.price||'')+'</td><td>'+esc(d.vibe||'')+'</td><td>'+esc(d.weddingShort||'')+'</td></tr>').join('')+'</tbody></table>':'';
+  $('sections').innerHTML=D.map(d=>{const rl=(byRegion[d.id]||[]).sort((a,b)=>(b.ok-a.ok)||a.name.localeCompare(b.name));const hero=d.heroPhoto||(rl.find(r=>r.photo)||{}).photo||'';
+    return'<section class="dest" id="'+esc(d.id)+'"><div class="wrap">'+
+    '<p class="eyebrow">'+esc(d.country||'')+'</p><h2>'+esc(d.name)+'</h2><p class="sub">'+esc(d.tagline||'')+'</p>'+
+    (hero?'<img class="hero" src="'+esc(hero)+'" alt="" loading="lazy">':'')+
+    '<div class="copy">'+String(d.overview||'').split(/\n\s*\n/).map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
+    '<div class="facts">'+[['Getting there',d.flights],['Airport & transfer',d.airport],['The beach',d.beach],['Weather',d.weather],['Entry & money',d.entry],['Costs',d.costs]].filter(x=>x[1]).map(x=>'<div class="fact"><b>'+esc(x[0])+'</b>'+esc(x[1])+'</div>').join('')+'</div>'+
+    (d.bestFor?'<h3>Who it suits</h3><p class="copy">'+esc(d.bestFor)+'</p>':'')+
+    (d.weddings?'<h3>Getting married here</h3><p class="copy">'+esc(d.weddings)+'</p>':'')+
+    (d.tip?'<h3>My tip</h3><p class="copy">'+esc(d.tip)+'</p>':'')+
+    (rl.length?'<div class="resorts"><p class="eyebrow" style="margin-bottom:6px;">Resorts I work with here</p>'+rl.filter(r=>r.ok).map(r=>'<a href="'+esc(guide+'?r='+r.slug)+'">'+esc(r.name)+'</a>').join('')+(rl.some(r=>!r.ok)?'<p style="font-size:13px;opacity:.7;margin:10px 0 0;">Also: '+rl.filter(r=>!r.ok).map(r=>esc(r.name)).join(', ')+'.</p>':'')+'</div>':'')+
+    '</div></section>';}).join('');
+  $('foot').innerHTML='<p>Tell me the two or three that sound right and I\u2019ll price real resorts for your dates \u2014 reply to the email, or <a href="https://zcal.co/amymcate/letschat">grab a time</a>. How working with me looks: <a href="https://work-with-amy-dwt.netlify.app/">work-with-amy-dwt.netlify.app</a>.</p><p style="opacity:.7;font-size:13px;">Flight times are typical non-stop or one-stop from Houston; other cities vary. Weather and entry rules change \u2014 I check the current picture before you book.</p>';
+  if(location.hash){const el=document.querySelector(location.hash);if(el)setTimeout(()=>el.scrollIntoView(),200);}
+}
+firebase.auth().onAuthStateChanged(run);
+</script>
+</body>
+</html>
