@@ -471,9 +471,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <li><a href="#rooms">Rooms</a></li>
     <li><a href="#club">Club Level</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#resbar">Resources</a></li>
+    <li><a href="#downloads">Resources</a></li>
   </ul></nav>
-  <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><span id="resbar-list"></span></div></div>
+  <div class="resbar" id="resbar" style="display:none;"><div class="wrap"><p class="eyebrow">Resources</p><span id="resbar-list"></span></div></div><!-- top strip retired; nav Resources jumps to Downloads -->
   <section>
     <div class="wrap">
       <div class="split">
@@ -838,7 +838,7 @@ function docStrip(){
 }
 function renderDownloads(){
   const strip=docStrip();
-  if(strip){$id('resbar-list').innerHTML=strip;$id('resbar').style.display='block';}
+  if(strip){$id('resbar-list').innerHTML=strip;} /* strip stays hidden — links live in their sections and in Downloads */
   const html=docBtns('');
   if(!html)return;
   
@@ -1076,7 +1076,7 @@ function renderQuote(){
     clean(P.airportDistance)?['Airport',shortAge(clean(P.airportDistance))]:null
   ].filter(Boolean).slice(0,6);
   if(facts.length)S.push('<div class="fact-grid">'+facts.map(f=>'<div><p class="k">'+esc(f[0])+'</p><p class="v">'+esc(f[1])+'</p></div>').join('')+'</div>');
-  if(q.opts.docs!==false){const ds=docStrip();if(ds)S.push('<div class="resbar"><div class="wrap"><p class="eyebrow">Resources</p><span>'+ds+'</span></div></div>');}
+
 
 
   /* 3b — OFFERS */
