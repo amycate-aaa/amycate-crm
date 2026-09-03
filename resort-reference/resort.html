@@ -764,12 +764,12 @@ async function loadPicker(){$id('loading').style.display='none';$id('picker-scre
     const p=d.data();const base=okUrl(p.heroPhoto)&&String(p.description||p.overview||'').trim().length>40;
     const roomsWithPhotos=arr(p.roomCategories).some(r=>r&&okUrl(r.photo||r.photoUrl));
     const full=base&&roomsWithPhotos&&arr(p.restaurants).length>0&&arr(p.pools).length>0;
-    const tier=full?0:base?1:2;if(tier===2&&!showAll)return;const reg=region(p.destination,p.name);(groups[reg]=groups[reg]||[]).push({id:d.id,name:p.name||d.id,tier});});
+    const tier=full?0:base?1:2;if(tier===2&&!showAll)return;const wed=arr(p.venues).length>0&&arr(p.packages).length>0&&!!(p.weddingUrl||p.dwtUrl);const reg=region(p.destination,p.name);(groups[reg]=groups[reg]||[]).push({id:d.id,name:p.name||d.id,tier,wed});});
   const order=['Cancún & Costa Mujeres','Riviera Maya','Tulum','Cozumel','Los Cabos','Puerto Vallarta & Riviera Nayarit','Huatulco','Mexico — other','Punta Cana','Cap Cana','La Romana','Jamaica','St. Lucia','Aruba','Curaçao','Bahamas','Costa Rica','Panama','Other'];
   Object.keys(groups).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)||a.localeCompare(b);}).forEach(reg=>{
     const list=groups[reg].sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
     const g=document.createElement('optgroup');g.label='\u2014 '+reg+' ('+list.length+') \u2014';
-    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;const dot=x.tier===0?'\ud83d\udfe2 ':x.tier===1?'\ud83d\udfe1 ':'\ud83d\udd34 ';o.textContent=dot+x.name;o.style.color=x.tier===0?'#2E6B3A':x.tier===1?'#8A6A0E':'#8B2E2E';g.appendChild(o);});sel.appendChild(g);});}
+    list.forEach(x=>{const o=document.createElement('option');o.value=x.id;const dot=x.tier===0?'\ud83d\udfe2 ':x.tier===1?'\ud83d\udfe1 ':'\ud83d\udd34 ';o.textContent=dot+x.name+(x.wed?'  \ud83d\udc8d':'');o.style.color=x.tier===0?'#2E6B3A':x.tier===1?'#8A6A0E':'#8B2E2E';g.appendChild(o);});sel.appendChild(g);});}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
