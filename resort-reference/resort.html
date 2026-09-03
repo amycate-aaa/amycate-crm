@@ -1253,14 +1253,16 @@ function ebToHtml(text){const E=esc;const lines=String(text||'').replace(/\r/g,'
     out.push('<p style="'+F+'font-size:15px;line-height:1.7;color:#2A241F;margin:0 0 16px;">'+html+'</p>');}
   return'<div style="max-width:640px;">'+out.join('')+'</div>';}
 const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.googleusercontent.com';
-const AGENT_SIG={name:'Amy Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group  \u00b7  Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'',hours:'',call:'https://zcal.co/amymcate/letschat'};
+const AGENT_SIG={name:'Amy M. Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group & Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'(832) 773-8664',hours:'Office Hours: Monday\u2013Thursday 9:00am\u20135:00pm, Friday 9:00am\u20133:00pm CST',hours2:'Weekends by appointment',call:'https://zcal.co/amymcate/letschat',address:'945 Concord Street | Framingham, MA | 01701',sigImage:''};
 function sigHtml(){const S=AGENT_SIG;const F='font-family:Jost,Helvetica,Arial,sans-serif;';const SERIF='font-family:\'Cormorant Garamond\',Georgia,\'Times New Roman\',serif;';
   return'<table role="presentation" cellpadding="0" cellspacing="0" style="max-width:640px;margin-top:28px;border-top:1px solid #4A7A76;"><tr><td style="padding-top:18px;">'+
   '<div style="'+F+'font-size:15px;color:#2A241F;margin-bottom:10px;">Best regards,</div>'+
   '<div style="'+SERIF+'font-size:24px;color:#1A1510;line-height:1.1;">'+esc(S.name)+'</div>'+
   '<div style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#6B6258;margin:4px 0 10px;">'+esc(S.title)+'</div>'+
-  '<div style="'+F+'font-size:14px;color:#2A241F;line-height:1.7;">'+esc(S.brands)+'<br><a href="mailto:'+esc(S.email)+'" style="color:#4A7A76;">'+esc(S.email)+'</a>'+(S.phone?'<br>'+esc(S.phone)+(S.hours?'  \u00b7  '+esc(S.hours):''):(S.hours?'<br>'+esc(S.hours):''))+'</div>'+
-  (S.call?'<div style="margin-top:12px;"><a href="'+esc(S.call)+'" style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8B6914;text-decoration:none;">Schedule a call with me \u2192</a></div>':'')+'</td></tr></table>';}
+  '<div style="'+F+'font-size:14px;color:#2A241F;line-height:1.7;">'+esc(S.brands)+'<br><a href="mailto:'+esc(S.email)+'" style="color:#4A7A76;">'+esc(S.email)+'</a>'+(S.phone?'<br>'+esc(S.phone):'')+(S.hours?'<br>'+esc(S.hours):'')+(S.hours2?'<br><i>'+esc(S.hours2)+'</i>':'')+'</div>'+
+  (S.call?'<div style="margin-top:12px;"><a href="'+esc(S.call)+'" style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8B6914;text-decoration:none;">Book a call with me \u2192</a></div>':'')+
+  (S.sigImage?'<div style="margin-top:16px;"><img src="'+esc(S.sigImage)+'" alt="" style="max-width:640px;display:block;"></div>':'')+
+  (S.address?'<div style="'+F+'font-size:12px;color:#6B6258;margin-top:12px;">'+esc(S.address)+'</div>':'')+'</td></tr></table>';}
 function gmailToken(){return new Promise((res,rej)=>{if(!window.google||!google.accounts){rej(new Error('Google sign-in not loaded yet \u2014 try again in a second.'));return;}
   const tc=google.accounts.oauth2.initTokenClient({client_id:GMAIL_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.compose',hint:AGENT_SIG.email,callback:r=>r&&r.access_token?res(r.access_token):rej(new Error(r&&r.error?r.error:'No token'))});
   tc.requestAccessToken({prompt:''});});}
