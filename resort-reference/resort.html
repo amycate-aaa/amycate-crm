@@ -732,7 +732,6 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
       <button class="qb-btn" onclick="saveToBasket()" title="Keeps this quote with the client's other resorts so you can email them together">Save for client</button>
       <button class="qb-btn ghost" onclick="toggleBasket()" id="qb-basket-btn">Basket</button>
-      <button class="qb-btn ghost" onclick="toggleSavedQuotes()" id="qb-saved-btn">Saved Quotes</button>
       <span class="qb-msg" id="qb-msg"></span>
     </div>
     <div id="qb-basket" style="display:none;margin-top:14px;border-top:1px solid var(--sand-deep);padding-top:12px;">
@@ -892,7 +891,8 @@ async function loadResort(slug){
     if(new URLSearchParams(location.search).get('download')==='1')
       setTimeout(()=>{try{downloadGuide();}catch(e){console.warn(e);}},1200);$id('page').style.display='block';
     const _qp=new URLSearchParams(location.search);
-    if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
+    if(_qp.get('edit')&&P.quoteLinks&&P.quoteLinks[_qp.get('edit')]){openQuote();setTimeout(()=>{applyQ(decQ(P.quoteLinks[_qp.get('edit')].q));saveLocal();},120);}
+    else if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
       if(_qp.get('q')||_qp.get('k'))renderQuote();
       else if(AGENT)openQuote();
     }
@@ -1140,11 +1140,12 @@ async function saveToBasket(){const q=collectQ();saveLocal();const say=t=>{const
 function toggleBasket(){const box=$id('qb-basket');const on=box.style.display==='none';box.style.display=on?'block':'none';if(on)renderBasket();}
 function renderBasket(){const box=$id('qb-basket-list');const all=bkAll();const cur=bkCurrentKey();const keys=Object.keys(all).sort((a,b)=>(a===cur?-1:b===cur?1:0));
   const switcher=keys.length>1||(keys.length===1&&keys[0]!==cur)?'<p class="small" style="margin:0 0 10px;">Clients with a basket: '+keys.map(k=>'<a href="#" onclick="window.BASKET_KEY=\''+k.replace(/'/g,"\\'")+'\';renderBasket();renderBasketBtn();return false;" style="'+(k===cur?'font-weight:500;':'')+'color:var(--gold);margin-right:12px;">'+esc(all[k][0].couple||k)+' ('+all[k].length+')</a>').join('')+'</p>':'';
-  const b=ebBasketGet();if(!b.length){box.innerHTML=switcher+'<p class="small">Nothing saved yet for this client. <b>Save for client</b> keeps the quote here (14 days) so you can add more resorts before emailing.</p>';return;}
+  const b=ebBasketGet();if(!b.length){box.innerHTML=switcher+'<p class="small">Nothing saved yet for this client. <b>Save for client</b> keeps the quote here (14 days) so you can add more resorts before emailing.</p><p class="small"><a href="#" onclick="toggleSavedQuotes();return false;" style="color:var(--gold-soft);">Older quotes for this resort \u2192</a></p>';return;}
   const who=b.map(e=>e.couple).filter(Boolean)[0]||'';const cmp=location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+b.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(',');
   box.innerHTML=switcher+'<p class="small" style="margin:0 0 8px;"><b>'+esc(who||'Current client')+'</b> \u2014 '+b.length+' resort'+(b.length>1?'s':'')+'</p>'+
-  '<table style="width:100%;border-collapse:collapse;font-size:13px;">'+b.map(e=>'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:7px 6px;"><b>'+esc(e.name)+'</b>'+(e.travel?' <span class="small">\u00b7 '+esc(e.travel)+'</span>':'')+(e.pkg?'<br><span class="small">'+esc(e.pkg)+'</span>':'')+'</td><td style="padding:7px 6px;white-space:nowrap;text-align:right;"><a href="'+esc(e.link)+'" target="_blank" class="qb-btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Open</a> <button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="basketRemove(\''+e.slug+'\')">Remove</button></td></tr>').join('')+'</table>'+
-  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty this basket?\')){ebBasketSet([]);window.BASKET_KEY=null;renderBasket();renderBasketBtn();}">Empty basket</button></div>';}
+  '<table style="width:100%;border-collapse:collapse;font-size:13px;">'+b.map(e=>'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:7px 6px;"><b>'+esc(e.name)+'</b>'+(e.travel?' <span class="small">\u00b7 '+esc(e.travel)+'</span>':'')+(e.pkg?'<br><span class="small">'+esc(e.pkg)+'</span>':'')+'</td><td style="padding:7px 6px;white-space:nowrap;text-align:right;"><button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;" onclick="basketEdit(\''+e.slug+'\',\''+((e.link.match(/[?&]k=([^&]+)/)||[])[1]||'')+'\')">Edit</button> <a href="'+esc(e.link)+'" target="_blank" class="qb-btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Open</a> <button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="basketRemove(\''+e.slug+'\')">Remove</button></td></tr>').join('')+'</table>'+
+  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty this basket?\')){ebBasketSet([]);window.BASKET_KEY=null;renderBasket();renderBasketBtn();}">Empty basket</button></div>'+'<p class="small" style="margin-top:14px;"><a href="#" onclick="toggleSavedQuotes();return false;" style="color:var(--gold-soft);">Older quotes for this resort \u2192</a></p>';}
+function basketEdit(slug,key){if(!key){alert('This one was saved without a short link \u2014 open it and Copy Link, then it can be edited from here.');return;}if(slug===SLUG){editSavedQuote(key);window.scrollTo({top:$id('qb').offsetTop-20,behavior:'smooth'});}else{location.href=location.origin+location.pathname+'?r='+slug+'&edit='+key;}}
 function basketRemove(slug){ebBasketSet(ebBasketGet().filter(e=>e.slug!==slug));renderBasket();renderBasketBtn();}
 async function emailDraft(){
   const q=collectQ();const R=P.name||P.resortName||'';
