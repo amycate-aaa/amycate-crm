@@ -598,6 +598,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
 
     <div class="qb-grid">
       <div class="qb-f"><label>Couple / Group Names</label><input id="q-couple" placeholder="Kaylee &amp; Derek"></div>
+      <div class="qb-f wide"><label>Guest names <span style="opacity:.6;">(who is travelling &mdash; shown on the quote)</span></label>
+        <div id="q-guests"></div>
+        <button type="button" class="qb-btn ghost" style="margin-top:6px;" onclick="addGuestRow()">+ Add name</button></div>
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
       <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
@@ -882,7 +885,7 @@ function collectQ(){
     basis:basisEl?basisEl.value:'ppn',nights:$id('q-nights')?$id('q-nights').value.trim():'',
     deposit:$id('q-deposit')?$id('q-deposit').value.trim():'',due:$id('q-due')?$id('q-due').value.trim():'',
     bookLink:$id('q-booklink')?$id('q-booklink').value.trim():'',easyPay:$id('o-easypay')?$id('o-easypay').checked:false,
-    savedAt:Date.now(),
+    guests:guestNames(),savedAt:Date.now(),
     needAir:$id('q-needair').checked,
     pkgPrice:$id('q-pkgprice').value.trim(),
     pkgCovers:$id('q-pkgcovers').value.trim(),
@@ -904,6 +907,7 @@ function applyQ(q){
     if(el&&q[k==='pkgprice'?'pkgPrice':'pkgCovers']!=null)el.value=q[k==='pkgprice'?'pkgPrice':'pkgCovers'];});
   ['couple','date','travel','priced','brand','headline','note','mode','deposit','due','nights'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
   if($id('q-booklink')&&q.bookLink!=null)$id('q-booklink').value=q.bookLink;
+  if($id('q-guests')){$id('q-guests').innerHTML='';(q.guests||[]).forEach(g=>addGuestRow(g));}
   if($id('o-easypay')&&q.easyPay!=null)$id('o-easypay').checked=!!q.easyPay;
   if(q.basis){const r=document.querySelector('input[name="q-basis"][value="'+q.basis+'"]');if(r)r.checked=true;}
   toggleMode();toggleBasis();
@@ -950,6 +954,7 @@ function clearTrip(){
   if($id('q-air-rows'))$id('q-air-rows').innerHTML='';
   ['q-pkgprice','q-pkgroom','q-deposit','q-due','q-booklink','q-nights'].forEach(k=>{const el=$id(k); if(el)el.value='';});
   if($id('o-easypay'))$id('o-easypay').checked=false;
+  if($id('q-guests'))$id('q-guests').innerHTML='';
   if($id('q-price-rows'))$id('q-price-rows').innerHTML='';
   saveLocal();
 }
@@ -1007,6 +1012,13 @@ function wireRooms(){
   });
 }
 const RAPIDAPI_KEY='1540ad94fcmsh80790b3065091f5p1285b9jsn51218123bdb5';
+function addGuestRow(v){
+  const box=$id('q-guests');if(!box)return;
+  const d=document.createElement('div');d.className='q-guest';d.style.cssText='display:flex;gap:8px;align-items:center;margin:0 0 6px;';
+  d.innerHTML='<input class="qb-in g" placeholder="Denise Smith" value="'+esc(v||'')+'" oninput="saveLocal()" style="flex:1;"><button type="button" class="rx" title="Remove" onclick="this.parentElement.remove();saveLocal();">\u00d7</button>';
+  box.appendChild(d);if(!v)d.querySelector('input').focus();
+}
+function guestNames(){return [...document.querySelectorAll('#q-guests input.g')].map(i=>i.value.trim()).filter(Boolean);}
 function toggleMode(){
   const guest=$id('q-mode')&&$id('q-mode').value==='guest';
   if($id('q-guestbox'))$id('q-guestbox').style.display=guest?'block':'none';
@@ -1025,7 +1037,7 @@ function toggleBasis(){
 }
 function emailDraft(){
   const q=collectQ();const R=P.resortName||P.name||'';const link=location.origin+location.pathname+'?r='+SLUG+'&q='+encQ(q);
-  const first=(q.couple||'').split(/[&,]| and /)[0].trim();
+  const first=((q.guests&&q.guests[0])||q.couple||'').split(/[&,]| and /)[0].trim().split(' ')[0];
   const hi='Hi'+(first?' '+first:'')+',';
   let subject,body;
   if(q.mode==='guest'){
@@ -1128,6 +1140,7 @@ function renderQuote(){
     '<h1 class="q-name">'+esc(q.headline||(GUEST?'Your Room At '+R:R))+'</h1>'+
     ((q.headline||GUEST)?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
+    ((q.guests||[]).length?'<p class="q-when" style="font-style:italic;text-transform:none;letter-spacing:.04em;">'+(GUEST?'Travelling: ':'For ')+esc(q.guests.join(' \u00b7 '))+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
     '<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>'+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
