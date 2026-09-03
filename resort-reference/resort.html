@@ -870,7 +870,7 @@ async function mqCreate(){const msg=$id('mq-msg');const couple=$id('mq-couple').
   const CT=brand==='ct';const cmp=location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+made.map(m=>m.slug+':'+m.k).join(',');
   const order=[];made.forEach(m=>{if(!order.includes(m.where))order.push(m.where);});made.sort((a,b)=>order.indexOf(a.where)-order.indexOf(b.where));
   const blocks=made.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+(e.rooms.length?'\n'+e.rooms.map(l=>'   '+l).join('\n'):'')+(e.pkg?'\n   \u2022 Package with flights: '+e.pkg:'')).join('\n\n');
-  const names=made.map(e=>e.name);const subject=couple+': '+(names.length>1?names.slice(0,-1).join(', ')+' or '+names[names.length-1]:names[0])+' \u2014 take a look';
+  const names=made.map(e=>e.name);const _dl=[...new Set(made.map(m=>m.where).filter(Boolean))];const _dt=_dl.length>1?_dl.slice(0,-1).join(', ')+' and '+_dl[_dl.length-1]:(_dl[0]||'');const subject=(brand==='ct'?'Your resort options':'Your wedding resort options')+(_dt?' \u2014 '+_dt:'')+(couple?' \u2014 '+couple:'');
   const dests=[...new Set(made.map(m=>m.where).filter(Boolean))];const destTxt=dests.length?(dests.length>1?dests.slice(0,-1).join(', ')+' and '+dests[dests.length-1]:dests[0]):'';
   const nTxt=nights?nights+' night'+(nights==='1'?'':'s'):'the dates';const basisTxt=basis==='total'?'2 adults for '+nTxt:'per person, per night';
   let body;
@@ -1332,7 +1332,7 @@ async function emailDraft(){
   } else if(basket.length>1){
     const order=[];basket.forEach(m=>{if(!order.includes(m.where))order.push(m.where);});basket.sort((a,b)=>order.indexOf(a.where)-order.indexOf(b.where));
     const names=basket.map(e=>e.name);
-    subject=(q.couple?q.couple+': ':'')+names.slice(0,-1).join(', ')+' or '+names[names.length-1]+' \u2014 take a look';
+    {const _dl=[...new Set(basket.map(e=>(e.where||'').split(',')[0].trim()).filter(Boolean))];const _dt=_dl.length>1?_dl.slice(0,-1).join(', ')+' and '+_dl[_dl.length-1]:(_dl[0]||'');subject=(CT?'Your resort options':'Your wedding resort options')+(_dt?' \u2014 '+_dt:'')+(q.couple?' \u2014 '+q.couple:'');}
     const sameTravel=entry.travel&&basket.every(e=>e.travel===entry.travel);
     const blocks=basket.map((e,n)=>(n+1)+'. '+e.name+(e.where?' \u2014 '+e.where:'')+'\n'+e.link+'\n'+facts(e).split('\n').filter(l=>!/^\u2022 Resort:/.test(l)&&!(sameTravel&&/^\u2022 Dates:/.test(l))).map(l=>'   '+l).join('\n')).join('\n\n');
     if(!CT){const dests=[...new Set(basket.map(e=>(e.where||'').split(',')[0].trim()).filter(Boolean))];const destTxt=dests.length>1?dests.slice(0,-1).join(', ')+' and '+dests[dests.length-1]:(dests[0]||'');const n=parseInt(q.nights,10)||nightsFromTravel(entry.travel);const total=/total/i.test(q.priced||'')||q.basis==='total';const basisTxt=total?'2 adults for '+(n>0?n+' night'+(n===1?'':'s'):'the dates'):'per person, per night';
@@ -1342,7 +1342,7 @@ async function emailDraft(){
       '\n\nSide by side on one page \u2014 price, beach, pools, rooms:\n'+compareLink+
       '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   } else {
-    subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
+    subject=R+(q.couple?' \u2014 '+q.couple:'');
     body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts(entry)+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';
   }
   const to=(($id('q-email')||{}).value||'').trim();
