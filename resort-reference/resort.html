@@ -36,6 +36,7 @@ section{padding:clamp(56px,7vw,96px) 0;}
 #error h2{font-size:2rem;color:var(--espresso);}
 #picker-screen{display:none;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:24px;padding:40px;text-align:center;background:var(--sand);}
 #picker-screen h1{font-size:2.4rem;font-weight:300;letter-spacing:.1em;text-transform:uppercase;color:var(--espresso);margin:0;}
+#picker-search{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;box-sizing:border-box;}#picker-search:focus{outline:none;border-color:var(--gold);}
 #picker-select{padding:12px 20px;border:1px solid var(--gold-soft);background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:1rem;min-width:340px;cursor:pointer;}
 #picker-btn{font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--espresso);border:1px solid var(--gold);padding:16px 36px;background:transparent;cursor:pointer;font-family:var(--sans);transition:.3s;}
 #picker-btn:hover{background:var(--gold);color:#fff;}
@@ -471,7 +472,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 <body>
 <div id="loading"><div class="spinner"></div><p style="font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-soft);margin:0">Loading</p></div>
 <div id="error" style="display:none"><h2>Resort not found</h2><p id="error-msg" style="font-size:17px;color:#5A544C;"></p><br><a href="?" style="font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);">← Browse Resorts</a></div>
-<div id="picker-screen"><p class="eyebrow">Amy Cate · Resort Reference</p><h1>Choose a Resort</h1><p class="small">Select a property to view the full guide.</p><select id="picker-select"><option value="">Select a resort…</option></select><button id="picker-btn" onclick="goToResort()">Open Guide →</button><a href="#" id="picker-unbuilt" onclick="window.SHOW_UNBUILT=!window.SHOW_UNBUILT;this.textContent=window.SHOW_UNBUILT?'hide unbuilt resorts':'show unbuilt resorts';loadPicker();return false;" style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;margin-top:6px;">show unbuilt resorts</a></div>
+<div id="picker-screen"><p class="eyebrow">Amy Cate · Resort Reference</p><h1>Choose a Resort</h1><p class="small">Select a property to view the full guide.</p><input id="picker-search" type="search" placeholder="Search resorts…" autocomplete="off" oninput="filterPicker(this.value)" onkeydown="if(event.key==='Enter'){const o=[...document.querySelectorAll('#picker-select option')].find(o=>o.value&&o.style.display!=='none');if(o){document.getElementById('picker-select').value=o.value;goToResort();}}"><select id="picker-select"><option value="">Select a resort…</option></select><button id="picker-btn" onclick="goToResort()">Open Guide →</button><a href="#" id="picker-unbuilt" onclick="window.SHOW_UNBUILT=!window.SHOW_UNBUILT;this.textContent=window.SHOW_UNBUILT?'hide unbuilt resorts':'show unbuilt resorts';loadPicker();return false;" style="font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;margin-top:6px;">show unbuilt resorts</a></div>
 <div id="page">
   <header class="hero" id="top">
     <div class="hero-copy">
@@ -770,6 +771,7 @@ async function loadPicker(){$id('loading').style.display='none';$id('picker-scre
     const list=groups[reg].sort((a,b)=>a.tier-b.tier||a.name.localeCompare(b.name));
     const g=document.createElement('optgroup');g.label='\u2014 '+reg+' ('+list.length+') \u2014';
     list.forEach(x=>{const o=document.createElement('option');o.value=x.id;const dot=x.tier===0?'\ud83d\udfe2 ':x.tier===1?'\ud83d\udfe1 ':'\ud83d\udd34 ';o.textContent=dot+x.name+(x.wed?'  \ud83d\udc8d':'');o.style.color=x.tier===0?'#2E6B3A':x.tier===1?'#8A6A0E':'#8B2E2E';g.appendChild(o);});sel.appendChild(g);});}
+function filterPicker(q){q=(q||'').trim().toLowerCase();const sel=$id('picker-select');let first=null;[...sel.querySelectorAll('optgroup')].forEach(g=>{let n=0;[...g.querySelectorAll('option')].forEach(o=>{const hit=!q||o.textContent.toLowerCase().includes(q)||o.value.includes(q.replace(/\s+/g,'-'));o.style.display=hit?'':'none';o.disabled=!hit;if(hit){n++;if(!first)first=o;}});g.style.display=n?'':'none';g.disabled=!n;});if(q&&first)sel.value=first.value;else if(!q)sel.value='';sel.size=q?Math.min(12,Math.max(4,[...sel.options].filter(o=>o.value&&!o.disabled).length+2)):1;}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
