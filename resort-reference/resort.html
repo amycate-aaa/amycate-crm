@@ -1193,7 +1193,7 @@ function showEmailBox(to,subject,body,names){
   let m=$id('email-box');
   if(!m){m=document.createElement('div');m.id='email-box';m.innerHTML='<div class="eb-card"><div class="eb-head"><span class="eyebrow" style="margin:0">Email draft</span><button class="eb-x" onclick="document.getElementById(\'email-box\').style.display=\'none\'">\u00d7</button></div>'+
     '<label>To</label><input id="eb-to">'+'<label>Subject</label><input id="eb-subject">'+'<label>Message <span style="opacity:.6">(edit anything, then copy)</span></label><textarea id="eb-body" rows="16"></textarea>'+
-    '<div class="eb-actions"><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Copy message only</button><span id="eb-msg"></span></div><p id="eb-basket" style="font-size:12px;color:#6B6258;margin:14px 0 0"></p></div>';
+    '<div class="eb-actions"><button class="qb-btn solid" onclick="ebCopyHtml()" title="Paste into Outlook \u2014 keeps the styling">Copy formatted for Outlook</button><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Plain text only</button><span id="eb-msg"></span></div><p id="eb-basket" style="font-size:12px;color:#6B6258;margin:14px 0 0"></p></div>';
     document.body.appendChild(m);}
   $id('eb-to').value=to||'';$id('eb-subject').value=subject;$id('eb-body').value=body;m.style.display='flex';
   const bk=$id('eb-basket');if(names&&names.length>1)bk.innerHTML='This email covers '+names.length+' resorts: '+names.map(esc).join(', ')+'. <a href="#" onclick="ebStartOver();return false;" style="color:var(--gold)">Start over with just this one</a>';else bk.innerHTML='To send two or three resorts in one email: build the quote on the next resort and click Email Draft there \u2014 this one is remembered for 24 hours.';
@@ -1211,6 +1211,24 @@ function bkKey(c){c=String(c||'').trim().toLowerCase();return c||'(no client nam
 function bkCurrentKey(){if(window.BASKET_KEY)return window.BASKET_KEY;const c=($id('q-couple')||{}).value;return bkKey(c);}
 function ebBasketGet(key){const all=bkAll();return all[key||bkCurrentKey()]||[];}
 function ebBasketSet(b,key){try{const all=bkAll();const k=key||bkCurrentKey();if(b&&b.length)all[k]=b;else delete all[k];localStorage.setItem('ac_baskets',JSON.stringify(all));}catch(e){}}
+function ebToHtml(text){const E=esc;const lines=String(text||'').replace(/\r/g,'').split('\n');const out=[];let i=0;const F='font-family:Jost,Helvetica,Arial,sans-serif;';const SERIF='font-family:\'Cormorant Garamond\',Georgia,\'Times New Roman\',serif;';
+  const isUrl=l=>/^https?:\/\/\S+$/.test(l.trim());const isHead=l=>/^\d+\.\s+/.test(l);const isBullet=l=>/^\s*[\u2022\u2013-]\s+/.test(l);
+  while(i<lines.length){let l=lines[i];
+    if(!l.trim()){i++;continue;}
+    if(/^YOUR RESORT OPTIONS/.test(l)){out.push('<p style="'+F+'font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8B6914;margin:28px 0 6px;">'+E(l)+'</p>');i++;continue;}
+    if(isHead(l)){const m=l.match(/^\d+\.\s+(.*?)(?:\s+\u2014\s+(.*))?$/);let name=m?m[1]:l,where=m&&m[2]?m[2]:'';let link='';const bullets=[];i++;
+      while(i<lines.length&&lines[i].trim()){const t=lines[i].trim();if(isUrl(t)&&!link)link=t;else if(isBullet(lines[i])||/^\s{2,}/.test(lines[i]))bullets.push(t.replace(/^[\u2022\u2013-]\s+/,''));else break;i++;}
+      out.push('<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;max-width:640px;border-bottom:1px solid #E4D8C6;margin:0 0 14px;"><tr><td style="padding:12px 0 14px;">'+
+        '<div style="'+SERIF+'font-size:22px;color:#1A1510;line-height:1.2;">'+(link?'<a href="'+E(link)+'" style="color:#1A1510;text-decoration:none;">'+E(name)+'</a>':E(name))+'</div>'+
+        (where?'<div style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#6B6258;margin-top:4px;">'+E(where)+'</div>':'')+
+        (bullets.length?'<div style="'+F+'font-size:14px;color:#2A241F;margin-top:8px;line-height:1.6;">'+bullets.map(E).join('<br>')+'</div>':'')+
+        (link?'<div style="margin-top:10px;"><a href="'+E(link)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">View the full quote \u2192</a></div>':'')+'</td></tr></table>');continue;}
+    // paragraph: gather until blank; URL-only line becomes a link
+    const para=[];while(i<lines.length&&lines[i].trim()){para.push(lines[i].trim());i++;}
+    const html=para.map(t=>isUrl(t)?'<a href="'+E(t)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">'+(/compare/.test(t)?'Open the side-by-side \u2192':/zcal|calendly/.test(t)?'Grab a time \u2192':E(t))+'</a>':E(t).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" style="color:#8B6914;">$1</a>')).join('<br>');
+    out.push('<p style="'+F+'font-size:15px;line-height:1.7;color:#2A241F;margin:0 0 16px;">'+html+'</p>');}
+  return'<div style="max-width:640px;">'+out.join('')+'</div>';}
+async function ebCopyHtml(){const body=$id('eb-body').value;const html=ebToHtml(body);const m=$id('eb-msg');try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([body],{type:'text/plain'})})]);m.textContent='Formatted email copied \u2014 paste into a new Outlook message. Subject: '+$id('eb-subject').value;}catch(e){console.warn(e);m.textContent='Your browser blocked the rich copy \u2014 use Copy subject + message instead.';}setTimeout(()=>m.textContent='',8000);}
 function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
 function nightsFromTravel(t){t=String(t||'').replace(/\u2013|\u2014/g,'-').trim();if(!t)return 0;const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const yr=(t.match(/\b(20\d\d)\b/)||[])[1];const y=yr?+yr:new Date().getFullYear()+1;
   let m;
