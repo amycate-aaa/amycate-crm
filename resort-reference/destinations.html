@@ -45,6 +45,7 @@ table.matrix thead th{font-size:11px;letter-spacing:.2em;text-transform:uppercas
 table.matrix tbody th{font-family:var(--serif);font-size:1.15rem;font-weight:400;white-space:nowrap;}
 table.matrix tbody th a{text-decoration:none;color:var(--espresso);}
 .pill{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--sand-deep);margin:2px 4px 2px 0;}
+.parts{margin-top:8px;}.part{border-left:2px solid var(--sand-deep);padding-left:18px;margin:16px 0;}.part h3{margin-top:0;}
 .foot{padding:56px 0 90px;font-size:15px;color:var(--ink);}
 .foot a{color:var(--gold);}
 .btn{display:inline-block;margin-top:14px;padding:11px 20px;border:1px solid var(--espresso);font-size:11px;letter-spacing:.24em;text-transform:uppercase;text-decoration:none;color:var(--espresso);}
@@ -76,23 +77,24 @@ const sp=new URLSearchParams(location.search);const only=(sp.get('d')||'').split
 const guide=location.origin+location.pathname.replace(/destinations(\.html)?\/?$/,'resort');
 async function run(){
   const [ds,rs]=await Promise.all([db.collection('destinations').orderBy('order').get(),db.collection('resortProfiles').get()]);
-  let D=[];ds.forEach(d=>D.push(Object.assign({id:d.id},d.data())));if(only.length)D=D.filter(d=>only.includes(d.id));
+  let D=[];ds.forEach(d=>{const x=Object.assign({id:d.id},d.data());if(!x.hidden)D.push(x);});const alias=k=>{const m=D.find(d=>(d.regions||[]).includes(k));return m?m.id:k;};if(only.length){const want=only.map(alias);D=D.filter(d=>want.includes(d.id));}
   if(!D.length){$('sections').innerHTML='<div class="wrap"><p class="copy">No destinations written yet.</p></div>';return;}
   const byRegion={},pics={};rs.forEach(d=>{const p=d.data();if(/-maggie$/.test(d.id))return;const ok=p.heroPhoto&&String(p.description||'').length>=40&&(p.roomCategories||[]).length&&(p.restaurants||[]).length&&(p.pools||[]).length;const k=region(p.destination,p.name);if(!k)return;(byRegion[k]=byRegion[k]||[]).push({slug:d.id,name:p.name||d.id,ok:!!ok,ages:p.agePolicy||'',photo:p.heroPhoto||''});const g=(p.photos||[]).filter(u=>/^https?:/.test(u));const pref=g.filter(u=>/beach|playa|aerial|aerea|ocean|sea|coast|panoram|sunset|drone|dji|shore/i.test(u));(pics[k]=pics[k]||[]).push(...pref.filter(u=>u!==p.heroPhoto),...pref);});
   if(who)$('sub').textContent='For '+who+' \u2014 the places worth a look, and how to choose between them.';
   $('jump').innerHTML=D.map(d=>'<a href="#'+esc(d.id)+'">'+esc(d.short||d.name)+'</a>').join('');
   $('matrix').innerHTML=D.length>1?'<p class="eyebrow" style="margin-top:34px;">At a glance</p><table class="matrix"><thead><tr><th></th><th>Flight from Houston</th><th>Airport to resort</th><th>Beach &amp; water</th><th>Best months</th><th>Price</th><th>Feels like</th><th>Weddings</th></tr></thead><tbody>'+
     D.map(d=>'<tr><th><a href="#'+esc(d.id)+'">'+esc(d.name)+'</a></th><td>'+esc(d.flightHouston||'')+'</td><td>'+esc(d.transfer||'')+'</td><td>'+esc(d.beachShort||'')+'</td><td>'+esc(d.bestMonths||'')+'</td><td>'+esc(d.price||'')+'</td><td>'+esc(d.vibe||'')+'</td><td>'+esc(d.weddingShort||'')+'</td></tr>').join('')+'</tbody></table>':'';
-  $('sections').innerHTML=D.map(d=>{const rl=(byRegion[d.id]||[]).sort((a,b)=>(b.ok-a.ok)||a.name.localeCompare(b.name));const pl=[...new Set(pics[d.id]||[])];const hero=d.heroPhoto||pl[(d.order||0)%Math.max(1,pl.length)]||(rl.find(r=>r.photo)||{}).photo||'';
+  $('sections').innerHTML=D.map(d=>{const regs=(d.regions&&d.regions.length)?d.regions:[d.id];const rl=regs.flatMap(k=>byRegion[k]||[]).sort((a,b)=>(b.ok-a.ok)||a.name.localeCompare(b.name));const pl=[...new Set(regs.flatMap(k=>pics[k]||[]))];const hero=d.heroPhoto||pl[(d.order||0)%Math.max(1,pl.length)]||(rl.find(r=>r.photo)||{}).photo||'';
     return'<section class="dest" id="'+esc(d.id)+'"><div class="wrap">'+
     '<p class="eyebrow">'+esc(d.country||'')+'</p><h2>'+esc(d.name)+'</h2><p class="sub">'+esc(d.tagline||'')+'</p>'+
     (hero?'<img class="hero" src="'+esc(hero)+'" alt="" loading="lazy">':'')+
     '<div class="copy">'+String(d.overview||'').split(/\n\s*\n/).map(p=>'<p>'+esc(p)+'</p>').join('')+'</div>'+
+    ((d.parts||[]).length?'<div class="parts">'+d.parts.map(pt=>{const prl=(byRegion[pt.region]||[]).filter(r=>r.ok);return'<div class="part" id="'+esc(pt.region||'')+'"><h3>'+esc(pt.name)+'</h3><p class="copy">'+esc(pt.text||'')+'</p>'+(pt.beach?'<p class="copy" style="font-size:14px;opacity:.85;"><b style="font-weight:500;">Beach & transfer:</b> '+esc(pt.beach)+'</p>':'')+(prl.length?'<p class="copy" style="font-size:14px;">'+prl.map(r=>'<a href="'+esc(guide+'?r='+r.slug)+'" style="text-decoration:none;border-bottom:1px solid var(--sand-deep);margin-right:12px;">'+esc(r.name)+'</a>').join('')+'</p>':'')+'</div>';}).join('')+'</div>':'')+
     '<div class="facts">'+[['Getting there',d.flights],['The beach',d.beach],['Weather',d.weather],['Costs & practicalities',d.costs]].filter(x=>x[1]).map(x=>'<div class="fact"><b>'+esc(x[0])+'</b>'+esc(x[1])+'</div>').join('')+'</div>'+
     (d.bestFor?'<h3>Who it suits</h3><p class="copy">'+esc(d.bestFor)+'</p>':'')+
     (d.weddings?'<h3>Getting married here</h3><p class="copy">'+esc(d.weddings)+'</p>':'')+
     (d.tip?'<h3>My tip</h3><p class="copy">'+esc(d.tip)+'</p>':'')+
-    (rl.length?'<div class="resorts"><p class="eyebrow" style="margin-bottom:6px;">Resorts I work with here</p>'+rl.filter(r=>r.ok).map(r=>'<a href="'+esc(guide+'?r='+r.slug)+'">'+esc(r.name)+'</a>').join('')+(rl.some(r=>!r.ok)?'<p style="font-size:13px;opacity:.7;margin:10px 0 0;">Also: '+rl.filter(r=>!r.ok).map(r=>esc(r.name)).join(', ')+'.</p>':'')+'</div>':'')+
+    (rl.length&&!(d.parts||[]).length?'<div class="resorts"><p class="eyebrow" style="margin-bottom:6px;">Resorts I work with here</p>'+rl.filter(r=>r.ok).map(r=>'<a href="'+esc(guide+'?r='+r.slug)+'">'+esc(r.name)+'</a>').join('')+(rl.some(r=>!r.ok)?'<p style="font-size:13px;opacity:.7;margin:10px 0 0;">Also: '+rl.filter(r=>!r.ok).map(r=>esc(r.name)).join(', ')+'.</p>':'')+'</div>':'')+
     '</div></section>';}).join('');
   $('foot').innerHTML='<p>Tell me the two or three that sound right and I\u2019ll price real resorts for your dates \u2014 reply to the email, or <a href="https://zcal.co/amymcate/letschat">grab a time</a>. How working with me looks: <a href="https://work-with-amy-dwt.netlify.app/">work-with-amy-dwt.netlify.app</a>.</p><p style="opacity:.7;font-size:13px;">Flight times are typical non-stop or one-stop from Houston; other cities vary. Weather and entry rules change \u2014 I check the current picture before you book.</p>';
   if(location.hash){const el=document.querySelector(location.hash);if(el)setTimeout(()=>el.scrollIntoView(),200);}
