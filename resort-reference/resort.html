@@ -695,7 +695,15 @@ details.cmptuck .tb{text-align:left;padding:0;}
       </tr></thead><tbody id="q-air-rows"></tbody></table></div>
       <div style="display:flex;gap:10px;align-items:center;margin-top:12px;">
         <button type="button" class="qb-btn ghost" onclick="addAirRow()">+ Add flight</button>
+        <button type="button" class="qb-btn ghost" onclick="const b=$id('q-airpaste');b.style.display=b.style.display==='none'?'block':'none';">Paste air</button>
         <span class="airmsg" id="q-air-msg"></span>
+      </div>
+      <div id="q-airpaste" style="display:none;margin-top:12px;">
+        <textarea id="q-airtext" class="qb-in" rows="5" style="width:100%;font-family:monospace;font-size:13px;" placeholder="Paste the itinerary here \u2014 a Sabre/DestiWorld line (UA 1167 14MAY IAHPUJ 900A 1230P), an airline confirmation, or a Southwest e-mail. One flight per line works best."></textarea>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:8px;">
+          <button type="button" class="qb-btn" onclick="parseAirBlock()">Parse &amp; look up</button>
+          <span class="small">Finds flight numbers, dates and airports; anything missing gets filled by Look up.</span>
+        </div>
       </div>
     </div>
 
@@ -1162,6 +1170,47 @@ function wireAir(){
     tr.querySelector('.rx').onclick=()=>{tr.remove();saveLocal();};
     tr.querySelector('.look').onclick=()=>lookupAir(tr);
   });
+}
+const AIRLINE_NAMES={united:'UA',american:'AA',delta:'DL',southwest:'WN',jetblue:'B6',spirit:'NK',frontier:'F9',alaska:'AS','air canada':'AC',westjet:'WS',aeromexico:'AM','aeroméxico':'AM',volaris:'Y4','viva aerobus':'VB',copa:'CM',sun:'SY','sun country':'SY',avianca:'AV',interjet:'4O'};
+function parseAirBlock(){
+  const raw=($id('q-airtext').value||'').replace(/\r/g,'');const msg=$id('q-air-msg');
+  const MON={JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12};
+  const year=(()=>{const m=raw.match(/\b(20\d\d)\b/);if(m)return +m[1];const t=($id('q-travel')&&$id('q-travel').value||'').match(/20\d\d/);return t?+t[0]:new Date().getFullYear();})();
+  const pad=n=>String(n).padStart(2,'0');
+  const parseDate=t=>{let m;
+    if(m=t.match(/\b(20\d\d)-(\d\d)-(\d\d)\b/))return m[1]+'-'+m[2]+'-'+m[3];
+    if(m=t.match(/\b(\d{1,2})([A-Z]{3})(\d{2,4})?\b/i)){const mo=MON[m[2].toUpperCase()];if(mo)return (m[3]?(m[3].length===2?'20'+m[3]:m[3]):year)+'-'+pad(mo)+'-'+pad(m[1]);}
+    if(m=t.match(/\b(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)[A-Z]*\.?\s+(\d{1,2})(?:,?\s*(20\d\d))?/i))return (m[3]||year)+'-'+pad(MON[m[1].toUpperCase().slice(0,3)])+'-'+pad(m[2]);
+    if(m=t.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/))return (m[3]?(m[3].length===2?'20'+m[3]:m[3]):year)+'-'+pad(m[1])+'-'+pad(m[2]);
+    return '';};
+  const parseTimes=t=>{const out=[];const re=/\b(\d{1,2})[:.]?(\d{2})\s*([AP])M?\b|\b(\d{1,2})[:.](\d{2})\b/gi;let m;while((m=re.exec(t))){let h,mi,ap;if(m[1]){h=+m[1];mi=m[2];ap=m[3].toUpperCase();if(ap==='P'&&h<12)h+=12;if(ap==='A'&&h===12)h=0;}else{h=+m[4];mi=m[5];}const ap2=h>=12?'PM':'AM';const h12=h%12||12;out.push(h12+':'+mi+' '+ap2);}return out;};
+  const skip=/^(confirmation|record locator|passenger|seat|class|fare|total|ticket|baggage|e-?ticket)/i;
+  const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l&&!skip.test(l));
+  let rows=[],cur=null;
+  lines.forEach(line=>{
+    let fl='';let m=line.match(/\b([A-Z][A-Z0-9])\s?(\d{2,4})\b/);
+    if(m&&!/^\d/.test(m[1]))fl=m[1]+m[2];
+    if(!fl){for(const k in AIRLINE_NAMES){const r2=new RegExp('\\b'+k+'\\b(?:\\s+(?:airlines?|flight|#))?\\s*#?\\s*(\\d{2,4})','i');const mm=line.match(r2);if(mm){fl=AIRLINE_NAMES[k]+mm[1];break;}}}
+    const dt=parseDate(line);
+    const codes=[...line.toUpperCase().matchAll(/\(([A-Z]{3})\)|\b([A-Z]{3})\b/g)].map(x=>x[1]||x[2]).filter(c=>!MON[c]&&!/^(AND|THE|FOR|VIA|MON|TUE|WED|THU|FRI|SAT|SUN)$/.test(c));
+    let from='',to='';const pair=line.toUpperCase().match(/\b([A-Z]{3})([A-Z]{3})\b/);
+    if(pair&&!MON[pair[1]]&&!MON[pair[2]]){from=pair[1];to=pair[2];}else if(codes.length>=2){from=codes[0];to=codes[1];}else if(codes.length===1&&cur&&!cur.to){cur.to=codes[0];}
+    const times=parseTimes(line);
+    if(fl){cur={flight:fl,date:dt,from,to,dep:times[0]||'',arr:times[1]||''};rows.push(cur);}
+    else if(cur){if(!cur.date&&dt)cur.date=dt;if(!cur.from&&from)cur.from=from;if(!cur.to&&to)cur.to=to;if(!cur.dep&&times[0])cur.dep=times[0];if(!cur.arr&&times[1])cur.arr=times[1];}
+  });
+  rows=rows.filter(r=>r.flight);
+  if(!rows.length){msg.className='airmsg bad';msg.textContent='No flight numbers found \u2014 paste one flight per line, e.g. UA 1167 14MAY IAHPUJ.';return;}
+  const cityOf=c=>({IAH:'Houston',HOU:'Houston',DFW:'Dallas',DAL:'Dallas',AUS:'Austin',SAT:'San Antonio',DEN:'Denver',ATL:'Atlanta',ORD:'Chicago',MDW:'Chicago',LAX:'Los Angeles',SFO:'San Francisco',JFK:'New York',EWR:'Newark',LGA:'New York',BOS:'Boston',MIA:'Miami',FLL:'Fort Lauderdale',MCO:'Orlando',TPA:'Tampa',PHX:'Phoenix',LAS:'Las Vegas',SEA:'Seattle',MSP:'Minneapolis',DTW:'Detroit',CLT:'Charlotte',PHL:'Philadelphia',DCA:'Washington',IAD:'Washington',BWI:'Baltimore',STL:'St. Louis',MCI:'Kansas City',OKC:'Oklahoma City',TUL:'Tulsa',MSY:'New Orleans',BNA:'Nashville',RDU:'Raleigh',SLC:'Salt Lake City',PDX:'Portland',SAN:'San Diego',YYZ:'Toronto',YVR:'Vancouver',YYC:'Calgary',YUL:'Montreal'})[c]||'';
+  $id('q-needair').checked=true;toggleAir();
+  const existing=[...document.querySelectorAll('#q-air-rows tr[data-air]')].filter(tr=>tr.querySelector('.a-fl').value.trim()||tr.querySelector('.a-who').value.trim());
+  if(!existing.length)$id('q-air-rows').innerHTML='';
+  let lastWho='';
+  rows.forEach(r=>{let who=cityOf(r.from)||cityOf(r.to)||lastWho;if(!cityOf(r.from)&&lastWho)who=lastWho;lastWho=who||lastWho;
+    addAirRow({who,flight:r.flight,date:r.date,from:r.from,to:r.to,dep:r.dep,arr:r.arr});});
+  saveLocal&&saveLocal();
+  msg.className='airmsg';msg.textContent=rows.length+' flight'+(rows.length===1?'':'s')+' parsed \u2014 looking up\u2026';
+  (async()=>{const trs=[...document.querySelectorAll('#q-air-rows tr[data-air]')].slice(-rows.length);for(const tr of trs){const need=!tr.querySelector('.a-fr').value||!tr.querySelector('.a-to').value||!tr.querySelector('.a-dp').value||!tr.querySelector('.a-ar').value;if(need&&tr.querySelector('.a-dt').value)await lookupAir(tr);}msg.className='airmsg';msg.textContent=rows.length+' flight'+(rows.length===1?'':'s')+' added. Check the dates and cities.';})();
 }
 async function lookupAir(tr){
   const msg=$id('q-air-msg');
