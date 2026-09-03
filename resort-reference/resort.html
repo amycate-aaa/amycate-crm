@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
 firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
 const db=firebase.firestore();
@@ -1193,7 +1194,7 @@ function showEmailBox(to,subject,body,names){
   let m=$id('email-box');
   if(!m){m=document.createElement('div');m.id='email-box';m.innerHTML='<div class="eb-card"><div class="eb-head"><span class="eyebrow" style="margin:0">Email draft</span><button class="eb-x" onclick="document.getElementById(\'email-box\').style.display=\'none\'">\u00d7</button></div>'+
     '<label>To</label><input id="eb-to">'+'<label>Subject</label><input id="eb-subject">'+'<label>Message <span style="opacity:.6">(edit anything, then copy)</span></label><textarea id="eb-body" rows="16"></textarea>'+
-    '<div class="eb-actions"><button class="qb-btn solid" onclick="ebCopyHtml()" title="Paste into Outlook \u2014 keeps the styling">Copy formatted for Outlook</button><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Plain text only</button><span id="eb-msg"></span></div><p id="eb-basket" style="font-size:12px;color:#6B6258;margin:14px 0 0"></p></div>';
+    '<div class="eb-actions"><button class="qb-btn solid" onclick="ebGmailDraft()" title="Creates the draft in amy.cate@destinationweddings.com with your signature">Send to Gmail drafts</button><button class="qb-btn" onclick="ebCopyHtml()" title="Paste into Outlook \u2014 keeps the styling">Copy formatted</button><button class="qb-btn" onclick="ebCopy(\'all\')">Copy subject + message</button><button class="qb-btn" onclick="ebCopy(\'body\')">Plain text only</button><span id="eb-msg"></span></div><p id="eb-basket" style="font-size:12px;color:#6B6258;margin:14px 0 0"></p></div>';
     document.body.appendChild(m);}
   $id('eb-to').value=to||'';$id('eb-subject').value=subject;$id('eb-body').value=body;m.style.display='flex';
   const bk=$id('eb-basket');if(names&&names.length>1)bk.innerHTML='This email covers '+names.length+' resorts: '+names.map(esc).join(', ')+'. <a href="#" onclick="ebStartOver();return false;" style="color:var(--gold)">Start over with just this one</a>';else bk.innerHTML='To send two or three resorts in one email: build the quote on the next resort and click Email Draft there \u2014 this one is remembered for 24 hours.';
@@ -1228,6 +1229,30 @@ function ebToHtml(text){const E=esc;const lines=String(text||'').replace(/\r/g,'
     const html=para.map(t=>isUrl(t)?'<a href="'+E(t)+'" style="'+F+'font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8B6914;text-decoration:none;">'+(/compare/.test(t)?'Open the side-by-side \u2192':/zcal|calendly/.test(t)?'Grab a time \u2192':E(t))+'</a>':E(t).replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" style="color:#8B6914;">$1</a>')).join('<br>');
     out.push('<p style="'+F+'font-size:15px;line-height:1.7;color:#2A241F;margin:0 0 16px;">'+html+'</p>');}
   return'<div style="max-width:640px;">'+out.join('')+'</div>';}
+const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.googleusercontent.com';
+const AGENT_SIG={name:'Amy Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group  \u00b7  Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'',hours:'',call:'https://zcal.co/amymcate/letschat'};
+function sigHtml(){const S=AGENT_SIG;const F='font-family:Jost,Helvetica,Arial,sans-serif;';const SERIF='font-family:\'Cormorant Garamond\',Georgia,\'Times New Roman\',serif;';
+  return'<table role="presentation" cellpadding="0" cellspacing="0" style="max-width:640px;margin-top:28px;border-top:1px solid #4A7A76;"><tr><td style="padding-top:18px;">'+
+  '<div style="'+F+'font-size:15px;color:#2A241F;margin-bottom:10px;">Best regards,</div>'+
+  '<div style="'+SERIF+'font-size:24px;color:#1A1510;line-height:1.1;">'+esc(S.name)+'</div>'+
+  '<div style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#6B6258;margin:4px 0 10px;">'+esc(S.title)+'</div>'+
+  '<div style="'+F+'font-size:14px;color:#2A241F;line-height:1.7;">'+esc(S.brands)+'<br><a href="mailto:'+esc(S.email)+'" style="color:#4A7A76;">'+esc(S.email)+'</a>'+(S.phone?'<br>'+esc(S.phone)+(S.hours?'  \u00b7  '+esc(S.hours):''):(S.hours?'<br>'+esc(S.hours):''))+'</div>'+
+  (S.call?'<div style="margin-top:12px;"><a href="'+esc(S.call)+'" style="'+F+'font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:#8B6914;text-decoration:none;">Schedule a call with me \u2192</a></div>':'')+'</td></tr></table>';}
+function gmailToken(){return new Promise((res,rej)=>{if(!window.google||!google.accounts){rej(new Error('Google sign-in not loaded yet \u2014 try again in a second.'));return;}
+  const tc=google.accounts.oauth2.initTokenClient({client_id:GMAIL_CLIENT_ID,scope:'https://www.googleapis.com/auth/gmail.compose',hint:AGENT_SIG.email,callback:r=>r&&r.access_token?res(r.access_token):rej(new Error(r&&r.error?r.error:'No token'))});
+  tc.requestAccessToken({prompt:window.GMAIL_TOKEN?'':'consent'});});}
+function b64url(str){const bytes=new TextEncoder().encode(str);let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function mimeMessage(to,subject,text,html){const b='b'+Math.random().toString(36).slice(2);const enc=s=>'=?UTF-8?B?'+btoa(unescape(encodeURIComponent(s)))+'?=';
+  return['To: '+to,'From: '+AGENT_SIG.email,'Subject: '+enc(subject),'MIME-Version: 1.0','Content-Type: multipart/alternative; boundary="'+b+'"','','--'+b,'Content-Type: text/plain; charset="UTF-8"','Content-Transfer-Encoding: base64','',btoa(unescape(encodeURIComponent(text))),'','--'+b,'Content-Type: text/html; charset="UTF-8"','Content-Transfer-Encoding: base64','',btoa(unescape(encodeURIComponent(html))),'','--'+b+'--'].join('\r\n');}
+async function ebGmailDraft(){const m=$id('eb-msg');const to=$id('eb-to').value.trim(),subject=$id('eb-subject').value,body=$id('eb-body').value;m.textContent='Signing in\u2026';
+  try{const token=await gmailToken();window.GMAIL_TOKEN=token;m.textContent='Creating the draft\u2026';
+    const html='<div style="background:#FBF8F3;padding:6px 0;">'+ebToHtml(body)+sigHtml()+'</div>';const text=body+'\n\nBest regards,\n'+AGENT_SIG.name+'\n'+AGENT_SIG.title+'\n'+AGENT_SIG.brands+'\n'+AGENT_SIG.email+(AGENT_SIG.phone?'\n'+AGENT_SIG.phone:'')+(AGENT_SIG.call?'\n'+AGENT_SIG.call:'');
+    const raw=b64url(mimeMessage(to,subject,text,html));
+    const r=await fetch('https://gmail.googleapis.com/gmail/v1/users/me/drafts',{method:'POST',headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},body:JSON.stringify({message:{raw}})});
+    if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error((e.error&&e.error.message)||('HTTP '+r.status));}
+    const d=await r.json();m.innerHTML='Draft saved to Gmail'+(to?' for '+esc(to):'')+' \u2014 <a href="https://mail.google.com/mail/u/?authuser='+encodeURIComponent(AGENT_SIG.email)+'#drafts" target="_blank" style="color:var(--gold);">open Drafts \u2192</a>';}
+  catch(e){console.warn(e);m.textContent='Could not create the draft: '+e.message;}
+  setTimeout(()=>{if(/Could not/.test(m.textContent))m.textContent='';},12000);}
 async function ebCopyHtml(){const body=$id('eb-body').value;const html=ebToHtml(body);const m=$id('eb-msg');try{await navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([body],{type:'text/plain'})})]);m.textContent='Formatted email copied \u2014 paste into a new Outlook message. Subject: '+$id('eb-subject').value;}catch(e){console.warn(e);m.textContent='Your browser blocked the rich copy \u2014 use Copy subject + message instead.';}setTimeout(()=>m.textContent='',8000);}
 function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
 function nightsFromTravel(t){t=String(t||'').replace(/\u2013|\u2014/g,'-').trim();if(!t)return 0;const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const yr=(t.match(/\b(20\d\d)\b/)||[])[1];const y=yr?+yr:new Date().getFullYear()+1;
