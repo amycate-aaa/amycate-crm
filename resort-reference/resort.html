@@ -850,7 +850,7 @@ async function loadResort(slug){
       setTimeout(()=>{try{downloadGuide();}catch(e){console.warn(e);}},1200);$id('page').style.display='block';
     const _qp=new URLSearchParams(location.search);
     if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
-      if(_qp.get('q'))renderQuote();
+      if(_qp.get('q')||_qp.get('k'))renderQuote();
       else if(AGENT)openQuote();
     }
   }catch(e){console.error(e);$id('error-msg').textContent='Error loading: '+e.message;$id('loading').style.display='none';$id('error').style.display='flex';}
@@ -988,7 +988,7 @@ function buildBuilder(){
   document.querySelectorAll('#qb input,#qb select,#qb textarea').forEach(el=>{
     el.addEventListener('input',()=>{if(el.classList.contains('d')||el.classList.contains('s')||el.classList.contains('t')||el.classList.contains('c'))el.classList.toggle('on',!!el.value.trim());saveLocal();});
     el.addEventListener('change',saveLocal);});
-  const url=new URLSearchParams(location.search).get('q');
+  const _sp=new URLSearchParams(location.search);const url=_sp.get('q')||(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]&&P.quoteLinks[_sp.get('k')].q)||'';
   if(url)applyQ(decQ(url));
   else{
     let had=false;
@@ -1052,22 +1052,30 @@ function toggleBasis(){
     :'Add only the categories you are actually pricing. Per person, per night, based on double occupancy &mdash; just the number.';
   saveLocal();
 }
-function emailDraft(){
-  const q=collectQ();const R=P.name||P.resortName||'';const link=location.origin+location.pathname+'?r='+SLUG+'&q='+encQ(q);
-  const first=((q.guests&&q.guests[0])||q.couple||'').split(/[&,]| and /)[0].trim().split(' ')[0];
+async function emailDraft(){
+  const q=collectQ();const R=P.name||P.resortName||'';
+  const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
+  say('Building the email\u2026');
+  const link=await quoteLink(q);
+  const CT=q.brand==='ct';
+  let first=((q.guests&&q.guests[0])||'').trim().split(/[&,]| and /)[0].trim().split(' ')[0];
+  if(!first){const c=(q.couple||'').trim();if(c&&!/celebration|retirement|wedding|trip|group|party|reunion|birthday|getaway/i.test(c))first=c.split(/[&,]| and /)[0].trim().split(' ')[0];}
+  first=first.replace(/['\u2019]s$/,'');
   const hi='Hi'+(first?' '+first:'')+',';
+  const where=(P.destination||'').replace(/,\s*/g,', ');
+  const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):'')).join('\n');
+  const facts=['\u2022 Resort: '+R+(where?' \u2014 '+where:''),q.travel?'\u2022 Dates: '+q.travel:'',q.couple?'\u2022 For: '+q.couple:'',rooms?'\u2022 Rooms priced:\n'+rooms:'',q.needAir&&q.pkgPrice?'\u2022 Package with flights: $'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):''].filter(Boolean).join('\n');
   let subject,body;
   if(q.mode==='guest'){
     subject='Your room at '+R+(q.travel?' \u2014 '+q.travel:'');
     const terms=[q.deposit?q.deposit+' now':'',q.due?'the balance by '+q.due:''].filter(Boolean).join(' and ');
-    body=hi+'\n\nHere\u2019s your quote for '+R+': '+link+'\n\nYour room'+(q.prices.length>1?' options':'')+', your dates, and the price, all on one page.'+
-      (terms?' To hold it, it\u2019s '+terms+(q.easyPay?' \u2014 you can pay that in pieces any time before then':'')+'.':'')+
+    body=hi+'\n\nHere\u2019s your quote for '+R+':\n'+link+'\n\n'+facts+'\n\nYour room'+(q.prices.length>1?' options':'')+', your dates and the price are all on that page.'+
+      (terms?' To hold it, it\u2019s '+terms+(q.easyPay?' \u2014 and you can pay that in pieces any time before then':'')+'.':'')+
       '\n\nIf it looks right, hit the button at the bottom of the page and I\u2019ll get you booked. Any questions, just reply.\n\nAmy';
   } else {
     subject=R+(q.couple?' for '+q.couple:'')+' \u2014 take a look';
-    body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+': '+link+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools, and how the group side works. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through.\n\nAmy';
+    body=hi+'\n\nHere\u2019s '+R+(q.travel?' priced for '+q.travel:'')+':\n'+link+'\n\n'+facts+'\n\nIt\u2019s a full page, not a brochure \u2014 the price, every room type, dining, pools'+(CT?', and how the group side works':', and how the wedding side works')+'. Scroll it on your phone, forward it to whoever else is deciding, and tell me what\u2019s landing and what isn\u2019t.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat\n\nAmy';
   }
-  const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
   const to=(($id('q-email')||{}).value||'').trim();
   const gm='https://mail.google.com/mail/?view=cm&fs=1'+(to?'&to='+encodeURIComponent(to):'')+'&su='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
   const w=window.open(gm,'_blank');
@@ -1133,9 +1141,20 @@ function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.d
 function backToBuilder(){$id('quote-page').style.display='none';$id('page').style.display='block';$id('qb').classList.add('on');document.body.style.overflow='hidden';qbChrome(true);}
 function qbChrome(on){if($id('qb-open'))$id('qb-open').style.display=(on&&AGENT)?'block':'none';if($id('q-back'))$id('q-back').style.display=on?'none':'block';}
 function printQuote(){if(!$id('quote-page').innerHTML)renderQuote();window.print();}
-function copyQuoteLink(){const u=location.origin+location.pathname+'?r='+SLUG+'&quote=true&q='+encQ(collectQ());
-  navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied \u2014 paste it anywhere.';setTimeout(()=>$id('qb-msg').textContent='',4000);})
-  .catch(()=>{$id('qb-msg').textContent=u;});}
+async function quoteLink(q){
+  const base=location.origin+location.pathname+'?r='+SLUG+'&quote=true';
+  const enc=encQ(q);
+  try{
+    const id=Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);
+    const ref=db.collection('resortProfiles').doc(SLUG);const snap=await ref.get();
+    const links=Object.assign({},(snap.data()||{}).quoteLinks||{});
+    const cutoff=Date.now()-180*24*3600*1000;Object.keys(links).forEach(k=>{if((links[k].t||0)<cutoff)delete links[k];});
+    links[id]={q:enc,t:Date.now()};
+    await ref.set({quoteLinks:links},{merge:true});
+    return base+'&k='+id;
+  }catch(e){console.warn('short link failed, using long link',e);return base+'&q='+enc;}
+}
+function copyQuoteLink(){quoteLink(collectQ()).then(u=>navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied \u2014 paste it anywhere.';setTimeout(()=>$id('qb-msg').textContent='',4000);}).catch(()=>{$id('qb-msg').textContent=u;}));}
 
 /* ══════════════════ QUOTE RENDER ══════════════════ */
 function renderQuote(){
