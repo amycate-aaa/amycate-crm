@@ -674,7 +674,7 @@ if(location.hash==='#groups')setTimeout(()=>selTab('grp'),100);
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function $id(id){return document.getElementById(id);}
-async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');snap.forEach(d=>{const o=document.createElement('option');o.value=d.id;o.textContent=d.data().name||d.id;sel.appendChild(o);});}
+async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');snap.forEach(d=>{if(/-maggie$/i.test(d.id)||/-chris(topher)?$/i.test(d.id))return; /* other agents' twins stay out of Amy's picker */ const o=document.createElement('option');o.value=d.id;o.textContent=d.data().name||d.id;sel.appendChild(o);});}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v;}
 function showPicker(){location.href='?';}
 async function loadResort(slug){
