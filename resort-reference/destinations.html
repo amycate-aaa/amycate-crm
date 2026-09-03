@@ -72,7 +72,7 @@ const region=(dest,name)=>{const t=(String(dest||'')+' '+String(name||'')).toLow
   if(/tulum/.test(t))return 'tulum';if(/cancun|cancún|costa mujeres|playa mujeres|isla mujeres/.test(t))return 'cancun';
   if(/riviera maya|playa del carmen|puerto morelos|akumal|puerto aventuras|riviera cancun|xcaret/.test(t))return 'riviera-maya';
   if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
-  if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';return '';};
+  if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';if(/curacao|curaçao/.test(t))return 'curacao';return '';};
 const sp=new URLSearchParams(location.search);const only=(sp.get('d')||'').split(',').map(s=>s.trim()).filter(Boolean);const who=sp.get('for')||'';
 const guide=location.origin+location.pathname.replace(/destinations(\.html)?\/?$/,'resort');
 async function run(){
