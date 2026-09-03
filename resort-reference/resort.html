@@ -718,6 +718,7 @@ if(window.CTMODE){
   document.querySelectorAll('a[href^="mailto:amy.cate@destinationweddings.com"]').forEach(a=>{a.href=a.href.replace('amy.cate@destinationweddings.com','amy.cate@celebrationtravel.com');});
   const fp=document.querySelector('footer p');if(fp)fp.textContent='Amy Cate \u00b7 Celebration Travel';
   const pe=document.querySelector('#picker-screen .eyebrow');if(pe)pe.textContent='Amy Cate \u00b7 Celebration Travel';
+  const ww=document.querySelector('a.workwith');if(ww)ww.href='https://work-with-amy-ct.netlify.app/';
 }
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
@@ -1142,7 +1143,7 @@ function renderQuote(){
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
     ((q.guests||[]).length?'<p class="q-when" style="font-style:italic;text-transform:none;letter-spacing:.04em;">'+(GUEST?'Travelling: ':'For ')+esc(q.guests.join(' \u00b7 '))+'</p>':'')+
     (P.destination?'<p class="q-when" style="color:var(--gold-soft)">'+esc(P.destination)+'</p>':'')+
-    '<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>'+
+    (GUEST?'':'<p style="margin:0;"><a class="herobtn" href="'+(CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-dwt.netlify.app/')+'" target="_blank" rel="noopener">What working with me looks like \u2192</a></p>')+
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
