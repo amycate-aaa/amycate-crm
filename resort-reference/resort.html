@@ -730,8 +730,14 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button class="qb-btn" onclick="clearTrip()" title="Wipes the client details and flights, ready for a new client">Clear Client</button>
       <button class="qb-btn" onclick="printQuote()">Print / PDF</button>
       <button class="qb-btn ghost" onclick="closeQuote()">Back to Guide</button>
+      <button class="qb-btn" onclick="saveToBasket()" title="Keeps this quote with the client's other resorts so you can email them together">Save for client</button>
+      <button class="qb-btn ghost" onclick="toggleBasket()" id="qb-basket-btn">Basket</button>
       <button class="qb-btn ghost" onclick="toggleSavedQuotes()" id="qb-saved-btn">Saved Quotes</button>
       <span class="qb-msg" id="qb-msg"></span>
+    </div>
+    <div id="qb-basket" style="display:none;margin-top:14px;border-top:1px solid var(--sand-deep);padding-top:12px;">
+      <p class="qb-h" style="margin-bottom:6px;">Client basket</p>
+      <div id="qb-basket-list"></div>
     </div>
     <div id="qb-saved" style="display:none;margin-top:14px;border-top:1px solid var(--sand-deep);padding-top:12px;">
       <p class="qb-h" style="margin-bottom:6px;">Saved quotes for this resort</p>
@@ -1104,9 +1110,20 @@ function ebCopy(what){const sub=$id('eb-subject').value,b=$id('eb-body').value;c
   const ok=()=>{$id('eb-msg').textContent='Copied \u2014 paste it into Outlook.';setTimeout(()=>$id('eb-msg').textContent='',5000);};
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(ok).catch(()=>{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();});
   else{const t=$id('eb-body');t.focus();t.select();document.execCommand('copy');ok();}}
-function ebBasketGet(){try{const b=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');const cut=Date.now()-24*3600*1000;return b.filter(e=>e.t>cut);}catch(e){return[];}}
+function ebBasketGet(){try{const b=JSON.parse(localStorage.getItem('ac_email_basket')||'[]');const cut=Date.now()-7*24*3600*1000;return b.filter(e=>e.t>cut);}catch(e){return[];}}
 function ebBasketSet(b){try{localStorage.setItem('ac_email_basket',JSON.stringify(b));}catch(e){}}
 function ebStartOver(){const b=ebBasketGet().filter(e=>e.slug===SLUG);ebBasketSet(b);emailDraft();}
+function basketEntryFor(q,link){const R=P.name||P.resortName||'';const where=(P.destination||'').replace(/,\s*/g,', ');const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));return{slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};}
+function basketAdd(entry){let b=ebBasketGet().filter(e=>e.slug!==SLUG&&(!e.couple||!entry.couple||e.couple.toLowerCase()===entry.couple.toLowerCase()));b.push(entry);ebBasketSet(b);renderBasketBtn();return b;}
+function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();btn.textContent='Basket'+(b.length?' ('+b.length+')':'');}
+async function saveToBasket(){const q=collectQ();saveLocal();const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},5000);}};say('Saving\u2026');const link=await quoteLink(q);const b=basketAdd(basketEntryFor(q,link));say('Saved for '+(q.couple||'this client')+' \u2014 '+b.length+' resort'+(b.length>1?'s':'')+' in the basket.');}
+function toggleBasket(){const box=$id('qb-basket');const on=box.style.display==='none';box.style.display=on?'block':'none';if(on)renderBasket();}
+function renderBasket(){const box=$id('qb-basket-list');const b=ebBasketGet();if(!b.length){box.innerHTML='<p class="small">Nothing saved yet. <b>Save for client</b> keeps this quote here (7 days) so you can add more resorts before emailing.</p>';return;}
+  const who=b.map(e=>e.couple).filter(Boolean)[0]||'';const cmp=location.origin+location.pathname.replace(/resort\.html$/,'compare.html')+'?r='+b.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(',');
+  box.innerHTML='<p class="small" style="margin:0 0 8px;"><b>'+esc(who||'Current client')+'</b> \u2014 '+b.length+' resort'+(b.length>1?'s':'')+'</p>'+
+  '<table style="width:100%;border-collapse:collapse;font-size:13px;">'+b.map(e=>'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:7px 6px;"><b>'+esc(e.name)+'</b>'+(e.travel?' <span class="small">\u00b7 '+esc(e.travel)+'</span>':'')+(e.pkg?'<br><span class="small">'+esc(e.pkg)+'</span>':'')+'</td><td style="padding:7px 6px;white-space:nowrap;text-align:right;"><a href="'+esc(e.link)+'" target="_blank" class="qb-btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Open</a> <button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="basketRemove(\''+e.slug+'\')">Remove</button></td></tr>').join('')+'</table>'+
+  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty the basket?\')){ebBasketSet([]);renderBasket();renderBasketBtn();}">Empty basket</button></div>';}
+function basketRemove(slug){ebBasketSet(ebBasketGet().filter(e=>e.slug!==slug));renderBasket();renderBasketBtn();}
 async function emailDraft(){
   const q=collectQ();const R=P.name||P.resortName||'';
   const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},6000);}};
@@ -1119,11 +1136,8 @@ async function emailDraft(){
   const hi='Hi'+(first?' '+first:'')+',';
   const where=(P.destination||'').replace(/,\s*/g,', ');
   const rooms=(q.prices||[]).map(r=>'    \u2013 '+r.name+(r.ppn?': $'+r.ppn+(q.priced&&/total/i.test(q.priced)?' total for the room':' per person, per night'):''));
-  const entry={slug:SLUG,name:R,where,travel:q.travel||'',couple:q.couple||'',rooms,pkg:(q.needAir&&q.pkgPrice)?'$'+q.pkgPrice+' per person'+(q.pkgCovers?' \u2014 '+q.pkgCovers:''):'',link,t:Date.now()};
-  if(q.mode!=='guest'){
-    let b=ebBasketGet().filter(e=>e.slug!==SLUG&&(!e.couple||!q.couple||e.couple.toLowerCase()===q.couple.toLowerCase()));
-    b.push(entry);ebBasketSet(b);
-  }
+  const entry=basketEntryFor(q,link);
+  if(q.mode!=='guest')basketAdd(entry);
   const basket=q.mode==='guest'?[entry]:ebBasketGet();
   const compareLink=basket.length>1?location.origin+location.pathname.replace(/resort\.html$/,'compare.html')+'?r='+basket.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(','):'';
   const facts=e=>['\u2022 Resort: '+e.name+(e.where?' \u2014 '+e.where:''),e.travel?'\u2022 Dates: '+e.travel:'',e.couple&&basket.length===1?'\u2022 For: '+e.couple:'',e.rooms.length?'\u2022 Rooms priced:\n'+e.rooms.join('\n'):'',e.pkg?'\u2022 Package with flights: '+e.pkg:''].filter(Boolean).join('\n');
@@ -1244,7 +1258,7 @@ async function lookupAir(tr){
     saveLocal();
   }catch(e){ msg.className='airmsg bad'; msg.textContent='Lookup failed \u2014 fill it in by hand.'; }
 }
-function openQuote(){$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
+function openQuote(){setTimeout(renderBasketBtn,0);$id('qb').classList.add('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='hidden';}
 function closeQuote(){$id('qb').classList.remove('on');$id('quote-page').style.display='none';$id('page').style.display='block';document.body.style.overflow='';qbChrome(true);}
 function backToBuilder(){$id('quote-page').style.display='none';$id('page').style.display='block';$id('qb').classList.add('on');document.body.style.overflow='hidden';qbChrome(true);}
 function qbChrome(on){if($id('qb-open'))$id('qb-open').style.display=(on&&AGENT)?'block':'none';if($id('q-back'))$id('q-back').style.display=on?'none':'block';}
@@ -1278,7 +1292,7 @@ async function renderSavedQuotes(){const box=$id('qb-saved-list');box.innerHTML=
 function editSavedQuote(k){const l=(P.quoteLinks||{})[k];if(!l)return;const q=decQ(l.q);if(!q)return;applyQ(q);saveLocal();$id('qb-msg').textContent='Loaded \u2014 edit and Copy Link again to save a new version.';setTimeout(()=>$id('qb-msg').textContent='',5000);}
 function copySavedQuote(k){const u=location.origin+location.pathname+'?r='+SLUG+'&quote=true&k='+k;navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied.';setTimeout(()=>$id('qb-msg').textContent='',3000);}).catch(()=>{$id('qb-msg').textContent=u;});}
 async function deleteSavedQuote(k){if(!confirm('Delete this saved quote? The link you sent will stop working.'))return;const ref=db.collection('resortProfiles').doc(SLUG);const snap=await ref.get();const links=Object.assign({},(snap.data()||{}).quoteLinks||{});delete links[k];await ref.set({quoteLinks:links},{merge:true});renderSavedQuotes();}
-function copyQuoteLink(){quoteLink(collectQ()).then(u=>navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied \u2014 paste it anywhere.';setTimeout(()=>$id('qb-msg').textContent='',4000);}).catch(()=>{$id('qb-msg').textContent=u;}));}
+function copyQuoteLink(){const q=collectQ();quoteLink(q).then(u=>{if(q.mode!=='guest')basketAdd(basketEntryFor(q,u));return navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied and saved to the basket.';setTimeout(()=>$id('qb-msg').textContent='',4000);}).catch(()=>{$id('qb-msg').textContent=u;});});}
 
 /* ══════════════════ QUOTE RENDER ══════════════════ */
 function renderQuote(){
