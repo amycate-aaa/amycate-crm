@@ -481,6 +481,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
   <p style="text-align:center;margin:0 0 14px;"><a href="destinations" target="_blank" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-soft);text-decoration:none;">Destination guide &rarr;</a></p>
   <p style="text-align:center;margin:0;"><a href="#" id="mq-open" onclick="mqToggle();return false;" style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso);text-decoration:none;border:1px solid var(--espresso);padding:12px 22px;display:inline-block;">Quick quote &mdash; several resorts</a></p>
   <div id="mq" style="display:none;margin-top:18px;border:1px solid var(--sand-deep);background:var(--ivory);padding:26px 28px;">
+    <p class="eyebrow" style="margin-bottom:8px;">Paste a TI email or DestiWorld results <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; fills dates, adults, flights and the resorts below</span></p>
+    <textarea id="mq-paste" class="qb-in" rows="4" style="width:100%;font-family:monospace;font-size:12px;" placeholder="Select all on the TI itinerary email or the DestiWorld search results page, copy, paste here."></textarea>
+    <div style="display:flex;gap:10px;align-items:center;margin:8px 0 22px;"><button type="button" class="qb-btn ghost" onclick="mqPasteAll()">Fill from paste</button><span class="small" id="mq-paste-msg" style="opacity:.8;"></span></div>
     <p class="eyebrow" style="margin-bottom:12px;">The client</p>
     <div class="mq-grid">
       <div><label class="qb-lbl">Couple / group name</label><input id="mq-couple" class="qb-in" placeholder="Kaylee &amp; Derek"></div>
@@ -896,6 +899,38 @@ function renderPickerBaskets(){const box=$id('picker-baskets');if(!box)return;co
   box.innerHTML='<p class="eyebrow" style="text-align:center;">Your baskets</p>'+keys.map(k=>{const b=all[k];const who=b.find(e=>e.couple)?.couple||'(no client name)';const travel=b.find(e=>e.travel)?.travel||'';const first=b[0];const fk=(first.link.match(/[?&]k=([^&]+)/)||[])[1]||'';
     return'<div class="bk"><h3>'+esc(who)+'</h3><p class="small" style="margin:0 0 6px;opacity:.75;">'+b.length+' resort'+(b.length>1?'s':'')+(travel?' \u00b7 '+esc(travel):'')+' \u00b7 last saved '+fmt(Math.max(...b.map(e=>e.t)))+'</p><table>'+b.map(e=>{const key=(e.link.match(/[?&]k=([^&]+)/)||[])[1]||'';return'<tr><td><b>'+esc(e.name)+'</b>'+(e.pkg?'<br><span class="small" style="opacity:.8;">'+esc(e.pkg)+'</span>':'')+'</td><td class="act">'+(key?'<a href="?r='+esc(e.slug)+'&edit='+esc(key)+'">Edit</a>':'')+'<a href="'+esc(e.link)+'" target="_blank">Open</a><button onclick="pickerBasketRemove(\''+k.replace(/'/g,"\\'")+'\',\''+esc(e.slug)+'\')">Remove</button></td></tr>';}).join('')+'</table>'+
     '<div class="row">'+'<a href="#" onclick="mqPrefill(\''+k.replace(/'/g,"\\'")+'\');return false;">+ Add resorts</a>'+(fk?'<a href="?r='+esc(first.slug)+'&edit='+esc(fk)+'&emailbasket='+encodeURIComponent(k)+'">Email all '+b.length+'</a>':'')+(b.length>1?'<a href="'+esc(cmp(b))+'" target="_blank">Open comparison</a>':'')+'<button onclick="if(confirm(\'Empty this basket?\')){ebBasketSet([],\''+k.replace(/'/g,"\\'")+'\');renderPickerBaskets();}">Empty</button></div></div>';}).join('');}
+function mqNorm(t){return String(t||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9 ]+/g,' ').replace(/\b(all inclusive|an autograph collection|autograph collection|resort|resorts|spa|hotel|hotels|residences|golf|and|the|by|marriott|hilton|hyatt inclusive|collection|a|an)\b/g,' ').replace(/\s+/g,' ').trim();}
+function mqTokens(t){return new Set(mqNorm(t).split(' ').filter(w=>w.length>2));}
+function mqBestSlug(name){const A=mqTokens(name);let best=null,score=0;Object.keys(window.LIB).forEach(k=>{const B=mqTokens(window.LIB[k].name);let hit=0;A.forEach(w=>{if(B.has(w))hit++;});const sc=hit/Math.max(1,Math.max(A.size,B.size));if(hit>=2&&sc>score){score=sc;best=k;}});return score>=0.5?best:null;}
+function mqBestRoom(slug,room){const rooms=(window.LIB[slug]||{}).rooms||[];if(!rooms.length)return '';const A=mqTokens(room);let best='',score=0;rooms.forEach(r=>{const B=mqTokens(r);let hit=0;A.forEach(w=>{if(B.has(w))hit++;});const sc=hit/Math.max(1,A.size);if(sc>score){score=sc;best=r;}});return score>=0.5?best:'';}
+function mqParseHotels(raw){const L=raw.replace(/\r/g,'').split('\n').map(x=>x.trim());const out=[];
+  // Travel Impressions: name line, ..., "Room #1: X", "From $N"
+  for(let i=0;i<L.length;i++){const m=L[i].match(/^Room #\d+:\s*(.+)$/i);if(!m)continue;let name='';for(let j=i-1;j>=Math.max(0,i-8);j--){const t=L[j];if(!t||/^(rating|location|\d|-|from \$|includes|book now|prices shown|check-|hotels?:)/i.test(t)||/miles from airport/i.test(t))continue;name=t.replace(/\t.*$/,'');break;}
+    let price='';for(let j=i+1;j<Math.min(L.length,i+6);j++){const p=L[j].match(/From \$([\d,]+(?:\.\d+)?)/i);if(p){price=p[1].replace(/,/g,'');break;}}
+    if(name)out.push({name,room:m[1].trim(),total:price,src:'TI'});}
+  // DestiWorld: name line then "<Room>Hotel Package Price: $N"
+  for(let i=0;i<L.length;i++){const m=L[i].match(/^(.*?)Hotel Package Price:\s*\$([\d,]+(?:\.\d+)?)/i);if(!m)continue;let name='';for(let j=i-1;j>=Math.max(0,i-6);j--){const t=L[j];if(!t||/^(rating|view hotel|temporary|see more|\d)/i.test(t))continue;name=t.replace(/\s+$/,'');break;}
+    if(name)out.push({name,room:m[1].replace(/\s*-\s*all inclusive$/i,'').trim(),total:m[2].replace(/,/g,''),src:'DW'});}
+  return out;}
+function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}
+  // adults
+  const ad=raw.match(/(\d+)\s+Adults?/i);const adults=ad?parseInt(ad[1],10):2;$id('mq-occ').value=adults;
+  // dates
+  const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const iso=(y,m,d)=>y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  const pd=t=>{let m;if(m=t.match(/(\d{1,2})\s*([A-Za-z]{3})\s*(\d{2,4})/)){const mo=MON[m[2].toLowerCase()];if(mo==null)return '';const y=m[3].length===2?'20'+m[3]:m[3];return iso(y,mo,+m[1]);}return '';};
+  let ci=raw.match(/Check-?In Date:\s*([^\n]+)/i),co=raw.match(/Check-?Out Date:\s*([^\n]+)/i);
+  if(!ci){ci=raw.match(/From:\s*(\d{1,2} \w{3} \d{4})/);co=raw.match(/To:\s*(\d{1,2} \w{3} \d{4})/);}
+  if(ci&&co){const a=pd(ci[1]),b=pd(co[1]);if(a&&b){$id('mq-from').value=a;$id('mq-to').value=b;mqDates('to');}}
+  // hotels
+  const hotels=mqParseHotels(raw);const nights=parseInt($id('mq-nights').value,10)||0;
+  $id('mq-rows').innerHTML='';const missed=[];
+  hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;if(!slug){missed.push(h.name);row.querySelector('.mq-resort').value='';return;}
+    const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);const rs=row.querySelector('.mq-room');const rm=mqBestRoom(slug,h.room);if(rm)rs.value=rm;else{const o=document.createElement('option');o.textContent=h.room;o.selected=true;rs.appendChild(o);}
+    if(h.total){const pp=Math.round(parseFloat(h.total)/Math.max(1,adults));row.querySelector('.mq-pkg').value=pp;}});
+  if(!hotels.length)mqAddRow();
+  // flights → one destination box (after rows exist)
+  mqAirBlocks();const air=parseAirText(raw,($id('mq-from').value||'').slice(0,4));if(air.length){const ta=document.querySelector('#mq-air-blocks textarea');if(ta){ta.value=raw;mqAirPreview(ta);}}
+  msg.textContent=hotels.length+' hotel'+(hotels.length===1?'':'s')+' found'+(hotels.length?' \u2014 '+(hotels.length-missed.length)+' matched to your library':'')+(missed.length?'. Not in library: '+missed.join('; '):'')+(air.length?' \u00b7 '+air.length+' flights':'')+'. Prices are per person with flights ('+adults+' adults). Check, then Create.';}
 async function mqPrefill(key){const b=ebBasketGet(key);if(!b.length)return;const e=b.find(x=>x.couple)||b[0];
   let q=null;const fk=(e.link.match(/[?&]k=([^&]+)/)||[])[1];if(fk){try{const snap=await db.collection('resortProfiles').doc(e.slug).get();const L=(snap.data()||{}).quoteLinks||{};if(L[fk])q=decQ(L[fk].q);}catch(err){}}
   const m=$id('mq');m.style.display='block';$id('mq-rows').innerHTML='';mqAddRow();
