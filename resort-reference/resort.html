@@ -753,7 +753,8 @@ async function loadResort(slug){
       if(pb)$id('pools-grid').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(pb)+'" alt="" loading="lazy" style="margin-bottom:30px;">');})();
     $id('pools-grid').innerHTML=pools.length?pools.map(pl=>{const pi=[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'';
       return'<div class="pool-card">'+(pi?'<img src="'+esc(pi)+'" alt="'+esc(pl.name)+'" loading="lazy">':'')+'<h4>'+esc(pl.name)+'</h4><p>'+esc(clean(pl.features||pl.description))+'</p></div>';}).join(''):'<div class="pool-card"><p class="empty">Pool details coming soon.</p></div>';
-    const cats=p.roomCategories||[];
+    // Amy's rule: a room category with no photo is left out (venues are not filtered this way)
+    const cats=(p.roomCategories||[]).filter(r=>r&&r.name&&[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk));
     const rPhotos=photos.filter(ph=>(ph.roomCategory||'')!=='');
     $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk)||'';const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);return'<div class="rcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(clean(r.description||r.view)?'<p>'+esc(clean(r.description||r.view))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
     (function(){const ci=[(p.sectionPhotos||{}).club].find(photoOk)||'';
@@ -1110,14 +1111,17 @@ function renderQuote(){
 
   /* 4 — ROOMS & PRICING (before packages, per Amy's standard) */
   let ROOMS='';
-  const allCats=(P.roomCategories||[]).filter(c=>c&&c.name);
+  const allCatsRaw=(P.roomCategories||[]).filter(c=>c&&c.name);
+  const roomPic=c=>[c.photo,c.photoUrl,PHOTOMAP[String(c.name||'').toLowerCase().trim()]].find(photoOk)||'';
+  // Amy's rule: no photo, no room card — except a room she has actually priced
+  const allCats=allCatsRaw.filter(roomPic);
   const priceMap={}; q.prices.forEach(r=>{priceMap[String(r.name||'').toLowerCase().trim()]=r.ppn;});
   const rows=priced
     ? (q.prices.length ? q.prices.slice()
        : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices))
     : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices);
   if(rows.length||hasPkg){
-    const cats=allCats;
+    const cats=allCatsRaw;
     const solo=rows.length===1&&!q.needAir;
     const stayHTML=(priced&&q.opts.example&&!q.needAir)?stayTotals(q,solo):'';
     ROOMS=sec('',head('Your Guests',(priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites')+
