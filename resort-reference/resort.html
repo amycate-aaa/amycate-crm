@@ -877,7 +877,8 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true}};
     const id=dry?'preview':Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);const enc=encQ(q);
     if(!dry){try{await db.collection('resortProfiles').doc(r.slug).set({quoteLinks:{[id]:{q:enc,t:Date.now()}}},{merge:true});}catch(e){msg.textContent='Could not save '+lib.name+': '+e.message;return;}}
-    const link=dry?location.origin+location.pathname+'?r='+r.slug+'&quote=true&q='+enc:location.origin+location.pathname+'?r='+r.slug+'&quote=true&k='+id;
+    if(dry){try{localStorage.setItem('ac_preview_'+r.slug,enc);}catch(e){}}
+    const link=dry?location.origin+location.pathname+'?r='+r.slug+'&quote=true&pv=1':location.origin+location.pathname+'?r='+r.slug+'&quote=true&k='+id;
     const roomsTxt=q.prices.map(p=>'    \u2013 '+priceLine(p.name,p.ppn,q));
     made.push({slug:r.slug,name:lib.name||r.slug,where:lib.dest||'',travel,couple,rooms:roomsTxt,pkg:r.pkg?'$'+r.pkg+' per person \u2014 '+q.pkgCovers:'',link,t:Date.now(),k:id,_q:q});}
   if(!dry){const key=bkKey(couple);let b=ebBasketGet(key).filter(e=>!made.some(m=>m.slug===e.slug));b=b.concat(made.map(m=>{const c=Object.assign({},m);delete c._q;return c;}));ebBasketSet(b,key);}
@@ -1069,7 +1070,7 @@ async function loadResort(slug){
     const _qp=new URLSearchParams(location.search);
     if(_qp.get('edit')&&P.quoteLinks&&P.quoteLinks[_qp.get('edit')]){openQuote();setTimeout(()=>{applyQ(decQ(P.quoteLinks[_qp.get('edit')].q));saveLocal();if(_qp.get('emailbasket')){window.BASKET_KEY=_qp.get('emailbasket');setTimeout(emailDraft,200);}},120);}
     else if(_qp.get('quote')==='true'||_qp.get('quote')==='1'){
-      if(_qp.get('q')||_qp.get('k'))renderQuote();
+      if(_qp.get('q')||_qp.get('k')||_qp.get('pv'))renderQuote();
       else if(AGENT)openQuote();
     }
   }catch(e){console.error(e);$id('error-msg').textContent='Error loading: '+e.message;$id('loading').style.display='none';$id('error').style.display='flex';}
@@ -1207,7 +1208,7 @@ function buildBuilder(){
   document.querySelectorAll('#qb input,#qb select,#qb textarea').forEach(el=>{
     el.addEventListener('input',()=>{if(el.classList.contains('d')||el.classList.contains('s')||el.classList.contains('t')||el.classList.contains('c'))el.classList.toggle('on',!!el.value.trim());saveLocal();});
     el.addEventListener('change',saveLocal);});
-  const _sp=new URLSearchParams(location.search);const url=_sp.get('q')||(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]&&P.quoteLinks[_sp.get('k')].q)||'';
+  const _sp=new URLSearchParams(location.search);const url=_sp.get('q')||(_sp.get('pv')&&localStorage.getItem('ac_preview_'+SLUG))||(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]&&P.quoteLinks[_sp.get('k')].q)||'';
   if(url)applyQ(decQ(url));
   else{
     let had=false;
