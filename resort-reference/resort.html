@@ -932,9 +932,10 @@ function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-past
   // hotels
   const hotels=mqParseHotels(raw);const nights=parseInt($id('mq-nights').value,10)||0;
   $id('mq-rows').innerHTML='';const missed=[];
-  hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;if(!slug){missed.push(h.name);row.querySelector('.mq-resort').value='';return;}
-    const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);const rs=row.querySelector('.mq-room');const rm=mqBestRoom(slug,h.room);if(rm)rs.value=rm;else{const o=document.createElement('option');o.textContent=h.room;o.selected=true;rs.appendChild(o);}
-    if(h.total){const pp=Math.round(parseFloat(h.total)/Math.max(1,adults));row.querySelector('.mq-pkg').value=pp;}});
+  hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;const pp=h.total?Math.round(parseFloat(h.total)/Math.max(1,adults)):'';if(pp)row.querySelector('.mq-pkg').value=pp;
+    const rs=row.querySelector('.mq-room');
+    if(!slug){missed.push(h.name);row.querySelector('.mq-resort').value='';rs.innerHTML='<option selected>'+esc(h.room)+'</option>';let note=row.querySelector('.mq-ready');if(!note){note=document.createElement('div');note.className='mq-ready small';note.style.cssText='grid-column:1/-1;font-size:12px;margin:-4px 0 2px;';row.appendChild(note);}note.innerHTML='<span style="color:#8B2E2E;">'+esc(h.name)+' is not in your library \u2014 pick the resort, or remove this row.</span>';return;}
+    const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);const rm=mqBestRoom(slug,h.room);if(rm)rs.value=rm;else{const o=document.createElement('option');o.textContent=h.room;o.selected=true;rs.appendChild(o);}});
   if(!hotels.length)mqAddRow();
   // flights → one destination box (after rows exist)
   mqAirBlocks();const air=parseAirText(raw,($id('mq-from').value||'').slice(0,4));if(air.length){const ta=document.querySelector('#mq-air-blocks textarea');if(ta){ta.value=raw;mqAirPreview(ta);}}
@@ -2148,7 +2149,7 @@ function downloadQuote(){
 }
 
 const slug=new URLSearchParams(location.search).get('r');
-window.addEventListener('message',e=>{try{const d=e.data||{};if(d&&d.type==='amy-quote-paste'&&typeof d.text==='string'){const go=()=>{const m=$id('mq');if(!m)return false;if(m.style.display==='none')mqToggle();$id('mq-paste').value=d.text;mqPasteAll();window.scrollTo({top:$id('mq-wrap').offsetTop-20,behavior:'smooth'});return true;};if(!go()){let n=0;const t=setInterval(()=>{if(go()||++n>40)clearInterval(t);},250);}}}catch(err){console.warn(err);}});
+window.addEventListener('message',e=>{try{const d=e.data||{};if(d&&d.type==='amy-quote-paste'&&typeof d.text==='string'){const go=()=>{const m=$id('mq');if(!m||!Object.keys(window.LIB||{}).length)return false;if(m.style.display==='none')mqToggle();$id('mq-paste').value=d.text;mqPasteAll();window.scrollTo({top:$id('mq-wrap').offsetTop-20,behavior:'smooth'});return true;};if(!go()){let n=0;const t=setInterval(()=>{if(go()||++n>40)clearInterval(t);},250);}}}catch(err){console.warn(err);}});
 firebase.auth().onAuthStateChanged(()=>{if(slug)loadResort(slug);else{loadPicker().then(()=>{try{renderPickerBaskets();}catch(e){console.warn(e);}if(new URLSearchParams(location.search).get('quick')==='1'){mqToggle();if(window.opener)try{window.opener.postMessage({type:'amy-quote-ready'},'*');}catch(e){}}});}});
 </script>
 </body>
