@@ -981,7 +981,7 @@ function pickerBasketRemove(k,slug){ebBasketSet(ebBasketGet(k).filter(e=>e.slug!
 function filterPicker(q){q=(q||'').trim().toLowerCase();const sel=$id('picker-select');let first=null;[...sel.querySelectorAll('optgroup')].forEach(g=>{let n=0;[...g.querySelectorAll('option')].forEach(o=>{const hit=!q||o.textContent.toLowerCase().includes(q)||o.value.includes(q.replace(/\s+/g,'-'));o.style.display=hit?'':'none';o.disabled=!hit;if(hit){n++;if(!first)first=o;}});g.style.display=n?'':'none';g.disabled=!n;});if(q&&first)sel.value=first.value;else if(!q)sel.value='';sel.size=q?Math.min(12,Math.max(4,[...sel.options].filter(o=>o.value&&!o.disabled).length+2)):1;}
 function goToResort(){const v=$id('picker-select').value;if(v)location.href='?r='+v+(window.CTMODE?'&brand=ct':'');}
 function showPicker(){location.href='?';}
-async function loadResort(slug){
+async function loadResort(slug){window.QUOTE_CT=false;
   try{
     const[profSnap,photosSnap]=await Promise.all([db.collection('resortProfiles').doc(slug).get(),db.collection('resortPhotos').where('resortSlug','==',slug).get()]);
     if(!profSnap.exists){$id('error-msg').textContent='No resort found with slug "'+slug+'".';$id('loading').style.display='none';$id('error').style.display='flex';return;}
@@ -1577,6 +1577,7 @@ function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
   const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
+  window.QUOTE_CT=CT;
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
@@ -2032,8 +2033,8 @@ function autoDocs(section){
   return out;
 }
 function docBtns(section){
-  const seen={};
-  const d=docsFor(section).concat(autoDocs(section)).filter(x=>{
+  const seen={};const ct=!!window.QUOTE_CT;const WED=/wedding|venue|ceremon|bride|bridal|vow|honeymoon|destinationweddings\.com|dwt/i;
+  const d=docsFor(section).concat(autoDocs(section)).filter(x=>!(ct&&(WED.test(String(x.label||''))||/destinationweddings\.com/i.test(String(x.url||''))))).filter(x=>{
     const k=String(x.url||'').trim().replace(/\/+$/,'').toLowerCase();
     if(!k||seen[k])return false; seen[k]=1; return true;
   });
