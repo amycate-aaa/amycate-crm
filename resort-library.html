@@ -710,8 +710,8 @@ let myResortSlugs = new Set();
 
 async function initResortFilter() {
   try {
-    const snap = await db.collection('resortProfiles').where('owner', '==', 'amy').get();
-    myResortSlugs = new Set(snap.docs.map(d => d.id));
+    const snap = await db.collection('resortProfiles').get();
+    myResortSlugs = new Set(snap.docs.filter(d => { const o = d.data().owner; return (!o || o === 'amy') && !/-(maggie|chris)$/.test(d.id); }).map(d => d.id));
     filterResorts('mine'); // default to My Resorts
   } catch(e) {
     console.warn('Resort filter init failed:', e);
