@@ -672,6 +672,7 @@ async function loadResortDropdown() {
       const opt = document.createElement('option');
       opt.value = doc.id;
       opt.textContent = isOwn ? name : `${name} · ${owner.charAt(0).toUpperCase() + owner.slice(1)}`;
+      RESORT_NAMES[doc.id] = name;
       if (!isOwn) {
         opt.style.color = '#888';
         opt.style.fontStyle = 'italic';
@@ -687,6 +688,9 @@ async function loadResortDropdown() {
 
     // Restore last selected resort
     const last = localStorage.getItem('lastResort');
+    if (last && last !== 'other' && ![...sel.options].some(o => o.value === last)) {
+      try { const ds = await db.collection('resortProfiles').doc(last).get(); if (ds.exists) { const dd = ds.data() || {}; const nm = dd.name || dd.resortName || last; const o = new Option(nm, last); sel.insertBefore(o, sel.lastElementChild); RESORT_NAMES[last] = nm; } } catch (e) {}
+    }
     if (last && [...sel.options].some(o => o.value === last)) {
       sel.value = last;
       setTimeout(() => onMasterResortChange(last), 300);
@@ -2456,7 +2460,8 @@ function resortDropdownResort(){
       if(!n && !x.tagline && !x.description && !x.createdAt) return;
       const o = document.createElement('option');
       o.value = d.id;
-      o.textContent = x.resortName || x.name || prettify(d.id);
+      o.textContent = x.name || x.resortName || prettify(d.id);
+      RESORT_NAMES[d.id] = o.textContent;
       sel.appendChild(o); added++;
     });
     // re-sort alphabetically, keeping the placeholder first and "Other" last
@@ -2576,7 +2581,7 @@ body{padding-left:210px !important;padding-bottom:56px !important}
   var sel=document.getElementById('masterResort');
   var slug=sel?sel.value:'';
   var head=document.getElementById('acActive');
-  if(head)head.textContent=sel&&sel.selectedIndex>-1?(sel.options[sel.selectedIndex].text||'\u2014'):'\u2014';
+  if(head){var _t=sel&&sel.selectedIndex>-1?(sel.options[sel.selectedIndex].text||''):'';if(!_t&&slug)_t=(typeof RESORT_NAMES!=='undefined'&&RESORT_NAMES[slug])||slug;head.textContent=_t||'\u2014';}
   function set(label,txt,cls){
    var a=[].slice.call(nav.querySelectorAll('a.nb')).filter(function(x){return x.dataset.label===label;})[0];
    if(!a)return;var b=a.querySelector('.bdg');
