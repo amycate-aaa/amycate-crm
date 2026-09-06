@@ -827,7 +827,7 @@ async function copyToMyLibrary() {
 
 function onMasterResortChange(slug) {
   const uploadRes = document.getElementById('uploadResort');
-  if (uploadRes && slug) {
+  if (uploadRes && slug && uploadRes.tagName === 'SELECT') {
     if (![...uploadRes.options].some(o => o.value === slug)) {
       const ms = document.getElementById('masterResort');
       const mo = ms && [...ms.options].find(o => o.value === slug);
