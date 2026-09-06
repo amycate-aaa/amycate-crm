@@ -495,6 +495,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <div><label class="qb-lbl">Send as</label><select id="mq-brand" class="qb-in"><option value="dw">Destination Weddings Travel Group</option><option value="ct">Celebration Travel</option></select></div>
       <div><label class="qb-lbl">Prices are</label><select id="mq-basis" class="qb-in" onchange="document.querySelectorAll('.mq-price').forEach(mqPriceHint)"><option value="ppn">Per person, per night</option><option value="total">Total for the room</option></select></div>
       <div><label class="qb-lbl">Adults per room</label><input id="mq-occ" class="qb-in" value="2" oninput="document.querySelectorAll('.mq-pkg').forEach(mqPkgHint);document.querySelectorAll('.mq-price').forEach(mqPriceHint)"></div>
+      <div><label class="qb-lbl">Trip size</label><select id="mq-tripsize" class="qb-in"><option value="group">Group — talk about a room block</option><option value="small">Just them — no group talk</option></select></div>
       <div><label class="qb-lbl">Airport transfers</label><select id="mq-xfer" class="qb-in"><option value="no">Not included in these prices</option><option value="yes">Included</option></select></div>
       <div><label class="qb-lbl">Client email <span style="opacity:.6">(optional)</span></label><input id="mq-email" class="qb-in" placeholder="name@example.com"></div>
     </div>
@@ -685,6 +686,10 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <option value="dwt">Destination Weddings Travel Group</option>
         <option value="ct">Celebration Travel</option>
       </select></div>
+      <div class="qb-f"><label>Trip size</label><select id="q-tripsize" title="Small hides the group-block language and the What A Group Gets You section">
+        <option value="group">Group &mdash; talk about a room block</option>
+        <option value="small">Just them &mdash; a couple or a few rooms, no group talk</option>
+      </select></div>
       <div class="qb-f wide"><label>Headline (optional &mdash; something about them)</label><input id="q-headline" placeholder="Five Years Late"></div>
       <div class="qb-f wide"><label>Your Note To Them</label><textarea id="q-note" placeholder="Reflect their brief back in their own words, then say why their instinct is right&hellip;"></textarea></div>
     </div>
@@ -846,7 +851,7 @@ function regionKey(dest,name){const t=(String(dest||'')+' '+String(name||'')).to
   if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
   if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';if(/curacao|curaçao/.test(t))return 'curacao';return '';}
 function destGuideLink(entries,couple){const keys=[...new Set(entries.map(e=>regionKey(e.where,e.name)).filter(Boolean))];if(!keys.length)return '';return location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'destinations')+'?d='+keys.join(',')+(couple?'&for='+encodeURIComponent(couple):'');}
-function mqState(){const F=['mq-couple','mq-date','mq-from','mq-nights','mq-to','mq-brand','mq-basis','mq-occ','mq-xfer','mq-email','mq-note'];const st={f:{},rows:[],air:{},guide:!!($id('mq-guide')||{}).checked,t:Date.now()};F.forEach(k=>{const el=$id(k);if(el)st.f[k]=el.value;});
+function mqState(){const F=['mq-couple','mq-date','mq-from','mq-nights','mq-to','mq-brand','mq-basis','mq-occ','mq-xfer','mq-tripsize','mq-email','mq-note'];const st={f:{},rows:[],air:{},guide:!!($id('mq-guide')||{}).checked,t:Date.now()};F.forEach(k=>{const el=$id(k);if(el)st.f[k]=el.value;});
   st.rows=[...document.querySelectorAll('.mq-row')].map(r=>({slug:r.querySelector('.mq-resort').value,room:r.querySelector('.mq-room').value,price:r.querySelector('.mq-price').value,pkg:r.querySelector('.mq-pkg').value}));
   document.querySelectorAll('#mq-air-blocks [data-dest]').forEach(el=>{st.air[el.dataset.dest]=el.querySelector('textarea').value;});return st;}
 function mqSave(){try{const st=mqState();const hasRows=st.rows.some(r=>r.slug||r.price||r.pkg);const hasName=!!(st.f['mq-couple']||'').trim();if(!hasRows&&!hasName){const prev=JSON.parse(localStorage.getItem('ac_mq')||'null');if(prev&&prev.rows&&prev.rows.some(r=>r.slug||r.price||r.pkg))return;}localStorage.setItem('ac_mq',JSON.stringify(st));localStorage.setItem('ac_mq_bak',JSON.stringify(st));}catch(e){}}
@@ -885,7 +890,7 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   const notReady=rows.map(r=>window.LIB[r.slug]).filter(l=>l&&!l.ready).map(l=>l.name);if(notReady.length&&!confirm('These guides are not complete yet:\n\n'+notReady.join('\n')+'\n\nCreate the quotes anyway?'))return;
   const travel=mqTravelText();const brand=$id('mq-brand').value;const basis=$id('mq-basis').value;const nights=$id('mq-nights').value.trim();const note=$id('mq-note').value.trim();const date=$id('mq-date').value.trim();
   msg.textContent='Creating '+rows.length+' quote'+(rows.length>1?'s':'')+'\u2026';const made=[];
-  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true}};
+  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true}};
     const id=dry?'preview':Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);const enc=encQ(q);
     if(!dry){try{await db.collection('resortProfiles').doc(r.slug).set({quoteLinks:{[id]:{q:enc,t:Date.now()}}},{merge:true});}catch(e){msg.textContent='Could not save '+lib.name+': '+e.message;return;}}
     if(dry){try{localStorage.setItem('ac_preview_'+r.slug,enc);}catch(e){}}
@@ -1145,10 +1150,11 @@ function collectQ(){
       to:tr.querySelector('.a-to').value.trim(),   dep:tr.querySelector('.a-dp').value.trim(),
       arr:tr.querySelector('.a-ar').value.trim()
     })).filter(r=>r.who||r.flight),
-    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o};
+    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group'};
 }
 function applyQ(q){
   if(!q)return;
+  if($id('q-tripsize'))$id('q-tripsize').value=q.tripSize||'group';
   if(q.needAir!=null)$id('q-needair').checked=!!q.needAir;
   toggleAir();
   (q.air||[]).forEach(r=>addAirRow(r));
@@ -1167,7 +1173,7 @@ function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).re
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
 /* Names, dates, brand and flights belong to the trip, not the resort — they are kept
    separately so switching resorts carries them across. Price and rooms stay per resort. */
-const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-head','q-note'];
+const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-tripsize','q-head','q-note'];
 function saveTrip(){
   try{
     const t={};
@@ -1578,6 +1584,7 @@ function renderQuote(){
   const R=P.name||P.resortName||'';
   const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
   window.QUOTE_CT=CT;
+  const SMALL=q.tripSize==='small';   // just them — no group-block language
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
@@ -1768,11 +1775,13 @@ function renderQuote(){
           terms.push('<p>Rates are confirmed at booking. Once your deposit is in, your room and your price are held.</p>');
           const pick=q.prices.length>1?'<p>Pick the room that suits you with the button on its card, and I take it from there.</p>':'';
           return '<div class="note-box" style="margin-top:44px;"><p class="eyebrow" style="margin:0 0 14px;">Booking Terms</p>'+terms.join('')+pick+'</div>';})()
-      :!priced?'':'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
+      :!priced?'':(SMALL
+        ?'<div class="note-box"><p><strong>Nothing is held yet.</strong> This is where the rate lands today \u2014 it moves until the room is booked, and I watch it and tell you if it shifts.</p>'+(q.needAir?'<p>Flights are only held once ticketed; I reprice them the moment you say go.</p>':'<p>What you are seeing is two people sharing; one person or three changes it a little, and I price that properly when we book.</p>')+'</div>'
+        :'<div class="note-box"><p><strong>Nothing is held yet.</strong> These are close enough to plan around, but they are not a quote. At ten rooms or more a group agreement locks your rates against any increase between now and your date; below that everyone books individually at whatever the rate is on the day, and I watch it for you.</p>'+
       (q.needAir
         ?'<p>Flight prices move daily and are only held once ticketed. If your group reaches ten rooms I can hold the room rates against any increase; below that everyone books individually and I look after each reservation the same way. Either way I tell you straight away if anything shifts.</p>'
         :'<p>What you are seeing is two people sharing. Someone travelling alone pays a bit more, three sharing a bit less, and children 3\u201312 come in around a third \u2014 under two, they travel free. I price all of that out properly the moment the agreement rates land.</p>')+
-      '<p>And your guests are not locked to your dates. Three nights, five, ten \u2014 they book what suits them and only ever see the rate for their own room and their own stay.</p></div>'));
+      '<p>And your guests are not locked to your dates. Three nights, five, ten \u2014 they book what suits them and only ever see the rate for their own room and their own stay.</p></div>')));
   }
   if(priced&&ROOMS){S.push(ROOMS);ROOMS='';}   // priced: show it here, near the top
 
@@ -1901,7 +1910,7 @@ function renderQuote(){
 
   /* 14 — GROUP AGREEMENT */
   if(GUEST){}else if(!CT){
-  if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
+  if(q.opts.group&&!SMALL)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
     '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being a holiday everyone books separately and starts being <em>your</em> week. Under ten rooms none of this applies and none of it is needed \u2014 everyone simply books individually and I look after each reservation. Here is what changes once you are over that line.</p>'+
     '<div class="ga-grid">'+
     '<div class="ga-card"><p class="i">&#128274;</p><h4>Your price stops moving</h4><p>Every category we price gets held at today\u2019s number. Rates will go up between now and your date \u2014 yours will not. A guest who decides next spring that they want the ocean view still pays what you are looking at right now.</p></div>'+
@@ -1911,7 +1920,7 @@ function renderQuote(){
     '</div>'+
     '<div class="free-box"><p><strong>None of this is due today.</strong> When you are ready, I go and request your agreement. It comes back in a few days and we get on a call and walk through every line of it together before you sign anything \u2014 you will never be handed a contract and left to figure it out.</p></div>'));
   } else {
-  if(q.opts.group)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
+  if(q.opts.group&&!SMALL)S.push(sec('',head('Better Together','What A Group Gets You')+bandImg('groups')+
     '<p class="small" style="max-width:64ch;margin:0 0 34px;">Once you are at ten rooms or more, this stops being everyone booking separately and starts being <em>your</em> trip. Under ten rooms none of this applies and none of it is needed \u2014 everyone simply books individually and I look after each reservation. Here is what changes once you are over that line.</p>'+
     '<div class="ga-grid">'+
     '<div class="ga-card"><p class="i">&#128274;</p><h4>Your price stops moving</h4><p>Every category we price gets held at today\u2019s number. Rates will go up between now and your dates \u2014 yours will not. Someone who decides months from now that they want the ocean view still pays what you are looking at today.</p></div>'+
@@ -1928,8 +1937,8 @@ function renderQuote(){
     '<div class="steps" style="margin-top:34px;">'+
     '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
     (CT
-      ?'<div><p class="n">02</p><h4>Everyone books through me</h4><p>Each person or couple books their own room and their own dates with me \u2014 one email or call, their deposit, done. Nobody has to book on the same day or for the same nights, and nobody is holding money for anyone else. I keep the list and tell you who is in.</p></div>'+
-       '<div><p class="n">03</p><h4>If the group grows, we can lock it in</h4><p>Optional. If you get to ten rooms or more, I can ask the resort for a group agreement that holds everyone\u2019s rate against increases and earns the group perks \u2014 it comes back in a few days and we walk through it together before anything is signed. Under ten rooms there is nothing to sign, and nothing changes about how people book.</p></div>'
+      ?(SMALL?'<div><p class="n">02</p><h4>You book through me</h4><p>One email or call, your deposit, done \u2014 I hold the room, watch the rate, and handle every change and payment from here on.</p></div>':'<div><p class="n">02</p><h4>Everyone books through me</h4><p>Each person or couple books their own room and their own dates with me \u2014 one email or call, their deposit, done. Nobody has to book on the same day or for the same nights, and nobody is holding money for anyone else. I keep the list and tell you who is in.</p></div>')+
+       (SMALL?'':'<div><p class="n">03</p><h4>If the group grows, we can lock it in</h4><p>Optional. If you get to ten rooms or more, I can ask the resort for a group agreement that holds everyone\u2019s rate against increases and earns the group perks \u2014 it comes back in a few days and we walk through it together before anything is signed. Under ten rooms there is nothing to sign, and nothing changes about how people book.</p></div>')
       :'<div><p class="n">02</p><h4>I request the group agreement</h4><p>Only if you need one. Ten rooms or more and I go to the resort and ask for your contract \u2014 it comes back in a few days, and we get on a call and walk through it together before anything is signed. Under ten rooms there is no agreement and nothing to sign: everyone books individually and I handle each booking for you exactly the same way.</p></div>'+
        '<div><p class="n">03</p><h4>Your guests book</h4><p>With an agreement, your wedding website goes live five to seven business days after signing and your guests book themselves at your locked rates. Without one, they book directly through me. Either way it stops being your job.</p></div>')+
     '</div>'+
