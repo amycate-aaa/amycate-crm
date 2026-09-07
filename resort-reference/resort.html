@@ -1017,7 +1017,7 @@ async function loadResort(slug){window.QUOTE_CT=false;
       ?overviewText.split('\n\n').map(t=>'<p style="margin:0 0 1em">'+esc(t)+'</p>').join('')
       :(descText?'<p>'+esc(descText)+'</p>':'');
     const strip=$id('photo-strip');
-    if(resortWide.length){strip.innerHTML=resortWide.slice(0,10).map(ph=>'<figure><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.caption||ph.category||'')+'" loading="lazy"></figure>').join('');strip.style.display='flex';}
+    if(resortWide.length>=3){strip.innerHTML=resortWide.slice(0,10).map(ph=>'<figure><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.caption||ph.category||'')+'" loading="lazy"></figure>').join('');strip.style.display='flex';}else{strip.innerHTML='';strip.style.display='none';}
     const venues=p.venues||[];
     $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
