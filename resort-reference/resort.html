@@ -678,6 +678,10 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
       <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028" oninput="autoNights()"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
+      <div class="qb-f wide"><label>Fill from paste &mdash; Travel Impressions itinerary or DestiWorld results</label>
+        <textarea id="q-paste" class="qb-in" rows="4" style="width:100%;font-family:monospace;font-size:12px;" placeholder="Paste the whole TI email or the DestiWorld results page here. Dates, adults, flights and this resort\u2019s room and price fill in; other resorts in the paste are ignored."></textarea>
+        <div style="margin-top:6px;display:flex;gap:8px;align-items:center;"><button type="button" class="qb-btn ghost" onclick="qbPasteAll()">Fill from paste</button><span id="q-paste-msg" class="small"></span></div>
+      </div>
       <div class="qb-f"><label>Quote Type</label><select id="q-mode" onchange="toggleMode()">
         <option value="resort">Resort quote &mdash; helping them choose</option>
         <option value="guest">Guest quote &mdash; resort chosen, booking a room</option>
@@ -1509,6 +1513,22 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
   rows=rows.filter(r=>r.flight);
   const cityOf0=c=>(window.AIRPORT_CITY||{})[String(c||'').toUpperCase()]||'';
   const first=rows[0];const home=first?(cityOf0(first.from)||first.fromCity||first.from||''):'';rows.forEach(r=>{r.who=home;delete r.fromCity;});return rows;}
+function qbPasteAll(){const raw=($id('q-paste')||{}).value||'';const msg=$id('q-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}const out=[];
+  const ad=raw.match(/(\d+)\s+Adults?/i);const adults=ad?parseInt(ad[1],10):2;
+  const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const pd=t=>{let m;if(m=t.match(/(\d{1,2})\s*([A-Za-z]{3})\s*(\d{2,4})/)){const mo=MON[m[2].toLowerCase()];if(mo==null)return null;const y=m[3].length===2?'20'+m[3]:m[3];return new Date(+y,mo,+m[1]);}return null;};
+  let ci=raw.match(/Check-?In Date:\s*([^\n]+)/i),co=raw.match(/Check-?Out Date:\s*([^\n]+)/i);if(!ci){ci=raw.match(/From:\s*(\d{1,2} \w{3} \d{4})/);co=raw.match(/To:\s*(\d{1,2} \w{3} \d{4})/);}
+  let nights=0;if(ci&&co){const a=pd(ci[1]),b=pd(co[1]);if(a&&b){nights=Math.round((b-a)/864e5);const same=a.getMonth()===b.getMonth();$id('q-travel').value=MN[a.getMonth()]+' '+a.getDate()+' \u2013 '+(same?'':MN[b.getMonth()]+' ')+b.getDate()+', '+b.getFullYear();autoNights&&autoNights();out.push('dates');}}
+  // flights
+  const air=parseAirText(raw);if(air.length){$id('q-airtext').value=raw;parseAirBlock();out.push(air.length+' flights');}
+  // this resort
+  const hotels=mqParseHotels(raw);const mine=hotels.filter(h=>mqBestSlug(h.name)===SLUG);
+  if(mine.length){const h=mine[0];const room=mqBestRoom(SLUG,h.room)||h.room;const total=parseFloat(String(h.total||'').replace(/,/g,''));
+    if(total){if(air.length){$id('q-pkgprice').value=String(Math.round(total/adults));$id('q-pkgcovers').value='Flights, '+(nights||parseInt($id('q-nights').value,10)||'')+' nights all-inclusive';addRoomRow(room,'');out.push(room+' \u2014 $'+Math.round(total/adults)+' pp with flights');}
+      else{const ppn=nights?Math.round(total/adults/nights):'';addRoomRow(room,ppn?String(ppn):'');out.push(room+(ppn?' \u2014 $'+ppn+' pp/night':''));}}
+    else addRoomRow(room,'');}
+  else if(hotels.length)out.push('no '+(window.LIB[SLUG]||{}).name+' in the paste ('+hotels.map(h=>h.name).join(', ')+')');
+  saveLocal&&saveLocal();msg.textContent=out.length?'Filled: '+out.join(' \u00b7 '):'Nothing recognised \u2014 paste the TI email or the DestiWorld results page.';}
 function parseAirBlock(){
   const msg=$id('q-air-msg');const rows=parseAirText($id('q-airtext').value);
   if(!rows.length){msg.className='airmsg bad';msg.textContent='No flight numbers found \u2014 paste one flight per line, e.g. UA 1167 14MAY IAHPUJ.';return;}
