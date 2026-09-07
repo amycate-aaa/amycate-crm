@@ -1471,6 +1471,7 @@ function wireAir(){
   });
 }
 const AIRLINE_NAMES={united:'UA',american:'AA',delta:'DL',southwest:'WN',jetblue:'B6',spirit:'NK',frontier:'F9',alaska:'AS','air canada':'AC',westjet:'WS',aeromexico:'AM','aeroméxico':'AM',volaris:'Y4','viva aerobus':'VB',copa:'CM',sun:'SY','sun country':'SY',avianca:'AV',interjet:'4O'};
+window.AIRPORT_CITY={IAH:'Houston',HOU:'Houston',DFW:'Dallas',DAL:'Dallas',AUS:'Austin',SAT:'San Antonio',DEN:'Denver',ATL:'Atlanta',ORD:'Chicago',MDW:'Chicago',LAX:'Los Angeles',SFO:'San Francisco',JFK:'New York',EWR:'Newark',LGA:'New York',BOS:'Boston',MIA:'Miami',FLL:'Fort Lauderdale',MCO:'Orlando',TPA:'Tampa',PHX:'Phoenix',LAS:'Las Vegas',SEA:'Seattle',MSP:'Minneapolis',DTW:'Detroit',CLT:'Charlotte',PHL:'Philadelphia',DCA:'Washington',IAD:'Washington',BWI:'Baltimore',STL:'St. Louis',MCI:'Kansas City',OKC:'Oklahoma City',TUL:'Tulsa',MSY:'New Orleans',BNA:'Nashville',RDU:'Raleigh',SLC:'Salt Lake City',PDX:'Portland',SAN:'San Diego',SYR:'Syracuse',ROC:'Rochester',BUF:'Buffalo',ALB:'Albany',PIT:'Pittsburgh',CLE:'Cleveland',CMH:'Columbus',CVG:'Cincinnati',IND:'Indianapolis',MKE:'Milwaukee',OMA:'Omaha',MEM:'Memphis',LIT:'Little Rock',SAV:'Savannah',JAX:'Jacksonville',RSW:'Fort Myers',PBI:'West Palm Beach',SDF:'Louisville',BHM:'Birmingham',ABQ:'Albuquerque',ELP:'El Paso',CRP:'Corpus Christi',MAF:'Midland',LBB:'Lubbock',AMA:'Amarillo',YYZ:'Toronto',YVR:'Vancouver',YYC:'Calgary',YUL:'Montreal',CUN:'Cancún',PUJ:'Punta Cana',SJD:'Los Cabos',PVR:'Puerto Vallarta',MBJ:'Montego Bay',KIN:'Kingston',NAS:'Nassau',UVF:'St. Lucia',AUA:'Aruba',CUR:'Curaçao',ANU:'Antigua',LRM:'La Romana',SDQ:'Santo Domingo',POP:'Puerto Plata',SJU:'San Juan',CZM:'Cozumel',MEX:'Mexico City',PTY:'Panama City',SJO:'San José',LIR:'Liberia',BGI:'Barbados',GCM:'Grand Cayman',PLS:'Providenciales',STT:'St. Thomas',SXM:'St. Maarten',BZE:'Belize City',HAV:'Havana',HNL:'Honolulu',OGG:'Maui',ORL:'Orlando',SNA:'Orange County',SMF:'Sacramento',SJC:'San José CA',OAK:'Oakland',HSV:'Huntsville',GSP:'Greenville',CHS:'Charleston',ORF:'Norfolk',RIC:'Richmond',PVD:'Providence',BDL:'Hartford',MHT:'Manchester',GRR:'Grand Rapids',DSM:'Des Moines',MSN:'Madison',BOI:'Boise',TUS:'Tucson',RNO:'Reno',ANC:'Anchorage',DAY:'Dayton',BTV:'Burlington',PWM:'Portland ME'};
 function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
   const MON={JAN:1,FEB:2,MAR:3,APR:4,MAY:5,JUN:6,JUL:7,AUG:8,SEP:9,OCT:10,NOV:11,DEC:12};
   const year=(()=>{const m=raw.match(/\b(20\d\d)\b/);if(m)return +m[1];const t=String(yearHint||($id('q-travel')&&$id('q-travel').value)||'').match(/20\d\d/);return t?+t[0]:new Date().getFullYear();})();
@@ -1505,7 +1506,7 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
     else if(cur){if(!cur.date&&dt)cur.date=dt;if(!cur.from&&from)cur.from=from;if(!cur.to&&to)cur.to=to;if(!cur.dep&&times[0])cur.dep=times[0];if(!cur.arr&&times[1])cur.arr=times[1];}
   });
   rows=rows.filter(r=>r.flight);
-  const cityOf0=c=>({IAH:'Houston',HOU:'Houston',DFW:'Dallas',DAL:'Dallas',AUS:'Austin',SAT:'San Antonio',DEN:'Denver',ATL:'Atlanta',ORD:'Chicago',MDW:'Chicago',LAX:'Los Angeles',SFO:'San Francisco',JFK:'New York',EWR:'Newark',LGA:'New York',BOS:'Boston',MIA:'Miami',FLL:'Fort Lauderdale',MCO:'Orlando',TPA:'Tampa',PHX:'Phoenix',LAS:'Las Vegas',SEA:'Seattle',MSP:'Minneapolis',DTW:'Detroit',CLT:'Charlotte',PHL:'Philadelphia',DCA:'Washington',IAD:'Washington',BWI:'Baltimore',STL:'St. Louis',MCI:'Kansas City',OKC:'Oklahoma City',TUL:'Tulsa',MSY:'New Orleans',BNA:'Nashville',RDU:'Raleigh',SLC:'Salt Lake City',PDX:'Portland',SAN:'San Diego',SYR:'Syracuse',ROC:'Rochester',BUF:'Buffalo',ALB:'Albany',PIT:'Pittsburgh',CLE:'Cleveland',CMH:'Columbus',CVG:'Cincinnati',IND:'Indianapolis',MKE:'Milwaukee',OMA:'Omaha',MEM:'Memphis',LIT:'Little Rock',SAV:'Savannah',JAX:'Jacksonville',RSW:'Fort Myers',PBI:'West Palm Beach',SDF:'Louisville',BHM:'Birmingham',ABQ:'Albuquerque',ELP:'El Paso',CRP:'Corpus Christi',MAF:'Midland',LBB:'Lubbock',AMA:'Amarillo',YYZ:'Toronto',YVR:'Vancouver',YYC:'Calgary',YUL:'Montreal'})[c]||'';
+  const cityOf0=c=>(window.AIRPORT_CITY||{})[String(c||'').toUpperCase()]||'';
   const first=rows[0];const home=first?(cityOf0(first.from)||first.fromCity||first.from||''):'';rows.forEach(r=>{r.who=home;delete r.fromCity;});return rows;}
 function parseAirBlock(){
   const msg=$id('q-air-msg');const rows=parseAirText($id('q-airtext').value);
@@ -1680,7 +1681,8 @@ function renderQuote(){
       '</tr></thead><tbody>'+
       rows.map((r,i)=>{
         const same=i>0 && String(rows[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
-        return '<tr'+(same?' class="leg"':'')+'><td class="city">'+(same?'':esc(r.who||'\u2014'))+'</td>'+
+        const depCity=(window.AIRPORT_CITY||{})[String(r.from||'').toUpperCase()]||r.who||'\u2014';
+        return '<tr'+(same?' class="leg"':'')+'><td class="city">'+esc(depCity)+'</td>'+
         (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
         '<td>'+esc(r.date||'\u2014')+'</td>'+
         (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
