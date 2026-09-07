@@ -1288,7 +1288,7 @@ function toggleMode(){
 function toggleBasis(){
   const el=document.querySelector('input[name="q-basis"]:checked');const total=el&&el.value==='total';
   if($id('q-nightsbox'))$id('q-nightsbox').style.display=total?'inline':'none';
-  if($id('q-pricecol'))$id('q-pricecol').textContent=total?'Total For The Room':'Per Person / Night';
+  if($id('q-pricecol')&&!($id('q-needair')&&$id('q-needair').checked))$id('q-pricecol').textContent=total?'Total For The Room':'Per Person / Night';
   const pr=$id('q-priced');if(pr&&(!pr.value||pr.value==='Per person, per night'||pr.value==='Total for the room'))pr.value=total?'Total for the room':'Per person, per night';
   const h=$id('q-pricehint');if(h&&!$id('q-needair').checked)h.innerHTML=total
     ?'Add only the categories you are actually pricing. Enter the <strong>total for the room</strong> for the whole stay, exactly as the operator quotes it, two people sharing. Per person is worked out for you; add the number of nights and per night is too.'
@@ -1446,6 +1446,7 @@ async function emailDraft(){
 }
 function toggleAir(){ const on=$id('q-needair').checked;
   $id('q-airbox').style.display=on?'block':'none';
+  {const th=$id('q-pricecol');const hint=$id('q-pricehint');if(on){if(th)th.textContent='With Flights, Per Person';if(hint)hint.textContent='With air on, each room\u2019s number is the per-person package price \u2014 flights, room, transfers, taxes \u2014 for the whole stay. The page prints it that way.';}else{if(th)th.textContent=(document.querySelector('input[name="q-basis"]:checked')||{}).value==='total'?'Total For The Room':'Per Person / Night';if(hint)hint.textContent='Add only the categories you are actually pricing. Per person, per night, based on double occupancy \u2014 just the number.';}}
   $id('q-pkgbox').style.display=on?'block':'none';
   const cv=$id('q-pkgcovers');
   if(on&&cv&&!cv.value.trim())cv.value='Flights, 3 nights all-inclusive and roundtrip airport transfers';
