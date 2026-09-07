@@ -720,7 +720,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <button type="button" class="qb-btn ghost" onclick="addAllRooms()">Add all</button>
     </div>
     <div style="overflow-x:auto;"><table class="qb-rooms"><thead><tr>
-      <th style="min-width:220px;">Room Category</th><th style="width:200px;" id="q-pricecol">Per Person / Night</th><th style="width:44px;"></th>
+      <th style="min-width:220px;">Room Category</th><th style="width:160px;" id="q-pricecol">Per Person / Night</th><th style="width:170px;" class="q-pkcol" style="display:none;">With Flights, Per Person</th><th style="width:44px;"></th>
     </tr></thead><tbody id="q-price-rows"></tbody></table></div>
 
     <div id="q-pkgbox" style="display:none;margin-bottom:26px;">
@@ -1133,9 +1133,9 @@ function renderDownloads(){
 /* ══════════════════ QUOTE STATE ══════════════════ */
 function collectQ(){
   const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{
-    const el=tr.querySelector('.d');
-    return el?{name:tr.dataset.name,ppn:el.value.trim()}:null;
-  }).filter(r=>r&&r.ppn);
+    const el=tr.querySelector('.d');const pk=tr.querySelector('.pk');
+    return el?{name:tr.dataset.name,ppn:el.value.trim(),pkg:pk?pk.value.trim():''}:null;
+  }).filter(r=>r&&(r.ppn||r.pkg));
   const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
   const basisEl=document.querySelector('input[name="q-basis"]:checked');
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
@@ -1172,7 +1172,7 @@ function applyQ(q){
   if(q.basis){const r=document.querySelector('input[name="q-basis"][value="'+q.basis+'"]');if(r)r.checked=true;}
   toggleMode();toggleBasis();
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el&&k!=='gallery')el.checked=!!q.opts[k];});
-  (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||''));
+  (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||'',r.pkg||''));togglePkCol();
 }
 function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
@@ -1251,19 +1251,21 @@ function syncRooms(){
   if(!tb.querySelector('tr[data-name]')){tb.innerHTML=NOROOMS;}
   else{const ph=$id('q-norooms');if(ph)ph.remove();}
 }
-function addRoomRow(name,val){
+function addRoomRow(name,val,pkg){
   const n=(name||$id('q-room-add').value||'').trim();
   if(!n)return;
   if([...document.querySelectorAll('#q-price-rows tr[data-name]')].some(t=>t.dataset.name===n))return;
   $id('q-price-rows').insertAdjacentHTML('beforeend',
     '<tr data-name="'+esc(n)+'"><td>'+esc(n)+'</td>'+
     '<td><input class="d" placeholder="309" value="'+esc(val||'')+'"></td>'+
+    '<td class="q-pkcol"><input class="pk" placeholder="2197" value="'+esc(pkg||'')+'"></td>'+
     '<td><button type="button" class="rx" title="Remove">\u00d7</button></td></tr>');
-  syncRooms();wireRooms();
+  syncRooms();wireRooms();togglePkCol();
 }
+function togglePkCol(){const on=!!($id('q-needair')&&$id('q-needair').checked);document.querySelectorAll('.q-pkcol').forEach(el=>el.style.display=on?'':'none');}
 function addAllRooms(){ROOMCATS.forEach(n=>addRoomRow(n));}
 function wireRooms(){
-  document.querySelectorAll('#q-price-rows .d').forEach(el=>{
+  document.querySelectorAll('#q-price-rows .d, #q-price-rows .pk').forEach(el=>{
     el.classList.toggle('on',!!el.value.trim());
     el.oninput=function(){el.classList.toggle('on',!!el.value.trim());saveLocal();};
   });
@@ -1288,7 +1290,7 @@ function toggleMode(){
 function toggleBasis(){
   const el=document.querySelector('input[name="q-basis"]:checked');const total=el&&el.value==='total';
   if($id('q-nightsbox'))$id('q-nightsbox').style.display=total?'inline':'none';
-  if($id('q-pricecol')&&!($id('q-needair')&&$id('q-needair').checked))$id('q-pricecol').textContent=total?'Total For The Room':'Per Person / Night';
+  if($id('q-pricecol'))$id('q-pricecol').textContent=total?'Total For The Room':'Per Person / Night';
   const pr=$id('q-priced');if(pr&&(!pr.value||pr.value==='Per person, per night'||pr.value==='Total for the room'))pr.value=total?'Total for the room':'Per person, per night';
   const h=$id('q-pricehint');if(h&&!$id('q-needair').checked)h.innerHTML=total
     ?'Add only the categories you are actually pricing. Enter the <strong>total for the room</strong> for the whole stay, exactly as the operator quotes it, two people sharing. Per person is worked out for you; add the number of nights and per night is too.'
@@ -1445,8 +1447,8 @@ async function emailDraft(){
   if(compareLink){const bk=$id('eb-basket');if(bk)bk.innerHTML+=' <a href="'+compareLink+'" target="_blank" style="color:var(--gold);">Open the comparison \u2192</a>';}
 }
 function toggleAir(){ const on=$id('q-needair').checked;
-  $id('q-airbox').style.display=on?'block':'none';
-  {const th=$id('q-pricecol');const hint=$id('q-pricehint');if(on){if(th)th.textContent='With Flights, Per Person';if(hint)hint.textContent='With air on, each room\u2019s number is the per-person package price \u2014 flights, room, transfers, taxes \u2014 for the whole stay. The page prints it that way.';}else{if(th)th.textContent=(document.querySelector('input[name="q-basis"]:checked')||{}).value==='total'?'Total For The Room':'Per Person / Night';if(hint)hint.textContent='Add only the categories you are actually pricing. Per person, per night, based on double occupancy \u2014 just the number.';}}
+  $id('q-airbox').style.display=on?'block':'none';togglePkCol();
+  {const th=$id('q-pricecol');const hint=$id('q-pricehint');if(on){if(hint)hint.textContent='Left column: the room price (per night or total, as chosen). Right column: the per-person package with flights for the whole stay. Fill either or both.';}else{if(th)th.textContent=(document.querySelector('input[name="q-basis"]:checked')||{}).value==='total'?'Total For The Room':'Per Person / Night';if(hint)hint.textContent='Add only the categories you are actually pricing. Per person, per night, based on double occupancy \u2014 just the number.';}}
   $id('q-pkgbox').style.display=on?'block':'none';
   const cv=$id('q-pkgcovers');
   if(on&&cv&&!cv.value.trim())cv.value='Flights, 3 nights all-inclusive and roundtrip airport transfers';
@@ -1526,8 +1528,7 @@ function qbPasteAll(){const raw=($id('q-paste')||{}).value||'';const msg=$id('q-
   const hotels=mqParseHotels(raw);const mine=hotels.filter(h=>mqBestSlug(h.name)===SLUG);
   if(mine.length){const N=nights||parseInt($id('q-nights').value,10)||0;const rows=mine.map(h=>({room:mqBestRoom(SLUG,h.room)||h.room,total:parseFloat(String(h.total||'').replace(/,/g,''))||0}));
     if(air.length){/* air-inclusive: every room row is a per-person package price */
-      rows.forEach(r=>addRoomRow(r.room,r.total?String(Math.round(r.total/adults)):''));
-      $id('q-priced').value='Per person, including flights, '+N+' nights all-inclusive, taxes and transfers';
+      rows.forEach(r=>addRoomRow(r.room,'',r.total?String(Math.round(r.total/adults)):''));
       const lo=rows.filter(r=>r.total).map(r=>Math.round(r.total/adults));if(lo.length){$id('q-pkgprice').value=String(Math.min(...lo));$id('q-pkgcovers').value='Flights, '+N+' nights all-inclusive, taxes and roundtrip transfers \u2014 from the lowest room shown';}
       const ex=$id('o-example');if(ex)ex.checked=false;
       out.push(rows.length+' room'+(rows.length===1?'':'s')+' with flights: '+rows.map(r=>r.room+' $'+(r.total?Math.round(r.total/adults):'?')).join(', '));}
@@ -1772,14 +1773,15 @@ function renderQuote(){
             return'<div class="pcard'+(pics.length>1?' hasgal':'')+'">'+(img?'<img class="main" src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">'+gal:'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
-              (r.ppn?(function(){
-                  if(q.needAir)return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person<br>flights, room and transfers</p></div>';
+              ((r.ppn||r.pkg)?(function(){
+                  if(q.needAir&&!r.ppn)return '<div class="rows"><p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>flights, room and transfers</p></div>';
+                  const PK=(q.needAir&&r.pkg)?'<p class="ppnbreak" style="margin-top:8px;"><strong>'+esc(money(r.pkg))+'</strong> per person with flights, room and transfers</p>':'';
                   const OCC=parseInt(q.occ,10)||2;const occTxt=OCC===2?'two people sharing':OCC+' adults sharing';
                   if(TOTAL){const t=num(r.ppn);const pp=t?t/OCC:0;const pn=(t&&NIGHTS)?pp/NIGHTS:0;
                     return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', '+occTxt:'<br>'+occTxt)+'</p>'+
-                      (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+'</div>';}
+                      (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+PK+'</div>';}
                   {const t=num(r.ppn);const NN=NIGHTS||nightsFromTravel(q.travel)||0;const tot=(t&&NN)?t*OCC*NN:0;
-                    return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p>'+(tot?'<p class="ppnbreak">'+esc(money((t*NN).toFixed(0)))+' per person for '+NN+' night'+(NN===1?'':'s')+' &nbsp;&#10022;&nbsp; '+esc(money(tot.toFixed(0)))+' total for the room</p>':'')+'</div>';}})():'')+
+                    return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p>'+(tot?'<p class="ppnbreak">'+esc(money((t*NN).toFixed(0)))+' per person for '+NN+' night'+(NN===1?'':'s')+' &nbsp;&#10022;&nbsp; '+esc(money(tot.toFixed(0)))+' total for the room</p>':'')+PK+'</div>';}})():'')+
               (GUEST?'<p style="margin:18px 0 0;">'+(q.bookLink
                   ?'<a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a>'
                   :'<a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+r.name+' at '+R+(q.couple?' \u2014 '+q.couple:''))+'&body='+encodeURIComponent('Hi Amy,\n\nI\u2019ll take the '+r.name+' at '+R+(q.travel?' for '+q.travel:'')+'.\n\n'+((q.guests||[]).length?'Travelling: '+q.guests.join(', ')+'\n\n':''))+'">I\u2019ll take this room \u2192</a>')+'</p>':'')+
