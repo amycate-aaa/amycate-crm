@@ -1523,10 +1523,14 @@ function qbPasteAll(){const raw=($id('q-paste')||{}).value||'';const msg=$id('q-
   const air=parseAirText(raw);if(air.length){$id('q-airtext').value=raw;parseAirBlock();out.push(air.length+' flights');}
   // this resort
   const hotels=mqParseHotels(raw);const mine=hotels.filter(h=>mqBestSlug(h.name)===SLUG);
-  if(mine.length){const h=mine[0];const room=mqBestRoom(SLUG,h.room)||h.room;const total=parseFloat(String(h.total||'').replace(/,/g,''));
-    if(total){if(air.length){$id('q-pkgprice').value=String(Math.round(total/adults));$id('q-pkgcovers').value='Flights, '+(nights||parseInt($id('q-nights').value,10)||'')+' nights all-inclusive';addRoomRow(room,'');out.push(room+' \u2014 $'+Math.round(total/adults)+' pp with flights');}
-      else{const ppn=nights?Math.round(total/adults/nights):'';addRoomRow(room,ppn?String(ppn):'');out.push(room+(ppn?' \u2014 $'+ppn+' pp/night':''));}}
-    else addRoomRow(room,'');}
+  if(mine.length){const N=nights||parseInt($id('q-nights').value,10)||0;const rows=mine.map(h=>({room:mqBestRoom(SLUG,h.room)||h.room,total:parseFloat(String(h.total||'').replace(/,/g,''))||0}));
+    if(air.length){/* air-inclusive: every room row is a per-person package price */
+      rows.forEach(r=>addRoomRow(r.room,r.total?String(Math.round(r.total/adults)):''));
+      $id('q-priced').value='Per person, including flights, '+N+' nights all-inclusive, taxes and transfers';
+      const lo=rows.filter(r=>r.total).map(r=>Math.round(r.total/adults));if(lo.length){$id('q-pkgprice').value=String(Math.min(...lo));$id('q-pkgcovers').value='Flights, '+N+' nights all-inclusive, taxes and roundtrip transfers \u2014 from the lowest room shown';}
+      const ex=$id('o-example');if(ex)ex.checked=false;
+      out.push(rows.length+' room'+(rows.length===1?'':'s')+' with flights: '+rows.map(r=>r.room+' $'+(r.total?Math.round(r.total/adults):'?')).join(', '));}
+    else{rows.forEach(r=>{const ppn=(r.total&&N)?Math.round(r.total/adults/N):'';addRoomRow(r.room,ppn?String(ppn):'');});out.push(rows.length+' room'+(rows.length===1?'':'s')+' per person per night');}}
   else if(hotels.length)out.push('no '+(window.LIB[SLUG]||{}).name+' in the paste ('+hotels.map(h=>h.name).join(', ')+')');
   saveLocal&&saveLocal();msg.textContent=out.length?'Filled: '+out.join(' \u00b7 '):'Nothing recognised \u2014 paste the TI email or the DestiWorld results page.';}
 function parseAirBlock(){
