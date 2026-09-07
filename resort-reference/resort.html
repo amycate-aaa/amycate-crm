@@ -742,6 +742,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 
     <p class="qb-h">Flights</p>
     <label class="airtoggle"><input type="checkbox" id="q-needair" onchange="toggleAir()"> This group needs air</label>
+    <label class="airtoggle" style="margin-left:14px;">Airport transfers <select id="q-xfer" class="qb-in" style="width:auto;display:inline-block;margin-left:6px;" onchange="saveLocal()"><option value="no">Not included in these prices</option><option value="yes">Included</option></select></label>
     <div id="q-airbox" style="display:none;">
       <p class="qb-note">One row per flight. Type the flight number and date, press Look up, and the airports and times fill themselves. For a connection, add another row with the <em>same</em> city name and the quote shows them as legs of one journey.</p>
       <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
@@ -1155,11 +1156,12 @@ function collectQ(){
       to:tr.querySelector('.a-to').value.trim(),   dep:tr.querySelector('.a-dp').value.trim(),
       arr:tr.querySelector('.a-ar').value.trim()
     })).filter(r=>r.who||r.flight),
-    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group'};
+    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group',xfer:(($id('q-xfer')||{}).value||'no')==='yes'};
 }
 function applyQ(q){
   if(!q)return;
   if($id('q-tripsize'))$id('q-tripsize').value=q.tripSize||'group';
+  if($id('q-xfer'))$id('q-xfer').value=q.xfer?'yes':'no';
   if(q.needAir!=null)$id('q-needair').checked=!!q.needAir;
   toggleAir();
   (q.air||[]).forEach(r=>addAirRow(r));
@@ -1178,7 +1180,7 @@ function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).re
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
 /* Names, dates, brand and flights belong to the trip, not the resort — they are kept
    separately so switching resorts carries them across. Price and rooms stay per resort. */
-const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-tripsize','q-head','q-note'];
+const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-tripsize','q-xfer','q-head','q-note'];
 function saveTrip(){
   try{
     const t={};
@@ -1529,7 +1531,7 @@ function qbPasteAll(){const raw=($id('q-paste')||{}).value||'';const msg=$id('q-
   if(mine.length){const N=nights||parseInt($id('q-nights').value,10)||0;const rows=mine.map(h=>({room:mqBestRoom(SLUG,h.room)||h.room,total:parseFloat(String(h.total||'').replace(/,/g,''))||0}));
     if(air.length){/* air-inclusive: every room row is a per-person package price */
       rows.forEach(r=>addRoomRow(r.room,'',r.total?String(Math.round(r.total/adults)):''));
-      const lo=rows.filter(r=>r.total).map(r=>Math.round(r.total/adults));if(lo.length){$id('q-pkgprice').value=String(Math.min(...lo));$id('q-pkgcovers').value='Flights, '+N+' nights all-inclusive, taxes and roundtrip transfers \u2014 from the lowest room shown';}
+      const lo=rows.filter(r=>r.total).map(r=>Math.round(r.total/adults));if(lo.length){$id('q-pkgprice').value=String(Math.min(...lo));$id('q-pkgcovers').value='Flights, '+N+' nights all-inclusive and taxes'+((($id('q-xfer')||{}).value||'no')==='yes'?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+' \u2014 from the lowest room shown';}
       const ex=$id('o-example');if(ex)ex.checked=false;
       out.push(rows.length+' room'+(rows.length===1?'':'s')+' with flights: '+rows.map(r=>r.room+' $'+(r.total?Math.round(r.total/adults):'?')).join(', '));}
     else{rows.forEach(r=>{const ppn=(r.total&&N)?Math.round(r.total/adults/N):'';addRoomRow(r.room,ppn?String(ppn):'');});out.push(rows.length+' room'+(rows.length===1?'':'s')+' per person per night');}}
@@ -1774,8 +1776,8 @@ function renderQuote(){
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
               ((r.ppn||r.pkg)?(function(){
-                  if(q.needAir&&!r.ppn)return '<div class="rows"><p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>flights, room and transfers</p></div>';
-                  const PK=(q.needAir&&r.pkg)?'<p class="ppnbreak" style="margin-top:8px;"><strong>'+esc(money(r.pkg))+'</strong> per person with flights, room and transfers</p>':'';
+                  const XT=q.xfer?'flights, room and transfers':'flights and room \u2014 airport transfers extra';if(q.needAir&&!r.ppn)return '<div class="rows"><p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p></div>';
+                  const PK=(q.needAir&&r.pkg)?'<p class="ppnbreak" style="margin-top:8px;"><strong>'+esc(money(r.pkg))+'</strong> per person with '+XT+'</p>':'';
                   const OCC=parseInt(q.occ,10)||2;const occTxt=OCC===2?'two people sharing':OCC+' adults sharing';
                   if(TOTAL){const t=num(r.ppn);const pp=t?t/OCC:0;const pn=(t&&NIGHTS)?pp/NIGHTS:0;
                     return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', '+occTxt:'<br>'+occTxt)+'</p>'+
