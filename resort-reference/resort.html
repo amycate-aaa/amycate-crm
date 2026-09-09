@@ -509,6 +509,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <p class="eyebrow" style="margin:26px 0 8px;">Flights <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; once per destination, applied to every resort there</span></p>
       <div id="mq-air-blocks"></div>
     </div>
+    <label class="airtoggle" style="margin-top:18px;display:inline-flex;gap:8px;align-items:center;margin-right:18px;"><input type="checkbox" id="mq-faq"> Add &ldquo;How working with me works&rdquo; (FAQ + timeline) to each quote page</label>
     <label class="airtoggle" style="margin-top:18px;display:inline-flex;gap:8px;align-items:center;"><input type="checkbox" id="mq-guide" checked> Include the destination guide in the email (the short version of each place they're looking at)</label>
     <p class="eyebrow" style="margin:26px 0 8px;">Your note <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; goes on every quote page</span></p>
     <textarea id="mq-note" class="qb-in" rows="4" style="width:100%;" placeholder="Optional. What you'd say to them about this shortlist."></textarea>
@@ -779,6 +780,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <label><input type="checkbox" id="o-gallery"> Photo gallery</label>
       <label><input type="checkbox" id="o-docs" checked> More info</label>
       <label><input type="checkbox" id="o-group" checked> What a group gets you</label>
+      <label><input type="checkbox" id="o-faq"> How working with me works (FAQ + timeline)</label>
       <label><input type="checkbox" id="o-steps" checked> Next steps</label>
     </div>
 
@@ -898,7 +900,7 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   const notReady=rows.map(r=>window.LIB[r.slug]).filter(l=>l&&!l.ready).map(l=>l.name);if(notReady.length&&!confirm('These guides are not complete yet:\n\n'+notReady.join('\n')+'\n\nCreate the quotes anyway?'))return;
   const travel=mqTravelText();const brand=$id('mq-brand').value;const basis=$id('mq-basis').value;const nights=$id('mq-nights').value.trim();const note=$id('mq-note').value.trim();const date=$id('mq-date').value.trim();
   msg.textContent='Creating '+rows.length+' quote'+(rows.length>1?'s':'')+'\u2026';const made=[];
-  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true}};
+  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true,faq:!!(($id('mq-faq')||{}).checked)}};
     const id=dry?'preview':Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);const enc=encQ(q);
     if(!dry){try{await db.collection('resortProfiles').doc(r.slug).set({quoteLinks:{[id]:{q:enc,t:Date.now()}}},{merge:true});}catch(e){msg.textContent='Could not save '+lib.name+': '+e.message;return;}}
     if(dry){try{localStorage.setItem('ac_preview_'+r.slug,enc);}catch(e){}}
@@ -1140,7 +1142,7 @@ function collectQ(){
     const el=tr.querySelector('.d');const pk=tr.querySelector('.pk');
     return el?{name:tr.dataset.name,ppn:el.value.trim(),pkg:pk?pk.value.trim():''}:null;
   }).filter(r=>r&&(r.ppn||r.pkg));
-  const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps'].forEach(k=>o[k]=$id('o-'+k).checked);
+  const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps','faq'].forEach(k=>{const el=$id('o-'+k);o[k]=el?el.checked:false;});
   const basisEl=document.querySelector('input[name="q-basis"]:checked');
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
     priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
@@ -1968,6 +1970,13 @@ function renderQuote(){
 
 
   /* 15 — NEXT STEPS */
+  if(q.opts.faq&&!GUEST){const QA=[['What does this cost me?','Nothing. Not for you, not for a single person you bring. The resorts pay my side, so my time never costs anybody anything.'],['Am I committing to anything?','Nope. Ask me questions for six months and never book \u2014 that happens all the time. Though I\u2019m secretly hoping you love me and book.'],['Do I still get to decide things?','All of it. You pick the place, the resort, the room, the date. I just bring you real options instead of guesses.'],['We have no idea where we want to go.','Perfect \u2014 that\u2019s where most people start. Tell me the vibe and the budget and I\u2019ll bring you three.'],['What if it\u2019s just us \u2014 or just a few of us?','Still yes. Two people or ninety, I plan it the same way. Smaller trips just work a little differently and I\u2019ll walk you through it.'],['Will you push me toward one resort?','No. My job is to narrow it down, not talk you into anything. If a resort isn\u2019t right for you, I\u2019ll say so.'],['We already started looking ourselves.','Send me what you found. I\u2019ll tell you if it\u2019s a good price and what the place is really like.'],['Does everyone have to figure out their own ride from the airport?','Nope \u2014 that\u2019s mine. Every single person gets their transfer arranged, whether it\u2019s two of you or fifty.'],['What if our plans change?','They will. Dates move, headcounts shift, life happens. That\u2019s the job.']];
+    const ST=[['We talk.','A relaxed conversation about what you\u2019re picturing and what you want to spend. Phone, text, or email \u2014 whatever\u2019s easiest.'],['I bring you options.','A few resorts with real pricing, current promotions, and what\u2019s actually included. No guessing.'],['We check your dates.','Availability, pricing, and exactly what it takes to hold it.'],['We lock it in.','Rooms held, rates secured, dates confirmed.'],['You get your own booking page.','Everything in one place \u2014 and I become the contact for anyone traveling with you, so the questions come to me, not you.'],['I stay with you.','Every booking, every deadline, right up to travel day.']];
+    S.push('<section id="faq" class="sec">'+head('A Few Things People Usually Wonder','How Working With Me Works')+
+      '<div class="dinelist" style="margin-top:34px;">'+QA.map(([a,b])=>'<div class="d"><h4>'+esc(a)+'</h4><p>'+esc(b)+'</p></div>').join('')+'</div>'+
+      '<div class="note-box" style="margin-top:28px;"><p>Ask me anything \u2014 I\u2019d rather answer it now than have you wonder.</p></div>'+
+      '<p class="eyebrow" style="margin:40px 0 14px;">How this works</p><div class="steps">'+ST.map(([a,b],i)=>'<div><p class="n">0'+(i+1)+'</p><h4>'+esc(a)+'</h4><p>'+esc(b)+(i===1?' <em>Not a big group? Then it\u2019s simple \u2014 you choose, I book, you pack.</em>':'')+'</p></div>').join('')+'</div>'+
+      '<p style="font-family:\'Cormorant Garamond\',Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--gold);margin:30px 0 0;">That\u2019s it. Can\u2019t wait to get started!</p></section>');}
   if(q.opts.steps&&!GUEST)S.push(sec('sand-band',head('No Rush','Next Steps')+
     '<div class="steps" style="margin-top:34px;">'+
     '<div><p class="n">01</p><h4>Tell me what you think</h4><p>Nothing to decide today. Read it, sit with it, and tell me what is landing and what is not.</p></div>'+
