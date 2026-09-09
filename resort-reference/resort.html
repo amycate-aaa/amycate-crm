@@ -277,7 +277,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 /* a single priced room reads better side by side than as one wide card */
 .price-grid.solo{display:block;}
 .price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
-.price-grid.solo .pcard img.main{height:100%;min-height:300px;object-fit:cover;}
+.price-grid.solo .pcard .pic{height:100%;}
+.price-grid.solo .pcard .pic img.main{flex:1 1 auto;height:auto;min-height:300px;object-fit:cover;}
 .price-grid.solo .pcard .b{display:flex;flex-direction:column;justify-content:center;padding:clamp(28px,4vw,44px);}
 .price-grid.solo .pcard .b .mathbox{margin:22px 0 0;background:var(--ivory);border:1px solid var(--sand-deep);border-left:2px solid var(--gold);padding:16px 18px;}
 .price-grid.solo .pcard .b .mathbox h4{margin:0 0 8px;font-size:9.5px;letter-spacing:.2em;}
@@ -334,8 +335,10 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .travellers .names .dot{color:var(--gold);font-size:.55em;margin:0 .6em;vertical-align:middle;}
 .travellers .when{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);margin:14px 0 0;}
 /* room card gallery — tap a thumbnail to swap the main photo */
-.pcard .thumbs{display:flex;gap:4px;padding:4px 4px 0;background:#fff;}
-.pcard .thumbs img{flex:1 1 0;height:54px;min-height:0;object-fit:cover;cursor:pointer;opacity:.55;transition:.2s;}
+.pcard .pic{display:flex;flex-direction:column;min-width:0;}
+.pcard .pic img.main{width:100%;display:block;}
+.pcard .thumbs{display:flex;gap:4px;padding:4px 4px 0;background:#fff;flex:0 0 auto;}
+.pcard .thumbs img{flex:0 0 auto;width:calc((100% - 20px)/6);max-width:80px;height:52px;min-height:0;object-fit:cover;cursor:pointer;opacity:.55;transition:.2s;}
 .pcard .thumbs img.on,.pcard .thumbs img:hover{opacity:1;}
 .pcard.hasgal img.main{height:230px;}
 .ppnbreak{font-size:14px;line-height:1.5;color:#6E665C;margin:8px 0 0;letter-spacing:.01em;}
@@ -1772,7 +1775,7 @@ function renderQuote(){
             const pics=roomPhotos(r.name,c);const img=pics[0]||'';
             const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Sleeps up to '+c.maxOccupancy:null,c.swimOut?'Swim-out':null].filter(Boolean).join(' \u00b7 ');
             const gal=pics.length>1?'<div class="thumbs">'+pics.slice(0,6).map((u,i)=>'<img src="'+esc(u)+'" alt="" loading="lazy"'+(i===0?' class="on"':'')+' onclick="swapRoomPic(this)">').join('')+'</div>':'';
-            return'<div class="pcard'+(pics.length>1?' hasgal':'')+'">'+(img?'<img class="main" src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">'+gal:'')+
+            return'<div class="pcard'+(pics.length>1?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">'+gal+'</div>':'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
               ((r.ppn||r.pkg)?(function(){
