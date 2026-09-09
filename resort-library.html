@@ -1312,7 +1312,7 @@ function addRoomCatRow(name='', description='', photo='', more='') {
         </div>
       </div>
       <div style="margin-top:8px;">
-        <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">More photos &mdash; one link per line (shown as a small gallery under the room)</label>
+        <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">More photos &mdash; one per line or separated by commas (small gallery under the room photo)</label>
         <textarea class="form-control roomcat-more" rows="2" placeholder="https://&hellip;&#10;https://&hellip;">${more}</textarea>
       </div>
     </div>`;
@@ -1324,7 +1324,7 @@ function getRoomCategories() {
   return [...document.querySelectorAll('#roomcat-list > div')].map(div => {
     const name = div.querySelector('.roomcat-name')?.value?.trim() || '';
     const photo = div.querySelector('.roomcat-photo')?.value?.trim() || '';
-    const more = (div.querySelector('.roomcat-more')?.value || '').split(/\n/).map(x => x.trim()).filter(x => /^https?:/.test(x) && x !== photo);
+    const more = (div.querySelector('.roomcat-more')?.value || '').split(/[\n,]+(?=\s*https?:)|\n/).map(x => x.trim().replace(/,+$/, '')).filter(x => /^https?:/.test(x) && x !== photo);
     const base = orig[name] || {};   // keep sqft, view, beds, club, swimOut, etc. that this form does not edit
     return Object.assign({}, base, {
       name,
