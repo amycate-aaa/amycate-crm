@@ -981,7 +981,7 @@ async function loadResortProfile(slugOverride) {
       set('profileFacilityNotes', d.facilityNotes);
       // Load room categories
       const roomcatList = document.getElementById('roomcat-list');
-      if (roomcatList) { roomcatList.innerHTML = ''; (d.roomCategories || []).forEach(r => addRoomCatRow(r.name, r.description, r.photo || '')); }
+      if (roomcatList) { roomcatList.innerHTML = ''; window.ROOMCAT_ORIG = {}; (d.roomCategories || []).forEach(r => { if (r && r.name) window.ROOMCAT_ORIG[r.name] = r; addRoomCatRow(r.name, r.description, r.photo || '', (r.photos || []).filter(u => u && u !== r.photo).join('\n')); }); }
       // Load restaurants
       const restList = document.getElementById('restaurant-list');
       if (restList) { restList.innerHTML = ''; (d.restaurants || []).forEach(function(r){
@@ -1287,7 +1287,7 @@ function getPackages() {
 }
 
 
-function addRoomCatRow(name='', description='', photo='') {
+function addRoomCatRow(name='', description='', photo='', more='') {
   const list = document.getElementById('roomcat-list');
   if (!list) return;
   const div = document.createElement('div');
@@ -1311,16 +1311,28 @@ function addRoomCatRow(name='', description='', photo='') {
           <button type="button" title="Pick from uploaded photos" onclick="openRoomCatPhotoPicker(this.previousElementSibling)" style="background:#2a2a2a;border:1px solid #444;border-radius:6px;color:#f0c958;cursor:pointer;padding:6px 10px;font-size:14px;">&#128247;</button>
         </div>
       </div>
+      <div style="margin-top:8px;">
+        <label style="font-size:.78rem;color:#888;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:4px;">More photos &mdash; one link per line (shown as a small gallery under the room)</label>
+        <textarea class="form-control roomcat-more" rows="2" placeholder="https://&hellip;&#10;https://&hellip;">${more}</textarea>
+      </div>
     </div>`;
   list.appendChild(div);
 }
 
 function getRoomCategories() {
-  return [...document.querySelectorAll('#roomcat-list > div')].map(div => ({
-    name:        div.querySelector('.roomcat-name')?.value?.trim() || '',
-    description: div.querySelector('.roomcat-desc')?.value?.trim() || '',
-    photo:       div.querySelector('.roomcat-photo')?.value?.trim() || ''
-  })).filter(r => r.name);
+  const orig = window.ROOMCAT_ORIG || {};
+  return [...document.querySelectorAll('#roomcat-list > div')].map(div => {
+    const name = div.querySelector('.roomcat-name')?.value?.trim() || '';
+    const photo = div.querySelector('.roomcat-photo')?.value?.trim() || '';
+    const more = (div.querySelector('.roomcat-more')?.value || '').split(/\n/).map(x => x.trim()).filter(x => /^https?:/.test(x) && x !== photo);
+    const base = orig[name] || {};   // keep sqft, view, beds, club, swimOut, etc. that this form does not edit
+    return Object.assign({}, base, {
+      name,
+      description: div.querySelector('.roomcat-desc')?.value?.trim() || '',
+      photo,
+      photos: photo ? [photo].concat(more) : more
+    });
+  }).filter(r => r.name);
 }
 
 
