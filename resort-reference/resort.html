@@ -1974,7 +1974,7 @@ function renderQuote(){
           (lines.length?'<div class="r"><p class="lbl">Included</p><div class="incl">'+
             lines.map(h=>'<p>&#10022;&nbsp;&nbsp;'+esc(h)+'</p>').join('')+'</div></div>':'')+
           '</div>';}).join('')+'</div>'+
-      (function(){if(TEASER)return '';const t=cmpTable(P.packageComparison);
+      (function(){const t=cmpTable(P.packageComparison,TEASER);
         return t?'<details class="tuck cmptuck" style="margin-top:38px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>':'';})()
       +(function(){
         if(TEASER)return '';   // no calculator on a teaser — nothing to price
@@ -2254,8 +2254,13 @@ function docBtns(section){
   return'<div class="docrow">'+d.map(x=>'<a class="docbtn" href="'+esc(x.url)+'" target="_blank" rel="noopener">'+
     '<span class="ic">&#10022;</span>'+esc(x.label)+'</a>').join('')+'</div>';
 }
-function cmpTable(pc){
+function cmpTable(pc,noPrice){
   if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
+  if(noPrice){   // teaser: keep what each package includes, drop every money row
+    const isMoney=t=>/price|cost|deposit|per (guest|person|head)|extra (guest|adult|child)|supplement|free with|complimentary if/i.test(String(t||''));
+    pc=Object.assign({},pc,{notes:'',groups:pc.groups.map(g=>Object.assign({},g,{rows:(g.rows||[]).filter(r=>!isMoney(r.label)&&!(r.values||[]).some(v=>/\$\s?\d/.test(String(v))))})).filter(g=>!isMoney(g.title)&&(g.rows||[]).length)});
+    if(!pc.groups.length)return'';
+  }
   const cell=v=>{
     if(v==='Y')return'<td><span class="tk">\u2713</span></td>';
     if(v==='-')return'<td><span class="dh">\u2014</span></td>';
