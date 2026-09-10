@@ -1122,7 +1122,16 @@ async function loadResort(slug){window.QUOTE_CT=false;
       if(ci)$id('club-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(ci)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     $id('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
     $id('club-body').innerHTML=(p.clubName||p.clubPerks)?(function(){const raw=p.clubPerks||p.clubLevelPerks;const list=(Array.isArray(raw)?raw:String(raw||'').split(/\n|\u2022/)).map(x=>clean(x)).filter(x=>x&&x.length>2);const note=clean(p.clubInfo||p.clubLevelInfo);
-      return '<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(list.length>1?'<ul style="margin:0;padding-left:20px;">'+list.map(x=>'<li style="margin:7px 0;font-size:15px;">'+esc(x)+'</li>').join('')+'</ul>':list.length?'<p>'+esc(list[0])+'</p>':'')+(note?'<p style="margin-top:14px;opacity:.85;">'+esc(note)+'</p>':'')+'</div>';})():'<p class="empty">This resort does not have a dedicated club tier.</p>';
+      const cn=(p.clubName||p.clubLevelName||'Club Level');
+      const key=String(cn).toLowerCase().split(' ')[0];
+      const cr=(p.roomCategories||[]).filter(r=>r&&(r.club===true||new RegExp('\\b'+key.replace(/[^a-z]/g,'')+'\\b','i').test(r.name||'')));
+      const roomsHtml=cr.length?'<div style="margin-top:22px;border-top:1px solid var(--sand-deep,#E4D8C6);padding-top:18px;"><p class="eyebrow" style="margin-bottom:10px;">'+esc(cn)+' suites</p>'+
+        cr.map(r=>{const bits=[r.sqft?(r.sqft+' sq ft'):'',r.view||'',r.maxOccupancy?('up to '+r.maxOccupancy+' guests'):''].filter(Boolean).join(' \u00b7 ');
+          const body=clean(r.description);
+          return '<details style="border-bottom:1px solid var(--sand-deep,#E4D8C6);padding:9px 0;"><summary style="cursor:pointer;font-size:15px;list-style:none;">'+esc(r.name)+(bits?'<span style="opacity:.6;font-size:13px;"> \u2014 '+esc(bits)+'</span>':'')+'</summary>'+
+            (photoOk(r.photo)?'<img src="'+esc(r.photo)+'" alt="" loading="lazy" style="width:100%;max-width:420px;border-radius:3px;margin:10px 0 6px;display:block;">':'')+
+            (body?'<p style="margin:6px 0 4px;font-size:14px;">'+esc(body)+'</p>':'')+'</details>';}).join('')+'</div>':'';
+      return '<div class="club-block"><h3>'+esc(cn)+'</h3>'+(list.length>1?'<ul style="margin:0;padding-left:20px;">'+list.map(x=>'<li style="margin:7px 0;font-size:15px;">'+esc(x)+'</li>').join('')+'</ul>':list.length?'<p>'+esc(list[0])+'</p>':'')+(note?'<p style="margin-top:14px;opacity:.85;">'+esc(note)+'</p>':'')+roomsHtml+'</div>';})():'<p class="empty">This resort does not have a dedicated club tier.</p>';
     const acts=p.activitiesIncluded||p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     if(acts){let incl=[],extra=[];
       if(typeof acts==='string'&&acts.includes('Additional charge')){const parts=acts.split(/Additional charge[:\s]*/i);incl=parts[0].split(' · ').map(s=>s.trim()).filter(Boolean);extra=parts[1]?parts[1].split(' · ').map(s=>s.trim()).filter(Boolean):[];}
