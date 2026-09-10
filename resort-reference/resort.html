@@ -904,11 +904,15 @@ function mqFavSlug(want){const L=window.LIB||{};if(L[want])return want;const n=x
 function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.textContent='';return;}
   const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();const set=window.MQ_FAVORITES[dest]||{};let list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];const F=window.MQ_FAV_FILTER||'all';if(F!=='all')list=list.filter(w=>{const s2=mqFavSlug(w);const L=(window.LIB||{})[s2];if(!L)return true;return F==='adults'?!!L.adults:!L.adults;});
   if(!list.length){if(msg)msg.textContent='No favorites saved for '+dest+' yet.';return;}
-  [...document.querySelectorAll('.mq-row')].forEach(r=>{if(!r.querySelector('.mq-resort').value&&!r.querySelector('.mq-price').value&&!r.querySelector('.mq-pkg').value)r.remove();});
+  const val=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};
+  [...document.querySelectorAll('#mq-rows .mq-row')].forEach(r=>{if(!val(r,'.mq-resort')&&!val(r,'.mq-price')&&!val(r,'.mq-pkg'))r.remove();});
   const missing=[];let added=0;
   list.forEach(want=>{const slug=mqFavSlug(want);if(!slug){missing.push(want);return;}
     if([...document.querySelectorAll('.mq-resort')].some(s=>s.value===slug))return;
-    mqAddRow();const row=$id('mq-rows').lastElementChild;const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);added++;});
+    mqAddRow();const rows=$id('mq-rows').children;const row=rows[rows.length-1];if(!row)return;const sel=row.querySelector('.mq-resort');if(!sel)return;
+    sel.value=slug;if(sel.value!==slug){const o=[...sel.options].find(o=>o.value===slug);if(o)o.selected=true;}
+    try{mqRooms(sel);}catch(e){}added++;});
+  if(!added&&!missing.length)missing.push('(rows did not render \u2014 tell Claude)');
   if(msg)msg.textContent=added+' resort'+(added===1?'':'s')+' loaded'+(missing.length?' \u2014 not in your library: '+missing.join(', '):'')+'. Add dates and rates, then Create.';}
 function mqAddRow(){const box=$id('mq-rows');const slugs=Object.keys(window.LIB).sort((a,b)=>window.LIB[a].name.localeCompare(window.LIB[b].name));const row=document.createElement('div');row.className='mq-row';
   row.innerHTML='<div><label class="qb-lbl">Resort</label><select class="qb-in mq-resort" onchange="mqRooms(this)"><option value="">Choose\u2026</option>'+slugs.map(k=>'<option value="'+esc(k)+'">'+(window.LIB[k].ready?'':'\u26a0 ')+esc(window.LIB[k].name)+(window.LIB[k].dest?' \u2014 '+esc(window.LIB[k].dest):'')+'</option>').join('')+'</select></div>'+
