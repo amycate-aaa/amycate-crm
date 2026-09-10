@@ -978,7 +978,8 @@ function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-past
   const hotels=mqParseHotels(raw);const nights=parseInt($id('mq-nights').value,10)||0;
   // keep existing filled rows; drop empty placeholder rows
   [...document.querySelectorAll('.mq-row')].forEach(r=>{if(!r.querySelector('.mq-resort').value&&!r.querySelector('.mq-price').value&&!r.querySelector('.mq-pkg').value)r.remove();});const missed=[];
-  hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;if(h.total){const inp=row.querySelector('.mq-pkg');inp.value=Math.round(parseFloat(h.total));mqPkgHint(inp);}
+  const HAS_AIR=(parseAirText(raw)||[]).length>0;if(!HAS_AIR&&hotels.some(h=>h.total)){const b=$id('mq-basis');if(b){b.value='total';}}
+  hotels.forEach(h=>{const slug=mqBestSlug(h.name);mqAddRow();const row=$id('mq-rows').lastElementChild;if(h.total){if(HAS_AIR){const inp=row.querySelector('.mq-pkg');inp.value=Math.round(parseFloat(h.total));mqPkgHint(inp);}else{const inp=row.querySelector('.mq-price');inp.value=Math.round(parseFloat(h.total));if(typeof mqPriceHint==='function')mqPriceHint(inp);}}
     const rs=row.querySelector('.mq-room');
     if(!slug){missed.push(h.name);row.querySelector('.mq-resort').value='';rs.innerHTML='<option selected>'+esc(h.room)+'</option>';let note=row.querySelector('.mq-ready');if(!note){note=document.createElement('div');note.className='mq-ready small';note.style.cssText='grid-column:1/-1;font-size:12px;margin:-4px 0 2px;';row.appendChild(note);}note.innerHTML='<span style="color:#8B2E2E;">'+esc(h.name)+' is not in your library \u2014 pick the resort, or remove this row.</span>';return;}
     const sel=row.querySelector('.mq-resort');sel.value=slug;mqRooms(sel);const rm=mqBestRoom(slug,h.room);if(rm)rs.value=rm;else{const o=document.createElement('option');o.textContent=h.room;o.selected=true;rs.appendChild(o);}});
