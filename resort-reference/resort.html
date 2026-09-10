@@ -995,12 +995,12 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
     const blocksT=made.map(m=>'\u2022 '+m.resort+(m.where?' \u2014 '+m.where:'')+'\n'+m.link).join('\n\n');
     const many=made.length>1;
     body=(couple?'Hi '+couple+',':'Hi there,')+'\n\n'
+      +'I know we haven\u2019t had the chance to connect yet, and I hope we will soon \u2014 but in the meantime I wanted to send you a few of my favourites'+(destTxt?' in '+destTxt:'')+'.\n\n'
       +(note?note+'\n\n':'')
-      +'I pulled together '+(many?'a few resorts':'a resort')+' I think '+(many?'are':'is')+' worth a look'+(destTxt?' in '+destTxt:'')+'. No prices here on purpose \u2014 I\u2019d rather you look at the places first and tell me which ones feel like you.\n\n'
       +blocksT+'\n\n'
-      +'Each page has the venues, the rooms, the restaurants and plenty of photos, so you can get a real sense of '+(many?'each one':'it')+'.\n\n'
-      +'When '+(many?'one or two jump out':'it looks right')+', tell me which and I\u2019ll put together real numbers for your dates \u2014 rooms, the wedding package, the whole picture.\n\n'
-      +'No rush, and no obligation. Just have a look.';
+      +'There are no prices here on purpose. I\u2019d rather you look at the places first \u2014 the venues, the rooms, the restaurants, plenty of photos \u2014 and tell me which '+(many?'ones feel':'one feels')+' like you.\n\n'
+      +'When '+(many?'one or two jump out':'it looks right')+', just reply and let me know. I\u2019ll put real numbers together for your dates \u2014 rooms, the wedding package, the whole picture.\n\n'
+      +'No rush and no obligation. Have a look and tell me what you think.';
   } else
   if(CT){body=hi+'\n\n'+(note?note+'\n\n':'')+'Here '+(made.length===1?'is the resort':'are the '+(made.length===2?'two':made.length===3?'three':made.length)+' resorts')+' I\u2019d put in front of you'+(travel?', priced for '+travel:'')+':\n\n'+blocks+(made.length>1?'\n\nSide by side on one page \u2014 price, beach, pools, rooms:\n'+cmp:'')+(($id('mq-guide')||{}).checked&&destGuideLink(made,couple)?'\n\nNot sure about the destination yet? The short version of each place \u2014 flights, the beach, the weather and what it costs:\n'+destGuideLink(made,couple):'')+'\n\nOne more thing: these are the prices I\u2019m seeing today. If you come across the same resort, room and dates for less anywhere online, send it to me before we book \u2014 I price match, and I\u2019d rather you book with me knowing you have the best number.'+(xferNote?'\n\nA small note on the package prices: they cover the flights and the resort, but not the airport transfer. I\u2019ll add that for you when we book so nothing is a surprise at the airport.':'')+
     '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools, and how the group side works. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';}
