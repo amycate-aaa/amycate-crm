@@ -1687,7 +1687,7 @@ function renderQuote(){
         title:'Celebration Travel Offers',
         body:'Your dream group celebration just got a whole lot sunnier. Have a look at the exclusive deals available to you from a variety of our favourite hotels and resorts.',
         link:CT_OFFERS});
-    } else {
+    } else if(!P.hideStandingOffer) {
       o.push({tag:'Always applies \u2014 nothing to enter',
         title:'Up to $2,500 off your destination wedding',
         body:'Major wedding savings at over 200 all-inclusive resorts across Mexico and the Caribbean. It is applied for you \u2014 there is nothing to claim.',
