@@ -480,6 +480,8 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .eb-card textarea{resize:vertical;min-height:220px}
 .eb-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
 #eb-msg{font-size:12px;color:var(--gold)}
+.mq-fbtn{background:none;border:0;padding:6px 12px;font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#2A241F;opacity:.55;cursor:pointer;}
+.mq-fbtn.on{background:#F3EADB;opacity:1;}
 </style>
 </head>
 <body>
@@ -510,6 +512,11 @@ details.cmptuck .tb{text-align:left;padding:0;}
     <div style="display:flex;gap:8px;align-items:center;margin:0 0 12px;flex-wrap:wrap;">
       <label class="qb-lbl" style="margin:0;">My favorites</label>
       <select id="mq-fav" class="qb-in" style="max-width:280px;" onchange="mqLoadFavorites(this.value)"><option value="">Choose a destination…</option></select>
+      <span id="mq-fav-filter" style="display:inline-flex;border:1px solid #E4D8C6;border-radius:999px;overflow:hidden;">
+        <button type="button" class="mq-fbtn on" data-f="all" onclick="mqFavFilter(this)">All</button>
+        <button type="button" class="mq-fbtn" data-f="adults" onclick="mqFavFilter(this)">Adults only</button>
+        <button type="button" class="mq-fbtn" data-f="family" onclick="mqFavFilter(this)">Family</button>
+      </span>
       <span id="mq-fav-msg" class="small" style="opacity:.75;"></span>
     </div>
     <div id="mq-rows"></div>
@@ -840,7 +847,7 @@ function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';bt
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function collapseRooms(root,limit){root=root||document;limit=limit||6;root.querySelectorAll('.room-grid, .price-grid, .dinelist').forEach(g=>{if(g.dataset.collapsed)return;const kids=[...g.children].filter(el=>!el.classList.contains('rooms-more'));const sec=g.closest('section');const isVenues=!!(sec&&/Where You Say It|Ceremony & Reception Venues/i.test(sec.textContent.slice(0,300)));const isRooms=isVenues||g.classList.contains('room-grid')||g.classList.contains('price-grid')||(g.classList.contains('dinelist')&&sec&&/room/i.test(sec.textContent.slice(0,400)));if(!isRooms||kids.length<=limit+1)return;g.dataset.collapsed='1';kids.slice(limit).forEach(el=>el.style.display='none');const b=document.createElement('button');b.type='button';b.className='rooms-more';b.textContent='Show all '+kids.length+(isVenues?' venues':' room categories');b.style.cssText='grid-column:1/-1;justify-self:start;margin-top:6px;padding:11px 20px;border:1px solid var(--espresso);background:none;color:var(--espresso);font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;';b.onclick=()=>{const open=b.dataset.open==='1';kids.slice(limit).forEach(el=>el.style.display=open?'none':'');b.dataset.open=open?'':'1';b.textContent=open?'Show all '+kids.length+' room categories':'Show fewer';if(open)g.scrollIntoView({behavior:'smooth',block:'start'});};g.appendChild(b);});}
 function $id(id){return document.getElementById(id);}
-async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');try{snap.forEach(d=>{const p=d.data();if(/-maggie$/.test(d.id))return;const _rdy=!!(p.heroPhoto&&String(p.description||'').length>=40&&(p.roomCategories||[]).length&&(p.restaurants||[]).length&&(p.pools||[]).length);window.LIB[d.id]={name:p.name||d.id,dest:String(p.destination||'').split(',')[0].trim(),rooms:(p.roomCategories||[]).map(r=>r&&r.name).filter(Boolean),ready:_rdy};});renderRecentQuotes(snap);try{mqFavFill();}catch(_){}}catch(e){console.warn(e);}
+async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');try{snap.forEach(d=>{const p=d.data();if(/-maggie$/.test(d.id))return;const _rdy=!!(p.heroPhoto&&String(p.description||'').length>=40&&(p.roomCategories||[]).length&&(p.restaurants||[]).length&&(p.pools||[]).length);window.LIB[d.id]={name:p.name||d.id,dest:String(p.destination||'').split(',')[0].trim(),rooms:(p.roomCategories||[]).map(r=>r&&r.name).filter(Boolean),ready:_rdy,adults:/adult/i.test(String(p.agePolicy||''))};});renderRecentQuotes(snap);try{mqFavFill();}catch(_){}}catch(e){console.warn(e);}
   const okUrl=u=>/^https?:\/\//.test(String(u||''));const arr=v=>Array.isArray(v)?v:[];
   const region=(dest,name)=>{const t=(String(dest||'')+' '+String(name||'')).toLowerCase();
     if(/cabo/.test(t))return 'Los Cabos';if(/vallarta|nayarit|bahia mita|bahía mita|punta de mita/.test(t))return 'Puerto Vallarta & Riviera Nayarit';
@@ -890,10 +897,12 @@ function mqTravelText(){const a=$id('mq-from').value,b=$id('mq-to').value;if(!a|
 window.MQ_FAVORITES={
   'Jamaica':{dwt:['ocean-coral-spring','princess-grand-jamaica','moon-palace-jamaica','princess-senses-the-mangrove','ocean-eden-bay']}
 };
+window.MQ_FAV_FILTER='all';
+function mqFavFilter(b){document.querySelectorAll('.mq-fbtn').forEach(x=>x.classList.toggle('on',x===b));window.MQ_FAV_FILTER=b.dataset.f;const d=($id('mq-fav')||{}).value;if(d)mqLoadFavorites(d);}
 function mqFavFill(){const sel=$id('mq-fav');if(!sel||sel.dataset.filled)return;sel.dataset.filled='1';Object.keys(window.MQ_FAVORITES).sort().forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o);});}
 function mqFavSlug(want){const L=window.LIB||{};if(L[want])return want;const n=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,'');const w=n(want);let hit=Object.keys(L).find(k=>n(k)===w);if(hit)return hit;hit=Object.keys(L).find(k=>n(L[k].name)===w||n(k).includes(w)||w.includes(n(k)));return hit||'';}
 function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.textContent='';return;}
-  const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();const set=window.MQ_FAVORITES[dest]||{};const list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];
+  const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();const set=window.MQ_FAVORITES[dest]||{};let list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];const F=window.MQ_FAV_FILTER||'all';if(F!=='all')list=list.filter(w=>{const s2=mqFavSlug(w);const L=(window.LIB||{})[s2];if(!L)return true;return F==='adults'?!!L.adults:!L.adults;});
   if(!list.length){if(msg)msg.textContent='No favorites saved for '+dest+' yet.';return;}
   [...document.querySelectorAll('.mq-row')].forEach(r=>{if(!r.querySelector('.mq-resort').value&&!r.querySelector('.mq-price').value&&!r.querySelector('.mq-pkg').value)r.remove();});
   const missing=[];let added=0;
