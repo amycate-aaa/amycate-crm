@@ -918,7 +918,7 @@ function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.
     sel.value=slug;if(sel.value!==slug){const o=[...sel.options].find(o=>o.value===slug);if(o)o.selected=true;}
     try{mqRooms(sel);}catch(e){}added++;});
   if(msg)msg.textContent=(added?added+' resort'+(added===1?'':'s')+' loaded':'')+(already?(added?', ':'')+already+' already in your rows':'')+(missing.length?' \u2014 not in your library: '+missing.join(', '):'')+'. Add dates and rates, then Create.';}
-function mqFavReset(){const box=$id('mq-rows');if(box)box.innerHTML='';const sel=$id('mq-fav');const msg=$id('mq-fav-msg');if(msg)msg.textContent='';if(sel&&sel.value)mqLoadFavorites(sel.value);else mqAddRow();}
+function mqFavReset(){const box=$id('mq-rows');if(box)box.innerHTML='';const sel=$id('mq-fav');const msg=$id('mq-fav-msg');if(msg)msg.textContent='Rows cleared.';window.MQ_FAV_LAST='';if(sel)sel.value='';mqAddRow();}
 function mqAddRow(){const box=$id('mq-rows');const slugs=Object.keys(window.LIB).sort((a,b)=>window.LIB[a].name.localeCompare(window.LIB[b].name));const row=document.createElement('div');row.className='mq-row';
   row.innerHTML='<div><label class="qb-lbl">Resort</label><select class="qb-in mq-resort" onchange="mqRooms(this)"><option value="">Choose\u2026</option>'+slugs.map(k=>'<option value="'+esc(k)+'">'+(window.LIB[k].ready?'':'\u26a0 ')+esc(window.LIB[k].name)+(window.LIB[k].dest?' \u2014 '+esc(window.LIB[k].dest):'')+'</option>').join('')+'</select></div>'+
   '<div><label class="qb-lbl">Room category</label><select class="qb-in mq-room"><option value="">Choose a resort first</option></select></div>'+
