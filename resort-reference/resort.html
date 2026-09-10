@@ -730,6 +730,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <div class="qb-f"><label>Quote Type</label><select id="q-mode" onchange="toggleMode()">
         <option value="resort">Resort quote &mdash; helping them choose</option>
         <option value="guest">Guest quote &mdash; resort chosen, booking a room</option>
+        <option value="teaser">Teaser &mdash; a few resorts to look at, no pricing</option>
       </select></div>
       <div class="qb-f"><label>Send As</label><select id="q-brand">
         <option value="dwt">Destination Weddings Travel Group</option>
@@ -1390,10 +1391,14 @@ function addGuestRow(v){
 }
 function guestNames(){return [...document.querySelectorAll('#q-guests input.g')].map(i=>i.value.trim()).filter(Boolean);}
 function toggleMode(){
-  const guest=$id('q-mode')&&$id('q-mode').value==='guest';
+  const v=$id('q-mode')?$id('q-mode').value:'resort';
+  const guest=v==='guest', teaser=v==='teaser';
   if($id('q-guestbox'))$id('q-guestbox').style.display=guest?'block':'none';
   ['o-offers','o-group','o-steps','o-inclusions'].forEach(k=>{const el=$id(k);if(el&&el.parentElement)el.parentElement.style.display=guest?'none':'';});
-  const h=document.querySelector('#qb h2');if(h)h.textContent=guest?'Build a Guest Quote':'Build a Quote';
+  // a teaser carries no prices, so the rate fields and price basis are irrelevant
+  ['q-priced','q-pricebox','q-basis-box','q-rooms','q-deposit','q-due'].forEach(k=>{const el=$id(k);if(el){const box=el.closest?(el.closest('.qb-f')||el):el;box.style.display=teaser?'none':'';}});
+  const h=document.querySelector('#qb h2');if(h)h.textContent=guest?'Build a Guest Quote':(teaser?'Build a Teaser \u2014 no pricing':'Build a Quote');
+  const m=$id('qb-msg');if(m&&teaser)m.textContent='Teaser mode: no rates, no packages prices, no calculator. Just the resorts.';
 }
 function toggleBasis(){
   const el=document.querySelector('input[name="q-basis"]:checked');const total=el&&el.value==='total';
@@ -1728,6 +1733,7 @@ function renderQuote(){
   window.QUOTE_CT=CT;
   const SMALL=q.tripSize==='small';   // just them — no group-block language
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
+  const TEASER=q.mode==='teaser'; // no pricing anywhere — a look at the resorts, nothing to price against
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
   const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
@@ -1751,7 +1757,7 @@ function renderQuote(){
   if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
   const hasPkg=q.needAir&&String(q.pkgPrice||'').trim()!=='';
-  const priced=q.prices.length>0||hasPkg;
+  const priced=TEASER?false:(q.prices.length>0||hasPkg);   // teaser never shows a price
   const cnt=v=>Array.isArray(v)&&v.length?String(v.length):'';
   const shortAge=v=>{const t=String(v||'').trim();if(!t)return'';
     const f=t.split(/[.\u00b7]/)[0].trim();
@@ -1800,7 +1806,7 @@ function renderQuote(){
     const l=CT?P.ctPromoLink:P.weddingPromoLink;
     const standing=norm(CT?CT_OFFERS:DWT_OFFERS);
     if(t && b && norm(l)!==standing) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
-    if(!o.length||q.opts.offers===false||GUEST||P.hideAllOffers)return;
+    if(!o.length||q.opts.offers===false||GUEST||TEASER||P.hideAllOffers)return;
     S.push('<div class="offers"><div class="wrap">'+o.map(x=>
       '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
       '<h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(x.body)+'</p>':'')+
@@ -1933,7 +1939,7 @@ function renderQuote(){
   if(priced&&ROOMS){S.push(ROOMS);ROOMS='';}   // priced: show it here, near the top
 
   /* 5 — PACKAGES */
-  const pkgs=(CT||GUEST)?[]:(P.packages||[]).filter(p=>p&&p.name);
+  const pkgs=(CT||GUEST)?[]:(P.packages||[]).filter(p=>p&&p.name).map(p=>TEASER?Object.assign({},p,{price:''}):p);
   if(pkgs.length){
     S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
@@ -1948,9 +1954,10 @@ function renderQuote(){
           (lines.length?'<div class="r"><p class="lbl">Included</p><div class="incl">'+
             lines.map(h=>'<p>&#10022;&nbsp;&nbsp;'+esc(h)+'</p>').join('')+'</div></div>':'')+
           '</div>';}).join('')+'</div>'+
-      (function(){const t=cmpTable(P.packageComparison);
+      (function(){if(TEASER)return '';const t=cmpTable(P.packageComparison);
         return t?'<details class="tuck cmptuck" style="margin-top:38px;"><summary>Compare all packages side by side</summary><div class="tb">'+t+'</div></details>':'';})()
       +(function(){
+        if(TEASER)return '';   // no calculator on a teaser — nothing to price
         const money=t=>{const m=String(t||'').match(/\$\s?([\d,]+(?:\.\d+)?)/);return m?parseFloat(m[1].replace(/,/g,'')):null;};
         const inc=t=>{const m=String(t||'').match(/(\d+)\s*(?:guests?|people|persons|pax)/i);return m?parseInt(m[1],10):null;};
         const per=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(pk.highlights||[]).join(' ')].join(' ');
