@@ -478,6 +478,7 @@ body{background:#111;color:#e8e8e8;font-family:'Inter',sans-serif;min-height:100
 
       <div style="border-left:3px solid #f0c958;padding-left:14px;margin-bottom:20px;">
         <div style="font-size:.78rem;color:#f0c958;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;">Wedding Promotion</div>
+        <label style="display:flex;gap:8px;align-items:center;margin:0 0 12px;font-size:.9rem;cursor:pointer;"><input type="checkbox" id="profileHideAllOffers"> Hide all offers on this resort's quotes (DWT $2,500 card, exclusive offers, and the promo below)</label>
         <div class="form-group" style="margin-bottom:10px;">
           <label>Headline</label>
           <input type="text" class="form-control" id="profileWeddingPromoTitle" placeholder="e.g. Complimentary wedding package with 7+ rooms">
@@ -964,6 +965,7 @@ async function loadResortProfile(slugOverride) {
       var nc=document.getElementById('profileNoClubLevel'); if(nc) nc.checked = !!d.clubLevelNA;
       set('profileWeddingGuide', d.weddingGuide);
       set('profileWeddingPromoTitle',   d.weddingPromoTitle);
+      { const cb=document.getElementById('profileHideAllOffers'); if(cb) cb.checked=!!d.hideAllOffers; }
       set('profileWeddingPromoSummary', d.weddingPromoSummary);
       set('profileWeddingPromoLink',    d.weddingPromoLink);
       set('profileCtPromoTitle',        d.ctPromoTitle);
@@ -1446,6 +1448,8 @@ async function saveResortProfile() {
     clubPerks:       document.getElementById('profileClubPerks').value.trim(),
     weddingGuide:    document.getElementById('profileWeddingGuide').value.trim(),
     weddingPromoTitle: document.getElementById('profileWeddingPromoTitle')?.value?.trim() || '',
+    hideAllOffers: !!document.getElementById('profileHideAllOffers')?.checked,
+    hideStandingOffer: !!document.getElementById('profileHideAllOffers')?.checked,
     weddingPromoSummary: document.getElementById('profileWeddingPromoSummary')?.value?.trim() || '',
     weddingPromoLink: document.getElementById('profileWeddingPromoLink')?.value?.trim() || '',
     ctPromoTitle:    document.getElementById('profileCtPromoTitle')?.value?.trim() || '',
