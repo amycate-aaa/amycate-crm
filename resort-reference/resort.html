@@ -486,6 +486,15 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .mq-fbtn{background:none;border:0;padding:6px 12px;font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#2A241F;opacity:.55;cursor:pointer;}
 .mq-fbtn.on{background:#F3EADB;opacity:1;}
 .bl-blank{display:block;background:#F3EADB;border-radius:3px;}
+.gc{margin-top:40px;border:1px solid var(--sand-deep);padding:24px 22px;background:#FBF7F0;}
+.gc h4{font-family:var(--serif);font-size:20px;margin:0 0 4px;font-weight:400;}
+.gc p.gc-sub{font-size:13px;color:var(--espresso);margin:0 0 16px;}
+.gc-in{font-family:var(--sans);font-size:15px;padding:8px 10px;border:1px solid var(--sand-deep);background:#fff;width:90px;}
+.gc table{width:100%;border-collapse:collapse;margin-top:16px;font-size:14px;}
+.gc th{text-align:left;font-family:var(--sans);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--espresso);font-weight:400;padding:0 10px 8px 0;border-bottom:1px solid var(--sand-deep);}
+.gc td{padding:10px 10px 10px 0;border-bottom:1px solid #EFE7DA;}
+.gc td.gc-total{font-weight:600;white-space:nowrap;}
+.gc .gc-note{font-size:12px;color:var(--espresso);margin-top:12px;}
 </style>
 </head>
 <body>
@@ -599,7 +608,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <h3 class="lead">Wedding Packages</h3>
         <div id="doc-packages"></div>
         <p class="pkg-hint">Click any package to see full inclusions</p>
-        <div class="pkglist" id="pkg-grid"></div>
+        <div class="pkglist" id="pkg-grid"></div><div class="gc" id="guest-calc" style="display:none"><h4>What it costs for your group</h4><p class="gc-sub">Package price plus the resort's own per-guest charge above the included count \u2014 a starting point, not a quote.</p><label style="font-size:12px;color:var(--espresso)">Guests <input class="gc-in" id="gc-guests" type="number" min="2" max="500" value="40"></label><table><thead><tr><th>Package</th><th>Included</th><th>Extra guests</th><th>Tax &amp; service</th><th>Estimated total</th></tr></thead><tbody id="gc-body"></tbody></table><p class="gc-note" id="gc-note"></p></div>
         <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><div class="vgrid" id="venues-grid"></div></div>
       </div>
       <div id="panel-grp" hidden><div id="groups-body"></div></div>
@@ -1086,6 +1095,22 @@ async function loadResort(slug){window.QUOTE_CT=false;
     const venues=p.venues||[];
     $id('venues-grid').innerHTML=venues.length?venues.map(v=>'<div class="vcard">'+(photoOk(v.photo)?'<img src="'+esc(v.photo)+'" alt="'+esc(v.name)+'" loading="lazy">':'')+'<div class="vbody"><p class="vtag">'+esc(v.bestFor||v.type||'')+'</p><h4>'+esc(v.name)+'</h4>'+(v.capacity?'<p style="font-size:15px;color:var(--espresso);margin:6px 0 0;font-weight:400">Up to '+esc(v.capacity)+' guests</p>':'')+(clean(v.description)?'<p>'+esc(clean(v.description))+'</p>':'')+'</div></div>').join(''):'<p class="empty">Venue details coming soon.</p>';
     const pkgs=p.packages||[];
+    (function(){
+      const money=t=>{const m=String(t||'').match(/\$\s?([\d,]+(?:\.\d+)?)/);return m?parseFloat(m[1].replace(/,/g,'')):null;};
+      const included=t=>{const m=String(t||'').match(/(\d+)\s*(?:guests?|people|persons|pax)/i);return m?parseInt(m[1],10):null;};
+      const perHead=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(pk.highlights||[]).join(' ')].join(' ');
+        const m=hay.match(/(?:additional|extra)[^.$]{0,40}\$\s?([\d,]+(?:\.\d+)?)/i);return m?parseFloat(m[1].replace(/,/g,'')):null;};
+      const taxed=pk=>/16%\s*tax|\+\s*16%|15%\s*service/i.test([pk.capacity,pk.price,(pk.highlights||[]).join(' ')].join(' '));
+      const rows=pkgs.map(pk=>({name:pk.name,base:money(pk.price),inc:included(pk.capacity)||included(pk.price),per:perHead(pk),tax:taxed(pk)})).filter(r=>r.base&&r.inc&&r.per);
+      const box=$id('guest-calc');if(!box)return;
+      if(!rows.length){box.style.display='none';return;}
+      box.style.display='block';
+      const draw=n=>{$id('gc-body').innerHTML=rows.map(r=>{const over=Math.max(0,n-r.inc);const extra=over*r.per;const svc=r.tax?extra*0.31:0;const total=r.base+extra+svc;
+        return '<tr><td>'+esc(r.name)+'</td><td>'+r.inc+'</td><td>'+(over?'+'+over+' \u00d7 $'+r.per.toLocaleString():'\u2014')+'</td><td>'+(svc?'$'+Math.round(svc).toLocaleString():'\u2014')+'</td><td class="gc-total">$'+Math.round(total).toLocaleString()+'</td></tr>';}).join('');
+        $id('gc-note').textContent=rows.some(r=>r.tax)?'Where the resort adds 16% tax and 15% service to extra guests, that is included above.':'Taxes and gratuities are included in these package prices.';};
+      const inp=$id('gc-guests');inp.oninput=()=>{const n=parseInt(inp.value,10);if(n>0&&n<600)draw(n);};
+      draw(parseInt(inp.value,10)||40);
+    })();
     $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const hl=hiList(pk.highlights);const sn=pk.summary||hl.slice(0,2).join(' · ');const lines=hl.map(clean).filter(Boolean);return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+([pk.photo,pk.photoUrl].find(photoOk)?'<img class="pkgpic" src="'+esc([pk.photo,pk.photoUrl].find(photoOk))+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
     $id('doc-packages').innerHTML=docBtns('packages');
     $id('doc-venues').innerHTML=docBtns('venues');
