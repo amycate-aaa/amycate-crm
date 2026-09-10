@@ -1153,9 +1153,9 @@ async function loadResort(slug){window.QUOTE_CT=false;
     (function(){
       const money=t=>{const m=String(t||'').match(/\$\s?([\d,]+(?:\.\d+)?)/);return m?parseFloat(m[1].replace(/,/g,'')):null;};
       const included=t=>{const m=String(t||'').match(/(\d+)\s*(?:guests?|people|persons|pax)/i);return m?parseInt(m[1],10):null;};
-      const perHead=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(pk.highlights||[]).join(' ')].join(' ');
+      const perHead=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(Array.isArray(pk.highlights)?pk.highlights.join(' '):String(pk.highlights||''))].join(' ');
         const m=hay.match(/(?:additional|extra)[^.$]{0,40}\$\s?([\d,]+(?:\.\d+)?)/i);return m?parseFloat(m[1].replace(/,/g,'')):null;};
-      const taxed=pk=>/16%\s*tax|\+\s*16%|15%\s*service/i.test([pk.capacity,pk.price,(pk.highlights||[]).join(' ')].join(' '));
+      const taxed=pk=>/16%\s*tax|\+\s*16%|15%\s*service/i.test([pk.capacity,pk.price,(Array.isArray(pk.highlights)?pk.highlights.join(' '):String(pk.highlights||''))].join(' '));
       const rows=pkgs.map(pk=>({name:pk.name,base:money(pk.price),inc:included(pk.capacity)||included(pk.price),per:perHead(pk),tax:taxed(pk)})).filter(r=>r.base&&r.inc&&r.per);
       const box=$id('guest-calc');if(!box)return;
       if(!rows.length){box.style.display='none';return;}
@@ -2010,9 +2010,9 @@ function renderQuote(){
         if(TEASER)return '';   // no calculator on a teaser — nothing to price
         const money=t=>{const m=String(t||'').match(/\$\s?([\d,]+(?:\.\d+)?)/);return m?parseFloat(m[1].replace(/,/g,'')):null;};
         const inc=t=>{const m=String(t||'').match(/(\d+)\s*(?:guests?|people|persons|pax)/i);return m?parseInt(m[1],10):null;};
-        const per=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(pk.highlights||[]).join(' ')].join(' ');
+        const per=pk=>{const hay=[pk.capacity,pk.price,pk.summary,(Array.isArray(pk.highlights)?pk.highlights.join(' '):String(pk.highlights||''))].join(' ');
           const m=hay.match(/(?:additional|extra)[^.$]{0,40}\$\s?([\d,]+(?:\.\d+)?)/i);return m?parseFloat(m[1].replace(/,/g,'')):null;};
-        const tx=pk=>/16%\s*tax|\+\s*16%|15%\s*service/i.test([pk.capacity,pk.price,(pk.highlights||[]).join(' ')].join(' '));
+        const tx=pk=>/16%\s*tax|\+\s*16%|15%\s*service/i.test([pk.capacity,pk.price,(Array.isArray(pk.highlights)?pk.highlights.join(' '):String(pk.highlights||''))].join(' '));
         const rows=pkgs.map(pk=>({n:pk.name,b:money(pk.price),i:inc(pk.capacity)||inc(pk.price),p:per(pk),t:tx(pk)})).filter(r=>r.b&&r.i&&r.p);
         if(!rows.length)return '';
         const data=encodeURIComponent(JSON.stringify(rows));
