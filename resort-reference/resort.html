@@ -517,6 +517,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <button type="button" class="mq-fbtn" data-f="adults" onclick="mqFavFilter(this)">Adults only</button>
         <button type="button" class="mq-fbtn" data-f="family" onclick="mqFavFilter(this)">Family</button>
       </span>
+      <button type="button" class="mq-fbtn" onclick="mqFavReset()" style="border:1px solid #E4D8C6;border-radius:999px;">Clear rows</button>
       <span id="mq-fav-msg" class="small" style="opacity:.75;"></span>
     </div>
     <div id="mq-rows"></div>
@@ -906,14 +907,14 @@ function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.
   if(!list.length){if(msg)msg.textContent='No favorites saved for '+dest+' yet.';return;}
   const val=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};
   [...document.querySelectorAll('#mq-rows .mq-row')].forEach(r=>{if(!val(r,'.mq-resort')&&!val(r,'.mq-price')&&!val(r,'.mq-pkg'))r.remove();});
-  const missing=[];let added=0;
+  const missing=[];let added=0,already=0;
   list.forEach(want=>{const slug=mqFavSlug(want);if(!slug){missing.push(want);return;}
-    if([...document.querySelectorAll('.mq-resort')].some(s=>s.value===slug))return;
+    if([...document.querySelectorAll('.mq-resort')].some(s=>s.value===slug)){already++;return;}
     mqAddRow();const rows=$id('mq-rows').children;const row=rows[rows.length-1];if(!row)return;const sel=row.querySelector('.mq-resort');if(!sel)return;
     sel.value=slug;if(sel.value!==slug){const o=[...sel.options].find(o=>o.value===slug);if(o)o.selected=true;}
     try{mqRooms(sel);}catch(e){}added++;});
-  if(!added&&!missing.length)missing.push('(rows did not render \u2014 tell Claude)');
-  if(msg)msg.textContent=added+' resort'+(added===1?'':'s')+' loaded'+(missing.length?' \u2014 not in your library: '+missing.join(', '):'')+'. Add dates and rates, then Create.';}
+  if(msg)msg.textContent=(added?added+' resort'+(added===1?'':'s')+' loaded':'')+(already?(added?', ':'')+already+' already in your rows':'')+(missing.length?' \u2014 not in your library: '+missing.join(', '):'')+'. Add dates and rates, then Create.';}
+function mqFavReset(){const box=$id('mq-rows');if(box)box.innerHTML='';const sel=$id('mq-fav');const msg=$id('mq-fav-msg');if(msg)msg.textContent='';if(sel&&sel.value)mqLoadFavorites(sel.value);else mqAddRow();}
 function mqAddRow(){const box=$id('mq-rows');const slugs=Object.keys(window.LIB).sort((a,b)=>window.LIB[a].name.localeCompare(window.LIB[b].name));const row=document.createElement('div');row.className='mq-row';
   row.innerHTML='<div><label class="qb-lbl">Resort</label><select class="qb-in mq-resort" onchange="mqRooms(this)"><option value="">Choose\u2026</option>'+slugs.map(k=>'<option value="'+esc(k)+'">'+(window.LIB[k].ready?'':'\u26a0 ')+esc(window.LIB[k].name)+(window.LIB[k].dest?' \u2014 '+esc(window.LIB[k].dest):'')+'</option>').join('')+'</select></div>'+
   '<div><label class="qb-lbl">Room category</label><select class="qb-in mq-room"><option value="">Choose a resort first</option></select></div>'+
