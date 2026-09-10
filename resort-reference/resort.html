@@ -1791,7 +1791,7 @@ function renderQuote(){
   const closeImg=(RESORTWIDE.filter(p=>photoOk(p.url||p.downloadURL)).map(p=>p.url||p.downloadURL)[1])||hero;
   const S=[];
   const sec=(cls,inner)=>'<section'+(cls?' class="'+cls+'"':'')+'><div class="wrap">'+inner+'</div></section>';
-  const head=(eyebrow,title)=>'<p class="eyebrow">'+esc(eyebrow)+'</p><h2 class="display">'+esc(title)+'</h2><hr class="rule">';
+  const head=(eyebrow,title)=>(eyebrow?'<p class="eyebrow">'+esc(eyebrow)+'</p>':'')+'<h2 class="display">'+esc(title)+'</h2><hr class="rule">';
 
   /* 1 — HERO */
   S.push('<header class="q-hero"><div class="c">'+
@@ -1991,7 +1991,7 @@ function renderQuote(){
   /* 5 — PACKAGES */
   const pkgs=(CT||GUEST)?[]:(P.packages||[]).filter(p=>p&&p.name).map(p=>TEASER?Object.assign({},p,{price:''}):p);
   if(pkgs.length){
-    S.push(sec('sand-band',head('For The Two Of You','Wedding Packages')+bandImg('packages')+docBtns('packages')+
+    S.push(sec('sand-band',head('','Wedding Packages')+bandImg('packages')+docBtns('packages')+
       '<div style="margin-top:34px;">'+pkgs.map(pk=>{
         const lines=q.opts.inclusions?hiList(pk.highlights).map(clean).filter(Boolean):[];
         const pkImg=[pk.photo,pk.photoUrl].find(photoOk)||'';
