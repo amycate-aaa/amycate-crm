@@ -899,10 +899,14 @@ window.MQ_FAVORITES={
   'Jamaica':{dwt:['ocean-coral-spring','princess-grand-jamaica','moon-palace-jamaica','princess-senses-the-mangrove','ocean-eden-bay']}
 };
 window.MQ_FAV_FILTER='all';
-function mqFavFilter(b){document.querySelectorAll('.mq-fbtn').forEach(x=>x.classList.toggle('on',x===b));window.MQ_FAV_FILTER=b.dataset.f;const d=($id('mq-fav')||{}).value;if(d)mqLoadFavorites(d);}
+function mqFavFilter(b){document.querySelectorAll('#mq-fav-filter .mq-fbtn').forEach(x=>x.classList.toggle('on',x===b));window.MQ_FAV_FILTER=b.dataset.f;const d=($id('mq-fav')||{}).value;if(!d)return;
+  const box=$id('mq-rows');if(box){const val=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};[...box.querySelectorAll('.mq-row')].forEach(r=>{if(!val(r,'.mq-price')&&!val(r,'.mq-pkg'))r.remove();});}
+  mqLoadFavorites(d);}
 function mqFavFill(){const sel=$id('mq-fav');if(!sel||sel.dataset.filled)return;sel.dataset.filled='1';Object.keys(window.MQ_FAVORITES).sort().forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o);});}
 function mqFavSlug(want){const L=window.LIB||{};if(L[want])return want;const n=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,'');const w=n(want);let hit=Object.keys(L).find(k=>n(k)===w);if(hit)return hit;hit=Object.keys(L).find(k=>n(L[k].name)===w||n(k).includes(w)||w.includes(n(k)));return hit||'';}
 function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.textContent='';return;}
+  if(window.MQ_FAV_LAST&&window.MQ_FAV_LAST!==dest){const box=$id('mq-rows');if(box){const v=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};[...box.querySelectorAll('.mq-row')].forEach(r=>{if(!v(r,'.mq-price')&&!v(r,'.mq-pkg'))r.remove();});}}
+  window.MQ_FAV_LAST=dest;
   const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();const set=window.MQ_FAVORITES[dest]||{};let list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];const F=window.MQ_FAV_FILTER||'all';if(F!=='all')list=list.filter(w=>{const s2=mqFavSlug(w);const L=(window.LIB||{})[s2];if(!L)return true;return F==='adults'?!!L.adults:!L.adults;});
   if(!list.length){if(msg)msg.textContent=(F==='all'?'No favorites saved for '+dest+' yet.':'None of your '+dest+' favorites are '+(F==='adults'?'adults-only':'family-friendly')+'.');return;}
   const val=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};
