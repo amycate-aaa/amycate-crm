@@ -512,6 +512,16 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .fchip.have{opacity:.5;cursor:default;}
 .qgc .qgc-fine{font-size:11.5px;color:var(--espresso);opacity:.85;margin-top:10px;line-height:1.55;font-style:italic;}
 .q-fineprint{max-width:820px;margin:0 auto;padding:34px 24px 46px;font-size:11.5px;line-height:1.6;color:var(--espresso);opacity:.8;text-align:center;border-top:1px solid var(--sand-deep);}
+.extras{margin-top:26px;border:1px solid var(--sand-deep);padding:24px 22px;background:#fff;}
+.extras h4{font-family:var(--serif);font-size:21px;margin:0 0 4px;font-weight:400;}
+.extras .ex-sub{font-size:13px;color:var(--espresso);margin:0 0 16px;line-height:1.55;}
+.extras table{width:100%;border-collapse:collapse;font-size:14px;}
+.extras td{padding:11px 12px 11px 0;border-bottom:1px solid #EFE7DA;vertical-align:top;}
+.extras .ex-n{font-weight:600;white-space:nowrap;}
+.extras .ex-p{white-space:nowrap;color:var(--gold);font-weight:600;}
+.extras .ex-d{font-size:13px;color:var(--espresso);line-height:1.5;}
+.extras .ex-fine{font-size:11.5px;color:var(--espresso);opacity:.85;margin-top:14px;font-style:italic;line-height:1.55;}
+@media(max-width:620px){.extras .ex-d{display:none;}}
 </style>
 </head>
 <body>
@@ -1798,6 +1808,26 @@ function wireGuestCalc(root){
     draw(parseInt(inp.value,10)||40);
   });
 }
+
+/* Typical add-on costs — ranges drawn from resort sheets across the library.
+   Shown as a rough planning guide, never as a quote for a particular resort. */
+function extrasBlock(){
+  const E=[
+   ['DJ and sound','$900\u20131,500','Three to four hours with an MC, lighting and a dance floor. A few packages include it \u2014 check the one you pick before adding it.'],
+   ['Photography','$1,200\u20132,500','Ceremony coverage through the reception, with edited digital images. Ceremony-only coverage runs less.'],
+   ['Video','$800\u20131,800','Ceremony plus highlights. Often sold alongside photography at a better rate.'],
+   ['Live music at the ceremony','$350\u2013700','A soloist, trio or mariachi for a set. Included at the higher tiers of several packages.'],
+   ['Extra cocktail hour','$400\u20131,000','Priced by group size at most resorts \u2014 open bar and passed hors d\u2019oeuvres.'],
+   ['Private reception, per guest','$50\u2013110','Where the reception is not already in the package. Two to three hours with an open bar.'],
+   ['Floral upgrades','$95\u2013400','Per centrepiece or arch piece, above what the collection includes.'],
+   ['Day pass for guests not staying at the resort','$90\u2013300','Per person. Most resorts cap these at about 20% of the wedding party.'],
+   ['Outside vendor fee','$500\u20131,500','Charged per vendor, sometimes per service per day. Some resorts waive it if the vendor stays on property; one or two allow no outside vendors at all.'],
+   ['Legal or civil ceremony','$800\u20132,500','On top of the package. Includes the government fee, and in Mexico the blood test and paperwork.']];
+  return '<div class="extras"><h4>What couples usually add</h4>'
+   +'<p class="ex-sub">None of this is included in the numbers above. These are the ranges I see across resorts \u2014 use them to sanity-check a budget, not to price a specific wedding. Your resort\u2019s own list may be higher or lower, and some of these are already in the package you choose.</p>'
+   +'<table><tbody>'+E.map(function(r){return '<tr><td class="ex-n">'+r[0]+'</td><td class="ex-p">'+r[1]+'</td><td class="ex-d">'+r[2]+'</td></tr>';}).join('')+'</tbody></table>'
+   +'<p class="ex-fine">Ranges reflect published resort pricing across the properties I work with, current as of the last time each sheet was updated. Ask me and I\u2019ll get the exact figure from your resort.</p></div>';
+}
 function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
@@ -2042,7 +2072,7 @@ function renderQuote(){
           +'<p class="qgc-sub">Package price plus the resort\u2019s own charge for guests above the included count. A starting point, not a final quote \u2014 ask Amy for exact numbers on your dates.</p>'
           +'<label class="qgc-lab">Guests <input class="qgc-in" type="number" min="2" max="500" value="40"></label>'
           +'<table><thead><tr><th>Package</th><th>Included</th><th>Extra guests</th><th>Tax &amp; service</th><th>Estimated total</th></tr></thead><tbody></tbody></table>'
-          +'<p class="qgc-note"></p>'+'<p class="qgc-fine">These figures come from the resort\u2019s current wedding sheet and are a guide, not a quote. Prices move with the season, the day of the week and the year you marry, and resorts change them without notice. I\u2019ll confirm exact numbers for your dates before anything is booked.</p></div>';})()));
+          +'<p class="qgc-note"></p>'+'<p class="qgc-fine">These figures come from the resort\u2019s current wedding sheet and are a guide, not a quote. Prices move with the season, the day of the week and the year you marry, and resorts change them without notice. I\u2019ll confirm exact numbers for your dates before anything is booked.</p></div>'+extrasBlock();})()));
   }
 
   /* 6 — VENUES */
