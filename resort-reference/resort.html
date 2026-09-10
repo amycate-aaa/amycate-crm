@@ -420,6 +420,9 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 @media(max-width:860px){.pkgrow,.pkgrow.solo{grid-template-columns:1fr;}.pkgrow .l{border-right:0;border-bottom:1px solid var(--sand-deep);}.pkgrow .incl{column-count:1;}}
 .barlist{column-count:3;column-gap:44px;margin-top:26px;}
 .barlist .bl{break-inside:avoid;padding:0 0 15px;margin:0 0 15px;border-bottom:1px solid var(--sand-deep);}
+.barlist.has-pics .bl{display:flex;gap:12px;align-items:flex-start;}
+.bl-thumb{width:64px;height:64px;object-fit:cover;border-radius:3px;flex:0 0 64px;}
+.bl-txt{min-width:0;}
 .barlist h4{font-family:var(--serif);font-size:1.15rem;font-weight:400;color:var(--espresso);margin:0;line-height:1.3;}
 .barlist p{font-size:14.5px;line-height:1.6;color:#5A544C;margin:5px 0 0;}
 @media(max-width:900px){.barlist{column-count:2;}}
@@ -1936,9 +1939,12 @@ function renderQuote(){
         (photoOk(menuUrlOf(r))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
         '</div>').join('')+'</div>'+
       (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
-        return bars.length?'<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist">'+
-          bars.map(b=>'<div class="bl"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div>').join('')+
-        '</div></div>':'';})()+
+        if(!bars.length)return '';
+        const pics=bars.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
+        const allPics=pics.every(Boolean);   // all or nothing — a half-illustrated list looks unfinished
+        return '<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist'+(allPics?' has-pics':'')+'">'+
+          bars.map((b,i)=>'<div class="bl">'+(allPics?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'')+'<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div></div>').join('')+
+        '</div></div>';})()+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
 
