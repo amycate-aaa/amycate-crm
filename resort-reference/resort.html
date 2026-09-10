@@ -510,6 +510,8 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .fchip{display:inline-flex;align-items:center;gap:6px;border:1px solid #E4D8C6;border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;background:#fff;}
 .fchip:hover{border-color:var(--gold);}
 .fchip.have{opacity:.5;cursor:default;}
+.qgc .qgc-fine{font-size:11.5px;color:var(--espresso);opacity:.85;margin-top:10px;line-height:1.55;font-style:italic;}
+.q-fineprint{max-width:820px;margin:0 auto;padding:34px 24px 46px;font-size:11.5px;line-height:1.6;color:var(--espresso);opacity:.8;text-align:center;border-top:1px solid var(--sand-deep);}
 </style>
 </head>
 <body>
@@ -625,7 +627,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
         <h3 class="lead">Wedding Packages</h3>
         <div id="doc-packages"></div>
         <p class="pkg-hint">Click any package to see full inclusions</p>
-        <div class="pkglist" id="pkg-grid"></div><div class="gc" id="guest-calc" style="display:none"><h4>What it costs for your group</h4><p class="gc-sub">Package price plus the resort's own per-guest charge above the included count \u2014 a starting point, not a quote.</p><label style="font-size:12px;color:var(--espresso)">Guests <input class="gc-in" id="gc-guests" type="number" min="2" max="500" value="40"></label><table><thead><tr><th>Package</th><th>Included</th><th>Extra guests</th><th>Tax &amp; service</th><th>Estimated total</th></tr></thead><tbody id="gc-body"></tbody></table><p class="gc-note" id="gc-note"></p></div>
+        <div class="pkglist" id="pkg-grid"></div><div class="gc" id="guest-calc" style="display:none"><h4>What it costs for your group</h4><p class="gc-sub">Package price plus the resort's own per-guest charge above the included count \u2014 a starting point, not a quote.</p><label style="font-size:12px;color:var(--espresso)">Guests <input class="gc-in" id="gc-guests" type="number" min="2" max="500" value="40"></label><table><thead><tr><th>Package</th><th>Included</th><th>Extra guests</th><th>Tax &amp; service</th><th>Estimated total</th></tr></thead><tbody id="gc-body"></tbody></table><p class="gc-note" id="gc-note"></p><p class="gc-note">These figures come from the resort's current wedding sheet and are a guide, not a quote. Prices move with the season, the day of the week and the year you marry, and resorts change them without notice \u2014 exact numbers are confirmed for your dates before anything is booked.</p></div>
         <div style="margin-top:52px;"><h3 class="lead">Venues</h3><div id="doc-venues"></div><div class="vgrid" id="venues-grid"></div></div>
       </div>
       <div id="panel-grp" hidden><div id="groups-body"></div></div>
@@ -2040,7 +2042,7 @@ function renderQuote(){
           +'<p class="qgc-sub">Package price plus the resort\u2019s own charge for guests above the included count. A starting point, not a final quote \u2014 ask Amy for exact numbers on your dates.</p>'
           +'<label class="qgc-lab">Guests <input class="qgc-in" type="number" min="2" max="500" value="40"></label>'
           +'<table><thead><tr><th>Package</th><th>Included</th><th>Extra guests</th><th>Tax &amp; service</th><th>Estimated total</th></tr></thead><tbody></tbody></table>'
-          +'<p class="qgc-note"></p></div>';})()));
+          +'<p class="qgc-note"></p>'+'<p class="qgc-fine">These figures come from the resort\u2019s current wedding sheet and are a guide, not a quote. Prices move with the season, the day of the week and the year you marry, and resorts change them without notice. I\u2019ll confirm exact numbers for your dates before anything is booked.</p></div>';})()));
   }
 
   /* 6 — VENUES */
@@ -2210,7 +2212,9 @@ function renderQuote(){
 
   S.push('<footer><p>Amy Cate \u00b7 '+esc(brandName)+'</p><p>'+esc(email)+'</p>'+
     '<p>'+(GUEST?'Rates are confirmed at booking and held once your deposit is received. ':priced?'Pricing is a sample based on the dates shown and is not held until a group agreement is signed and returned. ':'')+
-    'Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
+    'Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p>'+
+    '<p style="margin-top:14px;font-size:11px;line-height:1.6;opacity:.85;max-width:640px;margin-left:auto;margin-right:auto;">'+
+    'Everything here \u2014 wedding packages, venue capacities, inclusions and any estimated totals \u2014 comes from the most recent information each resort has published. Resorts change prices, packages and what they include without notice, and figures vary by season, by day of the week and by the year you marry. Treat all of it as a guide while you choose. Exact numbers are confirmed with the resort for your dates before anything is booked.</p></footer>');
 
   $id('quote-page').innerHTML=S.join('');try{collapseRooms($id('quote-page'),6);}catch(e){}
   try{wireGuestCalc($id('quote-page'));}catch(e){}
