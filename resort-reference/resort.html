@@ -1776,6 +1776,26 @@ async function deleteSavedQuote(k){if(!confirm('Delete this saved quote? The lin
 function copyQuoteLink(){const q=collectQ();quoteLink(q).then(u=>{if(q.mode!=='guest')basketAdd(basketEntryFor(q,u));return navigator.clipboard.writeText(u).then(()=>{$id('qb-msg').textContent='Link copied and saved to the basket.';setTimeout(()=>$id('qb-msg').textContent='',4000);}).catch(()=>{$id('qb-msg').textContent=u;});});}
 
 /* ══════════════════ QUOTE RENDER ══════════════════ */
+
+/* Makes the guest calculator live — used on the quote preview and re-created in the export */
+function wireGuestCalc(root){
+  (root||document).querySelectorAll('.qgc').forEach(function(box){
+    if(box.dataset.wired)return;box.dataset.wired='1';
+    var rows=[];try{rows=JSON.parse(decodeURIComponent(box.getAttribute('data-rows')||'[]'));}catch(e){return;}
+    var inp=box.querySelector('.qgc-in'),tb=box.querySelector('tbody'),nt=box.querySelector('.qgc-note');
+    if(!inp||!tb)return;
+    var money=function(v){return '$'+Math.round(v).toLocaleString();};
+    function draw(n){
+      tb.innerHTML=rows.map(function(r){
+        var over=Math.max(0,n-r.i),extra=over*r.p,svc=r.t?extra*0.31:0,tot=r.b+extra+svc;
+        return '<tr><td>'+r.n+'</td><td>'+r.i+'</td><td>'+(over?'+'+over+' \u00d7 '+money(r.p):'\u2014')+'</td><td>'+(svc?money(svc):'\u2014')+'</td><td class="tot">'+money(tot)+'</td></tr>';
+      }).join('');
+      if(nt)nt.textContent=rows.some(function(r){return r.t;})?'Where the resort adds 16% tax and 15% service to extra guests, that is included above.':'Taxes and gratuities are included in these package prices.';
+    }
+    inp.addEventListener('input',function(){var n=parseInt(inp.value,10);if(n>0&&n<600)draw(n);});
+    draw(parseInt(inp.value,10)||40);
+  });
+}
 function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
@@ -2193,6 +2213,7 @@ function renderQuote(){
     'Details from published resort information \u00b7 Subject to change \u00b7 Rates confirmed at booking.</p></footer>');
 
   $id('quote-page').innerHTML=S.join('');try{collapseRooms($id('quote-page'),6);}catch(e){}
+  try{wireGuestCalc($id('quote-page'));}catch(e){}
   $id('quote-page').style.display='block';
   try{buildQuoteNav();}catch(e){console.warn('nav',e);}
   $id('page').style.display='none';
