@@ -1704,7 +1704,7 @@ function renderQuote(){
     const l=CT?P.ctPromoLink:P.weddingPromoLink;
     const standing=norm(CT?CT_OFFERS:DWT_OFFERS);
     if(t && b && norm(l)!==standing) o.push({tag:'At this resort',title:t,body:b,link:photoOk(l)?l:''});
-    if(!o.length||q.opts.offers===false||GUEST)return;
+    if(!o.length||q.opts.offers===false||GUEST||P.hideAllOffers)return;
     S.push('<div class="offers"><div class="wrap">'+o.map(x=>
       '<div class="offer">'+(x.tag?'<p class="tag">'+esc(x.tag)+'</p>':'')+
       '<h3>'+esc(x.title)+'</h3>'+(x.body?'<p>'+esc(x.body)+'</p>':'')+
