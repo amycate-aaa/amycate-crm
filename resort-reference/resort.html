@@ -550,6 +550,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       <p class="eyebrow" style="margin:26px 0 8px;">Flights <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; once per destination, applied to every resort there</span></p>
       <div id="mq-air-blocks"></div>
     </div>
+    <label class="airtoggle" style="margin-top:18px;display:inline-flex;gap:8px;align-items:center;margin-right:18px;"><input type="checkbox" id="mq-teaser" onchange="mqTeaserToggle()"> <b>Teaser</b> &mdash; no pricing anywhere, just the resorts</label>
     <label class="airtoggle" style="margin-top:18px;display:inline-flex;gap:8px;align-items:center;margin-right:18px;"><input type="checkbox" id="mq-faq"> Add &ldquo;How working with me works&rdquo; (FAQ + timeline) to each quote page</label>
     <label class="airtoggle" style="margin-top:18px;display:inline-flex;gap:8px;align-items:center;"><input type="checkbox" id="mq-guide" checked> Include the destination guide in the email (the short version of each place they're looking at)</label>
     <p class="eyebrow" style="margin:26px 0 8px;">Your note <span style="letter-spacing:0;text-transform:none;font-size:13px;color:var(--ink);opacity:.7;">&mdash; goes on every quote page</span></p>
@@ -972,7 +973,7 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   const notReady=rows.map(r=>window.LIB[r.slug]).filter(l=>l&&!l.ready).map(l=>l.name);if(notReady.length&&!confirm('These guides are not complete yet:\n\n'+notReady.join('\n')+'\n\nCreate the quotes anyway?'))return;
   const travel=mqTravelText();const brand=$id('mq-brand').value;const basis=$id('mq-basis').value;const nights=$id('mq-nights').value.trim();const note=$id('mq-note').value.trim();const date=$id('mq-date').value.trim();
   msg.textContent='Creating '+rows.length+' quote'+(rows.length>1?'s':'')+'\u2026';const made=[];
-  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:'resort',basis,nights,occ,xfer,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:r.room&&r.price?[{name:r.room,ppn:r.price}]:[],opts:{offers:true,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true,faq:!!(($id('mq-faq')||{}).checked)}};
+  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const TEASE=!!(($id('mq-teaser')||{}).checked);const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:TEASE?'teaser':'resort',basis,nights,occ,xfer,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:TEASE?[]:(r.room&&r.price?[{name:r.room,ppn:r.price}]:[]),opts:{offers:!TEASE,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true,faq:!!(($id('mq-faq')||{}).checked)}};
     const id=dry?'preview':Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);const enc=encQ(q);
     if(!dry){try{await db.collection('resortProfiles').doc(r.slug).set({quoteLinks:{[id]:{q:enc,t:Date.now()}}},{merge:true});}catch(e){msg.textContent='Could not save '+lib.name+': '+e.message;return;}}
     if(dry){try{localStorage.setItem('ac_preview_'+r.slug,enc);}catch(e){}}
@@ -989,6 +990,18 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   const dests=[...new Set(made.map(m=>m.where).filter(Boolean))];const destTxt=dests.length?(dests.length>1?dests.slice(0,-1).join(', ')+' and '+dests[dests.length-1]:dests[0]):'';
   const nTxt=nights?nights+' night'+(nights==='1'?'':'s'):'the dates';const basisTxt=basis==='total'?(parseInt(($id('mq-occ')||{}).value,10)||2)+' adults for '+nTxt:'per person, per night';
   let body;
+  const TEASE=!!(($id('mq-teaser')||{}).checked);
+  if(TEASE){
+    const blocksT=made.map(m=>'\u2022 '+m.resort+(m.where?' \u2014 '+m.where:'')+'\n'+m.link).join('\n\n');
+    const many=made.length>1;
+    body=(couple?'Hi '+couple+',':'Hi there,')+'\n\n'
+      +(note?note+'\n\n':'')
+      +'I pulled together '+(many?'a few resorts':'a resort')+' I think '+(many?'are':'is')+' worth a look'+(destTxt?' in '+destTxt:'')+'. No prices here on purpose \u2014 I\u2019d rather you look at the places first and tell me which ones feel like you.\n\n'
+      +blocksT+'\n\n'
+      +'Each page has the venues, the rooms, the restaurants and plenty of photos, so you can get a real sense of '+(many?'each one':'it')+'.\n\n'
+      +'When '+(many?'one or two jump out':'it looks right')+', tell me which and I\u2019ll put together real numbers for your dates \u2014 rooms, the wedding package, the whole picture.\n\n'
+      +'No rush, and no obligation. Just have a look.';
+  } else
   if(CT){body=hi+'\n\n'+(note?note+'\n\n':'')+'Here '+(made.length===1?'is the resort':'are the '+(made.length===2?'two':made.length===3?'three':made.length)+' resorts')+' I\u2019d put in front of you'+(travel?', priced for '+travel:'')+':\n\n'+blocks+(made.length>1?'\n\nSide by side on one page \u2014 price, beach, pools, rooms:\n'+cmp:'')+(($id('mq-guide')||{}).checked&&destGuideLink(made,couple)?'\n\nNot sure about the destination yet? The short version of each place \u2014 flights, the beach, the weather and what it costs:\n'+destGuideLink(made,couple):'')+'\n\nOne more thing: these are the prices I\u2019m seeing today. If you come across the same resort, room and dates for less anywhere online, send it to me before we book \u2014 I price match, and I\u2019d rather you book with me knowing you have the best number.'+(xferNote?'\n\nA small note on the package prices: they cover the flights and the resort, but not the airport transfer. I\u2019ll add that for you when we book so nothing is a surprise at the airport.':'')+
     '\n\nEach link is a full page, not a brochure \u2014 the price, every room type, dining, pools, and how the group side works. Scroll them on your phone, forward them to whoever else is deciding, and tell me which one is landing.\n\nNothing to decide today, and nothing is held. When you\u2019re ready we\u2019ll talk it through \u2014 reply here, or grab a time: https://zcal.co/amymcate/letschat';}
   else{body=hi+'\n\n'+(note?note+'\n\n':'I\u2019ve put together a selection of resort options'+(destTxt?' in '+destTxt:'')+' that align with what you are looking for. Each one includes the accommodations, wedding packages, venues and current promotions, so you can see how they compare.\n\n')+
@@ -1390,6 +1403,13 @@ function addGuestRow(v){
   box.appendChild(d);if(!v)d.querySelector('input').focus();
 }
 function guestNames(){return [...document.querySelectorAll('#q-guests input.g')].map(i=>i.value.trim()).filter(Boolean);}
+
+function mqTeaserToggle(){
+  const on=!!(($id('mq-teaser')||{}).checked);
+  const msg=$id('mq-msg');if(msg)msg.textContent=on?'Teaser: rates are ignored — the email and pages carry no pricing.':'';
+  document.querySelectorAll('#mq-rows .mq-row').forEach(r=>{
+    r.querySelectorAll('input').forEach(i=>{if(/price|pkg/i.test(i.id||i.placeholder||''))i.style.opacity=on?'.35':'';});});
+}
 function toggleMode(){
   const v=$id('q-mode')?$id('q-mode').value:'resort';
   const guest=v==='guest', teaser=v==='teaser';
