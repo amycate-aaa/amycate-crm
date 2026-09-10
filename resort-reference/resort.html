@@ -1810,6 +1810,9 @@ function renderQuote(){
               (clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+
               '</div>';}).join('')+'</div>')+
       (solo?'':stayHTML)+
+      (function(){if(!priced)return '';const named=new Set(rows.map(r=>String(r.name||'').toLowerCase().trim()));const others=cats.filter(c=>c&&c.name&&!named.has(String(c.name).toLowerCase().trim()));if(!others.length)return '';
+        return '<p class="eyebrow" style="margin:44px 0 14px;">The other rooms here</p><p class="small" style="max-width:64ch;margin:0 0 22px;">Priced above is what I quoted. These are the rest of the categories at the resort \u2014 say the word and I price any of them.</p><div class="room-grid">'+others.map(c=>{const img=[c.photo,c.photoUrl].find(photoOk)||'';const pics=[...new Set([img].concat(Array.isArray(c.photos)?c.photos:[]).filter(photoOk))];const gal=pics.length>1?'<div class="thumbs">'+pics.slice(0,6).map((u,i)=>'<img src="'+esc(u)+'" alt="" loading="lazy"'+(i===0?' class="on"':'')+' onclick="swapRoomPic(this)">').join('')+'</div>':'';const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Up to '+c.maxOccupancy+' guests':null,clean(c.view),c.swimOut?'Swim-out':null].filter(Boolean);
+          return '<div class="rcard'+(gal?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(c.name)+'" loading="lazy">'+gal+'</div>':'')+'<div class="rbody"><h4>'+esc(c.name)+'</h4>'+(clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join('')+'</div>';})()+
 
       (GUEST?(function(){
           const terms=[];
