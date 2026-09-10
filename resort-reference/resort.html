@@ -506,6 +506,10 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .qgc td.tot{font-weight:600;white-space:nowrap;}
 .qgc .qgc-note{font-size:12px;color:var(--espresso);margin-top:12px;}
 @media(max-width:620px){.qgc table{font-size:13px;}.qgc th{font-size:9px;}}
+.fchips{display:flex;flex-wrap:wrap;gap:8px;}
+.fchip{display:inline-flex;align-items:center;gap:6px;border:1px solid #E4D8C6;border-radius:999px;padding:6px 12px;font-size:13px;cursor:pointer;background:#fff;}
+.fchip:hover{border-color:var(--gold);}
+.fchip.have{opacity:.5;cursor:default;}
 </style>
 </head>
 <body>
@@ -543,6 +547,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
       </span>
       <button type="button" class="mq-fbtn" onclick="mqFavReset()" style="border:1px solid #E4D8C6;border-radius:999px;">Clear rows</button>
       <span id="mq-fav-msg" class="small" style="opacity:.75;"></span>
+      <div id="mq-fav-pick" style="width:100%;margin-top:12px;"></div>
     </div>
     <div id="mq-rows"></div>
     <button type="button" class="qb-btn ghost" onclick="mqAddRow()">+ Add a resort</button>
@@ -934,20 +939,46 @@ function mqFavFilter(b){document.querySelectorAll('#mq-fav-filter .mq-fbtn').for
   mqLoadFavorites(d);}
 function mqFavFill(){const sel=$id('mq-fav');if(!sel||sel.dataset.filled)return;sel.dataset.filled='1';Object.keys(window.MQ_FAVORITES).sort().forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;sel.appendChild(o);});}
 function mqFavSlug(want){const L=window.LIB||{};if(L[want])return want;const n=x=>String(x||'').toLowerCase().replace(/[^a-z0-9]+/g,'');const w=n(want);let hit=Object.keys(L).find(k=>n(k)===w);if(hit)return hit;hit=Object.keys(L).find(k=>n(L[k].name)===w||n(k).includes(w)||w.includes(n(k)));return hit||'';}
-function mqLoadFavorites(dest){const msg=$id('mq-fav-msg');if(!dest){if(msg)msg.textContent='';return;}
-  if(window.MQ_FAV_LAST&&window.MQ_FAV_LAST!==dest){const box=$id('mq-rows');if(box){const v=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};[...box.querySelectorAll('.mq-row')].forEach(r=>{if(!v(r,'.mq-price')&&!v(r,'.mq-pkg'))r.remove();});}}
+function mqLoadFavorites(dest){
+  const msg=$id('mq-fav-msg');const pick=$id('mq-fav-pick');
+  if(pick)pick.innerHTML='';
+  if(!dest){if(msg)msg.textContent='';return;}
   window.MQ_FAV_LAST=dest;
-  const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();const set=window.MQ_FAVORITES[dest]||{};let list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];const F=window.MQ_FAV_FILTER||'all';if(F!=='all')list=list.filter(w=>{const s2=mqFavSlug(w);const L=(window.LIB||{})[s2];if(!L)return true;return F==='adults'?!!L.adults:!L.adults;});
+  const brand=(($id('mq-brand')||{}).value||'dwt').toLowerCase();
+  const set=window.MQ_FAVORITES[dest]||{};
+  let list=(set[brand]&&set[brand].length?set[brand]:set.dwt)||[];
+  const F=window.MQ_FAV_FILTER||'all';
+  if(F!=='all')list=list.filter(w=>{const s2=mqFavSlug(w);const L=(window.LIB||{})[s2];if(!L)return true;return F==='adults'?!!L.adults:!L.adults;});
   if(!list.length){if(msg)msg.textContent=(F==='all'?'No favorites saved for '+dest+' yet.':'None of your '+dest+' favorites are '+(F==='adults'?'adults-only':'family-friendly')+'.');return;}
+  // show them as choices — nothing is added until you tick and click
+  const inRows=[...document.querySelectorAll('.mq-resort')].map(s2=>s2.value).filter(Boolean);
+  const chips=list.map(want=>{const slug=mqFavSlug(want);if(!slug)return'';
+    const L=(window.LIB||{})[slug]||{};const nm=L.name||want;
+    const have=inRows.indexOf(slug)>-1;
+    return'<label class="fchip'+(have?' have':'')+'"><input type="checkbox" value="'+esc(slug)+'"'+(have?' disabled':'')+'> '+esc(nm)+(have?' \u2713':'')+'</label>';}).join('');
+  if(pick)pick.innerHTML='<div class="fchips">'+chips+'</div>'
+    +'<button class="qb-btn" type="button" onclick="mqFavAddPicked()" style="margin-top:10px;">Add selected</button>'
+    +'<button class="qb-btn" type="button" onclick="mqFavPickAll(this)" style="margin-top:10px;margin-left:8px;">Select all</button>';
+  if(msg)msg.textContent='Tick the ones you want, then Add selected.';
+}
+function mqFavPickAll(btn){const pick=$id('mq-fav-pick');if(!pick)return;
+  const boxes=[...pick.querySelectorAll('input[type=checkbox]:not(:disabled)')];
+  const on=boxes.some(b=>!b.checked);boxes.forEach(b=>b.checked=on);btn.textContent=on?'Clear all':'Select all';}
+function mqFavAddPicked(){const pick=$id('mq-fav-pick');const msg=$id('mq-fav-msg');if(!pick)return;
+  const want=[...pick.querySelectorAll('input[type=checkbox]:checked')].map(b=>b.value);
+  if(!want.length){if(msg)msg.textContent='Nothing ticked yet.';return;}
   const val=(r,c)=>{const el=r.querySelector(c);return el&&el.value?el.value.trim():'';};
   [...document.querySelectorAll('#mq-rows .mq-row')].forEach(r=>{if(!val(r,'.mq-resort')&&!val(r,'.mq-price')&&!val(r,'.mq-pkg'))r.remove();});
-  const missing=[];let added=0,already=0;
-  list.forEach(want=>{const slug=mqFavSlug(want);if(!slug){missing.push(want);return;}
-    if([...document.querySelectorAll('.mq-resort')].some(s=>s.value===slug)){already++;return;}
-    mqAddRow();const rows=$id('mq-rows').children;const row=rows[rows.length-1];if(!row)return;const sel=row.querySelector('.mq-resort');if(!sel)return;
+  let added=0;
+  want.forEach(slug=>{
+    if([...document.querySelectorAll('.mq-resort')].some(s2=>s2.value===slug))return;
+    mqAddRow();const rows=$id('mq-rows').children;const row=rows[rows.length-1];if(!row)return;
+    const sel=row.querySelector('.mq-resort');if(!sel)return;
     sel.value=slug;if(sel.value!==slug){const o=[...sel.options].find(o=>o.value===slug);if(o)o.selected=true;}
     try{mqRooms(sel);}catch(e){}added++;});
-  if(msg)msg.textContent=(added?added+' resort'+(added===1?'':'s')+' loaded':'')+(already?(added?', ':'')+already+' already in your rows':'')+(missing.length?' \u2014 not in your library: '+missing.join(', '):'')+'. Add dates and rates, then Create.';}
+  pick.innerHTML='';
+  if(msg)msg.textContent=added?added+' resort'+(added===1?'':'s')+' added. Choose another destination to add more.':'Those are already in your rows.';
+}
 function mqFavReset(){const box=$id('mq-rows');if(box)box.innerHTML='';const sel=$id('mq-fav');const msg=$id('mq-fav-msg');if(msg)msg.textContent='Rows cleared.';window.MQ_FAV_LAST='';if(sel)sel.value='';mqAddRow();}
 function mqAddRow(){const box=$id('mq-rows');const slugs=Object.keys(window.LIB).sort((a,b)=>window.LIB[a].name.localeCompare(window.LIB[b].name));const row=document.createElement('div');row.className='mq-row';
   row.innerHTML='<div><label class="qb-lbl">Resort</label><select class="qb-in mq-resort" onchange="mqRooms(this)"><option value="">Choose\u2026</option>'+slugs.map(k=>'<option value="'+esc(k)+'">'+(window.LIB[k].ready?'':'\u26a0 ')+esc(window.LIB[k].name)+(window.LIB[k].dest?' \u2014 '+esc(window.LIB[k].dest):'')+'</option>').join('')+'</select></div>'+
