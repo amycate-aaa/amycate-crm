@@ -485,6 +485,7 @@ details.cmptuck .tb{text-align:left;padding:0;}
 #eb-msg{font-size:12px;color:var(--gold)}
 .mq-fbtn{background:none;border:0;padding:6px 12px;font:inherit;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#2A241F;opacity:.55;cursor:pointer;}
 .mq-fbtn.on{background:#F3EADB;opacity:1;}
+.bl-blank{display:block;background:#F3EADB;border-radius:3px;}
 </style>
 </head>
 <body>
@@ -1951,9 +1952,9 @@ function renderQuote(){
       (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
         if(!bars.length)return '';
         const pics=bars.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
-        const allPics=pics.every(Boolean);   // all or nothing — a half-illustrated list looks unfinished
-        return '<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist'+(allPics?' has-pics':'')+'">'+
-          bars.map((b,i)=>'<div class="bl">'+(allPics?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'')+'<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div></div>').join('')+
+        const somePics=pics.filter(Boolean).length>=Math.ceil(bars.length*0.6);  // most have one: show them, text-only rows for the rest
+        return '<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist'+(somePics?' has-pics':'')+'">'+
+          bars.map((b,i)=>'<div class="bl">'+(somePics?(pics[i]?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'<span class="bl-thumb bl-blank"></span>'):'')+'<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div></div>').join('')+
         '</div></div>';})()+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
