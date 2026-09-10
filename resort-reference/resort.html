@@ -961,8 +961,10 @@ function mqParseHotels(raw){const L=raw.replace(/\r/g,'').replace(/\[([^\]]*)\]\
   // DestiWorld: name line then "<Room>Hotel Package Price: $N"
   for(let i=0;i<L.length;i++){const m=L[i].match(/^(.*?)Hotel Package Price:?\s*\$?\s*([\d,]+(?:\.\d+)?)?/i);if(!m)continue;let room=m[1].trim();let total=(m[2]||'').replace(/,/g,'');let k=i;
     if(!total){for(let j=i+1;j<Math.min(L.length,i+3);j++){const p=L[j].match(/\$\s*([\d,]+(?:\.\d+)?)/);if(p){total=p[1].replace(/,/g,'');break;}}}
-    if(!room){for(let j=i-1;j>=Math.max(0,i-3);j--){const t=L[j];if(t&&!/^(rating|view hotel|temporary|see more|select|\d|\$)/i.test(t)){room=t;k=j;break;}}}
-    let name='';for(let j=k-1;j>=Math.max(0,k-8);j--){const t=L[j];if(!t||/^(rating|view hotel|temporary|see more|select|\d|\$|kids|upgrade|promotion|resort credit|elevate|book now|rooms available)/i.test(t)||/hotel package price/i.test(t))continue;name=t.replace(/\s+$/,'');break;}
+    if(!room){for(let j=i-1;j>=Math.max(0,i-4);j--){const t=L[j];if(t&&t.length<=80&&!/^(rating|view hotel|temporary|see more|select|\d|\$|all reservations|please)/i.test(t)&&!/read more|maintenance|renovat/i.test(t)){room=t;k=j;break;}}}
+    let name='';{let rj=-1;for(let j=k-1;j>=Math.max(0,k-14);j--){if(/^rating\s*:?/i.test(L[j])){rj=j;break;}}
+      if(rj>0){for(let j=rj-1;j>=Math.max(0,rj-4);j--){const t=L[j];if(t&&!/hotel package price|^\$|^\d|rooms available/i.test(t)){name=t;break;}}}
+      if(!name){for(let j=k-1;j>=Math.max(0,k-8);j--){const t=L[j];if(!t||t.length>90||/^(rating|view hotel|temporary|see more|select|\d|\$|kids|upgrade|promotion|resort credit|elevate|book now|rooms available|all reservations|please be advised|please note)/i.test(t)||/hotel package price|will be carrying|maintenance|renovat/i.test(t))continue;name=t.replace(/\s+$/,'');break;}}}
     if(name&&room)out.push({name,room:room.replace(/\s*-\s*all inclusive$/i,'').replace(/select$/i,'').trim(),total,src:'DW'});}
   return out;}
 function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}
