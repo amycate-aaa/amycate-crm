@@ -1972,10 +1972,14 @@ function renderQuote(){
 
   /* 9 — CLUB LEVEL */
   const clubImg=bandImg('club');
-  const clubPerks=clean(P.clubPerks||P.clubLevelPerks);
-  if((P.clubName||P.clubLevelName)&&(clubPerks||clubImg)){
+  const rawPerks=P.clubPerks||P.clubLevelPerks;
+  const perkList=(Array.isArray(rawPerks)?rawPerks:String(rawPerks||'').split(/\n|\u2022|(?<=[.;])\s+(?=[A-Z])/)).map(x=>clean(x)).filter(x=>x&&x.length>2);
+  const clubNote=clean(P.clubInfo||P.clubLevelInfo);
+  if((P.clubName||P.clubLevelName)&&(perkList.length||clubNote||clubImg)){
     S.push(sec('sand-band',head('Worth The Upgrade',P.clubName||P.clubLevelName)+clubImg+
-      (clubPerks?'<p class="small" style="max-width:66ch;margin-top:24px;">'+esc(clubPerks)+'</p>':'')));
+      (perkList.length===1?'<p class="small" style="max-width:66ch;margin-top:24px;">'+esc(perkList[0])+'</p>':
+       perkList.length?'<ul class="small" style="max-width:70ch;margin-top:24px;padding-left:20px;">'+perkList.map(x=>'<li style="margin:7px 0;">'+esc(x)+'</li>').join('')+'</ul>':'')+
+      (clubNote?'<p class="small" style="max-width:70ch;margin-top:18px;opacity:.85;">'+esc(clubNote)+'</p>':'')));
   }
 
   /* 10 — ACTIVITIES */
