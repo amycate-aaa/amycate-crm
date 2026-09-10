@@ -1121,7 +1121,8 @@ async function loadResort(slug){window.QUOTE_CT=false;
     (function(){const ci=[(p.sectionPhotos||{}).club].find(photoOk)||'';
       if(ci)$id('club-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(ci)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     $id('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
-    $id('club-body').innerHTML=(p.clubName||p.clubPerks)?'<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(clean(p.clubPerks||p.clubLevelPerks)?'<p>'+esc(clean(p.clubPerks||p.clubLevelPerks))+'</p>':'')+'</div>':'<p class="empty">This resort does not have a dedicated club tier.</p>';
+    $id('club-body').innerHTML=(p.clubName||p.clubPerks)?(function(){const raw=p.clubPerks||p.clubLevelPerks;const list=(Array.isArray(raw)?raw:String(raw||'').split(/\n|\u2022/)).map(x=>clean(x)).filter(x=>x&&x.length>2);const note=clean(p.clubInfo||p.clubLevelInfo);
+      return '<div class="club-block"><h3>'+esc(p.clubName||p.clubLevelName||'Club Level')+'</h3>'+(list.length>1?'<ul style="margin:0;padding-left:20px;">'+list.map(x=>'<li style="margin:7px 0;font-size:15px;">'+esc(x)+'</li>').join('')+'</ul>':list.length?'<p>'+esc(list[0])+'</p>':'')+(note?'<p style="margin-top:14px;opacity:.85;">'+esc(note)+'</p>':'')+'</div>';})():'<p class="empty">This resort does not have a dedicated club tier.</p>';
     const acts=p.activitiesIncluded||p.activities||'';const actsExtra=p.activitiesExtra||p.activitiesAdditional||'';
     if(acts){let incl=[],extra=[];
       if(typeof acts==='string'&&acts.includes('Additional charge')){const parts=acts.split(/Additional charge[:\s]*/i);incl=parts[0].split(' · ').map(s=>s.trim()).filter(Boolean);extra=parts[1]?parts[1].split(' · ').map(s=>s.trim()).filter(Boolean):[];}
