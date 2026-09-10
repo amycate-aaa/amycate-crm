@@ -1880,7 +1880,7 @@ async function openEditPhoto(id) {
     so.value = caption;
     so.textContent = caption;
     suggestGroup.appendChild(so);
-    sel.insertBefore(suggestGroup, sel.options[1]);
+    sel.insertBefore(suggestGroup, sel.children[1] || null);
   }
 
   // Set the select to the current category
