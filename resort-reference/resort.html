@@ -335,7 +335,11 @@ ul.pricepts b{font-weight:500;color:var(--espresso);}
 .travellers .names .dot{color:var(--gold);font-size:.55em;margin:0 .6em;vertical-align:middle;}
 .travellers .when{font-family:var(--sans);font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-soft);margin:14px 0 0;}
 /* room card gallery — tap a thumbnail to swap the main photo */
-.pcard .pic{display:flex;flex-direction:column;min-width:0;}
+.pcard .pic,.rcard .pic{display:flex;flex-direction:column;min-width:0;}
+.rcard .pic img.main{width:100%;display:block;}
+.rcard .thumbs{display:flex;gap:4px;padding:4px 4px 0;background:#fff;}
+.rcard .thumbs img{flex:0 0 auto;width:calc((100% - 20px)/6);max-width:80px;height:52px;object-fit:cover;cursor:pointer;opacity:.55;transition:.2s;}
+.rcard .thumbs img.on,.rcard .thumbs img:hover{opacity:1;}
 .pcard .pic img.main{width:100%;display:block;}
 .pcard .thumbs{display:flex;gap:4px;padding:4px 4px 0;background:#fff;flex:0 0 auto;}
 .pcard .thumbs img{flex:0 0 auto;width:calc((100% - 20px)/6);max-width:80px;height:52px;min-height:0;object-fit:cover;cursor:pointer;opacity:.55;transition:.2s;}
@@ -1063,7 +1067,7 @@ async function loadResort(slug){window.QUOTE_CT=false;
     // Amy's rule: a room category with no photo is left out (venues are not filtered this way)
     const cats=(p.roomCategories||[]).filter(r=>r&&r.name&&[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk));
     const rPhotos=photos.filter(ph=>(ph.roomCategory||'')!=='');
-    $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk)||'';const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);return'<div class="rcard">'+(img?'<img src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(clean(r.description||r.view)?'<p>'+esc(clean(r.description||r.view))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
+    $id('rooms-grid').innerHTML=cats.length?cats.map(r=>{const img=[r.photo,r.photoUrl,findPhoto(r.name||'')].find(photoOk)||'';const pills=[r.sqft?r.sqft+' sq ft':null,r.maxOccupancy?'Up to '+r.maxOccupancy+' guests':null,r.swimOut?'Swim-out':null].filter(Boolean);const pics=[...new Set([img].concat(Array.isArray(r.photos)?r.photos:[]).filter(photoOk))];const gal=pics.length>1?'<div class="thumbs">'+pics.slice(0,6).map((u,i)=>'<img src="'+esc(u)+'" alt="" loading="lazy"'+(i===0?' class="on"':'')+' onclick="swapRoomPic(this)">').join('')+'</div>':'';return'<div class="rcard'+(gal?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">'+gal+'</div>':'')+'<div class="rbody">'+(r.sqft?'<p class="rmeta">'+esc(r.sqft)+' sq ft</p>':'')+'<h4>'+esc(r.name)+'</h4>'+(clean(r.description||r.view)?'<p>'+esc(clean(r.description||r.view))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join(''):rPhotos.length?rPhotos.map(ph=>'<div class="rcard"><img src="'+esc(ph.url||ph.downloadURL)+'" alt="'+esc(ph.roomCategory||ph.caption||'Room')+'" loading="lazy"><div class="rbody"><h4>'+esc(ph.roomCategory||ph.caption||'Room')+'</h4></div></div>').join(''):'<p class="empty">Room details coming soon.</p>';
     (function(){const ci=[(p.sectionPhotos||{}).club].find(photoOk)||'';
       if(ci)$id('club-body').insertAdjacentHTML('beforebegin','<img class="bandimg" src="'+esc(ci)+'" alt="" loading="lazy" style="margin-bottom:26px;">');})();
     $id('club-title').textContent=p.clubName||p.clubLevelName||'Club Level';
@@ -2025,7 +2029,7 @@ function renderQuote(){
 // have no menu, so a missing link is accurate rather than an omission.
 function menuUrlOf(r){ return (r && typeof r!=='string') ? (r.menuUrl||r.menu||'') : ''; }
 function swapRoomPic(t){
-  const card=t.closest('.pcard');if(!card)return;const main=card.querySelector('img.main');if(main)main.src=t.src;
+  const card=t.closest('.pcard')||t.closest('.rcard');if(!card)return;const main=card.querySelector('img.main');if(main)main.src=t.src;
   card.querySelectorAll('.thumbs img').forEach(i=>i.classList.toggle('on',i===t));
 }
 function roomPhotos(name,c){
