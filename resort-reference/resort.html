@@ -1925,6 +1925,10 @@ function renderQuote(){
   const SMALL=q.tripSize==='small';   // just them — no group-block language
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
   const TEASER=q.mode==='teaser'||/^(1|true)$/i.test(new URLSearchParams(location.search).get('np')||''); // no pricing anywhere — a look at the resorts, nothing to price against
+  // Opened from the shared library rather than a real quote link: it belongs to nobody,
+  // so drop anything left over from the last quote built on this machine.
+  (function(){const _p=new URLSearchParams(location.search);
+    if(!_p.get('k')&&!_p.get('q')&&!_p.get('edit')){q.couple='';q.note='';q.headline=q.headline||'';q.date='';q.travel='';}})();
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
   const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
