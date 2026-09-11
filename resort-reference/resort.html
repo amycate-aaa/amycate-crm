@@ -1945,11 +1945,11 @@ function renderQuote(){
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
-  if(q.note)
   if(TEASER||!AGENT)S.push('<div class="topask"><div class="c"><span class="ta-q">Like the look of '+esc(R)+'?</span>'
     +'<button type="button" class="ta-btn" onclick="jumpInterest()">I\u2019m interested \u2192</button>'
     +'<span class="ta-n">One tap. I\u2019ll come back with numbers.</span></div></div>');
-S.push(sec('',head('What you told me','A Word Before You Look')+
+  if(q.note)
+  S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
   const hasPkg=q.needAir&&String(q.pkgPrice||'').trim()!=='';
   const priced=TEASER?false:(q.prices.length>0||hasPkg);   // teaser never shows a price
