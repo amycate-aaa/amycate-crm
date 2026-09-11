@@ -1831,7 +1831,7 @@ function extrasBlock(){
 function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
-  const CT=q.brand==='ct';   // Celebration Travel — social group, no wedding
+  const CT=q.brand==='ct'||/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');   // Celebration Travel — social group, no wedding
   window.QUOTE_CT=CT;
   const SMALL=q.tripSize==='small';   // just them — no group-block language
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
