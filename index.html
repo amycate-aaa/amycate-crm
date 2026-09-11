@@ -3489,6 +3489,7 @@ ${clubPerksBox}
 
 </table></td></tr></table>
 
+
 <script>
 /* The shareable library links, with a box to tag each one to a lead. */
 function shareLinks(){
@@ -3497,27 +3498,47 @@ function shareLinks(){
          ['Celebration Travel \u2014 no pricing',B+'&ct=1'],
          ['Wedding \u2014 with pricing',B+'&prices=1'],
          ['Celebration Travel \u2014 with pricing',B+'&ct=1&prices=1']];
-  var w=document.getElementById('sharebox');
-  if(w){w.remove();return;}
-  w=document.createElement('div');w.id='sharebox';
+  var old=document.getElementById('sharebox');
+  if(old){old.remove();return false;}
+  var w=document.createElement('div');
+  w.id='sharebox';
   w.style.cssText='position:fixed;inset:0;background:rgba(20,18,15,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  w.innerHTML='<div style="background:#fff;max-width:620px;width:100%;padding:26px 26px 22px;border-radius:6px;font-family:inherit;max-height:86vh;overflow:auto;">'
-   +'<h3 style="margin:0 0 4px;font-size:20px;">Share the resort library</h3>'
-   +'<p style="margin:0 0 16px;font-size:13px;color:#666;">Add their name so you can see who opened it. Click a link to copy.</p>'
-   +'<input id="shareWho" placeholder="Their name (optional) \u2014 e.g. hannah" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;margin-bottom:16px;">'
-   +'<div id="shareList"></div>'
-   +'<button onclick="document.getElementById(\'sharebox\').remove()" style="margin-top:16px;padding:9px 18px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;">Close</button></div>';
-  document.body.appendChild(w);
+  var card=document.createElement('div');
+  card.style.cssText='background:#fff;max-width:640px;width:100%;padding:26px;border-radius:6px;max-height:86vh;overflow:auto;';
+  var h=document.createElement('h3');h.textContent='Share the resort library';h.style.cssText='margin:0 0 4px;font-size:20px;';
+  var p=document.createElement('p');p.textContent='Add their name so you can see who opened it. Click a link to copy it.';p.style.cssText='margin:0 0 16px;font-size:13px;color:#666;';
+  var inp=document.createElement('input');inp.placeholder='Their name (optional)';inp.style.cssText='width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;margin-bottom:18px;';
+  var list=document.createElement('div');
+  var close=document.createElement('button');close.textContent='Close';close.style.cssText='margin-top:18px;padding:9px 18px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;';
+  close.onclick=function(){w.remove();};
   function draw(){
-    var who=(document.getElementById('shareWho').value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
-    document.getElementById('shareList').innerHTML=L.map(function(x){
+    var who=(inp.value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
+    list.innerHTML='';
+    L.forEach(function(x){
       var u=x[1]+(who?'&c='+who:'');
-      return '<div style="margin-bottom:12px;">'
-        +'<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A7C68;margin-bottom:3px;">'+x[0]+'</div>'
-        +'<div onclick="navigator.clipboard.writeText(this.textContent.trim()).then(()=>{this.style.background=\'#EAF6EA\';this.textContent=\'Copied \\u2713  \'+this.dataset.u;setTimeout(()=>{this.textContent=this.dataset.u;this.style.background=\'#F7F4EF\';},1400);})" data-u="'+u+'" style="cursor:pointer;background:#F7F4EF;border:1px solid #E4D8C6;padding:9px 11px;border-radius:4px;font-size:12.5px;word-break:break-all;font-family:ui-monospace,Menlo,monospace;">'+u+'</div></div>';}).join('');
+      var lab=document.createElement('div');
+      lab.textContent=x[0];
+      lab.style.cssText='font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8A7C68;margin:0 0 4px;';
+      var box=document.createElement('div');
+      box.textContent=u;
+      box.style.cssText='cursor:pointer;background:#F7F4EF;border:1px solid #E4D8C6;padding:10px 12px;border-radius:4px;font-size:12.5px;word-break:break-all;font-family:ui-monospace,Menlo,monospace;margin-bottom:14px;';
+      box.onclick=function(){
+        var t=u;
+        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);}
+        else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
+        box.textContent='Copied \u2713';box.style.background='#EAF6EA';
+        setTimeout(function(){box.textContent=t;box.style.background='#F7F4EF';},1300);
+      };
+      list.appendChild(lab);list.appendChild(box);
+    });
   }
-  document.getElementById('shareWho').addEventListener('input',draw);
+  inp.addEventListener('input',draw);
+  card.appendChild(h);card.appendChild(p);card.appendChild(inp);card.appendChild(list);card.appendChild(close);
+  w.appendChild(card);
+  w.onclick=function(e){if(e.target===w)w.remove();};
+  document.body.appendChild(w);
   draw();
+  return false;
 }
 </script>
 </body></html>`;
