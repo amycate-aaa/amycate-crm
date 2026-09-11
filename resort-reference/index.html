@@ -207,7 +207,7 @@ function card(p){
   if((p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
   if((p.restaurants||[]).length)bits.push((p.restaurants||[]).length+' restaurants');
   if((p.roomCategories||[]).length)bits.push((p.roomCategories||[]).length+' room types');
-  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'">'
+  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true&np=1">'
     +'<div class="ph"'+(img?' style="background-image:url(\''+esc(img)+'\')"':'')+'></div>'
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
