@@ -320,8 +320,8 @@ tr:hover .sticky-col{background:var(--surface2);}
     <a href="resort-library.html" class="nav-btn" style="text-decoration:none">🏨 Resort Library</a>
     <a href="resort-reference/" class="nav-btn" style="text-decoration:none">📋 Resort Guides</a>
     <a href="resort-reference/resort.html" class="nav-btn" style="text-decoration:none">⚡ Live Guide</a>
-    <a href="resort-reference/?k=amycate" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">🔒 Share — no pricing</a>
-    <a href="resort-reference/?k=amycate&amp;prices=1" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">💲 Share — with pricing</a>
+    <a href="#" onclick="shareLinks();return false;" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">🔗 Share links</a>
+    
 
     <div class="sidebar-section">All</div>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')">👥 All Guests</button>
@@ -3487,6 +3487,38 @@ ${clubPerksBox}
 </td></tr>
 
 </table></td></tr></table>
+
+<script>
+/* The shareable library links, with a box to tag each one to a lead. */
+function shareLinks(){
+  var B='https://amy-cate.com/resort-reference/?k=amycate';
+  var L=[['Wedding leads \u2014 no pricing',B],
+         ['Celebration Travel \u2014 no pricing',B+'&ct=1'],
+         ['Wedding \u2014 with pricing',B+'&prices=1'],
+         ['Celebration Travel \u2014 with pricing',B+'&ct=1&prices=1']];
+  var w=document.getElementById('sharebox');
+  if(w){w.remove();return;}
+  w=document.createElement('div');w.id='sharebox';
+  w.style.cssText='position:fixed;inset:0;background:rgba(20,18,15,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  w.innerHTML='<div style="background:#fff;max-width:620px;width:100%;padding:26px 26px 22px;border-radius:6px;font-family:inherit;max-height:86vh;overflow:auto;">'
+   +'<h3 style="margin:0 0 4px;font-size:20px;">Share the resort library</h3>'
+   +'<p style="margin:0 0 16px;font-size:13px;color:#666;">Add their name so you can see who opened it. Click a link to copy.</p>'
+   +'<input id="shareWho" placeholder="Their name (optional) \u2014 e.g. hannah" style="width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;margin-bottom:16px;">'
+   +'<div id="shareList"></div>'
+   +'<button onclick="document.getElementById(\'sharebox\').remove()" style="margin-top:16px;padding:9px 18px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;">Close</button></div>';
+  document.body.appendChild(w);
+  function draw(){
+    var who=(document.getElementById('shareWho').value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
+    document.getElementById('shareList').innerHTML=L.map(function(x){
+      var u=x[1]+(who?'&c='+who:'');
+      return '<div style="margin-bottom:12px;">'
+        +'<div style="font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8A7C68;margin-bottom:3px;">'+x[0]+'</div>'
+        +'<div onclick="navigator.clipboard.writeText(this.textContent.trim()).then(()=>{this.style.background=\'#EAF6EA\';this.textContent=\'Copied \\u2713  \'+this.dataset.u;setTimeout(()=>{this.textContent=this.dataset.u;this.style.background=\'#F7F4EF\';},1400);})" data-u="'+u+'" style="cursor:pointer;background:#F7F4EF;border:1px solid #E4D8C6;padding:9px 11px;border-radius:4px;font-size:12.5px;word-break:break-all;font-family:ui-monospace,Menlo,monospace;">'+u+'</div></div>';}).join('');
+  }
+  document.getElementById('shareWho').addEventListener('input',draw);
+  draw();
+}
+</script>
 </body></html>`;
 
   // Show preview
