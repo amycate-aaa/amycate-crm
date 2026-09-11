@@ -130,7 +130,7 @@ footer strong{font-weight:500;color:#5A5045}
   <div class="top">
     <p class="eyebrow">Amy Cate &middot; Destination Weddings</p>
     <h1>Resort Reference</h1>
-    <p class="lede">The resorts I know well &mdash; venues, rooms, dining and what a wedding there actually looks like. Tap any one to read the full guide.</p>
+    <p class="lede" id="lede">The resorts I know well &mdash; venues, rooms, dining and what a wedding there actually looks like. Tap any one to read the full guide.</p>
   </div>
   <div class="tools">
     <input id="q" type="search" placeholder="Search a resort or destination&hellip;" autocomplete="off">
@@ -173,6 +173,7 @@ const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;'
 const ok=v=>v&&/^https?:/.test(String(v));
 const ORDER=['Jamaica','Dominican Republic','Mexico'];
 let ALL=[],F='all',Q='';
+const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 
 function isAdults(p){
   const ap=String(p.agePolicy||'');
@@ -207,7 +208,7 @@ function card(p){
   if((p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
   if((p.restaurants||[]).length)bits.push((p.restaurants||[]).length+' restaurants');
   if((p.roomCategories||[]).length)bits.push((p.roomCategories||[]).length+' room types');
-  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true&np=1">'
+  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true'+(SHOWPRICE?'':'&np=1')+'">'
     +'<div class="ph"'+(img?' style="background-image:url(\''+esc(img)+'\')"':'')+'></div>'
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
@@ -235,6 +236,7 @@ document.getElementById('q').addEventListener('input',e=>{Q=e.target.value;draw(
 document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');F=b.dataset.f;draw();}));
 
+if(SHOWPRICE){const l=document.getElementById('lede');if(l)l.insertAdjacentHTML('afterend','<p style="margin-top:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);">Pricing version</p>');}
 db.collection('resortProfiles').get().then(s=>{
   ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()))
     .filter(p=>p.name&&(p.venues||[]).length);      // only resorts with real guide content
