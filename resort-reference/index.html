@@ -162,19 +162,6 @@ footer strong{font-weight:500;color:#5A5045}
     <button class="chip" data-f="adults">Adults only</button>
     <button class="chip" data-f="family">Family friendly</button>
   </div>
-  <div class="ask">
-    <div class="ask-in">
-      <p class="ask-q">Not sure where to start?</p>
-      <p class="ask-s">Tell me roughly what you&rsquo;re picturing and I&rsquo;ll come back with three that fit &mdash; no forms, no obligation.</p>
-      <div class="ask-f">
-        <input id="ask-name" placeholder="Your name">
-        <input id="ask-when" placeholder="When, roughly?">
-        <input id="ask-pax" type="number" min="1" max="500" placeholder="How many?">
-      </div>
-      <button class="ask-btn" id="ask-go">Ask Amy</button>
-      <p class="ask-note" id="ask-note"></p>
-    </div>
-  </div>
   <div id="dests" class="dests"></div>
   <div id="out"><p class="state">Loading the library&hellip;</p></div>
   <div class="foot">
@@ -322,26 +309,7 @@ function logVisit(){
 }
 
 
-(function(){
-  var b=document.getElementById('ask-go');if(!b)return;
-  b.onclick=function(){
-    var q=new URLSearchParams(location.search);
-    b.disabled=true;b.textContent='Got it \u2014 Amy will be in touch \u2713';b.classList.add('done');
-    try{
-      db.collection('libraryInterest').add({
-        at:new Date().toISOString(),
-        resort:'',resortName:'General enquiry \u2014 from the library',
-        name:((document.getElementById('ask-name')||{}).value||'').slice(0,80),
-        when:((document.getElementById('ask-when')||{}).value||'').slice(0,60),
-        guests:((document.getElementById('ask-pax')||{}).value||'').slice(0,10),
-        sentTo:(q.get('c')||'').slice(0,60),
-        brand:CTMODE?'Celebration Travel':'Weddings',
-        device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
-        handled:false});
-      document.getElementById('ask-note').textContent='Thank you \u2014 I\u2019ll come back to you with a few that fit.';
-    }catch(e){document.getElementById('ask-note').textContent='Something went wrong \u2014 email amy.cate@destinationweddings.com and I\u2019ll pick it up.';}
-  };
-})();
+
 
 logVisit();
 db.collection('resortProfiles').get().then(s=>{
