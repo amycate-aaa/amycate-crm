@@ -199,8 +199,7 @@ function regionOf(p){
   const d=String(p.destination||'')+' '+String(p.name||'');
   if(/jamaica|montego|negril|ocho rios|falmouth/i.test(d))return 'Jamaica';
   if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero/i.test(d))return 'Punta Cana & the DR';
-  if(/costa mujeres|playa mujeres|canc/i.test(d))return 'Canc\u00fan & Costa Mujeres';
-  if(/riviera maya|playa del carmen|akumal|tulum|puerto morelos|cozumel|maroma/i.test(d))return 'Riviera Maya';
+  if(/costa mujeres|playa mujeres|canc|riviera maya|playa del carmen|akumal|tulum|puerto morelos|cozumel|maroma/i.test(d))return 'Canc\u00fan & Riviera Maya';
   if(/los cabos|cabo san lucas|san jos\u00e9 del cabo|baja/i.test(d))return 'Los Cabos';
   if(/vallarta|nayarit|bah\u00eda de banderas|bahia mita|punta mita/i.test(d))return 'Puerto Vallarta';
   if(/aruba|curacao|cura\u00e7ao|bahamas|barbados|st\.? lucia|antigua|grenada|turks|tobago|trinidad/i.test(d))return 'Elsewhere in the Caribbean';
@@ -259,7 +258,7 @@ function draw(){
 }
 function drawDests(){
   const R={};ALL.forEach(p=>{const r=regionOf(p);R[r]=(R[r]||0)+1;});
-  const ORD=['Jamaica','Punta Cana & the DR','Canc\u00fan & Costa Mujeres','Riviera Maya','Los Cabos','Puerto Vallarta','Elsewhere in Mexico','Elsewhere in the Caribbean','Elsewhere'];
+  const ORD=['Jamaica','Punta Cana & the DR','Canc\u00fan & Riviera Maya','Los Cabos','Puerto Vallarta','Elsewhere in Mexico','Elsewhere in the Caribbean','Elsewhere'];
   const keys=Object.keys(R).sort((a,b)=>{const i=ORD.indexOf(a),j=ORD.indexOf(b);return (i<0?99:i)-(j<0?99:j);});
   const box=document.getElementById('dests');if(!box)return;
   box.innerHTML='<button class="dbox'+(D==='all'?' on':'')+'" data-d="all"><span class="n">Everywhere</span><span class="c">'+ALL.length+' resorts</span></button>'
