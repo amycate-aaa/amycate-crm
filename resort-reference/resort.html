@@ -522,6 +522,12 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .extras .ex-d{font-size:13px;color:var(--espresso);line-height:1.5;}
 .extras .ex-fine{font-size:11.5px;color:var(--espresso);opacity:.85;margin-top:14px;font-style:italic;line-height:1.55;}
 @media(max-width:620px){.extras .ex-d{display:none;}}
+.iam{margin-top:30px;padding-top:26px;border-top:1px solid rgba(176,141,87,.35);text-align:center;}
+.iam .iam-q{font-family:var(--serif);font-size:1.35rem;color:#FBF8F3;margin:0 0 14px;font-style:italic;}
+.iam-btn{font-family:var(--sans);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:15px 30px;cursor:pointer;transition:.22s;max-width:100%;}
+.iam-btn:hover{background:#fff;color:var(--gold-deep,#8A6D3B);}
+.iam-btn.done{background:transparent;border-color:rgba(255,255,255,.45);color:#FBF8F3;cursor:default;}
+.iam .iam-note{font-size:12px;color:rgba(251,248,243,.75);margin-top:12px;line-height:1.55;max-width:420px;margin-left:auto;margin-right:auto;}
 </style>
 </head>
 <body>
@@ -1826,6 +1832,27 @@ function copyQuoteLink(){const q=collectQ();quoteLink(q).then(u=>{if(q.mode!=='g
 /* ══════════════════ QUOTE RENDER ══════════════════ */
 
 /* Makes the guest calculator live — used on the quote preview and re-created in the export */
+
+/* One-tap interest. Writes to the CRM, nothing for the client to fill in. */
+function tellAmy(btn){
+  try{
+    var q=new URLSearchParams(location.search);
+    btn.disabled=true;
+    btn.textContent='Got it \u2014 I\u2019ll be in touch \u2713';
+    btn.classList.add('done');
+    db.collection('libraryInterest').add({
+      at:new Date().toISOString(),
+      resort:q.get('r')||'',
+      resortName:(typeof P!=='undefined'&&P&&P.name)?P.name:'',
+      sentTo:(q.get('c')||'').slice(0,60),
+      brand:q.get('ct')?'Celebration Travel':'Weddings',
+      device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
+      handled:false
+    });
+    var n=document.querySelector('.iam-note');
+    if(n)n.textContent='Thank you \u2014 Amy has it. She\u2019ll follow up with pricing for your dates.';
+  }catch(e){btn.textContent='Something went wrong \u2014 just reply to my email instead.';}
+}
 function wireGuestCalc(root){
   (root||document).querySelectorAll('.qgc').forEach(function(box){
     if(box.dataset.wired)return;box.dataset.wired='1';
@@ -2273,7 +2300,11 @@ function renderQuote(){
     (GUEST&&q.bookLink?'<a href="'+esc(q.bookLink)+'" target="_blank" rel="noopener" style="display:inline-block;margin:0 12px 12px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--espresso);background:var(--gold);border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Accept &amp; Pay &rarr;</a>':'')+
     '<a href="mailto:'+esc(email)+'?subject='+encodeURIComponent((q.couple?q.couple+' \u2014 ':'')+R)+'" style="display:inline-block;margin:0 12px 12px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Email Me &rarr;</a>'+
     '<a href="https://zcal.co/amymcate/letschat" target="_blank" rel="noopener" style="display:inline-block;margin:0 0 12px;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Call Me &rarr;</a></p>'+
-    '<p class="sig">Amy</p></div>'+
+    '<p class="sig">Amy</p>'+
+    (TEASER||!AGENT?'<div class="iam"><p class="iam-q">Is this one of them?</p>'
+      +'<button type="button" class="iam-btn" onclick="tellAmy(this)">I\u2019m interested in '+esc(R)+'</button>'
+      +'<p class="iam-note">One tap \u2014 no form, nothing to fill in. It just lets me know, and I\u2019ll come back to you with numbers.</p></div>':'')
+    +'</div>'+
     (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
 
   S.push('<footer><p>Amy Cate \u00b7 '+esc(brandName)+'</p><p>'+esc(email)+'</p>'+
