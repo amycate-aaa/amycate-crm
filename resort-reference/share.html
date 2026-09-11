@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Share the Library — Amy Cate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF7F2;--line:#E4D8C6;--gold:#B08D57;--gold-deep:#8A6D3B;--ink:#1E1A14;--mute:#7A7266;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Jost',system-ui,sans-serif;font-weight:300;}
+.wrap{max-width:760px;margin:0 auto;padding:44px 22px 60px;}
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:400;line-height:1.1;margin-top:8px;}
+p.lede{color:var(--mute);font-size:14.5px;margin-top:8px;line-height:1.6;}
+label.who{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin:30px 0 7px;}
+input{width:100%;padding:13px 15px;border:1px solid var(--line);background:#fff;font-family:inherit;font-size:16px;}
+.row{margin-top:24px;}
+.row h3{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;margin-bottom:6px;}
+.link{background:#fff;border:1px solid var(--line);padding:13px 15px;font-family:ui-monospace,Menlo,monospace;font-size:12.5px;word-break:break-all;cursor:pointer;transition:.15s;}
+.link:hover{border-color:var(--gold);}
+.link.copied{background:#EDF6ED;border-color:#8AB98A;}
+.hint{font-size:12px;color:var(--mute);margin-top:6px;}
+.foot{margin-top:44px;border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--mute);}
+a{color:var(--gold-deep);}
+</style></head><body>
+<div class="wrap">
+  <p class="eyebrow">Amy Cate</p>
+  <h1>Share the Library</h1>
+  <p class="lede">Add a name and every link below is tagged to that person, so <a href="visits.html">Who's Looking</a> tells you exactly who opened it. Click a link to copy it.</p>
+  <label class="who" for="who">Who are you sending it to?</label>
+  <input id="who" placeholder="e.g. hannah, or jeff-and-chelsea" autocomplete="off">
+  <p class="hint">Optional. Leave blank for a general link.</p>
+  <div id="out"></div>
+  <p class="foot">All four links are password-free for the person you send them to &mdash; the word is built in. <a href="../index.html">Back to the dashboard</a></p>
+</div>
+<script>
+var B='https://amy-cate.com/resort-reference/?k=amycate';
+var L=[['Wedding leads \u2014 no pricing',B,'The one to send a lead who hasn\u2019t replied.'],
+       ['Celebration Travel \u2014 no pricing',B+'&ct=1','Same resorts, read as a holiday. No wedding venues or packages.'],
+       ['Wedding \u2014 with pricing',B+'&prices=1','For couples you\u2019re actively working with.'],
+       ['Celebration Travel \u2014 with pricing',B+'&ct=1&prices=1','Priced, no wedding content.']];
+var who=document.getElementById('who'), out=document.getElementById('out');
+function draw(){
+  var tag=(who.value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
+  out.innerHTML='';
+  L.forEach(function(x){
+    var u=x[1]+(tag?'&c='+tag:'');
+    var row=document.createElement('div');row.className='row';
+    var h=document.createElement('h3');h.textContent=x[0];
+    var box=document.createElement('div');box.className='link';box.textContent=u;
+    var hint=document.createElement('p');hint.className='hint';hint.textContent=x[2];
+    box.onclick=function(){
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u);}
+      else{var ta=document.createElement('textarea');ta.value=u;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
+      box.textContent='Copied \u2713';box.className='link copied';
+      setTimeout(function(){box.textContent=u;box.className='link';},1300);
+    };
+    row.appendChild(h);row.appendChild(box);row.appendChild(hint);out.appendChild(row);
+  });
+}
+who.addEventListener('input',draw);
+draw();
+</script></body></html>
