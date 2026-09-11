@@ -534,6 +534,13 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .iam-more input::placeholder{color:rgba(251,248,243,.5);}
 .iam-more input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.14);}
 .iam-more .iam-name input{min-width:220px;}
+.topask{background:#3A332B;border-top:1px solid rgba(176,141,87,.3);border-bottom:1px solid rgba(176,141,87,.3);}
+.topask .c{max-width:1080px;margin:0 auto;padding:13px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;}
+.topask .ta-q{font-family:var(--serif);font-size:19px;color:#F7F2E9;font-style:italic;}
+.topask .ta-btn{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:10px 20px;cursor:pointer;transition:.2s;white-space:nowrap;}
+.topask .ta-btn:hover{background:#F7F2E9;color:#3A332B;}
+.topask .ta-n{font-size:11.5px;color:rgba(214,196,167,.8);}
+@media(max-width:560px){.topask .ta-n{display:none;}.topask .ta-q{font-size:17px;}}
 </style>
 </head>
 <body>
@@ -1840,6 +1847,15 @@ function copyQuoteLink(){const q=collectQ();quoteLink(q).then(u=>{if(q.mode!=='g
 /* Makes the guest calculator live — used on the quote preview and re-created in the export */
 
 /* One-tap interest. Writes to the CRM, nothing for the client to fill in. */
+
+function jumpInterest(){
+  var el=document.querySelector('.iam');
+  if(!el)return;
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+  var b=el.querySelector('.iam-btn');
+  if(b){b.style.transition='box-shadow .3s';b.style.boxShadow='0 0 0 6px rgba(176,141,87,.35)';
+    setTimeout(function(){b.style.boxShadow='none';},1600);}
+}
 function tellAmy(btn){
   try{
     var q=new URLSearchParams(location.search);
@@ -1929,7 +1945,11 @@ function renderQuote(){
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
-  if(q.note)S.push(sec('',head('What you told me','A Word Before You Look')+
+  if(q.note)
+  if(TEASER||!AGENT)S.push('<div class="topask"><div class="c"><span class="ta-q">Like the look of '+esc(R)+'?</span>'
+    +'<button type="button" class="ta-btn" onclick="jumpInterest()">I\u2019m interested \u2192</button>'
+    +'<span class="ta-n">One tap. I\u2019ll come back with numbers.</span></div></div>');
+S.push(sec('',head('What you told me','A Word Before You Look')+
     '<div style="font-size:19px;line-height:1.85;max-width:64ch;">'+q.note.split('\n').filter(Boolean).map(l=>'<p style="margin:0 0 1em">'+esc(l)+'</p>').join('')+'</div>'));
   const hasPkg=q.needAir&&String(q.pkgPrice||'').trim()!=='';
   const priced=TEASER?false:(q.prices.length>0||hasPkg);   // teaser never shows a price
