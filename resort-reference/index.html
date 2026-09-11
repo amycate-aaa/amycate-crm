@@ -113,7 +113,19 @@ footer strong{font-weight:500;color:#5A5045}
 .state{text-align:center;padding:70px 0;color:#6B6254;}
 .foot{margin-top:56px;border-top:1px solid var(--line);padding:30px 0 54px;text-align:center;font-size:12.5px;color:#6B6254;}
 .foot a{color:var(--gold-deep);}
+
+#gate{position:fixed;inset:0;background:var(--cream);z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;}
+#gate .box{max-width:400px;width:100%;text-align:center;}
+#gate .eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:10px;}
+#gate h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:40px;font-weight:400;line-height:1.1;}
+#gate p{font-size:14.5px;color:#5A5248;margin-top:12px;line-height:1.6;}
+#gate form{margin-top:22px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+#gate input{font-family:'Jost',sans-serif;font-size:16px;padding:12px 14px;border:1px solid var(--line);background:#fff;min-width:200px;text-align:center;}
+#gate button{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:12px 22px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;}
+#gate button:hover{background:var(--gold-deep);border-color:var(--gold-deep);}
+#gate .no{color:#A33;font-size:13px;margin-top:12px;min-height:18px;}
 </style></head><body>
+<div id="gate"><div class="box"><p class="eyebrow">Amy Cate &middot; Destination Weddings</p><h1>Resort Reference</h1><p>This library is shared with my couples. Enter the word I gave you to take a look.</p><form onsubmit="return gateGo(event)"><input id="gk" type="password" autocomplete="off" placeholder="Enter the word" autofocus><button type="submit">Enter</button></form><p class="no" id="gno"></p></div></div>
 <div class="wrap">
   <div class="top">
     <p class="eyebrow">Amy Cate &middot; Destination Weddings</p>
@@ -136,6 +148,25 @@ footer strong{font-weight:500;color:#5A5045}
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
+
+/* Simple shared-word gate. A deterrent against the link being passed around,
+   not real security — nothing sensitive lives on this page. */
+(function(){
+  var WORD='amycate';
+  var open=false;
+  try{open=sessionStorage.getItem('acr')==='1'||localStorage.getItem('acr')==='1';}catch(e){}
+  var q=new URLSearchParams(location.search).get('k');
+  if(q&&q.toLowerCase().trim()===WORD)open=true;
+  if(open){var g=document.getElementById('gate');if(g)g.remove();}
+  window.gateGo=function(e){
+    e.preventDefault();
+    var v=(document.getElementById('gk').value||'').toLowerCase().trim();
+    if(v===WORD){try{localStorage.setItem('acr','1');}catch(_){}
+      var g=document.getElementById('gate');if(g)g.remove();return false;}
+    document.getElementById('gno').textContent='That\u2019s not it \u2014 try again, or ask me for the word.';
+    return false;};
+})();
+
 firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
 const db=firebase.firestore();
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
