@@ -210,7 +210,7 @@ function card(p){
   if(!CTMODE&&(p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
   if((p.restaurants||[]).length)bits.push((p.restaurants||[]).length+' restaurants');
   if((p.roomCategories||[]).length)bits.push((p.roomCategories||[]).length+' room types');
-  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&pv=1'+(SHOWPRICE?'':'&np=1')+(CTMODE?'&ct=1':'')+'">'
+  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true&pv=1'+(SHOWPRICE?'':'&np=1')+(CTMODE?'&ct=1':'')+'">'
     +'<div class="ph"'+(img?' style="background-image:url(\''+esc(img)+'\')"':'')+'></div>'
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
