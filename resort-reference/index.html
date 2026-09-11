@@ -210,7 +210,7 @@ firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDom
 const db=firebase.firestore();
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ok=v=>v&&/^https?:/.test(String(v));
-const ORDER=['Jamaica','Dominican Republic','Mexico'];
+const ORDER=['Canc\u00fan, Riviera Maya & Tulum','Los Cabos','Puerto Vallarta','Dominican Republic','Jamaica','Costa Rica','Other'];
 let ALL=[],F='all',Q='',D='all';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
@@ -279,7 +279,7 @@ function draw(){
     return (String(p.name||'')+' '+String(p.destination||'')).toLowerCase().includes(q);
   });
   if(!list.length){document.getElementById('out').innerHTML='<p class="state">Nothing matches that \u2014 try another word.</p>';return;}
-  const groups={};list.forEach(p=>{const d=D==='all'?destOf(p):regionOf(p);(groups[d]=groups[d]||[]).push(p);});
+  const groups={};list.forEach(p=>{const d=regionOf(p);(groups[d]=groups[d]||[]).push(p);});
   const keys=Object.keys(groups).sort((a,b)=>{const i=ORDER.indexOf(a),j=ORDER.indexOf(b);return (i<0?99:i)-(j<0?99:j)||a.localeCompare(b);});
   document.getElementById('out').innerHTML=keys.map(k=>
     '<section class="dest"><h2>'+esc(k)+'</h2><p class="cnt">'+groups[k].length+' resort'+(groups[k].length===1?'':'s')+'</p>'
