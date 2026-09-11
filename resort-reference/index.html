@@ -198,7 +198,7 @@ function isAdults(p){
 function regionOf(p){
   const d=String(p.destination||'')+' '+String(p.name||'');
   if(/jamaica|montego|negril|ocho rios|falmouth/i.test(d))return 'Jamaica';
-  if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero/i.test(d))return 'Punta Cana & the DR';
+  if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero|esmeralda|playa esmeralda/i.test(d))return 'Punta Cana & the DR';
   if(/costa mujeres|playa mujeres|canc|riviera maya|playa del carmen|akumal|tulum|puerto morelos|cozumel|maroma/i.test(d))return 'Canc\u00fan & Riviera Maya';
   if(/los cabos|cabo san lucas|san jos\u00e9 del cabo|baja/i.test(d))return 'Los Cabos';
   if(/vallarta|nayarit|bah\u00eda de banderas|bahia mita|punta mita/i.test(d))return 'Puerto Vallarta';
