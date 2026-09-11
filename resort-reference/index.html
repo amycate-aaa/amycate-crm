@@ -124,13 +124,17 @@ footer strong{font-weight:500;color:#5A5045}
 #gate button{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:12px 22px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;}
 #gate button:hover{background:var(--gold-deep);border-color:var(--gold-deep);}
 #gate .no{color:#A33;font-size:13px;margin-top:12px;min-height:18px;}
-.dests{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:26px 0 4px;}
-.dbox{border:1px solid var(--line);background:#fff;padding:15px 16px;cursor:pointer;text-align:left;font-family:'Jost',sans-serif;transition:.2s;}
-.dbox:hover{border-color:var(--gold);transform:translateY(-1px);}
-.dbox.on{background:var(--gold);border-color:var(--gold);}
-.dbox .n{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;font-weight:400;line-height:1.2;color:var(--ink);}
-.dbox .c{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute,#7A7266);margin-top:5px;}
-.dbox.on .n,.dbox.on .c{color:#fff;}
+.dests{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;padding:30px 0 6px;}
+.dbox{position:relative;border:1px solid #6E6152;background:#3A332B;padding:19px 18px 17px;cursor:pointer;text-align:center;font-family:'Jost',sans-serif;transition:.24s;overflow:hidden;}
+.dbox::before{content:'';position:absolute;inset:5px;border:1px solid rgba(176,141,87,.34);pointer-events:none;transition:.24s;}
+.dbox:hover{background:#2E2821;border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 20px rgba(30,26,20,.18);}
+.dbox:hover::before{inset:7px;border-color:rgba(176,141,87,.65);}
+.dbox.on{background:var(--gold-deep);border-color:var(--gold-deep);}
+.dbox.on::before{border-color:rgba(255,255,255,.4);}
+.dbox .n{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:20px;font-weight:400;line-height:1.22;color:#F7F2E9;letter-spacing:.01em;}
+.dbox .c{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(214,196,167,.78);margin-top:7px;}
+.dbox.on .n{color:#fff;}
+.dbox.on .c{color:rgba(255,255,255,.8);}
 </style></head><body>
 <div id="gate"><div class="box"><p class="eyebrow">Amy Cate &middot; Destination Weddings</p><h1>Resort Reference</h1><p>This library is shared with my couples. Enter the word I gave you to take a look.</p><form onsubmit="return gateGo(event)"><input id="gk" type="password" autocomplete="off" placeholder="Enter the word" autofocus><button type="submit">Enter</button></form><p class="no" id="gno"></p></div></div>
 <div class="wrap">
