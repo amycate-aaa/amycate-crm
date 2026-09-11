@@ -238,6 +238,25 @@ document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');F=b.dataset.f;draw();}));
 
 if(SHOWPRICE){const l=document.getElementById('lede');if(l)l.insertAdjacentHTML('afterend','<p style="margin-top:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);">Pricing version</p>');}
+
+/* Visit log — a timestamp, which version, and where the link came from.
+   Nothing personal, nothing identifying. One entry per visit. */
+function logVisit(){
+  try{
+    var last=0;try{last=parseInt(sessionStorage.getItem('acv')||'0',10);}catch(e){}
+    if(Date.now()-last<1800000)return;            // one entry per half hour per session
+    try{sessionStorage.setItem('acv',String(Date.now()));}catch(e){}
+    db.collection('libraryVisits').add({
+      at:new Date().toISOString(),
+      version:SHOWPRICE?'with pricing':'no pricing',
+      from:(document.referrer||'').slice(0,120),
+      device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
+      returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
+    });
+  }catch(e){}
+}
+
+logVisit();
 db.collection('resortProfiles').get().then(s=>{
   ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()))
     .filter(p=>p.name&&(p.venues||[]).length);      // only resorts with real guide content
