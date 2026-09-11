@@ -1530,6 +1530,31 @@ function ebToHtml(text){const E=esc;const lines=String(text||'').replace(/\r/g,'
   const M=window.EB_META||{};const hdr=M.couple?'<div style="text-align:center;padding:26px 0 30px;border-bottom:1px solid #E4D8C6;margin-bottom:26px;"><div style="'+F+'font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#8B6914;">Prepared for '+E(M.couple)+'</div><div style="'+SERIF+'font-size:30px;color:#1A1510;margin:8px 0 6px;">Let\u2019s find your place</div><div style="'+F+'font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#6B6258;">'+[M.date?E(M.date):'',M.travel?E(M.travel):''].filter(Boolean).join('  \u00b7  ')+'</div></div>':'';
   return'<div style="max-width:640px;">'+hdr+out.join('')+'</div>';}
 const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.googleusercontent.com';
+
+/* Logs a client opening a shared guide page — same as the library index.
+   Only fires on the client view, never when Amy is working. */
+(function(){
+  try{
+    if(AGENT)return;
+    var q=new URLSearchParams(location.search);
+    if(!(q.get('pv')||q.get('np')||q.get('k')||q.get('c')))return;
+    var slug=q.get('r')||'';
+    var last=0;try{last=parseInt(sessionStorage.getItem('acv_'+slug)||'0',10);}catch(e){}
+    if(Date.now()-last<1800000)return;
+    try{sessionStorage.setItem('acv_'+slug,String(Date.now()));}catch(e){}
+    db.collection('libraryVisits').add({
+      at:new Date().toISOString(),
+      resort:slug,
+      page:'guide',
+      version:(q.get('ct')?'CT \u00b7 ':'')+(q.get('np')?'no pricing':'with pricing'),
+      sentTo:(q.get('c')||'').slice(0,60),
+      from:(document.referrer||'').slice(0,120),
+      device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
+      returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
+    });
+  }catch(e){}
+})();
+
 const AGENT_SIG={name:'Amy M. Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group & Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'(832) 773-8664',hours:'Office Hours: Monday\u2013Thursday 9:00am\u20135:00pm, Friday 9:00am\u20133:00pm CST',hours2:'Weekends by appointment',call:'https://zcal.co/amymcate/letschat',address:'945 Concord Street | Framingham, MA | 01701',sigImage:'https://amy-cate.com/resort-reference/photos/signature.png'};
 function sigHtml(){const S=AGENT_SIG;const F='font-family:Helvetica,Arial,sans-serif;';const SERIF='font-family:Georgia,\'Times New Roman\',serif;';
   return'<table role="presentation" cellpadding="0" cellspacing="0" style="max-width:640px;margin-top:28px;border-top:1px solid #4A7A76;"><tr><td style="padding-top:18px;">'+
