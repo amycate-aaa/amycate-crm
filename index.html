@@ -320,9 +320,8 @@ tr:hover .sticky-col{background:var(--surface2);}
     <a href="resort-library.html" class="nav-btn" style="text-decoration:none">🏨 Resort Library</a>
     <a href="resort-reference/" class="nav-btn" style="text-decoration:none">📋 Resort Guides</a>
     <a href="resort-reference/resort.html" class="nav-btn" style="text-decoration:none">⚡ Live Guide</a>
-    <a href="#" onclick="shareLinks();return false;" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">🔗 Share links</a>
-    <a href="resort-reference/visits.html" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">👀 Who's looking</a>
-    
+    <a href="resort-reference/share.html" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">🔗 Share links</a>
+    <a href="resort-reference/visits.html" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">👀 Who's looking</a>
 
     <div class="sidebar-section">All</div>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')">👥 All Guests</button>
@@ -3488,59 +3487,6 @@ ${clubPerksBox}
 </td></tr>
 
 </table></td></tr></table>
-
-
-<script>
-/* The shareable library links, with a box to tag each one to a lead. */
-function shareLinks(){
-  var B='https://amy-cate.com/resort-reference/?k=amycate';
-  var L=[['Wedding leads \u2014 no pricing',B],
-         ['Celebration Travel \u2014 no pricing',B+'&ct=1'],
-         ['Wedding \u2014 with pricing',B+'&prices=1'],
-         ['Celebration Travel \u2014 with pricing',B+'&ct=1&prices=1']];
-  var old=document.getElementById('sharebox');
-  if(old){old.remove();return false;}
-  var w=document.createElement('div');
-  w.id='sharebox';
-  w.style.cssText='position:fixed;inset:0;background:rgba(20,18,15,.55);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
-  var card=document.createElement('div');
-  card.style.cssText='background:#fff;max-width:640px;width:100%;padding:26px;border-radius:6px;max-height:86vh;overflow:auto;';
-  var h=document.createElement('h3');h.textContent='Share the resort library';h.style.cssText='margin:0 0 4px;font-size:20px;';
-  var p=document.createElement('p');p.textContent='Add their name so you can see who opened it. Click a link to copy it.';p.style.cssText='margin:0 0 16px;font-size:13px;color:#666;';
-  var inp=document.createElement('input');inp.placeholder='Their name (optional)';inp.style.cssText='width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:4px;font-size:14px;margin-bottom:18px;';
-  var list=document.createElement('div');
-  var close=document.createElement('button');close.textContent='Close';close.style.cssText='margin-top:18px;padding:9px 18px;border:1px solid #ccc;background:#fff;border-radius:4px;cursor:pointer;';
-  close.onclick=function(){w.remove();};
-  function draw(){
-    var who=(inp.value||'').trim().toLowerCase().replace(/[^a-z0-9-]+/g,'-').replace(/^-|-$/g,'');
-    list.innerHTML='';
-    L.forEach(function(x){
-      var u=x[1]+(who?'&c='+who:'');
-      var lab=document.createElement('div');
-      lab.textContent=x[0];
-      lab.style.cssText='font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#8A7C68;margin:0 0 4px;';
-      var box=document.createElement('div');
-      box.textContent=u;
-      box.style.cssText='cursor:pointer;background:#F7F4EF;border:1px solid #E4D8C6;padding:10px 12px;border-radius:4px;font-size:12.5px;word-break:break-all;font-family:ui-monospace,Menlo,monospace;margin-bottom:14px;';
-      box.onclick=function(){
-        var t=u;
-        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t);}
-        else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
-        box.textContent='Copied \u2713';box.style.background='#EAF6EA';
-        setTimeout(function(){box.textContent=t;box.style.background='#F7F4EF';},1300);
-      };
-      list.appendChild(lab);list.appendChild(box);
-    });
-  }
-  inp.addEventListener('input',draw);
-  card.appendChild(h);card.appendChild(p);card.appendChild(inp);card.appendChild(list);card.appendChild(close);
-  w.appendChild(card);
-  w.onclick=function(e){if(e.target===w)w.remove();};
-  document.body.appendChild(w);
-  draw();
-  return false;
-}
-</script>
 </body></html>`;
 
   // Show preview
