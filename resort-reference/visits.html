@@ -49,6 +49,18 @@ const ago=t=>{const d=(Date.now()-new Date(t).getTime())/3600000;
 const tbl=(head,rows)=>rows.length?'<table><thead><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'
   +rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>':'<p class="none">Nothing yet.</p>';
 
+db.collection('libraryInterest').orderBy('at','desc').limit(100).get().then(si=>{
+  const I=si.docs.map(d=>Object.assign({_id:d.id},d.data()));
+  if(!I.length)return;
+  const box=document.createElement('div');
+  box.innerHTML='<h2 style="color:var(--gold-deep)">\u2605 They told you they\u2019re interested</h2>'
+   +tbl(['When','Who','Resort','Brand',''],I.map(x=>[ago(x.at),x.sentTo?'<span class="hot">'+esc(x.sentTo)+'</span>':'<span style="color:var(--mute)">not tagged</span>',
+     '<span class="hot">'+esc(x.resortName||x.resort)+'</span>',esc(x.brand||''),
+     x.handled?'<span style="color:var(--mute)">done</span>':'<button data-id="'+x._id+'" class="mk" style="font-family:inherit;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);background:#fff;padding:6px 12px;cursor:pointer;">Mark done</button>']));
+  document.getElementById('out').before(box);
+  box.querySelectorAll('.mk').forEach(b=>b.onclick=()=>{db.collection('libraryInterest').doc(b.dataset.id).set({handled:true},{merge:true});b.outerHTML='<span style="color:var(--mute)">done</span>';});
+}).catch(()=>{});
+
 db.collection('libraryVisits').orderBy('at','desc').limit(500).get().then(s=>{
   const v=s.docs.map(d=>d.data());
   if(!v.length){document.getElementById('out').innerHTML='<p class="none">No visits yet. The counter started when this went live.</p>';return;}
