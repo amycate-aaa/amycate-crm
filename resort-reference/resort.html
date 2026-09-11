@@ -528,6 +528,12 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .iam-btn:hover{background:#fff;color:var(--gold-deep,#8A6D3B);}
 .iam-btn.done{background:transparent;border-color:rgba(255,255,255,.45);color:#FBF8F3;cursor:default;}
 .iam .iam-note{font-size:12px;color:rgba(251,248,243,.75);margin-top:12px;line-height:1.55;max-width:420px;margin-left:auto;margin-right:auto;}
+.iam-more{margin-top:18px;display:flex;flex-direction:column;gap:12px;align-items:center;}
+.iam-more label{font-size:12px;color:rgba(251,248,243,.85);display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;}
+.iam-more input{font-family:var(--sans);font-size:14px;padding:9px 11px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#FBF8F3;}
+.iam-more input::placeholder{color:rgba(251,248,243,.5);}
+.iam-more input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.14);}
+.iam-more .iam-name input{min-width:220px;}
 </style>
 </head>
 <body>
@@ -1846,6 +1852,10 @@ function tellAmy(btn){
       resortName:(typeof P!=='undefined'&&P&&P.name)?P.name:'',
       sentTo:(q.get('c')||'').slice(0,60),
       brand:q.get('ct')?'Celebration Travel':'Weddings',
+      from:(document.getElementById('iam-from')||{}).value||'',
+      to:(document.getElementById('iam-to')||{}).value||'',
+      guests:(document.getElementById('iam-pax')||{}).value||'',
+      name:((document.getElementById('iam-name')||{}).value||'').slice(0,80),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
       handled:false
     });
@@ -2303,7 +2313,12 @@ function renderQuote(){
     '<p class="sig">Amy</p>'+
     (TEASER||!AGENT?'<div class="iam"><p class="iam-q">Is this one of them?</p>'
       +'<button type="button" class="iam-btn" onclick="tellAmy(this)">I\u2019m interested in '+esc(R)+'</button>'
-      +'<p class="iam-note">One tap \u2014 no form, nothing to fill in. It just lets me know, and I\u2019ll come back to you with numbers.</p></div>':'')
+      +'<p class="iam-note">One tap and I\u2019ll come back to you with numbers. Add your dates below if you have them \u2014 it means I can quote properly first time.</p>'
+      +'<div class="iam-more">'
+      +'<label>Travelling <input type="date" id="iam-from"> to <input type="date" id="iam-to"></label>'
+      +'<label>Roughly how many people? <input type="number" id="iam-pax" min="1" max="500" placeholder="e.g. 40"></label>'
+      +'<label class="iam-name">Your name <input type="text" id="iam-name" placeholder="so I know who to reply to" autocomplete="name"></label>'
+      +'</div></div>':'')
     +'</div>'+
     (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
 
