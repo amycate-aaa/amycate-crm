@@ -149,21 +149,22 @@ footer strong{font-weight:500;color:#5A5045}
 <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 <script>
 
-/* Simple shared-word gate. A deterrent against the link being passed around,
-   not real security — nothing sensitive lives on this page. */
+/* Shared-word gate. The word itself is what's remembered, so changing WORD
+   below locks out everyone who used the old one. Not real security — a deterrent. */
 (function(){
   var WORD='amycate';
-  var open=false;
-  try{open=sessionStorage.getItem('acr')==='1'||localStorage.getItem('acr')==='1';}catch(e){}
-  var q=new URLSearchParams(location.search).get('k');
-  if(q&&q.toLowerCase().trim()===WORD)open=true;
-  if(open){var g=document.getElementById('gate');if(g)g.remove();}
+  var KEY='acr';
+  var saved='';try{saved=localStorage.getItem(KEY)||sessionStorage.getItem(KEY)||'';}catch(e){}
+  var q=new URLSearchParams(location.search).get('k')||'';
+  var open=(saved.toLowerCase().trim()===WORD)||(q.toLowerCase().trim()===WORD);
+  if(open){try{localStorage.setItem(KEY,WORD);}catch(_){}
+    var g=document.getElementById('gate');if(g)g.remove();}
   window.gateGo=function(e){
     e.preventDefault();
     var v=(document.getElementById('gk').value||'').toLowerCase().trim();
-    if(v===WORD){try{localStorage.setItem('acr','1');}catch(_){}
+    if(v===WORD){try{localStorage.setItem(KEY,WORD);}catch(_){}
       var g=document.getElementById('gate');if(g)g.remove();return false;}
-    document.getElementById('gno').textContent='That\u2019s not it \u2014 try again, or ask me for the word.';
+    document.getElementById('gno').textContent='That\u2019s not it \u2014 try again, or ask me for the current word.';
     return false;};
 })();
 
