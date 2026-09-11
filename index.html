@@ -10,15 +10,16 @@
 <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
 <style>
 :root {
-  --bg:#4a4a4a; --surface:#5a5a5a; --surface2:#525252; --border:#6a6a6a;
-  --accent:#f0f0f0; --accent2:#cccccc; --text:#f0f0f0;--muted:#999999;
-  --green:#4ade80; --green-bg:#1a2a1a; --green-border:#2a5a2a;
-  --red:#f87171; --red-bg:#2a1a1a; --red-border:#5a2a2a;
-  --yellow:#fbbf24; --yellow-bg:#2a2010; --yellow-border:#6a5010;
+  --bg:#f7f4ed; --surface:#ffffff; --surface2:#f2ece1; --border:#e2d9c8;
+  --accent:#9c7a33; --accent2:#c9a96e; --text:#2b2723; --muted:#7c7365;
+  --ink:#2b2723; --navy:#2b2723;
+  --green:#1f7a4a; --green-bg:#eef6f0; --green-border:#c2ddcb;
+  --red:#a53232; --red-bg:#fbeeec; --red-border:#e8c8c2;
+  --yellow:#8a6614; --yellow-bg:#fbf3df; --yellow-border:#e4d29a;
   --radius:10px; --font:'Segoe UI',system-ui,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;}
 
 /* LOCK */
 
@@ -40,8 +41,8 @@ body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px
 #sidebar{
   width:220px;
   min-width:220px;
-  background:#333333;
-  border-right:1px solid #444444;
+  background:#262220;
+  border-right:1px solid #3a332b;
   display:flex;
   flex-direction:column;
   position:sticky;
@@ -53,24 +54,24 @@ body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px
 }
 .sidebar-logo{
   padding:16px 16px 14px;
-  color:#f0f0f0;
+  color:#c9a96e;
   font-size:.95rem;
   font-weight:700;
   letter-spacing:.04em;
-  border-bottom:1px solid #444444;
+  border-bottom:1px solid #3a332b;
 }
 .sidebar-stats{
   padding:12px 14px;
-  border-bottom:1px solid #444444;
+  border-bottom:1px solid #3a332b;
 }
 .sidebar-stat{margin-bottom:8px;}
 .sidebar-stat:last-child{margin-bottom:0;}
-.sidebar-stat-label{font-size:.72rem;color:#777777;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
-.sidebar-stat-val{font-size:1.25rem;font-weight:700;color:#f0f0f0;}
-.sidebar-stat-sub{font-size:.75rem;color:#999999;margin-top:1px;}
-.sidebar-stat-val.green{color:#4ADE80;}
-.sidebar-stat-val.red{color:#FF6B6B;}
-.sidebar-section{font-size:.7rem;color:#666666;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
+.sidebar-stat-label{font-size:.72rem;color:#8c8073;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;}
+.sidebar-stat-val{font-size:1.25rem;font-weight:700;color:#f4efe6;}
+.sidebar-stat-sub{font-size:.75rem;color:#a2978a;margin-top:1px;}
+.sidebar-stat-val.green{color:#6fd39a;}
+.sidebar-stat-val.red{color:#f08a7a;}
+.sidebar-section{font-size:.7rem;color:#8c8073;text-transform:uppercase;letter-spacing:.09em;padding:10px 14px 4px;}
 .nav-btn{
   display:flex;
   align-items:center;
@@ -79,7 +80,7 @@ body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px
   background:none;
   border:none;
   border-left:2px solid transparent;
-  color:#999999;
+  color:#a2978a;
   font-size:.9rem;
   padding:8px 16px;
   cursor:pointer;
@@ -87,16 +88,16 @@ body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px
   text-align:left;
   text-decoration:none;
 }
-.nav-btn:hover{background:#444444;color:#f0f0f0;}
-.nav-btn.active{background:#444444;color:#f0f0f0;border-left-color:#f0f0f0;font-weight:600;}
-.nav-badge{font-size:.62rem;background:#555555;color:#999999;padding:1px 5px;border-radius:3px;}
-.sidebar-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid #1B2B4B;display:flex;flex-direction:column;gap:6px;}
+.nav-btn:hover{background:#332d28;color:#f4efe6;}
+.nav-btn.active{background:#332d28;color:#f4efe6;border-left-color:#c9a96e;font-weight:600;}
+.nav-badge{font-size:.62rem;background:#3a332b;color:#c9a96e;padding:1px 5px;border-radius:3px;}
+.sidebar-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid #3a332b;display:flex;flex-direction:column;gap:6px;}
 
 /* MAIN AREA */
-#main-area{flex:1;display:flex;flex-direction:column;min-width:0;background:#333333;}
+#main-area{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg);}
 #main-topbar{
-  background:#333333;
-  border-bottom:1px solid #444444;
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
   padding:10px 20px;
   display:flex;
   align-items:center;
@@ -107,9 +108,9 @@ body{background:#4a4a4a;color:var(--text);font-family:var(--font);font-size:16px
   flex-wrap:wrap;
   gap:8px;
 }
-#main-topbar-title{font-size:.9rem;font-weight:600;color:#f0f0f0;}
+#main-topbar-title{font-size:.9rem;font-weight:600;color:var(--text);}
 .header-right{display:flex;align-items:center;gap:8px;}
-main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);color:white;}
+main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);color:var(--text);}
 
 /* TABS */
 .tab-panel{display:none;}
@@ -117,17 +118,17 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);c
 
 /* SECTION HEAD */
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
-.section-head h2{font-size:1.05rem;font-weight:700;color:white !important;}
+.section-head h2{font-size:1.05rem;font-weight:700;color:var(--text) !important;}
 .section-head p{font-size:.9rem;color:var(--muted);margin-top:2px;}
 
 /* BUTTONS */
 .btn{padding:8px 14px;border-radius:6px;font-size:.92rem;cursor:pointer;border:none;font-weight:600;transition:all .15s;display:inline-flex;align-items:center;gap:5px;}
-.btn-primary{background:#1a1a1a !important;color:white !important;}
-.btn-primary:hover{background:#333 !important;}
-.btn-outline{background:var(--surface) !important;border:1px solid #999 !important;color:var(--text) !important;}
-.btn-outline:hover{border-color:#1a1a1a !important;color:#1a1a1a !important;background:var(--surface2) !important;}
-.btn-danger{background:#fff0f0 !important;border:1px solid #cc8888 !important;color:#8a1a1a !important;}
-.btn-danger:hover{background:#fdf0f0 !important;}
+.btn-primary{background:var(--ink) !important;color:#fdfbf7 !important;}
+.btn-primary:hover{background:#443c34 !important;}
+.btn-outline{background:var(--surface) !important;border:1px solid var(--border) !important;color:var(--text) !important;}
+.btn-outline:hover{border-color:var(--accent2) !important;color:var(--text) !important;background:var(--surface2) !important;}
+.btn-danger{background:var(--red-bg) !important;border:1px solid var(--red-border) !important;color:var(--red) !important;}
+.btn-danger:hover{background:#f6e2de !important;}
 .btn-sm{padding:4px 9px;font-size:.88rem;}
 
 /* MODAL */
@@ -149,7 +150,7 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);c
 
 /* STAT CARDS */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
-.stat-card{background:var(--surface2);border:1px solid #cccccc;border-radius:var(--radius);padding:16px 18px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;}
 .stat-card .label{font-size:.92rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
 .stat-card .value{font-size:1.8rem;font-weight:700;}
 .stat-card .value.gold{color:var(--accent);}
@@ -158,23 +159,23 @@ main{padding:20px;max-width:1400px;margin:0 auto;min-height:calc(100vh - 50px);c
 .stat-card .sub{font-size:.88rem;color:var(--muted);margin-top:2px;}
 
 /* TABLE */
-.table-wrap{background:var(--surface);border:1px solid #cccccc;border-radius:var(--radius);overflow-x:auto;}
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow-x:auto;}
 table{width:100%;border-collapse:collapse;font-size:1rem;}
-thead{background:#1a1a1a;position:sticky;top:0;z-index:10;}
+thead{background:var(--ink);position:sticky;top:0;z-index:10;}
 th{padding:11px 13px;text-align:left;color:#ffffff;font-weight:600;font-size:.95rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;}
-td{padding:9px 10px;border-top:1px solid #e0e0e0;vertical-align:middle;color:var(--text) !important;font-size:.9rem;}
+td{padding:9px 10px;border-top:1px solid var(--border);vertical-align:middle;color:var(--text) !important;font-size:.9rem;}
 tr:hover td{background:var(--surface2);}
 .sticky-col{position:sticky;right:0;background:var(--surface);box-shadow:-3px 0 8px rgba(0,0,0,.1);z-index:10;min-width:90px;width:90px;}
-thead .sticky-col{background:#1a1a1a;min-width:90px;width:90px;}
+thead .sticky-col{background:var(--ink);min-width:90px;width:90px;}
 tr:hover .sticky-col{background:var(--surface2);}
 
 /* BADGES */
 .badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.92rem;font-weight:600;}
-.badge-green{background:#f0f7f0;color:#1a5a1a;border:0.5px solid #c8e4c8;}
-.badge-yellow{background:#fdf8e8;color:#7a5a10;border:0.5px solid #e8d890;}
-.badge-red{background:#fdf0f0;color:#8a2a2a;border:0.5px solid #f0c4c4;}
-.badge-muted{background:var(--surface2);color:var(--muted);border:0.5px solid #cccccc;}
-.badge-gold{background:var(--surface2);color:var(--accent);border:0.5px solid #cccccc;}
+.badge-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-border);}
+.badge-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
+.badge-muted{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+.badge-gold{background:var(--surface2);color:var(--accent);border:1px solid var(--accent2);}
 
 /* TOOLBAR */
 .toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center;flex-wrap:wrap;}
@@ -197,11 +198,11 @@ tr:hover .sticky-col{background:var(--surface2);}
 .wedding-square.selected{}
 
 /* DUE DATES PANEL */
-.due-dates-panel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
+.due-dates-panel{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 20px;margin-bottom:20px;}
 .due-dates-panel .panel-title{font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:12px;}
 .due-dates-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;}
 .due-date-item{padding:8px 10px;background:var(--surface);border-radius:7px;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.1);}
-.due-date-item.soon{border-color:#d4c060;background:#fdf8e0;}
+.due-date-item.soon{border-color:var(--yellow-border);background:var(--yellow-bg);}
 .due-date-item .di-label{font-size:.83rem;color:var(--muted);margin-bottom:3px;}
 .due-date-item .di-val{font-size:.9rem;font-weight:600;}
 
@@ -212,7 +213,7 @@ tr:hover .sticky-col{background:var(--surface2);}
 .doc-card a:hover{text-decoration:underline;}
 
 /* SETUP CARD (wedding form sections) */
-.setup-card{background:var(--surface);border:1px solid #cccccc;border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.setup-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:18px;}
 .setup-card h3{font-size:.9rem;color:var(--accent);margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em;}
 
 @media(max-width:680px){
@@ -223,9 +224,9 @@ tr:hover .sticky-col{background:var(--surface2);}
 }
 
 /* INNER TABS */
-.inner-tab{background:none;border:none;color:#ccc;font-size:.95rem;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-weight:600;}
-.inner-tab:hover{color:white;}
-.inner-tab.active{color:white;border-bottom-color:white;font-weight:700;}
+.inner-tab{background:none;border:none;color:var(--muted);font-size:.95rem;padding:9px 16px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;font-weight:600;}
+.inner-tab:hover{color:var(--text);}
+.inner-tab.active{color:var(--text);border-bottom-color:var(--accent2);font-weight:700;}
 .inner-panel{display:none;}
 .inner-panel.active{display:block;}
 
@@ -233,7 +234,7 @@ tr:hover .sticky-col{background:var(--surface2);}
 #tab-quotes .form-label {
   font-size: .8rem;
   font-weight: 600;
-  color: #555;
+  color: var(--muted);
   text-transform: uppercase;
   letter-spacing: .05em;
   display: block;
@@ -242,7 +243,7 @@ tr:hover .sticky-col{background:var(--surface2);}
 #tab-quotes .form-input {
   width: 100%;
   padding: 10px 12px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font-size: .95rem;
   font-family: inherit;
@@ -257,12 +258,12 @@ tr:hover .sticky-col{background:var(--surface2);}
 #tab-quotes label {
   font-size: .8rem;
   font-weight: 600;
-  color: #555;
+  color: var(--muted);
 }
 #tab-quotes .card {
   background:var(--surface);
   border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border);
   padding: 20px;
   margin-bottom: 14px;
 }
@@ -304,16 +305,6 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div class="sidebar-stat-val" id="sb-guests">—</div>
         <div class="sidebar-stat-sub" id="sb-rooms-sub"></div>
       </div>
-      <div class="sidebar-stat">
-        <div class="sidebar-stat-label">Collected</div>
-        <div class="sidebar-stat-val green" id="sb-collected">—</div>
-        <div class="sidebar-stat-sub" id="sb-collected-sub"></div>
-      </div>
-      <div class="sidebar-stat">
-        <div class="sidebar-stat-label">Outstanding</div>
-        <div class="sidebar-stat-val red" id="sb-outstanding">—</div>
-        <div class="sidebar-stat-sub" id="sb-outstanding-sub"></div>
-      </div>
     </div>
 
     <!-- NAV LINKS -->
@@ -322,15 +313,12 @@ tr:hover .sticky-col{background:var(--surface2);}
     <div class="sidebar-section">Pipeline</div>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('leads')">⭐ Leads</button>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('inbox')" style="position:relative">📥 Inbox<span id="inboxBadge" class="nav-badge" style="display:none"></span></button>
-    <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('quotes')">📄 Quotes</button>
 
     <div class="sidebar-section">Overview</div>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('timeline')">📅 Timeline</button>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('reports')">📊 Reports</button>
     <a href="resort-library.html" class="nav-btn" style="text-decoration:none">🏨 Resort Library</a>
     <a href="resort-reference/" class="nav-btn" style="text-decoration:none">📋 Resort Guides</a>
-    <a href="resort-reference/resort" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none">💍 Live Guide &amp; Quote · Weddings</a>
-    <a href="resort-reference/resort?brand=ct" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none">🎉 Live Guide &amp; Quote · Celebration Travel</a>
     <a href="resort-reference/resort.html" class="nav-btn" style="text-decoration:none">⚡ Live Guide</a>
 
     <div class="sidebar-section">All</div>
@@ -339,10 +327,10 @@ tr:hover .sticky-col{background:var(--surface2);}
 
     <!-- SIDEBAR BOTTOM -->
     <div class="sidebar-bottom">
-      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)" style="background:#444444;border:1px solid #2d4a6e;color:#f0f0f0;padding:6px 8px;border-radius:6px;font-size:.75rem;width:100%">
+      <select class="wedding-selector" id="weddingSelect" onchange="switchWedding(this.value)" style="background:#332d28;border:1px solid #4a4238;color:#f4efe6;padding:6px 8px;border-radius:6px;font-size:.75rem;width:100%">
         <option value="">— Choose Wedding —</option>
       </select>
-      <button class="lock-btn" onclick="backupToDrive()" title="Download backup" style="background:#3a3a3a;border:1px solid #555555;color:#f0f0f0;font-size:.75rem;padding:5px 10px;border-radius:6px;cursor:pointer;width:100%">
+      <button class="lock-btn" onclick="backupToDrive()" title="Download backup" style="background:#332d28;border:1px solid #4a4238;color:#f4efe6;font-size:.75rem;padding:5px 10px;border-radius:6px;cursor:pointer;width:100%">
         💾 Backup
       </button>
     </div>
@@ -353,7 +341,7 @@ tr:hover .sticky-col{background:var(--surface2);}
     <div id="main-topbar">
       <div id="main-topbar-title">Active Events</div>
       <div class="header-right">
-        <span id="weddingLabel" style="display:none;font-size:.82rem;font-weight:400;color:#aaa"></span>
+        <span id="weddingLabel" style="display:none;font-size:.82rem;font-weight:400;color:var(--muted)"></span>
       </div>
     </div>
     <main>
@@ -556,10 +544,10 @@ tr:hover .sticky-col{background:var(--surface2);}
       <!-- Filter pills -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
         <button onclick="setInboxFilter('all',this)" class="inbox-pill active" style="padding:5px 14px;border-radius:20px;border:1px solid #1a1a1a;background:#1a1a1a;color:white;font-size:.82rem;font-weight:600;cursor:pointer">All</button>
-        <button onclick="setInboxFilter('intake',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:#555;font-size:.82rem;font-weight:600;cursor:pointer">📋 Intakes</button>
-        <button onclick="setInboxFilter('flight',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:#555;font-size:.82rem;font-weight:600;cursor:pointer">✈ Flights</button>
-        <button onclick="setInboxFilter('lead',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:#555;font-size:.82rem;font-weight:600;cursor:pointer">⭐ Leads</button>
-        <button onclick="setInboxFilter('email',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:#555;font-size:.82rem;font-weight:600;cursor:pointer">📨 Emails</button>
+        <button onclick="setInboxFilter('intake',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer">📋 Intakes</button>
+        <button onclick="setInboxFilter('flight',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer">✈ Flights</button>
+        <button onclick="setInboxFilter('lead',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer">⭐ Leads</button>
+        <button onclick="setInboxFilter('email',this)" class="inbox-pill" style="padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:.82rem;font-weight:600;cursor:pointer">📨 Emails</button>
       </div>
 
       <div id="inboxList" style="display:flex;flex-direction:column;gap:10px">
@@ -587,7 +575,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           ✈ Travel Quote
         </button>
         <button id="qb-mode-wedding" onclick="qbSetMode('wedding')"
-          style="flex:1;padding:10px 18px;background:#f5f5f5;color:#888888;border:none;font-family:Arial,sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;letter-spacing:.05em;">
+          style="flex:1;padding:10px 18px;background:#f5f5f5;color:var(--muted)888;border:none;font-family:Arial,sans-serif;font-size:.85rem;font-weight:700;cursor:pointer;letter-spacing:.05em;">
           💍 Wedding Sneak Peek
         </button>
       </div>
@@ -625,7 +613,7 @@ tr:hover .sticky-col{background:var(--surface2);}
               <div id="qb-name1-wrap" style="grid-column:1/-1"><label class="form-label" id="qb-name1-label">1st Guest Name *</label><input id="qb-name" class="form-input" placeholder="e.g. Tia Hatcher" oninput="qbCheckReady()"></div>
               <div id="qb-partner2-wrap" style="display:none;grid-column:1/-1"><label class="form-label">Partner 2 Name *</label><input id="qb-partner2" class="form-input" placeholder="e.g. Jewaun Williams" oninput="qbCheckReady()"></div>
               <div id="qb-wedding-date-wrap" style="display:none;grid-column:1/-1"><label class="form-label">Wedding Date</label><input id="qb-wedding-date" type="date" class="form-input"></div>
-              <div id="qb-resort-info-wrap" style="display:none;grid-column:1/-1"><label class="form-label">Resort Info Link <span style="color:#888;font-size:.75rem;">e.g. DWT resort page URL</span></label><input id="qb-resort-info-link" class="form-input" placeholder="https://www.destinationweddings.com/dreams-onyx-resort-spa"></div>
+              <div id="qb-resort-info-wrap" style="display:none;grid-column:1/-1"><label class="form-label">Resort Info Link <span style="color:var(--muted);font-size:.75rem;">e.g. DWT resort page URL</span></label><input id="qb-resort-info-link" class="form-input" placeholder="https://www.destinationweddings.com/dreams-onyx-resort-spa"></div>
               <div id="qb-guest2-wrap" style="display:none;grid-column:1/-1"><label class="form-label">2nd Guest Name</label><input id="qb-name2" class="form-input" placeholder="e.g. Brenesha Perkins"></div>
               <div id="qb-guest3-wrap" style="display:none;grid-column:1/-1"><label class="form-label">3rd Guest Name</label><input id="qb-name3" class="form-input" placeholder="e.g. Jordan Smith"></div>
               <div id="qb-occ-wrap"><label class="form-label">Occupancy</label>
@@ -661,16 +649,16 @@ tr:hover .sticky-col{background:var(--surface2);}
 
           <!-- Resort Profile (auto-filled from Resort Library) -->
           <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Info <span style="font-size:.68rem;color:#888;font-weight:400;text-transform:none;letter-spacing:0;">(auto-fills from Resort Library profile)</span></div>
+            <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:4px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Info <span style="font-size:.68rem;color:var(--muted);font-weight:400;text-transform:none;letter-spacing:0;">(auto-fills from Resort Library profile)</span></div>
             <div style="margin-bottom:10px"><label class="form-label">Location Tagline</label><input id="qb-location" class="form-input" placeholder="e.g. Riviera Maya · 42 miles from CUN"></div>
             <div style="margin-bottom:10px"><label class="form-label">Resort Description</label><textarea id="qb-desc-text" class="form-input" rows="3" placeholder="Description will auto-fill if you've saved a resort profile..."></textarea></div>
-            <div style="margin-bottom:10px"><label class="form-label">Highlights <span style="color:#888;font-size:.75rem;">separator: &nbsp;·&nbsp;</span></label><input id="qb-highlights" class="form-input" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa"></div>
-            <div style="margin-bottom:10px"><label class="form-label">Club Level Name <span style="color:#888;font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label><input id="qb-club-name" class="form-input" placeholder="e.g. Preferred Club"></div>
-            <div style="margin-bottom:10px"><label class="form-label">Club Level Perks <span style="color:#888;font-size:.75rem;">auto-shows in quote only when a club room is selected</span></label><textarea id="qb-club-perks" class="form-input" rows="4" placeholder="e.g. Personalized check-in & checkout · Private lounge access · Upgraded mini-bar · Pool concierge service"></textarea></div>
+            <div style="margin-bottom:10px"><label class="form-label">Highlights <span style="color:var(--muted);font-size:.75rem;">separator: &nbsp;·&nbsp;</span></label><input id="qb-highlights" class="form-input" placeholder="e.g. Unlimited-Luxury® · Championship Golf · Full Spa"></div>
+            <div style="margin-bottom:10px"><label class="form-label">Club Level Name <span style="color:var(--muted);font-size:.75rem;">e.g. Preferred Club, Royalton Club, Sky Collection</span></label><input id="qb-club-name" class="form-input" placeholder="e.g. Preferred Club"></div>
+            <div style="margin-bottom:10px"><label class="form-label">Club Level Perks <span style="color:var(--muted);font-size:.75rem;">auto-shows in quote only when a club room is selected</span></label><textarea id="qb-club-perks" class="form-input" rows="4" placeholder="e.g. Personalized check-in & checkout · Private lounge access · Upgraded mini-bar · Pool concierge service"></textarea></div>
             <div><label class="form-label">Booking Link</label><input id="qb-booking-link" class="form-input" placeholder="https://booking.celebrationtravel.com/..."></div>
             <!-- Wedding-only fields -->
-            <div id="qb-tags-wrap" style="display:none;margin-top:10px"><label class="form-label">Amenity Tags <span style="color:#888;font-size:.75rem;">comma-separated — show as pill badges on resort card</span></label><input id="qb-tags" class="form-input" placeholder="e.g. Family-Friendly, Unlimited-Luxury, Water Park, Swim-Out Suites"></div>
-            <div id="qb-venues-wrap" style="display:none;margin-top:10px"><label class="form-label">Wedding Venues <span style="color:#888;font-size:.75rem;">one venue per line — name: description</span></label><textarea id="qb-venues" class="form-input" rows="4" placeholder="Beach Terrace: Ceremony overlooking the ocean&#10;Grand Ballroom: Indoor reception for up to 300 guests&#10;Garden Gazebo: Intimate outdoor ceremony"></textarea></div>
+            <div id="qb-tags-wrap" style="display:none;margin-top:10px"><label class="form-label">Amenity Tags <span style="color:var(--muted);font-size:.75rem;">comma-separated — show as pill badges on resort card</span></label><input id="qb-tags" class="form-input" placeholder="e.g. Family-Friendly, Unlimited-Luxury, Water Park, Swim-Out Suites"></div>
+            <div id="qb-venues-wrap" style="display:none;margin-top:10px"><label class="form-label">Wedding Venues <span style="color:var(--muted);font-size:.75rem;">one venue per line — name: description</span></label><textarea id="qb-venues" class="form-input" rows="4" placeholder="Beach Terrace: Ceremony overlooking the ocean&#10;Grand Ballroom: Indoor reception for up to 300 guests&#10;Garden Gazebo: Intimate outdoor ceremony"></textarea></div>
             <div id="qb-promos-wrap" style="display:none;margin-top:10px;background:#fffdf5;border:1px solid #c9a96e;border-radius:8px;padding:12px;">
               <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a3a4a;margin-bottom:8px;">&#10022; Exclusive Promotions</div>
               <label style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:.85rem;cursor:pointer;">
@@ -713,7 +701,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           </div>
 
           <button onclick="qbGenerate()" id="qb-gen-btn" style="width:100%;padding:14px;background:#1a1a1a;color:white;border:none;border-radius:10px;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:6px" disabled> Generate Quote →</button>
-          <p style="text-align:center;font-size:.75rem;color:#888">Select resort, guest name, and at least one room option</p>
+          <p style="text-align:center;font-size:.75rem;color:var(--muted)">Select resort, guest name, and at least one room option</p>
         </div>
 
         <!-- RIGHT PANEL: PREVIEW -->
@@ -721,7 +709,7 @@ tr:hover .sticky-col{background:var(--surface2);}
           <div style="background:#f5f5f7;border:1px solid #e0e0e0;border-radius:12px;padding:20px;text-align:center;min-height:400px;display:flex;flex-direction:column;align-items:center;justify-content:center" id="qb-empty-state">
             <div style="font-size:3rem;margin-bottom:12px">📄</div>
             <div style="font-weight:700;color:var(--text);margin-bottom:6px">Your quote preview will appear here</div>
-            <div style="font-size:.85rem;color:#888">Fill in the form and click Generate Quote</div>
+            <div style="font-size:.85rem;color:var(--muted)">Fill in the form and click Generate Quote</div>
           </div>
           <div id="qb-preview-container" style="display:none">
             <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
@@ -740,7 +728,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div style="background:var(--surface);border-radius:14px;padding:28px;width:600px;max-width:95vw;margin:auto">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
             <h3 id="qb-resort-modal-title" style="font-size:1rem;font-weight:700;color:#1a1a1a">+ Add Resort</h3>
-            <button onclick="qbCloseResortModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">✕</button>
+            <button onclick="qbCloseResortModal()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
             <div><label class="form-label">Resort Name *</label><input id="qb-nr-name" class="form-input" placeholder="e.g. Sandals Royal Barbados"></div>
@@ -775,7 +763,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div style="background:var(--surface);border-radius:14px;padding:28px;width:580px;max-width:95vw;max-height:80vh;display:flex;flex-direction:column">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
             <h3 style="font-size:1rem;font-weight:700;color:#1a1a1a">✎ Manage Resorts</h3>
-            <button onclick="document.getElementById('qb-manage-modal').style.display='none'" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888">✕</button>
+            <button onclick="document.getElementById('qb-manage-modal').style.display='none'" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)">✕</button>
           </div>
           <div id="qb-manage-list" style="overflow-y:auto;flex:1"></div>
         </div>
@@ -785,7 +773,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div class="section-head">
         <div><h2>&#x1F4C5; Timeline</h2><p>All upcoming events</p></div>
         <div style="display:flex;gap:6px;align-items:center">
-          <button id="tl-btn-past" onclick="toggleTimelinePast()" style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;background:var(--surface);color:#888">Show Past</button>
+          <button id="tl-btn-past" onclick="toggleTimelinePast()" style="padding:6px 12px;border:1px solid var(--border);border-radius:6px;font-size:.78rem;font-weight:600;cursor:pointer;background:var(--surface);color:var(--muted)">Show Past</button>
           <button id="tl-btn-list" onclick="setTimelineView('list')" style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:#1a1a1a;color:white">&#9776; List</button>
           <button id="tl-btn-quarter" onclick="setTimelineView('quarter')" style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;font-size:.82rem;font-weight:600;cursor:pointer;background:var(--surface);color:#1a1a1a">&#9783; Quarterly</button>
         </div>
@@ -812,15 +800,15 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div id="masterDueDates" style="display:none"></div>
 
       <!-- PASTE PARSER ON HOME PAGE -->
-      <div style="background:#535353;border-radius:8px;padding:14px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:18px;display:flex;gap:10px;align-items:flex-start;">
         <div style="flex:1;min-width:0;">
-          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:#999;font-weight:600;margin-bottom:6px;">📋 Paste Payment Confirmation</div>
-          <textarea id="homePaymentPasteBox" rows="2" style="width:100%;background:#444;border:1px solid #606060;color:#f0f0f0;padding:8px 10px;border-radius:6px;font-size:.85rem;resize:vertical;font-family:inherit" placeholder="Paste payment email from Destination Weddings here…"></textarea>
-          <div id="homeParseResult" style="font-size:.82rem;margin-top:5px;min-height:16px;color:#999"></div>
+          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;margin-bottom:6px;">📋 Paste Payment Confirmation</div>
+          <textarea id="homePaymentPasteBox" rows="2" style="width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:8px 10px;border-radius:6px;font-size:.85rem;resize:vertical;font-family:inherit" placeholder="Paste payment email from Destination Weddings here…"></textarea>
+          <div id="homeParseResult" style="font-size:.82rem;margin-top:5px;min-height:16px;color:var(--muted)"></div>
         </div>
         <div style="display:flex;flex-direction:column;gap:5px;padding-top:20px;">
-          <button onclick="parseHomePaste()" style="font-size:.78rem;padding:6px 12px;border-radius:5px;background:#f0f0f0;color:var(--text);border:none;cursor:pointer;font-weight:600;white-space:nowrap">Parse &amp; Record</button>
-          <button onclick="document.getElementById('homePaymentPasteBox').value='';document.getElementById('homeParseResult').textContent=''" style="font-size:.78rem;padding:5px 12px;border-radius:5px;background:#444;color:#aaa;border:1px solid #555;cursor:pointer">Clear</button>
+          <button onclick="parseHomePaste()" style="font-size:.78rem;padding:6px 12px;border-radius:5px;background:var(--ink);color:#fdfbf7;border:none;cursor:pointer;font-weight:600;white-space:nowrap">Parse &amp; Record</button>
+          <button onclick="document.getElementById('homePaymentPasteBox').value='';document.getElementById('homeParseResult').textContent=''" style="font-size:.78rem;padding:5px 12px;border-radius:5px;background:var(--surface2);color:var(--muted);border:1px solid var(--border);cursor:pointer">Clear</button>
         </div>
       </div>
 
@@ -832,7 +820,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap">
         <button class="btn btn-outline" onclick="showTab('setup')">← Back</button>
         <div>
-          <div style="display:flex;align-items:center;gap:8px"><div style="font-size:1.2rem;font-weight:700;color:white" id="detail-title">—</div><button type="button" class="btn btn-sm btn-outline" style="font-size:.75rem;padding:2px 8px" onclick="editWedding(currentWeddingId)">✏️ Edit</button></div>
+          <div style="display:flex;align-items:center;gap:8px"><div style="font-size:1.2rem;font-weight:700;color:var(--text)" id="detail-title">—</div><button type="button" class="btn btn-sm btn-outline" style="font-size:.75rem;padding:2px 8px" onclick="editWedding(currentWeddingId)">✏️ Edit</button></div>
           <div style="font-size:.92rem;color:var(--muted)" id="detail-subtitle">—</div>
         </div>
         <div style="margin-left:auto;display:flex;gap:8px">
@@ -848,7 +836,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       <div id="detail-duedates"></div>
 
       <!-- Inner tabs -->
-      <div style="display:flex;gap:3px;border-bottom:1px solid #444;margin-bottom:18px;flex-wrap:wrap">
+      <div style="display:flex;gap:3px;border-bottom:1px solid var(--border);margin-bottom:18px;flex-wrap:wrap">
         <button class="inner-tab active" onclick="showInnerTab('iguests')">Guests</button>
         <button class="inner-tab" onclick="showInnerTab('iflights')">Flights</button>
         <button class="inner-tab" onclick="showInnerTab('ifinancials')">Financials</button>
@@ -860,7 +848,7 @@ tr:hover .sticky-col{background:var(--surface2);}
         <div class="section-head">
           <div style="display:flex;align-items:center;gap:10px">
             <h2>Guest List</h2>
-            <div style="display:flex;background:#e8e8e8;border-radius:6px;padding:2px;gap:2px">
+            <div style="display:flex;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:2px;gap:2px">
               <button id="viewToggleSummary" onclick="setGuestView('summary')" style="padding:4px 12px;border:none;border-radius:4px;font-size:.82rem;font-weight:700;cursor:pointer;background:#1a1a1a;color:white">Summary</button>
               <button id="viewToggleFull" onclick="setGuestView('full')" style="padding:4px 12px;border:none;border-radius:4px;font-size:.82rem;font-weight:700;cursor:pointer;background:transparent;color:#666">Full</button>
             </div>
@@ -870,11 +858,11 @@ tr:hover .sticky-col{background:var(--surface2);}
         </div>
 
         <!-- BOOKING REQUEST PARSER -->
-        <div style="background:var(--surface2);border:1px solid #666666;border-radius:10px;padding:16px 18px;margin-bottom:18px">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:18px">
           <div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);font-weight:700;margin-bottom:8px">📋 Paste Booking Request</div>
           <p style="font-size:.85rem;color:var(--muted);margin-bottom:8px">Paste a room booking request email and it will pre-fill the guest form automatically.</p>
           <div style="display:flex;gap:8px;align-items:flex-start">
-            <textarea id="bookingPasteBox" rows="3" style="flex:1;background:var(--surface);border:1px solid #666666;color:var(--text);padding:9px 11px;border-radius:6px;font-size:.88rem;resize:vertical;font-family:inherit" placeholder="Paste booking request here…"></textarea>
+            <textarea id="bookingPasteBox" rows="3" style="flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:9px 11px;border-radius:6px;font-size:.88rem;resize:vertical;font-family:inherit" placeholder="Paste booking request here…"></textarea>
             <div style="display:flex;flex-direction:column;gap:6px">
               <button class="btn btn-primary" onclick="parseBookingRequest()">Parse &amp; Open Form</button>
               <button class="btn btn-outline" onclick="document.getElementById('bookingPasteBox').value='';document.getElementById('bookingParseResult').textContent=''">Clear</button>
@@ -904,12 +892,12 @@ tr:hover .sticky-col{background:var(--surface2);}
       <!-- INNER FLIGHTS -->
       <div id="inner-iflights" class="inner-panel">
         <div style="margin-bottom:16px">
-          <h2 style="color:white;font-size:1.05rem;font-weight:700;margin-bottom:10px">Flights</h2>
+          <h2 style="color:var(--text);font-size:1.05rem;font-weight:700;margin-bottom:10px">Flights</h2>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <button type="button" class="btn btn-primary" onclick="openFlightModal()">+ Add Flight</button>
-            <button type="button" class="btn btn-outline" onclick="generateFlightReport()" style="color:white;border-color:rgba(255,255,255,.5)">📋 Flight Report</button>
-            <button type="button" class="btn btn-outline" onclick="exportFlightReportExcel()" style="color:white;border-color:rgba(255,255,255,.5)">⬇ Download Excel</button>
-            <button type="button" class="btn btn-outline" onclick="sendFlightRequestEmails()" style="color:white;border-color:rgba(255,255,255,.5)">📧 Send Flight Request</button>
+            <button type="button" class="btn btn-outline" onclick="generateFlightReport()">📋 Flight Report</button>
+            <button type="button" class="btn btn-outline" onclick="exportFlightReportExcel()">⬇ Download Excel</button>
+            <button type="button" class="btn btn-outline" onclick="sendFlightRequestEmails()">📧 Send Flight Request</button>
           </div>
         </div>
         <div id="detail-flights-msg"></div>
@@ -1295,7 +1283,7 @@ tr:hover .sticky-col{background:var(--surface2);}
       </div>
       <div class="form-group"><label>Deposit — $ per person</label><input type="number" id="w-depositPP" value="50"></div>
       <div class="form-group"><label>Min Deposit per Room ($)</label><input type="number" id="w-depositMin" value="100"></div>
-      <div class="form-group"><label>Gross Sales Override ($) <span style="font-size:.8rem;color:#aaa;font-weight:400">— enter total if guests not imported</span></label><input type="number" id="w-grossSalesOverride" placeholder="0.00" step="0.01"></div>
+      <div class="form-group"><label>Gross Sales Override ($) <span style="font-size:.8rem;color:var(--muted);font-weight:400">— enter total if guests not imported</span></label><input type="number" id="w-grossSalesOverride" placeholder="0.00" step="0.01"></div>
       <div class="form-group"><label>Commission ($)</label><input type="number" id="w-commission" placeholder="0.00" step="0.01"></div>
       <div class="form-group"><label style="display:flex;align-items:center;gap:8px;cursor:pointer"><input type="checkbox" id="w-commissionReceived" style="width:18px;height:18px;cursor:pointer"> Commission Received</label></div>
     </div>
@@ -1475,7 +1463,7 @@ function openResortPhotoPickerForEvent(){
   header.innerHTML = '<div style="font-weight:700;font-size:1rem;">Pick Hero Photo &mdash; '+esc(resortName)+'</div>';
   const closeBtn = document.createElement('button');
   closeBtn.innerHTML = '&times;';
-  closeBtn.style.cssText = 'background:none;border:none;font-size:1.4rem;cursor:pointer;color:#888';
+  closeBtn.style.cssText = 'background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--muted)';
   closeBtn.onclick = ()=>overlay.remove();
   header.appendChild(closeBtn);
   const grid = document.createElement('div');
@@ -1641,7 +1629,7 @@ async function loadWeddings(){
   }catch(e){
     console.error('loadWeddings error:',e);
     const grid=document.getElementById('weddingGrid');
-    if(grid) grid.innerHTML='<div style="color:white;padding:20px">Error loading weddings: '+e.message+'</div>';
+    if(grid) grid.innerHTML='<div style="color:var(--text);padding:20px">Error loading weddings: '+e.message+'</div>';
   }
 }
 
@@ -1733,18 +1721,10 @@ function renderMasterDueDates(){
   const sbActiveSub = document.getElementById('sb-active-sub');
   const sbGuests = document.getElementById('sb-guests');
   const sbRoomsSub = document.getElementById('sb-rooms-sub');
-  const sbCollected = document.getElementById('sb-collected');
-  const sbCollectedSub = document.getElementById('sb-collected-sub');
-  const sbOutstanding = document.getElementById('sb-outstanding');
-  const sbOutstandingSub = document.getElementById('sb-outstanding-sub');
   if(sbActive) sbActive.textContent = activeWeddings.length;
   if(sbActiveSub) sbActiveSub.textContent = weddings.length + ' total';
   if(sbGuests) sbGuests.textContent = totPeople;
   if(sbRoomsSub) sbRoomsSub.textContent = totRooms + ' rooms';
-  if(sbCollected) sbCollected.textContent = '$' + fmt(totPaid);
-  if(sbCollectedSub) sbCollectedSub.textContent = totRevenue>0?Math.round(totPaid/totRevenue*100)+'% of total':'';
-  if(sbOutstanding) sbOutstanding.textContent = '$' + fmt(Math.max(0,totRevenue-totPaid));
-  if(sbOutstandingSub) sbOutstandingSub.textContent = 'of $' + fmt(totRevenue) + ' total';
 }
 
 function renderWeddingGrid(){
@@ -1777,32 +1757,31 @@ function renderWeddingGrid(){
     const card=document.createElement('div');
     card.className='wedding-square'+(isSelected?' selected':'');
     const opBadge = w.operator==='CT'
-      ? `<span style="background:#2a4a6a;color:#aaccee;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">CT</span>`
+      ? `<span style="background:#e9eff6;color:#2a4a6a;border:1px solid #c8d8e8;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">CT</span>`
       : w.operator==='Other'
-      ? `<span style="background:#3a2a4a;color:#aa88ee;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">OTHER</span>`
-      : `<span style="background:#3a3a3a;color:#cccccc;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">DWT</span>`;
+      ? `<span style="background:#f0ebf8;color:#5a3a8a;border:1px solid #d8cce8;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">OTHER</span>`
+      : `<span style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">DWT</span>`;
     card.style.cssText='cursor:pointer;';
     card.onclick=()=>openWeddingDetail(w.id);
     card.innerHTML=`
-      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:#535353;border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='#5a5a5a'" onmouseout="this.style.background='#535353'">
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
-            <span style="font-size:.95rem;font-weight:700;color:#f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
+            <span style="font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
             ${opBadge}
-            ${w.portalProvided?'<span style="background:#1a3a1a;color:#4ade80;font-size:.62rem;font-weight:700;padding:1px 5px;border-radius:3px">✓ Portal</span>':''}
+            ${w.portalProvided?'<span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:.62rem;font-weight:700;padding:1px 5px;border-radius:3px">✓ Portal</span>':''}
           </div>
-          <div style="font-size:.78rem;color:#888;">${fmtDate(w.weddingDate)}${w.resort?' · '+esc(w.resort):''}${w.destination?' · '+esc(w.destination):''}</div>
+          <div style="font-size:.78rem;color:var(--muted);">${fmtDate(w.weddingDate)}${w.resort?' · '+esc(w.resort):''}${w.destination?' · '+esc(w.destination):''}</div>
         </div>
         <div style="display:flex;gap:14px;align-items:center;flex-shrink:0;">
-          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Rooms</div><div style="font-size:.88rem;font-weight:600;color:#f0f0f0">${rooms}</div></div>
-          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Guests</div><div style="font-size:.88rem;font-weight:600;color:#f0f0f0">${guestCount}</div></div>
-          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Paid</div><div style="font-size:.88rem;font-weight:600;color:#4ade80">$${fmt(paid)}</div></div>
-          <div style="text-align:right"><div style="font-size:.62rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Owed</div><div style="font-size:.88rem;font-weight:600;color:${outstanding>0?'#f87171':'#4ade80'}">$${fmt(outstanding)}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Rooms</div><div style="font-size:.88rem;font-weight:600;color:var(--text)">${rooms}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Guests</div><div style="font-size:.88rem;font-weight:600;color:var(--text)">${guestCount}</div></div>
+          <div style="text-align:right"><div style="font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Owed</div><div style="font-size:.88rem;font-weight:600;color:${outstanding>0?'var(--red)':'var(--green)'}">$${fmt(outstanding)}</div></div>
           <div style="display:flex;gap:4px;" onclick="event.stopPropagation()">
-            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="openCouplePortal('${w.id}')">View</button>
-            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="copyCoupleLink('${w.id}')">Link</button>
-            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#444;border:1px solid #555;color:#ccc;cursor:pointer" onclick="editWedding('${w.id}')">Edit</button>
-            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:#3a2a2a;border:1px solid #5a3a3a;color:#f87171;cursor:pointer" onclick="archiveWedding('${w.id}')">✕</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer" onclick="openCouplePortal('${w.id}')">View</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer" onclick="copyCoupleLink('${w.id}')">Link</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--muted);cursor:pointer" onclick="editWedding('${w.id}')">Edit</button>
+            <button type="button" style="font-size:.72rem;padding:4px 8px;border-radius:4px;background:var(--red-bg);border:1px solid var(--red-border);color:var(--red);cursor:pointer" onclick="archiveWedding('${w.id}')">✕</button>
           </div>
         </div>
       </div>`;
@@ -2502,12 +2481,12 @@ function renderFlights(){
       // Only show transfer/action buttons on first person row for the reservation
       const actionCell = pIdx===0 ? `
         <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
-          ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:#aaa;font-size:.75rem">No email</span>`}
-          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#1a1a1a;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
+          ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:var(--muted);font-size:.75rem">No email</span>`}
+          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:var(--text);font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
         </div>` : '';
       const transferCell = pIdx===0 ? `<span class="badge ${tb}">${f.transfer||'Not Booked'}</span>` : '';
       const notesCell = pIdx===0 ? esc(f.notes) : '';
-      rowHtml.push(`<tr style="${!hasFlight?'background:#fff8f8':pIdx>0?'background:var(--surface2)':''}">
+      rowHtml.push(`<tr style="${!hasFlight?'background:var(--red-bg);box-shadow:inset 3px 0 0 var(--red-border)':pIdx>0?'background:var(--surface2)':''}">
         <td style="color:var(--muted)">${pIdx===0?n:''}</td>
         <td style="color:var(--muted);font-size:.85rem;white-space:nowrap">${pIdx===0?esc(g.ti||g.booking||'—'):''}</td>
         <td>${nameDisplay}</td>
@@ -2737,19 +2716,19 @@ function renderReports(){
     </div>
 
     <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:14px;padding:32px 36px;margin-bottom:20px;box-shadow:0 1px 4px rgba(0,0,0,.06)">
-      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:#888;margin-bottom:6px">${selYr}</div>
+      <div style="font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:6px">${selYr}</div>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:28px">
-        <div style="font-size:.85rem;color:#888">${d.groups} events</div>
-        <div style="color:#ccc">&middot;</div>
-        <div style="font-size:.85rem;color:#888">${d.passengers} passengers</div>
+        <div style="font-size:.85rem;color:var(--muted)">${d.groups} events</div>
+        <div style="color:var(--border)">&middot;</div>
+        <div style="font-size:.85rem;color:var(--muted)">${d.passengers} passengers</div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
         <div>
-          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:8px">${grossLabel}</div>
+          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">${grossLabel}</div>
           <div style="font-size:2.6rem;font-weight:800;color:var(--text);line-height:1">$${fmt(gross)}</div>
         </div>
         <div>
-          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#aaa;margin-bottom:8px">${commLabel}</div>
+          <div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px">${commLabel}</div>
           <div style="font-size:2.6rem;font-weight:800;color:#1a5c2a;line-height:1">$${fmt(comm)}</div>
         </div>
       </div>
@@ -2944,11 +2923,11 @@ function qbRenderRooms() {
   if (!qbResortData || qbResortData.length === 0) {
     container.innerHTML = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
       <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Hero Photo</div>
-      <p style="font-size:.82rem;color:#888;">No photos uploaded yet for this resort. Upload photos in the Resort Library first.</p>
+      <p style="font-size:.82rem;color:var(--muted);">No photos uploaded yet for this resort. Upload photos in the Resort Library first.</p>
     </div>
     <div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
       <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:8px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
-      <p style="font-size:.82rem;color:#888;">No photos uploaded yet. You can still add custom rooms below.</p>
+      <p style="font-size:.82rem;color:var(--muted);">No photos uploaded yet. You can still add custom rooms below.</p>
       <button class="btn btn-outline btn-sm" onclick="qbAddCustomRoom()" style="margin-top:8px;">+ Add Custom Room</button>
     </div>`;
     return;
@@ -2969,7 +2948,7 @@ function qbRenderRooms() {
   // ── HERO PHOTO PICKER ── (any resort photo; property shots first, room types after)
   let heroHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Hero Photo</div>
-    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">Select one photo to appear at the top of the quote card.</p>`;
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px;">Select one photo to appear at the top of the quote card.</p>`;
 
   const allHeroPhotos = qbResortData.filter(p => (p.url || p.downloadURL));
   if (allHeroPhotos.length === 0) {
@@ -2986,12 +2965,12 @@ function qbRenderRooms() {
         <input type="checkbox" class="qb-hero-photo" value="${url}" ${checked} style="position:absolute;top:6px;left:6px;z-index:1;width:16px;height:16px;"
           onchange="this.closest('label').querySelector('img').style.borderColor=this.checked?'#c9a96e':'#e0e0e0';">
         <img src="${url}" style="width:100%;height:70px;object-fit:cover;border-radius:6px;border:2px solid ${checked?'#c9a96e':'#e0e0e0'};" class="qb-hero-img" onerror="this.closest('label').style.display='none'">
-        <div style="font-size:.7rem;color:#888;margin-top:2px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${cat}</div>
+        <div style="font-size:.7rem;color:var(--muted);margin-top:2px;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">${cat}</div>
       </label>`;
     };
 
     if (resortPhotos.length > 0) {
-      heroHtml += `<div style="font-size:.68rem;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Resort &amp; Property</div>
+      heroHtml += `<div style="font-size:.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Resort &amp; Property</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;">`;
       resortPhotos.forEach(p => { heroHtml += renderHeroCell(p); });
       heroHtml += `</div>`;
@@ -3000,7 +2979,7 @@ function qbRenderRooms() {
       if (resortPhotos.length === 0) {
         heroHtml += `<p style="font-size:.78rem;color:#8a6d1a;background:#FDF6E3;border:1px solid #EBD9A8;border-radius:6px;padding:8px 10px;margin:0 0 10px 0;line-height:1.5;">No resort/property photos yet for this resort &mdash; showing room photos. Upload a pool or exterior shot in the Resort Library to use as a hero.</p>`;
       }
-      heroHtml += `<div style="font-size:.68rem;color:#aaa;font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Room Photos</div>
+      heroHtml += `<div style="font-size:.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;">Room Photos</div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
       roomPhotos.forEach(p => { heroHtml += renderHeroCell(p); });
       heroHtml += `</div>`;
@@ -3010,8 +2989,8 @@ function qbRenderRooms() {
 
   // ── RESORT GALLERY (for wedding sneak peek body photos) ──
   let galleryPickerHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
-    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:6px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Gallery Photos <span style="font-weight:400;font-size:.7rem;color:#888;text-transform:none;">(wedding sneak peek — shown after resort card)</span></div>
-    <p style="font-size:.78rem;color:#888;margin-bottom:10px;">Check photos to include as a resort gallery collage in the quote body.</p>`;
+    <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:6px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Resort Gallery Photos <span style="font-weight:400;font-size:.7rem;color:var(--muted);text-transform:none;">(wedding sneak peek — shown after resort card)</span></div>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:10px;">Check photos to include as a resort gallery collage in the quote body.</p>`;
   if (resortPhotos.length > 0) {
     galleryPickerHtml += `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">`;
     resortPhotos.forEach(p => {
@@ -3025,7 +3004,7 @@ function qbRenderRooms() {
     });
     galleryPickerHtml += `</div>`;
   } else {
-    galleryPickerHtml += `<p style="font-size:.82rem;color:#aaa;">No resort/property photos uploaded yet.</p>`;
+    galleryPickerHtml += `<p style="font-size:.82rem;color:var(--muted);">No resort/property photos uploaded yet.</p>`;
   }
   galleryPickerHtml += `</div>`;
 
@@ -3047,7 +3026,7 @@ function qbRenderRooms() {
 
   let roomsHtml = `<div style="background:var(--surface);border:1px solid #e0e0e0;border-radius:12px;padding:18px;margin-bottom:14px">
     <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid #c9a96e">Room Options</div>
-    <p style="font-size:.82rem;color:#888;margin-bottom:12px;">${hasKids ? 'With kids: enter total cost for the whole room.' : 'Check rooms to include. Enter total room cost — per person auto-calculates.'}</p>`;
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:12px;">${hasKids ? 'With kids: enter total cost for the whole room.' : 'Check rooms to include. Enter total room cost — per person auto-calculates.'}</p>`;
 
   Object.entries(categories).forEach(([cat, photos]) => {
     const galleryUrl = `https://amy-cate.com/gallery?gallery=${encodeURIComponent(qbSlug)}&cat=${encodeURIComponent(cat)}`;
@@ -3062,13 +3041,13 @@ function qbRenderRooms() {
 
     const pricingHtml = hasKids
       ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Cost (everyone)</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 4200" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
-          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+          <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:2px;">Total Cost (everyone)</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 4200" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
+          <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
          </div>`
       : `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 2400" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
-          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Per Person</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
-          <div><label style="font-size:.75rem;color:#888;display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+          <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:2px;">Total Room Cost</label><input class="qb-room-cost form-input" data-cat="${cat}" placeholder="e.g. 2400" style="padding:6px 8px;font-size:.85rem;" oninput="qbCalcRoomRate(this)"></div>
+          <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:2px;">Per Person</label><input class="qb-room-rate form-input" data-cat="${cat}" placeholder="auto-calc" style="padding:6px 8px;font-size:.85rem;background:#f9f9f9;" readonly></div>
+          <div><label style="font-size:.75rem;color:var(--muted);display:block;margin-bottom:2px;">Highlights</label><input class="qb-room-notes form-input" data-cat="${cat}" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
          </div>`;
 
     roomsHtml += `<div style="border:1px solid #e0e0e0;border-radius:8px;padding:12px;margin-bottom:10px;">
@@ -3141,9 +3120,9 @@ function qbAddCustomRoom() {
     <button onclick="this.closest('div').parentElement.remove()" style="background:none;border:none;color:#e05555;cursor:pointer;font-size:1.1rem;">✕</button>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
-    <div><label style="font-size:.75rem;color:#888;">Rate (per person)</label><input class="qb-room-rate form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
-    <div><label style="font-size:.75rem;color:#888;">Room Cost (total)</label><input class="qb-room-cost form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
-    <div><label style="font-size:.75rem;color:#888;">Highlights</label><input class="qb-room-notes form-input" data-cat="" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
+    <div><label style="font-size:.75rem;color:var(--muted);">Rate (per person)</label><input class="qb-room-rate form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+    <div><label style="font-size:.75rem;color:var(--muted);">Room Cost (total)</label><input class="qb-room-cost form-input" data-cat="" placeholder="$0.00" style="padding:6px 8px;font-size:.85rem;"></div>
+    <div><label style="font-size:.75rem;color:var(--muted);">Highlights</label><input class="qb-room-notes form-input" data-cat="" placeholder="e.g. Ocean view" style="padding:6px 8px;font-size:.85rem;"></div>
   </div>`;
   container.querySelector('div').appendChild(div);
 }
@@ -3380,8 +3359,8 @@ function qbGenerate() {
     const occDisplay = preferred ? `&#9670; Adult Only &#10022; ${occLabel}` : occLabel;
     const photoRow = qbPhotoCollage(r.photos && r.photos.length ? r.photos : (r.url ? [r.url] : []));
     const priceBlock = r.cost
-      ? `<p style="margin:0;font-family:Georgia,serif;font-size:11px;color:#888888;">Room Total</p><p style="margin:0 0 6px 0;font-family:Georgia,serif;font-size:14px;color:#888888;">${r.cost}</p><p style="margin:0;font-family:Georgia,serif;font-size:11px;color:#1a3a4a;">Per Person</p><p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p>`
-      : `<p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p><p style="margin:2px 0 0 0;font-family:Arial,sans-serif;font-size:10px;color:#888888;">per person / ${nights} nights</p>`;
+      ? `<p style="margin:0;font-family:Georgia,serif;font-size:11px;color:var(--muted)888;">Room Total</p><p style="margin:0 0 6px 0;font-family:Georgia,serif;font-size:14px;color:var(--muted)888;">${r.cost}</p><p style="margin:0;font-family:Georgia,serif;font-size:11px;color:#1a3a4a;">Per Person</p><p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p>`
+      : `<p style="margin:0;font-family:Georgia,serif;font-size:19px;color:#1a3a4a;font-weight:bold;">${r.rate || '&mdash;'}</p><p style="margin:2px 0 0 0;font-family:Arial,sans-serif;font-size:10px;color:var(--muted)888;">per person / ${nights} nights</p>`;
     return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;border:1px solid ${cardBorder};border-radius:3px;overflow:hidden;">${photoRow}<tr><td style="background-color:${headerBg};padding:12px 16px;"><p style="margin:0;font-family:Georgia,serif;font-size:14px;color:${headerColor};font-weight:normal;">${r.cat}</p><p style="margin:3px 0 0 0;font-family:Arial,sans-serif;font-size:11px;color:${subColor};">${occDisplay}</p></td></tr><tr><td style="padding:14px 16px;background-color:${cardBg};"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="font-family:Arial,sans-serif;font-size:12.5px;color:#444444;line-height:1.65;vertical-align:top;">${r.notes || (resortDesc ? '' : '&nbsp;')}</td><td width="110" style="text-align:right;vertical-align:top;padding-left:16px;">${priceBlock}</td></tr></table></td></tr></table>`;
   }).join('\n');
 
@@ -3401,7 +3380,7 @@ function qbGenerate() {
     const finalPayFmtW = weddingFinalPay ? (() => { try { const d = new Date(weddingFinalPay+'T00:00:00'); return isNaN(d.getTime()) ? weddingFinalPay : d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}); } catch(e){return weddingFinalPay;} })() : '';
     let payRows = weddingDeposit ? '<tr style="background-color:#f9f9f9;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">Deposit to Reserve</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;border-bottom:1px solid #eeeeee;">At Booking</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;border-bottom:1px solid #eeeeee;">' + weddingDeposit + '</td></tr>' : '';
     payRows += finalPayFmtW ? '<tr style="background-color:#ffffff;"><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">Final Payment</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#333333;">' + finalPayFmtW + '</td><td style="padding:9px 14px;font-family:Arial,sans-serif;font-size:13px;color:#0A0A0A;font-weight:bold;text-align:right;">Remaining Balance</td></tr>' : '';
-    const notesRow = weddingPayNotes ? '<tr><td colspan="3" style="padding:10px 14px;font-family:Arial,sans-serif;font-size:12px;color:#888888;font-style:italic;">' + weddingPayNotes + '</td></tr>' : '';
+    const notesRow = weddingPayNotes ? '<tr><td colspan="3" style="padding:10px 14px;font-family:Arial,sans-serif;font-size:12px;color:var(--muted)888;font-style:italic;">' + weddingPayNotes + '</td></tr>' : '';
     weddingPaymentHtml = '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 8px 0;"><tr><td width="4" bgcolor="#B8973A" style="background:#B8973A;">&nbsp;</td><td width="12">&nbsp;</td><td style="font-family:Georgia,serif;font-size:18px;font-weight:bold;color:#0A0A0A;">Easy Payments</td></tr></table>'
       + '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;margin-bottom:28px;">'
       + '<tr style="background-color:#0A0A0A;"><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Payment</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;">Due Date</td><td style="padding:8px 14px;font-family:Arial,sans-serif;font-size:11px;color:#B8973A;letter-spacing:1px;text-transform:uppercase;text-align:right;">Amount</td></tr>'
@@ -4338,8 +4317,8 @@ function renderTimeline(){
         <div style="display:flex;justify-content:space-between;align-items:flex-start">
           <div>
             <div style="font-size:1.05rem;font-weight:700;color:#1a1a1a">${esc(w.names)}</div>
-            ${w.resort?`<div style="font-size:.82rem;color:#888;margin-top:2px">${esc(w.resort)}</div>`:''}
-            ${w.destination?`<div style="font-size:.78rem;color:#aaa">${esc(w.destination)}</div>`:''}
+            ${w.resort?`<div style="font-size:.82rem;color:var(--muted);margin-top:2px">${esc(w.resort)}</div>`:''}
+            ${w.destination?`<div style="font-size:.78rem;color:var(--muted)">${esc(w.destination)}</div>`:''}
           </div>
           <div style="text-align:right;flex-shrink:0;margin-left:12px">
             <div style="font-size:.85rem;font-weight:700;color:#1a1a1a">${fmtDate(w.weddingDate)}</div>
@@ -4658,7 +4637,7 @@ function renderDetailGuests(){
     const f=calcFinancials(g,w);
     if(guestView==='summary'){
       const cancelStyle = g.status==='Cancelled' ? 'opacity:0.45;text-decoration:line-through;background:var(--surface2);' : '';
-      const cancelLabel = g.status==='Cancelled' ? '<span style="font-size:.72rem;color:#aaa;font-weight:700;margin-left:6px">CANCELLED</span>' : '';
+      const cancelLabel = g.status==='Cancelled' ? '<span style="font-size:.72rem;color:var(--muted);font-weight:700;margin-left:6px">CANCELLED</span>' : '';
       return `<tr style="${cancelStyle}">
         <td style="color:var(--muted);text-align:center;font-size:.9rem">${rn}</td>
         <td style="font-size:.9rem;text-align:center">${esc(g.ti)||'—'}</td>
@@ -4674,7 +4653,7 @@ function renderDetailGuests(){
       </tr>`;
     } else {
       const cancelStyleF = g.status==='Cancelled' ? 'opacity:0.45;text-decoration:line-through;background:var(--surface2);' : '';
-      const cancelLabelF = g.status==='Cancelled' ? '<span style="font-size:.72rem;color:#aaa;font-weight:700;margin-left:6px">CANCELLED</span>' : '';
+      const cancelLabelF = g.status==='Cancelled' ? '<span style="font-size:.72rem;color:var(--muted);font-weight:700;margin-left:6px">CANCELLED</span>' : '';
       return `<tr style="${cancelStyleF}">
         <td style="color:var(--muted)">${rn}</td>
         <td style="font-size:.95rem">${esc(g.booking)}</td>
@@ -4728,10 +4707,10 @@ function renderDetailFlights(){
       const notesCell = pIdx===0 ? esc(f.notes) : '';
       const actionCell = pIdx===0 ? `
         <div style="display:flex;flex-direction:column;gap:4px;align-items:center">
-          ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:#aaa;font-size:.75rem">No email</span>`}
-          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:#1a1a1a;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
+          ${g.email?`<button onclick="event.stopPropagation();sendGuestFlightEmail('${g.id}')" style="background:#1a3a1a;border:1px solid #2a6a2a;color:#6fcf6f;font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer;white-space:nowrap">📧 Send</button>`:`<span style="color:var(--muted);font-size:.75rem">No email</span>`}
+          <button onclick="openFlightModal('${g.id}')" style="background:var(--surface2);border:1px solid #999;color:var(--text);font-size:.8rem;font-weight:700;padding:4px 8px;border-radius:5px;cursor:pointer">✏️ Edit</button>
         </div>` : '';
-      rowHtml.push(`<tr style="${!hasFlight?'background:#fff8f8':pIdx>0?'background:var(--surface2)':''}">
+      rowHtml.push(`<tr style="${!hasFlight?'background:var(--red-bg);box-shadow:inset 3px 0 0 var(--red-border)':pIdx>0?'background:var(--surface2)':''}">
         <td style="color:var(--muted)">${pIdx===0?n:''}</td>
         <td style="color:var(--muted);font-size:.85rem;white-space:nowrap">${pIdx===0?esc(g.ti||g.booking||'—'):''}</td>
         <td>${nameDisplay}</td>
@@ -5305,8 +5284,8 @@ function renderFlightPersonSections(focusGuestId){
 
   const fMap={};flights.forEach(f=>fMap[f.guestId]=f);
 
-  let arrHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px">✈ Arrivals</div>`;
-  let deptHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:white;font-weight:700;margin-bottom:10px;margin-top:20px">✈ Departures</div>`;
+  let arrHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;margin-bottom:10px">✈ Arrivals</div>`;
+  let deptHtml = `<div style="font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;color:var(--accent);font-weight:700;margin-bottom:10px;margin-top:20px">✈ Departures</div>`;
 
   // Global person index for copy-from-above
   let globalIdx = 0;
@@ -5824,7 +5803,7 @@ ${AMY_SIGNATURE}`;
   overlay.innerHTML = `
     <div style="background:var(--surface);border-radius:14px;padding:28px;width:620px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.3)">
       <h3 style="font-size:1rem;font-weight:700;color:var(--text);margin-bottom:6px">📧 Send Flight Request</h3>
-      <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">Sending to <strong>${wGuests.length} guest${wGuests.length>1?'s':''}</strong> — <span style="color:#888">[Name]</span> and <span style="color:#888">[Link]</span> will be personalized per guest automatically.</p>
+      <p style="font-size:.88rem;color:var(--muted);margin-bottom:16px">Sending to <strong>${wGuests.length} guest${wGuests.length>1?'s':''}</strong> — <span style="color:var(--muted)">[Name]</span> and <span style="color:var(--muted)">[Link]</span> will be personalized per guest automatically.</p>
       <div style="margin-bottom:14px">
         <label style="display:block;font-size:.82rem;font-weight:700;color:var(--muted);margin-bottom:6px">Subject</label>
         <input id="flightEmailSubject" type="text" value="Flight Details Needed — ${coupleNames} Wedding!" style="width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:7px;font-size:.93rem;font-family:inherit">
@@ -6035,7 +6014,7 @@ async function viewResponsesByWedding(weddingId) {
       });
     }
     if (docs.length === 0) {
-      body.innerHTML = '<p style="color:#888;text-align:center;padding:24px">No intake responses yet.</p>';
+      body.innerHTML = '<p style="color:var(--muted);text-align:center;padding:24px">No intake responses yet.</p>';
       return;
     }
     body.innerHTML = docs.map(doc => {
@@ -6044,7 +6023,7 @@ async function viewResponsesByWedding(weddingId) {
       return '<div style="border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:14px">'
         + '<div style="display:flex;justify-content:space-between;margin-bottom:8px">'
         + '<strong>' + esc(d.firstName||'') + ' ' + esc(d.lastName||'') + '</strong>'
-        + '<span style="font-size:.8rem;color:#888">' + date + '</span></div>'
+        + '<span style="font-size:.8rem;color:var(--muted)">' + date + '</span></div>'
         + '<div style="font-size:.85rem;color:#555;line-height:1.7">'
         + (d.email ? '✉️ ' + esc(d.email) + '<br>' : '')
         + (d.phone ? '📞 ' + esc(d.phone) + '<br>' : '')
@@ -6127,27 +6106,27 @@ async function viewResponses(leadId) {
     }
     const list = document.getElementById('responses-list');
     if (snap.empty) {
-      list.innerHTML = '<p style="color:#888;text-align:center;padding:24px">No responses yet.</p>';
+      list.innerHTML = '<p style="color:var(--muted);text-align:center;padding:24px">No responses yet.</p>';
       return;
     }
     list.innerHTML = snap.docs.map(doc => {
       const d = doc.data();
       const date = d.submittedAt ? new Date(d.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) : '&mdash;';
-      const notesHtml = d.notes ? '<div style="margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;font-size:.86rem;color:#555"><span style="color:#888">Notes:</span> ' + esc(d.notes) + '</div>' : '';
+      const notesHtml = d.notes ? '<div style="margin-top:10px;padding:10px;background:var(--surface2);border-radius:6px;font-size:.86rem;color:#555"><span style="color:var(--muted)">Notes:</span> ' + esc(d.notes) + '</div>' : '';
       return '<div style="border:1px solid #e0e0e0;border-radius:10px;padding:16px;margin-bottom:14px">'
         + '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:10px">'
         + '<strong style="font-size:1rem">' + esc(d.firstName||'') + ' ' + esc(d.lastName||'') + '</strong>'
-        + '<span style="font-size:.78rem;color:#888">' + date + '</span>'
+        + '<span style="font-size:.78rem;color:var(--muted)">' + date + '</span>'
         + '</div>'
         + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.88rem;color:#444">'
-        + '<div><span style="color:#888">Email:</span> ' + esc(d.email||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Phone:</span> ' + esc(d.phone||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Room:</span> ' + esc(d.roomPreference||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Travelers:</span> ' + esc(d.numTravelers||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Rooming with:</span> ' + esc(d.roomingWith||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Check-in:</span> ' + esc(d.checkinDate||'Group date') + '</div>'
-        + '<div><span style="color:#888">Nights:</span> ' + esc(d.nights||'&mdash;') + '</div>'
-        + '<div><span style="color:#888">Check-out:</span> ' + esc(d.checkoutDate||'Group date') + '</div>'
+        + '<div><span style="color:var(--muted)">Email:</span> ' + esc(d.email||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Phone:</span> ' + esc(d.phone||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Room:</span> ' + esc(d.roomPreference||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Travelers:</span> ' + esc(d.numTravelers||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Rooming with:</span> ' + esc(d.roomingWith||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Check-in:</span> ' + esc(d.checkinDate||'Group date') + '</div>'
+        + '<div><span style="color:var(--muted)">Nights:</span> ' + esc(d.nights||'&mdash;') + '</div>'
+        + '<div><span style="color:var(--muted)">Check-out:</span> ' + esc(d.checkoutDate||'Group date') + '</div>'
         + '</div>'
         + notesHtml
         + '<div style="display:flex;justify-content:flex-end;margin-top:10px">'
@@ -6368,11 +6347,11 @@ function renderInbox(){
       <div onclick="handleInboxClick('${item.id}')" style="flex:1;min-width:0;cursor:pointer">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px">
           <div style="font-weight:${isRead?'600':'700'};color:var(--text);font-size:.92rem">${item.title}${!isRead?'<span style="display:inline-block;width:8px;height:8px;background:#e05555;border-radius:50%;margin-left:8px;vertical-align:middle"></span>':''}</div>
-          <div style="font-size:.78rem;color:#aaa;white-space:nowrap;flex-shrink:0">${timeStr}</div>
+          <div style="font-size:.78rem;color:var(--muted);white-space:nowrap;flex-shrink:0">${timeStr}</div>
         </div>
         <div style="font-size:.83rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${item.subtitle}</div>
       </div>
-      <button onclick="event.stopPropagation();dismissInboxItem('${item.id}')" style="background:none;border:none;color:#ccc;font-size:1rem;cursor:pointer;padding:0 0 0 8px;flex-shrink:0" title="Dismiss">✕</button>
+      <button onclick="event.stopPropagation();dismissInboxItem('${item.id}')" style="background:none;border:none;color:var(--muted);font-size:1rem;cursor:pointer;padding:0 0 0 8px;flex-shrink:0" title="Dismiss">✕</button>
     </div>`;
   }).join('');
 }
@@ -6483,7 +6462,7 @@ function showInboxIntakeDetail(id, data){
 
   const rows = fields.map(([label, value]) => `
     <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f0f0f0">
-      <div style="font-size:.82rem;font-weight:700;color:#888;min-width:140px;flex-shrink:0">${label}</div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--muted);min-width:140px;flex-shrink:0">${label}</div>
       <div style="font-size:.88rem;color:#1a1a1a">${esc(String(value))}</div>
     </div>`).join('');
 
@@ -6623,48 +6602,7 @@ document.addEventListener('DOMContentLoaded', function(){
   if(popup && handle) makeDraggable(popup, handle);
 });
 
-// ── QUOTE BUILDER: use the live Quote Builder v2 inside the Quotes tab ──
-// The legacy in-CRM builder markup is left in place but hidden, so this is
-// reversible: delete this block and the old builder returns.
-(function(){
-  function mountQuoteBuilder(){
-    var panel = document.getElementById('tab-quotes');
-    if(!panel || panel.dataset.qbMounted) return;
-    panel.dataset.qbMounted = '1';
-    // hide the legacy builder
-    Array.prototype.forEach.call(panel.children, function(el){
-      el.setAttribute('data-legacy-qb','1');
-      el.style.display = 'none';
-    });
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'width:100%;';
-    wrap.innerHTML =
-      '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">' +
-        '<div style="font-size:.95rem;font-weight:700;color:var(--gold,#B8973A);">Quote Builder</div>' +
-        '<a href="quote-builder-v2.html" target="_blank" rel="noopener" ' +
-          'style="font-size:.78rem;color:#888;text-decoration:underline;">open in a new tab</a>' +
-        '<span style="flex:1"></span>' +
-        '<button type="button" onclick="qbShowLegacy()" ' +
-          'style="background:none;border:none;color:#666;font-size:.72rem;text-decoration:underline;cursor:pointer;">' +
-          'show old builder</button>' +
-      '</div>' +
-      '<iframe src="quote-builder-v2.html" title="Quote Builder" ' +
-        'style="width:100%;height:calc(100vh - 190px);min-height:620px;border:1px solid #2a2a2a;border-radius:10px;background:#fff;"></iframe>';
-    panel.appendChild(wrap);
-  }
-  window.qbShowLegacy = function(){
-    var panel = document.getElementById('tab-quotes');
-    if(!panel) return;
-    Array.prototype.forEach.call(panel.querySelectorAll('[data-legacy-qb]'), function(el){
-      el.style.display = '';
-    });
-  };
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', mountQuoteBuilder);
-  } else {
-    mountQuoteBuilder();
-  }
-})();
+
 
 </script>
 </body>
