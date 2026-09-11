@@ -129,7 +129,7 @@ footer strong{font-weight:500;color:#5A5045}
 <div class="wrap">
   <div class="top">
     <p class="eyebrow">Amy Cate &middot; Destination Weddings</p>
-    <h1>Resort Reference</h1>
+    <h1 id="idxtitle">Resort Reference</h1>
     <p class="lede" id="lede">The resorts I know well &mdash; venues, rooms, dining and what a wedding there actually looks like. Tap any one to read the full guide.</p>
   </div>
   <div class="tools">
@@ -175,6 +175,7 @@ const ok=v=>v&&/^https?:/.test(String(v));
 const ORDER=['Jamaica','Dominican Republic','Mexico'];
 let ALL=[],F='all',Q='';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
+const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
 
 function isAdults(p){
   const ap=String(p.agePolicy||'');
@@ -206,10 +207,10 @@ function tagline(p){
 function card(p){
   const img=hero(p);
   const bits=[];
-  if((p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
+  if(!CTMODE&&(p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
   if((p.restaurants||[]).length)bits.push((p.restaurants||[]).length+' restaurants');
   if((p.roomCategories||[]).length)bits.push((p.roomCategories||[]).length+' room types');
-  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true'+(SHOWPRICE?'':'&np=1')+'">'
+  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true'+(SHOWPRICE?'':'&np=1')+(CTMODE?'&ct=1':'')+'">'
     +'<div class="ph"'+(img?' style="background-image:url(\''+esc(img)+'\')"':'')+'></div>'
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
@@ -237,6 +238,9 @@ document.getElementById('q').addEventListener('input',e=>{Q=e.target.value;draw(
 document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');F=b.dataset.f;draw();}));
 
+if(CTMODE){const t=document.getElementById('idxtitle');if(t)t.textContent='Resorts I Love';
+  const l0=document.getElementById('lede');if(l0)l0.textContent='The resorts I know well \u2014 the rooms, the food, the pools and what it actually feels like to be there. Tap any one to have a proper look.';
+  const e=document.querySelector('.top .eyebrow');if(e)e.textContent='Amy Cate \u00b7 Celebration Travel';}
 if(SHOWPRICE){const l=document.getElementById('lede');if(l)l.insertAdjacentHTML('afterend','<p style="margin-top:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);">Pricing version</p>');}
 
 /* Visit log — a timestamp, which version, and where the link came from.
@@ -248,7 +252,7 @@ function logVisit(){
     try{sessionStorage.setItem('acv',String(Date.now()));}catch(e){}
     db.collection('libraryVisits').add({
       at:new Date().toISOString(),
-      version:SHOWPRICE?'with pricing':'no pricing',
+      version:(CTMODE?'CT \u00b7 ':'')+(SHOWPRICE?'with pricing':'no pricing'),
       sentTo:(new URLSearchParams(location.search).get('c')||'').slice(0,60),
       from:(document.referrer||'').slice(0,120),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
