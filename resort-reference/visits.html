@@ -54,8 +54,11 @@ db.collection('libraryInterest').orderBy('at','desc').limit(100).get().then(si=>
   if(!I.length)return;
   const box=document.createElement('div');
   box.innerHTML='<h2 style="color:var(--gold-deep)">\u2605 They told you they\u2019re interested</h2>'
-   +tbl(['When','Who','Resort','Brand',''],I.map(x=>[ago(x.at),x.sentTo?'<span class="hot">'+esc(x.sentTo)+'</span>':'<span style="color:var(--mute)">not tagged</span>',
-     '<span class="hot">'+esc(x.resortName||x.resort)+'</span>',esc(x.brand||''),
+   +tbl(['When','Who','Resort','Dates','Guests','Brand',''],I.map(x=>[ago(x.at),
+     '<span class="hot">'+esc(x.name||x.sentTo||'not tagged')+'</span>',
+     '<span class="hot">'+esc(x.resortName||x.resort)+'</span>',
+     x.from?esc(x.from)+(x.to?' \u2013 '+esc(x.to):''):'<span style="color:var(--mute)">\u2014</span>',
+     x.guests?esc(x.guests):'<span style="color:var(--mute)">\u2014</span>',esc(x.brand||''),
      x.handled?'<span style="color:var(--mute)">done</span>':'<button data-id="'+x._id+'" class="mk" style="font-family:inherit;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);background:#fff;padding:6px 12px;cursor:pointer;">Mark done</button>']));
   document.getElementById('out').before(box);
   box.querySelectorAll('.mk').forEach(b=>b.onclick=()=>{db.collection('libraryInterest').doc(b.dataset.id).set({handled:true},{merge:true});b.outerHTML='<span style="color:var(--mute)">done</span>';});
