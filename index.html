@@ -1761,10 +1761,14 @@ function renderWeddingGrid(){
       : w.operator==='Other'
       ? `<span style="background:#f0ebf8;color:#5a3a8a;border:1px solid #d8cce8;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">OTHER</span>`
       : `<span style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">DWT</span>`;
+    const isCT = w.operator==='CT';
+    const rowBg = isCT ? '#f3ead8' : 'var(--surface)';
+    const rowBgHover = isCT ? '#e9dcc0' : 'var(--surface2)';
+    const rowBorder = isCT ? '#e0d0aa' : 'var(--border)';
     card.style.cssText='cursor:pointer;';
     card.onclick=()=>openWeddingDetail(w.id);
     card.innerHTML=`
-      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'">
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${rowBg};border:1px solid ${rowBorder};border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='${rowBgHover}'" onmouseout="this.style.background='${rowBg}'">
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
             <span style="font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
