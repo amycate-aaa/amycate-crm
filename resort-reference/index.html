@@ -143,6 +143,14 @@ const ok=v=>v&&/^https?:/.test(String(v));
 const ORDER=['Jamaica','Dominican Republic','Mexico'];
 let ALL=[],F='all',Q='';
 
+function isAdults(p){
+  const ap=String(p.agePolicy||'');
+  if(/adults?[ -]?only|18\+/i.test(ap))return true;
+  if(/family|all ages|children|kids/i.test(ap))return false;
+  const blob=[p.name,p._id,p.description,p.tagline,p.kidsInfo].join(' ');
+  if(/adults?[ -]?only|18 and over|18\+/i.test(blob))return true;
+  return /\b(secrets|breathless|zilara|excellence|hideaway|chic|temptation|desire|live aqua beach)\b/i.test(String(p.name||p._id||''));
+}
 function destOf(p){
   const d=String(p.destination||'').trim();
   if(/jamaica/i.test(d))return 'Jamaica';
@@ -173,14 +181,15 @@ function card(p){
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
     +(tagline(p)?'<p class="tag">'+esc(tagline(p))+'</p>':'')
-    +'<div class="meta">'+(p.adults?'<span class="pill adults">Adults only</span>':'<span class="pill">Family friendly</span>')
+    +'<div class="meta">'+(isAdults(p)?'<span class="pill adults">Adults only</span>':'<span class="pill">Family friendly</span>')
     +(bits.length?'<span>'+esc(bits.join(' \u00b7 '))+'</span>':'')+'</div></div></a>';
 }
 function draw(){
   const q=Q.toLowerCase();
   const list=ALL.filter(p=>{
-    if(F==='adults'&&!p.adults)return false;
-    if(F==='family'&&p.adults)return false;
+    const ad=isAdults(p);
+    if(F==='adults'&&!ad)return false;
+    if(F==='family'&&ad)return false;
     if(!q)return true;
     return (String(p.name||'')+' '+String(p.destination||'')).toLowerCase().includes(q);
   });
