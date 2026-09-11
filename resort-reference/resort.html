@@ -1835,7 +1835,7 @@ function renderQuote(){
   window.QUOTE_CT=CT;
   const SMALL=q.tripSize==='small';   // just them — no group-block language
   const GUEST=q.mode==='guest'; // resort already chosen — their room, their price, a button to say yes
-  const TEASER=q.mode==='teaser'; // no pricing anywhere — a look at the resorts, nothing to price against
+  const TEASER=q.mode==='teaser'||/^(1|true)$/i.test(new URLSearchParams(location.search).get('np')||''); // no pricing anywhere — a look at the resorts, nothing to price against
   const TOTAL=q.basis==='total'; const NIGHTS=parseInt(q.nights,10)||0;
   const email=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
   const brandName=q.brand==='ct'?'Celebration Travel':'Destination Weddings Travel Group';
