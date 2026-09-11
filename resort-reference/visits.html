@@ -1,0 +1,88 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Who's Looking — Amy Cate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF7F2;--line:#E4D8C6;--gold:#B08D57;--gold-deep:#8A6D3B;--ink:#1E1A14;--mute:#7A7266;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Jost',system-ui,sans-serif;font-weight:300;}
+.wrap{max-width:1060px;margin:0 auto;padding:0 22px 60px;}
+.top{padding:44px 0 6px;}
+.top .eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);}
+.top h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:44px;font-weight:400;line-height:1.1;margin-top:8px;}
+.top p{color:var(--mute);font-size:14.5px;margin-top:8px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:26px 0 8px;}
+.stat{background:#fff;border:1px solid var(--line);padding:18px 16px;}
+.stat b{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:38px;font-weight:400;line-height:1;}
+.stat span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);display:block;margin-top:7px;}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;font-weight:400;margin:36px 0 12px;}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);font-size:14px;}
+th{text-align:left;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;padding:11px 12px;border-bottom:1px solid var(--line);}
+td{padding:11px 12px;border-bottom:1px solid #F1EADD;}
+tr:last-child td{border-bottom:none;}
+.hot{color:var(--gold-deep);font-weight:500;}
+.none{color:var(--mute);font-size:14px;padding:22px 0;}
+.bar{height:6px;background:var(--gold);display:inline-block;vertical-align:middle;margin-right:8px;}
+.foot{margin-top:40px;font-size:12px;color:var(--mute);border-top:1px solid var(--line);padding-top:18px;}
+a{color:var(--gold-deep);}
+</style></head><body>
+<div class="wrap">
+  <div class="top">
+    <p class="eyebrow">Amy Cate</p>
+    <h1>Who's Looking</h1>
+    <p>Visits to the shared resort library. Nothing personal is recorded &mdash; you see that someone looked, and what they opened.</p>
+  </div>
+  <div class="cards" id="stats"></div>
+  <div id="out"><p class="none">Loading&hellip;</p></div>
+  <p class="foot">Tag a link with <code>&amp;c=theirname</code> when you send it and their name appears here. <a href="../index.html">Back to the dashboard</a></p>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+const db=firebase.firestore();
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const when=t=>String(t||'').replace('T',' ').slice(0,16);
+const ago=t=>{const d=(Date.now()-new Date(t).getTime())/3600000;
+  if(d<1)return Math.max(1,Math.round(d*60))+' min ago';
+  if(d<24)return Math.round(d)+' hr ago';
+  return Math.round(d/24)+' day'+(Math.round(d/24)===1?'':'s')+' ago';};
+const tbl=(head,rows)=>rows.length?'<table><thead><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'
+  +rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody></table>':'<p class="none">Nothing yet.</p>';
+
+db.collection('libraryVisits').orderBy('at','desc').limit(500).get().then(s=>{
+  const v=s.docs.map(d=>d.data());
+  if(!v.length){document.getElementById('out').innerHTML='<p class="none">No visits yet. The counter started when this went live.</p>';return;}
+  const today=new Date().toISOString().slice(0,10);
+  const stats=[[v.length,'total visits'],
+    [v.filter(x=>String(x.at).slice(0,10)===today).length,'today'],
+    [new Set(v.filter(x=>x.sentTo).map(x=>x.sentTo)).size,'named leads'],
+    [v.filter(x=>x.returning).length,'came back'],
+    [v.filter(x=>x.device!=='computer').length,'on a phone']];
+  document.getElementById('stats').innerHTML=stats.map(x=>'<div class="stat"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
+
+  let H='';
+  const tagged=v.filter(x=>x.sentTo);
+  if(tagged.length){const by={};tagged.forEach(x=>{const k=x.sentTo;const o=by[k]=by[k]||{opens:0,last:'',resorts:new Set()};o.opens++;if(x.at>o.last)o.last=x.at;if(x.resort)o.resorts.add(x.resort);});
+    H+='<h2>People you sent it to</h2>'+tbl(['Who','Times opened','Last opened','Resorts they looked at'],
+      Object.keys(by).sort((a,b)=>by[b].last.localeCompare(by[a].last)).map(k=>{const o=by[k];
+        return ['<span class="hot">'+esc(k)+'</span>',o.opens,ago(o.last)+' <span style="color:var(--mute)">('+when(o.last)+')</span>',
+                o.resorts.size?esc([...o.resorts].join(', ')):'<span style="color:var(--mute)">just the library</span>'];}));}
+  else H+='<h2>People you sent it to</h2><p class="none">No tagged links opened yet. Use the Share links panel on your dashboard to add a name.</p>';
+
+  const g=v.filter(x=>x.page==='guide'&&x.resort);
+  if(g.length){const by={};g.forEach(x=>{by[x.resort]=(by[x.resort]||0)+1;});
+    const max=Math.max(...Object.values(by));
+    H+='<h2>Resorts they actually opened</h2>'+tbl(['Resort','Opens'],
+      Object.keys(by).sort((a,b)=>by[b]-by[a]).slice(0,25).map(k=>[esc(k),'<span class="bar" style="width:'+Math.round(by[k]/max*90)+'px"></span>'+by[k]]));}
+
+  const byDay={};v.forEach(x=>{const d=String(x.at).slice(0,10);byDay[d]=(byDay[d]||0)+1;});
+  const maxd=Math.max(...Object.values(byDay));
+  H+='<h2>By day</h2>'+tbl(['Date','Visits'],Object.keys(byDay).sort().reverse().slice(0,21)
+    .map(k=>[k===today?'<span class="hot">'+k+' (today)</span>':k,'<span class="bar" style="width:'+Math.round(byDay[k]/maxd*90)+'px"></span>'+byDay[k]]));
+
+  H+='<h2>Most recent</h2>'+tbl(['When','Who','What they opened','Version','On'],
+    v.slice(0,30).map(x=>[ago(x.at),x.sentTo?'<span class="hot">'+esc(x.sentTo)+'</span>':'<span style="color:var(--mute)">\u2014</span>',
+      x.resort?esc(x.resort):'<span style="color:var(--mute)">the library</span>',esc(x.version||''),esc(x.device||'')]));
+  document.getElementById('out').innerHTML=H;
+}).catch(e=>{document.getElementById('out').innerHTML='<p class="none">Could not load: '+esc(e.message)+'</p>';});
+</script></body></html>
