@@ -176,6 +176,8 @@ const ORDER=['Jamaica','Dominican Republic','Mexico'];
 let ALL=[],F='all',Q='';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
+const TAG=(new URLSearchParams(location.search).get('c')||'').slice(0,60);
+const PASS=(new URLSearchParams(location.search).get('k')||'');
 
 function isAdults(p){
   const ap=String(p.agePolicy||'');
@@ -210,7 +212,7 @@ function card(p){
   if(!CTMODE&&(p.venues||[]).length)bits.push((p.venues||[]).length+' wedding venues');
   if((p.restaurants||[]).length)bits.push((p.restaurants||[]).length+' restaurants');
   if((p.roomCategories||[]).length)bits.push((p.roomCategories||[]).length+' room types');
-  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true&pv=1'+(SHOWPRICE?'':'&np=1')+(CTMODE?'&ct=1':'')+'">'
+  return '<a class="card" href="./resort?r='+encodeURIComponent(p._id)+'&quote=true&pv=1'+(SHOWPRICE?'':'&np=1')+(CTMODE?'&ct=1':'')+(TAG?'&c='+encodeURIComponent(TAG):'')+(PASS?'&k='+encodeURIComponent(PASS):'')+'">'
     +'<div class="ph"'+(img?' style="background-image:url(\''+esc(img)+'\')"':'')+'></div>'
     +'<div class="bd"><h3>'+esc(p.name||p._id)+'</h3>'
     +(p.destination?'<p class="loc">'+esc(p.destination)+'</p>':'')
