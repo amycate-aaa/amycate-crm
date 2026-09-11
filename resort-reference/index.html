@@ -206,6 +206,7 @@ function regionOf(p){
   if(/vallarta|nayarit|bah\u00eda de banderas|bahia mita|punta mita|mita/i.test(d))return 'Puerto Vallarta';
   if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero|esmeralda/i.test(d))return 'Dominican Republic';
   if(/jamaica|montego|negril|ocho rios|falmouth/i.test(d))return 'Jamaica';
+  if(/costa rica|papagayo|guanacaste|liberia/i.test(d))return 'Costa Rica';
   return 'Other';
 }
 function destOf(p){
@@ -260,7 +261,7 @@ function draw(){
 }
 function drawDests(){
   const R={};ALL.forEach(p=>{const r=regionOf(p);R[r]=(R[r]||0)+1;});
-  const ORD=['Canc\u00fan, Riviera Maya & Tulum','Los Cabos','Puerto Vallarta','Dominican Republic','Jamaica','Other'];
+  const ORD=['Canc\u00fan, Riviera Maya & Tulum','Los Cabos','Puerto Vallarta','Dominican Republic','Jamaica','Costa Rica','Other'];
   const keys=Object.keys(R).sort((a,b)=>{const i=ORD.indexOf(a),j=ORD.indexOf(b);return (i<0?99:i)-(j<0?99:j);});
   const box=document.getElementById('dests');if(!box)return;
   box.innerHTML='<button class="dbox'+(D==='all'?' on':'')+'" data-d="all"><span class="n">Everywhere</span><span class="c">'+ALL.length+' resorts</span></button>'
