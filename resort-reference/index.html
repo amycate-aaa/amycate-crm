@@ -135,19 +135,19 @@ footer strong{font-weight:500;color:#5A5045}
 .dbox .c{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(214,196,167,.78);margin-top:7px;}
 .dbox.on .n{color:#fff;}
 .dbox.on .c{color:rgba(255,255,255,.8);}
-.ask{margin:30px 0 4px;background:#3A332B;position:relative;}
+.ask{margin:22px 0 2px;background:#3A332B;position:relative;}
 .ask::before{content:'';position:absolute;inset:6px;border:1px solid rgba(176,141,87,.34);pointer-events:none;}
-.ask-in{padding:30px 26px;text-align:center;}
-.ask-q{font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;color:#F7F2E9;font-weight:400;}
-.ask-s{font-size:13.5px;color:rgba(214,196,167,.85);margin-top:7px;line-height:1.55;max-width:520px;margin-left:auto;margin-right:auto;}
-.ask-f{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px;}
-.ask-f input{font-family:'Jost',sans-serif;font-size:14px;padding:11px 13px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#F7F2E9;min-width:170px;}
+.ask-in{padding:16px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;justify-content:center;}
+.ask-q{font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;color:#F7F2E9;font-weight:400;white-space:nowrap;}
+.ask-s{display:none;}
+.ask-f{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:0;}
+.ask-f input{font-family:'Jost',sans-serif;font-size:13px;padding:8px 11px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#F7F2E9;min-width:130px;}
 .ask-f input::placeholder{color:rgba(247,242,233,.5);}
 .ask-f input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.14);}
-.ask-btn{margin-top:16px;font-family:'Jost',sans-serif;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:14px 30px;cursor:pointer;transition:.22s;}
+.ask-btn{margin:0;font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:10px 20px;cursor:pointer;transition:.22s;white-space:nowrap;}
 .ask-btn:hover{background:#F7F2E9;color:#3A332B;}
 .ask-btn.done{background:transparent;color:#F7F2E9;border-color:rgba(255,255,255,.45);cursor:default;}
-.ask-note{font-size:12.5px;color:rgba(247,242,233,.8);margin-top:11px;min-height:16px;}
+.ask-note{font-size:12px;color:rgba(247,242,233,.85);margin:0;flex-basis:100%;text-align:center;}
 </style></head><body>
 <div id="gate"><div class="box"><p class="eyebrow">Amy Cate &middot; Destination Weddings</p><h1>Resort Reference</h1><p>This library is shared with my couples. Enter the word I gave you to take a look.</p><form onsubmit="return gateGo(event)"><input id="gk" type="password" autocomplete="off" placeholder="Enter the word" autofocus><button type="submit">Enter</button></form><p class="no" id="gno"></p></div></div>
 <div class="wrap">
@@ -168,10 +168,10 @@ footer strong{font-weight:500;color:#5A5045}
       <p class="ask-s">Tell me roughly what you&rsquo;re picturing and I&rsquo;ll come back with three that fit &mdash; no forms, no obligation.</p>
       <div class="ask-f">
         <input id="ask-name" placeholder="Your name">
-        <input id="ask-when" placeholder="When, roughly? e.g. March 2027">
-        <input id="ask-pax" type="number" min="1" max="500" placeholder="How many people?">
+        <input id="ask-when" placeholder="When, roughly?">
+        <input id="ask-pax" type="number" min="1" max="500" placeholder="How many?">
       </div>
-      <button class="ask-btn" id="ask-go">Have Amy get in touch</button>
+      <button class="ask-btn" id="ask-go">Ask Amy</button>
       <p class="ask-note" id="ask-note"></p>
     </div>
   </div>
