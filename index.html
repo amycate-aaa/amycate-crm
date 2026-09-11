@@ -1757,7 +1757,7 @@ function renderWeddingGrid(){
     const card=document.createElement('div');
     card.className='wedding-square'+(isSelected?' selected':'');
     const opBadge = w.operator==='CT'
-      ? `<span style="background:#e9eff6;color:#2a4a6a;border:1px solid #c8d8e8;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">CT</span>`
+      ? `<span style="background:#c9a96e;color:#3d3122;border:1px solid #b3924f;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">CT</span>`
       : w.operator==='Other'
       ? `<span style="background:#f0ebf8;color:#5a3a8a;border:1px solid #d8cce8;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">OTHER</span>`
       : `<span style="background:var(--surface2);color:var(--muted);border:1px solid var(--border);font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:3px">DWT</span>`;
@@ -1769,7 +1769,6 @@ function renderWeddingGrid(){
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
             <span style="font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
             ${opBadge}
-            ${w.portalProvided?'<span style="background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);font-size:.62rem;font-weight:700;padding:1px 5px;border-radius:3px">✓ Portal</span>':''}
           </div>
           <div style="font-size:.78rem;color:var(--muted);">${fmtDate(w.weddingDate)}${w.resort?' · '+esc(w.resort):''}${w.destination?' · '+esc(w.destination):''}</div>
         </div>
