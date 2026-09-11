@@ -264,7 +264,7 @@ function logVisit(){
 logVisit();
 db.collection('resortProfiles').get().then(s=>{
   ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()))
-    .filter(p=>p.name&&(p.venues||[]).length);      // only resorts with real guide content
+    .filter(p=>p.name&&(p.venues||[]).length&&!p.hideFromLibrary);      // only resorts with real guide content, minus anything flagged
   draw();
 }).catch(e=>{document.getElementById('out').innerHTML='<p class="state">Could not load the library. '+esc(e.message)+'</p>';});
 </script>
