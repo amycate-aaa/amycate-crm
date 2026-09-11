@@ -249,6 +249,7 @@ function logVisit(){
     db.collection('libraryVisits').add({
       at:new Date().toISOString(),
       version:SHOWPRICE?'with pricing':'no pricing',
+      sentTo:(new URLSearchParams(location.search).get('c')||'').slice(0,60),
       from:(document.referrer||'').slice(0,120),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
       returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
