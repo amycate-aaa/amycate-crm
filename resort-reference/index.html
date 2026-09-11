@@ -108,7 +108,7 @@ footer strong{font-weight:500;color:#5A5045}
 .card .bd{padding:17px 18px 19px;flex:1;display:flex;flex-direction:column;}
 .card h3{font-size:20px;font-weight:400;line-height:1.25;}
 .card .loc{font-size:12.5px;letter-spacing:.02em;color:#7A7266;margin-top:4px;font-weight:300;}
-.card .tag{font-size:13.5px;color:#5A5248;margin-top:9px;line-height:1.5;flex:1;}
+.card .tag{font-size:12.5px;color:#6B6254;margin-top:8px;line-height:1.5;flex:1;text-transform:none;font-weight:300;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .card .meta{margin-top:13px;padding-top:11px;border-top:1px solid var(--line);font-size:11.5px;color:#6B6254;display:flex;flex-wrap:wrap;gap:10px;}
 .pill{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);padding:3px 9px;}
 .pill.adults{border-color:var(--gold);color:var(--gold-deep);}
@@ -159,7 +159,9 @@ function hero(p){
 function tagline(p){
   const t=String(p.tagline||p.shortDescription||p.description||'').trim();
   if(!t)return '';
-  const first=t.split(/(?<=[.!?])\s/)[0];
+  let first=t.split(/(?<=[.!?])\s/)[0];
+  const letters=first.replace(/[^A-Za-z]/g,'');
+  if(letters&&letters===letters.toUpperCase())first=first.toLowerCase().replace(/(^|[.!?]\s+)([a-z])/g,(m,a,b)=>a+b.toUpperCase());
   return first.length>132?first.slice(0,132).replace(/[,;\s]\S*$/,'')+'\u2026':first;
 }
 function card(p){
