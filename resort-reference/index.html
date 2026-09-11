@@ -206,8 +206,9 @@ const PASS=(new URLSearchParams(location.search).get('k')||'');
 
 function isAdults(p){
   const nm=String(p.name||p._id||'');
-  // Dreams is a family brand, always — never let a description fool the guess
-  if(/\bdreams\b/i.test(nm))return false;
+  // Brand decides, not the description
+  if(/\b(dreams|sunscape|ziva|hyatt vivid|margaritaville|riu ventura|riu latino)\b/i.test(nm))return false;
+  if(/\b(secrets|breathless|zilara|impression|excellence|hideaway|chic|atelier|unico|temptation|desire|trs)\b/i.test(nm))return true;
   const ap=String(p.agePolicy||'');
   if(/adults?[ -]?only|18\+/i.test(ap))return true;
   if(/family|all ages|children|kids/i.test(ap))return false;
