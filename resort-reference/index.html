@@ -124,6 +124,13 @@ footer strong{font-weight:500;color:#5A5045}
 #gate button{font-family:'Jost',sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:12px 22px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;}
 #gate button:hover{background:var(--gold-deep);border-color:var(--gold-deep);}
 #gate .no{color:#A33;font-size:13px;margin-top:12px;min-height:18px;}
+.dests{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;padding:26px 0 4px;}
+.dbox{border:1px solid var(--line);background:#fff;padding:15px 16px;cursor:pointer;text-align:left;font-family:'Jost',sans-serif;transition:.2s;}
+.dbox:hover{border-color:var(--gold);transform:translateY(-1px);}
+.dbox.on{background:var(--gold);border-color:var(--gold);}
+.dbox .n{display:block;font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;font-weight:400;line-height:1.2;color:var(--ink);}
+.dbox .c{display:block;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute,#7A7266);margin-top:5px;}
+.dbox.on .n,.dbox.on .c{color:#fff;}
 </style></head><body>
 <div id="gate"><div class="box"><p class="eyebrow">Amy Cate &middot; Destination Weddings</p><h1>Resort Reference</h1><p>This library is shared with my couples. Enter the word I gave you to take a look.</p><form onsubmit="return gateGo(event)"><input id="gk" type="password" autocomplete="off" placeholder="Enter the word" autofocus><button type="submit">Enter</button></form><p class="no" id="gno"></p></div></div>
 <div class="wrap">
@@ -138,6 +145,7 @@ footer strong{font-weight:500;color:#5A5045}
     <button class="chip" data-f="adults">Adults only</button>
     <button class="chip" data-f="family">Family friendly</button>
   </div>
+  <div id="dests" class="dests"></div>
   <div id="out"><p class="state">Loading the library&hellip;</p></div>
   <div class="foot">
     <p>Amy M. Cate &middot; Certified Destination Wedding &amp; Group Travel Specialist</p>
@@ -173,7 +181,7 @@ const db=firebase.firestore();
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ok=v=>v&&/^https?:/.test(String(v));
 const ORDER=['Jamaica','Dominican Republic','Mexico'];
-let ALL=[],F='all',Q='';
+let ALL=[],F='all',Q='',D='all';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
 const TAG=(new URLSearchParams(location.search).get('c')||'').slice(0,60);
@@ -186,6 +194,18 @@ function isAdults(p){
   const blob=[p.name,p._id,p.description,p.tagline,p.kidsInfo].join(' ');
   if(/adults?[ -]?only|18 and over|18\+/i.test(blob))return true;
   return /\b(secrets|breathless|zilara|excellence|hideaway|chic|temptation|desire|live aqua beach)\b/i.test(String(p.name||p._id||''));
+}
+function regionOf(p){
+  const d=String(p.destination||'')+' '+String(p.name||'');
+  if(/jamaica|montego|negril|ocho rios|falmouth/i.test(d))return 'Jamaica';
+  if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero/i.test(d))return 'Punta Cana & the DR';
+  if(/costa mujeres|playa mujeres|canc/i.test(d))return 'Canc\u00fan & Costa Mujeres';
+  if(/riviera maya|playa del carmen|akumal|tulum|puerto morelos|cozumel|maroma/i.test(d))return 'Riviera Maya';
+  if(/los cabos|cabo san lucas|san jos\u00e9 del cabo|baja/i.test(d))return 'Los Cabos';
+  if(/vallarta|nayarit|bah\u00eda de banderas|bahia mita|punta mita/i.test(d))return 'Puerto Vallarta';
+  if(/aruba|curacao|cura\u00e7ao|bahamas|barbados|st\.? lucia|antigua|grenada|turks|tobago|trinidad/i.test(d))return 'Elsewhere in the Caribbean';
+  if(/mexico|mazatlan|huatulco|riviera nayarit/i.test(d))return 'Elsewhere in Mexico';
+  return 'Elsewhere';
 }
 function destOf(p){
   const d=String(p.destination||'').trim();
@@ -224,17 +244,27 @@ function draw(){
   const q=Q.toLowerCase();
   const list=ALL.filter(p=>{
     const ad=isAdults(p);
+    if(D!=='all'&&regionOf(p)!==D)return false;
     if(F==='adults'&&!ad)return false;
     if(F==='family'&&ad)return false;
     if(!q)return true;
     return (String(p.name||'')+' '+String(p.destination||'')).toLowerCase().includes(q);
   });
   if(!list.length){document.getElementById('out').innerHTML='<p class="state">Nothing matches that \u2014 try another word.</p>';return;}
-  const groups={};list.forEach(p=>{const d=destOf(p);(groups[d]=groups[d]||[]).push(p);});
+  const groups={};list.forEach(p=>{const d=D==='all'?destOf(p):regionOf(p);(groups[d]=groups[d]||[]).push(p);});
   const keys=Object.keys(groups).sort((a,b)=>{const i=ORDER.indexOf(a),j=ORDER.indexOf(b);return (i<0?99:i)-(j<0?99:j)||a.localeCompare(b);});
   document.getElementById('out').innerHTML=keys.map(k=>
     '<section class="dest"><h2>'+esc(k)+'</h2><p class="cnt">'+groups[k].length+' resort'+(groups[k].length===1?'':'s')+'</p>'
     +'<div class="grid">'+groups[k].sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''))).map(card).join('')+'</div></section>').join('');
+}
+function drawDests(){
+  const R={};ALL.forEach(p=>{const r=regionOf(p);R[r]=(R[r]||0)+1;});
+  const ORD=['Jamaica','Punta Cana & the DR','Canc\u00fan & Costa Mujeres','Riviera Maya','Los Cabos','Puerto Vallarta','Elsewhere in Mexico','Elsewhere in the Caribbean','Elsewhere'];
+  const keys=Object.keys(R).sort((a,b)=>{const i=ORD.indexOf(a),j=ORD.indexOf(b);return (i<0?99:i)-(j<0?99:j);});
+  const box=document.getElementById('dests');if(!box)return;
+  box.innerHTML='<button class="dbox'+(D==='all'?' on':'')+'" data-d="all"><span class="n">Everywhere</span><span class="c">'+ALL.length+' resorts</span></button>'
+    +keys.map(k=>'<button class="dbox'+(D===k?' on':'')+'" data-d="'+esc(k)+'"><span class="n">'+esc(k)+'</span><span class="c">'+R[k]+' resort'+(R[k]===1?'':'s')+'</span></button>').join('');
+  box.querySelectorAll('.dbox').forEach(b=>b.onclick=()=>{D=b.dataset.d;drawDests();draw();window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});});
 }
 document.getElementById('q').addEventListener('input',e=>{Q=e.target.value;draw();});
 document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
@@ -267,7 +297,7 @@ logVisit();
 db.collection('resortProfiles').get().then(s=>{
   ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()))
     .filter(p=>p.name&&(p.venues||[]).length&&!p.hideFromLibrary);      // only resorts with real guide content, minus anything flagged
-  draw();
+  drawDests();draw();
 }).catch(e=>{document.getElementById('out').innerHTML='<p class="state">Could not load the library. '+esc(e.message)+'</p>';});
 </script>
 </body></html>
