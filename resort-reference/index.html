@@ -135,6 +135,19 @@ footer strong{font-weight:500;color:#5A5045}
 .dbox .c{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(214,196,167,.78);margin-top:7px;}
 .dbox.on .n{color:#fff;}
 .dbox.on .c{color:rgba(255,255,255,.8);}
+.ask{margin:30px 0 4px;background:#3A332B;position:relative;}
+.ask::before{content:'';position:absolute;inset:6px;border:1px solid rgba(176,141,87,.34);pointer-events:none;}
+.ask-in{padding:30px 26px;text-align:center;}
+.ask-q{font-family:'Cormorant Garamond',Georgia,serif;font-size:27px;color:#F7F2E9;font-weight:400;}
+.ask-s{font-size:13.5px;color:rgba(214,196,167,.85);margin-top:7px;line-height:1.55;max-width:520px;margin-left:auto;margin-right:auto;}
+.ask-f{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:18px;}
+.ask-f input{font-family:'Jost',sans-serif;font-size:14px;padding:11px 13px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#F7F2E9;min-width:170px;}
+.ask-f input::placeholder{color:rgba(247,242,233,.5);}
+.ask-f input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.14);}
+.ask-btn{margin-top:16px;font-family:'Jost',sans-serif;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:14px 30px;cursor:pointer;transition:.22s;}
+.ask-btn:hover{background:#F7F2E9;color:#3A332B;}
+.ask-btn.done{background:transparent;color:#F7F2E9;border-color:rgba(255,255,255,.45);cursor:default;}
+.ask-note{font-size:12.5px;color:rgba(247,242,233,.8);margin-top:11px;min-height:16px;}
 </style></head><body>
 <div id="gate"><div class="box"><p class="eyebrow">Amy Cate &middot; Destination Weddings</p><h1>Resort Reference</h1><p>This library is shared with my couples. Enter the word I gave you to take a look.</p><form onsubmit="return gateGo(event)"><input id="gk" type="password" autocomplete="off" placeholder="Enter the word" autofocus><button type="submit">Enter</button></form><p class="no" id="gno"></p></div></div>
 <div class="wrap">
@@ -148,6 +161,19 @@ footer strong{font-weight:500;color:#5A5045}
     <button class="chip on" data-f="all">All</button>
     <button class="chip" data-f="adults">Adults only</button>
     <button class="chip" data-f="family">Family friendly</button>
+  </div>
+  <div class="ask">
+    <div class="ask-in">
+      <p class="ask-q">Not sure where to start?</p>
+      <p class="ask-s">Tell me roughly what you&rsquo;re picturing and I&rsquo;ll come back with three that fit &mdash; no forms, no obligation.</p>
+      <div class="ask-f">
+        <input id="ask-name" placeholder="Your name">
+        <input id="ask-when" placeholder="When, roughly? e.g. March 2027">
+        <input id="ask-pax" type="number" min="1" max="500" placeholder="How many people?">
+      </div>
+      <button class="ask-btn" id="ask-go">Have Amy get in touch</button>
+      <p class="ask-note" id="ask-note"></p>
+    </div>
   </div>
   <div id="dests" class="dests"></div>
   <div id="out"><p class="state">Loading the library&hellip;</p></div>
@@ -294,6 +320,28 @@ function logVisit(){
     });
   }catch(e){}
 }
+
+
+(function(){
+  var b=document.getElementById('ask-go');if(!b)return;
+  b.onclick=function(){
+    var q=new URLSearchParams(location.search);
+    b.disabled=true;b.textContent='Got it \u2014 Amy will be in touch \u2713';b.classList.add('done');
+    try{
+      db.collection('libraryInterest').add({
+        at:new Date().toISOString(),
+        resort:'',resortName:'General enquiry \u2014 from the library',
+        name:((document.getElementById('ask-name')||{}).value||'').slice(0,80),
+        when:((document.getElementById('ask-when')||{}).value||'').slice(0,60),
+        guests:((document.getElementById('ask-pax')||{}).value||'').slice(0,10),
+        sentTo:(q.get('c')||'').slice(0,60),
+        brand:CTMODE?'Celebration Travel':'Weddings',
+        device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
+        handled:false});
+      document.getElementById('ask-note').textContent='Thank you \u2014 I\u2019ll come back to you with a few that fit.';
+    }catch(e){document.getElementById('ask-note').textContent='Something went wrong \u2014 email amy.cate@destinationweddings.com and I\u2019ll pick it up.';}
+  };
+})();
 
 logVisit();
 db.collection('resortProfiles').get().then(s=>{
