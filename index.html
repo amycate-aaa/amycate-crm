@@ -192,7 +192,7 @@ tr:hover .sticky-col{background:var(--surface2);}
 .progress-fill{height:100%;border-radius:4px;background:var(--accent);transition:width .3s;}
 
 /* WEDDING GRID */
-.wedding-grid{display:flex;flex-direction:column;gap:0;}
+.wedding-grid{display:flex;flex-direction:column;gap:10px;}
 .wedding-square{cursor:pointer;transition:all .15s;}
 .wedding-square:hover{}
 .wedding-square.selected{}
@@ -320,8 +320,6 @@ tr:hover .sticky-col{background:var(--surface2);}
     <a href="resort-library.html" class="nav-btn" style="text-decoration:none">🏨 Resort Library</a>
     <a href="resort-reference/" class="nav-btn" style="text-decoration:none">📋 Resort Guides</a>
     <a href="resort-reference/resort.html" class="nav-btn" style="text-decoration:none">⚡ Live Guide</a>
-    <a href="resort-reference/?k=amycate" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">🔒 Share — no pricing</a>
-    <a href="resort-reference/?k=amycate&amp;prices=1" target="_blank" rel="noopener" class="nav-btn" style="text-decoration:none;font-size:.92em;opacity:.9;padding-left:26px;">💲 Share — with pricing</a>
 
     <div class="sidebar-section">All</div>
     <button type="button" autocomplete="off" class="nav-btn" onclick="showTab('guests')">👥 All Guests</button>
@@ -1770,7 +1768,7 @@ function renderWeddingGrid(){
     card.style.cssText='cursor:pointer;';
     card.onclick=()=>openWeddingDetail(w.id);
     card.innerHTML=`
-      <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;background:${rowBg};border:1px solid ${rowBorder};border-radius:8px;margin-bottom:5px;transition:background .15s;" onmouseover="this.style.background='${rowBgHover}'" onmouseout="this.style.background='${rowBg}'">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;background:${rowBg};border:1px solid ${rowBorder};border-radius:8px;transition:background .15s;" onmouseover="this.style.background='${rowBgHover}'" onmouseout="this.style.background='${rowBg}'">
         <div style="flex:1;min-width:0;">
           <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;">
             <span style="font-size:.95rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(w.names)}</span>
