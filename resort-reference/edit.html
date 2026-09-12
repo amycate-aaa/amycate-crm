@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Resort Editor — Amy Cate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--cream:#FAF7F2;--line:#E4D8C6;--gold:#B08D57;--gold-deep:#8A6D3B;--ink:#1E1A14;--mute:#7A7266;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Jost',system-ui,sans-serif;font-weight:300;}
+.wrap{max-width:980px;margin:0 auto;padding:34px 22px 80px;}
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:40px;font-weight:400;margin-top:6px;}
+.sub{color:var(--mute);font-size:14px;margin-top:6px;}
+select,input,textarea{font-family:'Jost',sans-serif;font-size:14px;padding:9px 11px;border:1px solid var(--line);background:#fff;color:var(--ink);width:100%;}
+textarea{min-height:60px;resize:vertical;line-height:1.5;}
+.pick{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:22px 0 8px;}
+.pick select{max-width:420px;}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 0;border-bottom:1px solid var(--line);padding-bottom:12px;}
+.tab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:9px 15px;border:1px solid var(--line);background:#fff;cursor:pointer;}
+.tab.on{background:var(--gold);border-color:var(--gold);color:#fff;}
+.tab .n{opacity:.7;margin-left:5px;}
+.rows{margin-top:18px;}
+.row{background:#fff;border:1px solid var(--line);padding:14px;margin-bottom:12px;display:grid;gap:9px;}
+.row .top{display:grid;grid-template-columns:1.4fr .7fr 1fr;gap:9px;}
+.row .ph{display:grid;grid-template-columns:1fr auto auto;gap:9px;align-items:center;}
+.thumb{width:74px;height:52px;background:#EFE7DA center/cover no-repeat;border:1px solid var(--line);}
+.thumb.bad{border-color:#C66;}
+.mini{font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);background:#fff;padding:8px 11px;cursor:pointer;white-space:nowrap;}
+.mini:hover{border-color:var(--gold);}
+.mini.del{color:#A33;border-color:#E3C9C9;}
+.bar{position:sticky;bottom:0;background:var(--cream);border-top:1px solid var(--line);padding:14px 0;margin-top:22px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.btn{font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:13px 26px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;}
+.btn:hover{background:var(--gold-deep);border-color:var(--gold-deep);}
+.btn.ghost{background:#fff;color:var(--ink);}
+.msg{font-size:13px;color:var(--gold-deep);}
+.lab{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:4px;display:block;}
+.basics{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;}
+.basics .full{grid-column:1/-1;}
+.warn{background:#FFF8E6;border:1px solid #E8D9A8;padding:11px 13px;font-size:13px;margin-top:14px;}
+@media(max-width:700px){.row .top{grid-template-columns:1fr;}.basics{grid-template-columns:1fr;}}
+</style></head><body>
+<div class="wrap">
+  <p class="eyebrow">Amy Cate</p>
+  <h1>Resort Editor</h1>
+  <p class="sub">Fill in what's missing without touching the console. Pick a resort, add rows, save.</p>
+
+  <div class="pick">
+    <select id="pick"><option>Loading the library…</option></select>
+    <button class="mini" id="only">Show only ones with gaps</button>
+  </div>
+
+  <div id="body" style="display:none">
+    <div class="basics">
+      <div class="full"><label class="lab">Hero photo URL</label><input id="hero" placeholder="https://…"></div>
+      <div class="full"><label class="lab">Short description — one or two sentences, shown on the library card</label><textarea id="desc"></textarea></div>
+    </div>
+    <div class="tabs" id="tabs"></div>
+    <div class="rows" id="rows"></div>
+    <button class="mini" id="add">+ Add another</button>
+    <div class="warn" id="warn" style="display:none"></div>
+    <div class="bar">
+      <button class="btn" id="save">Save this resort</button>
+      <button class="btn ghost" id="open">Open the guide page</button>
+      <span class="msg" id="msg"></span>
+    </div>
+  </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+const db=firebase.firestore();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ok=v=>v&&/^https?:/.test(String(v));
+const arr=(p,k)=>Array.isArray(p[k])?p[k]:[];
+const FIELDS=[['venues','Venues','capacity'],['roomCategories','Rooms','sqft'],['restaurants','Dining',''],['bars','Bars',''],['pools','Pools','']];
+let ALL=[],CUR=null,TAB='venues',DATA={},ONLY=false;
+
+function gapCount(p){let n=0;if(!ok(p.heroPhoto))n++;
+  FIELDS.forEach(([f])=>{const a=arr(p,f);if(!a.length)n++;else if(!a.filter(x=>x&&ok(x.photo)).length)n++;});return n;}
+
+function fillPicker(){
+  const list=ALL.filter(p=>!ONLY||gapCount(p)>0)
+    .sort((a,b)=>String(a.name||a._id).localeCompare(String(b.name||b._id)));
+  $('pick').innerHTML='<option value="">Choose a resort…</option>'+list.map(p=>{
+    const g=gapCount(p);
+    return '<option value="'+esc(p._id)+'">'+esc(p.name||p._id)+(g?'  —  '+g+' gap'+(g===1?'':'s'):'  ✓')+'</option>';}).join('');
+}
+function drawTabs(){
+  $('tabs').innerHTML=FIELDS.map(([f,label])=>{
+    const a=DATA[f]||[];const w=a.filter(x=>x&&ok(x.photo)).length;
+    return '<button class="tab'+(TAB===f?' on':'')+'" data-f="'+f+'">'+label+'<span class="n">'+w+'/'+a.length+'</span></button>';}).join('');
+  $('tabs').querySelectorAll('.tab').forEach(b=>b.onclick=()=>{TAB=b.dataset.f;drawTabs();drawRows();});
+}
+function drawRows(){
+  const extra=(FIELDS.find(f=>f[0]===TAB)||[])[2]||'';
+  const list=DATA[TAB]||[];
+  $('rows').innerHTML=list.map((x,i)=>
+    '<div class="row" data-i="'+i+'">'
+     +'<div class="top">'
+       +'<div><label class="lab">Name</label><input class="f-name" value="'+esc(x.name||'')+'"></div>'
+       +(extra?'<div><label class="lab">'+(extra==='capacity'?'Capacity':'Sq ft')+'</label><input class="f-extra" value="'+esc(x[extra]||'')+'"></div>':'<div></div>')
+       +(TAB==='venues'?'<div><label class="lab">Best for</label><input class="f-best" value="'+esc(x.bestFor||'')+'" placeholder="Ceremony · Reception"></div>':'<div></div>')
+     +'</div>'
+     +'<div><label class="lab">Description</label><textarea class="f-desc">'+esc(x.description||'')+'</textarea></div>'
+     +'<div class="ph">'
+       +'<div><label class="lab">Photo URL</label><input class="f-photo" value="'+esc(x.photo||'')+'" placeholder="https://…"></div>'
+       +'<div class="thumb"'+(ok(x.photo)?' style="background-image:url(\''+esc(x.photo)+'\')"':'')+'></div>'
+       +'<button class="mini del">Remove</button>'
+     +'</div></div>').join('')||'<p style="color:var(--mute);font-size:14px;padding:16px 0;">Nothing here yet. Use <b>+ Add another</b> below.</p>';
+  $('rows').querySelectorAll('.row').forEach(r=>{
+    const i=+r.dataset.i;
+    r.querySelector('.del').onclick=()=>{DATA[TAB].splice(i,1);drawTabs();drawRows();};
+    const ph=r.querySelector('.f-photo');
+    ph.addEventListener('input',()=>{const t=r.querySelector('.thumb');
+      if(ok(ph.value)){const im=new Image();im.onload=()=>{t.style.backgroundImage='url('+ph.value+')';t.classList.remove('bad');};
+        im.onerror=()=>{t.style.backgroundImage='';t.classList.add('bad');};im.src=ph.value;}
+      else{t.style.backgroundImage='';t.classList.remove('bad');}});
+  });
+}
+function collect(){
+  const extra=(FIELDS.find(f=>f[0]===TAB)||[])[2]||'';
+  const out=[];
+  $('rows').querySelectorAll('.row').forEach(r=>{
+    const g=c=>{const el=r.querySelector(c);return el?el.value.trim():'';};
+    const name=g('.f-name');if(!name)return;
+    const o={name,description:g('.f-desc')};
+    const p=g('.f-photo');if(p){o.photo=p;o.photos=[p];o.photoSource='added by hand';}
+    if(extra&&g('.f-extra'))o[extra]=extra==='capacity'?(parseInt(g('.f-extra'),10)||g('.f-extra')):g('.f-extra');
+    if(TAB==='venues'&&g('.f-best'))o.bestFor=g('.f-best');
+    out.push(o);});
+  DATA[TAB]=out;
+}
+$('only').onclick=()=>{ONLY=!ONLY;$('only').textContent=ONLY?'Show every resort':'Show only ones with gaps';fillPicker();};
+$('pick').onchange=async()=>{
+  const id=$('pick').value;if(!id){$('body').style.display='none';return;}
+  const s=await db.collection('resortProfiles').doc(id).get();if(!s.exists)return;
+  const p=s.data();CUR=id;DATA={};FIELDS.forEach(([f])=>DATA[f]=arr(p,f).map(x=>Object.assign({},x)));
+  $('hero').value=p.heroPhoto||'';$('desc').value=p.description||p.tagline||'';
+  $('body').style.display='block';TAB='venues';drawTabs();drawRows();
+  $('warn').style.display=arr(p,'venues').length?'none':'block';
+  $('warn').textContent='This resort has no venues, so it does not appear on the shared library. Add one and it goes live.';
+  $('msg').textContent='';
+};
+$('add').onclick=()=>{collect();(DATA[TAB]=DATA[TAB]||[]).push({name:'',description:'',photo:''});drawTabs();drawRows();};
+$('open').onclick=()=>{if(CUR)window.open('./resort?r='+encodeURIComponent(CUR)+'&quote=true&pv=1','_blank');};
+$('save').onclick=async()=>{
+  if(!CUR)return;collect();
+  const u={updatedAt:new Date().toISOString()};
+  FIELDS.forEach(([f])=>u[f]=DATA[f]||[]);
+  if($('hero').value.trim())u.heroPhoto=$('hero').value.trim();
+  if($('desc').value.trim())u.description=$('desc').value.trim();
+  $('save').disabled=true;$('msg').textContent='Saving…';
+  try{
+    await db.collection('resortProfiles').doc(CUR).set(u,{merge:true});
+    const i=ALL.findIndex(x=>x._id===CUR);if(i>-1)Object.assign(ALL[i],u);
+    $('msg').textContent='Saved ✓  — the library updates straight away.';
+    fillPicker();$('pick').value=CUR;
+  }catch(e){$('msg').textContent='Could not save: '+e.message;}
+  $('save').disabled=false;
+};
+db.collection('resortProfiles').get().then(s=>{
+  ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()));
+  fillPicker();
+}).catch(e=>{$('pick').innerHTML='<option>Could not load: '+esc(e.message)+'</option>';});
+</script></body></html>
