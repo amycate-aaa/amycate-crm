@@ -201,7 +201,15 @@ const ORDER=['Canc\u00fan, Riviera Maya & Tulum, Mexico','Los Cabos, Mexico','Pu
 let ALL=[],F='all',Q='',D='all';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
-const TAG=(new URLSearchParams(location.search).get('c')||'').slice(0,60);
+const TAG=(function(){
+  // Remember who this is. Once someone arrives on a tagged link, keep the tag on
+  // that device so later visits without it are still attributed to them.
+  var t=(new URLSearchParams(location.search).get('c')||'').slice(0,60);
+  try{
+    if(t){localStorage.setItem('ac_who',t);return t;}
+    return localStorage.getItem('ac_who')||'';
+  }catch(e){return t;}
+})();
 const PASS=(new URLSearchParams(location.search).get('k')||'');
 
 function isAdults(p){
@@ -307,7 +315,8 @@ function logVisit(){
     db.collection('libraryVisits').add({
       at:new Date().toISOString(),
       version:(CTMODE?'CT \u00b7 ':'')+(SHOWPRICE?'with pricing':'no pricing'),
-      sentTo:(new URLSearchParams(location.search).get('c')||'').slice(0,60),
+      sentTo:TAG,
+      tagSource:(new URLSearchParams(location.search).get('c')?'link':(TAG?'remembered':'')),
       from:(document.referrer||'').slice(0,120),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
       returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
