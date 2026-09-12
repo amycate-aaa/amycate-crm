@@ -1566,7 +1566,8 @@ const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.google
       resort:slug,
       page:'guide',
       version:(q.get('ct')?'CT \u00b7 ':'')+(q.get('np')?'no pricing':'with pricing'),
-      sentTo:(q.get('c')||'').slice(0,60),
+      sentTo:(function(){var t=(q.get('c')||'').slice(0,60);
+        try{if(t){localStorage.setItem('ac_who',t);return t;}return localStorage.getItem('ac_who')||'';}catch(e){return t;}})(),
       from:(document.referrer||'').slice(0,120),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
       returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
@@ -1866,7 +1867,7 @@ function tellAmy(btn){
       at:new Date().toISOString(),
       resort:q.get('r')||'',
       resortName:(typeof P!=='undefined'&&P&&P.name)?P.name:'',
-      sentTo:(q.get('c')||'').slice(0,60),
+      sentTo:(function(){var t=(q.get('c')||'').slice(0,60);try{return t||localStorage.getItem('ac_who')||'';}catch(e){return t;}})(),
       brand:q.get('ct')?'Celebration Travel':'Weddings',
       from:(document.getElementById('iam-from')||{}).value||'',
       to:(document.getElementById('iam-to')||{}).value||'',
