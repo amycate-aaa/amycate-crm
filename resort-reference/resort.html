@@ -1566,7 +1566,11 @@ const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.google
       resort:slug,
       page:'guide',
       version:(q.get('ct')?'CT \u00b7 ':'')+(q.get('np')?'no pricing':'with pricing'),
-      sentTo:(function(){var t=(q.get('c')||'').slice(0,60);
+      sentTo:(function(){
+        var t=(q.get('c')||'').slice(0,60);
+        // a quote link already knows whose quote it is — use that as the name
+        if(!t){try{var c=(window.QUOTE_COUPLE||'').trim();
+          if(c&&c.indexOf('@')<0)t=c.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);}catch(e){}}
         try{if(t){localStorage.setItem('ac_who',t);return t;}return localStorage.getItem('ac_who')||'';}catch(e){return t;}})(),
       from:(document.referrer||'').slice(0,120),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
@@ -1921,6 +1925,7 @@ function extrasBlock(){
 function renderQuote(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
+  try{window.QUOTE_COUPLE=q.couple||'';}catch(e){}
   const CT=q.brand==='ct'||/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');   // Celebration Travel — social group, no wedding
   window.QUOTE_CT=CT;
   const SMALL=q.tripSize==='small';   // just them — no group-block language
@@ -2357,6 +2362,11 @@ function renderQuote(){
 
   $id('quote-page').innerHTML=S.join('');try{collapseRooms($id('quote-page'),6);}catch(e){}
   try{wireGuestCalc($id('quote-page'));}catch(e){}
+  try{ // now that we know the couple, remember them on this device for next time
+    var _c=(q.couple||'').trim();
+    if(_c&&_c.indexOf('@')<0){var _k=_c.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
+      if(_k)localStorage.setItem('ac_who',_k);}
+  }catch(e){}
   $id('quote-page').style.display='block';
   try{buildQuoteNav();}catch(e){console.warn('nav',e);}
   $id('page').style.display='none';
