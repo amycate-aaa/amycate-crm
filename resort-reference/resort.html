@@ -1957,7 +1957,7 @@ function renderQuote(){
     '</div>'+(hero?'<img src="'+esc(hero)+'" alt="'+esc(R)+'">':'')+'</header>');
 
   /* 2 — NOTE + FACTS */
-  if(TEASER||!AGENT)S.push('<div class="topask"><div class="c"><span class="ta-q">Like the look of '+esc(R)+'?</span>'
+  if(TEASER)S.push('<div class="topask"><div class="c"><span class="ta-q">Like the look of '+esc(R)+'?</span>'
     +'<button type="button" class="ta-btn" onclick="jumpInterest()">I\u2019m interested \u2192</button>'
     +'<span class="ta-n">One tap. I\u2019ll come back with numbers.</span></div></div>');
   if(q.note)
@@ -2343,7 +2343,7 @@ function renderQuote(){
     '<a href="mailto:'+esc(email)+'?subject='+encodeURIComponent((q.couple?q.couple+' \u2014 ':'')+R)+'" style="display:inline-block;margin:0 12px 12px 0;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Email Me &rarr;</a>'+
     '<a href="https://zcal.co/amymcate/letschat" target="_blank" rel="noopener" style="display:inline-block;margin:0 0 12px;font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:#FBF8F3;border:1px solid var(--gold);padding:15px 34px;text-decoration:none;">Call Me &rarr;</a></p>'+
     '<p class="sig">Amy</p>'+
-    (TEASER||!AGENT?'<div class="iam"><p class="iam-q">Is this one of them?</p>'
+    (TEASER?'<div class="iam"><p class="iam-q">Is this one of them?</p>'
       +'<button type="button" class="iam-btn" onclick="tellAmy(this)">I\u2019m interested in '+esc(R)+'</button>'
       +'<p class="iam-note">One tap and I\u2019ll come back to you with numbers. Add your dates below if you have them \u2014 it means I can quote properly first time.</p>'
       +'<div class="iam-more">'
