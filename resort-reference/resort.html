@@ -534,7 +534,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .iam-more input::placeholder{color:rgba(251,248,243,.5);}
 .iam-more input:focus{outline:none;border-color:var(--gold);background:rgba(255,255,255,.14);}
 .iam-more .iam-name input{min-width:220px;}
-.topask{background:#3A332B;border-top:1px solid rgba(176,141,87,.3);border-bottom:1px solid rgba(176,141,87,.3);}
+.iam-more .iam-sel{font-family:var(--sans);font-size:14px;padding:9px 11px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#FBF8F3;}
+.iam-more .iam-sel option{color:#1E1A14;}
+.topask{background:#3A332B;border-top:1px solid rgba(176,141,87,.3);border-bottom:1px solid rgba(176,141,87,.3);position:sticky;top:0;z-index:40;box-shadow:0 2px 14px rgba(30,26,20,.18);}
 .topask .c{max-width:1080px;margin:0 auto;padding:13px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;}
 .topask .ta-q{font-family:var(--serif);font-size:19px;color:#F7F2E9;font-style:italic;}
 .topask .ta-btn{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:10px 20px;cursor:pointer;transition:.2s;white-space:nowrap;}
@@ -1877,6 +1879,9 @@ function tellAmy(btn){
       to:(document.getElementById('iam-to')||{}).value||'',
       guests:(document.getElementById('iam-pax')||{}).value||'',
       name:((document.getElementById('iam-name')||{}).value||'').slice(0,80),
+      email:((document.getElementById('iam-email')||{}).value||'').slice(0,120),
+      phone:((document.getElementById('iam-phone')||{}).value||'').slice(0,40),
+      contactBy:((document.getElementById('iam-how')||{}).value||''),
       device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer',
       handled:false
     });
@@ -2350,6 +2355,10 @@ function renderQuote(){
       +'<label>Travelling <input type="date" id="iam-from"> to <input type="date" id="iam-to"></label>'
       +'<label>Roughly how many people? <input type="number" id="iam-pax" min="1" max="500" placeholder="e.g. 40"></label>'
       +'<label class="iam-name">Your name <input type="text" id="iam-name" placeholder="so I know who to reply to" autocomplete="name"></label>'
+      +'<label class="iam-name">Your email <input type="email" id="iam-email" placeholder="optional" autocomplete="email"></label>'
+      +'<label class="iam-name">Your phone <input type="tel" id="iam-phone" placeholder="optional" autocomplete="tel"></label>'
+      +'<label>Easier to reach you by '
+        +'<select id="iam-how" class="iam-sel"><option value="">\u2014</option><option>Email</option><option>Text</option><option>Either</option></select></label>'
       +'</div></div>':'')
     +'</div>'+
     (photoOk(closeImg)?'<img src="'+esc(closeImg)+'" alt="'+esc(R)+'">':'')+'</div>');
