@@ -215,6 +215,10 @@ const PASS=(new URLSearchParams(location.search).get('k')||'');
 
 function isAdults(p){
   const nm=String(p.name||p._id||'');
+  // anything stated on the record wins over the brand rule
+  const _ap=String(p.agePolicy||'');
+  if(/adults?[ -]?only|18\+/i.test(_ap))return true;
+  if(/family|all ages/i.test(_ap))return false;
   // Brand decides, not the description
   if(/\b(dreams|sunscape|ziva|hyatt vivid|margaritaville|riu ventura|riu latino|ava)\b/i.test(nm)||/hard rock|hilton/i.test(nm))return false;
   if(/\bcatalonia\b/i.test(nm))return false;
