@@ -2296,6 +2296,27 @@ function renderQuote(){
       (who?'See '+esc(who)+'\u2019s Wedding':'See Their Wedding')+' \u2192</a></p>'));
   }
 
+  /* 6c — CT: the resort has to sell itself, so lead with what it actually has */
+  if(CT){
+    const n=k=>((P[k]||[]).filter(x=>x&&x.name)).length;
+    const bits=[];
+    if(n('restaurants'))bits.push([n('restaurants'),n('restaurants')===1?'restaurant':'restaurants']);
+    if(n('bars'))bits.push([n('bars'),n('bars')===1?'bar':'bars and lounges']);
+    if(n('pools'))bits.push([n('pools'),n('pools')===1?'pool':'pools']);
+    if(n('roomCategories'))bits.push([n('roomCategories'),'room types']);
+    const adults=/adult/i.test(String(P.agePolicy||''));
+    const blurb=clean(P.description||P.overview||'');
+    if(bits.length||blurb){
+      S.push(sec('sand-band',head('Why Here','The Resort Itself')+
+        (blurb?'<p style="font-size:19px;line-height:1.8;max-width:64ch;margin:0 auto 34px;text-align:center;">'+esc(blurb)+'</p>':'')+
+        (bits.length?'<div class="fact-grid" style="margin-top:8px;">'+
+          bits.map(b=>'<div class="fact"><b>'+b[0]+'</b><span>'+esc(b[1])+'</span></div>').join('')+
+          '<div class="fact"><b>'+(adults?'18+':'All')+'</b><span>'+(adults?'adults only':'ages welcome')+'</span></div>'+
+        '</div>':'')+
+        (clean(P.activitiesIncluded)?'<p class="note" style="margin-top:26px;text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;">'+esc(clean(P.activitiesIncluded))+'</p>':'')));
+    }
+  }
+
   /* 7b — BARS, as their own section */
   const _barsAll=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
   if(q.opts.dining&&_barsAll.length){
