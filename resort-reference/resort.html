@@ -2360,10 +2360,8 @@ function renderQuote(){
         const withPic=[],noPic=[];
         rests.forEach((r,i)=>{(pics[i]?withPic:noPic).push({r:r,src:pics[i]});});
         return '<div class="room-grid" style="margin-top:34px;">'+withPic.map(x=>{
-            const gal=Array.isArray(x.r.photos)&&x.r.photos.filter(photoOk).length>1
-              ?'<div class="thumbs">'+x.r.photos.filter(photoOk).slice(0,4).map(u=>'<img src="'+esc(u)+'" alt="" loading="lazy">').join('')+'</div>':'';
-            return '<div class="rcard'+(gal?' hasgal':'')+'">'+
-              '<div class="pic"><img class="main" src="'+esc(x.src)+'" alt="'+esc(x.r.name)+'" loading="lazy">'+gal+'</div>'+
+            return '<div class="rcard">'+
+              '<div class="pic"><img class="main" src="'+esc(x.src)+'" alt="'+esc(x.r.name)+'" loading="lazy"></div>'+
               '<div class="rbody"><h4>'+esc(x.r.name)+'</h4>'+
               (clean(x.r.type||x.r.cuisine)?'<p class="meta">'+esc(clean(x.r.type||x.r.cuisine))+'</p>':'')+
               (clean(x.r.description)?'<p>'+esc(clean(x.r.description))+'</p>':'')+
