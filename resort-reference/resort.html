@@ -543,6 +543,16 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .topask .ta-btn:hover{background:#F7F2E9;color:#3A332B;}
 .topask .ta-n{font-size:11.5px;color:rgba(214,196,167,.8);}
 @media(max-width:560px){.topask .ta-n{display:none;}.topask .ta-q{font-size:17px;}}
+.rtabs{background:var(--cream);}
+.rtabs-head{padding:56px 0 0;text-align:center;}
+.rtabs-head .c{max-width:1080px;margin:0 auto;padding:0 24px;}
+.rtabs-sub{font-size:14.5px;color:var(--espresso);opacity:.8;margin-top:6px;}
+.rtabs-bar{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:26px;border-bottom:1px solid var(--sand-deep,#E4D8C6);padding-bottom:0;}
+.rtab{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:13px 20px;border:none;background:none;color:var(--espresso);opacity:.65;cursor:pointer;border-bottom:2px solid transparent;transition:.2s;}
+.rtab:hover{opacity:1;}
+.rtab.on{opacity:1;color:var(--gold-deep,#8A6D3B);border-bottom-color:var(--gold);}
+.rtabs-body > section{padding-top:30px;}
+@media(max-width:620px){.rtabs-bar{gap:2px;}.rtab{padding:11px 13px;font-size:10px;letter-spacing:.12em;}}
 </style>
 </head>
 <body>
@@ -2444,6 +2454,7 @@ function renderQuote(){
 
   $id('quote-page').innerHTML=S.join('');try{collapseRooms($id('quote-page'),6);}catch(e){}
   try{wireGuestCalc($id('quote-page'));}catch(e){}
+  try{buildResortTabs($id('quote-page'));}catch(e){}
   try{ // now that we know the couple, remember them on this device for next time
     var _c=(q.couple||'').trim();
     if(_c&&_c.indexOf('@')<0){var _k=_c.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,60);
@@ -2604,6 +2615,53 @@ function buildQuoteNav(){
   secs.forEach(x=>io.observe(x));
 }
 
+
+/* Everything after the wedding day gets its own tab bar, so the page stops
+   being one long scroll. Packages, venues and rooms stay in the main flow. */
+const RESORT_TABS=['Dining','Pools & Beach','Activities','Good To Know','What A Group Gets You','Gallery','More Info'];
+const TABLABEL={'Pools & Beach':'Pools','What A Group Gets You':'Groups','Good To Know':'Essentials','More Info':'More'};
+function buildResortTabs(root){
+  const qp=root||document.getElementById('quote-page');if(!qp)return;
+  if(qp.querySelector('.rtabs'))return;
+  const all=[...qp.querySelectorAll('section')].filter(x=>x.querySelector('h2.display'));
+  const picked=[];
+  all.forEach(x=>{const t=x.querySelector('h2.display').textContent.trim();
+    if(RESORT_TABS.indexOf(t)>-1)picked.push({el:x,title:t});});
+  if(picked.length<2)return;
+  const wrap=document.createElement('section');
+  wrap.className='rtabs';
+  const head=document.createElement('div');
+  head.className='rtabs-head';
+  head.innerHTML='<div class="c"><p class="eyebrow">The Resort</p>'
+    +'<h2 class="display">Beyond The Wedding Day</h2>'
+    +'<p class="rtabs-sub">What your guests get for the rest of the week.</p>'
+    +'<div class="rtabs-bar"></div></div>';
+  wrap.appendChild(head);
+  const body=document.createElement('div');body.className='rtabs-body';wrap.appendChild(body);
+  picked[0].el.parentNode.insertBefore(wrap,picked[0].el);
+  const bar=head.querySelector('.rtabs-bar');
+  picked.forEach((p,i)=>{
+    const label=TABLABEL[p.title]||p.title;
+    const b=document.createElement('button');
+    b.type='button';b.className='rtab'+(i===0?' on':'');b.textContent=label;
+    b.onclick=function(){
+      [...bar.children].forEach(c=>c.classList.remove('on'));
+      b.classList.add('on');
+      picked.forEach((q2,j)=>{q2.el.style.display=j===i?'':'none';});
+      wrap.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    bar.appendChild(b);
+    // move the section inside, and hide its own heading since the tab says it
+    const h=p.el.querySelector('h2.display');
+    const eb=p.el.querySelector('.eyebrow');
+    const rule=p.el.querySelector('hr.rule');
+    if(h)h.style.display='none';
+    if(eb)eb.style.display='none';
+    if(rule)rule.style.display='none';
+    p.el.style.display=i===0?'':'none';
+    body.appendChild(p.el);
+  });
+}
 function stayTotals(q,compact){
   const r=q.prices.find(x=>num(x.ppn));
   if(!r)return'';
