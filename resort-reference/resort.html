@@ -538,7 +538,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .iam-more .iam-name input{min-width:220px;}
 .iam-more .iam-sel{font-family:var(--sans);font-size:14px;padding:9px 11px;border:1px solid rgba(255,255,255,.35);background:rgba(255,255,255,.08);color:#FBF8F3;}
 .iam-more .iam-sel option{color:#1E1A14;}
-.topask{background:#3A332B;border-top:1px solid rgba(176,141,87,.3);border-bottom:1px solid rgba(176,141,87,.3);position:sticky;top:0;z-index:40;box-shadow:0 2px 14px rgba(30,26,20,.18);}
+.topask{background:#3A332B;border-top:1px solid rgba(176,141,87,.35);position:fixed;left:0;right:0;bottom:0;z-index:60;box-shadow:0 -4px 18px rgba(30,26,20,.28);transform:translateY(110%);transition:transform .32s ease;}
+.topask.up{transform:translateY(0);}
+body.hasask{padding-bottom:78px;}
 .topask .c{max-width:1080px;margin:0 auto;padding:13px 24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 16px;}
 .topask .ta-q{font-family:var(--serif);font-size:19px;color:#F7F2E9;font-style:italic;}
 .topask .ta-btn{font-family:var(--sans);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;background:var(--gold);color:#fff;border:1px solid var(--gold);padding:10px 20px;cursor:pointer;transition:.2s;white-space:nowrap;}
@@ -1944,6 +1946,20 @@ function copyQuoteLink(){const q=collectQ();quoteLink(q).then(u=>{if(q.mode!=='g
 
 /* One-tap interest. Writes to the CRM, nothing for the client to fill in. */
 
+function wireStickyAsk(){
+  var bar=document.querySelector('.topask');if(!bar)return;
+  document.body.classList.add('hasask');
+  var form=document.querySelector('.iam');
+  function onScroll(){
+    var past=window.scrollY>320;
+    var formVisible=false;
+    if(form){var r=form.getBoundingClientRect();formVisible=r.top<window.innerHeight&&r.bottom>0;}
+    bar.classList.toggle('up',past&&!formVisible);
+  }
+  window.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('resize',onScroll);
+  onScroll();
+}
 function jumpInterest(){
   var el=document.querySelector('.iam');
   if(!el)return;
@@ -2517,6 +2533,7 @@ function renderQuote(){
     }
   }catch(e){}
   try{buildResortTabs($id('quote-page'));}catch(e){}
+  try{wireStickyAsk();}catch(e){}
   try{wireGuestCalc($id('quote-page'));}catch(e){}
   try{ // now that we know the couple, remember them on this device for next time
     var _c=(q.couple||'').trim();
