@@ -2314,8 +2314,8 @@ function renderQuote(){
       S.push(sec('sand-band',head('Why Here','The Resort Itself')+
         (blurb?'<p style="font-size:19px;line-height:1.8;max-width:64ch;margin:0 auto 34px;text-align:center;">'+esc(blurb)+'</p>':'')+
         (bits.length?'<div class="fact-grid" style="margin-top:8px;">'+
-          bits.map(b=>'<div class="fact"><b>'+b[0]+'</b><span>'+esc(b[1])+'</span></div>').join('')+
-          '<div class="fact"><b>'+(adults?'18+':'All')+'</b><span>'+(adults?'adults only':'ages welcome')+'</span></div>'+
+          bits.map(b=>'<div><p class="k">'+esc(b[1])+'</p><p class="v">'+b[0]+'</p></div>').join('')+
+          '<div><p class="k">'+(adults?'Adults only':'All ages')+'</p><p class="v">'+(adults?'18+':'Welcome')+'</p></div>'+
         '</div>':'')+
         (clean(P.activitiesIncluded)?'<p class="note" style="margin-top:26px;text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;">'+esc(clean(P.activitiesIncluded))+'</p>':'')));
     }
