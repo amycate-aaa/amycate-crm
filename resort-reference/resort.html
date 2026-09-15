@@ -2378,6 +2378,18 @@ function renderQuote(){
             '</div>').join('')+'</div>':'');
       })()+
       ''+
+      (CT?'':(function(){
+        const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
+        if(!bars.length)return '';
+        const bp=bars.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
+        const most=bp.filter(Boolean).length>=Math.ceil(bars.length*0.6);
+        return '<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p>'+
+          '<div class="barlist'+(most?' has-pics':'')+'">'+
+          bars.map((b,i)=>'<div class="bl">'+(most&&bp[i]?'<img class="bl-thumb" src="'+esc(bp[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'')+
+            '<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
+            (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
+            '</div></div>').join('')+'</div></div>';
+      })())+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
 
@@ -2406,7 +2418,7 @@ function renderQuote(){
   }
   /* 7b — BARS, as their own section */
   const _barsAll=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
-  if(q.opts.dining&&_barsAll.length){
+  if(CT&&q.opts.dining&&_barsAll.length){
     const pics=_barsAll.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
     const allPics=pics.every(Boolean);
     // Where most have a photo, show those as cards and list the rest underneath,
@@ -2732,7 +2744,7 @@ function buildQuoteNav(){
 
 /* Everything after the wedding day gets its own tab bar, so the page stops
    being one long scroll. Packages, venues and rooms stay in the main flow. */
-const RESORT_TABS=['Dining','Pools & Beach','Bars & Lounges','Activities','Good To Know','Gallery','More Info'];
+const RESORT_TABS=['Dining','Pools & Beach','Activities','Good To Know','Gallery','More Info'];
 const TAB_EXTRA=/club|lounge level|preferred club|diamond club|elite club|turquoize/i;
 const TABLABEL={'Bars & Lounges':'Bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
 function buildResortTabs(root){
