@@ -2301,13 +2301,28 @@ function renderQuote(){
   if(q.opts.dining&&_barsAll.length){
     const pics=_barsAll.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
     const allPics=pics.every(Boolean);
+    // Where most have a photo, show those as cards and list the rest underneath,
+    // rather than losing good photos because one bar has none.
+    const mostPics=!allPics&&pics.filter(Boolean).length>=Math.ceil(_barsAll.length*0.6);
+    const withPic=[],noPic=[];
+    _barsAll.forEach((b,i)=>{(pics[i]?withPic:noPic).push({b:b,src:pics[i]});});
     S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
       (allPics?bandImg('bars',/bar|lounge/i):'')+
-      '<div class="barlist'+(allPics?' has-pics':'')+'" style="margin-top:34px;">'+
-      _barsAll.map((b,i)=>'<div class="bl">'+(allPics?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'')+
-        '<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
-        (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
-        '</div></div>').join('')+'</div>'+
+      (allPics||mostPics
+        ? '<div class="barlist has-pics" style="margin-top:34px;">'+
+            (allPics?_barsAll.map((b,i)=>({b:b,src:pics[i]})):withPic).map(x=>'<div class="bl">'+
+              '<img class="bl-thumb" src="'+esc(x.src)+'" alt="'+esc(x.b.name)+'" loading="lazy">'+
+              '<div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>'+
+          (noPic.length?'<div class="barlist" style="margin-top:22px;">'+
+            noPic.map(x=>'<div class="bl"><div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>':'')
+        : '<div class="barlist" style="margin-top:34px;">'+
+            _barsAll.map(b=>'<div class="bl"><div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
+              (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>')+
       (clean(P.barNotes)?'<p class="note" style="margin-top:22px;">'+esc(clean(P.barNotes))+'</p>':'')));
   }
 
