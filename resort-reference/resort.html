@@ -2036,7 +2036,8 @@ function renderQuote(){
 
   /* 1 — HERO */
   S.push('<header class="q-hero"><div class="c">'+
-    (q.couple?'<p class="eyebrow">Prepared for '+esc(q.couple)+'</p>':'<p class="eyebrow">Amy Cate \u00b7 Your Quote</p>')+
+    (q.couple?'<p class="eyebrow">Prepared for '+esc(q.couple)+'</p>'
+      :'<p class="eyebrow">'+esc((CT?'Amy Cate \u00b7 Celebration Travel':'Amy Cate \u00b7 Resort Reference'))+'</p>')+
     '<h1 class="q-name">'+esc(q.headline||(GUEST?'Your Room At '+R:R))+'</h1>'+
     ((q.headline||GUEST)?'<p class="q-sub">'+esc(R)+'</p>':(clean(P.tagline)?'<p class="q-sub">'+esc(clean(P.tagline))+'</p>':''))+
     (q.date?'<p class="q-when">'+esc(q.date)+'</p>':'')+
