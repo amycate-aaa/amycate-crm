@@ -254,7 +254,8 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .sel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;}
 .sel-grid h4{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-soft);font-weight:500;margin:0 0 10px;}
 .sel-grid p{font-family:var(--serif);font-size:22px;color:#FBF8F3;margin:0;line-height:1.35;font-weight:300;}
-.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:26px;}
+.price-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:26px;}
+.price-grid > .pcard{max-width:420px;}
 .pcard{background:#fff;border:1px solid var(--sand-deep);display:flex;flex-direction:column;}
 .pcard img{width:100%;height:190px;object-fit:cover;}
 .pcard .b{padding:22px 24px 26px;flex:1;display:flex;flex-direction:column;}
@@ -276,6 +277,7 @@ footer p{margin:4px 0;font-size:12px;letter-spacing:.22em;text-transform:upperca
 .stay .v{font-family:var(--serif);font-size:1.5rem;color:var(--espresso);}
 /* a single priced room reads better side by side than as one wide card */
 .price-grid.solo{display:block;}
+.price-grid.solo > .pcard{max-width:none;}
 .price-grid.solo .pcard{display:grid;grid-template-columns:1fr 1fr;align-items:stretch;}
 .price-grid.solo .pcard .pic{height:100%;}
 .price-grid.solo .pcard .pic img.main{flex:1 1 auto;height:auto;min-height:300px;object-fit:cover;}
