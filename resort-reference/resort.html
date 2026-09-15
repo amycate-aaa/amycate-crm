@@ -556,6 +556,9 @@ details.cmptuck .tb{text-align:left;padding:0;}
 .rtab.on{background:var(--gold);color:#fff;}
 .rtabs-body > section{padding-top:30px;}
 @media(max-width:620px){.rtab{padding:14px 15px;font-size:11.5px;letter-spacing:.12em;}}
+.ctintro .wrap{text-align:center;}
+.ctintro .eyebrow,.ctintro .display{text-align:center;}
+.ctintro hr.rule{margin-left:auto;margin-right:auto;}
 </style>
 </head>
 <body>
@@ -2311,7 +2314,7 @@ function renderQuote(){
     const adults=/adult/i.test(String(P.agePolicy||''));
     const blurb=clean(P.description||P.overview||'');
     if(blurb||clean(P.activitiesIncluded)){
-      S.push(sec('sand-band',head('Why Here','The Resort Itself')+
+      S.push(sec('sand-band ctintro',head('Why Here','The Resort Itself')+
         (blurb?'<p style="font-size:19px;line-height:1.8;max-width:64ch;margin:0 auto 34px;text-align:center;">'+esc(blurb)+'</p>':'')+
 
         (clean(P.activitiesIncluded)?'<p class="note" style="margin-top:26px;text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;">'+esc(clean(P.activitiesIncluded))+'</p>':'')));
