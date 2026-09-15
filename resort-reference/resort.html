@@ -2317,35 +2317,6 @@ function renderQuote(){
     }
   }
 
-  /* 7b — BARS, as their own section */
-  const _barsAll=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
-  if(q.opts.dining&&_barsAll.length){
-    const pics=_barsAll.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
-    const allPics=pics.every(Boolean);
-    // Where most have a photo, show those as cards and list the rest underneath,
-    // rather than losing good photos because one bar has none.
-    const mostPics=!allPics&&pics.filter(Boolean).length>=Math.ceil(_barsAll.length*0.6);
-    const withPic=[],noPic=[];
-    _barsAll.forEach((b,i)=>{(pics[i]?withPic:noPic).push({b:b,src:pics[i]});});
-    S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
-      (allPics?bandImg('bars',/bar|lounge/i):'')+
-      (allPics||mostPics
-        ? '<div class="barlist has-pics" style="margin-top:34px;">'+
-            (allPics?_barsAll.map((b,i)=>({b:b,src:pics[i]})):withPic).map(x=>'<div class="bl">'+
-              '<img class="bl-thumb" src="'+esc(x.src)+'" alt="'+esc(x.b.name)+'" loading="lazy">'+
-              '<div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
-              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
-              '</div></div>').join('')+'</div>'+
-          (noPic.length?'<div class="barlist" style="margin-top:22px;">'+
-            noPic.map(x=>'<div class="bl"><div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
-              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
-              '</div></div>').join('')+'</div>':'')
-        : '<div class="barlist" style="margin-top:34px;">'+
-            _barsAll.map(b=>'<div class="bl"><div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
-              (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
-              '</div></div>').join('')+'</div>')+
-      (clean(P.barNotes)?'<p class="note" style="margin-top:22px;">'+esc(clean(P.barNotes))+'</p>':'')));
-  }
 
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
@@ -2380,6 +2351,35 @@ function renderQuote(){
             '<div class="d"><h4>'+esc(pl.name)+'</h4>'+
             (allPoolTxt?'<p>'+esc(poolTxt[i])+'</p>':'')+
             '</div>').join('')+'</div>')));
+  }
+  /* 7b — BARS, as their own section */
+  const _barsAll=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
+  if(q.opts.dining&&_barsAll.length){
+    const pics=_barsAll.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
+    const allPics=pics.every(Boolean);
+    // Where most have a photo, show those as cards and list the rest underneath,
+    // rather than losing good photos because one bar has none.
+    const mostPics=!allPics&&pics.filter(Boolean).length>=Math.ceil(_barsAll.length*0.6);
+    const withPic=[],noPic=[];
+    _barsAll.forEach((b,i)=>{(pics[i]?withPic:noPic).push({b:b,src:pics[i]});});
+    S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
+      (allPics?bandImg('bars',/bar|lounge/i):'')+
+      (allPics||mostPics
+        ? '<div class="barlist has-pics" style="margin-top:34px;">'+
+            (allPics?_barsAll.map((b,i)=>({b:b,src:pics[i]})):withPic).map(x=>'<div class="bl">'+
+              '<img class="bl-thumb" src="'+esc(x.src)+'" alt="'+esc(x.b.name)+'" loading="lazy">'+
+              '<div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>'+
+          (noPic.length?'<div class="barlist" style="margin-top:22px;">'+
+            noPic.map(x=>'<div class="bl"><div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+              (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>':'')
+        : '<div class="barlist" style="margin-top:34px;">'+
+            _barsAll.map(b=>'<div class="bl"><div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
+              (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
+              '</div></div>').join('')+'</div>')+
+      (clean(P.barNotes)?'<p class="note" style="margin-top:22px;">'+esc(clean(P.barNotes))+'</p>':'')));
   }
 
   /* 9 — CLUB LEVEL */
@@ -2669,7 +2669,7 @@ function buildQuoteNav(){
 
 /* Everything after the wedding day gets its own tab bar, so the page stops
    being one long scroll. Packages, venues and rooms stay in the main flow. */
-const RESORT_TABS=['Dining','Bars & Lounges','Pools & Beach','Activities','Good To Know','Gallery','More Info'];
+const RESORT_TABS=['Dining','Pools & Beach','Bars & Lounges','Activities','Good To Know','Gallery','More Info'];
 const TAB_EXTRA=/club|lounge level|preferred club|diamond club|elite club|turquoize/i;
 const TABLABEL={'Bars & Lounges':'Bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
 function buildResortTabs(root){
