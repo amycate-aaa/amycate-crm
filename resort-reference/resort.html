@@ -2211,7 +2211,9 @@ function renderQuote(){
           '<li><b>Every room type follows.</b> Once you have settled on the resort I lay them all out side by side, so your guests pick what suits them and what they want to spend.</li>'+
           '<li><b>Rates are confirmed when you book</b>, and held against increases if your group reaches ten rooms.</li>'+
           '</ul>'))
-        :'<p class="small" style="max-width:64ch;margin:0 0 34px;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees'+(q.xfer===false?' (airport transfers quoted separately)':', and roundtrip airport transfers')+' \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>')+
+        :(TEASER
+          ?'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">Every room type at the resort. Tell me which appeals and I\u2019ll price it for your dates.</p>'
+          :'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees'+(q.xfer===false?' (airport transfers quoted separately)':', and roundtrip airport transfers')+' \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>'))+
       (priced
         ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
