@@ -2674,6 +2674,8 @@ const TAB_EXTRA=/club|lounge level|preferred club|diamond club|elite club|turquo
 const TABLABEL={'Bars & Lounges':'Bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
 function buildResortTabs(root){
   const qp=root||document.getElementById('quote-page');if(!qp)return;
+  // Celebration Travel reads as a full info sheet — no tabs, everything in one scroll.
+  if(window.QUOTE_CT)return;
   if(qp.querySelector('.rtabs'))return;
   const all=[...qp.querySelectorAll('section')].filter(x=>x.querySelector('h2.display'));
   const picked=[];
