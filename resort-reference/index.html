@@ -339,7 +339,22 @@ function logVisit(){
 logVisit();
 db.collection('resortProfiles').get().then(s=>{
   ALL=s.docs.filter(d=>!/-(maggie|chris)$/.test(d.id)).map(d=>Object.assign({_id:d.id},d.data()))
-    .filter(p=>p.name&&(p.venues||[]).length&&!p.hideFromLibrary);      // only resorts with real guide content, minus anything flagged
+    .filter(p=>{
+      if(!p.name||p.hideFromLibrary)return false;
+      const a=k=>Array.isArray(p[k])?p[k]:[];
+      const pic=v=>v&&/^https?:/.test(String(v));
+      if(CTMODE){
+        // A group trip does not need a wedding venue — it needs the resort to look good.
+        const rooms=a('roomCategories'),din=a('restaurants');
+        const shots=rooms.filter(x=>x&&pic(x.photo)).length
+                  +din.filter(x=>x&&pic(x.photo)).length
+                  +a('pools').filter(x=>x&&pic(x.photo)).length
+                  +a('bars').filter(x=>x&&pic(x.photo)).length
+                  +a('photos').filter(pic).length;
+        return pic(p.heroPhoto)&&rooms.length&&din.length&&shots>=6;
+      }
+      return a('venues').length;                       // weddings still need somewhere to marry
+    });
   drawDests();draw();
 }).catch(e=>{document.getElementById('out').innerHTML='<p class="state">Could not load the library. '+esc(e.message)+'</p>';});
 </script>
