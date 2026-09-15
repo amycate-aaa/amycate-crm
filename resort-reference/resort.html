@@ -2383,17 +2383,19 @@ function renderQuote(){
   if(q.opts.pools&&pools.length){
     const poolBand=sectionPhoto('pools');
     const poolPics=pools.map(pl=>[pl.photo,pl.photoUrl,matchPhoto(pl.name)].find(photoOk)||'');
-    const allPools=poolPics.every(Boolean);   // all or nothing — a half-illustrated list looks unfinished
+    const allPools=poolPics.filter(Boolean).length>=Math.ceil(pools.length*0.6);   // most have one: show cards for those, text rows for the rest
     const poolTxt=pools.map(pl=>clean(pl.features||pl.description));
     const allPoolTxt=poolTxt.every(Boolean);  // same for descriptions
     S.push(sec('',head('In The Water','Pools & Beach')+
       (poolBand?'<img class="bandimg" src="'+esc(poolBand)+'" alt="" loading="lazy">':'')+
       (allPools
-        ? '<div class="price-grid" style="margin-top:34px;">'+pools.map((pl,i)=>
-            '<div class="pcard"><img src="'+esc(poolPics[i])+'" alt="'+esc(pl.name)+'" loading="lazy">'+
+        ? '<div class="price-grid" style="margin-top:34px;">'+pools.map((pl,i)=>poolPics[i]?
+            ('<div class="pcard"><img src="'+esc(poolPics[i])+'" alt="'+esc(pl.name)+'" loading="lazy">'+
             '<div class="b"><h4>'+esc(pl.name)+'</h4>'+
-            (allPoolTxt?'<p class="desc">'+esc(poolTxt[i])+'</p>':'')+
-            '</div></div>').join('')+'</div>'
+            (poolTxt[i]?'<p class="desc">'+esc(poolTxt[i])+'</p>':'')+
+            '</div></div>'):'').join('')+'</div>'+
+          (poolPics.some(x=>!x)?'<div class="dinelist" style="margin-top:24px;">'+pools.map((pl,i)=>poolPics[i]?'':
+            ('<div class="d"><h4>'+esc(pl.name)+'</h4>'+(poolTxt[i]?'<p>'+esc(poolTxt[i])+'</p>':'')+'</div>')).join('')+'</div>':'')
         : '<div class="dinelist" style="margin-top:34px;">'+pools.map((pl,i)=>
             '<div class="d"><h4>'+esc(pl.name)+'</h4>'+
             (allPoolTxt?'<p>'+esc(poolTxt[i])+'</p>':'')+
