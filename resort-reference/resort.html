@@ -2666,9 +2666,10 @@ function buildResortTabs(root){
   wrap.className='rtabs';wrap.id='resort-tabs';
   const head=document.createElement('div');
   head.className='rtabs-head';
-  head.innerHTML='<div class="c"><p class="eyebrow">The Resort</p>'
-    +'<h2 class="display">Beyond The Wedding Day</h2>'
-    +'<p class="rtabs-sub">What your guests get for the rest of the week.</p>'
+  var _ct=!!window.QUOTE_CT;
+  head.innerHTML='<div class="c"><p class="eyebrow">'+(_ct?'The Resort':'The Resort')+'</p>'
+    +'<h2 class="display">'+(_ct?'What Your Group Gets':'Beyond The Wedding Day')+'</h2>'
+    +'<p class="rtabs-sub">'+(_ct?'Where you\u2019ll eat, drink and spend the days.':'What your guests get for the rest of the week.')+'</p>'
     +'<div class="rtabs-bar"></div></div>';
   wrap.appendChild(head);
   const body=document.createElement('div');body.className='rtabs-body';wrap.appendChild(body);
