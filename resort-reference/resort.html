@@ -2644,6 +2644,9 @@ function buildResortTabs(root){
   all.forEach(x=>{const t=x.querySelector('h2.display').textContent.trim();
     if(RESORT_TABS.indexOf(t)>-1||TAB_EXTRA.test(t))picked.push({el:x,title:t});});
   if(picked.length<2)return;
+  // Rooms always sit above this block — on a Celebration Travel page with no
+  // wedding sections, rooms are the main event and must not fall below the tabs.
+  const roomsSec=all.find(x=>/Rooms & Suites|Accommodations & Pricing|Your Room/i.test(x.querySelector('h2.display').textContent));
   const wrap=document.createElement('section');
   wrap.className='rtabs';wrap.id='resort-tabs';
   const head=document.createElement('div');
@@ -2654,7 +2657,13 @@ function buildResortTabs(root){
     +'<div class="rtabs-bar"></div></div>';
   wrap.appendChild(head);
   const body=document.createElement('div');body.className='rtabs-body';wrap.appendChild(body);
-  picked[0].el.parentNode.insertBefore(wrap,picked[0].el);
+  var host=picked[0].el.parentNode;
+  if(roomsSec&&roomsSec.parentNode===host&&roomsSec.compareDocumentPosition(picked[0].el)&Node.DOCUMENT_POSITION_PRECEDING){
+    // rooms currently sit AFTER the first tab section — lift rooms above it
+    host.insertBefore(roomsSec,picked[0].el);
+  }
+  host.insertBefore(wrap,picked[0].el);
+  if(roomsSec&&roomsSec.parentNode===host)host.insertBefore(roomsSec,wrap);
   const bar=head.querySelector('.rtabs-bar');
   picked.forEach((p,i)=>{
     const label=TABLABEL[p.title]||p.title;
