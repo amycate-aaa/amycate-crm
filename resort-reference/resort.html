@@ -2428,21 +2428,22 @@ function renderQuote(){
     _barsAll.forEach((b,i)=>{(pics[i]?withPic:noPic).push({b:b,src:pics[i]});});
     S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
       (allPics?bandImg('bars',/bar|lounge/i):'')+
-      (allPics||mostPics
-        ? '<div class="barlist has-pics" style="margin-top:34px;">'+
-            (allPics?_barsAll.map((b,i)=>({b:b,src:pics[i]})):withPic).map(x=>'<div class="bl">'+
-              '<img class="bl-thumb" src="'+esc(x.src)+'" alt="'+esc(x.b.name)+'" loading="lazy">'+
-              '<div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+      ((allPics||mostPics)
+        ? '<div class="room-grid" style="margin-top:34px;">'+
+            (allPics?_barsAll.map((b,i2)=>({b:b,src:pics[i2]})):withPic).map(x=>
+              '<div class="rcard">'+
+              '<div class="pic"><img class="main" src="'+esc(x.src)+'" alt="'+esc(x.b.name)+'" loading="lazy"></div>'+
+              '<div class="rbody"><h4>'+esc(x.b.name)+'</h4>'+
               (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
               '</div></div>').join('')+'</div>'+
-          (noPic.length?'<div class="barlist" style="margin-top:22px;">'+
-            noPic.map(x=>'<div class="bl"><div class="bl-txt"><h4>'+esc(x.b.name)+'</h4>'+
+          (noPic.length?'<div class="dinelist" style="margin-top:24px;">'+
+            noPic.map(x=>'<div class="d"><h4>'+esc(x.b.name)+'</h4>'+
               (clean(x.b.description||x.b.type)?'<p>'+esc(clean(x.b.description||x.b.type))+'</p>':'')+
-              '</div></div>').join('')+'</div>':'')
-        : '<div class="barlist" style="margin-top:34px;">'+
-            _barsAll.map(b=>'<div class="bl"><div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
+              '</div>').join('')+'</div>':'')
+        : '<div class="dinelist" style="margin-top:34px;">'+
+            _barsAll.map(b=>'<div class="d"><h4>'+esc(b.name)+'</h4>'+
               (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
-              '</div></div>').join('')+'</div>')+
+              '</div>').join('')+'</div>')+
       (clean(P.barNotes)?'<p class="note" style="margin-top:22px;">'+esc(clean(P.barNotes))+'</p>':'')));
   }
 
