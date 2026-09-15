@@ -353,7 +353,14 @@ db.collection('resortProfiles').get().then(s=>{
                   +a('photos').filter(pic).length;
         return pic(p.heroPhoto)&&rooms.length&&din.length&&shots>=6;
       }
-      return a('venues').length;                       // weddings still need somewhere to marry
+      // Weddings: it has to answer where, what it costs, and what the week looks like.
+      const priced=a('packages').some(x=>x&&/\$\s?\d|complimentary|free|included/i.test(String(x.price||'')));
+      return pic(p.heroPhoto)
+          && a('venues').length
+          && priced
+          && a('roomCategories').length
+          && a('restaurants').length
+          && a('pools').length;
     });
   drawDests();draw();
 }).catch(e=>{document.getElementById('out').innerHTML='<p class="state">Could not load the library. '+esc(e.message)+'</p>';});
