@@ -2623,9 +2623,9 @@ function buildQuoteNav(){
 
 /* Everything after the wedding day gets its own tab bar, so the page stops
    being one long scroll. Packages, venues and rooms stay in the main flow. */
-const RESORT_TABS=['Dining','Pools & Beach','Activities','Good To Know','What A Group Gets You','Gallery','More Info'];
+const RESORT_TABS=['Dining','Pools & Beach','Activities','Good To Know','Gallery','More Info'];
 const TAB_EXTRA=/club|lounge level|preferred club|diamond club|elite club|turquoize/i;
-const TABLABEL={'Pools & Beach':'Pools','What A Group Gets You':'Groups','Good To Know':'Essentials','More Info':'More'};
+const TABLABEL={'Dining':'Dining & bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
 function buildResortTabs(root){
   const qp=root||document.getElementById('quote-page');if(!qp)return;
   if(qp.querySelector('.rtabs'))return;
