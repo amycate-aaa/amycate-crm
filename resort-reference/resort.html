@@ -2296,6 +2296,21 @@ function renderQuote(){
       (who?'See '+esc(who)+'\u2019s Wedding':'See Their Wedding')+' \u2192</a></p>'));
   }
 
+  /* 7b — BARS, as their own section */
+  const _barsAll=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
+  if(q.opts.dining&&_barsAll.length){
+    const pics=_barsAll.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
+    const allPics=pics.every(Boolean);
+    S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
+      (allPics?bandImg('bars',/bar|lounge/i):'')+
+      '<div class="barlist'+(allPics?' has-pics':'')+'" style="margin-top:34px;">'+
+      _barsAll.map((b,i)=>'<div class="bl">'+(allPics?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'')+
+        '<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+
+        (clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+
+        '</div></div>').join('')+'</div>'+
+      (clean(P.barNotes)?'<p class="note" style="margin-top:22px;">'+esc(clean(P.barNotes))+'</p>':'')));
+  }
+
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
   if(q.opts.dining&&rests.length){
@@ -2305,13 +2320,7 @@ function renderQuote(){
         (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+
         (photoOk(menuUrlOf(r))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
         '</div>').join('')+'</div>'+
-      (function(){const bars=(P.bars||[]).map(b=>typeof b==='string'?{name:b}:b).filter(b=>b&&b.name);
-        if(!bars.length)return '';
-        const pics=bars.map(b=>[b.photo,b.photoUrl,matchPhoto(b.name)].find(photoOk)||'');
-        const somePics=pics.filter(Boolean).length>=Math.ceil(bars.length*0.6);  // most have one: show them, text-only rows for the rest
-        return '<div style="margin-top:52px;"><p class="eyebrow">Bars &amp; Lounges</p><div class="barlist'+(somePics?' has-pics':'')+'">'+
-          bars.map((b,i)=>'<div class="bl">'+(somePics?(pics[i]?'<img class="bl-thumb" src="'+esc(pics[i])+'" alt="'+esc(b.name)+'" loading="lazy">':'<span class="bl-thumb bl-blank"></span>'):'')+'<div class="bl-txt"><h4>'+esc(b.name)+'</h4>'+(clean(b.description||b.type)?'<p>'+esc(clean(b.description||b.type))+'</p>':'')+'</div></div>').join('')+
-        '</div></div>';})()+
+      ''+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
 
@@ -2594,7 +2603,7 @@ const NAVLABEL={'Accommodations & Pricing':'Rooms','Rooms & Suites':'Rooms',
   'Wedding Packages':'Wedding info','Ceremony & Reception Venues':'Wedding venues',
   'Pools & Beach':'Pools','Good To Know':'Good to know','More Info':'More info',
   'What A Group Gets You':'Groups','Next Steps':'Next steps',
-  'A Real Wedding Here':'Real wedding','Flights':'Flights','Your Room':'Your room','Your Room Options':'Your rooms'};
+  'Bars & Lounges':'Bars','A Real Wedding Here':'Real wedding','Flights':'Flights','Your Room':'Your room','Your Room Options':'Your rooms'};
 function buildQuoteNav(){
   const qp=$id('quote-page');
   const old=qp.querySelector('.qnav'); if(old)old.remove();
@@ -2624,9 +2633,9 @@ function buildQuoteNav(){
 
 /* Everything after the wedding day gets its own tab bar, so the page stops
    being one long scroll. Packages, venues and rooms stay in the main flow. */
-const RESORT_TABS=['Dining','Pools & Beach','Activities','Good To Know','Gallery','More Info'];
+const RESORT_TABS=['Dining','Bars & Lounges','Pools & Beach','Activities','Good To Know','Gallery','More Info'];
 const TAB_EXTRA=/club|lounge level|preferred club|diamond club|elite club|turquoize/i;
-const TABLABEL={'Dining':'Dining & bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
+const TABLABEL={'Bars & Lounges':'Bars','Pools & Beach':'Pools','Good To Know':'Essentials','More Info':'More'};
 function buildResortTabs(root){
   const qp=root||document.getElementById('quote-page');if(!qp)return;
   if(qp.querySelector('.rtabs'))return;
