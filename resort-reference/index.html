@@ -198,7 +198,7 @@ firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDom
 const db=firebase.firestore();
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ok=v=>v&&/^https?:/.test(String(v));
-const ORDER=['Canc\u00fan, Riviera Maya & Tulum, Mexico','Los Cabos, Mexico','Puerto Vallarta, Mexico','Dominican Republic','Jamaica','Costa Rica','Aruba','Cura\u00e7ao','St. Lucia','Other'];
+const ORDER=['Canc\u00fan, Riviera Maya & Tulum, Mexico','Los Cabos, Mexico','Puerto Vallarta, Mexico','Dominican Republic','Jamaica','Costa Rica','Aruba','Cura\u00e7ao','St. Lucia','Antigua','Grenada','Bahamas','Other'];
 let ALL=[],F='all',Q='',D='all';
 const SHOWPRICE=/^(1|true)$/i.test(new URLSearchParams(location.search).get('prices')||'');
 const CTMODE=/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');
@@ -237,6 +237,9 @@ function regionOf(p){
   if(/aruba|baby beach|palm beach|eagle beach|oranjestad/i.test(d))return 'Aruba';
   if(/st\.? ?lucia|saint lucia|castries|soufri/i.test(d))return 'St. Lucia';
   if(/cura\u00e7ao|curacao|willemstad|mangrove beach|the rif/i.test(d))return 'Cura\u00e7ao';
+  if(/bahamas|nassau|paradise island|freeport|grand bahama|baha mar|viva fortuna|exuma|abaco|eleuthera/i.test(d))return 'Bahamas';
+  if(/antigua|st\.? ?john\u2019?s|dickenson bay/i.test(d))return 'Antigua';
+  if(/grenada|st\.? ?george|grand anse/i.test(d))return 'Grenada';
   return 'Other';
 }
 function destOf(p){
@@ -291,7 +294,7 @@ function draw(){
 }
 function drawDests(){
   const R={};ALL.forEach(p=>{const r=regionOf(p);R[r]=(R[r]||0)+1;});
-  const ORD=['Canc\u00fan, Riviera Maya & Tulum, Mexico','Los Cabos, Mexico','Puerto Vallarta, Mexico','Dominican Republic','Jamaica','Costa Rica','Aruba','Cura\u00e7ao','St. Lucia','Other'];
+  const ORD=['Canc\u00fan, Riviera Maya & Tulum, Mexico','Los Cabos, Mexico','Puerto Vallarta, Mexico','Dominican Republic','Jamaica','Costa Rica','Aruba','Cura\u00e7ao','St. Lucia','Antigua','Grenada','Bahamas','Other'];
   const keys=Object.keys(R).sort((a,b)=>{const i=ORD.indexOf(a),j=ORD.indexOf(b);return (i<0?99:i)-(j<0?99:j);});
   const box=document.getElementById('dests');if(!box)return;
   box.innerHTML='<button class="dbox'+(D==='all'?' on':'')+'" data-d="all"><span class="n">Everywhere</span><span class="c">'+ALL.length+' resorts</span></button>'
