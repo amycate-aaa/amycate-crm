@@ -220,9 +220,9 @@ function isAdults(p){
   if(/adults?[ -]?only|18\+/i.test(_ap))return true;
   if(/family|all ages/i.test(_ap))return false;
   // Brand decides, not the description
-  if(/\b(dreams|sunscape|ziva|hyatt vivid|margaritaville|riu ventura|riu latino|ava)\b/i.test(nm)||/hard rock|hilton/i.test(nm))return false;
+  if(/\b(dreams|sunscape|ziva|margaritaville|riu ventura|riu latino|ava)\b/i.test(nm)||/hard rock|hilton/i.test(nm))return false;
   if(/\bcatalonia\b/i.test(nm))return false;
-  if(/\b(secrets|breathless|zilara|impression|excellence|hideaway|chic|atelier|unico|temptation|desire|trs)\b/i.test(nm))return true;
+  if(/\b(secrets|breathless|zilara|vivid|impression|excellence|hideaway|chic|atelier|unico|temptation|desire|trs)\b/i.test(nm))return true;
   const ap=String(p.agePolicy||'');
   if(/adults?[ -]?only|18\+/i.test(ap))return true;
   if(/family|all ages|children|kids/i.test(ap))return false;
