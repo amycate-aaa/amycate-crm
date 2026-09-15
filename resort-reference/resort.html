@@ -910,7 +910,80 @@ if(window.CTMODE){
 }
 function togglePkg(btn){const open=btn.getAttribute('aria-expanded')==='true';btn.setAttribute('aria-expanded',!open);btn.nextElementSibling.classList.toggle('open',!open);}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function collapseRooms(root,limit){root=root||document;limit=limit||6;root.querySelectorAll('.room-grid, .price-grid, .dinelist').forEach(g=>{if(g.dataset.collapsed)return;const kids=[...g.children].filter(el=>!el.classList.contains('rooms-more'));const sec=g.closest('section');const isVenues=!!(sec&&/Where You Say It|Ceremony & Reception Venues/i.test(sec.textContent.slice(0,300)));const isRooms=isVenues||g.classList.contains('room-grid')||g.classList.contains('price-grid')||(g.classList.contains('dinelist')&&sec&&/room/i.test(sec.textContent.slice(0,400)));if(!isRooms||kids.length<=limit+1)return;g.dataset.collapsed='1';kids.slice(limit).forEach(el=>el.style.display='none');const b=document.createElement('button');b.type='button';b.className='rooms-more';b.textContent='Show all '+kids.length+(isVenues?' venues':' room categories');b.style.cssText='grid-column:1/-1;justify-self:start;margin-top:6px;padding:11px 20px;border:1px solid var(--espresso);background:none;color:var(--espresso);font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;';b.onclick=()=>{const open=b.dataset.open==='1';kids.slice(limit).forEach(el=>el.style.display=open?'none':'');b.dataset.open=open?'':'1';b.textContent=open?'Show all '+kids.length+' room categories':'Show fewer';if(open)g.scrollIntoView({behavior:'smooth',block:'start'});};g.appendChild(b);});}
+function collapseRooms(root,limit){
+  root=root||document;limit=limit||6;
+  root.querySelectorAll('.room-grid, .price-grid, .dinelist').forEach(function(g){
+    if(g.dataset.collapsed)return;
+    var kids=[].slice.call(g.children).filter(function(el){return !el.classList.contains('rooms-more')&&!el.classList.contains('rooms-names');});
+    var sec=g.closest('section');
+    var isVenues=!!(sec&&/Where You Say It|Ceremony & Reception Venues/i.test(sec.textContent.slice(0,300)));
+    var isRooms=isVenues||g.classList.contains('room-grid')||g.classList.contains('price-grid')||
+      (g.classList.contains('dinelist')&&sec&&/room/i.test(sec.textContent.slice(0,400)));
+    if(!isRooms||kids.length<=limit+1)return;
+    g.dataset.collapsed='1';
+    var label=isVenues?'venues':'room categories';
+
+    /* Show a SPREAD rather than the first six — smallest, largest and evenly between,
+       so a couple sees the range instead of six near-identical entries. */
+    var keep=[];
+    if(isVenues){for(var a=0;a<limit;a++)keep.push(a);}
+    else{for(var b2=0;b2<limit;b2++)keep.push(Math.round(b2*(kids.length-1)/(limit-1)));}
+    keep=keep.filter(function(v,ix,arr){return arr.indexOf(v)===ix;});
+    var shown={};keep.forEach(function(ix){shown[ix]=1;});
+
+    kids.forEach(function(el,ix){if(!shown[ix])el.style.display='none';});
+
+    /* The rest as names you can tap open */
+    var rest=kids.map(function(el,ix){return shown[ix]?null:{el:el,ix:ix};}).filter(Boolean);
+    var names=document.createElement('div');
+    names.className='rooms-names';
+    names.style.cssText='grid-column:1/-1;margin-top:14px;padding-top:14px;border-top:1px solid var(--sand-deep,#E4D8C6);display:flex;flex-wrap:wrap;gap:8px;align-items:center;';
+    var lead=document.createElement('span');
+    lead.textContent='Also here \u2014 tap to open:';
+    lead.style.cssText='font-family:var(--sans);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--espresso);opacity:.75;margin-right:4px;';
+    names.appendChild(lead);
+    rest.forEach(function(r2){
+      var t=(r2.el.querySelector('h3,h4,.rc-name,.v-name,strong')||{}).textContent||'';
+      t=String(t).replace(/\s+/g,' ').trim();
+      if(!t)t='View';
+      var chip=document.createElement('button');
+      chip.type='button';chip.textContent=t;
+      chip.style.cssText='font-family:var(--sans);font-size:12px;padding:7px 13px;border:1px solid var(--sand-deep,#E4D8C6);background:#fff;color:var(--espresso);cursor:pointer;transition:.18s;';
+      chip.onmouseenter=function(){chip.style.borderColor='var(--gold)';};
+      chip.onmouseleave=function(){if(chip.dataset.open!=='1')chip.style.borderColor='var(--sand-deep,#E4D8C6)';};
+      chip.onclick=function(){
+        var open=chip.dataset.open==='1';
+        r2.el.style.display=open?'none':'';
+        chip.dataset.open=open?'':'1';
+        chip.style.background=open?'#fff':'var(--gold)';
+        chip.style.color=open?'var(--espresso)':'#fff';
+        chip.style.borderColor=open?'var(--sand-deep,#E4D8C6)':'var(--gold)';
+        if(!open)setTimeout(function(){r2.el.scrollIntoView({behavior:'smooth',block:'center'});},60);
+      };
+      names.appendChild(chip);
+    });
+    var all=document.createElement('button');
+    all.type='button';all.className='rooms-more';
+    all.textContent='Show all '+kids.length+' '+label;
+    all.style.cssText='font-family:var(--sans);font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:8px 16px;border:1px solid var(--espresso);background:none;color:var(--espresso);cursor:pointer;margin-left:4px;';
+    all.onclick=function(){
+      var open=all.dataset.open==='1';
+      rest.forEach(function(r2){r2.el.style.display=open?'none':'';});
+      [].slice.call(names.querySelectorAll('button')).forEach(function(c){
+        if(c===all)return;
+        c.dataset.open=open?'':'1';
+        c.style.background=open?'#fff':'var(--gold)';
+        c.style.color=open?'var(--espresso)':'#fff';
+        c.style.borderColor=open?'var(--sand-deep,#E4D8C6)':'var(--gold)';
+      });
+      all.dataset.open=open?'':'1';
+      all.textContent=open?'Show all '+kids.length+' '+label:'Show fewer';
+      if(open)g.scrollIntoView({behavior:'smooth',block:'start'});
+    };
+    names.appendChild(all);
+    g.appendChild(names);
+  });
+}
 function $id(id){return document.getElementById(id);}
 async function loadPicker(){$id('loading').style.display='none';$id('picker-screen').style.display='flex';const snap=await db.collection('resortProfiles').orderBy('name').get();const sel=$id('picker-select');try{snap.forEach(d=>{const p=d.data();if(/-maggie$/.test(d.id))return;const _rdy=!!(p.heroPhoto&&String(p.description||'').length>=40&&(p.roomCategories||[]).length&&(p.restaurants||[]).length&&(p.pools||[]).length);window.LIB[d.id]={name:p.name||d.id,dest:String(p.destination||'').split(',')[0].trim(),rooms:(p.roomCategories||[]).map(r=>r&&r.name).filter(Boolean),ready:_rdy,adults:(function(){const ap=String(p.agePolicy||'');if(/adults?[ -]?only|18\+|adults only/i.test(ap))return true;if(/family|all ages|children/i.test(ap))return false;return /\b(secrets|breathless|zilara|excellence|hideaway|chic|adult scene|temptation|desire|sensatori adult|live aqua beach)\b/i.test(String(p.name||d.id));})()};});renderRecentQuotes(snap);try{mqFavFill();}catch(_){}}catch(e){console.warn(e);}
   const okUrl=u=>/^https?:\/\//.test(String(u||''));const arr=v=>Array.isArray(v)?v:[];
