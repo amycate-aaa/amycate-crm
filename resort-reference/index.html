@@ -355,9 +355,14 @@ db.collection('resortProfiles').get().then(s=>{
       }
       // Weddings: it has to answer where, what it costs, and what the week looks like.
       const priced=a('packages').some(x=>x&&/\$\s?\d|complimentary|free|included/i.test(String(x.price||'')));
+      const docs=a('documents').filter(x=>x&&pic(x.url));
+      const pkgDoc=docs.some(x=>/package|wedding guide|sell sheet|catalog|booklet|collection|sales guide/i.test(x.label||''));
+      const wedLink=pic(p.weddingUrl)||pic(p.dwtUrl)||docs.length>0;
       return pic(p.heroPhoto)
           && a('venues').length
           && priced
+          && pkgDoc
+          && wedLink
           && a('roomCategories').length
           && a('restaurants').length
           && a('pools').length;
