@@ -2342,11 +2342,31 @@ function renderQuote(){
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
   if(q.opts.dining&&rests.length){
     S.push(sec('sand-band',head('Every Night, Somewhere New','Dining')+bandImg('dining',/dining|restaurant/i)+
-      '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
-        (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
-        (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+
-        (photoOk(menuUrlOf(r))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
-        '</div>').join('')+'</div>'+
+      (function(){
+        const pics=rests.map(r=>[r.photo,r.photoUrl,matchPhoto(r.name)].find(photoOk)||'');
+        const most=pics.filter(Boolean).length>=Math.ceil(rests.length*0.6);
+        if(!most) return '<div class="dinelist" style="margin-top:34px;">'+rests.map(r=>'<div class="d"><h4>'+esc(r.name)+'</h4>'+
+          (clean(r.type||r.cuisine)?'<p class="t">'+esc(clean(r.type||r.cuisine))+'</p>':'')+
+          (clean(r.description)?'<p>'+esc(clean(r.description))+'</p>':'')+
+          (photoOk(menuUrlOf(r))?'<a class="menulink" href="'+esc(menuUrlOf(r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+          '</div>').join('')+'</div>';
+        const withPic=[],noPic=[];
+        rests.forEach((r,i)=>{(pics[i]?withPic:noPic).push({r:r,src:pics[i]});});
+        return '<div class="room-grid" style="margin-top:34px;">'+withPic.map(x=>{
+            const gal=Array.isArray(x.r.photos)&&x.r.photos.filter(photoOk).length>1
+              ?'<div class="thumbs">'+x.r.photos.filter(photoOk).slice(0,4).map(u=>'<img src="'+esc(u)+'" alt="" loading="lazy">').join('')+'</div>':'';
+            return '<div class="rcard'+(gal?' hasgal':'')+'">'+
+              '<div class="pic"><img class="main" src="'+esc(x.src)+'" alt="'+esc(x.r.name)+'" loading="lazy">'+gal+'</div>'+
+              '<div class="rbody"><h4>'+esc(x.r.name)+'</h4>'+
+              (clean(x.r.type||x.r.cuisine)?'<p class="meta">'+esc(clean(x.r.type||x.r.cuisine))+'</p>':'')+
+              (clean(x.r.description)?'<p>'+esc(clean(x.r.description))+'</p>':'')+
+              (photoOk(menuUrlOf(x.r))?'<a class="menulink" href="'+esc(menuUrlOf(x.r))+'" target="_blank" rel="noopener">View menu &rarr;</a>':'')+
+              '</div></div>';}).join('')+'</div>'+
+          (noPic.length?'<div class="dinelist" style="margin-top:24px;">'+noPic.map(x=>'<div class="d"><h4>'+esc(x.r.name)+'</h4>'+
+            (clean(x.r.type||x.r.cuisine)?'<p class="t">'+esc(clean(x.r.type||x.r.cuisine))+'</p>':'')+
+            (clean(x.r.description)?'<p>'+esc(clean(x.r.description))+'</p>':'')+
+            '</div>').join('')+'</div>':'');
+      })()+
       ''+
       (clean(P.romanticDining||P.romanticNotes)?'<div class="note-box"><p><strong>Private &amp; romantic dining.</strong> '+esc(clean(P.romanticDining||P.romanticNotes))+'</p></div>':'')));
   }
