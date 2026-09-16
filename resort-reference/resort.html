@@ -17,6 +17,39 @@ firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDom
 const db=firebase.firestore();
 firebase.auth().signInAnonymously().catch(e=>console.warn('Auth:',e));
 </script>
+<!-- LINK REVOKE: any tag or quote key listed in access/revoked is turned away. -->
+<script>
+(function(){
+  try{
+    if(!window.db)return;
+    var q=new URLSearchParams(location.search);
+    var who=(q.get('c')||'').toLowerCase().trim();
+    try{ if(!who) who=(localStorage.getItem('ac_who')||'').toLowerCase().trim(); }catch(e){}
+    var key=(q.get('k')||q.get('quote')||q.get('q')||'').toLowerCase().trim();
+    var slug=(q.get('r')||'').toLowerCase().trim();
+    db.collection('access').doc('revoked').get().then(function(d){
+      if(!d.exists)return;
+      var data=d.data()||{};
+      var list=(data.tags||[]).map(function(x){return String(x).toLowerCase().trim();});
+      var keys=(data.keys||[]).map(function(x){return String(x).toLowerCase().trim();});
+      var all=data.allBefore?new Date(data.allBefore):null;
+      var hit=(who&&list.indexOf(who)>-1)||(key&&keys.indexOf(key)>-1);
+      if(!hit&&all){ try{ var first=localStorage.getItem('ac_first'); if(first&&new Date(first)<all)hit=true; }catch(e){} }
+      if(!hit)return;
+      document.documentElement.innerHTML='<body style="margin:0;font-family:Georgia,serif;background:#FBF8F3;color:#3A332B;'
+        +'display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:30px;">'
+        +'<div><p style="font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:#8A6D3B;margin:0 0 14px;">Amy Cate</p>'
+        +'<h1 style="font-weight:400;font-size:28px;margin:0 0 14px;">This link is no longer active</h1>'
+        +'<p style="font-size:16px;line-height:1.7;max-width:46ch;margin:0 auto 22px;color:#5A5248;">'
+        +'Get in touch and I\u2019ll send you an up-to-date one.</p>'
+        +'<p><a href="mailto:amy.cate@destinationweddings.com" style="font-family:system-ui,sans-serif;font-size:11px;letter-spacing:.2em;'
+        +'text-transform:uppercase;padding:13px 26px;border:1px solid #3A332B;color:#3A332B;text-decoration:none;">Email me</a></p></div></body>';
+    }).catch(function(){});
+    try{ if(!localStorage.getItem('ac_first'))localStorage.setItem('ac_first',new Date().toISOString()); }catch(e){}
+  }catch(e){}
+})();
+</script>
+
 <style>
 :root{--ivory:#FBF8F3;--sand:#F1E9DD;--sand-deep:#E4D8C6;--espresso:#1A1510;--ink:#2A241F;--gold:#8B6914;--gold-soft:#A07E3A;--sea:#4A7A76;--serif:'Cormorant Garamond','Cormorant',Georgia,'Times New Roman',serif;--sans:'Jost',system-ui,sans-serif;}
 *{box-sizing:border-box;}html{scroll-behavior:smooth;}
