@@ -598,9 +598,13 @@ body.hasask{padding-bottom:78px;}
 #quote-page section .eyebrow,
 #quote-page section h2.display{text-align:center;}
 #quote-page section hr.rule{margin-left:auto;margin-right:auto;}
-#quote-page section > .wrap > p.small,
-#quote-page section > .wrap > p.note,
-#quote-page section > .wrap > p.pkg-hint{text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;}
+#quote-page section .wrap > p.small,
+#quote-page section .wrap > p.note,
+#quote-page section .wrap > p.pkg-hint,
+#quote-page section .wrap > .intro,
+#quote-page section > .wrap > div > p.small{text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;}
+#quote-page .rcard p.small,#quote-page .pcard p.small,#quote-page .bl p.small,
+#quote-page table p.small{text-align:left;margin-left:0;margin-right:0;max-width:none;}
 /* except inside cards, where left-aligned reads better */
 #quote-page .rcard .eyebrow,#quote-page .pcard .eyebrow,#quote-page .bl .eyebrow,
 #quote-page .d .eyebrow{text-align:left;}
@@ -2690,6 +2694,18 @@ function roomPhotos(name,c){
   const add=u=>{u=String(u||'').trim();if(!photoOk(u)||seen[u])return;seen[u]=1;out.push(u);};
   c=c||{};add(c.photo);add(c.photoUrl);(Array.isArray(c.photos)?c.photos:[]).forEach(add);
   PHOTOS.filter(ph=>String(ph.roomCategory||'').toLowerCase().trim()===nm).forEach(ph=>add(ph.url||ph.downloadURL));
+  if(out.length<2){
+    // older quotes name rooms slightly differently ("... King", "Deluxe ..."), so try a looser match
+    const norm=x=>String(x||'').toLowerCase()
+      .replace(/\b(king|queen|double|doubles|twin|room|suite|category|bed|beds)\b/g,' ')
+      .replace(/[^a-z0-9]+/g,' ').trim();
+    const target=norm(nm);
+    if(target){
+      const cat=(P.roomCategories||[]).find(x=>x&&norm(x.name)===target);
+      if(cat){add(cat.photo);add(cat.photoUrl);(Array.isArray(cat.photos)?cat.photos:[]).forEach(add);}
+      PHOTOS.filter(ph=>norm(ph.roomCategory)===target).forEach(ph=>add(ph.url||ph.downloadURL));
+    }
+  }
   return out;
 }
 function matchPhoto(name){
