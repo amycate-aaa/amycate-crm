@@ -2491,6 +2491,7 @@ function renderQuote(){
     const blurb=clean(P.description||P.overview||'');
     if(blurb||clean(P.activitiesIncluded)){
       S.push(sec('sand-band ctintro',head('Why Here','The Resort Itself')+
+        bandImg('overview',/resort|aerial|exterior|property/i)+
         (blurb?'<p style="font-size:19px;line-height:1.8;max-width:64ch;margin:0 auto 34px;text-align:center;">'+esc(blurb)+'</p>':'')+
 
         (clean(P.activitiesIncluded)?'<p class="note" style="margin-top:26px;text-align:center;max-width:70ch;margin-left:auto;margin-right:auto;">'+esc(clean(P.activitiesIncluded))+'</p>':'')));
