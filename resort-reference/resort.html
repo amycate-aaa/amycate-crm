@@ -827,6 +827,7 @@ body.hasask{padding-bottom:78px;}
         <button type="button" class="qb-btn ghost" style="margin-top:6px;" onclick="addGuestRow()">+ Add name</button></div>
       <div class="qb-f"><label>Wedding Date</label><input id="q-date" placeholder="February 14, 2028"></div>
       <div class="qb-f"><label>Travel Dates</label><input id="q-travel" placeholder="Feb 11 &ndash; 15, 2028" oninput="autoNights()"></div>
+      <div class="qb-f"><label>Second date option <span style="opacity:.6;">(leave blank for one set of dates)</span></label><input id="q-travelB" placeholder="Apr 12 &ndash; 16, 2028" oninput="toggleOptB();saveLocal();"></div>
       <div class="qb-f"><label>Priced On</label><input id="q-priced" placeholder="Per person, per night"></div>
       <div class="qb-f wide"><label>Fill from paste &mdash; Travel Impressions itinerary or DestiWorld results</label>
         <textarea id="q-paste" class="qb-in" rows="4" style="width:100%;font-family:monospace;font-size:12px;" placeholder="Paste the whole TI email or the DestiWorld results page here. Dates, adults, flights and this resort\u2019s room and price fill in; other resorts in the paste are ignored."></textarea>
@@ -871,7 +872,7 @@ body.hasask{padding-bottom:78px;}
       <button type="button" class="qb-btn ghost" onclick="addAllRooms()">Add all</button>
     </div>
     <div style="overflow-x:auto;"><table class="qb-rooms"><thead><tr>
-      <th style="min-width:220px;">Room Category</th><th style="width:160px;" id="q-pricecol">Per Person / Night</th><th style="width:170px;" class="q-pkcol" style="display:none;">With Flights, Per Person</th><th style="width:44px;"></th>
+      <th style="min-width:220px;">Room Category</th><th style="width:160px;" id="q-pricecol">Per Person / Night</th><th style="width:170px;" class="q-pkcol" style="display:none;">With Flights, Per Person</th><th style="width:160px;" class="q-bcol" style="display:none;">Option B</th><th style="width:170px;" class="q-bcol q-pkcol" style="display:none;">Option B, With Flights</th><th style="width:44px;"></th>
     </tr></thead><tbody id="q-price-rows"></tbody></table></div>
 
     <div id="q-pkgbox" style="display:none;margin-bottom:26px;">
@@ -898,7 +899,7 @@ body.hasask{padding-bottom:78px;}
       <p class="qb-note">One row per flight. Type the flight number and date, press Look up, and the airports and times fill themselves. For a connection, add another row with the <em>same</em> city name and the quote shows them as legs of one journey.</p>
       <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
         <th style="min-width:130px;">Who / city</th><th style="width:110px;">Flight</th><th style="width:130px;">Date</th>
-        <th style="width:80px;">From</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
+        <th style="width:80px;">From</th><th style="width:110px;" class="q-bcol" style="display:none;">Option B date</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
         <th style="width:90px;"></th><th style="width:40px;"></th>
       </tr></thead><tbody id="q-air-rows"></tbody></table></div>
       <div style="display:flex;gap:10px;align-items:center;margin-top:12px;">
@@ -1468,11 +1469,14 @@ function renderDownloads(){
 function collectQ(){
   const rows=[...document.querySelectorAll('#q-price-rows tr[data-name]')].map(tr=>{
     const el=tr.querySelector('.d');const pk=tr.querySelector('.pk');
-    return el?{name:tr.dataset.name,ppn:el.value.trim(),pkg:pk?pk.value.trim():''}:null;
+    const dB=tr.querySelector('.dB'),pkB=tr.querySelector('.pkB');
+    return el?{name:tr.dataset.name,ppn:el.value.trim(),pkg:pk?pk.value.trim():'',
+               ppnB:dB?dB.value.trim():'',pkgB:pkB?pkB.value.trim():''}:null;
   }).filter(r=>r&&(r.ppn||r.pkg));
   const o={};['offers','inclusions','example','dining','pools','activities','essentials','gallery','docs','group','steps','faq'].forEach(k=>{const el=$id('o-'+k);o[k]=el?el.checked:false;});
   const basisEl=document.querySelector('input[name="q-basis"]:checked');
   return{couple:$id('q-couple').value.trim(),date:$id('q-date').value.trim(),travel:$id('q-travel').value.trim(),
+    travelB:$id('q-travelB')?$id('q-travelB').value.trim():'',
     priced:$id('q-priced').value.trim(),brand:$id('q-brand').value,
     mode:$id('q-mode')?$id('q-mode').value:'resort',
     basis:basisEl?basisEl.value:'ppn',nights:$id('q-nights')?$id('q-nights').value.trim():'',
@@ -1594,10 +1598,20 @@ function addRoomRow(name,val,pkg){
     '<tr data-name="'+esc(n)+'"><td>'+esc(n)+'</td>'+
     '<td><input class="d" placeholder="309" value="'+esc(val||'')+'"></td>'+
     '<td class="q-pkcol"><input class="pk" placeholder="2197" value="'+esc(pkg||'')+'"></td>'+
+    '<td class="q-bcol" style="display:none;"><input class="dB" placeholder="309" value="'+esc((arguments[3]||''))+'"></td>'+
+    '<td class="q-bcol q-pkcol" style="display:none;"><input class="pkB" placeholder="2197" value="'+esc((arguments[4]||''))+'"></td>'+
     '<td><button type="button" class="rx" title="Remove">\u00d7</button></td></tr>');
   syncRooms();wireRooms();togglePkCol();
 }
-function togglePkCol(){const on=!!($id('q-needair')&&$id('q-needair').checked);document.querySelectorAll('.q-pkcol').forEach(el=>el.style.display=on?'':'none');}
+function toggleOptB(){
+  const on=!!($id('q-travelB')&&$id('q-travelB').value.trim());
+  document.querySelectorAll('.q-bcol').forEach(el=>{
+    const isPk=el.classList.contains('q-pkcol');
+    const air=!!($id('q-needair')&&$id('q-needair').checked);
+    el.style.display=(on&&(!isPk||air))?'':'none';
+  });
+}
+function togglePkCol(){const on=!!($id('q-needair')&&$id('q-needair').checked);document.querySelectorAll('.q-pkcol').forEach(el=>el.style.display=on?'':'none');try{toggleOptB();}catch(e){}}
 function addAllRooms(){ROOMCATS.forEach(n=>addRoomRow(n));}
 function wireRooms(){
   document.querySelectorAll('#q-price-rows .d, #q-price-rows .pk').forEach(el=>{
@@ -1842,6 +1856,7 @@ function addAirRow(v){
     '<tr data-air><td><input class="a-who" placeholder="Denver" value="'+esc(v.who||'')+'"></td>'+
     '<td><input class="a-fl" placeholder="UA1167" value="'+esc(v.flight||'')+'"></td>'+
     '<td><input class="a-dt" placeholder="2027-05-14" value="'+esc(v.date||'')+'"></td>'+
+    '<td class="q-bcol" style="display:none;"><input class="a-dtB" placeholder="2027-06-11" value="'+esc(v.dateB||'')+'"></td>'+
     '<td><input class="a-fr" value="'+esc(v.from||'')+'"></td>'+
     '<td><input class="a-to" value="'+esc(v.to||'')+'"></td>'+
     '<td><input class="a-dp" value="'+esc(v.dep||'')+'"></td>'+
