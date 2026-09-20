@@ -915,13 +915,26 @@ body.showB .optB > p{display:block;}
       <p class="qb-note">One row per flight. Type the flight number and date, press Look up, and the airports and times fill themselves. For a connection, add another row with the <em>same</em> city name and the quote shows them as legs of one journey.</p>
       <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
         <th style="min-width:130px;">Who / city</th><th style="width:110px;">Flight</th><th style="width:130px;">Date</th>
-        <th style="width:80px;">From</th><th style="width:110px;" class="q-bcol" style="display:none;">Option B date</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
+        <th style="width:80px;">From</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
         <th style="width:90px;"></th><th style="width:40px;"></th>
       </tr></thead><tbody id="q-air-rows"></tbody></table></div>
       <div style="display:flex;gap:10px;align-items:center;margin-top:12px;">
         <button type="button" class="qb-btn ghost" onclick="addAirRow()">+ Add flight</button>
         <button type="button" class="qb-btn ghost" onclick="const b=$id('q-airpaste');b.style.display=b.style.display==='none'?'block':'none';">Paste air</button>
         <span class="airmsg" id="q-air-msg"></span>
+      </div>
+      <div class="q-bcol" style="display:none;margin-top:30px;border-top:1px solid #E4D8C6;padding-top:22px;">
+        <p class="qb-h" style="margin-top:0;">Flights &mdash; Option B</p>
+        <p class="qb-note">The second set of dates, with its own flights. Different carrier, numbers and times are fine.</p>
+        <div style="overflow-x:auto;"><table class="airrows"><thead><tr>
+          <th style="min-width:130px;">Who / city</th><th style="width:110px;">Flight</th><th style="width:130px;">Date</th>
+          <th style="width:80px;">From</th><th style="width:80px;">To</th><th style="width:100px;">Departs</th><th style="width:100px;">Arrives</th>
+          <th style="width:90px;"></th><th style="width:40px;"></th>
+        </tr></thead><tbody id="q-airB-rows"></tbody></table></div>
+        <div style="display:flex;gap:10px;align-items:center;margin-top:12px;">
+          <button type="button" class="qb-btn ghost" onclick="addAirRowB()">+ Add flight</button>
+          <button type="button" class="qb-btn ghost" onclick="copyAirToB()">Copy option A and edit</button>
+        </div>
       </div>
       <div id="q-airpaste" style="display:none;margin-top:12px;">
         <textarea id="q-airtext" class="qb-in" rows="5" style="width:100%;font-family:monospace;font-size:13px;" placeholder="Paste the itinerary here \u2014 a Sabre/DestiWorld line (UA 1167 14MAY IAHPUJ 900A 1230P), an airline confirmation, or a Southwest e-mail. One flight per line works best."></textarea>
@@ -1509,6 +1522,12 @@ function collectQ(){
       to:tr.querySelector('.a-to').value.trim(),   dep:tr.querySelector('.a-dp').value.trim(),
       arr:tr.querySelector('.a-ar').value.trim()
     })).filter(r=>r.who||r.flight),
+    airB:[...document.querySelectorAll('#q-airB-rows tr[data-airb]')].map(tr=>({
+      who:tr.querySelector('.b-who').value.trim(), flight:tr.querySelector('.b-fl').value.trim(),
+      date:tr.querySelector('.b-dt').value.trim(), from:tr.querySelector('.b-fr').value.trim(),
+      to:tr.querySelector('.b-to').value.trim(),   dep:tr.querySelector('.b-dp').value.trim(),
+      arr:tr.querySelector('.b-ar').value.trim()
+    })).filter(r=>r.who||r.flight),
     headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group',xfer:(($id('q-xfer')||{}).value||'no')==='yes'};
 }
 function applyQ(q){
@@ -1872,7 +1891,6 @@ function addAirRow(v){
     '<tr data-air><td><input class="a-who" placeholder="Denver" value="'+esc(v.who||'')+'"></td>'+
     '<td><input class="a-fl" placeholder="UA1167" value="'+esc(v.flight||'')+'"></td>'+
     '<td><input class="a-dt" placeholder="2027-05-14" value="'+esc(v.date||'')+'"></td>'+
-    '<td class="q-bcol" style="display:none;"><input class="a-dtB" placeholder="2027-06-11" value="'+esc(v.dateB||'')+'"></td>'+
     '<td><input class="a-fr" value="'+esc(v.from||'')+'"></td>'+
     '<td><input class="a-to" value="'+esc(v.to||'')+'"></td>'+
     '<td><input class="a-dp" value="'+esc(v.dep||'')+'"></td>'+
@@ -1880,6 +1898,43 @@ function addAirRow(v){
     '<td><button type="button" class="look">Look up</button></td>'+
     '<td><button type="button" class="rx">\u00d7</button></td></tr>');
   wireAir();
+}
+function addAirRowB(v){
+  v=v||{};
+  $id('q-airB-rows').insertAdjacentHTML('beforeend',
+    '<tr data-airb><td><input class="b-who" placeholder="Columbus" value="'+esc(v.who||'')+'"></td>'+
+    '<td><input class="b-fl" placeholder="AA1234" value="'+esc(v.flight||'')+'"></td>'+
+    '<td><input class="b-dt" placeholder="2027-04-12" value="'+esc(v.date||'')+'"></td>'+
+    '<td><input class="b-fr" value="'+esc(v.from||'')+'"></td>'+
+    '<td><input class="b-to" value="'+esc(v.to||'')+'"></td>'+
+    '<td><input class="b-dp" value="'+esc(v.dep||'')+'"></td>'+
+    '<td><input class="b-ar" value="'+esc(v.arr||'')+'"></td>'+
+    '<td><button type="button" class="lookb">Look up</button></td>'+
+    '<td><button type="button" class="rxb">\u00d7</button></td></tr>');
+  wireAirB();
+}
+function wireAirB(){
+  document.querySelectorAll('#q-airB-rows tr[data-airb]').forEach(tr=>{
+    tr.querySelectorAll('input').forEach(i=>{i.oninput=saveLocal;});
+    tr.querySelector('.rxb').onclick=()=>{tr.remove();saveLocal();};
+    const lb=tr.querySelector('.lookb');
+    if(lb)lb.onclick=()=>lookupAirB(tr);
+  });
+}
+function lookupAirB(tr){
+  // reuse the option A lookup by borrowing its class names for the call
+  const map=[['b-who','a-who'],['b-fl','a-fl'],['b-dt','a-dt'],['b-fr','a-fr'],['b-to','a-to'],['b-dp','a-dp'],['b-ar','a-ar']];
+  map.forEach(([b,a])=>{const el=tr.querySelector('.'+b);if(el)el.classList.add(a);});
+  try{lookupAir(tr);}catch(e){}
+  setTimeout(()=>map.forEach(([b,a])=>{const el=tr.querySelector('.'+b);if(el)el.classList.remove(a);}),4000);
+}
+function copyAirToB(){
+  const rows=[...document.querySelectorAll('#q-air-rows tr[data-air]')].map(tr=>({
+    who:tr.querySelector('.a-who').value,flight:tr.querySelector('.a-fl').value,
+    date:tr.querySelector('.a-dt').value,from:tr.querySelector('.a-fr').value,
+    to:tr.querySelector('.a-to').value,dep:tr.querySelector('.a-dp').value,arr:tr.querySelector('.a-ar').value}));
+  $id('q-airB-rows').innerHTML='';
+  rows.forEach(addAirRowB);saveLocal();
 }
 function wireAir(){
   document.querySelectorAll('#q-air-rows tr[data-air]').forEach(tr=>{
