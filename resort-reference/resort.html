@@ -2189,13 +2189,12 @@ function renderQuote(){
     S.push(sec('flightsec',head('Getting There','Flights')+
       '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
       '<table class="flighttbl"><thead><tr>'+
-      '<th>Departing from</th>'+(anyFl?'<th>Flight</th>':'')+'<th>Date</th>'+
+      (anyFl?'<th>Flight</th>':'')+'<th>Date</th>'+
       (anyRt?'<th>Route</th>':'')+(anyTm?'<th>Departs</th><th>Arrives</th>':'')+
       '</tr></thead><tbody>'+
       rows.map((r,i)=>{
         const same=i>0 && String(rows[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
-        const depCity=(window.AIRPORT_CITY||{})[String(r.from||'').toUpperCase()]||r.who||'\u2014';
-        return '<tr'+(same?' class="leg"':'')+'><td class="city">'+esc(depCity)+'</td>'+
+        return '<tr'+(same?' class="leg"':'')+'>'+
         (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
         '<td>'+esc(r.date||'\u2014')+'</td>'+
         (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
