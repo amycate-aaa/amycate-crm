@@ -609,6 +609,18 @@ body.hasask{padding-bottom:78px;}
 #quote-page section > .wrap > p:first-of-type:not(.meta):not(.t){text-align:center;max-width:72ch;margin-left:auto;margin-right:auto;}
 #quote-page .rcard p,#quote-page .pcard p,#quote-page .bl p,#quote-page .d p,
 #quote-page .cmp p,#quote-page table p{text-align:left;margin-left:0;margin-right:0;max-width:none;}
+.dateopt{background:var(--cream);padding:46px 0 0;text-align:center;}
+.dateopt .c{max-width:900px;margin:0 auto;padding:0 24px;}
+.dateopt-bar{display:flex;justify-content:center;gap:0;margin-top:26px;background:#3A332B;border:1px solid rgba(176,141,87,.35);}
+.dopt{font-family:var(--sans);font-size:13.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;padding:17px 26px;border:none;border-right:1px solid rgba(176,141,87,.25);background:none;color:rgba(247,242,233,.72);cursor:pointer;transition:.2s;flex:1 1 auto;}
+.dopt:last-child{border-right:none;}
+.dopt:hover{color:#F7F2E9;background:rgba(255,255,255,.06);}
+.dopt.on{background:var(--gold);color:#fff;}
+.optB{display:none;}
+body.showB .optA{display:none;}
+body.showB .optB{display:inline;}
+body.showB .optB > p{display:block;}
+@media(max-width:620px){.dopt{padding:14px 12px;font-size:11.5px;letter-spacing:.1em;}}
 </style>
 </head>
 <body>
@@ -2211,7 +2223,7 @@ function renderQuote(){
         const same=i>0 && String(rows[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
         return '<tr'+(same?' class="leg"':'')+'>'+
         (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
-        '<td>'+esc(r.date||'\u2014')+'</td>'+
+        '<td>'+((q.travelB||'').trim()&&r.dateB?('<span class="optA">'+esc(r.date||'\u2014')+'</span><span class="optB">'+esc(r.dateB)+'</span>'):esc(r.date||'\u2014'))+'</td>'+
         (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
         (anyTm?'<td>'+esc(r.dep||'\u2014')+'</td><td>'+esc(r.arr||'\u2014')+'</td>':'')+
         '</tr>';}).join('')+'</tbody></table>'+
@@ -2276,14 +2288,16 @@ function renderQuote(){
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
               ((r.ppn||r.pkg)?(function(){
-                  const XT=q.xfer?'flights, room and transfers':'flights and room \u2014 airport transfers extra';if(q.needAir&&!r.ppn)return '<div class="rows"><p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p></div>';
-                  const PK=(q.needAir&&r.pkg)?'<p class="ppnbreak" style="margin-top:8px;"><strong>'+esc(money(r.pkg))+'</strong> per person with '+XT+'</p>':'';
+                  const _B=(q.travelB||'').trim()&&(r.ppnB||r.pkgB);
+                  const _wrap=h=>_B?('<span class="optA">'+h+'</span>'):h;
+                  const XT=q.xfer?'flights, room and transfers':'flights and room \u2014 airport transfers extra';if(q.needAir&&!r.ppn)return '<div class="rows">'+_wrap('<p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p>')+(_B?'<span class="optB"><p class="ppn">'+esc(money(r.pkgB||r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p></span>':'')+'</div>';
+                  const PK=(q.needAir&&r.pkg)?('<p class="ppnbreak" style="margin-top:8px;">'+(_B?'<span class="optA">':'')+'<strong>'+esc(money(r.pkg))+'</strong> per person with '+XT+(_B?'</span><span class="optB"><strong>'+esc(money(r.pkgB||r.pkg))+'</strong> per person with '+XT+'</span>':'')+'</p>'):'';
                   const OCC=parseInt(q.occ,10)||2;const occTxt=OCC===2?'two people sharing':OCC+' adults sharing';
                   if(TOTAL){const t=num(r.ppn);const pp=t?t/OCC:0;const pn=(t&&NIGHTS)?pp/NIGHTS:0;
-                    return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', '+occTxt:'<br>'+occTxt)+'</p>'+
-                      (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+PK+'</div>';}
+                    return '<div class="rows">'+(_B?'<span class="optB"><p class="ppn">'+esc(money(r.ppnB||r.ppn))+'</p><p class="ppnsub">total for the room</p></span><span class="optA">':'')+'<p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">total for the room'+(NIGHTS?'<br>'+NIGHTS+' night'+(NIGHTS===1?'':'s')+', '+occTxt:'<br>'+occTxt)+'</p>'+
+                      (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+PK+(_B?'</span>':'')+'</div>';}
                   {const t=num(r.ppn);const NN=NIGHTS||nightsFromTravel(q.travel)||0;const tot=(t&&NN)?t*OCC*NN:0;
-                    return '<div class="rows"><p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p>'+(tot?'<p class="ppnbreak">'+esc(money((t*NN).toFixed(0)))+' per person for '+NN+' night'+(NN===1?'':'s')+' &nbsp;&#10022;&nbsp; '+esc(money(tot.toFixed(0)))+' total for the room</p>':'')+PK+'</div>';}})():'')+
+                    return '<div class="rows">'+(_B?'<span class="optB"><p class="ppn">'+esc(money(r.ppnB||r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p></span><span class="optA">':'')+'<p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p>'+(tot?'<p class="ppnbreak">'+esc(money((t*NN).toFixed(0)))+' per person for '+NN+' night'+(NN===1?'':'s')+' &nbsp;&#10022;&nbsp; '+esc(money(tot.toFixed(0)))+' total for the room</p>':'')+PK+(_B?'</span>':'')+'</div>';}})():'')+
               (GUEST?'<p style="margin:18px 0 0;">'+(q.bookLink
                   ?'<a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a>'
                   :'<a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+r.name+' at '+R+(q.couple?' \u2014 '+q.couple:''))+'&body='+encodeURIComponent('Hi Amy,\n\nI\u2019ll take the '+r.name+' at '+R+(q.travel?' for '+q.travel:'')+'.\n\n'+((q.guests||[]).length?'Travelling: '+q.guests.join(', ')+'\n\n':''))+'">I\u2019ll take this room \u2192</a>')+'</p>':'')+
@@ -2401,6 +2415,19 @@ function renderQuote(){
     }
   }
 
+
+  /* 6d — TWO DATE OPTIONS */
+  if((q.travelB||'').trim()){
+    const a=esc(q.travel||'Option A'), b=esc(q.travelB);
+    S.push('<div class="dateopt"><div class="c">'
+      +'<p class="eyebrow">Two sets of dates</p>'
+      +'<h2 class="display">Which week suits you?</h2>'
+      +'<p class="small" style="max-width:60ch;margin:10px auto 0;text-align:center;">Prices and flights change with the dates, so here is each one in full. Tap to switch.</p>'
+      +'<div class="dateopt-bar">'
+      +'<button type="button" class="dopt on" data-opt="a">'+a+'</button>'
+      +'<button type="button" class="dopt" data-opt="b">'+b+'</button>'
+      +'</div></div></div>');
+  }
 
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
@@ -2629,6 +2656,7 @@ function renderQuote(){
       else if(rooms&&!intro&&secs[0]&&secs[0]!==rooms)secs[0].parentNode.insertBefore(rooms,secs[0]);
     }
   }catch(e){}
+  try{wireDateToggle();}catch(e){}
   try{buildResortTabs($id('quote-page'));}catch(e){}
   try{wireStickyAsk();}catch(e){}
   try{wireGuestCalc($id('quote-page'));}catch(e){}
@@ -2852,6 +2880,17 @@ function buildResortTabs(root){
     if(rule)rule.style.display='none';
     p.el.style.display=i===0?'':'none';
     body.appendChild(p.el);
+  });
+}
+
+function wireDateToggle(){
+  const bar=document.querySelector('.dateopt-bar');if(!bar)return;
+  bar.querySelectorAll('.dopt').forEach(b=>{
+    b.onclick=function(){
+      bar.querySelectorAll('.dopt').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on');
+      document.body.classList.toggle('showB',b.dataset.opt==='b');
+    };
   });
 }
 function stayTotals(q,compact){
