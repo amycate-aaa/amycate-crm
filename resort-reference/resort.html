@@ -625,6 +625,21 @@ body.showB .optA{display:none;}
 body.showB .optB{display:inline;}
 body.showB .optB > p{display:block;}
 @media(max-width:620px){.dopt{padding:14px 12px;font-size:11.5px;letter-spacing:.1em;}}
+
+/* Section headings and their intro line: centred, last word on it */
+#quote-page section > .wrap > p.eyebrow,
+#quote-page section > .wrap > h2.display,
+#quote-page section > .wrap > p.small,
+#quote-page section > .wrap > p.note,
+#quote-page .rtabs-body section > .wrap > p.small,
+#quote-page section > .wrap > p.lead-in{text-align:center !important;}
+#quote-page section > .wrap > p.small,
+#quote-page section > .wrap > p.note,
+#quote-page section > .wrap > p.lead-in{max-width:70ch !important;margin-left:auto !important;margin-right:auto !important;}
+#quote-page section > .wrap > hr.rule{margin-left:auto !important;margin-right:auto !important;}
+/* but never inside a card, a table or a list */
+#quote-page .pcard p,#quote-page .rcard p,#quote-page .bl p,#quote-page .d p,
+#quote-page table p,#quote-page li,#quote-page .offer p{text-align:left !important;max-width:none !important;}
 </style>
 </head>
 <body>
