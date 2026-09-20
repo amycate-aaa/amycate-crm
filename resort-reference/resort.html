@@ -2269,23 +2269,31 @@ function renderQuote(){
   /* 3c — FLIGHTS */
   (function(){
     if(!q.needAir)return;
-    const rows=(q.air||[]).filter(r=>r.who||r.flight);
+    const rowsA=(q.air||[]).filter(r=>r.who||r.flight);
+    const rowsB=(q.airB||[]).filter(r=>r.who||r.flight);
+    const TWO=!!(String(q.travelB||'').trim()&&rowsB.length);
+    const rows=rowsA.length?rowsA:rowsB;
     if(!rows.length)return;
-    const anyFl=rows.some(r=>r.flight), anyRt=rows.some(r=>r.from||r.to), anyTm=rows.some(r=>r.dep||r.arr);
-    S.push(sec('flightsec',head('Getting There','Flights')+
-      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
-      '<table class="flighttbl"><thead><tr>'+
+    const all=rowsA.concat(rowsB);
+    const anyFl=all.some(r=>r.flight), anyRt=all.some(r=>r.from||r.to), anyTm=all.some(r=>r.dep||r.arr);
+    const flightTable=function(list){
+      return '<table class="flighttbl"><thead><tr>'+
       (anyFl?'<th>Flight</th>':'')+'<th>Date</th>'+
       (anyRt?'<th>Route</th>':'')+(anyTm?'<th>Departs</th><th>Arrives</th>':'')+
       '</tr></thead><tbody>'+
-      rows.map((r,i)=>{
-        const same=i>0 && String(rows[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
+      list.map(function(r,i){
+        const same=i>0 && String(list[i-1].who||'').trim().toLowerCase()===String(r.who||'').trim().toLowerCase();
         return '<tr'+(same?' class="leg"':'')+'>'+
-        (anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
-        '<td>'+((q.travelB||'').trim()&&r.dateB?('<span class="optA">'+esc(r.date||'\u2014')+'</span><span class="optB">'+esc(r.dateB)+'</span>'):esc(r.date||'\u2014'))+'</td>'+
+(anyFl?'<td>'+esc(r.flight||'\u2014')+'</td>':'')+
+        '<td>'+esc(r.date||'\u2014')+'</td>'+
         (anyRt?'<td>'+esc([r.from,r.to].filter(Boolean).join(' \u2192 ')||'\u2014')+'</td>':'')+
         (anyTm?'<td>'+esc(r.dep||'\u2014')+'</td><td>'+esc(r.arr||'\u2014')+'</td>':'')+
-        '</tr>';}).join('')+'</tbody></table>'+
+        '</tr>';}).join('')+'</tbody></table>';
+    };
+    S.push(sec('flightsec',head('Getting There','Flights')+
+      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
+      (TWO?('<span class="optA">'+flightTable(rowsA)+'</span><span class="optB">'+flightTable(rowsB)+'</span>'):flightTable(rows))+
+
       '<p class="small" style="margin-top:22px;">Nothing here is ticketed yet. Once you are ready I hold the seats, and I book everyone\u2019s flights alongside their rooms so it is one conversation rather than five.</p>'));
   })();
 
