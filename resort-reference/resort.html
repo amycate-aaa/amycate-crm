@@ -1620,8 +1620,13 @@ function buildBuilder(){
   document.querySelectorAll('#qb input,#qb select,#qb textarea').forEach(el=>{
     el.addEventListener('input',()=>{if(el.classList.contains('d')||el.classList.contains('s')||el.classList.contains('t')||el.classList.contains('c'))el.classList.toggle('on',!!el.value.trim());saveLocal();});
     el.addEventListener('change',saveLocal);});
-  const _sp=new URLSearchParams(location.search);const url=_sp.get('q')||(_sp.get('pv')&&localStorage.getItem('ac_preview_'+SLUG))||(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]&&P.quoteLinks[_sp.get('k')].q)||'';
+  const _sp=new URLSearchParams(location.search);
+  // A library link (np=1, no quote of its own) must open clean — never with whatever
+  // quote or trip was last being built in this browser.
+  const _LIB=/^(1|true)$/i.test(_sp.get('np')||'')&&!_sp.get('q')&&!(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]);
+  const url=_sp.get('q')||(!_LIB&&_sp.get('pv')&&localStorage.getItem('ac_preview_'+SLUG))||(_sp.get('k')&&P.quoteLinks&&P.quoteLinks[_sp.get('k')]&&P.quoteLinks[_sp.get('k')].q)||'';
   if(url)applyQ(decQ(url));
+  else if(_LIB){ /* library view: nothing carried over */ }
   else{
     let had=false;
     try{const s=localStorage.getItem('ac_quote_'+SLUG);if(s){const saved=JSON.parse(s);
