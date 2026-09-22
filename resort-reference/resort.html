@@ -662,6 +662,15 @@ body.showB .optB > p{display:block;}
 .otherrooms details[open] summary::after{content:'\2013';}
 .otherrooms .osq{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep,#8A6D3B);white-space:nowrap;align-self:center;}
 .otherrooms .rcard{margin:0 0 22px;}
+
+/* the rooms you actually quoted: wide horizontal cards, photo left, details and price right */
+.price-grid.qrooms{display:block !important;max-width:1040px;margin:0 auto;}
+.price-grid.qrooms > .pcard{display:grid !important;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:stretch;max-width:none !important;margin:0 0 26px;}
+.price-grid.qrooms > .pcard:not(:has(.pic)){grid-template-columns:1fr;}
+.price-grid.qrooms > .pcard .pic{height:100%;display:flex;flex-direction:column;}
+.price-grid.qrooms > .pcard .pic img.main{flex:1 1 auto;height:100%;min-height:300px;max-height:420px;object-fit:cover;}
+.price-grid.qrooms > .pcard .b{padding:28px 32px 30px;justify-content:center;}
+@media(max-width:760px){.price-grid.qrooms > .pcard{grid-template-columns:1fr;}.price-grid.qrooms > .pcard .pic img.main{min-height:220px;max-height:280px;}}
 </style>
 </head>
 <body>
@@ -2469,7 +2478,7 @@ function renderQuote(){
           ?'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">Every room type at the resort. Tell me which appeals and I\u2019ll price it for your dates.</p>'
           :'<p class="small" style="max-width:64ch;margin:0 auto 34px;text-align:center;">The room types available. Rates are per person and include the room, all food and drink, all resort taxes and fees'+(q.xfer===false?' (airport transfers quoted separately)':', and roundtrip airport transfers')+' \u2014 tell me what suits your group and I\u2019ll price whichever categories you want.</p>'))+
       (priced
-        ? '<div class="price-grid'+(solo?' solo':'')+'">'+rows.map(r=>{
+        ? '<div class="price-grid qrooms'+(solo?' solo':'')+'">'+rows.map(r=>{
             const c=cats.find(x=>x.name===r.name)||{};
             const pics=roomPhotos(r.name,c);const img=pics[0]||'';
             const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Sleeps up to '+c.maxOccupancy:null,c.swimOut?'Swim-out':null].filter(Boolean).join(' \u00b7 ');
