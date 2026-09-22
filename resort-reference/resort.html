@@ -2495,7 +2495,7 @@ function _renderQuoteCore(){
                   (room?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(room)+'</p>':'');
               })()+
          '<p class="who">Per person</p>'+
-         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
+         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.').replace(/\s*[\u2014\u2013-]\s*(airport transfers[^<]*)$/i,(m,x)=>'<br>'+x.charAt(0).toUpperCase()+x.slice(1))+'</p>'+
          LOVE('With flights',money(q.pkgPrice),clean(q.pkgRoom)||((q.prices||[])[0]||{}).name||'')+'</div>'+
          (function(){ // the resort-only price for the same stay, side by side
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
@@ -2510,7 +2510,7 @@ function _renderQuoteCore(){
              '<p class="big">'+esc(money(pp.toFixed(0)))+'</p>'+
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person</p>'+
-             '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
+             '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?'<br>With roundtrip airport transfers':'<br>Airport transfers quoted separately')+'</p>'+
              LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'</div>':'')+
