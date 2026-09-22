@@ -722,6 +722,8 @@ body.showB .optB > p{display:block;}
 .pkgprice .roomprices .rp{display:flex;justify-content:space-between;gap:14px;padding:9px 2px;border-bottom:1px solid rgba(255,255,255,.08);font-size:15px;color:#F1E9DC;text-align:left;}
 .pkgprice .roomprices .rpn{font-family:var(--serif,Georgia,serif);font-size:17px;}
 .pkgprice .roomprices .rpv{white-space:nowrap;font-weight:500;}
+
+.pkgprice .big.bigtxt{font-size:clamp(28px,4vw,38px) !important;letter-spacing:.02em;}
 </style>
 </head>
 <body>
@@ -2514,7 +2516,7 @@ function _renderQuoteCore(){
     const stayHTML=(priced&&q.opts.example&&!q.needAir&&!TOTAL&&!GUEST)?stayTotals(q,solo):'';
     const LOVE=(opt,price,room)=>'<button type="button" class="lovebtn" onclick="loveThis(this)" data-to="'+esc(email)+'" data-resort="'+esc(R)+'" data-opt="'+esc(opt)+'" data-price="'+esc(price)+'" data-room="'+esc(room||'')+'" data-travel="'+esc(clean(q.travel)||'')+'" data-couple="'+esc(q.couple||'')+'">\u2665 Love this</button>';
     const HASPKG=!!(q.needAir&&clean(q.pkgPrice));
-    const PKGBAND=((HASPKG||(priced&&!GUEST&&!TEASER&&(q.prices||[]).some(x=>x&&x.ppn)))
+    const PKGBAND=((HASPKG||(priced&&!GUEST&&!TEASER&&(q.prices||[]).some(x=>x&&(x.ppn||x.ppnB))))
         ?(function(){
             const legs=(q.air||[]).filter(r=>r.from&&r.to)
               .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
@@ -2538,24 +2540,30 @@ function _renderQuoteCore(){
          '<p class="who">Per person</p>'+
          '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.').replace(/\s*[\u2014\u2013-]\s*(airport transfers[^<]*)$/i,(m,x)=>'<br>'+x.charAt(0).toUpperCase()+x.slice(1))+'</p>'+
          LOVE('With flights',money(q.pkgPrice),clean(q.pkgRoom)||((q.prices||[])[0]||{}).name||'')+'</div>')+
-         (function(){ // the resort-only price for the same stay, side by side
+         (function(){ // the resort-only price, per person \u2014 or for the whole room when children are in it
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
-           const perP=x=>{const t=Number(String(x.ppn||'').replace(/[^0-9.]/g,''));if(!t)return 0;return (q.basis==='total')?t/occ:(n?t*n:0);};
-           const ros=(q.prices||[]).filter(x=>x&&x.ppn).map(x=>({name:x.name,pp:perP(x),ppB:perP({ppn:x.ppnB})})).filter(x=>x.pp);
+           const KID=hasKids(q);
+           const conv=t=>KID?((q.basis==='total')?t:(n?t*n*occ:0)):((q.basis==='total')?t/occ:(n?t*n:0));
+           const val=v=>{const raw=String(v==null?'':v).trim();if(!raw)return null;const t=Number(raw.replace(/[^0-9.]/g,''));const c=t?conv(t):0;return c?{n:c}:{txt:raw};};
+           const ros=(q.prices||[]).filter(x=>x&&x.name).map(x=>({name:x.name,a:val(x.ppn),b:val(x.ppnB)})).filter(x=>x.a||x.b);
            if(!ros.length)return '';
-           ros.sort((a,b)=>a.pp-b.pp);
-           const manyR=ros.length>1, pp=ros[0].pp;
-           const bs=ros.map(x=>x.ppB).filter(Boolean);const ppB=bs.length?Math.min.apply(null,bs):0;
-           const TWOR=!!(clean(q.travelB)&&ppB);
-           const diff=Number(String(q.pkgPrice).replace(/[^0-9.]/g,''))-pp;
+           const num=o=>o&&o.n!=null?o.n:Infinity;
+           ros.sort((x,y)=>num(x.a)-num(y.a));
+           const TWOR=!!clean(q.travelB)&&ros.some(x=>x.b);
+           const lowOf=k=>{const ns=ros.map(x=>x[k]).filter(o=>o&&o.n!=null);if(ns.length)return {n:Math.min.apply(null,ns.map(o=>o.n))};const t=ros.map(x=>x[k]).find(o=>o&&o.txt);return t||null;};
+           const A=lowOf('a'),B=lowOf('b');
+           const fmt=o=>!o?'\u2014':(o.n!=null?esc(money(o.n.toFixed(0))):esc(o.txt.charAt(0).toUpperCase()+o.txt.slice(1)));
+           const swap=(a,b)=>TWOR?'<span class="optA">'+fmt(a)+'</span><span class="optB">'+fmt(b)+'</span>':fmt(a);
+           const manyR=ros.length>1;
+           const unit=KID?'Total for the room':'Per person';
            return '<div class="pkgcol pkgcol-ro"><p class="who pkgtag">'+(HASPKG?'Resort only \u2014 no flights':'Your stay')+'</p>'+
              (manyR?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
-             '<p class="big">'+(TWOR?'<span class="optA">'+esc(money(pp.toFixed(0)))+'</span><span class="optB">'+esc(money(ppB.toFixed(0)))+'</span>':esc(money(pp.toFixed(0))))+'</p>'+
-             (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
-             '<p class="who">Per person</p>'+
-             (manyR?'<div class="roomprices">'+ros.map(x=>'<div class="rp"><span class="rpn">'+esc(x.name)+'</span><span class="rpv">'+(TWOR&&x.ppB?'<span class="optA">'+esc(money(x.pp.toFixed(0)))+'</span><span class="optB">'+esc(money(x.ppB.toFixed(0)))+'</span>':esc(money(x.pp.toFixed(0))))+'</span></div>').join('')+'</div>':'')+
+             '<p class="big'+((A&&A.txt&&(!TWOR||(B&&B.txt)))?' bigtxt':'')+'">'+swap(A,B)+'</p>'+
+             (!manyR?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
+             '<p class="who">'+unit+'</p>'+(KID?'<p class="covers" style="margin-top:4px;">'+esc(whoInRoom(q))+'</p>':'')+
+             (manyR?'<div class="roomprices">'+ros.map(x=>'<div class="rp"><span class="rpn">'+esc(x.name)+'</span><span class="rpv">'+swap(x.a,x.b)+'</span></div>').join('')+'</div>':'')+
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?'<br>With roundtrip airport transfers':'<br>Airport transfers quoted separately')+'</p>'+
-             LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
+             LOVE('Resort only',(A&&A.n!=null)?money(A.n.toFixed(0))+(KID?' for the room':''):((B&&B.n!=null)?money(B.n.toFixed(0))+(KID?' for the room':''):''),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'</div>':'')+
          (HASPKG?'<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p>':'<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">Where the rate lands today \u2014 nothing is held until you book, and I reprice it the moment you are ready.</p>')+'</div>';
