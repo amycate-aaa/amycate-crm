@@ -645,6 +645,13 @@ body.showB .optB > p{display:block;}
 .qnav .inner{flex-wrap:wrap !important;overflow-x:visible !important;row-gap:0 !important;column-gap:26px !important;justify-content:center !important;padding-top:4px !important;padding-bottom:4px !important;}
 .qnav .inner>a:first-child,.qnav .inner>a:last-child{margin-left:0 !important;margin-right:0 !important;}
 .qnav a{padding:11px 0 !important;}
+
+/* flight breakdown inside the dark package panel */
+.pkgprice .pkgflights{max-width:720px;margin:0 auto;text-align:left;}
+.pkgprice .pkgflights .flighttbl{width:100%;border-collapse:collapse;color:#F1E9DC;font-size:14px;}
+.pkgprice .pkgflights .flighttbl th{color:#BFB3A0;font-weight:500;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1px solid rgba(176,141,87,.35);}
+.pkgprice .pkgflights .flighttbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.08);}
+.pkgprice .pkgflights{overflow-x:auto;}
 </style>
 </head>
 <body>
@@ -2354,6 +2361,7 @@ function renderQuote(){
       '</div>').join('')+'</div></div>');
   })();
 
+  let PKG_FLIGHTS='';
   /* 3c — FLIGHTS */
   (function(){
     if(!q.needAir)return;
@@ -2378,6 +2386,8 @@ function renderQuote(){
         (anyTm?'<td>'+esc(r.dep||'\u2014')+'</td><td>'+esc(r.arr||'\u2014')+'</td>':'')+
         '</tr>';}).join('')+'</tbody></table>';
     };
+    const _tbl=(TWO?('<span class="optA">'+flightTable(rowsA)+'</span><span class="optB">'+flightTable(rowsB)+'</span>'):flightTable(rows));
+    if(clean(q.pkgPrice)){PKG_FLIGHTS=_tbl;return;}   // shown under the package price as the breakdown
     S.push(sec('flightsec',head('Getting There','Flights')+
       '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
       (TWO?('<span class="optA">'+flightTable(rowsA)+'</span><span class="optB">'+flightTable(rowsB)+'</span>'):flightTable(rows))+
@@ -2426,6 +2436,7 @@ function renderQuote(){
              '<p class="who">Per person'+(n?', '+n+' night'+(n===1?'':'s'):'')+'</p>'+
              (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'');
          })()+
+         (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
         :'');
