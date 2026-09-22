@@ -2310,19 +2310,23 @@ function extrasBlock(){
    +'<p class="ex-fine">Ranges reflect published resort pricing across the properties I work with, current as of the last time each sheet was updated. Ask me and I\u2019ll get the exact figure from your resort.</p></div>';
 }
 function ctClean(t){
-  // Celebration Travel pages sell the resort, not a wedding: drop any sentence about weddings
+  // Celebration Travel pages sell the resort, not a wedding: drop any sentence about weddings,
+  // and any phrase that's really a venue capacity ("a private island for 1,000").
   const RE=/\b(weddings?|ceremon(?:y|ies)|gazebos?|ballrooms?|bridal|brides?|grooms?|vows?|elopements?|chuppah|officiants?|wedding packages?|packages? from|sapphire partner|reception venues?|venues? for|wedding venues?)\b/i;
-  const s=String(t||'');if(!RE.test(s))return s;
+  const CAP=/(?:\s*,\s*(?:and\s+)?|\s+(?:and|plus)\s+)(?:(?!\b(?:and|plus)\b)[^,.;\u2014])*?\bfor\s+(?:up\s+to\s+)?\d{1,2},?\d{3}\b[^,.;]*/gi;
+  let s=String(t||'');const had=CAP.test(s);CAP.lastIndex=0;
+  s=s.replace(CAP,'').replace(/\s+([,.;])/g,'$1').replace(/,\s*\./g,'.').replace(/,\s*$/,'').trim();
+  if(had)s=s.replace(/,\s+([^,]+?)([.!?]?)$/,(m,x,p)=>/\band\b/.test(x)?m:' and '+x+p);
+  if(!RE.test(s))return s;
   return s.split(/(?<=[.!?])\s+(?=[A-Z0-9"\u201c(])/).filter(x=>!RE.test(x)).join(' ').trim();
 }
-
 function renderQuote(){
   // On a Celebration Travel page, render from a copy of the resort with wedding sentences removed
   let isCT=false;
   try{const q0=collectQ();isCT=q0.brand==='ct'||/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');}catch(e){}
   if(!isCT||!P)return _renderQuoteCore.apply(this,arguments);
   const orig=P;const c=Object.assign({},P);
-  Object.keys(c).forEach(k=>{if(typeof c[k]==='string'&&c[k].length>60)c[k]=ctClean(c[k]);});
+  Object.keys(c).forEach(k=>{if(typeof c[k]==='string'&&c[k].length>15&&!/^https?:/.test(c[k]))c[k]=ctClean(c[k]);});
   P=c;try{return _renderQuoteCore.apply(this,arguments);}finally{P=orig;}
 }
 function _renderQuoteCore(){
