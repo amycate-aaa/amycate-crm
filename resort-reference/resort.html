@@ -1348,6 +1348,8 @@ function mqPasteAll(){const raw=tiNormalize($id('mq-paste').value||'');const msg
   if(ci&&co){const a=pd(ci[1]),b=pd(co[1]);if(a&&b){$id('mq-from').value=a;$id('mq-to').value=b;mqDates('to');}}
   // hotels
   const hotels=mqParseHotels(raw);const nights=parseInt($id('mq-nights').value,10)||0;
+  // TI and DestiWorld both price the whole room for the whole stay — read resort prices the same way
+  if(hotels.length&&$id('mq-basis')){$id('mq-basis').value='total';}
   // keep existing filled rows; drop empty placeholder rows
   [...document.querySelectorAll('.mq-row')].forEach(r=>{if(!r.querySelector('.mq-resort').value)r.remove();});const missed=[];
   const HAS_AIR=(parseAirText(raw)||[]).length>0;if(!HAS_AIR&&hotels.some(h=>h.total)){const b=$id('mq-basis');if(b){b.value='total';}}
@@ -1368,6 +1370,7 @@ function mqPasteAll(){const raw=tiNormalize($id('mq-paste').value||'');const msg
       msg.parentNode.insertBefore(box,msg.nextSibling);}
     box.textContent='No hotels read \u2014 copy everything in this grey box and send it to Claude:\n\n'+show.join('\n')+'\n\n[codes] '+codes+'\n[lines] '+L.length;
   }catch(e){}}else{const b=$id('mq-debug');if(b)b.remove();}
+  try{document.querySelectorAll('.mq-price').forEach(mqPriceHint);}catch(e){}
   $id('mq-paste').value='';mqSave();
   const incomplete=[...document.querySelectorAll('.mq-resort')].map(x=>window.LIB[x.value]).filter(l=>l&&!l.ready).map(l=>l.name);
   msg.textContent=hotels.length+' hotel'+(hotels.length===1?'':'s')+' found'+(hotels.length?' \u2014 '+(hotels.length-missed.length)+' matched to your library':'')+(missed.length?'. Not in library: '+missed.join('; '):'')+(air.length?' \u00b7 '+air.length+' flights':'')+(incomplete.length?'. \u26a0 Guide not complete: '+incomplete.join('; '):'')+'. Package totals are for all travelers ('+adults+' adults) \u2014 per person is shown under each. Check, then Create.';}
