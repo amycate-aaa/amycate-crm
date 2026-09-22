@@ -694,6 +694,12 @@ body.showB .optB > p{display:block;}
 /* identical treatment in both columns */
 .pkgprice .pkgcol .big,.pkgprice .pkgcol-ro .big{font-size:clamp(46px,7vw,72px) !important;}
 .pkgprice .pkgcol .covers{font-size:15px !important;}
+
+.lovebtn{margin-top:auto;padding:12px 26px;margin-top:22px;border:1px solid var(--gold,#B08D57);background:transparent;color:#F7F2E9;font-family:var(--sans);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;transition:.2s;}
+.lovebtn:hover{background:var(--gold,#B08D57);color:#fff;}
+.lovebtn.sent{background:var(--gold,#B08D57);color:#fff;}
+.pkgprice .pkgcol .lovebtn{margin-top:auto;}
+.pkgprice .pkgcol{padding-bottom:10px;}
 </style>
 </head>
 <body>
@@ -2452,6 +2458,7 @@ function renderQuote(){
     const cats=allCatsRaw;
     const solo=rows.length===1&&!q.needAir;
     const stayHTML=(priced&&q.opts.example&&!q.needAir&&!TOTAL&&!GUEST)?stayTotals(q,solo):'';
+    const LOVE=(opt,price,room)=>'<button type="button" class="lovebtn" onclick="loveThis(this)" data-to="'+esc(email)+'" data-resort="'+esc(R)+'" data-opt="'+esc(opt)+'" data-price="'+esc(price)+'" data-room="'+esc(room||'')+'" data-travel="'+esc(clean(q.travel)||'')+'" data-couple="'+esc(q.couple||'')+'">\u2665 Love this</button>';
     const PKGBAND=((q.needAir&&clean(q.pkgPrice))
         ?(function(){
             const legs=(q.air||[]).filter(r=>r.from&&r.to)
@@ -2472,7 +2479,8 @@ function renderQuote(){
                   (room?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(room)+'</p>':'');
               })()+
          '<p class="who">Per person</p>'+
-         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p></div>'+
+         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
+         LOVE('With flights',money(q.pkgPrice),clean(q.pkgRoom)||((q.prices||[])[0]||{}).name||'')+'</div>'+
          (function(){ // the resort-only price for the same stay, side by side
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
            const perP=x=>{const t=Number(String(x.ppn||'').replace(/[^0-9.]/g,''));if(!t)return 0;return (q.basis==='total')?t/occ:(n?t*n:0);};
@@ -2487,7 +2495,7 @@ function renderQuote(){
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person</p>'+
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
-             (diff>0?'<p class="covers" style="margin-top:6px;opacity:.85;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+'</div>';
+             (diff>0?'<p class="covers" style="margin-top:6px;opacity:.85;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
@@ -3151,6 +3159,16 @@ function whoInRoom(q){
   return (W[a]||a)+' adult'+(a===1?'':'s')+' and '+(W[k]||k)+' child'+(k===1?'':'ren')+ageTxt;
 }
 function hasKids(q){return (parseInt(q.kids,10)||0)>0;}
+function loveThis(btn){
+  const d=btn.dataset;const who=(function(){try{return localStorage.getItem('ac_who')||'';}catch(e){return '';}})();
+  try{db.collection('libraryInterest').add({at:new Date().toISOString(),kind:'love',resort:SLUG,resortName:d.resort||'',
+    option:d.opt||'',price:d.price||'',room:d.room||'',travel:d.travel||'',couple:d.couple||'',sentTo:who,
+    page:location.href.slice(0,300)});}catch(e){}
+  const subj='Love this \u2014 '+(d.resort||'')+(d.opt?' ('+d.opt+')':'');
+  const body='Hi Amy,\n\nWe love this one:\n\n'+(d.resort||'')+'\n'+(d.opt||'')+(d.room?' \u2014 '+d.room:'')+'\n'+(d.price?d.price+' per person\n':'')+(d.travel?d.travel+'\n':'')+'\nCan we talk about next steps?\n\n'+(d.couple||'');
+  btn.textContent='\u2665 Sent to Amy';btn.classList.add('sent');
+  location.href='mailto:'+encodeURIComponent(d.to||'')+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+}
 function stayTotals(q,compact){
   const r=q.prices.find(x=>num(x.ppn));
   if(!r)return'';
