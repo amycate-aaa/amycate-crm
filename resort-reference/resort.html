@@ -652,6 +652,16 @@ body.showB .optB > p{display:block;}
 .pkgprice .pkgflights .flighttbl th{color:#BFB3A0;font-weight:500;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;text-align:left;padding:8px 10px;border-bottom:1px solid rgba(176,141,87,.35);}
 .pkgprice .pkgflights .flighttbl td{padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.08);}
 .pkgprice .pkgflights{overflow-x:auto;}
+
+/* other rooms on a quote: a list of names that opens on tap */
+.otherrooms{border-top:1px solid var(--sand-deep,#E4D8C6);max-width:900px;margin:0 auto;}
+.otherrooms details.orow{border-bottom:1px solid var(--sand-deep,#E4D8C6);}
+.otherrooms summary{list-style:none;cursor:pointer;padding:15px 34px 15px 4px;font-family:var(--serif,Georgia,serif);font-size:17px;color:var(--espresso);position:relative;display:flex;justify-content:space-between;gap:14px;}
+.otherrooms summary::-webkit-details-marker{display:none;}
+.otherrooms summary::after{content:'+';position:absolute;right:6px;top:12px;font-family:var(--sans);font-size:20px;color:var(--gold);}
+.otherrooms details[open] summary::after{content:'\2013';}
+.otherrooms .osq{font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep,#8A6D3B);white-space:nowrap;align-self:center;}
+.otherrooms .rcard{margin:0 0 22px;}
 </style>
 </head>
 <body>
@@ -2500,8 +2510,8 @@ function renderQuote(){
               '</div></div>';}).join('')+'</div>')+
       (solo?'':stayHTML)+
       (function(){if(!priced)return '';const named=new Set(rows.map(r=>String(r.name||'').toLowerCase().trim()));const others=cats.filter(c=>c&&c.name&&!named.has(String(c.name).toLowerCase().trim()));if(!others.length)return '';
-        return '<p class="eyebrow" style="margin:44px 0 14px;">The other rooms here</p><p class="small" style="max-width:64ch;margin:0 0 22px;">Priced above is what I quoted. These are the rest of the categories at the resort \u2014 say the word and I price any of them.</p><div class="room-grid">'+others.map(c=>{const img=[c.photo,c.photoUrl].find(photoOk)||'';const pics=[...new Set([img].concat(Array.isArray(c.photos)?c.photos:[]).filter(photoOk))];const gal=pics.length>1?'<div class="thumbs">'+pics.slice(0,6).map((u,i)=>'<img src="'+esc(u)+'" alt="" loading="lazy"'+(i===0?' class="on"':'')+' onclick="swapRoomPic(this)">').join('')+'</div>':'';const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Up to '+c.maxOccupancy+' guests':null,clean(c.view),c.swimOut?'Swim-out':null].filter(Boolean);
-          return '<div class="rcard'+(gal?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(c.name)+'" loading="lazy">'+gal+'</div>':'')+'<div class="rbody"><h4>'+esc(c.name)+'</h4>'+(clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div>';}).join('')+'</div>';})()+
+        return '<p class="eyebrow" style="margin:44px 0 14px;">The other rooms here</p><p class="small" style="max-width:64ch;margin:0 0 22px;">Priced above is what I quoted. Here are the rest of the categories \u2014 tap one to see it, and say the word if you want it priced.</p><div class="otherrooms">'+others.map(c=>{const img=[c.photo,c.photoUrl].find(photoOk)||'';const pics=[...new Set([img].concat(Array.isArray(c.photos)?c.photos:[]).filter(photoOk))];const gal=pics.length>1?'<div class="thumbs">'+pics.slice(0,6).map((u,i)=>'<img src="'+esc(u)+'" alt="" loading="lazy"'+(i===0?' class="on"':'')+' onclick="swapRoomPic(this)">').join('')+'</div>':'';const pills=[c.sqft?c.sqft+' sq ft':null,c.maxOccupancy?'Up to '+c.maxOccupancy+' guests':null,clean(c.view),c.swimOut?'Swim-out':null].filter(Boolean);
+          return '<details class="orow"><summary>'+esc(c.name)+(c.sqft?'<span class="osq">'+esc(c.sqft)+' sq ft</span>':'')+'</summary><div class="rcard'+(gal?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(c.name)+'" loading="lazy">'+gal+'</div>':'')+'<div class="rbody">'+(clean(c.description)?'<p>'+esc(clean(c.description))+'</p>':'')+(pills.length?'<div class="rpills">'+pills.map(p=>'<span class="rpill">'+esc(p)+'</span>').join('')+'</div>':'')+'</div></div></details>';}).join('')+'</div>';})()+
 
       (GUEST?(function(){
           const terms=[];
