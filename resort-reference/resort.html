@@ -671,6 +671,16 @@ body.showB .optB > p{display:block;}
 .price-grid.qrooms > .pcard .pic img.main{flex:1 1 auto;height:100%;min-height:300px;max-height:420px;object-fit:cover;}
 .price-grid.qrooms > .pcard .b{padding:28px 32px 30px;justify-content:center;}
 @media(max-width:760px){.price-grid.qrooms > .pcard{grid-template-columns:1fr;}.price-grid.qrooms > .pcard .pic img.main{min-height:220px;max-height:280px;}}
+
+/* package vs resort-only: two columns with a rule between */
+.pkgprice .pkgcols{display:grid;grid-template-columns:1fr;gap:0;max-width:880px;margin:0 auto;}
+.pkgprice .pkgcols:has(.pkgcol-ro){grid-template-columns:1fr 1fr;}
+.pkgprice .pkgcol{padding:6px 28px;text-align:center;}
+.pkgprice .pkgcol-ro{border-left:1px solid rgba(176,141,87,.45);}
+.pkgprice .pkgcol-ro .big{font-size:inherit;}
+.pkgprice .pkgtag{letter-spacing:.2em;margin:0 0 10px !important;color:var(--gold,#B08D57) !important;}
+@media(max-width:700px){.pkgprice .pkgcols:has(.pkgcol-ro){grid-template-columns:1fr;}
+ .pkgprice .pkgcol-ro{border-left:none;border-top:1px solid rgba(176,141,87,.45);margin-top:22px;padding-top:24px;}}
 </style>
 </head>
 <body>
@@ -2437,6 +2447,7 @@ function renderQuote(){
             return '<div class="pkgprice">'+
               (when?'<p class="when">'+esc(when)+'</p>':'')+
               (when?'<hr class="hr">':'')+
+              '<div class="pkgcols"><div class="pkgcol"><p class="who pkgtag">With flights</p>'+
               (function(){
                 const rs=(q.prices||[]).filter(x=>x&&x.name);
                 const pk=rs.map(x=>Number(String(x.pkg||'').replace(/[^0-9.]/g,''))).filter(Boolean);
@@ -2448,7 +2459,7 @@ function renderQuote(){
                   (room?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(room)+'</p>':'');
               })()+
          '<p class="who">Per person</p>'+
-         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
+         '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p></div>'+
          (function(){ // the resort-only price for the same stay, side by side
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
            const perP=x=>{const t=Number(String(x.ppn||'').replace(/[^0-9.]/g,''));if(!t)return 0;return (q.basis==='total')?t/occ:(n?t*n:0);};
@@ -2457,13 +2468,13 @@ function renderQuote(){
            ros.sort((a,b)=>a.pp-b.pp);
            const manyR=ros.length>1, pp=ros[0].pp;
            const diff=Number(String(q.pkgPrice).replace(/[^0-9.]/g,''))-pp;
-           return '<hr class="hr" style="margin-top:26px;">'+
-             '<p class="who" style="margin-top:22px;">Resort only \u2014 no flights'+(manyR?' \u00b7 starting at':'')+'</p>'+
-             '<p class="big" style="font-size:clamp(34px,5vw,46px);">'+esc(money(pp.toFixed(0)))+'</p>'+
+           return '<div class="pkgcol pkgcol-ro"><p class="who pkgtag">Resort only \u2014 no flights</p>'+
+             (manyR?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
+             '<p class="big">'+esc(money(pp.toFixed(0)))+'</p>'+
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:17px;color:#F1E9DC;margin:4px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person'+(n?', '+n+' night'+(n===1?'':'s'):'')+'</p>'+
-             (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'');
-         })()+
+             (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+'</div>';
+         })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
