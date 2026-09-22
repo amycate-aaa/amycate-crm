@@ -2309,7 +2309,23 @@ function extrasBlock(){
    +'<table><tbody>'+E.map(function(r){return '<tr><td class="ex-n">'+r[0]+'</td><td class="ex-p">'+r[1]+'</td><td class="ex-d">'+r[2]+'</td></tr>';}).join('')+'</tbody></table>'
    +'<p class="ex-fine">Ranges reflect published resort pricing across the properties I work with, current as of the last time each sheet was updated. Ask me and I\u2019ll get the exact figure from your resort.</p></div>';
 }
+function ctClean(t){
+  // Celebration Travel pages sell the resort, not a wedding: drop any sentence about weddings
+  const RE=/\b(weddings?|ceremon(?:y|ies)|gazebos?|ballrooms?|bridal|brides?|grooms?|vows?|elopements?|chuppah|officiants?|wedding packages?|packages? from|sapphire partner|reception venues?|venues? for|wedding venues?)\b/i;
+  const s=String(t||'');if(!RE.test(s))return s;
+  return s.split(/(?<=[.!?])\s+(?=[A-Z0-9"\u201c(])/).filter(x=>!RE.test(x)).join(' ').trim();
+}
+
 function renderQuote(){
+  // On a Celebration Travel page, render from a copy of the resort with wedding sentences removed
+  let isCT=false;
+  try{const q0=collectQ();isCT=q0.brand==='ct'||/^(1|true|ct)$/i.test(new URLSearchParams(location.search).get('ct')||'');}catch(e){}
+  if(!isCT||!P)return _renderQuoteCore.apply(this,arguments);
+  const orig=P;const c=Object.assign({},P);
+  Object.keys(c).forEach(k=>{if(typeof c[k]==='string'&&c[k].length>60)c[k]=ctClean(c[k]);});
+  P=c;try{return _renderQuoteCore.apply(this,arguments);}finally{P=orig;}
+}
+function _renderQuoteCore(){
   const q=collectQ();saveLocal();
   const R=P.name||P.resortName||'';
   try{window.QUOTE_COUPLE=q.couple||'';}catch(e){}
