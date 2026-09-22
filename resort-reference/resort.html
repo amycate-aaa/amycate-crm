@@ -2501,7 +2501,7 @@ function renderQuote(){
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
         :'');
-    ROOMS=sec('',head(GUEST?'Your Booking':'Your Guests',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
+    ROOMS=sec('',head(GUEST?'Your Booking':'',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
       PKGBAND+
       (priced
         ?(q.needAir
