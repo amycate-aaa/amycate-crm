@@ -1220,7 +1220,7 @@ function mqAirBlocks(){const dests=[...new Set([...document.querySelectorAll('.m
 function mqAirPreview(ta,keepEdits){
   const p=ta.parentNode.querySelector('.mq-air-prev');
   if(!ta.value.trim()&&!(keepEdits&&keepEdits.length)){p.innerHTML='';return;}
-  const rows=(keepEdits&&keepEdits.length)?keepEdits:parseAirText(ta.value,($id('mq-from').value||'').slice(0,4));
+  const rows=(keepEdits&&keepEdits.length)?keepEdits:parseAirText(tiNormalize(ta.value),($id('mq-from').value||'').slice(0,4));
   if(!rows.length){p.textContent='No flight numbers found yet.';return;}
   const cell=(c,v,w)=>'<td><input class="qb-in mqa-'+c+'" value="'+esc(v||'')+'" style="width:'+w+'px;padding:5px 7px;font-size:13px;" oninput="mqSave()"></td>';
   p.innerHTML='<div style="overflow-x:auto;margin-top:6px;"><table class="airrows mq-airtbl" style="font-size:13px;"><thead><tr>'
@@ -1307,12 +1307,20 @@ function mqBestSlug(name){const A=mqTokens(name);const brands=[...A].filter(w=>!
 function mqBestRoom(slug,room){const rooms=(window.LIB[slug]||{}).rooms||[];if(!rooms.length)return '';const A=mqTokens(room);let best='',score=0;rooms.forEach(r=>{const B=mqTokens(r);let hit=0;A.forEach(w=>{if(B.has(w))hit++;});const sc=hit/Math.max(1,A.size);if(sc>score){score=sc;best=r;}});return score>=0.5?best:'';}
 function mqCleanName(name){return String(name||'').replace(/\s*[-\u2013|]\s*(all[- ]?inclusive|adults?[- ]?only|an all[- ]inclusive experience|all inclusive resort|resort & spa|resort and spa)\s*/gi,' ').replace(/\b(suites?|resort|hotel|golf|&|and|spa|casino|beach club|all[- ]?inclusive|adults?[- ]?only|an autograph collection)\b/gi,' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
 function tiNormalize(raw){
-  const L=String(raw||'').replace(/\r/g,'').split('\n');const out=[];
-  for(let i=0;i<L.length;i++){const t=L[i].trim();
+  // TI arrives in two shapes: one label per line, or everything on one line split by double spaces.
+  // Break double-spaced pieces onto their own lines (never tabs \u2014 DestiWorld uses those for columns),
+  // then join a bare label with the value that follows it.
+  const pre=String(raw||'').replace(/\r/g,'').split('\n').flatMap(l=>l.split(/ {2,}/));
+  const out=[];
+  for(let i=0;i<pre.length;i++){const t=pre[i].trim();
+    let m=t.match(/^(room #\d+|check-?in date|check-?out date)\s+(?!:)(.+)$/i);
+    if(m){out.push(m[1]+': '+m[2].trim());continue;}
+    m=t.match(/^from\s+(\$[\d,]+(?:\.\d+)?)(.*)$/i);
+    if(m){out.push('From: '+m[1]);if(m[2].trim())out.push(m[2].trim());continue;}
     if(/^(room #\d+|from|check-?in date|check-?out date|depart|arrival)\s*:?\s*$/i.test(t)){
-      let j=i+1;while(j<L.length&&!L[j].trim())j++;
-      if(j<L.length){out.push(t.replace(/\s*:?\s*$/,'')+': '+L[j].trim());i=j;continue;}}
-    out.push(L[i]);}
+      let j=i+1;while(j<pre.length&&!pre[j].trim())j++;
+      if(j<pre.length){out.push(t.replace(/\s*:?\s*$/,'')+': '+pre[j].trim());i=j;continue;}}
+    out.push(pre[i]);}
   return out.join('\n');}
 function mqParseHotels(raw){raw=tiNormalize(raw);const L=raw.replace(/\r/g,'').replace(/\[([^\]]*)\]\((https?:[^)]*)\)/g,'$1').split('\n').map(x=>x.trim()).filter(x=>!/^(view hotel details|see more|select|read more|sort by:)/i.test(x));const out=[];
   // Travel Impressions: name line, ..., "Room #1: X", "From $N"
