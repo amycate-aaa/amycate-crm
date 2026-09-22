@@ -1310,7 +1310,7 @@ function tiNormalize(raw){
   // TI arrives in two shapes: one label per line, or everything on one line split by double spaces.
   // Break double-spaced pieces onto their own lines (never tabs \u2014 DestiWorld uses those for columns),
   // then join a bare label with the value that follows it.
-  const pre=String(raw||'').replace(/\r/g,'').split('\n').flatMap(l=>l.split(/ {2,}/));
+  const pre=String(raw||'').replace(/\r/g,'').replace(/[\u00a0\u2007\u202f\u2009\u200a]/g,' ').split('\n').flatMap(l=>l.split(/ {2,}/));
   const out=[];
   for(let i=0;i<pre.length;i++){const t=pre[i].trim();
     let m=t.match(/^(room #\d+|check-?in date|check-?out date)\s+(?!:)(.+)$/i);
