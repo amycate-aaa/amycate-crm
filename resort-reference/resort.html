@@ -1090,9 +1090,10 @@ function collapseRooms(root,limit){
     if(g.dataset.collapsed)return;
     var kids=[].slice.call(g.children).filter(function(el){return !el.classList.contains('rooms-more')&&!el.classList.contains('rooms-names');});
     var sec=g.closest('section');
-    var isVenues=!!(sec&&/Where You Say It|Ceremony & Reception Venues/i.test(sec.textContent.slice(0,300)));
-    var isRooms=isVenues||g.classList.contains('room-grid')||g.classList.contains('price-grid')||
-      (g.classList.contains('dinelist')&&sec&&/room/i.test(sec.textContent.slice(0,400)));
+    var _h=(sec&&sec.querySelector('h2.display'))?sec.querySelector('h2.display').textContent:'';
+    var isVenues=/Ceremony & Reception Venues/i.test(_h);
+    // go by the section heading, never by words that happen to appear in it (e.g. "room service" in dining)
+    var isRooms=isVenues||/Rooms & Suites|Accommodations & Pricing|Your Room/i.test(_h);
     if(!isRooms||kids.length<=limit+1)return;
     g.dataset.collapsed='1';
     var label=isVenues?'venues':'room categories';
