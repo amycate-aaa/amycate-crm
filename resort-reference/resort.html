@@ -640,6 +640,11 @@ body.showB .optB > p{display:block;}
 /* but never inside a card, a table or a list */
 #quote-page .pcard p,#quote-page .rcard p,#quote-page .bl p,#quote-page .d p,
 #quote-page table p,#quote-page li,#quote-page .offer p{text-align:left !important;max-width:none !important;}
+
+/* section menu wraps onto a second row instead of running off the side */
+.qnav .inner{flex-wrap:wrap !important;overflow-x:visible !important;row-gap:0 !important;column-gap:26px !important;justify-content:center !important;padding-top:4px !important;padding-bottom:4px !important;}
+.qnav .inner>a:first-child,.qnav .inner>a:last-child{margin-left:0 !important;margin-right:0 !important;}
+.qnav a{padding:11px 0 !important;}
 </style>
 </head>
 <body>
