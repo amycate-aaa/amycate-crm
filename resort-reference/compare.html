@@ -43,6 +43,9 @@ tbody th{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(
 .empty{padding:80px 0;text-align:center;font-family:var(--serif);font-size:1.4rem;color:var(--gold-soft);}
 @media print{.btn{display:none;}body{font-size:12px;}th,td{padding:8px 10px;}}
 @media(max-width:820px){table{display:block;overflow-x:auto;white-space:normal;}th,td{min-width:220px;}thead th.lbl,tbody th{min-width:130px;width:130px;}}
+.lovebtn{display:block;margin-top:10px;padding:10px 18px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-family:var(--sans);font-size:11px;letter-spacing:.24em;text-transform:uppercase;cursor:pointer;}
+.lovebtn:hover,.lovebtn.sent{background:var(--gold);color:#fff;}
+@media print{.lovebtn{display:none;}}
 </style>
 </head>
 <body>
@@ -64,6 +67,18 @@ const arr=v=>Array.isArray(v)?v:[];const txt=v=>String(v||'').trim();
 function firstSentence(s,max){s=txt(s);if(!s)return'';const m=s.match(/^(.+?[.!?])(\s|$)/);let out=m?m[1]:s;if(out.length>max)out=out.slice(0,max-1).replace(/\s+\S*$/,'')+'…';return out;}
 function poolsCell(p){const pools=arr(p.pools);if(!pools.length)return'<span class="dim">—</span>';const names=pools.map(x=>(x.name||'').toLowerCase()).join(' ');const flags=[];if(/water ?park|slide/.test(names))flags.push('water park');if(/lazy river/.test(names))flags.push('lazy river');if(/swim-?out|swim ?up/.test(names))flags.push('swim-out rooms');if(/adult|quiet|preferred|club|vantage|privilege|platinum/.test(names))flags.push('adults / club pool');return pools.length+' pool'+(pools.length>1?'s':'')+(flags.length?'<br><span class="yes">'+flags.join(' · ')+'</span>':'');}
 function venueCell(p){const v=arr(p.venues).filter(x=>x&&x.name);if(!v.length)return'<span class="dim">ask</span>';const cap=Math.max(0,...v.map(x=>+x.capacity||0));return v.length+' venue'+(v.length>1?'s':'')+(cap?'<br>largest '+cap+' guests':'')+(p.weddingsPerDay?'<br>'+esc(p.weddingsPerDay)+' wedding'+(String(p.weddingsPerDay)==='1'?'':'s')+' a day':'');}
+function loveThis(btn){
+  const d=btn.dataset;let who='';try{who=localStorage.getItem('ac_who')||'';}catch(e){}
+  try{db.collection('libraryInterest').add({at:new Date().toISOString(),kind:'love',resort:d.slug||'',resortName:d.resort||'',
+    option:'Compare page',price:d.price||'',travel:d.travel||'',couple:d.couple||'',sentTo:who,page:location.href.slice(0,300)});}catch(e){}
+  const subj='Love this \u2014 '+(d.resort||'');
+  const body='Hi Amy,\n\nOut of the shortlist, we love this one:\n\n'+(d.resort||'')+(d.price?'\n'+d.price:'')+(d.travel?'\n'+d.travel:'')+'\n\nCan we talk about next steps?\n\n'+(d.couple||'');
+  document.querySelectorAll('.lovebtn[data-slug="'+(d.slug||'')+'"]').forEach(b=>{b.textContent='\u2665 Sent to Amy';b.classList.add('sent');});
+  location.href='mailto:'+encodeURIComponent(d.to||'')+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+}
+function loveBtn(c,ct){const q=c.q||{};const pr=arr(q.prices).filter(r=>r&&r.ppn);
+  const price=q.pkgPrice?('$'+q.pkgPrice+' per person with flights'):(pr[0]?('$'+pr[0].ppn+' \u2014 '+pr[0].name):'');
+  return '<button type="button" class="lovebtn" onclick="loveThis(this)" data-to="'+(ct?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com')+'" data-slug="'+esc(c.slug)+'" data-resort="'+esc(c.p.name||c.slug)+'" data-price="'+esc(price)+'" data-travel="'+esc(q.travel||'')+'" data-couple="'+esc(q.couple||'')+'">\u2665 Love this</button>';}
 function priceCell(q){if(!q)return'<span class="dim">not priced yet</span>';const pr=arr(q.prices).filter(r=>r&&r.ppn);if(!pr.length&&!q.pkgPrice)return'<span class="dim">not priced yet</span>';const per=q.priced&&/total/i.test(q.priced)?'total for the room':'per person, per night';const rows=pr.slice(0,3).map(r=>'<div class="price">$'+esc(r.ppn)+'<small>'+esc(r.name)+' · '+per+'</small></div>').join('');const pkg=q.pkgPrice?'<div class="price">$'+esc(q.pkgPrice)+'<small>with flights, per person'+(q.pkgCovers?' · '+esc(q.pkgCovers):'')+'</small></div>':'';return rows+pkg+(pr.length>3?'<span class="dim">+'+(pr.length-3)+' more on the quote</span>':'');}
 function kidsCell(p){if(/adult/i.test(txt(p.agePolicy)))return'<span class="dim">adults only</span>';return txt(p.kidsInfo)?'<span class="yes">yes</span> — '+esc(firstSentence(p.kidsInfo,110)):'<span class="dim">ask</span>';}
 async function run(){
@@ -75,7 +90,7 @@ async function run(){
   if(q0.couple)$('ttl').textContent=q0.couple;
   const travel=cols.map(c=>c.q&&c.q.travel).filter(Boolean);const same=travel.length&&travel.every(t=>t===travel[0]);
   $('sub').textContent=cols.length===1?'One resort':(cols.length===2?'Two':cols.length===3?'Three':cols.length)+' resorts, side by side'+(same?' — '+travel[0]:'');
-  const head='<thead><tr><th class="lbl"></th>'+cols.map(c=>{const p=c.p;const img=p.heroPhoto||arr(p.photos)[0]||'';const link=guideBase+'?r='+c.slug+(c.key?'&quote=true&k='+c.key:'');return'<th>'+(img?'<img class="thumb" src="'+esc(img)+'" alt="">':'')+'<div class="rname">'+esc(p.name||c.slug)+'</div><div class="rwhere">'+esc((p.destination||'').replace(/,\s*/g,', '))+'</div><a class="btn" href="'+esc(link)+'">'+(c.key?'See the quote':'See the guide')+' →</a></th>';}).join('')+'</tr></thead>';
+  const head='<thead><tr><th class="lbl"></th>'+cols.map(c=>{const p=c.p;const img=p.heroPhoto||arr(p.photos)[0]||'';const link=guideBase+'?r='+c.slug+(c.key?'&quote=true&k='+c.key:'');return'<th>'+(img?'<img class="thumb" src="'+esc(img)+'" alt="">':'')+'<div class="rname">'+esc(p.name||c.slug)+'</div><div class="rwhere">'+esc((p.destination||'').replace(/,\s*/g,', '))+'</div><a class="btn" href="'+esc(link)+'">'+(c.key?'See the quote':'See the guide')+' →</a>'+loveBtn(c,ct)+'</th>';}).join('')+'</tr></thead>';
   const rowsDef=[
     ['Price',c=>priceCell(c.q)],
     ['Who it\u2019s for',c=>esc(txt(c.p.agePolicy)||'—')+(c.p.stars?'<br>'+esc(c.p.stars)+' stars':'')+(c.p.totalRooms?'<br>'+esc(c.p.totalRooms)+' rooms':'')],
@@ -89,6 +104,7 @@ async function run(){
     ['Spa',c=>txt(c.p.spaInfo)?esc(firstSentence(c.p.spaInfo,110)):'<span class="dim">—</span>'],
   ];
   if(!ct)rowsDef.push(['Weddings',c=>venueCell(c.p)],['Packages',c=>{const k=arr(c.p.packages).length;return k?k+' package'+(k>1?'s':'')+(arr(c.p.packages).some(x=>/complimentary|free/i.test(x.price||''))?'<br><span class="yes">one complimentary</span>':''):'<span class="dim">ask</span>';}]);
+  rowsDef.push(['',c=>loveBtn(c,ct)]);
   const body='<tbody>'+rowsDef.map(([lbl,fn])=>'<tr><th>'+esc(lbl)+'</th>'+cols.map(c=>'<td>'+fn(c)+'</td>').join('')+'</tr>').join('')+'</tbody>';
   $('out').innerHTML='<table>'+head+body+'</table>';
   $('foot').textContent='Each name opens the full page. Nothing is held and there is nothing to decide today \u2014 reply to the email or grab a time when you\u2019re ready. \u2014 Amy';
