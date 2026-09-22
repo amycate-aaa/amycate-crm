@@ -2437,7 +2437,7 @@ function renderQuote(){
     const _tbl=(TWO?('<span class="optA">'+flightTable(rowsA)+'</span><span class="optB">'+flightTable(rowsB)+'</span>'):flightTable(rows));
     if(clean(q.pkgPrice)){PKG_FLIGHTS=_tbl;return;}   // shown under the package price as the breakdown
     S.push(sec('flightsec',head('Getting There','Flights')+
-      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg. Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p>'+
+      '<p class="small" style="max-width:64ch;margin:0 0 10px;">Here is the routing, leg by leg.</p>'+
       (TWO?('<span class="optA">'+flightTable(rowsA)+'</span><span class="optB">'+flightTable(rowsB)+'</span>'):flightTable(rows))+
 
       '<p class="small" style="margin-top:22px;">Nothing here is ticketed yet. Once you are ready I hold the seats, and I book everyone\u2019s flights alongside their rooms so it is one conversation rather than five.</p>'));
@@ -2497,7 +2497,7 @@ function renderQuote(){
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
              LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
-         (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
+         (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'</div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
           })()
         :'');
