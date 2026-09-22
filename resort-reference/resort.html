@@ -700,6 +700,11 @@ body.showB .optB > p{display:block;}
 .lovebtn.sent{background:var(--gold,#B08D57);color:#fff;}
 .pkgprice .pkgcol .lovebtn{margin-top:auto;}
 .pkgprice .pkgcol{padding-bottom:10px;}
+
+/* date tabs inside the dark price panel */
+.dateopt-in{max-width:560px;margin:0 auto 30px !important;background:rgba(255,255,255,.04) !important;}
+.dateopt-in .dopt{padding:14px 16px;font-size:12.5px;}
+#quote-page section > .wrap > .dateopt-in{margin:0 auto 34px !important;background:#3A332B !important;}
 </style>
 </head>
 <body>
@@ -2477,14 +2482,10 @@ function _renderQuoteCore(){
   /* 6d — TWO DATE OPTIONS */
   if((q.travelB||'').trim()){
     const a=esc(q.travel||'Option A'), b=esc(q.travelB);
-    DATEOPT=('<div class="dateopt"><div class="c">'
-      +'<p class="eyebrow">Two sets of dates</p>'
-      +'<h2 class="display">Which week suits you?</h2>'
-      +'<p class="small" style="max-width:60ch;margin:10px auto 0;text-align:center;">Prices and flights change with the dates, so here is each one in full. Tap to switch.</p>'
-      +'<div class="dateopt-bar">'
+    DATEOPT=('<div class="dateopt-bar dateopt-in">'
       +'<button type="button" class="dopt on" data-opt="a">'+a+'</button>'
       +'<button type="button" class="dopt" data-opt="b">'+b+'</button>'
-      +'</div></div></div>');
+      +'</div>');
   }
   const rows=priced
     ? (q.prices.length ? q.prices.slice()
@@ -2501,17 +2502,19 @@ function _renderQuoteCore(){
               .map(r=>'<span>'+esc(r.from)+' \u2192 '+esc(r.to)+'</span>').join(' &nbsp;&middot;&nbsp; ');
             const when=clean(q.travel);
             return '<div class="pkgprice">'+
-              (when?'<p class="when">'+esc(when)+'</p>':'')+
-              (when?'<hr class="hr">':'')+
+              (DATEOPT?DATEOPT:(when?'<p class="when">'+esc(when)+'</p><hr class="hr">':''))+
               '<div class="pkgcols"><div class="pkgcol"><p class="who pkgtag">With flights</p>'+
               (function(){
                 const rs=(q.prices||[]).filter(x=>x&&x.name);
                 const pk=rs.map(x=>Number(String(x.pkg||'').replace(/[^0-9.]/g,''))).filter(Boolean);
                 const many=rs.length>1;
                 const low=pk.length?Math.min.apply(null,pk):Number(String(q.pkgPrice).replace(/[^0-9.]/g,''));
+                const pkB=rs.map(x=>Number(String(x.pkgB||'').replace(/[^0-9.]/g,''))).filter(Boolean);
+                const lowB=pkB.length?Math.min.apply(null,pkB):0;
+                const TWOD=!!(clean(q.travelB)&&lowB);
                 const room=many?'':(clean(q.pkgRoom)||(rs[0]&&rs[0].name)||'');
                 return (many?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
-                  '<p class="big">'+esc(money(low||q.pkgPrice))+'</p>'+
+                  '<p class="big">'+(TWOD?'<span class="optA">'+esc(money(low||q.pkgPrice))+'</span><span class="optB">'+esc(money(lowB))+'</span>':esc(money(low||q.pkgPrice)))+'</p>'+
                   (room?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(room)+'</p>':'');
               })()+
          '<p class="who">Per person</p>'+
@@ -2520,14 +2523,16 @@ function _renderQuoteCore(){
          (function(){ // the resort-only price for the same stay, side by side
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
            const perP=x=>{const t=Number(String(x.ppn||'').replace(/[^0-9.]/g,''));if(!t)return 0;return (q.basis==='total')?t/occ:(n?t*n:0);};
-           const ros=(q.prices||[]).filter(x=>x&&x.ppn).map(x=>({name:x.name,pp:perP(x)})).filter(x=>x.pp);
+           const ros=(q.prices||[]).filter(x=>x&&x.ppn).map(x=>({name:x.name,pp:perP(x),ppB:perP({ppn:x.ppnB})})).filter(x=>x.pp);
            if(!ros.length)return '';
            ros.sort((a,b)=>a.pp-b.pp);
            const manyR=ros.length>1, pp=ros[0].pp;
+           const bs=ros.map(x=>x.ppB).filter(Boolean);const ppB=bs.length?Math.min.apply(null,bs):0;
+           const TWOR=!!(clean(q.travelB)&&ppB);
            const diff=Number(String(q.pkgPrice).replace(/[^0-9.]/g,''))-pp;
            return '<div class="pkgcol pkgcol-ro"><p class="who pkgtag">Resort only \u2014 no flights</p>'+
              (manyR?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
-             '<p class="big">'+esc(money(pp.toFixed(0)))+'</p>'+
+             '<p class="big">'+(TWOR?'<span class="optA">'+esc(money(pp.toFixed(0)))+'</span><span class="optB">'+esc(money(ppB.toFixed(0)))+'</span>':esc(money(pp.toFixed(0))))+'</p>'+
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person</p>'+
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?'<br>With roundtrip airport transfers':'<br>Airport transfers quoted separately')+'</p>'+
@@ -2538,7 +2543,7 @@ function _renderQuoteCore(){
           })()
         :'');
     ROOMS=sec('',head(GUEST?'Your Booking':'',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
-      DATEOPT+PKGBAND+
+      (PKGBAND?'':DATEOPT)+PKGBAND+
       (priced
         ?(q.needAir
         ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, and all resort taxes and fees'+((q.xfer===false||(q.xfer==null&&/separately|extra/i.test(q.pkgCovers||'')))?' for the whole trip; the airport transfer is quoted separately and I add it when we book':', and roundtrip airport transfers, for the whole trip')+'. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
@@ -2564,7 +2569,7 @@ function _renderQuoteCore(){
             return'<div class="pcard'+(pics.length>1?' hasgal':'')+'">'+(img?'<div class="pic"><img class="main" src="'+esc(img)+'" alt="'+esc(r.name)+'" loading="lazy">'+gal+'</div>':'')+
               '<div class="b">'+(pills?'<p class="meta">'+esc(pills)+'</p>':'')+'<h4>'+esc(r.name)+'</h4>'+
               (clean(c.description||c.view)?'<p class="desc">'+esc(clean(c.description||c.view))+'</p>':'')+
-              ((r.ppn||r.pkg)?(function(){
+              ((!PKGBAND&&(r.ppn||r.pkg))?(function(){
                   const _B=(q.travelB||'').trim()&&(r.ppnB||r.pkgB);
                   const _wrap=h=>_B?('<span class="optA">'+h+'</span>'):h;
                   const XT=q.xfer?'flights, room and transfers':'flights and room \u2014 airport transfers extra';if(q.needAir&&!r.ppn)return '<div class="rows">'+_wrap('<p class="ppn">'+esc(money(r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p>')+(_B?'<span class="optB"><p class="ppn">'+esc(money(r.pkgB||r.pkg))+'</p><p class="ppnsub">per person<br>'+XT+'</p></span>':'')+'</div>';
