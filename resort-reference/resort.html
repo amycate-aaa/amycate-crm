@@ -1671,9 +1671,10 @@ function applyQ(q){
   if(q.needAir!=null)$id('q-needair').checked=!!q.needAir;
   toggleAir();
   (q.air||[]).forEach(r=>addAirRow(r));
+  try{if($id('q-airB-rows')){$id('q-airB-rows').innerHTML='';(q.airB||[]).forEach(r=>addAirRowB(r));}}catch(e){}
   ['pkgprice','pkgcovers'].forEach(k=>{const el=$id('q-'+k);
     if(el&&q[k==='pkgprice'?'pkgPrice':'pkgCovers']!=null)el.value=q[k==='pkgprice'?'pkgPrice':'pkgCovers'];});
-  ['couple','date','travel','priced','brand','headline','note','mode','deposit','due','nights'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
+  ['couple','date','travel','travelB','priced','brand','headline','note','mode','deposit','due','nights'].forEach(k=>{const el=$id('q-'+k);if(el&&q[k]!=null)el.value=q[k];});
   if($id('q-booklink')&&q.bookLink!=null)$id('q-booklink').value=q.bookLink;
   if($id('q-adults'))$id('q-adults').value=(q.adults!=null?q.adults:(q.occ||2));
   if($id('q-kids'))$id('q-kids').value=(q.kids||0);
@@ -1683,7 +1684,8 @@ function applyQ(q){
   if(q.basis){const r=document.querySelector('input[name="q-basis"][value="'+q.basis+'"]');if(r)r.checked=true;}
   toggleMode();toggleBasis();
   if(q.opts)Object.keys(q.opts).forEach(k=>{const el=$id('o-'+k);if(el&&k!=='gallery')el.checked=!!q.opts[k];});
-  (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||'',r.pkg||''));togglePkCol();
+  (q.prices||[]).forEach(r=>addRoomRow(r.name,r.ppn||r.dbl||'',r.pkg||'',r.ppnB||'',r.pkgB||''));togglePkCol();
+  try{toggleOptB();}catch(e){}
 }
 function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
