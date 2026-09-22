@@ -1285,10 +1285,19 @@ const MQ_PLACES=new Set(['riviera','cancun','maya','punta','cana','cap','tulum',
 function mqBestSlug(name){const A=mqTokens(name);const brands=[...A].filter(w=>!MQ_PLACES.has(w));let best=null,score=0;Object.keys(window.LIB).forEach(k=>{const B=mqTokens(window.LIB[k].name);if(brands.length&&!brands.every(w=>B.has(w)))return;let hit=0;A.forEach(w=>{if(B.has(w))hit++;});const sc=hit/Math.max(1,Math.max(A.size,B.size));if(hit>=2&&sc>score){score=sc;best=k;}});return score>=0.5?best:null;}
 function mqBestRoom(slug,room){const rooms=(window.LIB[slug]||{}).rooms||[];if(!rooms.length)return '';const A=mqTokens(room);let best='',score=0;rooms.forEach(r=>{const B=mqTokens(r);let hit=0;A.forEach(w=>{if(B.has(w))hit++;});const sc=hit/Math.max(1,A.size);if(sc>score){score=sc;best=r;}});return score>=0.5?best:'';}
 function mqCleanName(name){return String(name||'').replace(/\s*[-\u2013|]\s*(all[- ]?inclusive|adults?[- ]?only|an all[- ]inclusive experience|all inclusive resort|resort & spa|resort and spa)\s*/gi,' ').replace(/\b(suites?|resort|hotel|golf|&|and|spa|casino|beach club|all[- ]?inclusive|adults?[- ]?only|an autograph collection)\b/gi,' ').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();}
-function mqParseHotels(raw){const L=raw.replace(/\r/g,'').replace(/\[([^\]]*)\]\((https?:[^)]*)\)/g,'$1').split('\n').map(x=>x.trim()).filter(x=>!/^(view hotel details|see more|select|read more|sort by:)/i.test(x));const out=[];
+function tiNormalize(raw){
+  const L=String(raw||'').replace(/\r/g,'').split('\n');const out=[];
+  for(let i=0;i<L.length;i++){const t=L[i].trim();
+    if(/^(room #\d+|from|check-?in date|check-?out date|depart|arrival)\s*:?\s*$/i.test(t)){
+      let j=i+1;while(j<L.length&&!L[j].trim())j++;
+      if(j<L.length){out.push(t.replace(/\s*:?\s*$/,'')+': '+L[j].trim());i=j;continue;}}
+    out.push(L[i]);}
+  return out.join('\n');}
+function mqParseHotels(raw){raw=tiNormalize(raw);const L=raw.replace(/\r/g,'').replace(/\[([^\]]*)\]\((https?:[^)]*)\)/g,'$1').split('\n').map(x=>x.trim()).filter(x=>!/^(view hotel details|see more|select|read more|sort by:)/i.test(x));const out=[];
   // Travel Impressions: name line, ..., "Room #1: X", "From $N"
-  for(let i=0;i<L.length;i++){const m=L[i].match(/^Room #\d+:\s*(.+)$/i);if(!m)continue;let name='';for(let j=i-1;j>=Math.max(0,i-8);j--){const t=L[j];if(!t||/^(rating|location|\d|-|from \$|includes|book now|prices shown|check-|hotels?:)/i.test(t)||/miles from airport/i.test(t))continue;name=t.replace(/\t.*$/,'');break;}
-    let price='';for(let j=i+1;j<Math.min(L.length,i+14);j++){if(/^Room #\d+:/i.test(L[j]))break;let p=L[j].match(/From\s*\$\s*([\d,]+(?:\.\d+)?)/i)||L[j].match(/^\$\s*([\d,]+\.\d{2})\s*$/)||L[j].match(/(?:total|price)[^$]*\$\s*([\d,]+\.\d{2})/i);if(p){price=p[1].replace(/,/g,'');break;}}
+  for(let i=0;i<L.length;i++){const m=L[i].match(/^Room #\d+:\s*(.+)$/i);if(!m)continue;let name='';for(let j=i-1;j>=Math.max(0,i-20);j--){const t=L[j];if(!t||/^(rating|location|\d|-|from:? ?\$|includes|book now|prices shown|check-|hotels?:)/i.test(t)||/miles from airport/i.test(t))continue;name=t.replace(/\t.*$/,'');break;}
+    let price='';for(let j=i-1;j>=Math.max(0,i-20);j--){if(/^Room #\d+:/i.test(L[j]))break;const pb=L[j].match(/From:?\s*\$\s*([\d,]+(?:\.\d+)?)/i);if(pb){price=pb[1].replace(/,/g,'');break;}}
+    if(!price)for(let j=i+1;j<Math.min(L.length,i+14);j++){if(/^Room #\d+:/i.test(L[j]))break;let p=L[j].match(/From\s*\$\s*([\d,]+(?:\.\d+)?)/i)||L[j].match(/^\$\s*([\d,]+\.\d{2})\s*$/)||L[j].match(/(?:total|price)[^$]*\$\s*([\d,]+\.\d{2})/i);if(p){price=p[1].replace(/,/g,'');break;}}
     if(name){name=mqCleanName(name);out.push({name,room:m[1].trim(),total:price,src:'TI'});}}
   // DestiWorld: name line then "<Room>Hotel Package Price: $N"
   for(let i=0;i<L.length;i++){const m=L[i].match(/^(.*?)Hotel Package Price:?\s*\$?\s*([\d,]+(?:\.\d+)?)?/i);if(!m)continue;let room=m[1].trim();let total=(m[2]||'').replace(/,/g,'');let k=i;
@@ -1304,7 +1313,7 @@ function mqPasteAll(){const raw=$id('mq-paste').value||'';const msg=$id('mq-past
   const ad=raw.match(/(\d+)\s+Adults?/i);const adults=ad?parseInt(ad[1],10):2;$id('mq-occ').value=adults;
   // dates
   const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const iso=(y,m,d)=>y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-  const pd=t=>{let m;if(m=t.match(/(\d{1,2})\s*([A-Za-z]{3})\s*(\d{2,4})/)){const mo=MON[m[2].toLowerCase()];if(mo==null)return '';const y=m[3].length===2?'20'+m[3]:m[3];return iso(y,mo,+m[1]);}return '';};
+  const pd=t=>{let m;if(m=t.match(/\b(\d{1,2})\/(\d{1,2})\/(\d{2,4})\b/)){const y=m[3].length===2?'20'+m[3]:m[3];return new Date(+y,+m[1]-1,+m[2]);}if(m=t.match(/(\d{1,2})\s*([A-Za-z]{3})\s*(\d{2,4})/)){const mo=MON[m[2].toLowerCase()];if(mo==null)return '';const y=m[3].length===2?'20'+m[3]:m[3];return iso(y,mo,+m[1]);}return '';};
   let ci=raw.match(/Check-?In Date:\s*([^\n]+)/i),co=raw.match(/Check-?Out Date:\s*([^\n]+)/i);
   if(!ci){ci=raw.match(/From:\s*(\d{1,2} \w{3} \d{4})/);co=raw.match(/To:\s*(\d{1,2} \w{3} \d{4})/);}
   if(ci&&co){const a=pd(ci[1]),b=pd(co[1]);if(a&&b){$id('mq-from').value=a;$id('mq-to').value=b;mqDates('to');}}
@@ -2006,12 +2015,13 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
     const times=parseTimes(line);
     let fromCity='';if(from){const cm=line.match(new RegExp('\\b'+from+'\\b[\\t ]+([A-Z][A-Za-z.\' ]+?)(?:,|\\t|$)'));if(cm)fromCity=cm[1].trim();}
     if(fl){cur={flight:fl,date:dt,from,to,dep:times[0]||'',arr:times[1]||'',fromCity};rows.push(cur);}
+    else if(cur&&/^arriv/i.test(line)&&times[0]){cur.arr=times[0];}
     else if(cur){if(!cur.date&&dt)cur.date=dt;if(!cur.from&&from)cur.from=from;if(!cur.to&&to)cur.to=to;if(!cur.dep&&times[0])cur.dep=times[0];if(!cur.arr&&times[1])cur.arr=times[1];}
   });
   rows=rows.filter(r=>r.flight);
   const cityOf0=c=>(window.AIRPORT_CITY||{})[String(c||'').toUpperCase()]||'';
   const first=rows[0];const home=first?(cityOf0(first.from)||first.fromCity||first.from||''):'';rows.forEach(r=>{r.who=home;delete r.fromCity;});return rows;}
-function qbPasteAll(){const raw=($id('q-paste')||{}).value||'';const msg=$id('q-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}const out=[];
+function qbPasteAll(){const raw=tiNormalize(($id('q-paste')||{}).value||'');const msg=$id('q-paste-msg');if(!raw.trim()){msg.textContent='Paste something first.';return;}const out=[];
   const ad=raw.match(/(\d+)\s+Adults?/i);const adults=ad?parseInt(ad[1],10):2;
   const MON={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const pd=t=>{let m;if(m=t.match(/(\d{1,2})\s*([A-Za-z]{3})\s*(\d{2,4})/)){const mo=MON[m[2].toLowerCase()];if(mo==null)return null;const y=m[3].length===2?'20'+m[3]:m[3];return new Date(+y,mo,+m[1]);}return null;};
