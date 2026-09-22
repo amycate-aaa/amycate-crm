@@ -2437,21 +2437,30 @@ function renderQuote(){
             return '<div class="pkgprice">'+
               (when?'<p class="when">'+esc(when)+'</p>':'')+
               (when?'<hr class="hr">':'')+
-              '<p class="big">'+esc(money(q.pkgPrice))+'</p>'+
-              (clean(q.pkgRoom)?'<p class="pkgroom">'+esc(clean(q.pkgRoom))+'</p>':'')+
+              (function(){
+                const rs=(q.prices||[]).filter(x=>x&&x.name);
+                const pk=rs.map(x=>Number(String(x.pkg||'').replace(/[^0-9.]/g,''))).filter(Boolean);
+                const many=rs.length>1;
+                const low=pk.length?Math.min.apply(null,pk):Number(String(q.pkgPrice).replace(/[^0-9.]/g,''));
+                const room=many?'':(clean(q.pkgRoom)||(rs[0]&&rs[0].name)||'');
+                return (many?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
+                  '<p class="big">'+esc(money(low||q.pkgPrice))+'</p>'+
+                  (room?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(room)+'</p>':'');
+              })()+
          '<p class="who">Per person</p>'+
          '<p class="covers">'+esc(clean(q.pkgCovers)||'Flights, your room, all food and drink, all resort taxes and fees, and roundtrip airport transfers \u2014 the whole trip in one figure.')+'</p>'+
          (function(){ // the resort-only price for the same stay, side by side
-           const ro=(q.prices||[]).find(x=>x&&x.ppn&&!x.pkg&&(!clean(q.pkgRoom)||x.name===q.pkgRoom))||(q.prices||[]).find(x=>x&&x.ppn&&!x.pkg);
-           if(!ro)return '';
-           const t=Number(String(ro.ppn).replace(/[^0-9.]/g,''));if(!t)return '';
            const occ=parseInt(q.occ,10)||2, n=parseInt(q.nights,10)||nightsFromTravel(q.travel)||0;
-           const pp=(q.basis==='total')?t/occ:(n?t*n:0);
-           if(!pp)return '';
+           const perP=x=>{const t=Number(String(x.ppn||'').replace(/[^0-9.]/g,''));if(!t)return 0;return (q.basis==='total')?t/occ:(n?t*n:0);};
+           const ros=(q.prices||[]).filter(x=>x&&x.ppn).map(x=>({name:x.name,pp:perP(x)})).filter(x=>x.pp);
+           if(!ros.length)return '';
+           ros.sort((a,b)=>a.pp-b.pp);
+           const manyR=ros.length>1, pp=ros[0].pp;
            const diff=Number(String(q.pkgPrice).replace(/[^0-9.]/g,''))-pp;
            return '<hr class="hr" style="margin-top:26px;">'+
-             '<p class="who" style="margin-top:22px;">Resort only \u2014 no flights</p>'+
+             '<p class="who" style="margin-top:22px;">Resort only \u2014 no flights'+(manyR?' \u00b7 starting at':'')+'</p>'+
              '<p class="big" style="font-size:clamp(34px,5vw,46px);">'+esc(money(pp.toFixed(0)))+'</p>'+
+             (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:17px;color:#F1E9DC;margin:4px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person'+(n?', '+n+' night'+(n===1?'':'s'):'')+'</p>'+
              (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'');
          })()+
