@@ -2431,7 +2431,7 @@ function _renderQuoteCore(){
       '</div>').join('')+'</div></div>');
   })();
 
-  let PKG_FLIGHTS='';
+  let PKG_FLIGHTS='';let DATEOPT='';
   /* 3c — FLIGHTS */
   (function(){
     if(!q.needAir)return;
@@ -2524,7 +2524,7 @@ function _renderQuoteCore(){
           })()
         :'');
     ROOMS=sec('',head(GUEST?'Your Booking':'',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
-      PKGBAND+
+      DATEOPT+PKGBAND+
       (priced
         ?(q.needAir
         ?'<p class="small" style="max-width:64ch;margin:0 0 34px;">This is a <em>package price per person</em> \u2014 flights, the room, all food and drink, and all resort taxes and fees'+((q.xfer===false||(q.xfer==null&&/separately|extra/i.test(q.pkgCovers||'')))?' for the whole trip; the airport transfer is quoted separately and I add it when we book':', and roundtrip airport transfers, for the whole trip')+'. Not a nightly rate. It is where things land today; airfare moves until it is ticketed, so I reprice it the moment you are ready to book.</p>'
@@ -2686,7 +2686,7 @@ function _renderQuoteCore(){
   /* 6d — TWO DATE OPTIONS */
   if((q.travelB||'').trim()){
     const a=esc(q.travel||'Option A'), b=esc(q.travelB);
-    S.push('<div class="dateopt"><div class="c">'
+    DATEOPT=('<div class="dateopt"><div class="c">'
       +'<p class="eyebrow">Two sets of dates</p>'
       +'<h2 class="display">Which week suits you?</h2>'
       +'<p class="small" style="max-width:60ch;margin:10px auto 0;text-align:center;">Prices and flights change with the dates, so here is each one in full. Tap to switch.</p>'
