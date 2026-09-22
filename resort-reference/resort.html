@@ -684,6 +684,13 @@ body.showB .optB > p{display:block;}
 
 /* section menu: two balanced rows rather than one long line */
 .qnav .inner{max-width:780px !important;margin:0 auto !important;}
+
+/* both price columns the same size, contents lined up */
+.pkgprice .pkgcols{align-items:stretch;}
+.pkgprice .pkgcol{display:flex;flex-direction:column;align-items:center;}
+.pkgprice .pkgcol .big{margin:0;line-height:1.05;}
+.pkgprice .pkgcol .pkgroom{min-height:1.4em;}
+.pkgprice .pkgcol .covers{margin-top:10px;max-width:34ch;}
 </style>
 </head>
 <body>
@@ -2475,7 +2482,8 @@ function renderQuote(){
              (manyR?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
              '<p class="big">'+esc(money(pp.toFixed(0)))+'</p>'+
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:17px;color:#F1E9DC;margin:4px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
-             '<p class="who">Per person'+(n?', '+n+' night'+(n===1?'':'s'):'')+'</p>'+
+             '<p class="who">Per person</p>'+
+             '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
              (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
