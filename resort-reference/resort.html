@@ -677,7 +677,6 @@ body.showB .optB > p{display:block;}
 .pkgprice .pkgcols:has(.pkgcol-ro){grid-template-columns:1fr 1fr;}
 .pkgprice .pkgcol{padding:6px 28px;text-align:center;}
 .pkgprice .pkgcol-ro{border-left:1px solid rgba(176,141,87,.45);}
-.pkgprice .pkgcol-ro .big{font-size:inherit;}
 .pkgprice .pkgtag{letter-spacing:.2em;margin:0 0 10px !important;color:var(--gold,#B08D57) !important;}
 @media(max-width:700px){.pkgprice .pkgcols:has(.pkgcol-ro){grid-template-columns:1fr;}
  .pkgprice .pkgcol-ro{border-left:none;border-top:1px solid rgba(176,141,87,.45);margin-top:22px;padding-top:24px;}}
@@ -691,6 +690,10 @@ body.showB .optB > p{display:block;}
 .pkgprice .pkgcol .big{margin:0;line-height:1.05;}
 .pkgprice .pkgcol .pkgroom{min-height:1.4em;}
 .pkgprice .pkgcol .covers{margin-top:10px;max-width:34ch;}
+
+/* identical treatment in both columns */
+.pkgprice .pkgcol .big,.pkgprice .pkgcol-ro .big{font-size:clamp(46px,7vw,72px) !important;}
+.pkgprice .pkgcol .covers{font-size:15px !important;}
 </style>
 </head>
 <body>
@@ -2481,10 +2484,10 @@ function renderQuote(){
            return '<div class="pkgcol pkgcol-ro"><p class="who pkgtag">Resort only \u2014 no flights</p>'+
              (manyR?'<p class="who" style="margin-bottom:4px;">Starting at</p>':'')+
              '<p class="big">'+esc(money(pp.toFixed(0)))+'</p>'+
-             (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:17px;color:#F1E9DC;margin:4px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
+             (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person</p>'+
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
-             (diff>0?'<p class="covers" style="font-size:14.5px;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+'</div>';
+             (diff>0?'<p class="covers" style="margin-top:6px;opacity:.85;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
