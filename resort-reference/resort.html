@@ -2695,7 +2695,7 @@ function renderQuote(){
   /* 10 — ACTIVITIES */
   if(q.opts.activities){
     const a=splitActs();
-    if(a.incl.length||a.extra.length)S.push(sec('',head('Between The Events','Activities')+bandImg('activities')+
+    if(a.incl.length||a.extra.length)S.push(sec('',head((CT?'':'Between The Events'),'Activities')+bandImg('activities')+
       '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:44px;margin-top:34px;">'+
       (a.incl.length?'<div><p class="eyebrow">Included</p>'+a.incl.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
       (a.extra.length?'<div><p class="eyebrow">Additional Charge</p>'+a.extra.map(x=>'<p style="font-size:16.5px;line-height:1.6;margin:0 0 10px;color:#5A544C;">&#10022; '+esc(x)+'</p>').join('')+'</div>':'')+
