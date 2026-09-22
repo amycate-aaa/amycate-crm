@@ -2472,6 +2472,18 @@ function _renderQuoteCore(){
   // Amy's rule: no photo, no room card — except a room she has actually priced
   const allCats=allCatsRaw.filter(roomPic);
   const priceMap={}; q.prices.forEach(r=>{priceMap[String(r.name||'').toLowerCase().trim()]=r.ppn;});
+  /* 6d — TWO DATE OPTIONS */
+  if((q.travelB||'').trim()){
+    const a=esc(q.travel||'Option A'), b=esc(q.travelB);
+    DATEOPT=('<div class="dateopt"><div class="c">'
+      +'<p class="eyebrow">Two sets of dates</p>'
+      +'<h2 class="display">Which week suits you?</h2>'
+      +'<p class="small" style="max-width:60ch;margin:10px auto 0;text-align:center;">Prices and flights change with the dates, so here is each one in full. Tap to switch.</p>'
+      +'<div class="dateopt-bar">'
+      +'<button type="button" class="dopt on" data-opt="a">'+a+'</button>'
+      +'<button type="button" class="dopt" data-opt="b">'+b+'</button>'
+      +'</div></div></div>');
+  }
   const rows=priced
     ? (q.prices.length ? q.prices.slice()
        : (allCats.length ? allCats.map(c=>({name:c.name,ppn:''})) : q.prices))
@@ -2683,18 +2695,6 @@ function _renderQuoteCore(){
   }
 
 
-  /* 6d — TWO DATE OPTIONS */
-  if((q.travelB||'').trim()){
-    const a=esc(q.travel||'Option A'), b=esc(q.travelB);
-    DATEOPT=('<div class="dateopt"><div class="c">'
-      +'<p class="eyebrow">Two sets of dates</p>'
-      +'<h2 class="display">Which week suits you?</h2>'
-      +'<p class="small" style="max-width:60ch;margin:10px auto 0;text-align:center;">Prices and flights change with the dates, so here is each one in full. Tap to switch.</p>'
-      +'<div class="dateopt-bar">'
-      +'<button type="button" class="dopt on" data-opt="a">'+a+'</button>'
-      +'<button type="button" class="dopt" data-opt="b">'+b+'</button>'
-      +'</div></div></div>');
-  }
 
   /* 7 — DINING */
   const rests=(P.restaurants||[]).map(r=>typeof r==='string'?{name:r}:r).filter(r=>r&&r.name);
