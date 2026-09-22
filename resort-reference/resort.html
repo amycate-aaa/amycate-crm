@@ -2495,7 +2495,7 @@ function renderQuote(){
              (!manyR&&ros[0].name?'<p class="pkgroom" style="font-family:var(--serif,Georgia,serif);font-size:19px;color:#F1E9DC;margin:6px 0 2px;">'+esc(ros[0].name)+'</p>':'')+
              '<p class="who">Per person</p>'+
              '<p class="covers">'+(n?n+' night'+(n===1?'':'s')+' all-inclusive':'All-inclusive')+(q.xfer===true?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately')+'</p>'+
-             (diff>0?'<p class="covers" style="margin-top:6px;opacity:.85;">Flights add about '+esc(money(diff.toFixed(0)))+' per person.</p>':'')+LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
+             LOVE('Resort only',money(pp.toFixed(0)),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'<p class="covers" style="font-size:13.5px;margin-top:12px;">Times are scheduled and can move \u2014 I watch them and tell you if anything changes.</p></div>':'')+
          '<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p></div>';
