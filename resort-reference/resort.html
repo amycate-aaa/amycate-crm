@@ -681,6 +681,9 @@ body.showB .optB > p{display:block;}
 .pkgprice .pkgtag{letter-spacing:.2em;margin:0 0 10px !important;color:var(--gold,#B08D57) !important;}
 @media(max-width:700px){.pkgprice .pkgcols:has(.pkgcol-ro){grid-template-columns:1fr;}
  .pkgprice .pkgcol-ro{border-left:none;border-top:1px solid rgba(176,141,87,.45);margin-top:22px;padding-top:24px;}}
+
+/* section menu: two balanced rows rather than one long line */
+.qnav .inner{max-width:780px !important;margin:0 auto !important;}
 </style>
 </head>
 <body>
@@ -3042,7 +3045,8 @@ function buildQuoteNav(){
   nav.innerHTML='<div class="inner">'+secs.map(x=>{
     const h=x.querySelector('h2.display');
     const t=h?h.textContent.trim():'';
-    return '<a href="#'+x.id+'">'+esc(NAVLABEL[t]||t)+'</a>';
+    let lab=NAVLABEL[t]||t;if(lab.length>22)lab=lab.split(/[,\u2014\u2013:]/)[0].trim();
+    return '<a href="#'+x.id+'">'+esc(lab)+'</a>';
   }).join('')+'</div>';
   const anchor=qp.querySelector('.offers')||qp.querySelector('.travellers')||qp.querySelector('.fact-grid');
   if(anchor&&anchor.parentNode)anchor.parentNode.insertBefore(nav,anchor.nextSibling);
