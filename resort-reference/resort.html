@@ -731,6 +731,13 @@ body.showB .optB > p{display:block;}
 #quote-page .protect .eyebrow{margin:0 0 8px !important;text-align:left !important;}
 #quote-page .protect h4{font-family:var(--serif,Georgia,serif);font-weight:400;font-size:20px;margin:0 0 10px;color:var(--espresso);}
 #quote-page .protect p{font-size:15.5px;line-height:1.75;margin:0;color:#4A443C;text-align:left !important;max-width:none !important;}
+
+/* video in the gallery */
+#quote-page .vids{display:grid;gap:22px;margin:34px auto 0;max-width:1040px;}
+#quote-page .vids .vid{margin:0;}
+#quote-page .vids video{width:100%;display:block;background:#1A1510;border:1px solid var(--sand-deep,#E4D8C6);}
+#quote-page .vids figcaption{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep,#8A6D3B);margin-top:10px;text-align:center;}
+@media(min-width:900px){#quote-page .vids:has(.vid + .vid){grid-template-columns:1fr 1fr;}}
 </style>
 </head>
 <body>
@@ -2869,11 +2876,18 @@ function _renderQuoteCore(){
 
   /* 12 — DOWNLOADS: general links now render inside Good To Know (see 11) */
 
-  /* 13 — GALLERY */
+  /* 13 — GALLERY (and any videos) */
   if(q.opts.gallery){
     const g=RESORTWIDE.map(p=>p.url||p.downloadURL).concat((P.photos||[])).filter(photoOk).slice(0,12);
-    if(g.length)S.push(sec('sand-band',head('The Place Itself','Gallery')+
-      '<div class="gallery" style="margin-top:34px;">'+g.map(u=>'<figure><img src="'+esc(u)+'" alt="'+esc(R)+'" loading="lazy"></figure>').join('')+'</div>'));
+    const vids=(Array.isArray(P.videos)?P.videos:[]).map(v=>typeof v==='string'?{url:v}:v)
+      .filter(v=>v&&/^https?:/.test(String(v.url||'')));
+    const vidHtml=vids.length?('<div class="vids">'+vids.map(v=>
+        '<figure class="vid"><video controls preload="metadata"'+(v.poster&&photoOk(v.poster)?' poster="'+esc(v.poster)+'"':'')+
+        '><source src="'+esc(v.url)+'" type="'+esc(v.type||(/\.webm(\?|$)/i.test(v.url)?'video/webm':'video/mp4'))+'">'+
+        'Your browser cannot play this video. <a href="'+esc(v.url)+'" target="_blank" rel="noopener">Open it here</a>.</video>'+
+        (clean(v.label)?'<figcaption>'+esc(clean(v.label))+'</figcaption>':'')+'</figure>').join('')+'</div>'):'';
+    if(g.length||vids.length)S.push(sec('sand-band',head('The Place Itself','Gallery')+vidHtml+
+      (g.length?'<div class="gallery" style="margin-top:34px;">'+g.map(u=>'<figure><img src="'+esc(u)+'" alt="'+esc(R)+'" loading="lazy"></figure>').join('')+'</div>':'')));
   }
 
   /* 13b — ROOMS (moved to the end) */
