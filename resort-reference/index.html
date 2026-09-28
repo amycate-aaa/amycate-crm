@@ -215,20 +215,22 @@ const PASS=(new URLSearchParams(location.search).get('k')||'');
 
 function isAdults(p){
   const nm=String(p.name||p._id||'');
-  // anything stated on the record wins over the brand rule
-  const _ap=String(p.agePolicy||'');
-  if(/adults?[ -]?only|18\+/i.test(_ap))return true;
-  if(/family|all ages/i.test(_ap))return false;
-  // Brand decides, not the description
+  // 1 — an explicit flag on the record settles it
+  if(p.adultsOnly===true)return true;
+  if(p.adultsOnly===false)return false;
+  const aud=String(p.audience||'');
+  if(/family|all ages/i.test(aud))return false;
+  if(/adult/i.test(aud))return true;
+  // 2 — the age policy, reading "family" first: a family resort may still have an adults-only pool
+  const ap=String(p.agePolicy||'');
+  if(/family|all ages|all-ages|children|kids/i.test(ap))return false;
+  if(/adults?[ -]?only|18\+|18 and over/i.test(ap))return true;
+  // 3 — brand rules
   if(/\b(dreams|sunscape|ziva|margaritaville|riu ventura|riu latino|ava)\b/i.test(nm)||/hard rock|hilton/i.test(nm))return false;
   if(/\bcatalonia\b/i.test(nm))return false;
   if(/\b(secrets|breathless|zilara|vivid|impression|excellence|hideaway|chic|atelier|unico|temptation|desire|trs)\b/i.test(nm))return true;
-  const ap=String(p.agePolicy||'');
-  if(/adults?[ -]?only|18\+/i.test(ap))return true;
-  if(/family|all ages|children|kids/i.test(ap))return false;
-  const blob=[p.name,p._id,p.description,p.tagline,p.kidsInfo].join(' ');
-  if(/adults?[ -]?only|18 and over|18\+/i.test(blob))return true;
-  return /\b(secrets|breathless|zilara|excellence|hideaway|chic|temptation|desire|live aqua beach)\b/i.test(String(p.name||p._id||''));
+  // 4 — last resort: the resort's own name only, never the description
+  return /\b(secrets|breathless|zilara|excellence|hideaway|chic|temptation|desire|live aqua beach)\b/i.test(nm);
 }
 function regionOf(p){
   const d=String(p.destination||'')+' '+String(p.name||'');
@@ -303,7 +305,7 @@ function drawDests(){
   const box=document.getElementById('dests');if(!box)return;
   box.innerHTML='<button class="dbox'+(D==='all'?' on':'')+'" data-d="all"><span class="n">Everywhere</span><span class="c">'+ALL.length+' resorts</span></button>'
     +keys.map(k=>'<button class="dbox'+(D===k?' on':'')+'" data-d="'+esc(k)+'"><span class="n">'+esc(k)+'</span><span class="c">'+R[k]+' resort'+(R[k]===1?'':'s')+'</span></button>').join('');
-  box.querySelectorAll('.dbox').forEach(b=>b.onclick=()=>{D=b.dataset.d;drawDests();draw();window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});});
+  box.querySelectorAll('.dbox').forEach(b=>b.onclick=()=>{D=b.dataset.d;drawDests();draw();if(D!=='all')window.scrollTo({top:box.offsetTop-16,behavior:'smooth'});});
 }
 document.getElementById('q').addEventListener('input',e=>{Q=e.target.value;draw();});
 document.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
