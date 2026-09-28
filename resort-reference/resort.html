@@ -724,6 +724,12 @@ body.showB .optB > p{display:block;}
 .pkgprice .roomprices .rpv{white-space:nowrap;font-weight:500;}
 
 .pkgprice .big.bigtxt{font-size:clamp(28px,4vw,38px) !important;letter-spacing:.02em;}
+
+/* travel protection note under Next Steps */
+#quote-page .protect{max-width:70ch;margin:38px auto 0;padding:26px 30px;border:1px solid var(--sand-deep,#E4D8C6);background:rgba(255,255,255,.5);text-align:left;}
+#quote-page .protect .eyebrow{margin:0 0 8px !important;text-align:left !important;}
+#quote-page .protect h4{font-family:var(--serif,Georgia,serif);font-weight:400;font-size:20px;margin:0 0 10px;color:var(--espresso);}
+#quote-page .protect p{font-size:15.5px;line-height:1.75;margin:0;color:#4A443C;text-align:left !important;max-width:none !important;}
 </style>
 </head>
 <body>
@@ -2913,6 +2919,10 @@ function _renderQuoteCore(){
        (SMALL?'':'<div><p class="n">03</p><h4>If the group grows, we can lock it in</h4><p>Optional. If you get to ten rooms or more, I can ask the resort for a group agreement that holds everyone\u2019s rate against increases and earns the group perks \u2014 it comes back in a few days and we walk through it together before anything is signed. Under ten rooms there is nothing to sign, and nothing changes about how people book.</p></div>')
       :'<div><p class="n">02</p><h4>I request the group agreement</h4><p>Only if you need one. Ten rooms or more and I go to the resort and ask for your contract \u2014 it comes back in a few days, and we get on a call and walk through it together before anything is signed. Under ten rooms there is no agreement and nothing to sign: everyone books individually and I handle each booking for you exactly the same way.</p></div>'+
        '<div><p class="n">03</p><h4>Your guests book</h4><p>With an agreement, your wedding website goes live five to seven business days after signing and your guests book themselves at your locked rates. Without one, they book directly through me. Either way it stops being your job.</p></div>')+
+    '</div>'+
+    '<div class="protect"><p class="eyebrow">Worth knowing</p>'+
+    '<h4>Travel protection</h4>'+
+    '<p>Life happens, and deposits are not refundable. I recommend a Cancel For Any Reason plan \u2014 it lets you cancel up to a set point before departure and get back what you have paid, less the cost of the plan, and it covers interruptions and delays, lost baggage, and medical help while you are away. It runs about $70 to $130 per adult depending on the price of the trip, and I give you the exact figure once you have chosen the resort.</p>'+
     '</div>'));
 
   /* 16 — CLOSING */
