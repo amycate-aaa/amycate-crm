@@ -2573,7 +2573,7 @@ function _renderQuoteCore(){
              LOVE('Resort only',(A&&A.n!=null)?money(A.n.toFixed(0))+(KID?' for the room':''):((B&&B.n!=null)?money(B.n.toFixed(0))+(KID?' for the room':''):''),manyR?'':ros[0].name)+'</div>';
          })()+'</div>'+
          (PKG_FLIGHTS?'<div class="pkgflights"><p class="who" style="margin:30px 0 12px;">Your flights</p>'+PKG_FLIGHTS+'</div>':'')+
-         (HASPKG?'<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p>':'<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">Where the rate lands today \u2014 nothing is held until you book, and I reprice it the moment you are ready.</p>')+'</div>';
+         (HASPKG?'<p class="covers" style="font-size:14.5px;color:#BFB3A0;margin-top:20px;">An idea, not a quote. Flights are only held once ticketed, and I price them fresh when you are ready to book.</p>':'')+'</div>';
           })()
         :'');
     ROOMS=sec('',head(GUEST?'Your Booking':'',GUEST?(q.prices.length>1?'Your Room Options':'Your Room'):((priced&&q.prices.length)?'Accommodations & Pricing':'Rooms & Suites'))+
