@@ -389,6 +389,7 @@ db.collection('resortProfiles').get().then(s=>{
       var keys=(data.keys||[]).map(function(x){return String(x).toLowerCase().trim();});
       var all=data.allBefore?new Date(data.allBefore):null;
       var hit=(who&&list.indexOf(who)>-1)||(key&&keys.indexOf(key)>-1);
+      if(!hit&&data.blockUntagged&&!who&&!key)hit=true;   // links sent without a name
       if(!hit&&all){ try{ var first=localStorage.getItem('ac_first'); if(first&&new Date(first)<all)hit=true; }catch(e){} }
       if(!hit)return;
       document.documentElement.innerHTML='<body style="margin:0;font-family:Georgia,serif;background:#FBF8F3;color:#3A332B;'
