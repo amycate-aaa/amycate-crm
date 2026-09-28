@@ -2617,7 +2617,6 @@ function _renderQuoteCore(){
                       (pp?'<p class="ppnbreak">'+esc(money(pp.toFixed(0)))+' per person'+(pn?' &nbsp;&#10022;&nbsp; '+esc(money(pn.toFixed(0)))+' per person, per night':'')+'</p>':'')+PK+RO+(_B?'</span>':'')+'</div>';}
                   {const t=num(r.ppn);const NN=NIGHTS||nightsFromTravel(q.travel)||0;const tot=(t&&NN)?t*OCC*NN:0;
                     return '<div class="rows">'+(_B?'<span class="optB"><p class="ppn">'+esc(money(r.ppnB||r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p></span><span class="optA">':'')+'<p class="ppn">'+esc(money(r.ppn))+'</p><p class="ppnsub">per person, per night<br>'+occTxt+'</p>'+(tot?'<p class="ppnbreak">'+esc(money((t*NN).toFixed(0)))+' per person for '+NN+' night'+(NN===1?'':'s')+' &nbsp;&#10022;&nbsp; '+esc(money(tot.toFixed(0)))+' total for the room</p>':'')+PK+RO+(_B?'</span>':'')+'</div>';}})():'')+
-              ((priced&&!GUEST)?LOVE('This room','',r.name):'')+
               (GUEST?'<p style="margin:18px 0 0;">'+(q.bookLink
                   ?'<a class="amybtn" href="'+esc(q.bookLink)+'" target="_blank" rel="noopener">Accept &amp; Pay \u2192</a>'
                   :'<a class="amybtn" href="mailto:'+esc(email)+'?subject='+encodeURIComponent('Yes to '+r.name+' at '+R+(q.couple?' \u2014 '+q.couple:''))+'&body='+encodeURIComponent('Hi Amy,\n\nI\u2019ll take the '+r.name+' at '+R+(q.travel?' for '+q.travel:'')+'.\n\n'+((q.guests||[]).length?'Travelling: '+q.guests.join(', ')+'\n\n':''))+'">I\u2019ll take this room \u2192</a>')+'</p>':'')+
