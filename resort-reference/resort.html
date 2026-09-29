@@ -1927,6 +1927,7 @@ const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.google
 (function(){
   try{
     if(AGENT)return;
+    try{if(localStorage.getItem('ac_agent')==='1')return;}catch(e){}   // this device is Amy's — never log it as a client view
     var q=new URLSearchParams(location.search);
     if(!(q.get('pv')||q.get('np')||q.get('k')||q.get('c')))return;
     var slug=q.get('r')||'';
