@@ -81,7 +81,10 @@ db.collection('libraryVisits').orderBy('at','desc').limit(500).get().then(s=>{
   document.getElementById('stats').innerHTML=stats.map(x=>'<div class="stat"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>').join('');
 
   let H='';
-  const tagged=v.filter(x=>x.sentTo);
+  H+='<h2>Most recent</h2>'+tbl(['When','Who','What they opened','Version','On'],
+    v.slice(0,30).map(x=>[ago(x.at),x.sentTo?'<span class="hot">'+esc(x.sentTo)+'</span>':'<span style="color:var(--mute)">\u2014</span>',
+      x.resort?esc(x.resort):'<span style="color:var(--mute)">the library</span>',esc(x.version||''),esc(x.device||'')]));
+    const tagged=v.filter(x=>x.sentTo);
   if(tagged.length){const by={};tagged.forEach(x=>{const k=x.sentTo;const o=by[k]=by[k]||{opens:0,last:'',resorts:new Set()};o.opens++;if(x.at>o.last)o.last=x.at;if(x.resort)o.resorts.add(x.resort);});
     H+='<h2>People you sent it to</h2>'+tbl(['Who','Times opened','Last opened','Resorts they looked at'],
       Object.keys(by).sort((a,b)=>by[b].last.localeCompare(by[a].last)).map(k=>{const o=by[k];
@@ -100,9 +103,6 @@ db.collection('libraryVisits').orderBy('at','desc').limit(500).get().then(s=>{
   H+='<h2>By day</h2>'+tbl(['Date','Visits'],Object.keys(byDay).sort().reverse().slice(0,21)
     .map(k=>[k===today?'<span class="hot">'+k+' (today)</span>':k,'<span class="bar" style="width:'+Math.round(byDay[k]/maxd*90)+'px"></span>'+byDay[k]]));
 
-  H+='<h2>Most recent</h2>'+tbl(['When','Who','What they opened','Version','On'],
-    v.slice(0,30).map(x=>[ago(x.at),x.sentTo?'<span class="hot">'+esc(x.sentTo)+'</span>':'<span style="color:var(--mute)">\u2014</span>',
-      x.resort?esc(x.resort):'<span style="color:var(--mute)">the library</span>',esc(x.version||''),esc(x.device||'')]));
-  document.getElementById('out').innerHTML=H;
+document.getElementById('out').innerHTML=H;
 }).catch(e=>{document.getElementById('out').innerHTML='<p class="none">Could not load: '+esc(e.message)+'</p>';});
 </script></body></html>
