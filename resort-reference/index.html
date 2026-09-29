@@ -320,6 +320,7 @@ if(SHOWPRICE){const l=document.getElementById('lede');if(l)l.insertAdjacentHTML(
    Nothing personal, nothing identifying. One entry per visit. */
 function logVisit(){
   try{
+    if(localStorage.getItem('ac_agent')==='1')return;   // this device is Amy's — never log it as a client view
     var last=0;try{last=parseInt(sessionStorage.getItem('acv')||'0',10);}catch(e){}
     if(Date.now()-last<1800000)return;            // one entry per half hour per session
     try{sessionStorage.setItem('acv',String(Date.now()));}catch(e){}
