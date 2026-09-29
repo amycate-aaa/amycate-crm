@@ -1,6 +1,8 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Share the Library — Amy Cate</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
 :root{--cream:#FAF7F2;--line:#E4D8C6;--gold:#B08D57;--gold-deep:#8A6D3B;--ink:#1E1A14;--mute:#7A7266;}
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -17,6 +19,17 @@ input{width:100%;padding:13px 15px;border:1px solid var(--line);background:#fff;
 .link:hover{border-color:var(--gold);}
 .link.copied{background:#EDF6ED;border-color:#8AB98A;}
 .hint{font-size:12px;color:var(--mute);margin-top:6px;}
+.sent{margin-top:46px;border-top:1px solid var(--line);padding-top:24px;}
+.sent h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:26px;font-weight:400;margin-bottom:4px;}
+.sent table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13.5px;}
+.sent th{text-align:left;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;padding:8px 10px 8px 0;border-bottom:1px solid var(--line);}
+.sent td{padding:11px 10px 11px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+.sent .nm{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;}
+.sent .kind{color:var(--mute);}
+.sent button{font-family:inherit;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 12px;border:1px solid var(--line);background:#fff;cursor:pointer;margin-right:6px;}
+.sent button:hover{border-color:var(--gold);}
+.sent .rv{color:#A33;border-color:#E2C4C4;}
+.sent .blocked{color:#A33;font-size:11px;letter-spacing:.12em;text-transform:uppercase;}
 .foot{margin-top:44px;border-top:1px solid var(--line);padding-top:18px;font-size:12.5px;color:var(--mute);}
 a{color:var(--gold-deep);}
 </style></head><body>
@@ -28,6 +41,11 @@ a{color:var(--gold-deep);}
   <input id="who" placeholder="e.g. hannah, or jeff-and-chelsea" autocomplete="off">
   <p class="hint">Optional. Leave blank for a general link.</p>
   <div id="out"></div>
+  <div class="sent" id="sent" style="display:none;">
+    <h2>Links you have sent</h2>
+    <p class="hint">Saved when you copy one. Click a name to copy that link again.</p>
+    <div id="sentbody"></div>
+  </div>
   <p class="foot">All four links are password-free for the person you send them to &mdash; the word is built in. <a href="../index.html">Back to the dashboard</a></p>
 </div>
 <script>
@@ -51,10 +69,81 @@ function draw(){
       else{var ta=document.createElement('textarea');ta.value=u;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove();}
       box.textContent='Copied \u2713';box.className='link copied';
       setTimeout(function(){box.textContent=u;box.className='link';},1300);
+      if(tag)saveLink(tag,x[0],u);
     };
     row.appendChild(h);row.appendChild(box);row.appendChild(hint);out.appendChild(row);
   });
 }
 who.addEventListener('input',draw);
 draw();
+
+/* remember every tagged link you copy, and list them with their status */
+var db=null;
+try{
+  firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",
+    projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",
+    messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+  db=firebase.firestore();
+}catch(e){}
+
+function saveLink(tag,kind,url){
+  if(!db)return;
+  db.collection('sharedLinks').doc(tag+'__'+kind.replace(/[^A-Za-z0-9]+/g,'-')).set({
+    tag:tag,kind:kind,url:url,lastCopied:new Date().toISOString()
+  },{merge:true}).then(loadSent).catch(function(){});
+}
+
+function loadSent(){
+  if(!db)return;
+  Promise.all([
+    db.collection('sharedLinks').get(),
+    db.collection('access').doc('revoked').get(),
+    db.collection('libraryVisits').get()
+  ]).then(function(r){
+    var links=r[0].docs.map(function(d){return d.data();});
+    if(!links.length){document.getElementById('sent').style.display='none';return;}
+    var blocked=(r[1].exists?(r[1].data().tags||[]):[]).map(function(x){return String(x).toLowerCase();});
+    var seen={};r[2].docs.forEach(function(d){var t=(d.data().sentTo||'').toLowerCase();
+      if(!t)return;seen[t]=seen[t]||{n:0,last:''};seen[t].n++;
+      if(d.data().at>seen[t].last)seen[t].last=d.data().at;});
+    var byTag={};
+    links.forEach(function(l){(byTag[l.tag]=byTag[l.tag]||[]).push(l);});
+    var names=Object.keys(byTag).sort();
+    var html='<table><thead><tr><th>Who</th><th>Links</th><th>Opened</th><th></th></tr></thead><tbody>'+
+      names.map(function(t){
+        var rows=byTag[t], last=rows.map(function(x){return x.lastCopied||'';}).sort().pop();
+        var s=seen[t];
+        var kinds=rows.map(function(x){
+          return '<button onclick="copyAgain(this,\''+encodeURIComponent(x.url)+'\')">'+x.kind.replace(/ \u2014 /,' \u00b7 ')+'</button>';}).join('');
+        return '<tr><td class="nm">'+t+(blocked.indexOf(t.toLowerCase())>-1?'<br><span class="blocked">revoked</span>':'')+
+          '</td><td class="kind">'+kinds+'</td><td class="kind">'+(s?(s.n+' time'+(s.n===1?'':'s')+'<br>'+String(s.last).slice(0,10)):'not yet')+
+          '</td><td>'+(blocked.indexOf(t.toLowerCase())>-1
+            ? '<button onclick="setBlock(\''+t+'\',false)">Allow again</button>'
+            : '<button class="rv" onclick="setBlock(\''+t+'\',true)">Revoke</button>')+
+          '</td></tr>';}).join('')+'</tbody></table>';
+    document.getElementById('sentbody').innerHTML=html;
+    document.getElementById('sent').style.display='';
+  }).catch(function(){});
+}
+
+function copyAgain(btn,enc){
+  var u=decodeURIComponent(enc);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(u);}
+  var was=btn.textContent;btn.textContent='Copied \u2713';
+  setTimeout(function(){btn.textContent=was;},1200);
+}
+
+function setBlock(tag,on){
+  if(!db)return;
+  db.collection('access').doc('revoked').get().then(function(s){
+    var d=s.exists?(s.data()||{}):{};
+    var tags=(d.tags||[]).map(function(x){return String(x).toLowerCase();});
+    tag=tag.toLowerCase();
+    if(on){if(tags.indexOf(tag)<0)tags.push(tag);}
+    else tags=tags.filter(function(x){return x!==tag;});
+    return db.collection('access').doc('revoked').set({tags:tags,keys:d.keys||[],
+      blockUntagged:d.blockUntagged||false,updatedAt:new Date().toISOString()},{merge:true});
+  }).then(loadSent).catch(function(){});
+}
+loadSent();
 </script></body></html>
