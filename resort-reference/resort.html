@@ -2290,6 +2290,24 @@ function jumpInterest(){
 function tellAmy(btn){
   try{
     var q=new URLSearchParams(location.search);
+    // a name and a way to reach them are required — otherwise there is nothing to follow up
+    var nm=((document.getElementById('iam-name')||{}).value||'').trim();
+    var em=((document.getElementById('iam-email')||{}).value||'').trim();
+    var ph=((document.getElementById('iam-phone')||{}).value||'').trim();
+    var note=document.querySelector('.iam-note');
+    var missing=[];
+    if(nm.length<2)missing.push('your name');
+    if(!em&&!ph)missing.push('an email address or a phone number');
+    else if(em&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)&&!ph)missing.push('a valid email address, or a phone number instead');
+    if(missing.length){
+      if(note){note.textContent='Just '+missing.join(' and ')+', so I know who to come back to.';note.style.color='#A33';}
+      [['iam-name',nm.length<2],['iam-email',!em&&!ph],['iam-phone',!em&&!ph]].forEach(function(x){
+        var el=document.getElementById(x[0]);if(el)el.style.borderColor=x[1]?'#A33':'';});
+      var first=document.getElementById(nm.length<2?'iam-name':'iam-email');
+      if(first)first.focus();
+      return;
+    }
+    if(note)note.style.color='';
     btn.disabled=true;
     btn.textContent='Got it \u2014 I\u2019ll be in touch \u2713';
     btn.classList.add('done');
