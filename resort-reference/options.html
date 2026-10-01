@@ -247,6 +247,8 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 @media(max-width:760px){.info .ibox{grid-template-columns:1fr;}}
 .in p.air b{display:inline-block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-right:8px;}
 .in ul.gl{margin:6px 0 0;padding-left:18px;}.in ul.gl li{margin:3px 0;}
+.hero .workwith{display:inline-block;align-self:flex-start;width:auto;max-width:max-content;margin-top:16px;padding:11px 20px;border-radius:999px;background:var(--btn);color:var(--btn-ink);font-family:var(--body);font-weight:700;font-size:14px;text-decoration:none;}
+.hero .workwith:hover{opacity:.88;}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -405,7 +407,7 @@ async function renderQuote(slugs){
   $('app').innerHTML=`
   <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Handpicked for your trip':'Handpicked for your wedding')}</span></div>
   <div class="wrap">
-    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p></div>
+    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p><a class="workwith" href="${CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-lead.netlify.app/'}" target="_blank" rel="noopener">What working with me looks like &rarr;</a></div>
       <div class="pic"${bg(brandHero(CT))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
     <div class="cards">${R.map(card).join('')}</div>
     <div class="ctas"><a class="btn" href="${mail}">Tell me which one</a></div>
