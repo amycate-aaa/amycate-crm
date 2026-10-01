@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light only">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Your wedding options | Amy Cate</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+*,*::before,*::after{box-sizing:inherit;}
+body[data-style="a"]{--bg:#FFFFFF;--panel:#F5F8FB;--surface:#FFFFFF;--line:#E3E9EF;--ink:#1C2B39;--muted:#5A6B7B;--accent:#2E7DD1;--btn:#2E7DD1;--btn-ink:#fff;
+  --soft:#EEF5FB;--soft-ink:#1F5F99;--fav:#FFFFFF;--fav-line:#2E7DD1;--badge:#2E7DD1;--badge-ink:#fff;--r:18px;--r-lg:22px;
+  --head:'Manrope',system-ui,sans-serif;--body:'Manrope',system-ui,sans-serif;--hw:800;--ht:-.025em;}
+body[data-style="c"]{--bg:#F7F7F7;--panel:#EBEBEB;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
+  --soft:#EBEBEB;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
+  --head:'Fraunces',Georgia,serif;--body:'Nunito Sans',system-ui,sans-serif;--hw:600;--ht:-.005em;}
+html{background:#fff;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 20px);}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17.5px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .2s;}
+h1,h2,h3{font-family:var(--head);font-weight:var(--hw);letter-spacing:var(--ht);line-height:1.08;margin:0;}
+a{color:var(--accent);}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+.ph{background:linear-gradient(135deg,#9FC9D3,#E9D9BE);}
+
+
+
+/* switcher (review only) */
+.switch{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:12px;z-index:80;display:flex;background:#111;border-radius:999px;padding:4px;box-shadow:0 8px 24px -10px rgba(0,0,0,.6);}
+.switch button{font:600 13px system-ui,sans-serif;color:#ccc;background:transparent;border:0;border-radius:999px;padding:8px 14px;cursor:pointer;}
+.switch button[aria-pressed="true"]{background:#fff;color:#111;}
+
+.top{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;font-size:14.5px;color:var(--muted);max-width:1080px;margin:0 auto;}
+.top b{color:var(--ink);font-weight:800;font-family:var(--body);}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:0;align-items:stretch;border-radius:var(--r-lg);overflow:hidden;background:var(--panel);}
+.hero .txt{padding:46px 40px;display:flex;flex-direction:column;justify-content:center;}
+.hi{align-self:flex-start;background:var(--surface);color:var(--soft-ink);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:700;margin-bottom:16px;}
+.hero h1{font-size:clamp(34px,4.6vw,52px);margin-bottom:14px;}
+.hero p{margin:0 0 20px;color:var(--muted);font-size:18px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chips span{background:var(--surface);border-radius:999px;padding:6px 13px;font-size:14px;font-weight:600;color:var(--soft-ink);}
+body[data-style="a"] .chips span{background:var(--soft);}
+.hero .pic{min-height:340px;}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px;}
+.card{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:transform .15s;}
+.card:hover{transform:translateY(-2px);}
+.card.fav{background:var(--fav);border:2px solid var(--fav-line);}
+body[data-style="c"] .card{padding:12px;}
+.card .pic{height:160px;position:relative;}
+body[data-style="c"] .card .pic{border-radius:16px;}
+.badge{position:absolute;top:12px;left:12px;background:var(--badge);color:var(--badge-ink);font-size:13px;font-weight:800;border-radius:999px;padding:5px 12px;}
+.card .b{padding:16px 18px 18px;}
+body[data-style="c"] .card .b{padding:12px 8px 6px;}
+.card h3{font-size:20px;}
+.card .w{margin:4px 0 12px;color:var(--muted);font-size:15px;}
+.card .amt{font-size:28px;font-weight:800;line-height:1;font-family:var(--body);}
+.card .per{font-size:13px;color:var(--muted);}
+
+.verdict{display:flex;gap:22px;align-items:center;background:var(--soft);border-radius:var(--r);padding:22px 26px;margin-top:18px;}
+.verdict .yes{font-family:var(--head);font-weight:var(--hw);font-size:46px;line-height:1;color:var(--soft-ink);}
+.verdict p{margin:0;}
+.fine{font-size:14px;color:var(--muted);margin:12px 4px 0;}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;}
+.btn{display:inline-block;background:var(--btn);color:var(--btn-ink);text-decoration:none;font-weight:700;border-radius:12px;padding:14px 22px;font-size:16px;}
+body[data-style="c"] .btn{border-radius:999px;}
+.btn.ghost{background:var(--soft);color:var(--soft-ink);}
+body[data-style="c"] .btn.ghost{background:var(--surface);color:var(--ink);}
+
+/* sections */
+.sec{padding:64px 0 0;}
+.sec>.wrap>h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:10px;}
+.sec>.wrap>.lead{color:var(--muted);margin:0 0 22px;max-width:680px;font-size:18px;}
+
+.resort{display:block;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;margin-top:18px;}
+.resort.fav{background:var(--fav);border:2px solid var(--fav-line);}
+.resort .pic{position:sticky;top:20px;align-self:start;height:360px;}
+.resort .b{padding:30px 32px;}
+.resort .tagline{color:var(--soft-ink);font-weight:700;font-size:15px;margin:0 0 6px;}
+.resort h3{font-size:30px;margin-bottom:10px;}
+.resort .pitch{margin:0 0 16px;}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 16px;}
+.stats div{background:var(--soft);border-radius:12px;padding:10px 14px;}
+body[data-style="c"] .resort.fav .stats div{background:#F2F2F2;}
+.stats b{display:block;font-size:22px;font-weight:800;line-height:1.1;}
+.stats span{font-size:13px;color:var(--muted);}
+.wed{border-left:3px solid var(--accent);padding:4px 0 4px 14px;margin:0 0 14px;font-size:16.5px;}
+details{border-top:1px solid var(--line);}
+body[data-style="c"] details{border-top:1px solid rgba(47,59,55,.12);}
+summary{cursor:pointer;list-style:none;padding:13px 34px 13px 0;font-weight:700;position:relative;font-size:16.5px;}
+summary::-webkit-details-marker{display:none;}
+summary::after{content:"+";position:absolute;right:4px;top:8px;font-size:24px;font-weight:400;color:var(--accent);transition:transform .2s;}
+details[open] summary::after{transform:rotate(45deg);}
+details .in{padding:0 0 14px;font-size:16.5px;}
+details .in p{margin:0 0 10px;}
+details .in ul{margin:0 0 10px;padding-left:20px;}
+.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed var(--line);padding:6px 0;}
+body[data-style="c"] .row{border-bottom-color:rgba(47,59,55,.15);}
+.row span:last-child{color:var(--muted);white-space:nowrap;}
+
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;}
+.tile .ic{font-size:24px;margin-bottom:10px;}
+.tile h3{font-size:18px;margin-bottom:6px;font-family:var(--body);font-weight:800;letter-spacing:0;}
+.tile p{margin:0;font-size:15.5px;color:var(--muted);}
+.more{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:4px 22px;margin-top:14px;}
+.more details:first-child{border-top:0;}
+
+.close{background:var(--panel);border-radius:var(--r-lg);padding:44px 40px;text-align:center;margin-top:64px;}
+.close h2{font-size:clamp(28px,3.6vw,40px);margin-bottom:10px;}
+.close p{max-width:620px;margin:0 auto 6px;}
+.close .ctas{justify-content:center;}
+.free{display:inline-block;background:var(--surface);border-radius:999px;padding:8px 16px;font-weight:700;color:var(--soft-ink);margin-top:22px;font-size:15px;}
+.sig{font-family:var(--head);font-weight:var(--hw);font-size:28px;margin-top:20px;}
+footer{text-align:center;font-size:14px;color:var(--muted);padding:34px 24px 110px;}
+
+.talk{position:fixed;right:20px;bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--btn);color:var(--btn-ink);text-decoration:none;font-weight:800;border-radius:999px;padding:15px 24px;box-shadow:0 12px 30px -12px rgba(0,0,0,.45);}
+
+@media(max-width:860px){
+  .hero,.resort{grid-template-columns:1fr;}
+  .hero .txt{padding:32px 24px;}
+  .hero .pic{min-height:220px;order:-1;}
+  .resort .pic{position:relative;top:auto;height:220px;}
+  .resort .b{padding:24px 22px;}
+  .cards{grid-template-columns:1fr;}
+  .tiles{grid-template-columns:1fr 1fr;}
+  .verdict{flex-direction:column;align-items:flex-start;gap:6px;}
+  .close{padding:34px 22px;}
+  .talk{left:16px;right:16px;text-align:center;}
+  .top{padding-right:150px;}
+}
+@media(max-width:480px){.tiles{grid-template-columns:1fr;}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+
+.venues{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:4px 0 16px;}
+.venue{background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--line);}
+body[data-style="c"] .venue{background:#F7F7F7;}
+.venue .vp{display:block;width:100%;height:150px;object-fit:cover;}
+.venue .vb{padding:10px 12px 12px;}
+.venue h4{margin:0;font-size:16px;font-family:var(--body);font-weight:800;color:#1A1A1A;display:block;}
+.venue .cap{font-size:13px;color:var(--soft-ink);font-weight:700;}
+.venue p{margin:4px 0 0;font-size:14px;color:var(--muted);line-height:1.45;}
+.vmore{display:flex;flex-wrap:wrap;gap:6px;padding:0 0 16px;}
+.vmore span{background:var(--soft);color:var(--soft-ink);border-radius:999px;padding:5px 12px;font-size:13.5px;font-weight:600;}
+.pkgs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:4px 0 16px;}
+.pkg{border:1px solid var(--line);border-radius:14px;padding:14px 16px;background:var(--bg);}
+body[data-style="c"] .pkg{background:#F7F7F7;border-color:transparent;}
+.pkg h4{margin:0;font-size:17px;font-family:var(--body);font-weight:800;}
+.pkg .pr{font-size:20px;font-weight:800;margin:4px 0 2px;}
+.pkg .cv{font-size:13.5px;color:var(--soft-ink);font-weight:700;}
+.pkg ul{margin:8px 0 0;padding-left:18px;font-size:14.5px;}
+.pkg li{margin-bottom:3px;}
+.pkg .note{font-size:13.5px;color:var(--muted);margin:8px 0 0;font-style:italic;}
+.cmpwrap{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:14px;}
+.cmp{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px;}
+.cmp th,.cmp td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:center;vertical-align:top;}
+body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rgba(47,59,55,.12);}
+.cmp th:first-child,.cmp td:first-child{text-align:left;}
+.cmp thead th{font-size:13px;vertical-align:bottom;}
+.cmp thead th b{display:block;font-size:14.5px;}
+.cmp thead th span{display:block;font-weight:400;color:var(--muted);}
+.cmp .grp td{font-weight:800;color:var(--soft-ink);padding-top:16px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;}
+.cmp .y{color:var(--accent);font-weight:800;}
+.cmp .n{color:#B8C0C8;}
+.notes{margin:0;padding:0 0 14px 18px;font-size:15.5px;}
+.budget{background:var(--soft);border-radius:var(--r);padding:16px 22px;margin-top:18px;font-size:16.5px;}
+.budget b{color:var(--soft-ink);}
+.resort .b h3{margin-bottom:6px;}
+.resort .tag2{color:var(--muted);margin:0 0 14px;}
+@media(max-width:860px){.venues{grid-template-columns:1fr 1fr;}.pkgs{grid-template-columns:1fr;}}
+@media(max-width:480px){.venues{grid-template-columns:1fr;}}
+
+.picker{max-width:760px;margin:30px auto 80px;padding:0 20px;font-family:var(--body);}
+.picker h1{font-size:34px;margin-bottom:6px;}
+.picker .sub{color:var(--muted);margin:0 0 20px;}
+.pf{display:grid;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;}
+.pf label{font-size:14px;font-weight:700;display:block;margin-bottom:4px;}
+.pf input[type=text],.pf input[type=search]{width:100%;font:inherit;padding:10px 12px;border:1px solid #CBD5DF;border-radius:10px;background:#fff;color:#1C2B39;}
+.plist{max-height:340px;overflow-y:auto;border:1px solid #E3E9EF;border-radius:10px;}
+.plist label{display:flex;gap:10px;align-items:center;padding:9px 12px;border-bottom:1px solid #EEF2F6;font-weight:500;cursor:pointer;margin:0;}
+.plist label small{color:var(--muted);font-weight:400;margin-left:auto;font-size:12.5px;}
+.sel{display:flex;flex-direction:column;gap:6px;}
+.sel div{display:flex;justify-content:space-between;align-items:center;background:var(--soft);border-radius:10px;padding:8px 12px;font-size:15px;}
+.sel button{font:inherit;font-size:13px;border:0;background:transparent;color:var(--soft-ink);cursor:pointer;font-weight:700;}
+.sel .on{background:var(--btn);color:var(--btn-ink);border-radius:999px;padding:3px 10px;}
+.prow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+.prow .btn{border:0;cursor:pointer;font-family:inherit;}
+.status{font-size:14px;color:var(--muted);}
+.docs{display:flex;gap:8px;flex-wrap:wrap;padding:0 0 14px;}
+.docs a{background:var(--soft);color:var(--soft-ink);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700;text-decoration:none;}
+.roombox{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;background:var(--soft);border-radius:14px;padding:12px;margin:0 0 14px;}
+.roombox .rp{width:110px;height:84px;border-radius:10px;background-size:cover;background-position:center;}
+.roombox .rp.none{display:none;}
+.roombox.nopic{grid-template-columns:1fr;}
+.roombox .lbl{font-size:12.5px;font-weight:800;color:var(--soft-ink);text-transform:uppercase;letter-spacing:.06em;}
+.roombox .rn{font-weight:700;}
+.roombox .pp{font-size:24px;font-weight:800;line-height:1.1;}
+.roombox .pb{font-size:13.5px;color:var(--muted);}
+.selrow{display:grid;grid-template-columns:1fr 1fr 110px auto;gap:8px;align-items:center;background:var(--soft);border-radius:10px;padding:8px 10px;}
+.selrow select,.selrow input,.pf select,.pf input[type=number]{font:inherit;font-size:14px;padding:7px 8px;border:1px solid #CBD5DF;border-radius:8px;background:#fff;color:#1C2B39;width:100%;}
+.selrow .nm2{font-weight:700;font-size:14.5px;}
+@media(max-width:640px){.selrow{grid-template-columns:1fr 1fr;}}
+.loading{text-align:center;padding:120px 20px;color:var(--muted);}
+.vp.none{background:var(--soft);}
+
+.resort .top{display:grid;grid-template-columns:.9fr 1.1fr;}
+.resort .top .pic{position:relative;top:auto;align-self:stretch;height:auto;min-height:300px;}
+.resort .exp{padding:0 32px 18px;}
+.resort .exp details:first-child{border-top:1px solid var(--line);}
+.pkgs{grid-template-columns:repeat(3,1fr);}
+.venues{grid-template-columns:repeat(4,1fr);}
+.pkg .pr{font-size:18px;line-height:1.3;}
+@media(max-width:1000px){.pkgs{grid-template-columns:repeat(2,1fr);}.venues{grid-template-columns:repeat(3,1fr);}}
+@media(max-width:860px){.resort .top{grid-template-columns:1fr;}.resort .top .pic{min-height:220px;}.resort .exp{padding:0 22px 14px;}}
+@media(max-width:620px){.pkgs,.venues{grid-template-columns:1fr;}}
+</style></head>
+<body data-style="a">
+<div id="app"><p class="loading">Loading…</p></div>
+<script>
+/* MODERN QUOTE — TEST PAGE. Read-only: this page never writes to Firestore. */
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+const db=firebase.firestore();
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* same internal-note guard as resort.html */
+const AC_BLOCK=[/not published/i,/conflict/i,/\u26a0/,/confirm with(\s+the)?\s+resort/i,/verify current/i,/not confirmed/i,/not detailed in the brochure/i,/contact the (resort\s+)?wedding coordinator/i,/listed on destinationweddings/i,/needs? (to be )?verif/i,/internal only/i,/check with the resort/i];
+const isClean=s=>{if(s===0)return true;if(!s)return false;const t=String(s).trim();return !!t&&!AC_BLOCK.some(r=>r.test(t));};
+const clean=s=>isClean(s)?String(s).trim():'';
+const photoOk=u=>{if(!u)return false;const s=String(u).trim(),l=s.toLowerCase();if(!s||l==='null'||l==='undefined')return false;return /^https?:\/\//.test(s);};
+const pic=o=>[o&&o.photo,o&&o.photoUrl].find(photoOk)||'';
+const nm=x=>typeof x==='string'?x:String((x&&(x.name||x.venueName||x.title||x.label||x.venue))||'');
+const phUrl=ph=>[ph&&ph.url,ph&&ph.downloadURL].find(photoOk)||'';
+const low=t=>String(t||'').toLowerCase().trim();
+/* same fallbacks as resort.html: record photo first, then the resort's photo library */
+const heroOf=r=>photoOk(r.heroPhoto)?r.heroPhoto:phUrl((r.__ph||[]).find(ph=>!low(ph.roomCategory)&&low(ph.category)&&!/room/.test(low(ph.category))&&phUrl(ph))||{});
+const STOP=/^(the|de|del|la|el|and|at|of|room|suite|venue|area)$/;
+const words=t=>low(t).replace(/[^a-z0-9\u00c0-\u024f ]+/g,' ').split(/\s+/).filter(w=>w.length>2&&!STOP.test(w));
+const libMatch=(r,name,pref)=>{const n=low(name);if(!n)return'';let L=(r.__ph||[]).filter(phUrl);
+  const txt=ph=>low(ph.caption)+' '+low(ph.roomCategory)+' '+low(ph.venue)+' '+low(ph.name)+' '+low(decodeURIComponent(String(phUrl(ph)).split('/').pop().split('?')[0]).replace(/[-_]/g,' '));
+  const order=pref?L.filter(ph=>pref.test(low(ph.category))).concat(L.filter(ph=>!pref.test(low(ph.category)))):L;
+  const w=words(name);
+  const hit=order.find(ph=>low(ph.caption)===n||low(ph.roomCategory)===n||low(ph.venue)===n)
+    ||order.find(ph=>{const c=low(ph.caption)||low(ph.roomCategory);return c&&(c.includes(n)||n.includes(c));})
+    ||(w.length?order.find(ph=>{const t=txt(ph);return w.every(x=>t.includes(x));}):null);
+  return hit?phUrl(hit):'';};
+const norm=a=>(Array.isArray(a)?a:[]).map(x=>typeof x==='string'?{name:x}:Object.assign({},x,{name:nm(x)})).filter(x=>isClean(x.name));
+function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s?[A-Z0-9])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).filter(Boolean);}
+const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
+const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
+const Q=new URLSearchParams(location.search);
+const style=(Q.get('s')||'c').toLowerCase()==='a'?'a':'c';
+const CT=(Q.get('b')||'').toLowerCase()==='ct';
+const AMY_EMAIL=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
+document.body.dataset.style=style;
+
+function cmpTable(pc){
+  if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
+  const cell=v=>v==='Y'?'<td class="y">\u2713</td>':v==='-'?'<td class="n">\u2014</td>':!v?'<td></td>':`<td>${esc(v)}</td>`;
+  return `<div class="cmpwrap"><table class="cmp"><thead><tr><th></th>${pc.packages.map(p=>`<th><b>${esc(p.name)}</b>${p.cap?`<span>${esc(p.cap)}</span>`:''}</th>`).join('')}</tr></thead><tbody>${
+    pc.groups.map(g=>`<tr class="grp"><td colspan="${pc.packages.length+1}">${esc(g.title)}</td></tr>`+(g.rows||[]).filter(r=>isClean(r.label)).map(r=>`<tr><td>${esc(r.label)}</td>${(r.values||[]).map(cell).join('')}</tr>`).join('')).join('')
+  }</tbody></table></div>`;
+}
+function docs(P,section){
+  const d=(P.documents||P.docLinks||[]).filter(x=>x&&photoOk(x.url)&&(x.public===true||x.public==='true'||x.isPublic===true)&&isClean(x.label)&&String(x.section||'')===section);
+  return d.length?`<div class="docs">${d.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a>`).join('')}</div>`:'';
+}
+function venuesHtml(P){
+  const v=norm(P.venues).map(x=>Object.assign({},x,{photo:pic(x)||libMatch(P,x.name,/venue|wedding|ceremon/)}));
+  const feat=v.filter(x=>pic(x)||clean(x.description)), rest=v.filter(x=>!pic(x)&&!clean(x.description));
+  return docs(P,'venues')+`<div class="venues">${feat.map(x=>`<div class="venue">${pic(x)?`<img class="vp" src="${esc(pic(x))}" alt="${esc(x.name)}" loading="lazy" onerror="this.remove()">`:''}<div class="vb"><h4>${esc(x.name)}</h4>${x.capacity?`<div class="cap">Up to ${esc(x.capacity)}</div>`:''}${clean(x.description)?`<p>${esc(clean(x.description))}</p>`:''}</div></div>`).join('')}</div>`+
+    (rest.length?`<div class="vmore">${rest.map(x=>`<span>${esc(x.name)}${x.capacity?' \u00b7 '+esc(x.capacity):''}</span>`).join('')}</div>`:'');
+}
+function packagesHtml(P){
+  const p=norm(P.packages);
+  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${clean(x.price)?`<div class="pr">${esc(clean(x.price))}</div>`:''}${clean(x.capacity)?`<div class="cv">${esc(clean(x.capacity))}</div>`:''}${clean(x.summary)?`<p class="note" style="font-style:normal">${esc(clean(x.summary))}</p>`:''}${h.length?`<ul>${h.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}</div>`;}).join('')}</div>`;
+}
+function notesList(P){
+  const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).filter(Boolean);
+  return n;
+}
+
+let PR={b:'',n:'',d:'',x:{}};
+try{const raw=Q.get('p');if(raw)PR=Object.assign(PR,JSON.parse(decodeURIComponent(escape(atob(raw)))));}catch(e){console.warn('pricing',e);}
+const BASIS={ppn:'per person, per night',tot:'total for 2, room only',pkg:'total for 2, flights + resort'};
+const basisTxt=()=>(BASIS[PR.b]||'')+(PR.b&&PR.b!=='ppn'&&PR.n?', '+PR.n+' nights':'');
+const priceOf=r=>(PR.x&&PR.x[r.slug])||{};
+const roomPic=(r,name)=>{const rc=(r.roomCategories||[]).find(x=>x&&nm(x)===name)||{};return [rc.photo,rc.photoUrl].concat(Array.isArray(rc.photos)?rc.photos:[]).find(photoOk)||libMatch(r,name);};
+async function renderQuote(slugs){
+  const pick=Q.get('pick')||'';const who=Q.get('for')||'';
+  const snaps=await Promise.all(slugs.map(s=>db.collection('resortProfiles').doc(s).get()));
+  const phs=await Promise.all(slugs.map(s=>db.collection('resortPhotos').where('resortSlug','==',s).get().then(q=>q.docs.map(d=>d.data())).catch(()=>[])));
+  const R=snaps.map((s,i)=>s.exists?Object.assign({slug:s.id,__ph:phs[i]},s.data()):null).filter(Boolean);
+  if(!R.length){$('app').innerHTML='<p class="loading">No resorts found for this link.</p>';return;}
+  const hero=(R.find(r=>r.slug===pick)||R[0]);
+  const venueN=r=>norm(r.venues).length, pkgN=r=>norm(r.packages).length;
+  const dest=r=>clean(String(r.destination||'').split(',')[0]);
+  const card=r=>`<a class="card${r.slug===pick?' fav':''}" href="#${esc(r.slug)}"><div class="pic${photoOk(heroOf(r))?'':' ph'}"${bg(heroOf(r))}>${r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':''}</div><div class="b"><h3>${esc(r.name||r.slug)}</h3><p class="w">${esc(dest(r))}</p>${priceOf(r).pr?`<div class="amt">${esc(priceOf(r).pr)}</div><div class="per">${esc(basisTxt())}</div>`:''}${CT?'':`<div class="per" style="margin-top:6px">${venueN(r)} venues \u00b7 ${pkgN(r)} packages</div>`}</div></a>`;
+  const block=r=>{
+    const v=CT?0:venueN(r),p=CT?0:pkgN(r),pc=CT?'':cmpTable(r.packageComparison),n=notesList(r);
+    const stats=[[dest(r),'destination'],[clean(r.agePolicy),'guests']].concat(CT?[]:[[v,'venues'],[p,'packages']]).filter(s=>s[0]!==''&&s[0]!==0);
+    return `<article class="resort${r.slug===pick?' fav':''}" id="${esc(r.slug)}"><div class="top"><div class="pic${photoOk(heroOf(r))?'':' ph'}"${bg(heroOf(r))}>${r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':''}</div><div class="b">
+      <h3>${esc(r.name||r.slug)}</h3><p class="tag2">${esc(clean(r.tagline)||firstSentence(r.description))}</p>
+      ${(()=>{const q=priceOf(r);if(!q.pr)return'';const rp=roomPic(r,q.r);return `<div class="roombox${rp?'':' nopic'}"><div class="rp${rp?'':' none'}"${bg(rp)}></div><div><div class="lbl">Estimated room pricing</div>${q.r?`<div class="rn">${esc(q.r)}</div>`:''}<div class="pp">${esc(q.pr)}</div><div class="pb">${esc(basisTxt())}${PR.d?' \u00b7 '+esc(PR.d):''}</div></div></div>`;})()}
+      <div class="stats">${stats.map(s=>`<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join('')}</div>
+    </div></div><div class="exp">
+      ${v?`<details><summary>Wedding venues (${v})</summary><div class="in">${venuesHtml(r)}</div></details>`:''}
+      ${p?`<details><summary>Wedding packages (${p})</summary><div class="in">${packagesHtml(r)}</div></details>`:''}
+      ${pc?`<details><summary>Compare packages side by side</summary><div class="in">${pc}</div></details>`:''}
+      ${n.length?`<details><summary>Good to know</summary><div class="in"><ul class="notes">${n.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`:''}
+    </div></article>`;};
+  document.title=(who?who+' | ':'')+(CT?'Resort options':'Wedding options');
+  const mail='mailto:'+AMY_EMAIL+'?subject='+encodeURIComponent((who?who+': ':'')+(CT?'Our resort options':'Our wedding options'));
+  $('app').innerHTML=`
+  <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Your resort options':'Your wedding options')}</span></div>
+  <div class="wrap">
+    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Your resort options':'Your wedding options'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p></div>
+      <div class="pic${photoOk(heroOf(hero))?'':' ph'}"${bg(heroOf(hero))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
+    <div class="cards">${R.map(card).join('')}</div>
+    <div class="ctas"><a class="btn" href="${mail}">Tell me which one</a></div>
+  </div>
+  <section class="sec"><div class="wrap"><h2>The resorts</h2><p class="lead">${CT?'Tap a resort card above to jump to it.':'Tap to open venues, packages and the comparison.'}</p>${R.map(block).join('')}</div></section>
+  <div class="wrap"><section class="close"><h2>Which one do you like?</h2>
+    <div class="ctas"><a class="btn" href="${mail}">Email Amy</a></div>
+    <span class="free">My help is free. The resorts pay me, not you.</span></section></div>
+  <footer>Amy Cate, ${CT?'Celebration Travel':'Certified Destination Wedding &amp; Group Travel Specialist'}<br>(832) 773-8664 \u00b7 Mon\u2013Thu 9\u20135, Fri 9\u20133 CST<br><br>${Object.keys(PR.x||{}).length?`Room prices are the rates I\u2019m seeing today for sample dates, ${esc(basisTxt())}. Your guests can choose their own dates and length of stay. If you find the same resort, room and dates for less online, send it to me before we book \u2014 I price match.${PR.b==='pkg'?' Package prices cover flights and the resort but not the airport transfer, which I add when we book.':''}<br><br>`:''}Packages, venues and prices are the resorts\u2019 published figures and can change. Exact numbers are confirmed for your dates before anything is booked.</footer>`;
+}
+
+async function renderPicker(){
+  $('app').innerHTML=`<div class="picker"><h1>Modern quote (test)</h1><p class="sub">Pick up to 4 resorts. This page only reads your library. It never changes anything.</p>
+  <div class="pf">
+    <div><label for="who">Couple name</label><input type="text" id="who" placeholder="Kaylee &amp; Derek"></div>
+    <div><label for="find">Find a resort</label><input type="search" id="find" placeholder="Type to filter"></div>
+    <div class="plist" id="plist"><p class="status" style="padding:10px 12px">Loading your library…</p></div>
+    <div><label>Selected: room, price, \u2605 your pick</label><div class="sel" id="sel"><p class="status">None yet.</p></div></div>
+    <div class="prow" style="display:grid;grid-template-columns:1.4fr .6fr 1.4fr;gap:8px;">
+      <div><label for="basis">Price is</label><select id="basis"><option value="ppn">Per person, per night</option><option value="tot">Total for 2, room only</option><option value="pkg">Total for 2, flights + resort</option></select></div>
+      <div><label for="nights">Nights</label><input type="number" id="nights" min="1" max="30" value="3"></div>
+      <div><label for="dates">Sample dates</label><input type="text" id="dates" placeholder="Feb 24\u201327, 2028"></div>
+    </div>
+    <div class="prow"><label style="margin:0">Style</label><label style="margin:0;font-weight:500"><input type="radio" name="st" value="a" checked> A, clean &amp; bright</label><label style="margin:0;font-weight:500"><input type="radio" name="st" value="c"> C, soft &amp; friendly</label></div>
+    <div class="prow"><button class="btn" id="go">Open quote</button><button class="btn ghost" id="copy">Copy link</button><span class="status" id="msg"></span></div>
+  </div></div>`;
+  const snap=await db.collection('resortProfiles').orderBy('name').get();
+  const all=[];snap.forEach(d=>{if(/-(maggie|chris)$/.test(d.id))return;const p=d.data();all.push({id:d.id,name:p.name||d.id,v:(p.venues||[]).length,k:(p.packages||[]).length,rooms:(Array.isArray(p.roomCategories)?p.roomCategories:[]).map(nm).filter(Boolean)});});
+  let chosen=[],fav='';const price={};
+  const draw=()=>{const f=$('find').value.toLowerCase();
+    $('plist').innerHTML=all.filter(r=>!f||r.name.toLowerCase().includes(f)).map(r=>`<label><input type="checkbox" value="${esc(r.id)}"${chosen.includes(r.id)?' checked':''}> ${esc(r.name)}<small>${r.v} venues \u00b7 ${r.k} pkgs</small></label>`).join('')||'<p class="status" style="padding:10px 12px">No match.</p>';
+    $('sel').innerHTML=chosen.length?chosen.map(id=>{const r=all.find(x=>x.id===id);const q=price[id]||{};return `<div class="selrow"><span class="nm2">${esc(r.name)}</span><select data-room="${esc(id)}"><option value="">Room category</option>${r.rooms.map(n=>`<option${q.r===n?' selected':''}>${esc(n)}</option>`).join('')}</select><input data-price="${esc(id)}" placeholder="$308" value="${esc(q.pr||'')}"><span><button data-fav="${esc(id)}" class="${fav===id?'on':''}">\u2605</button> <button data-rm="${esc(id)}">\u2715</button></span></div>`;}).join(''):'<p class="status">None yet.</p>';};
+  const save=e=>{const t=e.target;if(t.dataset.room){(price[t.dataset.room]=price[t.dataset.room]||{}).r=t.value;}if(t.dataset.price){(price[t.dataset.price]=price[t.dataset.price]||{}).pr=t.value.trim();}};
+  draw();
+  $('find').addEventListener('input',draw);
+  $('plist').addEventListener('change',e=>{const id=e.target.value;if(e.target.checked){if(chosen.length>=4){e.target.checked=false;$('msg').textContent='Up to 4 resorts.';return;}chosen.push(id);}else{chosen=chosen.filter(x=>x!==id);if(fav===id)fav='';}draw();});
+  $('sel').addEventListener('input',save);$('sel').addEventListener('change',save);
+  $('sel').addEventListener('click',e=>{const f=e.target.closest('[data-fav]'),r=e.target.closest('[data-rm]');if(!f&&!r)return;if(f){fav=fav===f.dataset.fav?'':f.dataset.fav;}if(r){chosen=chosen.filter(x=>x!==r.dataset.rm);if(fav===r.dataset.rm)fav='';}draw();});
+  const link=()=>{const u=new URL(location.href.split('?')[0]);u.searchParams.set('r',chosen.join(','));if(fav)u.searchParams.set('pick',fav);
+    const x={};chosen.forEach(id=>{const q=price[id];if(q&&q.pr){let v=q.pr;if(/^\d[\d,]*(\.\d+)?$/.test(v))v='$'+v;x[id]={r:q.r||'',pr:v};}});
+    if(Object.keys(x).length){const P={b:$('basis').value,n:$('nights').value,d:$('dates').value.trim(),x};u.searchParams.set('p',btoa(unescape(encodeURIComponent(JSON.stringify(P)))));}const w=$('who').value.trim();if(w)u.searchParams.set('for',w);const s=document.querySelector('input[name=st]:checked').value;if(s==='c')u.searchParams.set('s','c');return u.toString();};
+  $('go').addEventListener('click',()=>{if(!chosen.length){$('msg').textContent='Pick at least one resort.';return;}window.open(link(),'_blank');});
+  $('copy').addEventListener('click',async()=>{if(!chosen.length){$('msg').textContent='Pick at least one resort.';return;}try{await navigator.clipboard.writeText(link());$('msg').textContent='Link copied.';}catch(e){$('msg').textContent=link();}});
+}
+
+(async function(){
+  try{const r=(Q.get('r')||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,10);
+    if(r.length)await renderQuote(r);else await renderPicker();}
+  catch(e){console.error(e);$('app').innerHTML='<p class="loading">Could not load: '+esc(e.message)+'</p>';}
+})();
+</script>
+</body></html>
