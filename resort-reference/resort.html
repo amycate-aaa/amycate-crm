@@ -1413,14 +1413,18 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
     if(Object.keys(P0.x).length)u.searchParams.set('p',btoa(unescape(encodeURIComponent(JSON.stringify(P0)))));
     oneLink=u.toString();window.MQ_ONE_LINK=oneLink;
     const many=made.length>1;
-    body=hi+'\n\n'+(note?note+'\n\n':'I am so excited to work with you! I wanted to send over some of my initial thoughts and a few of my favorites'+(destTxt?' in '+destTxt:'')+'. There are so many resorts and locations, so think of this as a starting point to help us narrow things down \u2014 once we have a good idea of a direction, we can expand and add more.\n\n'+(many?'Here they are, all on one page':'Here it is')+(travel?', priced for '+travel:'')+':\n\n')
-      +oneLink+'\n\n'
-      +'A few things to know:\n'
-      +(Object.keys(P0.x).length?'\u2022 Room prices are '+(basis==='total'?'the total for '+basisTxt:basisTxt+(typeof nTxt!=='undefined'&&nTxt?', based on '+nTxt:''))+', so you can compare the resorts side by side. Guests can pick their own nights and dates when they book.\n':'\u2022 Guests can pick their own nights and dates when they book.\n')
-      +'\u2022 If you need to hold 10 or more rooms, I can get you a group rate.\n'
-      +'\u2022 Roundtrip airport transportation will be included'+(xferNote?' \u2014 the package prices shown cover the flights and the resort, and I\u2019ll add the transfers when we book':'')+'.\n'
-      +'\u2022 I price match. If you come across the same resort, room and dates for less anywhere online, send it to me before we book.\n'
-      +'\nHave a look and tell me which ones you like \u2014 nothing to decide today. I\u2019m always happy to jump on a call, too.';
+    body=hi+'\n\n'+(note?note+'\n\n':'I\u2019m so excited to work with you! Here are some of my initial thoughts and favorites'+(destTxt?' in '+destTxt:'')+'.\n\n')
+      +'YOUR OPTIONS'+(many?' (all on one page)':'')+(travel?' \u2014 '+travel:'')+'\n'+oneLink+'\n\n'
+      +'HOW THIS WORKS\n'
+      +'\u2022 This is a starting point. Once we have a direction, I can add more resorts and locations.\n'
+      +(Object.keys(P0.x).length?'\u2022 Prices are '+(basis==='total'?'the total for '+basisTxt:basisTxt+(nTxt?', based on '+nTxt:''))+', so you can compare side by side.\n':'')
+      +'\u2022 Guests pick their own nights and dates when they book.\n'
+      +'\u2022 10 or more rooms? I can get you a group rate to hold them.\n'
+      +'\u2022 Roundtrip airport transportation is included'+(xferNote?' (package prices cover flights and the resort; I\u2019ll add transfers when we book)':'')+'.\n'
+      +'\u2022 I price match. Find the same resort, room and dates for less online? Send it to me before we book.\n\n'
+      +'NEXT STEP\n'
+      +'\u2022 Tell me which ones you like \u2014 nothing to decide today.\n'
+      +'\u2022 Happy to jump on a call anytime.';
   }
   if(dry){const pv=$id('mq-preview');pv.style.display='block';pv.innerHTML='<p class="eyebrow" style="margin-bottom:8px;">Preview \u2014 nothing saved yet</p>'+(oneLink?'<p style="margin:0 0 12px;"><a href="'+esc(oneLink)+'" target="_blank" class="qb-btn">Open the one-page quote (Modern) \u2192</a></p>':'')+made.map(m=>{const q=m._q;return'<div style="border:1px solid var(--sand-deep);padding:12px 16px;margin-bottom:10px;"><b>'+esc(m.name)+'</b>'+(m.where?' <span class="small" style="opacity:.7;">\u00b7 '+esc(m.where)+'</span>':'')+' <a href="'+esc(m.link)+'" target="_blank" class="small" style="color:var(--gold);margin-left:10px;">open the quote page as the client will see it \u2192</a>'+
     '<div class="small" style="margin-top:6px;">'+(m.rooms.length?m.rooms.map(l=>esc(l.trim())).join('<br>'):'<span style="opacity:.6;">No room price entered</span>')+(q.pkgPrice?'<br>With flights: $'+esc(q.pkgPrice)+' per person \u2014 '+esc(q.pkgCovers):'')+(q.air&&q.air.length?'<br>Flights: '+q.air.map(a=>esc(a.flight+' '+a.from+'\u2013'+a.to+' '+a.date+(a.dep?' '+a.dep:''))).join(' \u00b7 '):'<br><span style="opacity:.6;">No flights on this one</span>')+(q.note?'<br>Note: '+esc(q.note):'')+'</div></div>';}).join('')+
