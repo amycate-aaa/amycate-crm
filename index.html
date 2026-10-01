@@ -372,9 +372,9 @@ tr:hover .sticky-col{background:var(--surface2);}
           <thead><tr>
             <th style="cursor:pointer;user-select:none" onclick="leadsSortClick('names')">Names ↕</th><th>Type</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('eventDate')">Event Date ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('profileCreated')">Signed Up ↕</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('destination')">Destination ↕</th>
             <th>Guests</th><th style="cursor:pointer;user-select:none" onclick="leadsSortClick('status')">Status ↕</th>
-            <th>Notes</th><th class="sticky-col"></th>
+            <th style="cursor:pointer;user-select:none" onclick="leadsSortClick('lastContact')">Last Contact ↕</th><th>Notes</th><th class="sticky-col"></th>
           </tr></thead>
-          <tbody id="leadTableBody"><tr><td colspan="11"><div class="empty-state"><div class="icon">⭐</div><p>No events yet</p></div></td></tr></tbody>
+          <tbody id="leadTableBody"><tr><td colspan="12"><div class="empty-state"><div class="icon">⭐</div><p>No events yet</p></div></td></tr></tbody>
         </table>
       </div>
     </div>
@@ -4342,8 +4342,10 @@ function renderTimeline(){
   }).join('');
 }
 
+function lcOf(l){let best={date:'',type:''};(l.activity||[]).forEach(a=>{if(!a||!a.date)return;if(!/text|email|call|sms|phone|meeting|zoom/i.test(a.type||''))return;const d=String(a.date).slice(0,10);if(d>best.date)best={date:d,type:a.type};});return best;}
 function renderLeads(){
   const tbody=document.getElementById('leadTableBody'); if(!tbody) return;
+  leads.forEach(l=>{const c=lcOf(l);l.lastContact=c.date;l.lastContactType=c.type;});
   const search=(gv('leadSearch')).toLowerCase();
   const statusF=gv('leadStatusFilter');
   const today=new Date(); today.setHours(0,0,0,0);
@@ -4361,6 +4363,7 @@ function renderLeads(){
   const sortedLeads = ls.col ? [...filtered].sort((a,b)=>{
     const acx=acFirst(a,b); if(acx) return acx;
     let av=a[ls.col]??'', bv=b[ls.col]??'';
+    if(/^\d{4}-\d{2}-\d{2}/.test(String(av))||/^\d{4}-\d{2}-\d{2}/.test(String(bv))) return String(av).localeCompare(String(bv))*ls.dir;
     const an=parseFloat(av),bn=parseFloat(bv);
     if(!isNaN(an)&&!isNaN(bn)) return (an-bn)*ls.dir;
     return String(av).localeCompare(String(bv))*ls.dir;
@@ -4379,6 +4382,7 @@ function renderLeads(){
       <td style="color:var(--muted);font-size:.95rem">${esc(l.destination)}</td>
       <td style="text-align:center">${l.guestCount||'—'}</td>
       <td><span class="badge ${sb[l.status]||'badge-muted'}">${l.status}</span></td>
+      <td style="font-size:.92rem;white-space:nowrap">${l.lastContact?`${fmtDate(l.lastContact)}<br><span style="color:var(--muted);font-size:.8rem">${esc(l.lastContactType||'')} · ${Math.max(0,Math.round((today-new Date(l.lastContact+'T00:00:00'))/86400000))}d ago</span>`:'—'}</td>
       <td style="color:var(--muted);font-size:.92rem;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(l.notes)}</td>
       <td class="sticky-col">
         <button onclick="event.stopPropagation();toggleLeadMenu('${l.id}',this)" style="background:#1a1a1a;border:1px solid #444;color:white;font-size:.85rem;font-weight:700;padding:5px 12px;border-radius:6px;cursor:pointer">⋯</button>
