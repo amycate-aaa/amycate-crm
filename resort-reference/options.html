@@ -15,8 +15,8 @@
 body[data-style="a"]{--bg:#FFFFFF;--panel:#F5F8FB;--surface:#FFFFFF;--line:#E3E9EF;--ink:#1C2B39;--muted:#5A6B7B;--accent:#2E7DD1;--btn:#2E7DD1;--btn-ink:#fff;
   --soft:#EEF5FB;--soft-ink:#1F5F99;--fav:#FFFFFF;--fav-line:#2E7DD1;--badge:#2E7DD1;--badge-ink:#fff;--r:18px;--r-lg:22px;
   --head:'Manrope',system-ui,sans-serif;--body:'Manrope',system-ui,sans-serif;--hw:800;--ht:-.025em;}
-body[data-style="c"]{--bg:#E2DCD1;--panel:#D5CEC1;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
-  --soft:#E2DCD1;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
+body[data-style="c"]{--bg:#CDC3B3;--panel:#C2B7A5;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
+  --soft:#F1ECE4;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
   --head:'Fraunces',Georgia,serif;--body:'Nunito Sans',system-ui,sans-serif;--hw:600;--ht:-.005em;}
 html{background:#fff;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 20px);}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17.5px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .2s;}
@@ -230,6 +230,23 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 .pic.sl .dots i{display:inline-block;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);margin:0 3px;}
 .pic.sl .dots i.on{background:#fff;}
 .pic.sl .badge{z-index:4;}
+.resort .stats{display:grid;grid-template-columns:repeat(12,1fr);row-gap:12px;gap:0;background:var(--soft);border-radius:16px;padding:14px 6px;margin:0 0 16px;}
+.resort .stats div,body[data-style="c"] .resort.fav .stats div{background:none;border-radius:0;padding:2px 14px;border-left:1px solid rgba(26,26,26,.12);}
+.resort .stats div:first-child{border-left:0;}
+.resort .stats span{display:block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 5px;font-weight:700;}
+.resort .stats b{display:block;font-family:var(--head);font-size:19px;font-weight:600;line-height:1.15;}
+.resort .stats div:nth-child(3){border-left:0;}
+.resort .stats div:nth-child(n+3){padding-top:12px;border-top:1px solid rgba(26,26,26,.12);}
+.resort h3 a.rlink{color:inherit;text-decoration:none;}
+.resort h3 a.rlink span{font-size:.6em;margin-left:6px;vertical-align:super;opacity:.55;}
+.resort h3 a.rlink:hover{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;}
+.info .ibox{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.info .ibox div{background:var(--surface);border-radius:20px;padding:20px 22px;}
+.info .ibox h4{font-family:var(--head);font-size:19px;font-weight:600;margin:0 0 8px;}
+.info .ibox p{margin:0;font-size:14.5px;line-height:1.55;color:var(--ink);}
+@media(max-width:760px){.info .ibox{grid-template-columns:1fr;}}
+.in p.air b{display:inline-block;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-right:8px;}
+.in ul.gl{margin:6px 0 0;padding-left:18px;}.in ul.gl li{margin:3px 0;}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -342,6 +359,11 @@ function pageHero(h,R,CT){const q=new URLSearchParams(location.search).get('h');
     const v=(Array.isArray(h.venues)?h.venues:[]).map(x=>x&&(x.photo||x.photoUrl)).find(u=>u&&photoOk(u));if(v)return v;}
   for(const r of [h].concat(R)){const u=resortPics(r).slice(6).find(x=>!used.has(x));if(u)return u;}
   return heroOf(h);}
+function brandHero(CT){const q=new URLSearchParams(location.search).get('h');if(q&&photoOk(q))return q;return CT?'https://storage.googleapis.com/cloudaio/ct-header-images/homepage/768e5a97-9edb-4532-8b6f-a7332b72b8c2/Home_hero_shutterstock_2286627891.png':'https://assets.milestoneinternet.com/cdn-cgi/image/width=1600,f=auto/destination-weddings-travel-group/homepage-hero-2.jpg';}
+function groupsData(r){const parts=[];const air=clean(r.airportNote||r.airportDistance||'');if(air)parts.push('<p class="air"><b>Airport</b> '+esc(air)+'</p>');
+  const g=String(r.groupsInfo||'').trim();if(g&&!/^Bringing a group here/i.test(g)){const lines=g.split(/\n+/).map(s=>s.trim()).filter(Boolean);const head=lines.filter(l=>!/^[•\-*]/.test(l));const items=lines.filter(l=>/^[•\-*]/.test(l)).map(l=>l.replace(/^[•\-*]\s*/,''));
+    parts.push(head.map(h=>'<p>'+esc(h)+'</p>').join('')+(items.length?'<ul class="gl">'+items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul>':''));}
+  return {n:parts.length,html:parts.join('')};}
 function galleryData(P){const list=resortPics(P).slice(6,36);
   const pools=(Array.isArray(P.pools)?P.pools:[]).map(x=>typeof x==='string'?x:(x&&x.name)).filter(Boolean);
   const html=(pools.length?`<div class="dhd">Pools</div><div class="vmore">${pools.map(n=>`<span>${esc(n)}</span>`).join('')}</div>`:'')+(list.length?`<div class="gal">${list.map(u=>`<img src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:'');
@@ -361,16 +383,20 @@ async function renderQuote(slugs){
   const card=r=>`<a class="card${r.slug===pick?' fav':''}" href="#${esc(r.slug)}">${cardPic(r,pick)}<div class="b"><h3>${esc(r.name||r.slug)}</h3><p class="w">${esc(dest(r))}</p>${priceOf(r).pr?`<div class="amt">${esc(priceOf(r).pr)}</div><div class="per">${esc(basisTxt())}</div>`:''}${CT?'':`<div class="per" style="margin-top:6px">${venueN(r)} venues \u00b7 ${pkgN(r)} packages</div>`}</div></a>`;
   const block=r=>{
     const v=CT?0:venueN(r),p=CT?0:pkgN(r),pc=CT?'':cmpTable(r.packageComparison),n=notesList(r);
-    const stats=[[dest(r),'destination'],[clean(r.agePolicy),'guests']].concat(CT?[]:[[v,'venues'],[p,'packages']]).filter(s=>s[0]!==''&&s[0]!==0);
+    const ageTxt=a=>{const s=clean(a);const m=s.match(/\b(1[68]|21)\b/);return /adult/i.test(s)?'Adults '+(m?m[1]+'+':'only'):s;};
+    const rN=Array.isArray(r.restaurants)?r.restaurants.length:0;
+    const rooms=parseInt(r.totalRooms,10)||0;const allS=/all[- ]suites?/i.test(String(r.tagline||'')+' '+String(r.description||''));
+    const stats=[[dest(r),'Destination'],[ageTxt(r.agePolicy),'Guests'],[rooms,allS?'Suites':'Rooms']].concat(CT?[]:[[v,'Venues'],[p,'Packages']]).concat([[rN,'Restaurants']]).filter(s=>s[0]!==''&&s[0]!==0);
     return `<article class="resort${r.slug===pick?' fav':''}" id="${esc(r.slug)}"><div class="top">${slider(r,pick)}<div class="b">
-      <h3>${esc(r.name||r.slug)}</h3><p class="tag2">${esc(clean(r.tagline)||firstSentence(r.description))}</p>
+      ${(()=>{const u=CT?r.ctUrl:r.dwtUrl;const n=esc(r.name||r.slug);return photoOk(u)?`<h3><a class="rlink" href="${esc(u)}" target="_blank" rel="noopener">${n}<span aria-hidden="true">&#8599;</span></a></h3>`:`<h3>${n}</h3>`;})()}<p class="tag2">${esc(clean(r.tagline)||firstSentence(r.description))}</p>
       ${(()=>{const q=priceOf(r);if(!q.pr)return'';const rp=roomPic(r,q.r);return `<div class="roombox${rp?'':' nopic'}"><div class="rp${rp?'':' none'}"${bg(rp)}></div><div><div class="lbl">Estimated room pricing</div>${q.r?`<div class="rn">${esc(q.r)}</div>`:''}<div class="pp">${esc(q.pr)}</div><div class="pb">${esc(basisTxt())}${PR.d?' \u00b7 '+esc(PR.d):''}</div></div></div>`;})()}
-      <div class="stats">${stats.map(s=>`<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join('')}</div>
+      <div class="stats">${stats.map((s,i,A)=>`<div style="grid-column:span ${i<2?6:Math.max(3,Math.floor(12/Math.max(1,A.length-2)))}"><span>${esc(s[1])}</span><b>${esc(s[0])}</b></div>`).join('')}</div>
     </div></div><div class="exp">
       ${v?`<details><summary>Wedding venues (${v})</summary><div class="in">${venuesHtml(r)}</div></details>`:''}
       ${p?`<details><summary>Wedding packages (${p})</summary><div class="in">${packagesHtml(r)}</div></details>`:''}
       ${pc?`<details><summary>Compare packages side by side</summary><div class="in">${pc}</div></details>`:''}
       ${(()=>{const d=diningData(r);return d.n?`<details><summary>Restaurants &amp; bars (${d.n})</summary><div class="in">${d.html}</div></details>`:'';})()}
+      ${(()=>{const d=groupsData(r);return d.n?`<details><summary>Groups &amp; transportation</summary><div class="in">${d.html}</div></details>`:'';})()}
       ${(()=>{const g=galleryData(r);return g.n?`<details><summary>Gallery (${g.n})</summary><div class="in">${g.html}</div></details>`:'';})()}
       ${n.length?`<details><summary>Good to know</summary><div class="in"><ul class="notes">${n.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`:''}
     </div></article>`;};
@@ -380,11 +406,12 @@ async function renderQuote(slugs){
   <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Handpicked for your trip':'Handpicked for your wedding')}</span></div>
   <div class="wrap">
     <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p></div>
-      <div class="pic"${bg(pageHero(hero,R,CT))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
+      <div class="pic"${bg(brandHero(CT))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
     <div class="cards">${R.map(card).join('')}</div>
     <div class="ctas"><a class="btn" href="${mail}">Tell me which one</a></div>
   </div>
   <section class="sec"><div class="wrap"><h2>The resorts</h2><p class="lead">${CT?'Tap a resort card above to jump to it.':'Tap to open venues, packages and the comparison.'}</p>${R.map(block).join('')}</div></section>
+  ${(()=>{const B=[['Group perks','With 10 or more rooms, your group gets its own room block. Rates are locked at today\u2019s price, the block earns complimentary rooms, and that value comes back to you once everyone is home. Every guest books on their own booking site, so there\u2019s no collecting money or chasing deposits. Anything specific to a resort is listed under that resort.'],['Transportation','Roundtrip airport transfers are included for every guest who books in your group block. Flights are booked separately, and I\u2019m happy to share tips on when to buy. Drive times from the airport are listed with each resort.'],['Travel protection','Travel insurance can be added for each guest when they book. Some plan benefits only apply when it\u2019s added at the time of deposit, so it\u2019s worth deciding up front. Ask me for the options.']];return `<section class="sec info"><div class="wrap"><h2>Good to know</h2><div class="ibox">${B.map(b=>`<div><h4>${b[0]}</h4><p>${b[1]}</p></div>`).join('')}</div></div></section>`;})()}
   <div class="wrap"><section class="close"><h2>Which one do you like?</h2>
     <div class="ctas"><a class="btn" href="${mail}">Email Amy</a></div>
     <span class="free">My help is free. The resorts pay me, not you.</span></section></div>
