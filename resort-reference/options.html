@@ -219,6 +219,7 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 @media(max-width:1000px){.pkgs{grid-template-columns:repeat(2,1fr);}.venues{grid-template-columns:repeat(3,1fr);}}
 @media(max-width:860px){.resort .top{grid-template-columns:1fr;}.resort .top .pic{min-height:220px;}.resort .exp{padding:0 22px 14px;}}
 @media(max-width:620px){.pkgs,.venues{grid-template-columns:1fr;}}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:4px 0 16px;}.gal img{display:block;width:100%;height:150px;object-fit:cover;border-radius:10px;}.dhd{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin:12px 0 8px;opacity:.7;}@media(max-width:640px){.gal{grid-template-columns:repeat(2,1fr);}.gal img{height:120px;}}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -291,6 +292,26 @@ const BASIS={ppn:'per person, per night',tot:'total for 2, room only',pkg:'total
 const basisTxt=()=>(BASIS[PR.b]||'')+(PR.b&&PR.b!=='ppn'&&PR.n?', '+PR.n+' nights':'');
 const priceOf=r=>(PR.x&&PR.x[r.slug])||{};
 const roomPic=(r,name)=>{const rc=(r.roomCategories||[]).find(x=>x&&nm(x)===name)||{};return [rc.photo,rc.photoUrl].concat(Array.isArray(rc.photos)?rc.photos:[]).find(photoOk)||libMatch(r,name);};
+/* Restaurants & bars and Gallery expanders (added Oct 2026) */
+function diningData(P){
+  const card=(x)=>`<div class="venue">${pic(x)?`<img class="vp" src="${esc(pic(x))}" alt="${esc(x.name)}" loading="lazy" onerror="this.remove()">`:''}<div class="vb"><h4>${esc(x.name)}</h4>${(x.type||x.cuisine)?`<div class="cap">${esc(x.type||x.cuisine)}</div>`:''}${x.hours?`<div class="cap">${esc(x.hours)}</div>`:''}${clean(x.description)?`<p>${esc(clean(x.description))}</p>`:''}</div></div>`;
+  const R=norm(P.restaurants).map(x=>Object.assign({},x,{photo:pic(x)||libMatch(P,x.name,/dining|restaurant/)}));
+  const B=norm(P.bars).map(x=>Object.assign({},x,{photo:pic(x)||libMatch(P,x.name,/bar|lounge/)}));
+  const grp=(L,t)=>{if(!L.length)return'';const F=L.filter(x=>pic(x)),M=L.filter(x=>!pic(x));return `<h5 class="dhd">${t}</h5>`+(F.length?`<div class="venues">${F.map(card).join('')}</div>`:'')+(M.length?`<div class="vmore">${M.map(x=>`<span>${esc(x.name)}${(x.type||x.cuisine)?' \u00b7 '+esc(x.type||x.cuisine):''}</span>`).join('')}</div>`:'');};
+  const html=grp(R,'Restaurants')+grp(B,'Bars &amp; lounges');
+  return {n:R.length+B.length,html};
+}
+function galleryData(P){
+  const out=[];const add=u=>{if(u&&photoOk(u)&&out.indexOf(u)<0)out.push(u);};
+  norm(P.pools).forEach(x=>add(pic(x)));
+  if(P.sectionPhotos)['pools','beach','resort','property','aerial','activities','spa','club'].forEach(k=>{const v=P.sectionPhotos[k];add(typeof v==='string'?v:(v&&v.url));});
+  [].concat(P.photos||[]).forEach(u=>add(typeof u==='string'?u:(u&&(u.url||u.src))));
+  (P.__ph||[]).filter(ph=>/pool|beach|exterior|aerial|property|resort|lobby|spa|gallery|lifestyle|activit/i.test(String(ph.category||'')+' '+String(ph.caption||''))).forEach(ph=>add(phUrl(ph)));
+  const pools=norm(P.pools).map(x=>x.name).filter(Boolean);
+  const list=out.slice(0,30);
+  const html=(pools.length?`<div class="vmore">${pools.map(n=>`<span>${esc(n)}</span>`).join('')}</div>`:'')+(list.length?`<div class="gal">${list.map(u=>`<img src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:'');
+  return {n:list.length,html};
+}
 async function renderQuote(slugs){
   const pick=Q.get('pick')||'';const who=Q.get('for')||'';
   const snaps=await Promise.all(slugs.map(s=>db.collection('resortProfiles').doc(s).get()));
@@ -312,6 +333,8 @@ async function renderQuote(slugs){
       ${v?`<details><summary>Wedding venues (${v})</summary><div class="in">${venuesHtml(r)}</div></details>`:''}
       ${p?`<details><summary>Wedding packages (${p})</summary><div class="in">${packagesHtml(r)}</div></details>`:''}
       ${pc?`<details><summary>Compare packages side by side</summary><div class="in">${pc}</div></details>`:''}
+      ${(()=>{const d=diningData(r);return d.n?`<details><summary>Restaurants &amp; bars (${d.n})</summary><div class="in">${d.html}</div></details>`:'';})()}
+      ${(()=>{const g=galleryData(r);return g.n?`<details><summary>Gallery (${g.n})</summary><div class="in">${g.html}</div></details>`:'';})()}
       ${n.length?`<details><summary>Good to know</summary><div class="in"><ul class="notes">${n.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`:''}
     </div></article>`;};
   document.title=(who?who+' | ':'')+(CT?'Resort options':'Wedding options');
