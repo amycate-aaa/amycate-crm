@@ -7,7 +7,7 @@
 <title>Resort Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
@@ -738,6 +738,21 @@ body.showB .optB > p{display:block;}
 #quote-page .vids video{width:100%;display:block;background:#1A1510;border:1px solid var(--sand-deep,#E4D8C6);}
 #quote-page .vids figcaption{font-family:var(--sans);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep,#8A6D3B);margin-top:10px;text-align:center;}
 @media(min-width:900px){#quote-page .vids:has(.vid + .vid){grid-template-columns:1fr 1fr;}}
+
+/* ═══ LOOK: MODERN — only applies to quotes saved with Look = Modern. Classic is untouched. ═══ */
+body.look-modern{--ivory:#FFFFFF;--sand:#F4F4F4;--sand-deep:#E4E4E4;--espresso:#111111;--ink:#2B2B2B;--gold:#111111;--gold-soft:#6B6B6B;--sea:#111111;
+  --serif:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;--sans:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;background:#fff;}
+body.look-modern #quote-page{font-family:var(--sans);}
+body.look-modern #quote-page h1,body.look-modern #quote-page h2,body.look-modern #quote-page h3,body.look-modern #quote-page h4{font-family:var(--sans)!important;font-style:normal!important;}
+body.look-modern #quote-page h1{font-weight:800!important;letter-spacing:-.025em!important;text-transform:none!important;}
+body.look-modern #quote-page section h2.display{font-weight:800!important;letter-spacing:-.02em!important;text-transform:none!important;}
+body.look-modern #quote-page h3,body.look-modern #quote-page h4{font-weight:700!important;letter-spacing:-.01em!important;}
+body.look-modern #quote-page section hr.rule{background:#111!important;width:40px!important;height:3px!important;border:0!important;border-radius:3px;}
+body.look-modern #quote-page em,body.look-modern #quote-page i,body.look-modern #quote-page p{font-style:normal!important;}
+body.look-modern #quote-page .eyebrow{color:#6B6B6B!important;}
+body.look-modern #quote-page img{border-radius:14px;}
+body.look-modern #quote-page .pkgrow,body.look-modern #quote-page .pcard,body.look-modern #quote-page .ess-block,body.look-modern #quote-page .offer,body.look-modern #quote-page .protect,body.look-modern #quote-page details,body.look-modern #quote-page .qgc,body.look-modern #quote-page table{border-radius:16px;overflow:hidden;}
+body.look-modern #quote-page a[class*="btn"],body.look-modern #quote-page button,body.look-modern #quote-page .btn{border-radius:999px!important;}
 </style>
 </head>
 <body>
@@ -761,6 +776,7 @@ body.showB .optB > p{display:block;}
       <div><label class="qb-lbl">Prices are</label><select id="mq-basis" class="qb-in" onchange="document.querySelectorAll('.mq-price').forEach(mqPriceHint)"><option value="ppn">Per person, per night</option><option value="total">Total for the room</option></select></div>
       <div><label class="qb-lbl">Adults per room</label><input id="mq-occ" class="qb-in" value="2" oninput="document.querySelectorAll('.mq-pkg').forEach(mqPkgHint);document.querySelectorAll('.mq-price').forEach(mqPriceHint)"></div>
       <div><label class="qb-lbl">Trip size</label><select id="mq-tripsize" class="qb-in"><option value="group">Group — talk about a room block</option><option value="small">Just them — no group talk</option></select></div>
+      <div><label class="qb-lbl">Look</label><select id="mq-look" class="qb-in"><option value="classic">Classic</option><option value="modern">Modern</option></select></div>
       <div><label class="qb-lbl">Airport transfers</label><select id="mq-xfer" class="qb-in"><option value="no">Not included in these prices</option><option value="yes">Included</option></select></div>
       <div><label class="qb-lbl">Client email <span style="opacity:.6">(optional)</span></label><input id="mq-email" class="qb-in" placeholder="name@example.com"></div>
     </div>
@@ -975,6 +991,7 @@ body.showB .optB > p{display:block;}
         <option value="group">Group &mdash; talk about a room block</option>
         <option value="small">Just them &mdash; a couple or a few rooms, no group talk</option>
       </select></div>
+      <div class="qb-f"><label>Look</label><select id="q-look"><option value="classic">Classic</option><option value="modern">Modern</option></select></div>
       <div class="qb-f wide"><label>Headline (optional &mdash; something about them)</label><input id="q-headline" placeholder="Five Years Late"></div>
       <div class="qb-f wide"><label>Your Note To Them</label><textarea id="q-note" placeholder="Reflect their brief back in their own words, then say why their instinct is right&hellip;"></textarea></div>
     </div>
@@ -1228,7 +1245,7 @@ function regionKey(dest,name){const t=(String(dest||'')+' '+String(name||'')).to
   if(/cap cana/.test(t))return 'cap-cana';if(/la romana|bayahibe/.test(t))return 'la-romana';if(/punta cana|uvero alto|bavaro|bávaro|macao|dominican/.test(t))return 'punta-cana';
   if(/jamaica|montego|negril|ocho rios|rose hall/.test(t))return 'jamaica';if(/st\.? lucia|saint lucia/.test(t))return 'st-lucia';if(/barbados/.test(t))return 'barbados';if(/bahamas|nassau|freeport|grand bahama/.test(t))return 'bahamas';if(/aruba/.test(t))return 'aruba';if(/curacao|curaçao/.test(t))return 'curacao';return '';}
 function destGuideLink(entries,couple){const keys=[...new Set(entries.map(e=>regionKey(e.where,e.name)).filter(Boolean))];if(!keys.length)return '';return location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'destinations')+'?d='+keys.join(',')+(couple?'&for='+encodeURIComponent(couple):'');}
-function mqState(){const F=['mq-couple','mq-date','mq-from','mq-nights','mq-to','mq-brand','mq-basis','mq-occ','mq-xfer','mq-tripsize','mq-email','mq-note'];const st={f:{},rows:[],air:{},guide:!!($id('mq-guide')||{}).checked,t:Date.now()};F.forEach(k=>{const el=$id(k);if(el)st.f[k]=el.value;});
+function mqState(){const F=['mq-couple','mq-date','mq-from','mq-nights','mq-to','mq-brand','mq-basis','mq-occ','mq-xfer','mq-tripsize','mq-look','mq-email','mq-note'];const st={f:{},rows:[],air:{},guide:!!($id('mq-guide')||{}).checked,t:Date.now()};F.forEach(k=>{const el=$id(k);if(el)st.f[k]=el.value;});
   st.rows=[...document.querySelectorAll('.mq-row')].map(r=>({slug:r.querySelector('.mq-resort').value,room:r.querySelector('.mq-room').value,price:r.querySelector('.mq-price').value,pkg:r.querySelector('.mq-pkg').value}));
   st.airRows={};document.querySelectorAll('#mq-air-blocks [data-dest]').forEach(el=>{st.air[el.dataset.dest]=el.querySelector('textarea').value;const ed=mqAirRowsOf(el);if(ed)st.airRows[el.dataset.dest]=ed;});return st;}
 function mqSave(){try{const st=mqState();const hasRows=st.rows.some(r=>r.slug||r.price||r.pkg);const hasName=!!(st.f['mq-couple']||'').trim();if(!hasRows&&!hasName){const prev=JSON.parse(localStorage.getItem('ac_mq')||'null');if(prev&&prev.rows&&prev.rows.some(r=>r.slug||r.price||r.pkg))return;}localStorage.setItem('ac_mq',JSON.stringify(st));localStorage.setItem('ac_mq_bak',JSON.stringify(st));}catch(e){}}
@@ -1344,7 +1361,7 @@ async function mqCreate(dry){const msg=$id('mq-msg');const couple=$id('mq-couple
   const notReady=rows.map(r=>window.LIB[r.slug]).filter(l=>l&&!l.ready).map(l=>l.name);if(notReady.length&&!confirm('These guides are not complete yet:\n\n'+notReady.join('\n')+'\n\nCreate the quotes anyway?'))return;
   const travel=mqTravelText();const brand=$id('mq-brand').value;const basis=$id('mq-basis').value;const nights=$id('mq-nights').value.trim();const note=$id('mq-note').value.trim();const date=$id('mq-date').value.trim();
   msg.textContent='Creating '+rows.length+' quote'+(rows.length>1?'s':'')+'\u2026';const made=[];
-  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const TEASE=!!(($id('mq-teaser')||{}).checked);const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:TEASE?'teaser':'resort',basis,nights,occ,xfer,tripSize:(($id('mq-tripsize')||{}).value||'group'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:TEASE?[]:(r.room&&r.price?[{name:r.room,ppn:r.price}]:[]),opts:{offers:!TEASE,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true,faq:!!(($id('mq-faq')||{}).checked)}};
+  for(const r of rows){const lib=window.LIB[r.slug]||{};const air=airBy[mqDestOf(r.slug)]||[];const occ=parseInt(($id('mq-occ')||{}).value,10)||2;const xfer=(($id('mq-xfer')||{}).value||'no')==='yes';const TEASE=!!(($id('mq-teaser')||{}).checked);const q={couple,date,travel,priced:basis==='total'?'Total for the room':'Per person, per night',brand,mode:TEASE?'teaser':'resort',basis,nights,occ,xfer,tripSize:(($id('mq-tripsize')||{}).value||'group'),look:(($id('mq-look')||{}).value||'classic'),deposit:'',due:'',bookLink:'',easyPay:false,guests:[],savedAt:Date.now(),needAir:air.length>0||!!r.pkg,pkgPrice:r.pkg||'',pkgCovers:r.pkg?'Flights and '+(nights||'')+' night'+(nights==='1'?'':'s')+' all-inclusive'+(xfer?', with roundtrip airport transfers':' \u2014 airport transfers quoted separately'):'',pkgRoom:r.pkg?r.room:'',air,headline:'',note,prices:TEASE?[]:(r.room&&r.price?[{name:r.room,ppn:r.price}]:[]),opts:{offers:!TEASE,inclusions:true,example:true,dining:true,pools:true,activities:true,essentials:true,gallery:true,docs:true,group:true,steps:true,faq:!!(($id('mq-faq')||{}).checked)}};
     const id=dry?'preview':Math.random().toString(36).slice(2,8)+Math.random().toString(36).slice(2,5);const enc=encQ(q);
     if(!dry){try{await db.collection('resortProfiles').doc(r.slug).set({quoteLinks:{[id]:{q:enc,t:Date.now()}}},{merge:true});}catch(e){msg.textContent='Could not save '+lib.name+': '+e.message;return;}}
     if(dry){try{localStorage.setItem('ac_preview_'+r.slug,enc);}catch(e){}}
@@ -1700,11 +1717,12 @@ function collectQ(){
       to:tr.querySelector('.b-to').value.trim(),   dep:tr.querySelector('.b-dp').value.trim(),
       arr:tr.querySelector('.b-ar').value.trim()
     })).filter(r=>r.who||r.flight),
-    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group',xfer:(($id('q-xfer')||{}).value||'no')==='yes'};
+    headline:$id('q-headline').value.trim(),note:$id('q-note').value.trim(),prices:rows,opts:o,tripSize:($id('q-tripsize')||{}).value||'group',look:($id('q-look')||{}).value||'classic',xfer:(($id('q-xfer')||{}).value||'no')==='yes'};
 }
 function applyQ(q){
   if(!q)return;
   if($id('q-tripsize'))$id('q-tripsize').value=q.tripSize||'group';
+  if($id('q-look'))$id('q-look').value=q.look||'classic';
   if($id('q-xfer'))$id('q-xfer').value=q.xfer?'yes':'no';
   if(q.needAir!=null)$id('q-needair').checked=!!q.needAir;
   toggleAir();
@@ -1729,7 +1747,7 @@ function encQ(q){return btoa(unescape(encodeURIComponent(JSON.stringify(q)))).re
 function decQ(s){try{return JSON.parse(decodeURIComponent(escape(atob(s.replace(/-/g,'+').replace(/_/g,'/')))));}catch(e){return null;}}
 /* Names, dates, brand and flights belong to the trip, not the resort — they are kept
    separately so switching resorts carries them across. Price and rooms stay per resort. */
-const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-tripsize','q-xfer','q-head','q-note'];
+const TRIPKEYS=['q-couple','q-date','q-travel','q-brand','q-tripsize','q-look','q-xfer','q-head','q-note'];
 function saveTrip(){
   try{
     const t={};
@@ -2988,6 +3006,7 @@ function _renderQuoteCore(){
     'Everything here \u2014 wedding packages, venue capacities, inclusions and any estimated totals \u2014 comes from the most recent information each resort has published. Resorts change prices, packages and what they include without notice, and figures vary by season, by day of the week and by the year you marry. Treat all of it as a guide while you choose. Exact numbers are confirmed with the resort for your dates before anything is booked.</p></footer>');
 
   $id('quote-page').innerHTML=S.join('');try{collapseRooms($id('quote-page'),6);}catch(e){}
+  try{document.body.classList.toggle('look-modern',q.look==='modern');}catch(e){}
   try{ // Celebration Travel: rooms come straight after the resort intro
     if(window.QUOTE_CT){
       const qp=$id('quote-page');
