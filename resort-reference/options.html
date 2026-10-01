@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="color-scheme" content="light only">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Your wedding options | Amy Cate</title>
+<title>Handpicked for your wedding | Amy Cate</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
 body[data-style="a"]{--bg:#FFFFFF;--panel:#F5F8FB;--surface:#FFFFFF;--line:#E3E9EF;--ink:#1C2B39;--muted:#5A6B7B;--accent:#2E7DD1;--btn:#2E7DD1;--btn-ink:#fff;
   --soft:#EEF5FB;--soft-ink:#1F5F99;--fav:#FFFFFF;--fav-line:#2E7DD1;--badge:#2E7DD1;--badge-ink:#fff;--r:18px;--r-lg:22px;
   --head:'Manrope',system-ui,sans-serif;--body:'Manrope',system-ui,sans-serif;--hw:800;--ht:-.025em;}
-body[data-style="c"]{--bg:#F7F7F7;--panel:#EBEBEB;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
-  --soft:#EBEBEB;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
+body[data-style="c"]{--bg:#E2DCD1;--panel:#D5CEC1;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
+  --soft:#E2DCD1;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
   --head:'Fraunces',Georgia,serif;--body:'Nunito Sans',system-ui,sans-serif;--hw:600;--ht:-.005em;}
 html{background:#fff;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 20px);}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17.5px;line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .2s;}
@@ -220,6 +220,16 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 @media(max-width:860px){.resort .top{grid-template-columns:1fr;}.resort .top .pic{min-height:220px;}.resort .exp{padding:0 22px 14px;}}
 @media(max-width:620px){.pkgs,.venues{grid-template-columns:1fr;}}
 .gal{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:4px 0 16px;}.gal img{display:block;width:100%;height:150px;object-fit:cover;border-radius:10px;}.dhd{font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;margin:12px 0 8px;opacity:.7;}@media(max-width:640px){.gal{grid-template-columns:repeat(2,1fr);}.gal img{height:120px;}}
+.pic.sl{background:#ddd;overflow:hidden;padding:0;}
+.pic.sl .trk{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.pic.sl .trk::-webkit-scrollbar{display:none;}
+.pic.sl .sld{flex:0 0 100%;height:100%;scroll-snap-align:start;}
+.pic.sl .sa{position:absolute;top:50%;transform:translateY(-50%);z-index:3;width:36px;height:36px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#1A1A1A;font-size:24px;line-height:34px;padding:0;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18);}
+.pic.sl .sa.prev{left:10px;}.pic.sl .sa.next{right:10px;}
+.pic.sl .dots{position:absolute;left:0;right:0;bottom:12px;text-align:center;z-index:3;pointer-events:none;}
+.pic.sl .dots i{display:inline-block;width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.55);margin:0 3px;}
+.pic.sl .dots i.on{background:#fff;}
+.pic.sl .badge{z-index:4;}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -301,17 +311,44 @@ function diningData(P){
   const html=grp(R,'Restaurants')+grp(B,'Bars &amp; lounges');
   return {n:R.length+B.length,html};
 }
-function galleryData(P){
-  const out=[];const add=u=>{if(u&&photoOk(u)&&out.indexOf(u)<0)out.push(u);};
-  norm(P.pools).forEach(x=>add(pic(x)));
-  if(P.sectionPhotos)['pools','beach','resort','property','aerial','activities','spa','club'].forEach(k=>{const v=P.sectionPhotos[k];add(typeof v==='string'?v:(v&&v.url));});
-  [].concat(P.photos||[]).forEach(u=>add(typeof u==='string'?u:(u&&(u.url||u.src))));
-  (P.__ph||[]).filter(ph=>/pool|beach|exterior|aerial|property|resort|lobby|spa|gallery|lifestyle|activit/i.test(String(ph.category||'')+' '+String(ph.caption||''))).forEach(ph=>add(phUrl(ph)));
-  const pools=norm(P.pools).map(x=>x.name).filter(Boolean);
-  const list=out.slice(0,30);
-  const html=(pools.length?`<div class="vmore">${pools.map(n=>`<span>${esc(n)}</span>`).join('')}</div>`:'')+(list.length?`<div class="gal">${list.map(u=>`<img src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:'');
-  return {n:list.length,html};
-}
+const RX_NO=/room|suite|restaurant|dining|\bbars?\b|lounge|food|cocktail|venue|wedding|ceremony|reception|ballroom|gazebo|chapel|fitness|gym|meeting|kids?\b|menu|buffet/i;
+const RX_YES=/pool|beach|exterior|aerial|property|resort|lobby|garden|grounds|highlight|ocean|view/i;
+const urlOf=u=>typeof u==='string'?u:(u&&(u.url||u.src||u.downloadURL))||'';
+function usedSet(P){const s=new Set();const a=x=>{if(!x)return;[x.photo,x.photoUrl].concat(x.photos||[]).forEach(u=>{u=urlOf(u);if(u)s.add(u);});};
+  ['roomCategories','restaurants','bars','venues','packages'].forEach(k=>(Array.isArray(P[k])?P[k]:[]).forEach(a));
+  (P.__ph||[]).forEach(ph=>{const x=String(ph.category||'')+' '+String(ph.roomCategory||'')+' '+String(ph.caption||'');if(RX_NO.test(x)||!RX_YES.test(x))s.add(phUrl(ph));});
+  return s;}
+function resortPics(P){
+  if(P.__rp)return P.__rp;
+  const no=usedSet(P),out=[];const cur=new Set([].concat(P.resortPhotos||[]).map(urlOf));
+  const add=u=>{u=urlOf(u);if(u&&photoOk(u)&&(cur.has(u)||!no.has(u))&&out.indexOf(u)<0)out.push(u);};
+  [].concat(P.resortPhotos||[]).forEach(add);
+  if(out.length)return (P.__rp=out);
+  [].concat(P.photoExclude||[]).forEach(u=>no.add(urlOf(u)));
+  add(P.heroPhoto);
+  const sp=P.sectionPhotos||{};['aerial','beach','pools','resort','property','exterior','grounds'].forEach(k=>add(sp[k]));
+  (Array.isArray(P.pools)?P.pools:[]).forEach(x=>add(x&&(x.photo||x.photoUrl)));
+  (P.__ph||[]).forEach(ph=>{const x=String(ph.category||'')+' '+String(ph.roomCategory||'')+' '+String(ph.caption||'');if(RX_YES.test(x)&&!RX_NO.test(x))add(phUrl(ph));});
+  const lib=new Set((P.__ph||[]).map(phUrl));
+  [].concat(P.photos||[]).forEach(u=>{u=urlOf(u);if(u&&!lib.has(u)&&!RX_NO.test(u.split('?')[0]))add(u);});
+  return (P.__rp=out);}
+function cardPic(r,pick){const u=resortPics(r)[0]||heroOf(r);return `<div class="pic${photoOk(u)?'':' ph'}"${bg(u)}>${r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':''}</div>`;}
+function slider(r,pick){const s=resortPics(r).slice(0,6);const badge=r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':'';
+  if(s.length<2)return `<div class="pic${s.length?'':' ph'}"${s.length?bg(s[0]):''}>${badge}</div>`;
+  return `<div class="pic sl">${badge}<div class="trk">${s.map(u=>`<div class="sld"${bg(u)}></div>`).join('')}</div><button class="sa prev" type="button" aria-label="Previous photo">&#8249;</button><button class="sa next" type="button" aria-label="Next photo">&#8250;</button><div class="dots">${s.map((u,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div></div>`;}
+function pageHero(h,R,CT){const q=new URLSearchParams(location.search).get('h');if(q&&photoOk(q))return q;
+  const used=new Set();R.forEach(r=>resortPics(r).slice(0,6).forEach(u=>used.add(u)));
+  if(!CT){const w=(h.__ph||[]).filter(ph=>/wedding|ceremony/i.test(String(ph.category||''))&&!ph.roomCategory).map(phUrl).find(u=>u&&photoOk(u)&&!used.has(u));if(w)return w;
+    const v=(Array.isArray(h.venues)?h.venues:[]).map(x=>x&&(x.photo||x.photoUrl)).find(u=>u&&photoOk(u));if(v)return v;}
+  for(const r of [h].concat(R)){const u=resortPics(r).slice(6).find(x=>!used.has(x));if(u)return u;}
+  return heroOf(h);}
+function galleryData(P){const list=resortPics(P).slice(6,36);
+  const pools=(Array.isArray(P.pools)?P.pools:[]).map(x=>typeof x==='string'?x:(x&&x.name)).filter(Boolean);
+  const html=(pools.length?`<div class="dhd">Pools</div><div class="vmore">${pools.map(n=>`<span>${esc(n)}</span>`).join('')}</div>`:'')+(list.length?`<div class="gal">${list.map(u=>`<img src="${esc(u)}" alt="" loading="lazy" onerror="this.remove()">`).join('')}</div>`:'');
+  return {n:list.length,html};}
+function slDots(tr,i){tr.parentNode.querySelectorAll('.dots i').forEach((d,j)=>d.classList.toggle('on',j===i));}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.sa');if(!b)return;e.preventDefault();const tr=b.parentNode.querySelector('.trk');const w=tr.clientWidth,n=tr.children.length;const cur=Math.round(tr.scrollLeft/w);const nx=(cur+(b.classList.contains('next')?1:-1)+n)%n;const x=nx*w;slDots(tr,nx);try{tr.scrollTo({left:x,behavior:'smooth'});}catch(_){}setTimeout(()=>{if(Math.abs(tr.scrollLeft-x)>2)tr.scrollLeft=x;},450);});
+document.addEventListener('scroll',e=>{const tr=e.target;if(!tr.classList||!tr.classList.contains('trk'))return;const i=Math.round(tr.scrollLeft/tr.clientWidth);slDots(tr,i);},true);
 async function renderQuote(slugs){
   const pick=Q.get('pick')||'';const who=Q.get('for')||'';
   const snaps=await Promise.all(slugs.map(s=>db.collection('resortProfiles').doc(s).get()));
@@ -321,11 +358,11 @@ async function renderQuote(slugs){
   const hero=(R.find(r=>r.slug===pick)||R[0]);
   const venueN=r=>norm(r.venues).length, pkgN=r=>norm(r.packages).length;
   const dest=r=>clean(String(r.destination||'').split(',')[0]);
-  const card=r=>`<a class="card${r.slug===pick?' fav':''}" href="#${esc(r.slug)}"><div class="pic${photoOk(heroOf(r))?'':' ph'}"${bg(heroOf(r))}>${r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':''}</div><div class="b"><h3>${esc(r.name||r.slug)}</h3><p class="w">${esc(dest(r))}</p>${priceOf(r).pr?`<div class="amt">${esc(priceOf(r).pr)}</div><div class="per">${esc(basisTxt())}</div>`:''}${CT?'':`<div class="per" style="margin-top:6px">${venueN(r)} venues \u00b7 ${pkgN(r)} packages</div>`}</div></a>`;
+  const card=r=>`<a class="card${r.slug===pick?' fav':''}" href="#${esc(r.slug)}">${cardPic(r,pick)}<div class="b"><h3>${esc(r.name||r.slug)}</h3><p class="w">${esc(dest(r))}</p>${priceOf(r).pr?`<div class="amt">${esc(priceOf(r).pr)}</div><div class="per">${esc(basisTxt())}</div>`:''}${CT?'':`<div class="per" style="margin-top:6px">${venueN(r)} venues \u00b7 ${pkgN(r)} packages</div>`}</div></a>`;
   const block=r=>{
     const v=CT?0:venueN(r),p=CT?0:pkgN(r),pc=CT?'':cmpTable(r.packageComparison),n=notesList(r);
     const stats=[[dest(r),'destination'],[clean(r.agePolicy),'guests']].concat(CT?[]:[[v,'venues'],[p,'packages']]).filter(s=>s[0]!==''&&s[0]!==0);
-    return `<article class="resort${r.slug===pick?' fav':''}" id="${esc(r.slug)}"><div class="top"><div class="pic${photoOk(heroOf(r))?'':' ph'}"${bg(heroOf(r))}>${r.slug===pick?'<span class="badge">Amy\u2019s pick</span>':''}</div><div class="b">
+    return `<article class="resort${r.slug===pick?' fav':''}" id="${esc(r.slug)}"><div class="top">${slider(r,pick)}<div class="b">
       <h3>${esc(r.name||r.slug)}</h3><p class="tag2">${esc(clean(r.tagline)||firstSentence(r.description))}</p>
       ${(()=>{const q=priceOf(r);if(!q.pr)return'';const rp=roomPic(r,q.r);return `<div class="roombox${rp?'':' nopic'}"><div class="rp${rp?'':' none'}"${bg(rp)}></div><div><div class="lbl">Estimated room pricing</div>${q.r?`<div class="rn">${esc(q.r)}</div>`:''}<div class="pp">${esc(q.pr)}</div><div class="pb">${esc(basisTxt())}${PR.d?' \u00b7 '+esc(PR.d):''}</div></div></div>`;})()}
       <div class="stats">${stats.map(s=>`<div><b>${esc(s[0])}</b><span>${esc(s[1])}</span></div>`).join('')}</div>
@@ -337,13 +374,13 @@ async function renderQuote(slugs){
       ${(()=>{const g=galleryData(r);return g.n?`<details><summary>Gallery (${g.n})</summary><div class="in">${g.html}</div></details>`:'';})()}
       ${n.length?`<details><summary>Good to know</summary><div class="in"><ul class="notes">${n.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div></details>`:''}
     </div></article>`;};
-  document.title=(who?who+' | ':'')+(CT?'Resort options':'Wedding options');
-  const mail='mailto:'+AMY_EMAIL+'?subject='+encodeURIComponent((who?who+': ':'')+(CT?'Our resort options':'Our wedding options'));
+  document.title=(who?who+' | ':'')+(CT?'Handpicked for your trip':'Handpicked for your wedding');
+  const mail='mailto:'+AMY_EMAIL+'?subject='+encodeURIComponent((who?who+': ':'')+(CT?'Our resort options':'Our handpicked resorts'));
   $('app').innerHTML=`
-  <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Your resort options':'Your wedding options')}</span></div>
+  <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Handpicked for your trip':'Handpicked for your wedding')}</span></div>
   <div class="wrap">
-    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Your resort options':'Your wedding options'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p></div>
-      <div class="pic${photoOk(heroOf(hero))?'':' ph'}"${bg(heroOf(hero))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
+    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p></div>
+      <div class="pic"${bg(pageHero(hero,R,CT))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
     <div class="cards">${R.map(card).join('')}</div>
     <div class="ctas"><a class="btn" href="${mail}">Tell me which one</a></div>
   </div>
