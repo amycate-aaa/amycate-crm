@@ -1216,7 +1216,7 @@ async function saveResortProfile() {
     const ref = db.collection('resortProfiles').doc(slug);
     const fresh = (await ref.get()).data() || {};
     const payload = buildSafePayload(data, fresh, slug);
-    if (payload === null) { toast('Save cancelled — nothing was changed.', 'error'); return; }
+    if (payload === null) { toast('Save canceled — nothing was changed.', 'error'); return; }
     await ref.set(payload, {merge: true});
     markLoaded(slug, (await ref.get()).data());
     const msg = document.getElementById('profileSaveMsg');
