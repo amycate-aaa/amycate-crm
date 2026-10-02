@@ -2925,7 +2925,7 @@ function _renderQuoteCore(){
     _barsAll.forEach((b,i)=>{(pics[i]?withPic:noPic).push({b:b,src:pics[i]});});
     S.push(sec('',head('Somewhere For A Drink','Bars & Lounges')+
       (allPics?bandImg('bars',/bar|lounge/i):'')+
-      ((allPics||mostPics)
+      (allPics
         ? '<div class="room-grid" style="margin-top:34px;">'+
             (allPics?_barsAll.map((b,i2)=>({b:b,src:pics[i2]})):withPic).map(x=>
               '<div class="rcard">'+
