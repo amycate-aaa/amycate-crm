@@ -392,9 +392,9 @@ function showSms(){
   var box=document.getElementById('sms');
   var msgs=[{label:'Say hello',body:document.getElementById('smsline').value.trim()}];
   picks.forEach(function(b){
-    listFor(b).forEach(function(r){msgs.push({label:r.name,body:linkFor(r.slug)});});
+    listFor(b).forEach(function(r){msgs.push({label:r.name,body:shortFor(r.slug,r.name)});});
   });
-  msgs.push({label:'The whole library',body:libLink('')});
+  msgs.push({label:'The whole library',body:shortFor('__lib','Whole library')});
   msgs.push({label:'Sign off',body:'Tell me which ones catch your eye. \u2014 Amy'});
   window.__SMS=msgs;
   box.innerHTML='<div class="btns" style="margin:0 0 14px;">'+
@@ -452,6 +452,24 @@ function openMail(){
     :'Opening your mail app \u2014 too many resorts for one link, so it sends a link per destination instead. "Copy the email" keeps them all, with photos.'));
   location.href=url;
 }
+var SHORT={};
+function codeFor(slug,t){
+  var seed=(slug+'|'+t).toLowerCase(),h=0;
+  for(var i=0;i<seed.length;i++){h=((h<<5)-h+seed.charCodeAt(i))|0;}
+  var a='abcdefghijkmnpqrstuvwxyz23456789',n=Math.abs(h),out='';
+  for(var j=0;j<5;j++){out+=a[n%a.length];n=Math.floor(n/a.length)+7;}
+  return out;
+}
+function shortFor(slug,label){
+  var t=tag(),full=slug==='__lib'?libLink(''):linkFor(slug);
+  if(!t)return full;                       // untagged links are not shortened
+  var c=codeFor(slug,t),url='https://amy-cate.com/r/'+c;
+  if(SHORT[c])return url;
+  SHORT[c]=true;
+  try{db.collection('shortLinks').doc(c).set({url:full,slug:slug,tag:t,label:label||'',
+    createdAt:new Date().toISOString()},{merge:true});}catch(e){}
+  return url;
+}
 function copyForClaude(btn){
   var picks=chosen(),out={to:((document.getElementById('toemail')||{}).value||'').trim(),
     subject:subjectLine(),tag:tag(),brand:BRAND,
@@ -492,9 +510,9 @@ function smsAll(){
   var L=[((document.getElementById('smsline')||{}).value||'').trim(),''];
   picks.forEach(function(b){
     var list=listFor(b);if(!list.length)return;
-    list.forEach(function(r){L.push(r.name);L.push(linkFor(r.slug));L.push('');});
+    list.forEach(function(r){L.push(r.name);L.push(shortFor(r.slug,r.name));L.push('');});
   });
-  L.push('My whole library: '+libLink(''));
+  L.push('My whole library: '+shortFor('__lib','Whole library'));
   L.push('');L.push('Tell me which ones catch your eye. \u2014 Amy');
   return L.join('\n').replace(/\n{3,}/g,'\n\n');
 }
