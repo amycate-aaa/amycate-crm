@@ -1,0 +1,49 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Amy Cate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+body{margin:0;background:#FAF7F2;color:#1E1A14;font-family:'Jost',system-ui,sans-serif;font-weight:300;
+ display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;padding:30px;}
+p.e{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#8A6D3B;margin:0 0 14px;}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:28px;margin:0 0 12px;}
+p.m{font-size:15.5px;line-height:1.7;color:#5A5248;max-width:46ch;margin:0 auto 20px;}
+a.btn{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+ padding:13px 26px;border:1px solid #1E1A14;color:#1E1A14;text-decoration:none;display:inline-block;}
+</style></head><body>
+<div>
+  <p class="e">Amy Cate</p>
+  <h1 id="h">One moment…</h1>
+  <p class="m" id="m">Taking you to the resort.</p>
+  <p id="b"></p>
+</div>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",
+ projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",
+ messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+var db=firebase.firestore();
+function code(){
+  var p=location.pathname.replace(/\/+$/,'').split('/').pop();
+  if(p&&p!=='r')return p;
+  try{return new URLSearchParams(location.search).get('x')||'';}catch(e){return '';}
+}
+function fail(msg){
+  document.getElementById('h').textContent='That link has expired';
+  document.getElementById('m').textContent=msg||'Get in touch and I will send you a fresh one.';
+  document.getElementById('b').innerHTML='<a class="btn" href="mailto:amy.cate@destinationweddings.com">Email me</a>';
+}
+var c=code();
+if(!c){fail();}
+else{
+  db.collection('shortLinks').doc(c).get().then(function(s){
+    if(!s.exists)return fail();
+    var d=s.data()||{};
+    if(d.disabled)return fail('This one is no longer active.');
+    try{db.collection('shortLinks').doc(c).set({clicks:(d.clicks||0)+1,lastClick:new Date().toISOString()},{merge:true});}catch(e){}
+    if(!d.url)return fail();
+    location.replace(d.url);
+  }).catch(function(){fail('Something went wrong on my side.');});
+}
+</script></body></html>
