@@ -381,10 +381,16 @@ function showSms(){
   });
   msgs.push({label:'The whole library',body:libLink('')});
   msgs.push({label:'Sign off',body:'Tell me which ones catch your eye. \u2014 Amy'});
-  box.innerHTML=msgs.map(function(m,i){
-    return '<div class="smsbox"><b>'+esc(m.label)+'</b><p>'+esc(m.body)+'</p>'+
-      '<button class="go ghost" style="margin-top:8px;padding:8px 14px;" onclick="copyOne(this,'+i+')">Copy</button></div>';}).join('');
   window.__SMS=msgs;
+  box.innerHTML='<div class="btns" style="margin:0 0 14px;">'+
+      '<button class="go" onclick="copyAllSms(this)">Copy the whole thing</button>'+
+      '<button class="go ghost" onclick="openText()">Open in Messages</button>'+
+    '</div>'+
+    '<div class="smsbox"><b>All of it, as one message</b><p>'+esc(smsAll())+'</p></div>'+
+    '<p class="hint" style="margin:14px 0 6px;">Or send them one at a time — a link on its own line is what makes a phone show the photo card.</p>'+
+    msgs.map(function(m,i){
+      return '<div class="smsbox"><b>'+esc(m.label)+'</b><p>'+esc(m.body)+'</p>'+
+        '<button class="go ghost" style="margin-top:8px;padding:8px 14px;" onclick="copyOne(this,'+i+')">Copy</button></div>';}).join('');
   document.getElementById('smswrap').style.display='';
 }
 function subjectLine(){
@@ -433,12 +439,24 @@ function openMail(){
 }
 function openText(){
   var to=((document.getElementById('tophone')||{}).value||'').replace(/[^0-9+]/g,'');
-  var picks=chosen();
-  var parts=[((document.getElementById('smsline')||{}).value||'').trim()];
-  picks.forEach(function(b){listFor(b).forEach(function(r){parts.push(linkFor(r.slug));});});
-  var body=parts.filter(Boolean).join('\n\n');
+  var body=smsAll();
   var sep=/iPhone|iPad|Macintosh/i.test(navigator.userAgent)?'&':'?';
   location.href='sms:'+to+sep+'body='+encodeURIComponent(body);
+}
+function smsAll(){
+  var picks=chosen();
+  var L=[((document.getElementById('smsline')||{}).value||'').trim(),''];
+  picks.forEach(function(b){
+    var list=listFor(b);if(!list.length)return;
+    list.forEach(function(r){L.push(r.name);L.push(linkFor(r.slug));L.push('');});
+  });
+  L.push('My whole library: '+libLink(''));
+  L.push('');L.push('Tell me which ones catch your eye. \u2014 Amy');
+  return L.join('\n').replace(/\n{3,}/g,'\n\n');
+}
+function copyAllSms(btn){
+  try{navigator.clipboard.writeText(smsAll());}catch(e){}
+  var w=btn.textContent;btn.textContent='Copied \u2713';setTimeout(function(){btn.textContent=w;},1400);
 }
 function copyOne(btn,i){
   try{navigator.clipboard.writeText(window.__SMS[i].body);}catch(e){}
