@@ -459,7 +459,7 @@ function codeFor(slug,t){
 function shortFor(slug,label){
   var t=tag(),full=slug==='__lib'?libLink(''):linkFor(slug);
   if(!t)return full;                       // untagged links are not shortened
-  var c=codeFor(slug,t),url='https://amy-cate.com/r/'+c;
+  var c=codeFor(slug,t),url='https://amy-cate.com/r/?x='+c;
   if(SHORT[c])return url;
   SHORT[c]=true;
   try{db.collection('shortLinks').doc(c).set({url:full,slug:slug,tag:t,label:label||'',
