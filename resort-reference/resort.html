@@ -1975,7 +1975,7 @@ const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.google
 
 /* Logs a client opening a shared guide page — same as the library index.
    Only fires on the client view, never when Amy is working. */
-(function(){
+setTimeout(function(){
   try{
     if(AGENT)return;
     try{if(localStorage.getItem('ac_agent')==='1')return;}catch(e){}   // this device is Amy's — never log it as a client view
@@ -2001,7 +2001,7 @@ const GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.google
       returning:(function(){try{var r=localStorage.getItem('acv1')==='1';localStorage.setItem('acv1','1');return r;}catch(e){return false;}})()
     });
   }catch(e){}
-})();
+},2500);
 
 const AGENT_SIG={name:'Amy M. Cate',title:'Certified Destination Wedding & Group Travel Specialist',brands:'Destination Weddings Travel Group & Celebration Travel',email:'amy.cate@destinationweddings.com',phone:'(832) 773-8664',hours:'Office Hours: Monday\u2013Thursday 9:00am\u20135:00pm, Friday 9:00am\u20133:00pm CST',hours2:'Weekends by appointment',call:'https://zcal.co/amymcate/letschat',address:'945 Concord Street | Framingham, MA | 01701',sigImage:'https://amy-cate.com/resort-reference/photos/signature.png'};
 function sigHtml(){const S=AGENT_SIG;const F='font-family:Helvetica,Arial,sans-serif;';const SERIF='font-family:Georgia,\'Times New Roman\',serif;';
