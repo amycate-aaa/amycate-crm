@@ -77,6 +77,11 @@ button.go:hover{opacity:.9;}
           <button type="button" class="pill on" data-b="dwt">Wedding</button>
           <button type="button" class="pill" data-b="ct">Celebration Travel</button>
         </div>
+        <label class="f">Look</label>
+        <div class="pills" id="look">
+          <button type="button" class="pill on" data-l="modern">Modern — one link</button>
+          <button type="button" class="pill" data-l="classic">Classic — a card each</button>
+        </div>
         <label class="f">Show prices in the library</label>
         <div class="pills" id="price">
           <button type="button" class="pill on" data-p="0">No prices</button>
@@ -218,6 +223,15 @@ function libLink(bucket){
   return SITE+'/?k='+PASS+(PRICE?'':'&np=1')+(BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+
     (bucket?'&d='+encodeURIComponent(bucket):'');
 }
+var LOOK='modern';
+function oneLink(){
+  var picks=chosen(),slugs=[];
+  picks.forEach(function(b){listFor(b).forEach(function(r){slugs.push(r.slug);});});
+  if(!slugs.length)return '';
+  var t=tag();
+  return SITE+'/options?r='+encodeURIComponent(slugs.join(','))+
+    (BRAND==='ct'?'&b=ct':'')+(t?'&c='+encodeURIComponent(t)+'&for='+encodeURIComponent(t.replace(/-/g,' ')):'')+'&k='+PASS;
+}
 function chosen(){
   return [].slice.call(document.querySelectorAll('#locs .loc input:checked')).map(function(i){return i.value;});
 }
@@ -315,6 +329,7 @@ function applyMode(){
   render();
 }
 function emailHtml(){
+  if(LOOK==='modern')return emailHtmlOne();
   var picks=chosen();
   var hdr=esc((document.getElementById('header')||{}).value||'');
   var greet=esc(document.getElementById('greet').value.trim());
@@ -364,8 +379,46 @@ function emailHtml(){
       '</table></td></tr></table>';
   return S;
 }
+function emailHtmlOne(){
+  var picks=chosen(), link=oneLink();
+  var hdr=esc(((document.getElementById('header')||{}).value||'').trim());
+  var greet=esc(document.getElementById('greet').value.trim());
+  var intro=esc(document.getElementById('intro').value.trim());
+  var interest=esc(document.getElementById('interest').value.trim());
+  var outro=esc(document.getElementById('outro').value.trim());
+  var names=[];picks.forEach(function(b){listFor(b).forEach(function(r){names.push(r);});});
+  var lead=names.filter(function(r){return photoOk(r.photo);})[0];
+  return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F4F4F4;padding:26px 0;"><tr><td align="center">'+
+   '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;background:#FFFFFF;">'+
+   (lead?'<tr><td><a href="'+esc(link)+'"><img src="'+esc(lead.photo)+'" width="600" style="width:100%;max-width:600px;display:block;border:0;" alt=""></a></td></tr>':'')+
+   '<tr><td style="padding:34px 40px 10px;font-family:Helvetica,Arial,sans-serif;">'+
+   (hdr?'<p style="margin:0 0 14px;font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.5px;color:#111;">'+hdr+'</p>':'')+
+   '<p style="margin:0 0 12px;font-size:16px;color:#111;">'+greet+'</p>'+
+   '<p style="margin:0 0 24px;font-size:16px;line-height:1.7;color:#2B2B2B;">'+intro+'</p></td></tr>'+
+   '<tr><td align="center" style="padding:0 40px 24px;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+   '<td bgcolor="#111111" style="border-radius:999px;padding:16px 34px;"><a href="'+esc(link)+'" style="font-family:Helvetica,Arial,sans-serif;font-size:14px;font-weight:700;color:#FFFFFF;text-decoration:none;"><font color="#FFFFFF">See your options \u2192</font></a></td>'+
+   '</tr></table></td></tr>'+
+   '<tr><td style="padding:0 40px 8px;font-family:Helvetica,Arial,sans-serif;">'+
+   '<p style="margin:0 0 10px;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;color:#6B6B6B;">On the page</p>'+
+   '<p style="margin:0 0 22px;font-size:16px;line-height:1.8;color:#111;">'+names.map(function(r){return esc(r.name);}).join('<br>')+'</p></td></tr>'+
+   '<tr><td style="padding:0 40px;font-family:Helvetica,Arial,sans-serif;">'+
+   '<p style="margin:0 0 14px;font-size:15px;line-height:1.7;color:#2B2B2B;">'+interest+'</p>'+
+   '<p style="margin:0 0 26px;font-size:15px;line-height:1.7;color:#2B2B2B;">'+outro+'</p></td></tr>'+
+   '<tr><td style="padding:18px 40px 34px;border-top:1px solid #E4E4E4;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+   (SIGPIC?'<td width="58" style="width:58px;"><img src="'+esc(SIGPIC)+'" width="50" height="50" alt="Amy" style="width:50px;height:50px;border-radius:25px;display:block;border:0;"></td><td width="14" style="width:14px;">&nbsp;</td>':'')+
+   '<td style="font-family:Helvetica,Arial,sans-serif;"><p style="margin:0 0 2px;font-size:16px;font-weight:700;color:#111;">Amy</p>'+
+   '<p style="margin:0;font-size:13px;color:#6B6B6B;">(832) 773-8664 &middot; <a href="mailto:'+(BRAND==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com')+'" style="color:#111;">email me</a></p>'+
+   '</td></tr></table></td></tr></table></td></tr></table>';
+}
 function plainText(){
   var picks=chosen();
+  if(LOOK==='modern'){
+    var L=[document.getElementById('greet').value.trim(),'',document.getElementById('intro').value.trim(),'',
+      'YOUR OPTIONS \u2014 all on one page',oneLink(),''];
+    picks.forEach(function(b){listFor(b).forEach(function(r){L.push('  '+r.name);});});
+    L.push('',document.getElementById('interest').value.trim(),'',document.getElementById('outro').value.trim(),'','Amy','(832) 773-8664');
+    return L.join('\n');
+  }
   var L=[document.getElementById('greet').value.trim(),'',document.getElementById('intro').value.trim(),''];
   picks.forEach(function(b){
     L.push(b.toUpperCase());
@@ -593,6 +646,14 @@ function openText(){
 }
 function smsAll(){
   var picks=chosen();
+  if(LOOK==='modern'){
+    var t=tag(),full=oneLink(),short=full;
+    if(t){var c=codeFor('__options',t);short='https://amy-cate.com/r/?x='+c;
+      if(!SHORT[c]){SHORT[c]=true;try{db.collection('shortLinks').doc(c).set({url:full,slug:'options',tag:t,
+        label:'All options on one page',createdAt:new Date().toISOString()},{merge:true});}catch(e){}}}
+    return [((document.getElementById('smsline')||{}).value||'').trim(),'',short,'',
+      'Tell me which ones catch your eye. \u2014 Amy'].join('\n');
+  }
   var L=[((document.getElementById('smsline')||{}).value||'').trim(),''];
   picks.forEach(function(b){
     var list=listFor(b);if(!list.length)return;
@@ -623,6 +684,8 @@ document.getElementById('mode').onclick=function(e){var b=e.target.closest('.pil
 document.getElementById('sigpic').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
   SIGPIC=+b.dataset.s?'https://amy-cate.com/amy-headshot.jpg':'';
   [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
+document.getElementById('look').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
+  LOOK=b.dataset.l;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
 document.getElementById('who').addEventListener('input',render);
 ['header','greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
 applyMode();
