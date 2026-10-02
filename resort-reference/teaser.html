@@ -59,7 +59,10 @@ button.go:hover{opacity:.9;}
       <div class="card">
         <h2>Who is this for?</h2>
         <p class="hint">Type their name and every link is tagged, so you see what they open on Who's Looking. Leave it blank and nothing is tracked — and untagged links are currently turned away, so use a name.</p>
-        <label class="f">Their name</label>
+        <label class="f">Pick a lead</label>
+        <select id="lead" onchange="useLead()"><option value="">Loading your leads…</option></select>
+        <p class="hint" id="leadnote"></p>
+        <label class="f">Their name <span style="text-transform:none;letter-spacing:0;color:#7A7266;">(tags the links)</span></label>
         <input type="text" id="who" placeholder="hannah-and-mark" autocomplete="off">
         <label class="f">Their email <span style="text-transform:none;letter-spacing:0;color:#7A7266;">(optional — to open your mail app)</span></label>
         <input type="text" id="toemail" placeholder="hannah@example.com" autocomplete="off">
@@ -227,6 +230,44 @@ function load(){
     render();
   }).catch(function(e){document.getElementById('locs').innerHTML='<p class="hint">Could not load the library: '+esc(String(e))+'</p>';});
 }
+var LEADS=[];
+function slugify(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);}
+function loadLeads(){
+  db.collection('leads').get().then(function(snap){
+    LEADS=[];
+    snap.forEach(function(d){var l=d.data();
+      if(l.archivedLead)return;
+      if(/signed contract/i.test(String(l.status||'')))return;
+      LEADS.push({id:d.id,names:l.names||l.contact||'',email:l.email||'',phone:l.phone||'',
+        dest:l.destination||'',status:l.status||'',type:l.type||'',last:l.lastContact||''});});
+    LEADS.sort(function(a,b){return String(a.names).localeCompare(String(b.names));});
+    var sel=document.getElementById('lead');
+    sel.innerHTML='<option value="">Type a name myself…</option>'+LEADS.map(function(l,i){
+      return '<option value="'+i+'">'+esc(l.names||'(no name)')+(l.dest?' — '+esc(l.dest):'')+(l.status?'  ·  '+esc(l.status):'')+'</option>';}).join('');
+  }).catch(function(){document.getElementById('lead').innerHTML='<option value="">Could not load leads — type a name instead</option>';});
+}
+function useLead(){
+  var i=document.getElementById('lead').value;
+  var note=document.getElementById('leadnote');
+  if(i===''){note.textContent='';return;}
+  var l=LEADS[+i];if(!l)return;
+  document.getElementById('who').value=slugify(l.names);
+  document.getElementById('toemail').value=l.email||'';
+  document.getElementById('tophone').value=l.phone||'';
+  // a lead with no contact yet gets the new-lead wording; one you have spoken to gets the follow-up
+  var m=/no contact/i.test(l.status)?'new':(/awaiting reply|sent quotes|received info/i.test(l.status)?'quiet':'follow');
+  var btn=document.querySelector('#mode .pill[data-m="'+m+'"]');if(btn)btn.click();
+  // tick the destination they asked about
+  if(l.dest){
+    var want=String(l.dest).toLowerCase();
+    [].forEach.call(document.querySelectorAll('#locs .loc input'),function(cb){
+      var hit=cb.value.toLowerCase().split(/[&,]/).some(function(part){
+        part=part.trim();return part.length>3&&(want.indexOf(part)>-1||part.indexOf(want)>-1);});
+      if(hit&&!cb.checked){cb.checked=true;toggleDest(cb);}});
+  }
+  note.textContent=[l.status,l.dest?('asked about '+l.dest):'',l.email||l.phone||'no contact details on the lead'].filter(Boolean).join('  ·  ');
+  render();
+}
 function applyMode(){
   var m=MODES[MODE];
   document.getElementById('greet').value=m.greet;
@@ -373,4 +414,5 @@ document.getElementById('who').addEventListener('input',render);
 ['header','greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
 applyMode();
 load();
+loadLeads();
 </script></body></html>
