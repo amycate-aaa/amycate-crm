@@ -147,6 +147,21 @@ var SIGPIC='https://amy-cate.com/amy-headshot.jpg';
 var PASS='amycate';
 var BUCKETS={},ORDER=[],BRAND='dwt',PRICE=0,MODE='new';
 
+var MODES_CT={
+ 'new':{greet:'Hi there,',
+   intro:'You asked about getting a group away together, and the choice can feel endless \u2014 so rather than send you a list of everything, here are a few of my favorites. These are resorts I know, and ones my groups have loved.',
+   sms:'Hi! You asked about getting everyone away together \u2014 rather than send you everything, here are a few of my favorites to start with.'},
+ 'follow':{greet:'Hi again,',
+   intro:'Following up on our conversation \u2014 I pulled together the resorts I think suit what you described for the group. Have a look whenever you have a few minutes.',
+   sms:'Following up with a few resorts I think suit your group \u2014 have a look when you get a minute.'},
+ 'quiet':{greet:'Hi there,',
+   intro:'I know getting a group organised slips down the list, and that is completely normal. No rush at all \u2014 but in case it sparks something, here are a few of my favorites.',
+   sms:'No rush at all \u2014 but in case it sparks something, here are a few of my favorites.'}
+};
+var FIXED_CT={
+ interest:'See one you like? Tap \u201cI\u2019m interested\u201d on any resort \u2014 add your dates if you have them and I can price it properly the first time.',
+ outro:'Happy to talk any of these through, or pull rates and group benefits for the ones you like best. Just hit reply.'
+};
 var MODES={
  'new':{greet:'Hi there,',
    intro:'You asked about a destination wedding, and the choice can feel endless \u2014 so rather than send you a list of everything, here are a few of my favorites. These are resorts I know, and ones my couples and their guests have loved.',
@@ -285,12 +300,12 @@ function useLead(){
   render();
 }
 function applyMode(){
-  var m=MODES[MODE];
+  var m=(BRAND==='ct'?MODES_CT:MODES)[MODE], f=(BRAND==='ct'?FIXED_CT:FIXED);
   document.getElementById('greet').value=m.greet;
   document.getElementById('intro').value=m.intro;
   document.getElementById('smsline').value=m.sms;
-  document.getElementById('interest').value=FIXED.interest;
-  document.getElementById('outro').value=FIXED.outro;
+  document.getElementById('interest').value=f.interest;
+  document.getElementById('outro').value=f.outro;
   render();
 }
 function emailHtml(){
@@ -566,7 +581,11 @@ function copyOne(btn,i){
   var w=btn.textContent;btn.textContent='Copied \u2713';setTimeout(function(){btn.textContent=w;},1200);
 }
 document.getElementById('brand').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
-  BRAND=b.dataset.b;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
+  var before=document.getElementById('intro').value.trim();
+  var stock=[MODES,MODES_CT].some(function(set){return Object.keys(set).some(function(k){return set[k].intro===before;});});
+  BRAND=b.dataset.b;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});
+  if(stock)applyMode(); else render();   // anything you have written yourself is left alone
+};
 document.getElementById('price').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
   PRICE=+b.dataset.p;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
 document.getElementById('mode').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
