@@ -1,0 +1,316 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Email Teasers — Amy Cate</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+:root{--cream:#FAF7F2;--sand:#F2EBE954;--line:#E4D8C6;--gold:#B08D57;--gold-deep:#8A6D3B;--ink:#1E1A14;--mute:#7A7266;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--ink);font-family:'Jost',system-ui,sans-serif;font-weight:300;}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 22px 70px;}
+.eyebrow{font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-deep);}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-size:42px;font-weight:400;line-height:1.1;margin-top:8px;}
+.lede{color:var(--mute);font-size:14.5px;margin-top:8px;}
+.topnav{float:right;font-size:12px;letter-spacing:.14em;text-transform:uppercase;}
+.topnav a{color:var(--gold-deep);text-decoration:none;margin-left:18px;}
+.cols{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:34px;margin-top:34px;align-items:start;}
+@media(max-width:900px){.cols{grid-template-columns:1fr;}}
+.card{background:#fff;border:1px solid var(--line);padding:22px 22px 24px;margin-bottom:20px;}
+.card h2{font-family:'Cormorant Garamond',Georgia,serif;font-size:23px;font-weight:400;}
+.hint{color:var(--mute);font-size:12.5px;margin-top:4px;line-height:1.6;}
+label.f{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin:16px 0 6px;}
+input[type=text],textarea,select{width:100%;font-family:inherit;font-size:14px;font-weight:300;padding:10px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);}
+textarea{min-height:76px;line-height:1.6;resize:vertical;}
+.locs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+@media(max-width:620px){.locs{grid-template-columns:1fr;}}
+.loc{display:flex;align-items:center;gap:9px;border:1px solid var(--line);padding:9px 11px;cursor:pointer;background:#fff;}
+.loc:hover{border-color:var(--gold);}
+.loc input{margin:0;}
+.loc .n{flex:1;font-size:13.5px;}
+.loc .c{font-size:11px;color:var(--mute);}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.pill{font-size:11px;letter-spacing:.14em;text-transform:uppercase;padding:8px 14px;border:1px solid var(--line);background:#fff;cursor:pointer;}
+.pill.on{background:var(--gold);color:#fff;border-color:var(--gold);}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;}
+button.go{font-family:inherit;font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:13px 22px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;}
+button.ghost{background:#fff;color:var(--gold-deep);}
+button.go:hover{opacity:.9;}
+.preview{border:1px solid var(--line);background:#fff;padding:0;overflow:auto;max-height:78vh;}
+.note{font-size:12px;color:var(--mute);margin-top:10px;}
+.count{font-size:12px;color:var(--gold-deep);letter-spacing:.14em;text-transform:uppercase;margin-top:14px;}
+.smsbox{border:1px solid var(--line);background:#fff;padding:14px 16px;margin-top:10px;}
+.smsbox b{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:5px;}
+.smsbox p{font-size:13.5px;line-height:1.6;white-space:pre-wrap;}
+</style></head><body>
+<div class="wrap">
+  <div class="topnav"><a href="./">Resort Library</a><a href="./visits.html">Who's Looking</a><a href="../">Dashboard</a></div>
+  <p class="eyebrow">Amy Cate</p>
+  <h1>Email Teasers</h1>
+  <p class="lede">A few of my favourites, by destination — built into an email you can send.</p>
+
+  <div class="cols">
+    <div>
+      <div class="card">
+        <h2>Who is this for?</h2>
+        <p class="hint">Type their name and every link is tagged, so you see what they open on Who's Looking. Leave it blank and nothing is tracked — and untagged links are currently turned away, so use a name.</p>
+        <label class="f">Their name</label>
+        <input type="text" id="who" placeholder="hannah-and-mark" autocomplete="off">
+        <label class="f">Which brand</label>
+        <div class="pills" id="brand">
+          <button type="button" class="pill on" data-b="dwt">Wedding</button>
+          <button type="button" class="pill" data-b="ct">Celebration Travel</button>
+        </div>
+        <label class="f">Show prices in the library</label>
+        <div class="pills" id="price">
+          <button type="button" class="pill on" data-p="0">No prices</button>
+          <button type="button" class="pill" data-p="1">With prices</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Pick your destinations</h2>
+        <p class="hint">Only resorts that are ready to share appear here. Tick a destination and the email builds itself.</p>
+        <div class="locs" id="locs"><p class="hint">Loading your library…</p></div>
+        <p class="count" id="count"></p>
+      </div>
+
+      <div class="card">
+        <h2>What kind of teaser?</h2>
+        <div class="pills" id="mode">
+          <button type="button" class="pill on" data-m="new">New lead</button>
+          <button type="button" class="pill" data-m="follow">Follow-up</button>
+          <button type="button" class="pill" data-m="quiet">Gone quiet</button>
+        </div>
+        <p class="hint">Swaps the greeting, the opening line and the text message. Anything you have typed over yourself is left alone.</p>
+        <label class="f">Greeting</label>
+        <input type="text" id="greet">
+        <label class="f">Opening line</label>
+        <textarea id="intro"></textarea>
+        <label class="f">Interested line</label>
+        <textarea id="interest"></textarea>
+        <label class="f">Closing line</label>
+        <textarea id="outro"></textarea>
+        <label class="f">Text message</label>
+        <textarea id="smsline"></textarea>
+        <div class="btns">
+          <button class="go" onclick="copyEmail(this)">Copy the email</button>
+          <button class="go ghost" onclick="copyPlain(this)">Copy plain text</button>
+          <button class="go ghost" onclick="showSms()">Make it a text</button>
+        </div>
+        <p class="note" id="note"></p>
+      </div>
+
+      <div class="card" id="smswrap" style="display:none;">
+        <h2>Send as a text</h2>
+        <p class="hint">One bubble per destination — a bare link on its own is what makes a phone show a photo card instead of a naked address.</p>
+        <div id="sms"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="preview" id="preview"></div>
+    </div>
+  </div>
+</div>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",
+ projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",
+ messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+var db=firebase.firestore();
+var SITE='https://amy-cate.com/resort-reference';
+var PASS='amycate';
+var BUCKETS={},ORDER=[],BRAND='dwt',PRICE=0,MODE='new';
+
+var MODES={
+ 'new':{greet:'Hi there,',
+   intro:'You asked about a destination wedding, and the choice can feel endless \u2014 so rather than send you a list of everything, here are a few of my favourites. These are resorts I know, and ones my couples and their guests have loved.',
+   sms:'Hi! You asked about a destination wedding \u2014 rather than send you everything, here are a few of my favourites to start with.'},
+ 'follow':{greet:'Hi again,',
+   intro:'Following up on our conversation \u2014 I pulled together the resorts I think suit what you described. Have a look through whenever you have a few minutes.',
+   sms:'Following up with a few resorts I think suit what you described \u2014 have a look when you get a minute.'},
+ 'quiet':{greet:'Hi there,',
+   intro:'I know planning a wedding abroad gets pushed down the list, and that is completely normal. No rush at all \u2014 but in case it sparks something, here are a few of my favourites.',
+   sms:'No rush at all \u2014 but in case it sparks something, here are a few of my favourites.'}
+};
+var FIXED={
+ interest:'See one you like? Tap "I\u2019m interested" on any resort \u2014 add your dates if you have them and I can price it properly the first time.',
+ outro:'Happy to talk any of these through, or pull rates for the ones you like best. Just hit reply.'
+};
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function regionOf(p){
+  var d=String(p.destination||'')+' '+String(p.name||'');
+  if(/costa mujeres|playa mujeres|canc|riviera maya|playa del carmen|akumal|tulum|puerto morelos|cozumel|maroma|xcaret|isla mujeres/i.test(d))return 'Canc\u00fan & the Riviera Maya';
+  if(/los cabos|cabo san lucas|san jos\u00e9 del cabo|san jose del cabo|baja/i.test(d))return 'Los Cabos';
+  if(/vallarta|nayarit|bah\u00eda de banderas|bahia mita|punta mita|mita/i.test(d))return 'Puerto Vallarta';
+  if(/punta cana|cap cana|bavaro|b\u00e1varo|la romana|dominican|macao|uvero|esmeralda|bayahibe/i.test(d))return 'Dominican Republic';
+  if(/jamaica|montego|negril|ocho rios|falmouth|runaway|trelawny|green island/i.test(d))return 'Jamaica';
+  if(/costa rica|papagayo|guanacaste|liberia/i.test(d))return 'Costa Rica';
+  if(/aruba|baby beach|palm beach|eagle beach|oranjestad/i.test(d))return 'Aruba';
+  if(/st\.? ?lucia|saint lucia|castries|soufri/i.test(d))return 'St. Lucia';
+  if(/cura\u00e7ao|curacao|willemstad/i.test(d))return 'Cura\u00e7ao';
+  if(/bahamas|nassau|paradise island|freeport|grand bahama|baha mar/i.test(d))return 'The Bahamas';
+  if(/antigua/i.test(d))return 'Antigua';
+  if(/grenada/i.test(d))return 'Grenada';
+  if(/turks|providenciales|grace bay/i.test(d))return 'Turks & Caicos';
+  if(/barbados/i.test(d))return 'Barbados';
+  return 'Elsewhere in the Caribbean';
+}
+var ORDER_PREF=['Dominican Republic','Jamaica','Canc\u00fan & the Riviera Maya','Los Cabos','Puerto Vallarta','Aruba','The Bahamas','Costa Rica','St. Lucia','Antigua','Grenada','Cura\u00e7ao','Turks & Caicos','Barbados','Elsewhere in the Caribbean'];
+function photoOk(u){return u&&/^https?:\/\//.test(String(u));}
+function ready(p){
+  return photoOk(p.heroPhoto)&&String(p.description||'').length>30&&
+    (p.roomCategories||[]).length&&(p.restaurants||[]).length;
+}
+function tag(){return (document.getElementById('who').value||'').trim().toLowerCase().replace(/\s+/g,'-');}
+function linkFor(slug){
+  var t=tag();
+  return SITE+'/resort?r='+encodeURIComponent(slug)+'&quote=true&pv=1'+(PRICE?'':'&np=1')+
+    (BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+'&k='+PASS;
+}
+function libLink(bucket){
+  var t=tag();
+  return SITE+'/?k='+PASS+(PRICE?'':'&np=1')+(BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+
+    '&d='+encodeURIComponent(bucket);
+}
+function chosen(){
+  return [].slice.call(document.querySelectorAll('#locs input:checked')).map(function(i){return i.value;});
+}
+function load(){
+  db.collection('resortProfiles').get().then(function(snap){
+    var all=[];
+    snap.forEach(function(d){
+      if(/-(maggie|chris|christopher)$/.test(d.id))return;
+      var p=d.data();if(p.hideFromLibrary)return;
+      if(!ready(p))return;
+      all.push({slug:d.id,name:p.name||p.resortName||d.id,tagline:p.tagline||'',dest:p.destination||'',
+        photo:p.heroPhoto,region:regionOf(p)});
+    });
+    BUCKETS={};
+    all.forEach(function(r){(BUCKETS[r.region]=BUCKETS[r.region]||[]).push(r);});
+    Object.keys(BUCKETS).forEach(function(b){BUCKETS[b].sort(function(a,c){return a.name.localeCompare(c.name);});});
+    ORDER=ORDER_PREF.filter(function(b){return BUCKETS[b]&&BUCKETS[b].length;})
+      .concat(Object.keys(BUCKETS).filter(function(b){return ORDER_PREF.indexOf(b)<0;}));
+    document.getElementById('locs').innerHTML=ORDER.map(function(b){
+      return '<label class="loc"><input type="checkbox" value="'+esc(b)+'" onchange="render()"><span class="n">'+esc(b)+'</span><span class="c">'+BUCKETS[b].length+'</span></label>';
+    }).join('')||'<p class="hint">No resorts are ready to share yet.</p>';
+    document.getElementById('count').textContent=all.length+' resorts ready to share across '+ORDER.length+' destinations';
+    render();
+  }).catch(function(e){document.getElementById('locs').innerHTML='<p class="hint">Could not load the library: '+esc(String(e))+'</p>';});
+}
+function applyMode(){
+  var m=MODES[MODE];
+  document.getElementById('greet').value=m.greet;
+  document.getElementById('intro').value=m.intro;
+  document.getElementById('smsline').value=m.sms;
+  document.getElementById('interest').value=FIXED.interest;
+  document.getElementById('outro').value=FIXED.outro;
+  render();
+}
+function emailHtml(){
+  var picks=chosen();
+  var greet=esc(document.getElementById('greet').value.trim());
+  var intro=esc(document.getElementById('intro').value.trim());
+  var interest=esc(document.getElementById('interest').value.trim());
+  var outro=esc(document.getElementById('outro').value.trim());
+  var S='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F2;padding:28px 0;"><tr><td align="center">'+
+    '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;background:#FFFFFF;border:1px solid #E4D8C6;">'+
+    '<tr><td style="padding:34px 38px 8px;font-family:Georgia,serif;">'+
+    '<p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8A6D3B;">Amy Cate</p>'+
+    '<p style="margin:0 0 14px;font-size:17px;color:#1E1A14;">'+greet+'</p>'+
+    '<p style="margin:0 0 20px;font-size:15.5px;line-height:1.75;color:#3A332B;">'+intro+'</p></td></tr>';
+  picks.forEach(function(b){
+    var list=BUCKETS[b]||[];
+    S+='<tr><td style="padding:14px 38px 4px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:#8A6D3B;">'+esc(b)+'</p></td></tr>';
+    list.forEach(function(r){
+      S+='<tr><td style="padding:10px 38px;">'+
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E4D8C6;">'+
+        (photoOk(r.photo)?'<tr><td><a href="'+esc(linkFor(r.slug))+'"><img src="'+esc(r.photo)+'" width="524" style="width:100%;max-width:524px;display:block;border:0;" alt="'+esc(r.name)+'"></a></td></tr>':'')+
+        '<tr><td style="padding:16px 18px 18px;font-family:Georgia,serif;">'+
+        '<p style="margin:0 0 6px;font-size:19px;color:#1E1A14;">'+esc(r.name)+'</p>'+
+        (r.tagline?'<p style="margin:0 0 10px;font-size:14px;line-height:1.6;color:#5A5248;">'+esc(r.tagline)+'</p>':'')+
+        '<p style="margin:0;"><a href="'+esc(linkFor(r.slug))+'" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A6D3B;text-decoration:none;">See the full guide &rarr;</a></p>'+
+        '</td></tr></table></td></tr>';
+    });
+    S+='<tr><td style="padding:2px 38px 16px;"><a href="'+esc(libLink(b))+'" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A6D3B;text-decoration:none;">All my '+esc(b)+' resorts &rarr;</a></td></tr>';
+  });
+  S+='<tr><td style="padding:12px 38px 0;font-family:Georgia,serif;">'+
+    '<p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#3A332B;">'+interest+'</p>'+
+    '<p style="margin:0 0 22px;font-size:15px;line-height:1.75;color:#3A332B;">'+outro+'</p></td></tr>'+
+    '<tr><td align="center" style="padding:0 38px 30px;">'+
+    '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+    '<td bgcolor="#B08D57" style="padding:12px 24px;"><a href="mailto:'+(BRAND==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com')+'" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#FFFFFF;text-decoration:none;"><font color="#FFFFFF">Email me</font></a></td>'+
+    '<td width="12" style="width:12px;">&nbsp;</td>'+
+    '<td bgcolor="#F2EBE9" style="padding:12px 24px;"><a href="https://zcal.co/amymcate/letschat" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#3A332B;text-decoration:none;"><font color="#3A332B">Schedule a call</font></a></td>'+
+    '</tr></table></td></tr>'+
+    '<tr><td style="padding:0 38px 34px;font-family:Georgia,serif;border-top:1px solid #E4D8C6;padding-top:20px;">'+
+    '<p style="margin:0;font-size:13px;line-height:1.7;color:#7A7266;">Amy M. Cate &middot; Destination Weddings Travel Group'+(BRAND==='ct'?' &amp; Celebration Travel':'')+'<br>(832) 773-8664 &middot; Mon&ndash;Thu 9&ndash;5, Fri 9&ndash;3 CST</p></td></tr>'+
+    '</table></td></tr></table>';
+  return S;
+}
+function plainText(){
+  var picks=chosen();
+  var L=[document.getElementById('greet').value.trim(),'',document.getElementById('intro').value.trim(),''];
+  picks.forEach(function(b){
+    L.push(b.toUpperCase());
+    (BUCKETS[b]||[]).forEach(function(r){L.push('  '+r.name+(r.tagline?' — '+r.tagline:''));L.push('  '+linkFor(r.slug));});
+    L.push('');
+  });
+  L.push(document.getElementById('interest').value.trim(),'',document.getElementById('outro').value.trim(),'',
+    'Amy M. Cate','Destination Weddings Travel Group','(832) 773-8664');
+  return L.join('\n');
+}
+function render(){
+  var picks=chosen();
+  document.getElementById('preview').innerHTML=picks.length?emailHtml()
+    :'<div style="padding:40px;text-align:center;color:#7A7266;font-size:14px;">Tick a destination on the left and the email appears here.</div>';
+  var n=picks.reduce(function(a,b){return a+(BUCKETS[b]||[]).length;},0);
+  document.getElementById('note').textContent=picks.length?(n+' resorts across '+picks.length+' destination'+(picks.length===1?'':'s')+(tag()?' \u00b7 tagged '+tag():' \u00b7 NOT TAGGED \u2014 add a name or the links will be turned away')):'';
+}
+function copyEmail(btn){
+  var html=emailHtml();
+  try{
+    var blob=new Blob([html],{type:'text/html'});
+    var item=new ClipboardItem({'text/html':blob,'text/plain':new Blob([plainText()],{type:'text/plain'})});
+    navigator.clipboard.write([item]);
+  }catch(e){
+    var d=document.createElement('div');d.contentEditable=true;d.innerHTML=html;
+    d.style.position='fixed';d.style.left='-9999px';document.body.appendChild(d);
+    var r=document.createRange();r.selectNodeContents(d);var s=getSelection();s.removeAllRanges();s.addRange(r);
+    document.execCommand('copy');s.removeAllRanges();d.remove();
+  }
+  var w=btn.textContent;btn.textContent='Copied \u2713';setTimeout(function(){btn.textContent=w;},1400);
+}
+function copyPlain(btn){
+  try{navigator.clipboard.writeText(plainText());}catch(e){}
+  var w=btn.textContent;btn.textContent='Copied \u2713';setTimeout(function(){btn.textContent=w;},1400);
+}
+function showSms(){
+  var picks=chosen();
+  var box=document.getElementById('sms');
+  var msgs=[{label:'Say hello',body:document.getElementById('smsline').value.trim()}];
+  picks.forEach(function(b){
+    (BUCKETS[b]||[]).slice(0,3).forEach(function(r){msgs.push({label:r.name,body:linkFor(r.slug)});});
+  });
+  msgs.push({label:'Sign off',body:'Tell me which ones catch your eye. \u2014 Amy'});
+  box.innerHTML=msgs.map(function(m,i){
+    return '<div class="smsbox"><b>'+esc(m.label)+'</b><p>'+esc(m.body)+'</p>'+
+      '<button class="go ghost" style="margin-top:8px;padding:8px 14px;" onclick="copyOne(this,'+i+')">Copy</button></div>';}).join('');
+  window.__SMS=msgs;
+  document.getElementById('smswrap').style.display='';
+}
+function copyOne(btn,i){
+  try{navigator.clipboard.writeText(window.__SMS[i].body);}catch(e){}
+  var w=btn.textContent;btn.textContent='Copied \u2713';setTimeout(function(){btn.textContent=w;},1200);
+}
+document.getElementById('brand').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
+  BRAND=b.dataset.b;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
+document.getElementById('price').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
+  PRICE=+b.dataset.p;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
+document.getElementById('mode').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
+  MODE=b.dataset.m;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});applyMode();};
+document.getElementById('who').addEventListener('input',render);
+['greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
+applyMode();
+load();
+</script></body></html>
