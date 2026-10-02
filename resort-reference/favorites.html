@@ -1,0 +1,118 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A few of my favorites — Amy Cate</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%23fff%27 stroke=%27%23111%27 stroke-width=%272%27/%3E%3Ctext x=%2716%27 y=%2721%27 text-anchor=%27middle%27 font-family=%27Helvetica%27 font-weight=%27bold%27 font-size=%2715%27 fill=%27%23111%27%3EA%3C/text%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+:root{--ink:#111;--mid:#2B2B2B;--soft:#6B6B6B;--line:#E4E4E4;--bg:#fff;--wash:#F4F4F4;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',sans-serif;font-weight:400;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px 80px;}
+header.top{padding:54px 0 10px;}
+.eyebrow{font-size:12px;letter-spacing:1.8px;text-transform:uppercase;color:var(--soft);font-weight:500;}
+h1{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.03em;line-height:1.05;margin:12px 0 0;}
+.sub{font-size:17px;line-height:1.7;color:var(--mid);max-width:60ch;margin-top:16px;}
+.count{font-size:13px;color:var(--soft);margin-top:22px;letter-spacing:.4px;}
+.grid{display:grid;gap:26px;margin-top:34px;}
+@media(min-width:760px){.grid{grid-template-columns:1fr 1fr;}}
+.card{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;display:flex;flex-direction:column;}
+.card .pic{position:relative;aspect-ratio:3/2;background:var(--wash);overflow:hidden;}
+.card .pic img{width:100%;height:100%;object-fit:cover;display:block;}
+.card .tagpill{position:absolute;left:14px;top:14px;background:rgba(255,255,255,.94);border-radius:999px;padding:6px 13px;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;}
+.card .b{padding:22px 22px 24px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.card h2{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.2;}
+.card .where{font-size:13px;color:var(--soft);letter-spacing:.3px;}
+.card p.t{font-size:15px;line-height:1.65;color:var(--mid);}
+.facts{display:flex;flex-wrap:wrap;gap:7px;margin-top:2px;}
+.fact{font-size:12px;font-weight:500;background:var(--wash);border-radius:999px;padding:6px 12px;color:var(--mid);}
+.card .go{margin-top:auto;display:inline-flex;align-items:center;gap:8px;align-self:flex-start;
+ background:var(--ink);color:#fff;text-decoration:none;font-size:13.5px;font-weight:700;padding:13px 22px;border-radius:999px;}
+.card .go:hover{opacity:.88;}
+.ask{margin-top:48px;border-top:1px solid var(--line);padding-top:36px;}
+.ask h3{font-size:24px;font-weight:800;letter-spacing:-.02em;}
+.ask p{font-size:15.5px;line-height:1.7;color:var(--mid);max-width:58ch;margin-top:10px;}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;}
+.btn{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-size:14px;font-weight:700;padding:15px 28px;border-radius:999px;}
+.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line);}
+.sig{display:flex;align-items:center;gap:14px;margin-top:46px;padding-top:26px;border-top:1px solid var(--line);}
+.sig img{width:54px;height:54px;border-radius:27px;object-fit:cover;}
+.sig b{font-size:16px;font-weight:700;display:block;}
+.sig span{font-size:13.5px;color:var(--soft);}
+.empty{padding:90px 0;text-align:center;color:var(--soft);}
+</style></head><body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow" id="eyebrow">Amy Cate</p>
+    <h1 id="title">A few of my favorites</h1>
+    <p class="sub" id="sub">Hand-picked, and each one I know. Open any of them for the full picture — rooms, dining, pools and the wedding spaces.</p>
+    <p class="count" id="count"></p>
+  </header>
+  <div class="grid" id="grid"><p class="empty">Loading…</p></div>
+  <div class="ask" id="ask" style="display:none;">
+    <h3>See one you like?</h3>
+    <p id="askp">Tell me which ones catch your eye and I'll price them for your dates. If none of these are quite right, tell me that too — there is plenty more where they came from.</p>
+    <div class="btns">
+      <a class="btn" id="mailbtn" href="#">Email me</a>
+      <a class="btn ghost" href="https://zcal.co/amymcate/letschat">Schedule a call</a>
+    </div>
+    <div class="sig">
+      <img src="https://amy-cate.com/amy-headshot.jpg" alt="Amy">
+      <div><b>Amy</b><span>(832) 773-8664</span></div>
+    </div>
+  </div>
+</div>
+<script>
+firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDomain:"wedding-crm-e5d12.firebaseapp.com",
+ projectId:"wedding-crm-e5d12",storageBucket:"wedding-crm-e5d12.firebasestorage.app",
+ messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
+var db=firebase.firestore();
+var sp=new URLSearchParams(location.search);
+var SLUGS=(sp.get('r')||'').split(',').map(function(s){return s.trim();}).filter(Boolean);
+var TAG=(sp.get('c')||'').trim(), FOR=(sp.get('for')||'').trim(), CT=sp.get('b')==='ct', PASS=sp.get('k')||'amycate';
+var MAIL=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function pic(v){return v&&/^https?:/.test(String(v));}
+function A(p,k){return Array.isArray(p[k])?p[k]:[];}
+document.getElementById('mailbtn').href='mailto:'+MAIL+'?subject='+encodeURIComponent('About the resorts you sent'+(FOR?' \u2014 '+FOR:''));
+if(FOR){document.getElementById('eyebrow').textContent='For '+FOR;}
+function guide(slug){
+  return './resort?r='+encodeURIComponent(slug)+'&quote=true&pv=1&np=1'+(CT?'&ct=1':'')+
+    (TAG?'&c='+encodeURIComponent(TAG):'')+'&k='+encodeURIComponent(PASS);
+}
+function card(slug,p){
+  var adults=/adult/i.test(String(p.agePolicy||''))&&!/family|all ages/i.test(String(p.agePolicy||''));
+  var facts=[];
+  var many=function(n,one,more){return n+' '+(n===1?one:more);};
+  if(A(p,'roomCategories').length)facts.push(many(A(p,'roomCategories').length,'room type','room types'));
+  if(A(p,'restaurants').length)facts.push(many(A(p,'restaurants').length,'restaurant','restaurants'));
+  if(A(p,'pools').length)facts.push(many(A(p,'pools').length,'pool','pools'));
+  if(!CT&&A(p,'venues').length)facts.push(many(A(p,'venues').length,'wedding venue','wedding venues'));
+  return '<article class="card">'+
+    (pic(p.heroPhoto)?'<a class="pic" href="'+esc(guide(slug))+'"><img src="'+esc(p.heroPhoto)+'" alt="'+esc(p.name||'')+'" loading="lazy">'+
+      '<span class="tagpill">'+(adults?'Adults only':'All ages')+'</span></a>':'')+
+    '<div class="b">'+
+    '<h2>'+esc(p.name||slug)+'</h2>'+
+    (p.destination?'<p class="where">'+esc(p.destination)+'</p>':'')+
+    (p.tagline?'<p class="t">'+esc(p.tagline)+'</p>':'')+
+    (facts.length?'<div class="facts">'+facts.map(function(f){return '<span class="fact">'+esc(f)+'</span>';}).join('')+'</div>':'')+
+    '<a class="go" href="'+esc(guide(slug))+'">See the full guide \u2192</a>'+
+    '</div></article>';
+}
+if(!SLUGS.length){document.getElementById('grid').innerHTML='<p class="empty">Nothing to show \u2014 the link looks incomplete.</p>';}
+else{
+  Promise.all(SLUGS.map(function(s){return db.collection('resortProfiles').doc(s).get().catch(function(){return null;});}))
+  .then(function(docs){
+    var html='',n=0;
+    docs.forEach(function(d,i){ if(!d||!d.exists)return; n++; html+=card(SLUGS[i],d.data()); });
+    document.getElementById('grid').innerHTML=html||'<p class="empty">Nothing to show.</p>';
+    document.getElementById('count').textContent=n+' resort'+(n===1?'':'s')+' \u00b7 tap any one for the full picture';
+    if(n)document.getElementById('ask').style.display='';
+    try{if(localStorage.getItem('ac_agent')!=='1')db.collection('libraryVisits').add({at:new Date().toISOString(),
+      resort:'(favorites page)',page:'favorites',version:CT?'CT \u00b7 no pricing':'no pricing',sentTo:TAG||'',
+      from:(document.referrer||'').slice(0,120),
+      device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer'});}catch(e){}
+  }).catch(function(e){document.getElementById('grid').innerHTML='<p class="empty">Could not load these just now.</p>';});
+}
+</script></body></html>
