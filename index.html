@@ -4061,7 +4061,7 @@ function openGroupReportModal() {
     <div style="margin-bottom:20px;">
       <div style="font-size:.8rem;font-weight:700;color:#888;margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em">Include</div>
       <label style="display:flex;align-items:center;gap:10px;margin-bottom:8px;cursor:pointer;"><input type="radio" name="reportFilter" value="all" checked> All Guests</label>
-      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;"><input type="radio" name="reportFilter" value="active"> Active Only (exclude cancelled)</label>
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;"><input type="radio" name="reportFilter" value="active"> Active Only (exclude canceled)</label>
     </div>
     <div style="display:flex;gap:10px;justify-content:flex-end;">
       <button onclick="document.getElementById('groupReportOverlay').remove()" style="padding:10px 18px;border:1px solid var(--border);border-radius:8px;background:var(--surface);cursor:pointer;">Cancel</button>
@@ -4092,10 +4092,10 @@ function generateGroupReport(filter) {
     const bal = total - paid;
     const comm = parseFloat(g.commission) || 0;
     const bg = idx % 2 === 0 ? '#ffffff' : '#f9f9f9';
-    const cancelled = g.status === 'Cancelled';
+    const canceled = g.status === 'Cancelled';
     // Cancelled rooms are shown for reference but excluded from group totals
-    if (!cancelled) { totalRoom += rc; totalIns += ic; totalPaid += paid; totalBal += bal; totalComm += comm; }
-    rows += `<tr style="background:${bg};${cancelled ? 'opacity:.5;' : ''}">
+    if (!canceled) { totalRoom += rc; totalIns += ic; totalPaid += paid; totalBal += bal; totalComm += comm; }
+    rows += `<tr style="background:${bg};${canceled ? 'opacity:.5;' : ''}">
       <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${g.ti || '—'}</td>
       <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;font-weight:700;">${g.names || '—'}</td>
       <td style="padding:9px 8px;border-bottom:1px solid #eee;font-size:.82rem;">${fmtDate(g.depart)}</td>
