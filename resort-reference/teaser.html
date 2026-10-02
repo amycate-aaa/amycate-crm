@@ -2,6 +2,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Email Teasers — Amy Cate</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
@@ -119,7 +120,8 @@ button.go:hover{opacity:.9;}
           <button class="go" onclick="copyEmail(this)">Copy the email</button>
           <button class="go ghost" onclick="copyPlain(this)">Copy plain text</button>
           <button class="go ghost" onclick="showSms()">Make it a text</button>
-          <button class="go ghost" onclick="openGmail()">Open in Gmail</button>
+          <button class="go" onclick="gmailDraft(this)">Send to Gmail drafts</button>
+          <button class="go ghost" onclick="openGmail()">Open in Gmail (plain)</button>
           <button class="go ghost" onclick="openMail()">Open in mail app</button>
           <button class="go ghost" onclick="openText()">Open in Messages</button>
           <button class="go ghost" onclick="copyForClaude(this)">Copy for Claude</button>
@@ -483,6 +485,51 @@ function copyForClaude(btn){
   try{navigator.clipboard.writeText(txt);}catch(e){}
   var w=btn.textContent;btn.textContent='Copied \u2713 paste it to Claude';
   setTimeout(function(){btn.textContent=w;},2200);
+}
+var GMAIL_CLIENT_ID='882555042901-27paoapr7arebi9ej64sqpitbjqg38ku.apps.googleusercontent.com';
+var MY_EMAIL=function(){return BRAND==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';};
+function gmailToken(){return new Promise(function(res,rej){
+  if(!window.google||!google.accounts){rej(new Error('Google sign-in has not loaded yet \u2014 try again in a second.'));return;}
+  var tc=google.accounts.oauth2.initTokenClient({client_id:GMAIL_CLIENT_ID,
+    scope:'https://www.googleapis.com/auth/gmail.compose',hint:'amy.cate@destinationweddings.com',
+    callback:function(r){r&&r.access_token?res(r.access_token):rej(new Error(r&&r.error?r.error:'No token'));}});
+  tc.requestAccessToken({prompt:''});});}
+function b64url(str){var bytes=new TextEncoder().encode(str),bin='';bytes.forEach(function(b){bin+=String.fromCharCode(b);});
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function mimeMessage(to,subject,text,html){
+  var b='b'+Math.random().toString(36).slice(2);
+  var enc=function(x){return '=?UTF-8?B?'+btoa(unescape(encodeURIComponent(x)))+'?=';};
+  return ['To: '+to,'From: '+MY_EMAIL(),'Subject: '+enc(subject),'MIME-Version: 1.0',
+    'Content-Type: multipart/alternative; boundary="'+b+'"','','--'+b,
+    'Content-Type: text/plain; charset="UTF-8"','Content-Transfer-Encoding: base64','',
+    btoa(unescape(encodeURIComponent(text))),'','--'+b,
+    'Content-Type: text/html; charset="UTF-8"','Content-Transfer-Encoding: base64','',
+    btoa(unescape(encodeURIComponent(html))),'','--'+b+'--'].join('\r\n');}
+function gmailDraft(btn){
+  var note=document.getElementById('note');
+  var picks=chosen();
+  if(!picks.length){note.textContent='Pick a destination and some resorts first.';return;}
+  var to=((document.getElementById('toemail')||{}).value||'').trim();
+  var was=btn.textContent;btn.textContent='Signing in\u2026';
+  note.textContent='A Google window should open \u2014 if nothing happens, check for a blocked pop-up in the address bar.';
+  gmailToken().then(function(token){
+    btn.textContent='Creating the draft\u2026';
+    var raw=b64url(mimeMessage(to,subjectLine(),plainText(),emailHtml()));
+    return fetch('https://gmail.googleapis.com/gmail/v1/users/me/drafts',{method:'POST',
+      headers:{Authorization:'Bearer '+token,'Content-Type':'application/json'},
+      body:JSON.stringify({message:{raw:raw}})});
+  }).then(function(r){
+    if(!r.ok)return r.json().catch(function(){return {};}).then(function(e){
+      throw new Error((e.error&&e.error.message)||('HTTP '+r.status));});
+    return r.json();
+  }).then(function(){
+    btn.textContent='Draft saved \u2713';
+    note.innerHTML='Saved to your Gmail drafts'+(to?' for '+esc(to):'')+' \u2014 <a href="https://mail.google.com/mail/u/0/#drafts" target="_blank" style="color:#8A6D3B;">open Drafts \u2192</a>';
+    setTimeout(function(){btn.textContent=was;},2500);
+  }).catch(function(e){
+    btn.textContent=was;
+    note.textContent='Could not create the draft: '+String(e.message||e)+' \u2014 "Copy the email" and paste it instead.';
+  });
 }
 function openGmail(){
   var to=((document.getElementById('toemail')||{}).value||'').trim();
