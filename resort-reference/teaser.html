@@ -123,6 +123,11 @@ button.go:hover{opacity:.9;}
           <button class="go ghost" onclick="openText()">Open in Messages</button>
         </div>
         <p class="note" id="note"></p>
+        <div class="btns" id="logged" style="border-top:1px solid var(--line);padding-top:16px;margin-top:18px;">
+          <button class="go ghost" onclick="logSent(this,'email')">✓ Email sent — add to lead</button>
+          <button class="go ghost" onclick="logSent(this,'text')">✓ Text sent — add to lead</button>
+        </div>
+        <p class="hint" id="logmsg"></p>
       </div>
 
       <div class="card" id="smswrap" style="display:none;">
@@ -280,8 +285,9 @@ function loadLeads(){
 function useLead(){
   var i=document.getElementById('lead').value;
   var note=document.getElementById('leadnote');
-  if(i===''){note.textContent='';return;}
+  if(i===''){note.textContent='';LEAD_ID='';return;}
   var l=LEADS[+i];if(!l)return;
+  LEAD_ID=l.id;
   document.getElementById('who').value=slugify(l.names);
   document.getElementById('toemail').value=l.email||'';
   document.getElementById('tophone').value=l.phone||'';
@@ -480,6 +486,30 @@ function shortFor(slug,label){
   try{db.collection('shortLinks').doc(c).set({url:full,slug:slug,tag:t,label:label||'',
     createdAt:new Date().toISOString()},{merge:true});}catch(e){}
   return url;
+}
+var LEAD_ID='';
+function logSent(btn,how){
+  var msg=document.getElementById('logmsg');
+  var picks=chosen(), names=[];
+  picks.forEach(function(b){listFor(b).forEach(function(r){names.push(r.name);});});
+  if(!names.length){msg.textContent='Pick the resorts you sent first.';return;}
+  if(!LEAD_ID){msg.textContent='Choose the lead at the top, then I can write it to their record.';return;}
+  var today=new Date(), iso=today.toISOString().slice(0,10);
+  var line=iso+' \u2014 Sent '+(how==='email'?'teaser email':'teaser text')+': '+names.join(', ')+
+    (picks.length?' ('+picks.join(', ')+')':'');
+  var was=btn.textContent;btn.textContent='Saving\u2026';
+  db.collection('leads').doc(LEAD_ID).get().then(function(snap){
+    var l=snap.data()||{};
+    var notes=String(l.notes||'').trim();
+    notes=notes?(line+'\n'+notes):line;
+    var up={notes:notes,lastContact:iso,updatedAt:new Date().toISOString()};
+    if(/no contact/i.test(String(l.status||'')))up.status='Contacted \u2014 Awaiting Reply';
+    return db.collection('leads').doc(LEAD_ID).set(up,{merge:true}).then(function(){return up;});
+  }).then(function(up){
+    btn.textContent='Added \u2713';
+    msg.innerHTML='Written to the lead: <b>'+esc(line)+'</b>'+(up.status?'<br>Status moved to Contacted \u2014 Awaiting Reply.':'');
+    setTimeout(function(){btn.textContent=was;},2200);
+  }).catch(function(e){btn.textContent=was;msg.textContent='Could not write to the lead: '+String(e.message||e);});
 }
 function copyForClaude(btn){
   var picks=chosen(),out={to:((document.getElementById('toemail')||{}).value||'').trim(),
