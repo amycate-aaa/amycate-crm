@@ -98,6 +98,11 @@ button.go:hover{opacity:.9;}
           <button type="button" class="pill" data-m="quiet">Gone quiet</button>
         </div>
         <p class="hint">Swaps the greeting, the opening line and the text message. Anything you have typed over yourself is left alone.</p>
+        <label class="f">Signature photo</label>
+        <div class="pills" id="sigpic">
+          <button type="button" class="pill on" data-s="1">With my photo</button>
+          <button type="button" class="pill" data-s="0">Name only</button>
+        </div>
         <label class="f">Header</label>
         <input type="text" id="header" value="A few of my favourites">
         <label class="f">Greeting</label>
@@ -140,6 +145,7 @@ firebase.initializeApp({apiKey:"AIzaSyAlYgdkcl7ZuRL2pXJ7BObGuQyxMdVH4Js",authDom
  messagingSenderId:"246819649586",appId:"1:246819649586:web:a74debd217ce048d26242b"});
 var db=firebase.firestore();
 var SITE='https://amy-cate.com/resort-reference';
+var SIGPIC='https://amy-cate.com/amy-headshot.jpg';
 var PASS='amycate';
 var BUCKETS={},ORDER=[],BRAND='dwt',PRICE=0,MODE='new';
 
@@ -329,8 +335,15 @@ function emailHtml(){
     '<td width="12" style="width:12px;">&nbsp;</td>'+
     '<td bgcolor="#F2EBE9" style="padding:12px 24px;"><a href="https://zcal.co/amymcate/letschat" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#3A332B;text-decoration:none;"><font color="#3A332B">Schedule a call</font></a></td>'+
     '</tr></table></td></tr>'+
-    '<tr><td style="padding:0 38px 34px;font-family:Georgia,serif;border-top:1px solid #E4D8C6;padding-top:20px;">'+
-    '<p style="margin:0;font-size:13px;line-height:1.7;color:#7A7266;">Amy M. Cate &middot; Destination Weddings Travel Group'+(BRAND==='ct'?' &amp; Celebration Travel':'')+'<br>(832) 773-8664 &middot; Mon&ndash;Thu 9&ndash;5, Fri 9&ndash;3 CST</p></td></tr>'+
+    '<tr><td style="padding:20px 38px 34px;border-top:1px solid #E4D8C6;">'+
+      '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>'+
+      (SIGPIC?'<td width="78" style="width:78px;vertical-align:top;"><img src="'+esc(SIGPIC)+'" width="68" height="68" alt="Amy Cate" style="width:68px;height:68px;border-radius:34px;display:block;border:0;"></td><td width="16" style="width:16px;">&nbsp;</td>':'')+
+      '<td style="vertical-align:top;font-family:Georgia,serif;">'+
+      '<p style="margin:0 0 3px;font-size:17px;color:#1E1A14;">Amy M. Cate</p>'+
+      '<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#8A6D3B;">Certified Destination Wedding &amp; Group Travel Specialist</p>'+
+      '<p style="margin:0;font-size:13px;line-height:1.7;color:#7A7266;">Destination Weddings Travel Group'+(BRAND==='ct'?' &amp; Celebration Travel':'')+'<br>'+
+      '(832) 773-8664 &middot; <a href="mailto:'+(BRAND==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com')+'" style="color:#8A6D3B;text-decoration:none;">'+(BRAND==='ct'?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com')+'</a><br>'+
+      'Mon&ndash;Thu 9&ndash;5, Fri 9&ndash;3 CST &middot; weekends by appointment</p></td></tr></table></td></tr>'+
     '</table></td></tr></table>';
   return S;
 }
@@ -499,6 +512,9 @@ document.getElementById('price').onclick=function(e){var b=e.target.closest('.pi
   PRICE=+b.dataset.p;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
 document.getElementById('mode').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
   MODE=b.dataset.m;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});applyMode();};
+document.getElementById('sigpic').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
+  SIGPIC=+b.dataset.s?'https://amy-cate.com/amy-headshot.jpg':'';
+  [].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});render();};
 document.getElementById('who').addEventListener('input',render);
 ['header','greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
 applyMode();
