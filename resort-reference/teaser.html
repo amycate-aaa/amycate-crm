@@ -56,7 +56,7 @@ button.go:hover{opacity:.9;}
   <div class="topnav"><a href="./">Resort Library</a><a href="./visits.html">Who's Looking</a><a href="../">Dashboard</a></div>
   <p class="eyebrow">Amy Cate</p>
   <h1>Email Teasers</h1>
-  <p class="lede">A few of my favourites, by destination — built into an email you can send.</p>
+  <p class="lede">A few of my favorites, by destination — built into an email you can send.</p>
 
   <div class="cols">
     <div>
@@ -105,7 +105,7 @@ button.go:hover{opacity:.9;}
           <button type="button" class="pill" data-s="0">Name only</button>
         </div>
         <label class="f">Header</label>
-        <input type="text" id="header" value="A few of my favourites">
+        <input type="text" id="header" value="A few of my favorites">
         <label class="f">Greeting</label>
         <input type="text" id="greet">
         <label class="f">Opening line</label>
@@ -149,14 +149,14 @@ var BUCKETS={},ORDER=[],BRAND='dwt',PRICE=0,MODE='new';
 
 var MODES={
  'new':{greet:'Hi there,',
-   intro:'You asked about a destination wedding, and the choice can feel endless \u2014 so rather than send you a list of everything, here are a few of my favourites. These are resorts I know, and ones my couples and their guests have loved.',
-   sms:'Hi! You asked about a destination wedding \u2014 rather than send you everything, here are a few of my favourites to start with.'},
+   intro:'You asked about a destination wedding, and the choice can feel endless \u2014 so rather than send you a list of everything, here are a few of my favorites. These are resorts I know, and ones my couples and their guests have loved.',
+   sms:'Hi! You asked about a destination wedding \u2014 rather than send you everything, here are a few of my favorites to start with.'},
  'follow':{greet:'Hi again,',
    intro:'Following up on our conversation \u2014 I pulled together the resorts I think suit what you described. Have a look through whenever you have a few minutes.',
    sms:'Following up with a few resorts I think suit what you described \u2014 have a look when you get a minute.'},
  'quiet':{greet:'Hi there,',
-   intro:'I know planning a wedding abroad gets pushed down the list, and that is completely normal. No rush at all \u2014 but in case it sparks something, here are a few of my favourites.',
-   sms:'No rush at all \u2014 but in case it sparks something, here are a few of my favourites.'}
+   intro:'I know planning a wedding abroad gets pushed down the list, and that is completely normal. No rush at all \u2014 but in case it sparks something, here are a few of my favorites.',
+   sms:'No rush at all \u2014 but in case it sparks something, here are a few of my favorites.'}
 };
 var FIXED={
  interest:'See one you like? Tap "I\u2019m interested" on any resort \u2014 add your dates if you have them and I can price it properly the first time.',
@@ -408,7 +408,7 @@ function subjectLine(){
   var picks=chosen();
   var hdr=((document.getElementById('header')||{}).value||'').trim();
   var where=picks.length===1?picks[0]:(picks.length===2?picks[0]+' and '+picks[1]:'a few places');
-  return (hdr||'A few of my favourites')+(picks.length?' \u2014 '+where:'');
+  return (hdr||'A few of my favorites')+(picks.length?' \u2014 '+where:'');
 }
 function mailBody(level){
   // level 0: everything. 1: drop the taglines. 2: drop the closing lines. 3: destinations only.
