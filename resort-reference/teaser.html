@@ -61,6 +61,10 @@ button.go:hover{opacity:.9;}
         <p class="hint">Type their name and every link is tagged, so you see what they open on Who's Looking. Leave it blank and nothing is tracked — and untagged links are currently turned away, so use a name.</p>
         <label class="f">Their name</label>
         <input type="text" id="who" placeholder="hannah-and-mark" autocomplete="off">
+        <label class="f">Their email <span style="text-transform:none;letter-spacing:0;color:#7A7266;">(optional — to open your mail app)</span></label>
+        <input type="text" id="toemail" placeholder="hannah@example.com" autocomplete="off">
+        <label class="f">Their mobile <span style="text-transform:none;letter-spacing:0;color:#7A7266;">(optional — to open Messages)</span></label>
+        <input type="text" id="tophone" placeholder="+1 555 123 4567" autocomplete="off">
         <label class="f">Which brand</label>
         <div class="pills" id="brand">
           <button type="button" class="pill on" data-b="dwt">Wedding</button>
@@ -104,6 +108,8 @@ button.go:hover{opacity:.9;}
           <button class="go" onclick="copyEmail(this)">Copy the email</button>
           <button class="go ghost" onclick="copyPlain(this)">Copy plain text</button>
           <button class="go ghost" onclick="showSms()">Make it a text</button>
+          <button class="go ghost" onclick="openMail()">Open in email</button>
+          <button class="go ghost" onclick="openText()">Open in Messages</button>
         </div>
         <p class="note" id="note"></p>
       </div>
@@ -327,6 +333,31 @@ function showSms(){
       '<button class="go ghost" style="margin-top:8px;padding:8px 14px;" onclick="copyOne(this,'+i+')">Copy</button></div>';}).join('');
   window.__SMS=msgs;
   document.getElementById('smswrap').style.display='';
+}
+function subjectLine(){
+  var picks=chosen();
+  var hdr=((document.getElementById('header')||{}).value||'').trim();
+  var where=picks.length===1?picks[0]:(picks.length===2?picks[0]+' and '+picks[1]:'a few places');
+  return (hdr||'A few of my favourites')+(picks.length?' \u2014 '+where:'');
+}
+function openMail(){
+  var to=((document.getElementById('toemail')||{}).value||'').trim();
+  var body=plainText();
+  var url='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subjectLine())+'&body='+encodeURIComponent(body);
+  if(url.length>1900){
+    document.getElementById('note').textContent='That is too long for your mail app to open directly \u2014 use "Copy the email" and paste it instead. The formatted version pastes properly.';
+    return;
+  }
+  location.href=url;
+}
+function openText(){
+  var to=((document.getElementById('tophone')||{}).value||'').replace(/[^0-9+]/g,'');
+  var picks=chosen();
+  var parts=[((document.getElementById('smsline')||{}).value||'').trim()];
+  picks.forEach(function(b){listFor(b).forEach(function(r){parts.push(linkFor(r.slug));});});
+  var body=parts.filter(Boolean).join('\n\n');
+  var sep=/iPhone|iPad|Macintosh/i.test(navigator.userAgent)?'&':'?';
+  location.href='sms:'+to+sep+'body='+encodeURIComponent(body);
 }
 function copyOne(btn,i){
   try{navigator.clipboard.writeText(window.__SMS[i].body);}catch(e){}
