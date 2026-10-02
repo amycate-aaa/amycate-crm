@@ -393,14 +393,42 @@ function subjectLine(){
   var where=picks.length===1?picks[0]:(picks.length===2?picks[0]+' and '+picks[1]:'a few places');
   return (hdr||'A few of my favourites')+(picks.length?' \u2014 '+where:'');
 }
+function mailBody(level){
+  // level 0: everything. 1: drop the taglines. 2: drop the closing lines. 3: destinations only.
+  var picks=chosen();
+  var L=[document.getElementById('greet').value.trim(),'',document.getElementById('intro').value.trim(),''];
+  picks.forEach(function(b){
+    var list=listFor(b);if(!list.length)return;
+    L.push(b.toUpperCase());
+    if(level>=3){L.push('  '+list.length+' resort'+(list.length===1?'':'s')+' \u2014 '+libLink(b));}
+    else list.forEach(function(r){
+      L.push('  '+r.name+(level<1&&r.tagline?' \u2014 '+r.tagline:''));
+      L.push('  '+linkFor(r.slug));});
+    L.push('');
+  });
+  L.push('See my whole library: '+libLink(''),'');
+  if(level<2){L.push(document.getElementById('interest').value.trim(),'',document.getElementById('outro').value.trim(),'');}
+  else {L.push('Reply and tell me which ones you like and I will price them.','');}
+  L.push('Amy M. Cate','Destination Weddings Travel Group','(832) 773-8664');
+  return L.join('\n');
+}
 function openMail(){
   var to=((document.getElementById('toemail')||{}).value||'').trim();
-  var body=plainText();
-  var url='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subjectLine())+'&body='+encodeURIComponent(body);
+  var subj=subjectLine(), url='', used=0;
+  for(var lv=0;lv<=3;lv++){
+    var u='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(mailBody(lv));
+    url=u;used=lv;
+    if(u.length<=1900)break;
+  }
+  var note=document.getElementById('note');
   if(url.length>1900){
-    document.getElementById('note').textContent='That is too long for your mail app to open directly \u2014 use "Copy the email" and paste it instead. The formatted version pastes properly.';
+    note.textContent='Even the short version is too long for a mail link \u2014 use "Copy the email" and paste it in. That keeps the photos too.';
     return;
   }
+  note.textContent=used===0?'Opening your mail app\u2026'
+    :(used===1?'Opening your mail app \u2014 taglines trimmed to fit.'
+    :(used===2?'Opening your mail app \u2014 trimmed to the resorts and links.'
+    :'Opening your mail app \u2014 too many resorts for one link, so it sends a link per destination instead. "Copy the email" keeps them all, with photos.'));
   location.href=url;
 }
 function openText(){
