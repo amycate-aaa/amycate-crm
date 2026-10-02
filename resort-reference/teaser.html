@@ -47,6 +47,9 @@ button.go:hover{opacity:.9;}
 .pick{display:flex;align-items:center;gap:8px;font-size:13px;color:#3A332B;cursor:pointer;}
 .pick input{margin:0;}
 .locs{grid-template-columns:1fr !important;}
+.allnone{margin:2px 0 8px;}
+.allnone button{font-family:inherit;font-size:10px;letter-spacing:.14em;text-transform:uppercase;padding:4px 10px;margin-right:6px;border:1px solid var(--line);background:#fff;color:var(--gold-deep);cursor:pointer;}
+.allnone button:hover{border-color:var(--gold);}
 </style></head><body>
 <div class="wrap">
   <div class="topnav"><a href="./">Resort Library</a><a href="./visits.html">Who's Looking</a><a href="../">Dashboard</a></div>
@@ -200,9 +203,14 @@ function listFor(b){
   var keep=picked(b);
   return (BUCKETS[b]||[]).filter(function(r){return keep.indexOf(r.slug)>-1;});
 }
+function pickAll(b,on){
+  [].forEach.call(document.querySelectorAll('.picks[data-for="'+b.replace(/"/g,'')+'"] input'),function(i){i.checked=on;});
+  render();
+}
 function toggleDest(cb){
   var box=cb.closest('.locwrap').querySelector('.picks');
-  if(box)box.style.display=cb.checked?'':'none';
+  if(box){box.style.display=cb.checked?'':'none';
+    if(!cb.checked)[].forEach.call(box.querySelectorAll('input'),function(i){i.checked=false;});}
   render();
 }
 function load(){
@@ -223,7 +231,9 @@ function load(){
     document.getElementById('locs').innerHTML=ORDER.map(function(b){
       return '<div class="locwrap"><label class="loc"><input type="checkbox" value="'+esc(b)+'" onchange="toggleDest(this)"><span class="n">'+esc(b)+'</span><span class="c">'+BUCKETS[b].length+'</span></label>'+
         '<div class="picks" data-for="'+esc(b)+'" style="display:none;">'+
-        BUCKETS[b].map(function(r){return '<label class="pick"><input type="checkbox" data-slug="'+esc(r.slug)+'" data-dest="'+esc(b)+'" checked onchange="render()"><span>'+esc(r.name)+'</span></label>';}).join('')+
+        '<p class="allnone"><button type="button" onclick="pickAll(\''+esc(b).replace(/'/g,"\\'")+'\',true)">All</button>'+
+        '<button type="button" onclick="pickAll(\''+esc(b).replace(/'/g,"\\'")+'\',false)">None</button></p>'+
+        BUCKETS[b].map(function(r){return '<label class="pick"><input type="checkbox" data-slug="'+esc(r.slug)+'" data-dest="'+esc(b)+'" onchange="render()"><span>'+esc(r.name)+'</span></label>';}).join('')+
         '</div></div>';
     }).join('')||'<p class="hint">No resorts are ready to share yet.</p>';
     document.getElementById('count').textContent=all.length+' resorts ready to share across '+ORDER.length+' destinations';
@@ -337,8 +347,10 @@ function plainText(){
 }
 function render(){
   var picks=chosen();
-  document.getElementById('preview').innerHTML=picks.length?emailHtml()
-    :'<div style="padding:40px;text-align:center;color:#7A7266;font-size:14px;">Tick a destination on the left and the email appears here.</div>';
+  var chosenCount=picks.reduce(function(a,b){return a+listFor(b).length;},0);
+  document.getElementById('preview').innerHTML=(picks.length&&chosenCount)?emailHtml()
+    :'<div style="padding:40px;text-align:center;color:#7A7266;font-size:14px;">'+
+     (picks.length?'Now tick the resorts you want to send \u2014 or press All.':'Tick a destination on the left and the email appears here.')+'</div>';
   var n=picks.reduce(function(a,b){return a+listFor(b).length;},0);
   document.getElementById('note').textContent=picks.length?(n+' resorts across '+picks.length+' destination'+(picks.length===1?'':'s')+(tag()?' \u00b7 tagged '+tag():' \u00b7 NOT TAGGED \u2014 add a name or the links will be turned away')):'';
 }
