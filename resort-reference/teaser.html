@@ -114,7 +114,8 @@ button.go:hover{opacity:.9;}
           <button class="go" onclick="copyEmail(this)">Copy the email</button>
           <button class="go ghost" onclick="copyPlain(this)">Copy plain text</button>
           <button class="go ghost" onclick="showSms()">Make it a text</button>
-          <button class="go ghost" onclick="openMail()">Open in email</button>
+          <button class="go ghost" onclick="openGmail()">Open in Gmail</button>
+          <button class="go ghost" onclick="openMail()">Open in mail app</button>
           <button class="go ghost" onclick="openText()">Open in Messages</button>
         </div>
         <p class="note" id="note"></p>
@@ -436,6 +437,19 @@ function openMail(){
     :(used===2?'Opening your mail app \u2014 trimmed to the resorts and links.'
     :'Opening your mail app \u2014 too many resorts for one link, so it sends a link per destination instead. "Copy the email" keeps them all, with photos.'));
   location.href=url;
+}
+function openGmail(){
+  var to=((document.getElementById('toemail')||{}).value||'').trim();
+  var subj=subjectLine(), url='', used=0;
+  for(var lv=0;lv<=3;lv++){
+    var u='https://mail.google.com/mail/?view=cm&fs=1&tf=1&to='+encodeURIComponent(to)+
+      '&su='+encodeURIComponent(subj)+'&body='+encodeURIComponent(mailBody(lv));
+    url=u;used=lv;
+    if(u.length<=7000)break;
+  }
+  document.getElementById('note').textContent=used===0?'Opening Gmail \u2014 it lands in your drafts when you close the window.'
+    :'Opening Gmail \u2014 trimmed a little to fit. "Copy the email" keeps everything, with photos.';
+  window.open(url,'_blank','noopener');
 }
 function openText(){
   var to=((document.getElementById('tophone')||{}).value||'').replace(/[^0-9+]/g,'');
