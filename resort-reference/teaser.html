@@ -42,6 +42,11 @@ button.go:hover{opacity:.9;}
 .smsbox{border:1px solid var(--line);background:#fff;padding:14px 16px;margin-top:10px;}
 .smsbox b{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:5px;}
 .smsbox p{font-size:13.5px;line-height:1.6;white-space:pre-wrap;}
+.locwrap{grid-column:1/-1;}
+.picks{padding:8px 0 10px 26px;display:grid;gap:5px;}
+.pick{display:flex;align-items:center;gap:8px;font-size:13px;color:#3A332B;cursor:pointer;}
+.pick input{margin:0;}
+.locs{grid-template-columns:1fr !important;}
 </style></head><body>
 <div class="wrap">
   <div class="topnav"><a href="./">Resort Library</a><a href="./visits.html">Who's Looking</a><a href="../">Dashboard</a></div>
@@ -83,6 +88,8 @@ button.go:hover{opacity:.9;}
           <button type="button" class="pill" data-m="quiet">Gone quiet</button>
         </div>
         <p class="hint">Swaps the greeting, the opening line and the text message. Anything you have typed over yourself is left alone.</p>
+        <label class="f">Header</label>
+        <input type="text" id="header" value="A few of my favourites">
         <label class="f">Greeting</label>
         <input type="text" id="greet">
         <label class="f">Opening line</label>
@@ -171,10 +178,23 @@ function linkFor(slug){
 function libLink(bucket){
   var t=tag();
   return SITE+'/?k='+PASS+(PRICE?'':'&np=1')+(BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+
-    '&d='+encodeURIComponent(bucket);
+    (bucket?'&d='+encodeURIComponent(bucket):'');
 }
 function chosen(){
-  return [].slice.call(document.querySelectorAll('#locs input:checked')).map(function(i){return i.value;});
+  return [].slice.call(document.querySelectorAll('#locs .loc input:checked')).map(function(i){return i.value;});
+}
+function picked(b){
+  return [].slice.call(document.querySelectorAll('.picks[data-for="'+b.replace(/"/g,'')+'"] input:checked'))
+    .map(function(i){return i.dataset.slug;});
+}
+function listFor(b){
+  var keep=picked(b);
+  return (BUCKETS[b]||[]).filter(function(r){return keep.indexOf(r.slug)>-1;});
+}
+function toggleDest(cb){
+  var box=cb.closest('.locwrap').querySelector('.picks');
+  if(box)box.style.display=cb.checked?'':'none';
+  render();
 }
 function load(){
   db.collection('resortProfiles').get().then(function(snap){
@@ -192,7 +212,10 @@ function load(){
     ORDER=ORDER_PREF.filter(function(b){return BUCKETS[b]&&BUCKETS[b].length;})
       .concat(Object.keys(BUCKETS).filter(function(b){return ORDER_PREF.indexOf(b)<0;}));
     document.getElementById('locs').innerHTML=ORDER.map(function(b){
-      return '<label class="loc"><input type="checkbox" value="'+esc(b)+'" onchange="render()"><span class="n">'+esc(b)+'</span><span class="c">'+BUCKETS[b].length+'</span></label>';
+      return '<div class="locwrap"><label class="loc"><input type="checkbox" value="'+esc(b)+'" onchange="toggleDest(this)"><span class="n">'+esc(b)+'</span><span class="c">'+BUCKETS[b].length+'</span></label>'+
+        '<div class="picks" data-for="'+esc(b)+'" style="display:none;">'+
+        BUCKETS[b].map(function(r){return '<label class="pick"><input type="checkbox" data-slug="'+esc(r.slug)+'" data-dest="'+esc(b)+'" checked onchange="render()"><span>'+esc(r.name)+'</span></label>';}).join('')+
+        '</div></div>';
     }).join('')||'<p class="hint">No resorts are ready to share yet.</p>';
     document.getElementById('count').textContent=all.length+' resorts ready to share across '+ORDER.length+' destinations';
     render();
@@ -209,6 +232,7 @@ function applyMode(){
 }
 function emailHtml(){
   var picks=chosen();
+  var hdr=esc((document.getElementById('header')||{}).value||'');
   var greet=esc(document.getElementById('greet').value.trim());
   var intro=esc(document.getElementById('intro').value.trim());
   var interest=esc(document.getElementById('interest').value.trim());
@@ -216,11 +240,13 @@ function emailHtml(){
   var S='<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FAF7F2;padding:28px 0;"><tr><td align="center">'+
     '<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px;max-width:100%;background:#FFFFFF;border:1px solid #E4D8C6;">'+
     '<tr><td style="padding:34px 38px 8px;font-family:Georgia,serif;">'+
-    '<p style="margin:0 0 16px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8A6D3B;">Amy Cate</p>'+
+    '<p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#8A6D3B;">Amy Cate</p>'+
+    (hdr?'<p style="margin:0 0 18px;font-family:Georgia,serif;font-size:27px;line-height:1.2;color:#1E1A14;">'+hdr+'</p>':'')+
     '<p style="margin:0 0 14px;font-size:17px;color:#1E1A14;">'+greet+'</p>'+
     '<p style="margin:0 0 20px;font-size:15.5px;line-height:1.75;color:#3A332B;">'+intro+'</p></td></tr>';
   picks.forEach(function(b){
-    var list=BUCKETS[b]||[];
+    var list=listFor(b);
+    if(!list.length)return;
     S+='<tr><td style="padding:14px 38px 4px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:#8A6D3B;">'+esc(b)+'</p></td></tr>';
     list.forEach(function(r){
       S+='<tr><td style="padding:10px 38px;">'+
@@ -234,7 +260,8 @@ function emailHtml(){
     });
     S+='<tr><td style="padding:2px 38px 16px;"><a href="'+esc(libLink(b))+'" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A6D3B;text-decoration:none;">All my '+esc(b)+' resorts &rarr;</a></td></tr>';
   });
-  S+='<tr><td style="padding:12px 38px 0;font-family:Georgia,serif;">'+
+  S+='<tr><td align="center" style="padding:16px 38px 4px;"><a href="'+esc(libLink(''))+'" style="font-family:Arial,sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8A6D3B;text-decoration:none;">See my whole library &rarr;</a></td></tr>'+
+    '<tr><td style="padding:12px 38px 0;font-family:Georgia,serif;">'+
     '<p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#3A332B;">'+interest+'</p>'+
     '<p style="margin:0 0 22px;font-size:15px;line-height:1.75;color:#3A332B;">'+outro+'</p></td></tr>'+
     '<tr><td align="center" style="padding:0 38px 30px;">'+
@@ -253,9 +280,10 @@ function plainText(){
   var L=[document.getElementById('greet').value.trim(),'',document.getElementById('intro').value.trim(),''];
   picks.forEach(function(b){
     L.push(b.toUpperCase());
-    (BUCKETS[b]||[]).forEach(function(r){L.push('  '+r.name+(r.tagline?' — '+r.tagline:''));L.push('  '+linkFor(r.slug));});
+    listFor(b).forEach(function(r){L.push('  '+r.name+(r.tagline?' — '+r.tagline:''));L.push('  '+linkFor(r.slug));});
     L.push('');
   });
+  L.push('See my whole library: '+libLink(''),'');
   L.push(document.getElementById('interest').value.trim(),'',document.getElementById('outro').value.trim(),'',
     'Amy M. Cate','Destination Weddings Travel Group','(832) 773-8664');
   return L.join('\n');
@@ -264,7 +292,7 @@ function render(){
   var picks=chosen();
   document.getElementById('preview').innerHTML=picks.length?emailHtml()
     :'<div style="padding:40px;text-align:center;color:#7A7266;font-size:14px;">Tick a destination on the left and the email appears here.</div>';
-  var n=picks.reduce(function(a,b){return a+(BUCKETS[b]||[]).length;},0);
+  var n=picks.reduce(function(a,b){return a+listFor(b).length;},0);
   document.getElementById('note').textContent=picks.length?(n+' resorts across '+picks.length+' destination'+(picks.length===1?'':'s')+(tag()?' \u00b7 tagged '+tag():' \u00b7 NOT TAGGED \u2014 add a name or the links will be turned away')):'';
 }
 function copyEmail(btn){
@@ -290,8 +318,9 @@ function showSms(){
   var box=document.getElementById('sms');
   var msgs=[{label:'Say hello',body:document.getElementById('smsline').value.trim()}];
   picks.forEach(function(b){
-    (BUCKETS[b]||[]).slice(0,3).forEach(function(r){msgs.push({label:r.name,body:linkFor(r.slug)});});
+    listFor(b).forEach(function(r){msgs.push({label:r.name,body:linkFor(r.slug)});});
   });
+  msgs.push({label:'The whole library',body:libLink('')});
   msgs.push({label:'Sign off',body:'Tell me which ones catch your eye. \u2014 Amy'});
   box.innerHTML=msgs.map(function(m,i){
     return '<div class="smsbox"><b>'+esc(m.label)+'</b><p>'+esc(m.body)+'</p>'+
@@ -310,7 +339,7 @@ document.getElementById('price').onclick=function(e){var b=e.target.closest('.pi
 document.getElementById('mode').onclick=function(e){var b=e.target.closest('.pill');if(!b)return;
   MODE=b.dataset.m;[].forEach.call(this.children,function(c){c.classList.toggle('on',c===b);});applyMode();};
 document.getElementById('who').addEventListener('input',render);
-['greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
+['header','greet','intro','interest','outro'].forEach(function(id){document.getElementById(id).addEventListener('input',render);});
 applyMode();
 load();
 </script></body></html>
