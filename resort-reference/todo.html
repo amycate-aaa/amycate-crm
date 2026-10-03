@@ -31,6 +31,13 @@ input[type=checkbox]{width:19px;height:19px;margin-top:3px;accent-color:var(--go
 footer{margin-top:40px;color:var(--mid);font-size:13px;border-top:1px solid var(--line);padding-top:16px;}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1A1714;--panel:#241F1A;--line:#3A332A;--ink:#F2EDE4;--mid:#A79C8C;}}
 :root[data-theme="dark"]{--bg:#1A1714;--panel:#241F1A;--line:#3A332A;--ink:#F2EDE4;--mid:#A79C8C;}
+
+.addrow{display:flex;gap:8px;margin:12px 0 0;flex-wrap:wrap;}
+.addrow input{flex:1;min-width:120px;padding:8px 11px;border:1px solid var(--line);background:#fff;font:inherit;font-size:14.5px;}
+.addrow .ai-tag{flex:0 0 120px;min-width:100px;}
+.addrow button{border:1px solid var(--gold);background:var(--gold);color:#fff;padding:8px 18px;font:inherit;font-size:14px;cursor:pointer;}
+.addrow button:hover{opacity:.9;}
+li .rm{margin-left:auto;border:none;background:none;color:var(--mid);cursor:pointer;font-size:18px;line-height:1;padding:0 2px;}
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 </head><body><div class="wrap">
@@ -48,19 +55,24 @@ footer{margin-top:40px;color:var(--mid);font-size:13px;border-top:1px solid var(
 <h2>You, or someone helping<span class="n" id="n1"></span></h2>
 <p class="who">Nobody else can do these &mdash; they need your DWT login, your eye, or a phone call.</p>
 <ul id="g1"></ul>
+<div class="addrow" data-for="y">
+  <input class="ai-name" placeholder="Resort">
+  <input class="ai-need" placeholder="What it needs">
+  <input class="ai-tag" placeholder="Tag" value="DWT PDF">
+  <button onclick="addTo('y',this)">Add</button>
+</div>
 
 <h2>Claude can do these<span class="n" id="n2"></span></h2>
 <p class="who">Photo pulls and writing from what is already on the record. Say the word in any session.</p>
 <ul id="g2"></ul>
-
-
-<h2>Things you add<span class="n" id="n3"></span></h2>
-<p class="who">Anything you notice while working &mdash; a resort that looks wrong, a PDF you found, something to ask the resort. Paste it here and it waits for the next session.</p>
-<div style="display:flex;gap:10px;margin:0 0 14px;flex-wrap:wrap;">
-  <input id="newItem" placeholder="Resort, and what it needs" style="flex:1;min-width:240px;padding:9px 12px;border:1px solid var(--line);background:#fff;font:inherit;font-size:15px;">
-  <button onclick="addItem()" style="border:1px solid var(--line);background:var(--gold);color:#fff;padding:9px 18px;font:inherit;font-size:14px;cursor:pointer;">Add</button>
+<div class="addrow" data-for="c">
+  <input class="ai-name" placeholder="Resort">
+  <input class="ai-need" placeholder="What it needs">
+  <input class="ai-tag" placeholder="Tag" value="Photo pull">
+  <button onclick="addTo('c',this)">Add</button>
 </div>
-<ul id="g3"></ul>
+
+
 
 <div class="note">
   <b>The 37 with no Wedding Package URL at all</b> are the biggest single gap. One PDF from DWT fills the link,
@@ -192,56 +204,66 @@ function render(list,el,nEl,prefix){
   }).join('');
   document.getElementById(nEl).textContent=list.length;
 }
-render(YOU,'g1','n1','y');
-render(CLAUDE,'g2','n2','c');
+
+let OWN={y:[],c:[]};
+try{OWN=Object.assign({y:[],c:[]},JSON.parse(localStorage.getItem('ac_todo_own')||'{}'));}catch(e){}
+function saveOwn(){try{localStorage.setItem('ac_todo_own',JSON.stringify(OWN));}catch(e){}}
+function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function ownHtml(p){
+  return (OWN[p]||[]).map((x,i)=>{
+    const id='o'+p+i;
+    return '<li data-id="'+id+'"'+(x.done?' class="done"':'')+'><input type="checkbox" id="'+id+'" '+(x.done?'checked':'')+
+      ' onchange="tickOwn(this,\''+p+'\','+i+')"><label for="'+id+'"><span class="name">'+esc(x.name)+'</span>'+
+      '<span class="tag">'+esc(x.tag)+'</span><span class="need">'+esc(x.need)+'</span></label>'+
+      '<button class="rm" title="Remove" onclick="dropOwn(\''+p+'\','+i+')">&times;</button></li>';
+  }).join('');
+}
+function addTo(p,btn){
+  const row=btn.closest('.addrow');
+  const name=row.querySelector('.ai-name').value.trim();
+  const need=row.querySelector('.ai-need').value.trim();
+  const tag=row.querySelector('.ai-tag').value.trim()||'Added';
+  if(!name&&!need)return;
+  OWN[p].push({name:name||'(no resort)',need:need,tag:tag,done:false});
+  row.querySelector('.ai-name').value='';row.querySelector('.ai-need').value='';
+  saveOwn();redraw();msg('Added.');
+}
+function tickOwn(c,p,i){OWN[p][i].done=c.checked;c.closest('li').classList.toggle('done',c.checked);saveOwn();count();}
+function dropOwn(p,i){OWN[p].splice(i,1);saveOwn();redraw();}
+function redraw(){
+  render(YOU,'g1','n1','y');
+  render(CLAUDE,'g2','n2','c');
+  document.getElementById('g1').insertAdjacentHTML('beforeend',ownHtml('y'));
+  document.getElementById('g2').insertAdjacentHTML('beforeend',ownHtml('c'));
+  document.getElementById('n1').textContent=YOU.length+OWN.y.length;
+  document.getElementById('n2').textContent=CLAUDE.length+OWN.c.length;
+  load();
+}
+
+redraw();
 function totals(){document.getElementById('total').textContent=YOU.length+CLAUDE.length+OWN.length;}
 function save(){try{const d={};document.querySelectorAll('input[type=checkbox]').forEach(c=>{if(c.checked)d[c.id]=1;});
   localStorage.setItem('ac_todo',JSON.stringify(d));}catch(e){}}
 function load(){try{const d=JSON.parse(localStorage.getItem('ac_todo')||'{}');
   Object.keys(d).forEach(k=>{const c=document.getElementById(k);if(c){c.checked=true;c.closest('li').classList.add('done');}});}catch(e){}
   count();}
-function tick(c){c.closest('li').classList.toggle('done',c.checked);save();count();}
+function tick(c){if(c.id[0]==='o')return;c.closest('li').classList.toggle('done',c.checked);save();count();}
 function count(){document.getElementById('count').textContent=document.querySelectorAll('input:checked').length;totals();}
 function reset(){document.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=false;c.closest('li').classList.remove('done');});save();count();}
 function copyOpen(){
   const out=[];
   if(OWN.filter(x=>!x.done).length)out.push('Added by you:\n'+OWN.filter(x=>!x.done).map(x=>'  \u2022 '+x.text).join('\n'));
   [['You',YOU,'y'],['Claude',CLAUDE,'c']].forEach(([t,list,p])=>{
-    const left=list.filter((x,i)=>!document.getElementById(p+i).checked);
-    if(left.length)out.push(t+':\n'+left.map(x=>'  \u2022 '+x[0]+' \u2014 '+x[1]).join('\n'));
+    const left=list.filter((x,i)=>{const c=document.getElementById(p+i);return c&&!c.checked;})
+      .map(x=>'  \u2022 '+x[0]+' \u2014 '+x[1]);
+    (OWN[p]||[]).filter(x=>!x.done).forEach(x=>left.push('  \u2022 '+x.name+' \u2014 '+x.need));
+    if(left.length)out.push(t+':\n'+left.join('\n'));
   });
   const txt=out.join('\n\n')||'Nothing left.';
   navigator.clipboard.writeText(txt).then(()=>{msg('Copied.');}).catch(()=>{prompt('Copy this:',txt);});
 }
 function msg(t){const m=document.getElementById('msg');m.textContent=t;setTimeout(()=>{m.textContent='';},3000);}
 
-let OWN=[];
-try{OWN=JSON.parse(localStorage.getItem('ac_todo_own')||'[]');}catch(e){}
-function saveOwn(){try{localStorage.setItem('ac_todo_own',JSON.stringify(OWN));}catch(e){}}
-function renderOwn(){
-  const ul=document.getElementById('g3');
-  ul.innerHTML=OWN.length?OWN.map((x,i)=>
-    '<li data-id="o'+i+'"><input type="checkbox" id="o'+i+'" '+(x.done?'checked':'')+' onchange="tickOwn(this,'+i+')">'+
-    '<label for="o'+i+'"><span class="name">'+esc(x.text)+'</span><span class="tag">'+esc(x.when)+'</span></label>'+
-    '<button onclick="dropItem('+i+')" title="Remove" style="margin-left:auto;border:none;background:none;color:var(--mid);cursor:pointer;font-size:17px;line-height:1;">&times;</button></li>'
-  ).join(''):'<li style="color:var(--mid);border:none;">Nothing added yet.</li>';
-  OWN.forEach((x,i)=>{const li=ul.querySelector('[data-id="o'+i+'"]');if(li&&x.done)li.classList.add('done');});
-  document.getElementById('n3').textContent=OWN.length;
-  count();
-}
-function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function addItem(){
-  const i=document.getElementById('newItem');
-  const t=i.value.trim();
-  if(!t)return;
-  const d=new Date();
-  OWN.unshift({text:t,when:d.getDate()+' '+['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()],done:false});
-  i.value='';saveOwn();renderOwn();msg('Added.');
-}
-function tickOwn(c,i){OWN[i].done=c.checked;c.closest('li').classList.toggle('done',c.checked);saveOwn();count();}
-function dropItem(i){OWN.splice(i,1);saveOwn();renderOwn();}
-document.getElementById('newItem').addEventListener('keydown',e=>{if(e.key==='Enter')addItem();});
-renderOwn();
 
 load();
 </script>
