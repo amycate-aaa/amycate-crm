@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Resort Library — what's left</title>
+<style>
+:root{--bg:#FAF7F2;--panel:#F4EFE7;--line:#E4D8C6;--ink:#1E1A14;--mid:#6B645A;--gold:#B08D57;--deep:#8A6D3B;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 'Jost',system-ui,sans-serif;}
+.wrap{max-width:1000px;margin:0 auto;padding:28px 18px 80px;}
+h1{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:clamp(2rem,5vw,2.8rem);margin:0 0 4px;}
+.sub{color:var(--mid);font-size:14.5px;margin:0 0 26px;}
+.bar{position:sticky;top:0;background:var(--bg);padding:12px 0;border-bottom:1px solid var(--line);z-index:5;
+  display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.bar b{font-size:15px;}
+.bar button{border:1px solid var(--line);background:#fff;padding:6px 12px;font:inherit;font-size:13px;cursor:pointer;}
+.bar button:hover{border-color:var(--gold);}
+h2{font-family:'Cormorant Garamond',Georgia,serif;font-weight:400;font-size:1.6rem;margin:34px 0 2px;}
+h2 .n{color:var(--gold);font-size:1rem;margin-left:8px;}
+.who{color:var(--mid);font-size:13.5px;margin:0 0 12px;}
+ul{list-style:none;margin:0;padding:0;}
+li{border-bottom:1px solid var(--line);padding:11px 2px;display:flex;gap:12px;align-items:flex-start;}
+li.done{opacity:.45;}
+li.done .name{text-decoration:line-through;}
+input[type=checkbox]{width:19px;height:19px;margin-top:3px;accent-color:var(--gold);flex-shrink:0;cursor:pointer;}
+.name{font-weight:500;}
+.need{color:var(--mid);font-size:14px;display:block;}
+.tag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--deep);
+  border:1px solid var(--line);padding:2px 7px;margin-left:8px;white-space:nowrap;}
+.note{background:var(--panel);border-left:3px solid var(--gold);padding:14px 16px;margin:14px 0 0;font-size:14.5px;}
+footer{margin-top:40px;color:var(--mid);font-size:13px;border-top:1px solid var(--line);padding-top:16px;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1A1714;--panel:#241F1A;--line:#3A332A;--ink:#F2EDE4;--mid:#A79C8C;}}
+:root[data-theme="dark"]{--bg:#1A1714;--panel:#241F1A;--line:#3A332A;--ink:#F2EDE4;--mid:#A79C8C;}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+</head><body><div class="wrap">
+
+<h1>What's left in the library</h1>
+<p class="sub">As of 3 October 2026 &middot; 179 resorts, 30 complete. Tick things off as they are done &mdash; it remembers.</p>
+
+<div class="bar">
+  <b><span id="count">0</span> of <span id="total">0</span> done</b>
+  <button onclick="reset()">Clear all ticks</button>
+  <button onclick="copyOpen()">Copy what's left</button>
+  <span id="msg" style="color:var(--mid);font-size:13px;"></span>
+</div>
+
+<h2>You, or someone helping<span class="n" id="n1"></span></h2>
+<p class="who">Nobody else can do these &mdash; they need your DWT login, your eye, or a phone call.</p>
+<ul id="g1"></ul>
+
+<h2>Claude can do these<span class="n" id="n2"></span></h2>
+<p class="who">Photo pulls and writing from what is already on the record. Say the word in any session.</p>
+<ul id="g2"></ul>
+
+<div class="note">
+  <b>The 37 with no Wedding Package URL at all</b> are the biggest single gap. One PDF from DWT fills the link,
+  every package summary and the comparison chart in one pass. Paste them in batches &mdash; resort name and link.
+</div>
+
+<footer>
+  Kept in this page only, on this device. Reopen the same file to see your ticks.
+</footer>
+</div>
+
+<script>
+const YOU=[
+ ['Wedding Package URL \u2014 the 37 with none','Bahia Principe Escape Ambar, Breathless Riviera Cancun, Catalonia Grand Costa Mujeres, El Dorado Casitas Royale, El Dorado Royale, Generations Riviera Maya, Grand Hyatt Baha Mar, the four Grand Velas, Haven Riviera Cancun, both Hotel Xcaret, the three Hyatt Vivid, Hyatt Zilara Cap Cana / Riviera Maya / Rose Hall, Hyatt Ziva Rose Hall, Lopesan, Majestic Colonial, Majestic Elegance Punta Cana, Moon Palace Canc\u00fan, Moon Palace Nizuc, Paradisus Los Cabos, Riu Palace Costa Rica, Secrets Aura Cozumel, Secrets Cap Cana, Secrets St James, the four Sunscape, Viva Fortuna','DWT PDF'],
+ ['Secrets Cap Cana \u2014 wedding PDF','You said you had this one to find','DWT PDF'],
+ ['Section band photos','AVA Resort Cancun, Riu Palace Macao, ATELIER Playa Mujeres, Hard Rock Vallarta, Majestic Elegance Costa Mujeres, Royalton Vessence Barbados, Secrets Playa Esmeralda, Breathless Cabo San Lucas','Your eye'],
+ ['Venue capacities \u2014 ask the resort or your BDM','Bahia Principe Escape Runaway Bay (4), Hyatt Ziva Los Cabos (1), Moon Palace The Grand Punta Cana (1), Dreams Onyx (2), Ocean Allure Costa Mujeres (1), Grand Hyatt Baha Mar (13), Dreams Dominicus (3), UNICO Riviera Nayarit (6)','Phone call'],
+ ['Package prices \u2014 need the brochure','Breathless Montego Bay, Devossion by Live Aqua, Secrets The Vine Cancun, Secrets Playa Esmeralda, ATELIER Playa Mujeres, Iberostar Selection Canc\u00fan','Brochure'],
+ ['Grand Sirenis \u2014 2026-27 wedding sheet','Weddings.mx@sirenishotels.com. Prices published elsewhere disagree, so nothing is on the record yet','Email'],
+ ['Grand Hyatt Baha Mar \u2014 current venue fees','They price per guest, not by package. Site fees around $2,500 ceremony and $2,000\u2013$3,500 reception need confirming','Email'],
+ ['royalton-negril \u2014 decide','Still a nameless record with nothing on it. Build it or delete it','Decision'],
+ ['Mark your devices','Run mark-my-device.js on each device you use, so your own opens stay out of Who\u2019s Looking','2 minutes'],
+ ['Test the teaser chain end to end','Build one, send to yourself, open on your phone, tap through, check Who\u2019s Looking','10 minutes']
+];
+const CLAUDE=[
+ ['Single missing photo \u2014 finishes the resort','Dreams Flora (1 restaurant), RIU Montego Bay (1 room), Secrets Playa Mujeres (1 room), Secrets Royal Beach (1 restaurant), Velas Vallarta (1 room), The Fives (1 restaurant)','Photo pull'],
+ ['Restaurant photos','Royalton Antigua (6), Valentin Imperial (5), Grand Palladium Palace (6), RIU Cancun (7), Riu Palace Las Americas (4), Royalton CHIC Punta Cana (9), Ocean Eden Bay (3), Hard Rock Cancun (5), Dreams Onyx (3), Sandos Finisterra (2)','Photo pull'],
+ ['Gallery photos \u2014 resorts with almost none','Grand Palladium Palace (0), Riu Palace Las Americas (0), Royalton CHIC Punta Cana (0), RIU Cancun (1), Ocean El Faro (3), Hilton Cancun Mar Caribe (6), The Fives (8)','Photo pull'],
+ ['Room photos','Hyatt Zilara Cancun (3), Hard Rock Vallarta (2), Hilton Vallarta (4), Sandos Finisterra (1), Ocean Allure (1)','Photo pull'],
+ ['Venue photos from the DWT venue pages','Secrets Baby Beach Aruba (2), Secrets Mirabel (2), Bahia Runaway Bay (4), Hard Rock Cancun (8), Hilton Vallarta (3), Majestic Elegance Costa Mujeres (1)','Photo pull'],
+ ['Secrets Papagayo \u2014 bars','Record has none','Website'],
+ ['Royalton Vessence Barbados \u2014 pools','Record has none','Website'],
+ ['Room descriptions','Hard Rock Punta Cana (13), Iberostar Selection Canc\u00fan (4)','Writing'],
+ ['Activities','Iberostar Coral Canc\u00fan, Secrets Mirabel, and the others still blank','Writing'],
+ ['Package summaries \u2014 about 170 left','Written once per package name, applies across every resort that uses it','Writing'],
+ ['Read the wedding PDFs already loaded','Dreams La Romana, Dreams Aventuras, and the Secrets batch \u2014 each gives packages, prices, inclusions and the chart in one pass','Reading'],
+ ['Redo three built before the standard was set','Dreams Sands, Dreams Aventuras, Grand Hyatt Baha Mar','Rework'],
+ ['Comparison charts','They build themselves once a resort has two or more packages with inclusions','Automatic'],
+ ['Dreams photo pulls \u2014 carry on','Flora, Macao, Royal Beach and Onyx are done. Natura, Palm Beach, Dominicus and the Mexico ones remain','Photo pull']
+];
+function render(list,el,nEl,prefix){
+  const ul=document.getElementById(el);
+  ul.innerHTML=list.map((x,i)=>{
+    const id=prefix+i;
+    return '<li data-id="'+id+'"><input type="checkbox" id="'+id+'" onchange="tick(this)">'+
+      '<label for="'+id+'"><span class="name">'+x[0]+'</span><span class="tag">'+x[2]+'</span>'+
+      '<span class="need">'+x[1]+'</span></label></li>';
+  }).join('');
+  document.getElementById(nEl).textContent=list.length;
+}
+render(YOU,'g1','n1','y');
+render(CLAUDE,'g2','n2','c');
+document.getElementById('total').textContent=YOU.length+CLAUDE.length;
+function save(){try{const d={};document.querySelectorAll('input[type=checkbox]').forEach(c=>{if(c.checked)d[c.id]=1;});
+  localStorage.setItem('ac_todo',JSON.stringify(d));}catch(e){}}
+function load(){try{const d=JSON.parse(localStorage.getItem('ac_todo')||'{}');
+  Object.keys(d).forEach(k=>{const c=document.getElementById(k);if(c){c.checked=true;c.closest('li').classList.add('done');}});}catch(e){}
+  count();}
+function tick(c){c.closest('li').classList.toggle('done',c.checked);save();count();}
+function count(){document.getElementById('count').textContent=document.querySelectorAll('input:checked').length;}
+function reset(){document.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=false;c.closest('li').classList.remove('done');});save();count();}
+function copyOpen(){
+  const out=[];
+  [['You',YOU,'y'],['Claude',CLAUDE,'c']].forEach(([t,list,p])=>{
+    const left=list.filter((x,i)=>!document.getElementById(p+i).checked);
+    if(left.length)out.push(t+':\n'+left.map(x=>'  \u2022 '+x[0]+' \u2014 '+x[1]).join('\n'));
+  });
+  const txt=out.join('\n\n')||'Nothing left.';
+  navigator.clipboard.writeText(txt).then(()=>{msg('Copied.');}).catch(()=>{prompt('Copy this:',txt);});
+}
+function msg(t){const m=document.getElementById('msg');m.textContent=t;setTimeout(()=>{m.textContent='';},3000);}
+load();
+</script>
+</body></html>
