@@ -323,7 +323,7 @@ function venuesHtml(P){
 }
 function packagesHtml(P){
   const p=norm(P.packages);
-  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${clean(x.price)?`<div class="pr">${esc(clean(x.price))}</div>`:''}${clean(x.capacity)?`<div class="cv">${esc(clean(x.capacity))}</div>`:''}${clean(x.summary)?`<p class="note" style="font-style:normal">${esc(clean(x.summary))}</p>`:''}${h.length?`<ul>${h.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}</div>`;}).join('')}</div>`;
+  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${(!NOPRICE&&clean(x.price))?`<div class="pr">${esc(clean(x.price))}</div>`:''}${clean(x.capacity)?`<div class="cv">${esc(clean(x.capacity))}</div>`:''}${clean(x.summary)?`<p class="note" style="font-style:normal">${esc(clean(x.summary))}</p>`:''}${h.length?`<ul>${h.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}</div>`;}).join('')}</div>`;
 }
 function notesList(P){
   const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).filter(Boolean);
@@ -331,6 +331,7 @@ function notesList(P){
 }
 
 let PR={b:'',n:'',d:'',x:{}};
+let NOPRICE=!Q.get('p');   // a teaser link carries no pricing payload — show no prices at all
 try{const raw=Q.get('p');if(raw)PR=Object.assign(PR,JSON.parse(decodeURIComponent(escape(atob(raw)))));}catch(e){console.warn('pricing',e);}
 const BASIS={ppn:'per person, per night',tot:'total for 2, room only',pkg:'total for 2, flights + resort'};
 const basisTxt=()=>(BASIS[PR.b]||'')+(PR.b&&PR.b!=='ppn'&&PR.n?', '+PR.n+' nights':'');
