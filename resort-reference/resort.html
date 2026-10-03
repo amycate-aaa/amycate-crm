@@ -1583,10 +1583,11 @@ async function loadResort(slug){window.QUOTE_CT=false;
       const draw=n=>{$id('gc-body').innerHTML=rows.map(r=>{const over=Math.max(0,n-r.inc);const extra=over*r.per;const svc=r.tax?extra*0.31:0;const total=r.base+extra+svc;
         return '<tr><td>'+esc(r.name)+'</td><td>'+r.inc+'</td><td>'+(over?'+'+over+' \u00d7 $'+r.per.toLocaleString():'\u2014')+'</td><td>'+(svc?'$'+Math.round(svc).toLocaleString():'\u2014')+'</td><td class="gc-total">$'+Math.round(total).toLocaleString()+'</td></tr>';}).join('');
         $id('gc-note').textContent=rows.some(r=>r.tax)?'Where the resort adds 16% tax and 15% service to extra guests, that is included above.':'Taxes and gratuities are included in these package prices.';};
+      if(window.NOPRICE){const gc=$id('guest-calc');if(gc)gc.remove();return;}
       const inp=$id('gc-guests');inp.oninput=()=>{const n=parseInt(inp.value,10);if(n>0&&n<600)draw(n);};
       draw(parseInt(inp.value,10)||40);
     })();
-    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const hl=hiList(pk.highlights);const sn=pk.summary||hl.slice(0,2).join(' · ');const lines=hl.map(clean).filter(Boolean);return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+esc(sp)+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+([pk.photo,pk.photoUrl].find(photoOk)?'<img class="pkgpic" src="'+esc([pk.photo,pk.photoUrl].find(photoOk))+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
+    $id('pkg-grid').innerHTML=pkgs.length?pkgs.map(pk=>{const fp=pk.price||'';const sp=fp.split('·')[0].trim();const hl=hiList(pk.highlights);const sn=pk.summary||hl.slice(0,2).join(' · ');const lines=hl.map(clean).filter(Boolean);return'<div class="pkgitem"><button class="pkgtrigger" aria-expanded="false" onclick="togglePkg(this)"><span><span class="pname">'+esc(pk.name)+'</span>'+(sn?'<span class="phint">'+esc(sn.slice(0,70))+(sn.length>70?'…':'')+'</span>':'')+'</span><span class="pprice">'+(window.NOPRICE?'':esc(sp))+'</span><span class="parrow">▼</span></button><div class="pkgbody">'+([pk.photo,pk.photoUrl].find(photoOk)?'<img class="pkgpic" src="'+esc([pk.photo,pk.photoUrl].find(photoOk))+'" alt="'+esc(pk.name)+'" loading="lazy">':'')+(fp!==sp?'<p class="pkgfull">'+esc(fp)+'</p>':'')+(lines.length?lines.map(h=>'<div class="pkghi-line">'+esc(h)+'</div>').join(''):'')+'</div></div>';}).join(''):'<p class="empty">Package details coming soon.</p>';
     $id('doc-packages').innerHTML=docBtns('packages');
     $id('doc-venues').innerHTML=docBtns('venues');
     (function(){const t=cmpTable(p.packageComparison);
@@ -1685,7 +1686,7 @@ let P=null,PHOTOS=[],RESORTWIDE=[],PHOTOMAP={},SLUG='';
 (function(){try{
   var q=new URLSearchParams(location.search);
   if(!/^(1|true)$/i.test(q.get('np')||''))return;
-  document.documentElement.classList.add('noprice');
+  document.documentElement.classList.add('noprice');window.NOPRICE=true;
   var css=document.createElement('style');
   css.textContent='.noprice .pprice,.noprice #guest-calc,.noprice .gc,'+
     '.noprice .pkgprice,.noprice .price,.noprice .ppn,.noprice .ppnsub,.noprice .ppnbreak{display:none !important;}';
