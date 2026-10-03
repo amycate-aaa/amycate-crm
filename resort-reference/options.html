@@ -249,6 +249,11 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 .in ul.gl{margin:6px 0 0;padding-left:18px;}.in ul.gl li{margin:3px 0;}
 .hero .workwith{display:inline-block;align-self:flex-start;width:auto;max-width:max-content;margin-top:16px;padding:11px 20px;border-radius:999px;background:var(--btn);color:var(--btn-ink);font-family:var(--body);font-weight:700;font-size:14px;text-decoration:none;}
 .hero .workwith:hover{opacity:.88;}
+.morein{margin-top:6px;}
+.morein summary{cursor:pointer;font-size:12.5px;color:#6B6B6B;list-style:none;}
+.morein summary::-webkit-details-marker{display:none;}
+.morein summary::after{content:'  +';}
+.morein[open] summary::after{content:'  \2013';}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -323,7 +328,7 @@ function venuesHtml(P){
 }
 function packagesHtml(P){
   const p=norm(P.packages);
-  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${(!NOPRICE&&clean(x.price))?`<div class="pr">${esc(clean(x.price))}</div>`:''}${clean(x.capacity)?`<div class="cv">${esc(clean(x.capacity))}</div>`:''}${clean(x.summary)?`<p class="note" style="font-style:normal">${esc(clean(x.summary))}</p>`:''}${h.length?`<ul>${h.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`:''}</div>`;}).join('')}</div>`;
+  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${(!NOPRICE&&clean(x.price))?`<div class="pr">${esc(clean(x.price))}</div>`:''}${clean(x.capacity)?`<div class="cv">${esc(clean(x.capacity))}</div>`:''}${clean(x.summary)?`<p class="note" style="font-style:normal">${esc(clean(x.summary))}</p>`:''}${h.length?`<ul>${h.slice(0,6).map(i=>`<li>${esc(i)}</li>`).join('')}</ul>${h.length>6?`<details class="morein"><summary>${h.length-6} more included</summary><ul>${h.slice(6).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></details>`:''}`:''}</div>`;}).join('')}</div>`;
 }
 function notesList(P){
   const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).filter(Boolean);
