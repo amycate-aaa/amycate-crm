@@ -318,7 +318,17 @@ const libMatch=(r,name,pref)=>{const n=low(name);if(!n)return'';let L=(r.__ph||[
     ||(w.length?order.find(ph=>{const t=txt(ph);return w.every(x=>t.includes(x));}):null);
   return hit?phUrl(hit):'';};
 const norm=a=>(Array.isArray(a)?a:[]).map(x=>typeof x==='string'?{name:x}:Object.assign({},x,{name:nm(x)})).filter(x=>isClean(x.name));
-function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s[A-Z])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).filter(Boolean);}
+/* a teaser link shows no pricing \u2014 and some records have the price written
+   INSIDE the summary or the inclusions, so strip those sentences at render time */
+const MONEYISH=/\$\s?\d|\bfrom \$|\bper (person|guest|adult|couple|night|room)\b|\bdeposit\b|\b\d+% (tax|service)|\bplus tax\b|\bextra (guests?|adults?|person)\b|\bprice[sd]?\b|\bcost[s]?\b/i;
+function noMoney(t){
+  if(!window.NOPRICE_TEXT)return t;
+  const str=String(t||'');
+  if(!MONEYISH.test(str))return str;
+  const parts=str.split(/(?<=[.!?])\s+/).filter(x=>!MONEYISH.test(x));
+  return parts.join(' ').trim();
+}
+function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s[A-Z])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).map(noMoney).filter(Boolean);}
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
@@ -369,7 +379,7 @@ function packagesHtml(P){
     const h=hiList(x.highlights);
     const price=(!NOPRICE&&clean(x.price))?clean(x.price):'';
     const cap=clean(x.capacity);
-    let sum=clean(x.summary)||'';
+    let sum=noMoney(clean(x.summary)||'');
     if(cap&&sum){const bare=cap.replace(/\s*\(.*$/,'');
       if(sum.toLowerCase().indexOf(bare.toLowerCase())===0)sum=sum.slice(bare.length).replace(/^[.\s]+/,'');}
     return `<div class="p2">
@@ -388,7 +398,8 @@ function notesList(P){
 }
 
 let PR={b:'',n:'',d:'',x:{}};
-let NOPRICE=!Q.get('p');   // a teaser link carries no pricing payload — show no prices at all
+let NOPRICE=!Q.get('p');
+window.NOPRICE_TEXT=NOPRICE;   // a teaser link carries no pricing payload — show no prices at all
 try{const raw=Q.get('p');if(raw)PR=Object.assign(PR,JSON.parse(decodeURIComponent(escape(atob(raw)))));}catch(e){console.warn('pricing',e);}
 const BASIS={ppn:'per person, per night',tot:'total for 2, room only',pkg:'total for 2, flights + resort'};
 const basisTxt=()=>(BASIS[PR.b]||'')+(PR.b&&PR.b!=='ppn'&&PR.n?', '+PR.n+' nights':'');
