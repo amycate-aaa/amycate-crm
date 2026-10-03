@@ -328,6 +328,9 @@ function noMoney(t){
   const parts=str.split(/(?<=[.!?])\s+/).filter(x=>!MONEYISH.test(x));
   return parts.join(' ').trim();
 }
+const HASPR=/(\$|US\$|USD)\s?\d|\d\s?USD\b|\bpriced? (from|at)\b/i, LABPR=/price|cost|fee|deposit|\brate\b|per (person|guest)|extra guest|additional guest/i;
+function noPrText(t){t=String(t||'');if(!NOPRICE)return t;t=t.replace(/\s*\([^()]*(\$|USD)[^()]*\)/g,'');return HASPR.test(t)?'':t;}
+function noPrList(L){return NOPRICE?L.map(noPrText).filter(Boolean):L;}
 function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s[A-Z])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).map(noMoney).filter(Boolean);}
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
@@ -360,7 +363,7 @@ function cmpTable(pc){
   if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
   const cell=v=>v==='Y'?'<td class="y">\u2713</td>':v==='-'?'<td class="n">\u2014</td>':!v?'<td></td>':`<td>${esc(v)}</td>`;
   return `<div class="cmpwrap"><table class="cmp"><thead><tr><th></th>${pc.packages.map(p=>`<th><b>${esc(p.name)}</b>${p.cap?`<span>${esc(p.cap)}</span>`:''}</th>`).join('')}</tr></thead><tbody>${
-    pc.groups.map(g=>`<tr class="grp"><td colspan="${pc.packages.length+1}">${esc(g.title)}</td></tr>`+(g.rows||[]).filter(r=>isClean(r.label)).map(r=>`<tr><td>${esc(r.label)}</td>${(r.values||[]).map(cell).join('')}</tr>`).join('')).join('')
+    pc.groups.filter(g=>!NOPRICE||(g.rows||[]).some(r=>isClean(r.label)&&!LABPR.test(r.label)&&!HASPR.test(r.label)&&!(r.values||[]).some(v=>/(\$|USD)\s?\d|\d\s?USD/.test(String(v||''))))).map(g=>`<tr class="grp"><td colspan="${pc.packages.length+1}">${esc(g.title)}</td></tr>`+(g.rows||[]).filter(r=>isClean(r.label)&&(!NOPRICE||(!LABPR.test(r.label)&&!HASPR.test(r.label)&&!(r.values||[]).some(v=>/(\$|USD)\s?\d|\d\s?USD/.test(String(v||'')))))).map(r=>`<tr><td>${esc(r.label)}</td>${(r.values||[]).map(cell).join('')}</tr>`).join('')).join('')
   }</tbody></table></div>`;
 }
 function docs(P,section){
@@ -376,7 +379,7 @@ function venuesHtml(P){
 function packagesHtml(P){
   const p=norm(P.packages);
   return docs(P,'packages')+`<div class="pkglist2">${p.map(x=>{
-    const h=hiList(x.highlights);
+    const h=noPrList(hiList(x.highlights));
     const price=(!NOPRICE&&clean(x.price))?clean(x.price):'';
     const cap=clean(x.capacity);
     let sum=noMoney(clean(x.summary)||'');
@@ -393,7 +396,7 @@ function packagesHtml(P){
 }
 
 function notesList(P){
-  const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).filter(Boolean);
+  const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).map(noPrText).filter(Boolean);
   return n;
 }
 
@@ -492,7 +495,7 @@ async function renderQuote(slugs){
   $('app').innerHTML=`
   <div class="top"><b>Amy Cate</b><span>${who?'Prepared for '+esc(who):(CT?'Handpicked for your trip':'Handpicked for your wedding')}</span></div>
   <div class="wrap">
-    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}, with estimated room pricing${CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'}.${PR.d?' '+esc(PR.d)+'.':''}</p><a class="workwith" href="${CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-lead.netlify.app/'}" target="_blank" rel="noopener">What working with me looks like &rarr;</a></div>
+    <section class="hero"><div class="txt">${who?`<span class="hi">${esc(who)}</span>`:''}<h1>${CT?'Handpicked for your trip':'Handpicked for your wedding'}</h1><p>${R.length} resort${R.length>1?'s':''}${NOPRICE?(CT?', with what each one offers':', with venues, packages and a side-by-side comparison for each'):(', with estimated room pricing'+(CT?' and what each one offers':', venues, packages and a side-by-side comparison for each'))}.${PR.d?' '+esc(PR.d)+'.':''}</p><a class="workwith" href="${CT?'https://work-with-amy-ct.netlify.app/':'https://work-with-amy-lead.netlify.app/'}" target="_blank" rel="noopener">What working with me looks like &rarr;</a></div>
       <div class="pic"${bg(brandHero(CT))} role="img" aria-label="${esc(hero.name||'')}"></div></section>
     <div class="cards">${R.map(card).join('')}</div>
     <div class="ctas"><a class="btn" href="${mail}">Tell me which one</a></div>

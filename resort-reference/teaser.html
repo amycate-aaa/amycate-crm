@@ -232,7 +232,7 @@ function oneLink(){
   if(!slugs.length)return '';
   var t=tag();
   return SITE+'/options?r='+encodeURIComponent(slugs.join(','))+
-    (BRAND==='ct'?'&b=ct':'')+(t?'&c='+encodeURIComponent(t)+'&for='+encodeURIComponent(t.replace(/-/g,' ')):'')+'&k='+PASS;
+    (BRAND==='ct'?'&b=ct':'')+(t?'&c='+encodeURIComponent(t)+'&for='+encodeURIComponent(LEAD_NAME||t.replace(/-/g,' ').replace(/\b[a-z]/g,function(c){return c.toUpperCase();})):'')+'&k='+PASS;
 }
 function chosen(){
   return [].slice.call(document.querySelectorAll('#locs .loc input:checked')).map(function(i){return i.value;});
@@ -282,7 +282,7 @@ function load(){
     render();
   }).catch(function(e){document.getElementById('locs').innerHTML='<p class="hint">Could not load the library: '+esc(String(e))+'</p>';});
 }
-var LEADS=[];
+var LEADS=[],LEAD_NAME='';
 function slugify(s){return String(s||'').toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'').slice(0,40);}
 function loadLeads(){
   db.collection('leads').get().then(function(snap){
@@ -301,9 +301,9 @@ function loadLeads(){
 function useLead(){
   var i=document.getElementById('lead').value;
   var note=document.getElementById('leadnote');
-  if(i===''){note.textContent='';LEAD_ID='';return;}
+  if(i===''){note.textContent='';LEAD_ID='';LEAD_NAME='';return;}
   var l=LEADS[+i];if(!l)return;
-  LEAD_ID=l.id;
+  LEAD_ID=l.id;LEAD_NAME=String(l.names||'').trim();
   document.getElementById('who').value=slugify(l.names);
   document.getElementById('toemail').value=l.email||'';
   document.getElementById('tophone').value=l.phone||'';
