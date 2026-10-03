@@ -2252,6 +2252,22 @@ function parseAirText(raw,yearHint){raw=String(raw||'').replace(/\r/g,'');
   const skip=/^(confirmation|record locator|passenger|seat|class|fare|total|ticket|baggage|e-?ticket)/i;
   const lines=raw.split('\n').map(l=>l.trim()).filter(l=>l&&!skip.test(l));
   let rows=[],cur=null;
+  // Travel Impressions / DWT confirmation blocks:
+  //   United Airlines #1622 / Houston (IAH) to Puerto Vallarta (PVR) / Depart: 10/24/2026 9:40 AM / Arrival: ... 11:10 AM
+  (function(){
+    const text=raw;
+    const re=/([A-Za-z][A-Za-z .'\-]{2,30}?)\s*#\s*(\d{1,4})[\s\S]{0,160}?\(([A-Z]{3})\)\s*to\s*[^()]*\(([A-Z]{3})\)[\s\S]{0,120}?Depart:\s*([0-9\/\-]+)\s*([0-9:]+\s*[AP]M)[\s\S]{0,120}?Arriv\w*:\s*[0-9\/\-]*\s*([0-9:]+\s*[AP]M)/gi;
+    let m;const seen={};
+    while((m=re.exec(text))){
+      const code=(m[1].match(/\b[A-Z][a-z]+/g)||[]).map(w=>w[0]).join('').slice(0,2).toUpperCase()||m[1].slice(0,2).toUpperCase();
+      const row={who:'',flight:code+m[2],date:parseDate(m[5]),from:m[3].toUpperCase(),to:m[4].toUpperCase(),
+        dep:parseTimes(m[6])[0]||'',arr:parseTimes(m[7])[0]||''};
+      const k=row.flight+row.date+row.from+row.to;
+      if(!seen[k]){seen[k]=1;rows.push(row);}
+    }
+  })();
+  if(rows.length)return rows;
+
   lines.forEach(line=>{
     // DestiWorld / Softrip table row: date, time, code, airline, flight, class, from, from city, to, to city, arr date, arr time, equipment, stops
     const tf=line.split('\t').map(x=>x.trim());
