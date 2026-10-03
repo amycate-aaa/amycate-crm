@@ -313,8 +313,8 @@ function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();i
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
-const _s=(Q.get('s')||'c').toLowerCase();
-const style=(_s==='a'||_s==='k')?_s:'c';   // k = classic cream, gold and Cormorant
+const _s=(Q.get('s')||'k').toLowerCase();   // classic cream, gold and Cormorant is the default
+const style=(_s==='a'||_s==='c')?_s:'k';    // &s=c or &s=a for the older skins
 /* who opened it — same log the guide and favorites pages write to */
 (function(){try{
   if(localStorage.getItem('ac_agent')==='1')return;
