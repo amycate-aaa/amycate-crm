@@ -86,7 +86,8 @@ function A(p,k){return Array.isArray(p[k])?p[k]:[];}
 document.getElementById('mailbtn').href='mailto:'+MAIL+'?subject='+encodeURIComponent('About the resorts you sent'+(FOR?' \u2014 '+FOR:''));
 if(FOR){document.getElementById('eyebrow').textContent='For '+FOR;}
 function guide(slug){
-  return './resort?r='+encodeURIComponent(slug)+'&quote=true&pv=1&np=1'+(CT?'&ct=1':'')+
+  // the GUIDE — the full resort page, not the wedding quote
+  return './resort?r='+encodeURIComponent(slug)+(CT?'&ct=1':'')+
     (TAG?'&c='+encodeURIComponent(TAG):'')+'&k='+encodeURIComponent(PASS);
 }
 function card(slug,p){
