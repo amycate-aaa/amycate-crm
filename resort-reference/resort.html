@@ -1680,6 +1680,17 @@ function num(v){const n=parseFloat(String(v==null?'':v).replace(/[^0-9.]/g,''));
 
 /* ══════════════════ SHARED STATE ══════════════════ */
 let P=null,PHOTOS=[],RESORTWIDE=[],PHOTOMAP={},SLUG='';
+/* np=1 means a link sent to a client with NO pricing — hide package prices,
+   the guest-cost calculator and any price column on the guide. */
+(function(){try{
+  var q=new URLSearchParams(location.search);
+  if(!/^(1|true)$/i.test(q.get('np')||''))return;
+  document.documentElement.classList.add('noprice');
+  var css=document.createElement('style');
+  css.textContent='.noprice .pprice,.noprice #guest-calc,.noprice .gc,'+
+    '.noprice .pkgprice,.noprice .price,.noprice .ppn,.noprice .ppnsub,.noprice .ppnbreak{display:none !important;}';
+  document.head.appendChild(css);
+}catch(e){}})();
 const AGENT=(function(){
   var q;try{q=new URLSearchParams(location.search);}catch(e){q=null;}
   // a link shared with a client is never the agent view
