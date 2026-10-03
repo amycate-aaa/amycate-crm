@@ -257,6 +257,23 @@ body[data-style="c"] .cmp th,body[data-style="c"] .cmp td{border-bottom-color:rg
 .morein summary::-webkit-details-marker{display:none;}
 .morein summary::after{content:'  +';}
 .morein[open] summary::after{content:'  \2013';}
+
+.pkglist2{border-top:1px solid var(--line);margin-top:4px;}
+.p2{border-bottom:1px solid var(--line);}
+.p2t{width:100%;background:none;border:none;padding:18px 0;display:grid;grid-template-columns:1fr auto auto;align-items:start;gap:18px;cursor:pointer;text-align:left;font:inherit;}
+.p2n{display:block;}
+.p2n>span{display:block;}
+.p2c{font-size:13.5px;color:#6B6B6B;margin-top:3px;font-weight:600;}
+.p2s{font-size:14.5px;color:#4A4A4A;margin-top:5px;line-height:1.55;}
+.p2p{font-size:16px;font-weight:700;white-space:nowrap;padding-top:2px;}
+.p2a{font-size:11px;color:#9A9A9A;transition:transform .2s;padding-top:5px;}
+.p2.open .p2a{transform:rotate(180deg);}
+.p2b{display:none;padding:0 0 22px;columns:2;column-gap:40px;}
+@media(min-width:900px){.p2b{columns:3;}}
+@media(max-width:620px){.p2b{columns:1;}}
+.p2.open .p2b{display:block;}
+.p2l{display:flex;gap:9px;padding:6px 0;font-size:14.5px;line-height:1.5;break-inside:avoid;}
+.p2l::before{content:"\00b7";flex-shrink:0;color:#9A9A9A;}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -331,12 +348,23 @@ function venuesHtml(P){
 }
 function packagesHtml(P){
   const p=norm(P.packages);
-  return docs(P,'packages')+`<div class="pkgs">${p.map(x=>{const h=hiList(x.highlights);return `<div class="pkg"><h4>${esc(x.name)}</h4>${(!NOPRICE&&clean(x.price))?`<div class="pr">${esc(clean(x.price))}</div>`:''}${(()=>{const cap=clean(x.capacity);const sum=clean(x.summary);
-      const same=cap&&sum&&sum.toLowerCase().indexOf(cap.toLowerCase().replace(/\s*\(.*$/,''))===0;
-      return (cap?`<div class="cv">${esc(cap)}</div>`:'')+
-        (sum&&!same?`<p class="note" style="font-style:normal">${esc(sum)}</p>`:
-         (sum&&same?`<p class="note" style="font-style:normal">${esc(sum.slice(cap.replace(/\s*\(.*$/,'').length).replace(/^[.\s]+/,''))}</p>`:''));})()}${h.length?`<ul>${h.slice(0,6).map(i=>`<li>${esc(i)}</li>`).join('')}</ul>${h.length>6?`<details class="morein"><summary>${h.length-6} more included</summary><ul>${h.slice(6).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></details>`:''}`:''}</div>`;}).join('')}</div>`;
+  return docs(P,'packages')+`<div class="pkglist2">${p.map(x=>{
+    const h=hiList(x.highlights);
+    const price=(!NOPRICE&&clean(x.price))?clean(x.price):'';
+    const cap=clean(x.capacity);
+    let sum=clean(x.summary)||'';
+    if(cap&&sum){const bare=cap.replace(/\s*\(.*$/,'');
+      if(sum.toLowerCase().indexOf(bare.toLowerCase())===0)sum=sum.slice(bare.length).replace(/^[.\s]+/,'');}
+    return `<div class="p2">
+      <button class="p2t" aria-expanded="false" onclick="this.parentNode.classList.toggle('open');this.setAttribute('aria-expanded',this.parentNode.classList.contains('open'));">
+        <span class="p2n">${esc(x.name)}${cap?`<span class="p2c">${esc(cap)}</span>`:''}${sum?`<span class="p2s">${esc(sum)}</span>`:''}</span>
+        ${price?`<span class="p2p">${esc(price)}</span>`:''}
+        <span class="p2a">\u25bc</span>
+      </button>
+      <div class="p2b">${h.length?h.map(i2=>`<div class="p2l">${esc(i2)}</div>`).join(''):'<p class="note">Inclusions on request.</p>'}</div>
+    </div>`;}).join('')}</div>`;
 }
+
 function notesList(P){
   const n=[].concat(P.facilityNotes||[]).map(x=>String(x||'').split(/\n+/)).flat().map(clean).filter(Boolean);
   return n;
