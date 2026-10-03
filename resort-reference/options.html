@@ -284,6 +284,9 @@ body[data-style="k"] .exp summary{font-family:var(--head);font-size:21px;font-we
 body[data-style="k"] .exp details{border-bottom:1px solid #E4D8C6;}
 body[data-style="k"] .exp summary:hover{color:#8A6D3B;}
 body[data-style="k"] h2,body[data-style="k"] h3,body[data-style="k"] h4{font-family:var(--head);font-weight:400;}
+
+.fullq{display:block;padding:16px 0;border-bottom:1px solid var(--line);font-family:var(--head);font-size:21px;color:var(--accent);text-decoration:none;}
+.fullq:hover{opacity:.75;}
 </style></head>
 <body data-style="a">
 <div id="app"><p class="loading">Loading…</p></div>
@@ -319,6 +322,9 @@ function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();i
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
+// &full=slug:key,slug:key — opens that resort's own full classic quote
+const FULL={};try{(Q.get('full')||'').split(',').forEach(function(pair){
+  const bits=pair.split(':');if(bits.length===2&&bits[0]&&bits[1])FULL[bits[0].trim()]=bits[1].trim();});}catch(e){}
 const _s=(Q.get('s')||'k').toLowerCase();   // classic cream, gold and Cormorant is the default
 const style=(_s==='a'||_s==='c')?_s:'k';    // &s=c or &s=a for the older skins
 /* who opened it — same log the guide and favorites pages write to */
@@ -461,6 +467,7 @@ async function renderQuote(slugs){
       ${(()=>{const q=priceOf(r);if(!q.pr)return'';const rp=roomPic(r,q.r);return `<div class="roombox${rp?'':' nopic'}"><div class="rp${rp?'':' none'}"${bg(rp)}></div><div><div class="lbl">Estimated room pricing</div>${q.r?`<div class="rn">${esc(q.r)}</div>`:''}<div class="pp">${esc(q.pr)}</div><div class="pb">${esc(basisTxt())}${PR.d?' \u00b7 '+esc(PR.d):''}</div></div></div>`;})()}
       <div class="stats">${stats.map((s,i,A)=>`<div style="grid-column:span ${i<2?6:Math.max(3,Math.floor(12/Math.max(1,A.length-2)))}"><span>${esc(s[1])}</span><b>${esc(s[0])}</b></div>`).join('')}</div>
     </div></div><div class="exp">
+      ${FULL[r._id]?`<a class="fullq" href="./resort?r=${encodeURIComponent(r._id)}&quote=true&k=${encodeURIComponent(FULL[r._id])}">See the full quote for ${esc(r.name||'')} &rarr;</a>`:''}
       ${v?`<details><summary>Wedding venues (${v})</summary><div class="in">${venuesHtml(r)}</div></details>`:''}
       ${p?`<details><summary>Wedding packages (${p})</summary><div class="in">${packagesHtml(r)}</div></details>`:''}
       ${pc?`<details><summary>Compare packages side by side</summary><div class="in">${pc}</div></details>`:''}
