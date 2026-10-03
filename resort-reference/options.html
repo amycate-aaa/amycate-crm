@@ -331,6 +331,7 @@ function noMoney(t){
 const HASPR=/(\$|US\$|USD)\s?\d|\d\s?USD\b|\bpriced? (from|at)\b/i, LABPR=/price|cost|fee|deposit|\brate\b|per (person|guest)|extra guest|additional guest/i;
 function noPrText(t){t=String(t||'');if(!NOPRICE)return t;t=t.replace(/\s*\([^()]*(\$|USD)[^()]*\)/g,'');return HASPR.test(t)?'':t;}
 function noPrList(L){return NOPRICE?L.map(noPrText).filter(Boolean):L;}
+function noPrCap(t){t=String(t||'');if(!NOPRICE)return t;return t.split(/;\s*/).filter(x=>!HASPR.test(x)).join('; ').trim();}
 function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s[A-Z])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).map(noMoney).filter(Boolean);}
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
@@ -362,12 +363,12 @@ document.body.dataset.style=style;
 function cmpTable(pc){
   if(!pc||!pc.packages||!pc.packages.length||!pc.groups||!pc.groups.length)return'';
   const cell=v=>v==='Y'?'<td class="y">\u2713</td>':v==='-'?'<td class="n">\u2014</td>':!v?'<td></td>':`<td>${esc(v)}</td>`;
-  return `<div class="cmpwrap"><table class="cmp"><thead><tr><th></th>${pc.packages.map(p=>`<th><b>${esc(p.name)}</b>${p.cap?`<span>${esc(p.cap)}</span>`:''}</th>`).join('')}</tr></thead><tbody>${
+  return `<div class="cmpwrap"><table class="cmp"><thead><tr><th></th>${pc.packages.map(p=>`<th><b>${esc(p.name)}</b>${noPrCap(p.cap)?`<span>${esc(noPrCap(p.cap))}</span>`:''}</th>`).join('')}</tr></thead><tbody>${
     pc.groups.filter(g=>!NOPRICE||(g.rows||[]).some(r=>isClean(r.label)&&!LABPR.test(r.label)&&!HASPR.test(r.label)&&!(r.values||[]).some(v=>/(\$|USD)\s?\d|\d\s?USD/.test(String(v||''))))).map(g=>`<tr class="grp"><td colspan="${pc.packages.length+1}">${esc(g.title)}</td></tr>`+(g.rows||[]).filter(r=>isClean(r.label)&&(!NOPRICE||(!LABPR.test(r.label)&&!HASPR.test(r.label)&&!(r.values||[]).some(v=>/(\$|USD)\s?\d|\d\s?USD/.test(String(v||'')))))).map(r=>`<tr><td>${esc(r.label)}</td>${(r.values||[]).map(cell).join('')}</tr>`).join('')).join('')
   }</tbody></table></div>`;
 }
 function docs(P,section){
-  const d=(P.documents||P.docLinks||[]).filter(x=>x&&photoOk(x.url)&&(x.public===true||x.public==='true'||x.isPublic===true)&&isClean(x.label)&&String(x.section||'')===section);
+  const d=(P.documents||P.docLinks||[]).filter(x=>x&&photoOk(x.url)&&(x.public===true||x.public==='true'||x.isPublic===true)&&isClean(x.label)&&!(NOPRICE&&HASPR.test(String(x.label||'')))&&String(x.section||'')===section);
   return d.length?`<div class="docs">${d.map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.label)}</a>`).join('')}</div>`:'';
 }
 function venuesHtml(P){
@@ -381,7 +382,7 @@ function packagesHtml(P){
   return docs(P,'packages')+`<div class="pkglist2">${p.map(x=>{
     const h=noPrList(hiList(x.highlights));
     const price=(!NOPRICE&&clean(x.price))?clean(x.price):'';
-    const cap=clean(x.capacity);
+    const cap=noPrCap(clean(x.capacity));
     let sum=noMoney(clean(x.summary)||'');
     if(cap&&sum){const bare=cap.replace(/\s*\(.*$/,'');
       if(sum.toLowerCase().indexOf(bare.toLowerCase())===0)sum=sum.slice(bare.length).replace(/^[.\s]+/,'');}
