@@ -285,6 +285,21 @@ const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-siz
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
 const style=(Q.get('s')||'c').toLowerCase()==='a'?'a':'c';
+/* who opened it — same log the guide and favorites pages write to */
+(function(){try{
+  if(localStorage.getItem('ac_agent')==='1')return;
+  var q=new URLSearchParams(location.search);
+  var tag=(q.get('c')||'').trim();
+  var who=(q.get('for')||'').trim();
+  if(!window.db)return;
+  db.collection('libraryVisits').add({at:new Date().toISOString(),
+    resort:'(options page)',page:'options',
+    version:(q.get('b')==='ct'?'CT \u00b7 ':'')+(q.get('p')?'with pricing':'no pricing'),
+    sentTo:tag||who.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),
+    resorts:(q.get('r')||'').slice(0,300),
+    from:(document.referrer||'').slice(0,120),
+    device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer'});
+}catch(e){}})();
 const CT=(Q.get('b')||'').toLowerCase()==='ct';
 const AMY_EMAIL=CT?'amy.cate@celebrationtravel.com':'amy.cate@destinationweddings.com';
 document.body.dataset.style=style;
