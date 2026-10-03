@@ -216,8 +216,9 @@ function tag(){return (document.getElementById('who').value||'').trim().toLowerC
 function linkFor(slug){
   var t=tag();
   // the GUIDE, not the quote view — quote=true&pv=1 renders the wedding quote
-  return SITE+'/resort?r='+encodeURIComponent(slug)+
-    (BRAND==='ct'?'?ct=1&':'?')+(t?'c='+encodeURIComponent(t)+'&':'')+'k='+PASS;
+  // the GUIDE with no pricing — np=1 is the clean library view; quote=true&pv=1 would render the wedding quote
+  return SITE+'/resort?r='+encodeURIComponent(slug)+'&np=1'+
+    (BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+'&k='+PASS;
 }
 function libLink(bucket){
   var t=tag();
