@@ -1376,7 +1376,8 @@ function mqAddAirRow(btn,v){
   tbl.querySelector('tbody').insertAdjacentHTML('beforeend','<tr>'+
     cell('fl','UA1622',v.flight)+cell('dt','2026-10-24',v.date)+cell('fr','IAH',v.from)+cell('to','PVR',v.to)+
     cell('dp','9:40 AM',v.dep)+cell('ar','11:10 AM',v.arr)+
-    '<td style="padding:3px;"><button type="button" class="rx" style="height:30px;" onclick="const t=this.closest(\'table\');this.closest(\'tr\').remove();if(!t.querySelector(\'tbody tr\'))t.style.display=\'none\';">\u00d7</button></td></tr>');
+    '<td style="padding:3px;white-space:nowrap;"><button type="button" class="qb-btn ghost" style="padding:4px 9px;font-size:11px;" onclick="mqLookupAir(this)">Look up</button>'+
+    '<button type="button" class="rx" style="height:30px;margin-left:4px;" onclick="const t=this.closest(\'table\');this.closest(\'tr\').remove();if(!t.querySelector(\'tbody tr\'))t.style.display=\'none\';">\u00d7</button></td></tr>');
 }
 /* turn whatever was pasted into editable rows, so flights can be corrected by hand */
 function mqAirToRows(btn){
@@ -1386,6 +1387,15 @@ function mqAirToRows(btn){
   if(!rs.length){alert('Nothing recognisable in the paste \u2014 add the flights by hand instead.');return;}
   const tb=block.querySelector('.mq-airtbl tbody');tb.innerHTML='';
   rs.forEach(r=>mqAddAirRow(btn,r));
+}
+/* Look up a flight from Quick Quote \u2014 reuses the quote builder's lookup */
+function mqLookupAir(btn){
+  const tr=btn.closest('tr');
+  const map=[['mqa-fl','a-fl'],['mqa-dt','a-dt'],['mqa-fr','a-fr'],['mqa-to','a-to'],['mqa-dp','a-dp'],['mqa-ar','a-ar']];
+  map.forEach(([m,a])=>{const el=tr.querySelector('.'+m);if(el)el.classList.add(a);});
+  if(!tr.querySelector('.a-who')){const h=document.createElement('input');h.className='a-who';h.type='hidden';tr.appendChild(h);}
+  try{lookupAir(tr);}catch(e){alert('Lookup failed \u2014 fill it in by hand.');}
+  setTimeout(()=>map.forEach(([m,a])=>{const el=tr.querySelector('.'+m);if(el)el.classList.remove(a);}),6000);
 }
 function mqAirRowsOf(block){const trs=[...block.querySelectorAll('.mq-airtbl tbody tr')];if(!trs.length)return null;
   const v=(tr,c)=>((tr.querySelector('.mqa-'+c)||{}).value||'').trim();
@@ -2344,7 +2354,7 @@ function parseAirBlock(){
   (async()=>{const trs=[...document.querySelectorAll('#q-air-rows tr[data-air]')].slice(-rows.length);for(const tr of trs){const need=!tr.querySelector('.a-fr').value||!tr.querySelector('.a-to').value||!tr.querySelector('.a-dp').value||!tr.querySelector('.a-ar').value;if(need&&tr.querySelector('.a-dt').value)await lookupAir(tr);}msg.className='airmsg';msg.textContent=rows.length+' flight'+(rows.length===1?'':'s')+' added. Check the dates and cities.';})();
 }
 async function lookupAir(tr){
-  const msg=$id('q-air-msg');
+  const msg=$id('q-air-msg')||{className:'',textContent:''};
   const fl=tr.querySelector('.a-fl').value.trim().replace(/\s/g,'').toUpperCase();
   const dt=tr.querySelector('.a-dt').value.trim();
   if(!fl||!dt){ msg.className='airmsg bad'; msg.textContent='Flight number and date first (date as 2027-05-14).'; return; }
