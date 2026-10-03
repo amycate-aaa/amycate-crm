@@ -41,6 +41,14 @@ h1{font-size:clamp(34px,6vw,56px);font-weight:800;letter-spacing:-.03em;line-hei
 .sig b{font-size:16px;font-weight:700;display:block;}
 .sig span{font-size:13.5px;color:var(--soft);}
 .empty{padding:90px 0;text-align:center;color:var(--soft);}
+
+.card p.d{font-size:15px;line-height:1.7;color:var(--mid);}
+.card details.more{border-top:1px solid var(--line);padding-top:12px;margin-top:2px;}
+.card details.more summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--ink);list-style:none;}
+.card details.more summary::-webkit-details-marker{display:none;}
+.card details.more summary::after{content:'  +';color:var(--soft);}
+.card details.more[open] summary::after{content:'  \2013';}
+.card details.more p{font-size:14.5px;line-height:1.7;color:var(--mid);margin-top:10px;}
 </style></head><body>
 <div class="wrap">
   <header class="top">
@@ -96,6 +104,8 @@ function card(slug,p){
     '<h2>'+esc(p.name||slug)+'</h2>'+
     (p.destination?'<p class="where">'+esc(p.destination)+'</p>':'')+
     (p.tagline?'<p class="t">'+esc(p.tagline)+'</p>':'')+
+    (p.description?'<p class="d">'+esc(p.description)+'</p>':'')+
+    (p.goodToKnow?'<details class="more"><summary>Good to know</summary><p>'+esc(p.goodToKnow)+'</p></details>':'')+
     (facts.length?'<div class="facts">'+facts.map(function(f){return '<span class="fact">'+esc(f)+'</span>';}).join('')+'</div>':'')+
     '<a class="go" href="'+esc(guide(slug))+'">See the full guide \u2192</a>'+
     '</div></article>';
