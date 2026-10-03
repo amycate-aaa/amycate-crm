@@ -1341,7 +1341,13 @@ const MQ_REGION_NAMES={'cancun':'Canc\u00fan & Riviera Maya','riviera-maya':'Can
 function mqDestOf(slug){const l=window.LIB[slug]||{};const k=regionKey(l.dest,l.name);return MQ_REGION_NAMES[k]||l.dest||'Other';}
 function mqAirBlocks(){const dests=[...new Set([...document.querySelectorAll('.mq-resort')].map(s=>s.value).filter(Boolean).map(mqDestOf))];const wrap=$id('mq-air');const box=$id('mq-air-blocks');if(!dests.length){wrap.style.display='none';return;}wrap.style.display='block';
   const keep={};[...box.querySelectorAll('[data-dest]')].forEach(el=>keep[el.dataset.dest]=el.querySelector('textarea').value);
-  box.innerHTML=dests.map(d=>'<div data-dest="'+esc(d)+'" style="margin-bottom:14px;"><label class="qb-lbl">'+esc(d)+'</label><textarea class="qb-in" rows="3" style="width:100%;font-family:monospace;font-size:13px;" placeholder="Paste the itinerary \u2014 Sabre/DestiWorld lines, TI, or an airline confirmation. Leave empty for no flights." oninput="mqAirPreview(this)">'+esc(keep[d]||'')+'</textarea><div class="small mq-air-prev" style="opacity:.75;margin-top:4px;"></div></div>').join('');
+  box.innerHTML=dests.map(d=>'<div data-dest="'+esc(d)+'" style="margin-bottom:18px;"><label class="qb-lbl">'+esc(d)+'</label><textarea class="qb-in" rows="3" style="width:100%;font-family:monospace;font-size:13px;" placeholder="Paste the itinerary \u2014 Sabre/DestiWorld lines, TI, or an airline confirmation. Leave empty for no flights." oninput="mqAirPreview(this)">'+esc(keep[d]||'')+'</textarea><div class="small mq-air-prev" style="opacity:.75;margin-top:4px;"></div>'+
+    '<table class="mq-airtbl" style="width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px;display:none;"><thead><tr>'+
+    '<th style="text-align:left;padding:4px;">Flight</th><th style="text-align:left;padding:4px;">Date</th><th style="text-align:left;padding:4px;">From</th><th style="text-align:left;padding:4px;">To</th><th style="text-align:left;padding:4px;">Departs</th><th style="text-align:left;padding:4px;">Arrives</th><th></th>'+
+    '</tr><tbody></tbody></table>'+
+    '<button type="button" class="qb-btn ghost" style="margin-top:8px;padding:5px 12px;font-size:11px;" onclick="mqAddAirRow(this)">+ Add flight</button>'+
+    '<button type="button" class="qb-btn ghost" style="margin-top:8px;margin-left:8px;padding:5px 12px;font-size:11px;" onclick="mqAirToRows(this)">Turn the paste into rows</button>'+
+    '</div>').join('');
   [...box.querySelectorAll('textarea')].forEach(mqAirPreview);}
 function mqAirPreview(ta,keepEdits){
   const p=ta.parentNode.querySelector('.mq-air-prev');
@@ -1361,6 +1367,26 @@ function mqAddAirLeg(btn){const tb=btn.parentNode.querySelector('.mq-airtbl tbod
   const tr=tb.insertRow();tr.dataset.who='';
   tr.innerHTML=['fl','dt','fr','to','dp','ar'].map((c,i)=>'<td><input class="qb-in mqa-'+c+'" style="width:'+[86,110,56,56,84,84][i]+'px;padding:5px 7px;font-size:13px;" oninput="mqSave()"></td>').join('')
     +'<td><button type="button" class="qb-btn ghost" style="padding:3px 9px;" onclick="this.closest(\'tr\').remove();mqSave();">\u00d7</button></td>';}
+function mqAddAirRow(btn,v){
+  v=v||{};
+  const block=btn.closest('[data-dest]');
+  const tbl=block.querySelector('.mq-airtbl');
+  tbl.style.display='';
+  const cell=(c,ph,val)=>'<td style="padding:3px;"><input class="qb-in mqa-'+c+'" style="padding:5px 7px;font-size:12.5px;" placeholder="'+ph+'" value="'+esc(val||'')+'"></td>';
+  tbl.querySelector('tbody').insertAdjacentHTML('beforeend','<tr>'+
+    cell('fl','UA1622',v.flight)+cell('dt','2026-10-24',v.date)+cell('fr','IAH',v.from)+cell('to','PVR',v.to)+
+    cell('dp','9:40 AM',v.dep)+cell('ar','11:10 AM',v.arr)+
+    '<td style="padding:3px;"><button type="button" class="rx" style="height:30px;" onclick="const t=this.closest(\'table\');this.closest(\'tr\').remove();if(!t.querySelector(\'tbody tr\'))t.style.display=\'none\';">\u00d7</button></td></tr>');
+}
+/* turn whatever was pasted into editable rows, so flights can be corrected by hand */
+function mqAirToRows(btn){
+  const block=btn.closest('[data-dest]');
+  const txt=(block.querySelector('textarea')||{}).value||'';
+  const rs=parseAirText(txt,(($id('mq-from')||{}).value||'').slice(0,4))||[];
+  if(!rs.length){alert('Nothing recognisable in the paste \u2014 add the flights by hand instead.');return;}
+  const tb=block.querySelector('.mq-airtbl tbody');tb.innerHTML='';
+  rs.forEach(r=>mqAddAirRow(btn,r));
+}
 function mqAirRowsOf(block){const trs=[...block.querySelectorAll('.mq-airtbl tbody tr')];if(!trs.length)return null;
   const v=(tr,c)=>((tr.querySelector('.mqa-'+c)||{}).value||'').trim();
   return trs.map(tr=>({who:tr.dataset.who||'',flight:v(tr,'fl'),date:v(tr,'dt'),from:v(tr,'fr').toUpperCase(),to:v(tr,'to').toUpperCase(),dep:v(tr,'dp'),arr:v(tr,'ar')}))
