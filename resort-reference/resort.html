@@ -2067,13 +2067,32 @@ function basketAdd(entry){window.BASKET_KEY=null;const k=bkKey(entry.couple);let
 function renderBasketBtn(){const btn=$id('qb-basket-btn');if(!btn)return;const b=ebBasketGet();const all=bkAll();const others=Object.keys(all).filter(k=>k!==bkCurrentKey()).length;btn.textContent='Basket'+(b.length?' ('+b.length+')':'')+(others?' +'+others:'');}
 async function saveToBasket(){const q=collectQ();saveLocal();const say=t=>{const m=$id('qb-msg');if(m){m.textContent=t;setTimeout(()=>{m.textContent='';},5000);}};say('Saving\u2026');const link=await quoteLink(q);const b=basketAdd(basketEntryFor(q,link));say('Saved for '+(q.couple||'this client')+' \u2014 '+b.length+' resort'+(b.length>1?'s':'')+' in the basket.');}
 function toggleBasket(){const box=$id('qb-basket');const on=box.style.display==='none';box.style.display=on?'block':'none';if(on)renderBasket();}
+/* One link for everything in the basket \u2014 the classic all-in-one page,
+   each resort opening its own full classic quote. Nothing to paste together. */
+function allInOneLink(){
+  const b=ebBasketGet();
+  if(!b.length)return '';
+  const slugs=b.map(e=>e.slug);
+  const full=b.map(e=>{const k=(String(e.link||'').match(/[?&]k=([^&]+)/)||[])[1]||'';return k?e.slug+':'+k:'';}).filter(Boolean);
+  const couple=(b[0]&&b[0].couple)||'';
+  return location.origin+'/resort-reference/options?r='+encodeURIComponent(slugs.join(','))+
+    (couple?'&for='+encodeURIComponent(couple):'')+
+    (full.length?'&full='+encodeURIComponent(full.join(',')):'');
+}
+function copyAllInOne(){
+  const u=allInOneLink();
+  if(!u){alert('Nothing in the basket yet \u2014 save a resort first.');return;}
+  navigator.clipboard.writeText(u).then(()=>{
+    const m=$id('qb-msg');if(m){m.textContent='All-in-one link copied \u2014 '+ebBasketGet().length+' resorts.';setTimeout(()=>{m.textContent='';},5000);}
+  }).catch(()=>{prompt('Copy this link:',u);});
+}
 function renderBasket(){const box=$id('qb-basket-list');const all=bkAll();const cur=bkCurrentKey();const keys=Object.keys(all).sort((a,b)=>(a===cur?-1:b===cur?1:0));
   const switcher=keys.length>1||(keys.length===1&&keys[0]!==cur)?'<p class="small" style="margin:0 0 10px;">Clients with a basket: '+keys.map(k=>'<a href="#" onclick="window.BASKET_KEY=\''+k.replace(/'/g,"\\'")+'\';renderBasket();renderBasketBtn();return false;" style="'+(k===cur?'font-weight:500;':'')+'color:var(--gold);margin-right:12px;">'+esc(all[k][0].couple||k)+' ('+all[k].length+')</a>').join('')+'</p>':'';
   const b=ebBasketGet();if(!b.length){box.innerHTML=switcher+'<p class="small">Nothing saved yet for this client. <b>Save for client</b> keeps the quote here (14 days) so you can add more resorts before emailing.</p><p class="small"><a href="#" onclick="toggleSavedQuotes();return false;" style="color:var(--gold-soft);">Older quotes for this resort \u2192</a></p>';return;}
   const who=b.map(e=>e.couple).filter(Boolean)[0]||'';const cmp=location.origin+location.pathname.replace(/resort(\.html)?\/?$/,'compare')+'?r='+b.map(e=>e.slug+((e.link.match(/[?&]k=([^&]+)/)||[])[1]?':'+e.link.match(/[?&]k=([^&]+)/)[1]:'')).join(',');
   box.innerHTML=switcher+'<p class="small" style="margin:0 0 8px;"><b>'+esc(who||'Current client')+'</b> \u2014 '+b.length+' resort'+(b.length>1?'s':'')+'</p>'+
   '<table style="width:100%;border-collapse:collapse;font-size:13px;">'+b.map(e=>'<tr style="border-top:1px solid #EFE7DA;"><td style="padding:7px 6px;"><b>'+esc(e.name)+'</b>'+(e.travel?' <span class="small">\u00b7 '+esc(e.travel)+'</span>':'')+(e.pkg?'<br><span class="small">'+esc(e.pkg)+'</span>':'')+'</td><td style="padding:7px 6px;white-space:nowrap;text-align:right;"><button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;" onclick="basketEdit(\''+e.slug+'\',\''+((e.link.match(/[?&]k=([^&]+)/)||[])[1]||'')+'\')">Edit</button> <a href="'+esc(e.link)+'" target="_blank" class="qb-btn ghost" style="padding:5px 10px;font-size:11px;text-decoration:none;">Open</a> <button class="qb-btn ghost" style="padding:5px 10px;font-size:11px;color:#8B2E2E;" onclick="basketRemove(\''+e.slug+'\')">Remove</button></td></tr>').join('')+'</table>'+
-  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty this basket?\')){ebBasketSet([]);window.BASKET_KEY=null;renderBasket();renderBasketBtn();}">Empty basket</button></div>'+'<p class="small" style="margin-top:14px;"><a href="#" onclick="toggleSavedQuotes();return false;" style="color:var(--gold-soft);">Older quotes for this resort \u2192</a></p>';}
+  '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center;"><button class="qb-btn" onclick="emailDraft()">Email all '+b.length+'</button>'+(b.length>1?'<button class="qb-btn" onclick="copyAllInOne()">Copy all-in-one link</button>':'')+(b.length>1?'<a href="'+esc(cmp)+'" target="_blank" class="qb-btn ghost" style="text-decoration:none;">Open comparison</a>':'')+'<button class="qb-btn ghost" onclick="if(confirm(\'Empty this basket?\')){ebBasketSet([]);window.BASKET_KEY=null;renderBasket();renderBasketBtn();}">Empty basket</button></div>'+'<p class="small" style="margin-top:14px;"><a href="#" onclick="toggleSavedQuotes();return false;" style="color:var(--gold-soft);">Older quotes for this resort \u2192</a></p>';}
 function basketEdit(slug,key){if(!key){alert('This one was saved without a short link \u2014 open it and Copy Link, then it can be edited from here.');return;}if(slug===SLUG){editSavedQuote(key);window.scrollTo({top:$id('qb').offsetTop-20,behavior:'smooth'});}else{location.href=location.origin+location.pathname+'?r='+slug+'&edit='+key;}}
 function basketRemove(slug){ebBasketSet(ebBasketGet().filter(e=>e.slug!==slug));renderBasket();renderBasketBtn();}
 async function emailDraft(){
