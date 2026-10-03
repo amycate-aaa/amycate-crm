@@ -87,7 +87,7 @@ document.getElementById('mailbtn').href='mailto:'+MAIL+'?subject='+encodeURIComp
 if(FOR){document.getElementById('eyebrow').textContent='For '+FOR;}
 function guide(slug){
   // the GUIDE — the full resort page, not the wedding quote
-  return './resort?r='+encodeURIComponent(slug)+(CT?'&ct=1':'')+
+  return './resort?r='+encodeURIComponent(slug)+'&np=1'+(CT?'&ct=1':'')+
     (TAG?'&c='+encodeURIComponent(TAG):'')+'&k='+encodeURIComponent(PASS);
 }
 function card(slug,p){
