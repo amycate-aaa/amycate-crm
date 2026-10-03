@@ -285,7 +285,7 @@ const libMatch=(r,name,pref)=>{const n=low(name);if(!n)return'';let L=(r.__ph||[
     ||(w.length?order.find(ph=>{const t=txt(ph);return w.every(x=>t.includes(x));}):null);
   return hit?phUrl(hit):'';};
 const norm=a=>(Array.isArray(a)?a:[]).map(x=>typeof x==='string'?{name:x}:Object.assign({},x,{name:nm(x)})).filter(x=>isClean(x.name));
-function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s?[A-Z0-9])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).filter(Boolean);}
+function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();if(!t)return[];if(t.indexOf(' \u00b7 ')>-1)return t.split(' \u00b7 ').map(y=>y.trim()).filter(Boolean);const p=t.split(/,(?=\s[A-Z])/).map(y=>y.trim()).filter(Boolean);return p.length>1?p:[t];};return (Array.isArray(v)?v:[v]).reduce((a,x)=>a.concat(burst(x)),[]).map(clean).filter(Boolean);}
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
