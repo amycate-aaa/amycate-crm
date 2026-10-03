@@ -41,9 +41,13 @@ else{
     if(!s.exists)return fail();
     var d=s.data()||{};
     if(d.disabled)return fail('This one is no longer active.');
-    try{db.collection('shortLinks').doc(c).set({clicks:(d.clicks||0)+1,lastClick:new Date().toISOString()},{merge:true});}catch(e){}
     if(!d.url)return fail();
-    location.replace(d.url);
+    // record the click BEFORE leaving, or the write never reaches the server
+    var go=function(){location.replace(d.url);};
+    var done=false,leave=function(){if(done)return;done=true;go();};
+    setTimeout(leave,1200);                       // never hold them up for long
+    db.collection('shortLinks').doc(c).set({clicks:(d.clicks||0)+1,
+      lastClick:new Date().toISOString()},{merge:true}).then(leave).catch(leave);
   }).catch(function(){fail('Something went wrong on my side.');});
 }
 </script></body></html>
