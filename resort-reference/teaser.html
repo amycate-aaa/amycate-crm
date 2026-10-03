@@ -231,7 +231,7 @@ function oneLink(){
   picks.forEach(function(b){listFor(b).forEach(function(r){slugs.push(r.slug);});});
   if(!slugs.length)return '';
   var t=tag();
-  return SITE+'/favorites?r='+encodeURIComponent(slugs.join(','))+
+  return SITE+'/options?r='+encodeURIComponent(slugs.join(','))+
     (BRAND==='ct'?'&b=ct':'')+(t?'&c='+encodeURIComponent(t)+'&for='+encodeURIComponent(t.replace(/-/g,' ')):'')+'&k='+PASS;
 }
 function chosen(){
