@@ -6,6 +6,7 @@
 <title>Handpicked for your wedding | Amy Cate</title>
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -15,6 +16,10 @@
 body[data-style="a"]{--bg:#FFFFFF;--panel:#F5F8FB;--surface:#FFFFFF;--line:#E3E9EF;--ink:#1C2B39;--muted:#5A6B7B;--accent:#2E7DD1;--btn:#2E7DD1;--btn-ink:#fff;
   --soft:#EEF5FB;--soft-ink:#1F5F99;--fav:#FFFFFF;--fav-line:#2E7DD1;--badge:#2E7DD1;--badge-ink:#fff;--r:18px;--r-lg:22px;
   --head:'Manrope',system-ui,sans-serif;--body:'Manrope',system-ui,sans-serif;--hw:800;--ht:-.025em;}
+body[data-style="k"]{--bg:#FAF7F2;--panel:#F4EFE7;--surface:#FFFFFF;--line:#E4D8C6;--ink:#1E1A14;--muted:#7A7266;--accent:#8A6D3B;--btn:#B08D57;--btn-ink:#fff;--soft:#F4EFE7;--soft-ink:#8A6D3B;--fav:#FFFFFF;--fav-line:#B08D57;--badge:#B08D57;--badge-ink:#fff;--r:0px;--r-lg:0px;--head:'Cormorant Garamond',Georgia,serif;--body:'Jost',system-ui,sans-serif;--hw:400;--ht:0;}
+body[data-style="k"] .p2n>span:first-child,body[data-style="k"] h1,body[data-style="k"] h2,body[data-style="k"] h3{letter-spacing:0;}
+body[data-style="k"] .p2p{font-family:var(--head);font-size:19px;font-weight:400;}
+body[data-style="k"] .p2c{text-transform:uppercase;letter-spacing:.14em;font-size:11px;color:#8A6D3B;}
 body[data-style="c"]{--bg:#CDC3B3;--panel:#C2B7A5;--surface:#FFFFFF;--line:transparent;--ink:#1A1A1A;--muted:#555555;--accent:#1A1A1A;--btn:#1A1A1A;--btn-ink:#fff;
   --soft:#F1ECE4;--soft-ink:#1A1A1A;--fav:#FFFFFF;--fav-line:#1A1A1A;--badge:#1A1A1A;--badge-ink:#fff;--r:24px;--r-lg:30px;
   --head:'Fraunces',Georgia,serif;--body:'Nunito Sans',system-ui,sans-serif;--hw:600;--ht:-.005em;}
@@ -308,7 +313,8 @@ function hiList(v){if(!v)return[];const burst=x=>{const t=String(x||'').trim();i
 const bg=u=>photoOk(u)?` style="background-image:url('${esc(u)}');background-size:cover;background-position:center;"`:'';
 const firstSentence=t=>{const s=clean(t);if(!s)return'';const m=s.match(/^.{20,220}?[.!?](\s|$)/);return (m?m[0]:s.slice(0,180)).trim();};
 const Q=new URLSearchParams(location.search);
-const style=(Q.get('s')||'c').toLowerCase()==='a'?'a':'c';
+const _s=(Q.get('s')||'c').toLowerCase();
+const style=(_s==='a'||_s==='k')?_s:'c';   // k = classic cream, gold and Cormorant
 /* who opened it — same log the guide and favorites pages write to */
 (function(){try{
   if(localStorage.getItem('ac_agent')==='1')return;
