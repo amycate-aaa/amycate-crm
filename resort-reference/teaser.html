@@ -215,8 +215,9 @@ function ready(p){
 function tag(){return (document.getElementById('who').value||'').trim().toLowerCase().replace(/\s+/g,'-');}
 function linkFor(slug){
   var t=tag();
-  return SITE+'/resort?r='+encodeURIComponent(slug)+'&quote=true&pv=1'+(PRICE?'':'&np=1')+
-    (BRAND==='ct'?'&ct=1':'')+(t?'&c='+encodeURIComponent(t):'')+'&k='+PASS;
+  // the GUIDE, not the quote view — quote=true&pv=1 renders the wedding quote
+  return SITE+'/resort?r='+encodeURIComponent(slug)+
+    (BRAND==='ct'?'?ct=1&':'?')+(t?'c='+encodeURIComponent(t)+'&':'')+'k='+PASS;
 }
 function libLink(bucket){
   var t=tag();
