@@ -100,6 +100,15 @@ function card(slug,p){
     '<a class="go" href="'+esc(guide(slug))+'">See the full guide \u2192</a>'+
     '</div></article>';
 }
+// log the visit straight away — not after the resorts load, or a quick look is never counted
+(function(){try{
+  if(localStorage.getItem('ac_agent')==='1')return;
+  db.collection('libraryVisits').add({at:new Date().toISOString(),
+    resort:'(favorites page)',page:'favorites',version:CT?'CT \u00b7 no pricing':'no pricing',
+    sentTo:TAG||'',resorts:SLUGS.join(','),
+    from:(document.referrer||'').slice(0,120),
+    device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer'});
+}catch(e){}})();
 if(!SLUGS.length){document.getElementById('grid').innerHTML='<p class="empty">Nothing to show \u2014 the link looks incomplete.</p>';}
 else{
   Promise.all(SLUGS.map(function(s){return db.collection('resortProfiles').doc(s).get().catch(function(){return null;});}))
@@ -109,10 +118,6 @@ else{
     document.getElementById('grid').innerHTML=html||'<p class="empty">Nothing to show.</p>';
     document.getElementById('count').textContent=n+' resort'+(n===1?'':'s')+' \u00b7 tap any one for the full picture';
     if(n)document.getElementById('ask').style.display='';
-    try{if(localStorage.getItem('ac_agent')!=='1')db.collection('libraryVisits').add({at:new Date().toISOString(),
-      resort:'(favorites page)',page:'favorites',version:CT?'CT \u00b7 no pricing':'no pricing',sentTo:TAG||'',
-      from:(document.referrer||'').slice(0,120),
-      device:/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)?'phone or tablet':'computer'});}catch(e){}
   }).catch(function(e){document.getElementById('grid').innerHTML='<p class="empty">Could not load these just now.</p>';});
 }
 </script></body></html>
